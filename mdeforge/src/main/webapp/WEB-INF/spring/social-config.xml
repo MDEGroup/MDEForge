@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       					   http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop 
+                           http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+    <bean id="connectionFactoryLocator" class="org.springframework.social.connect.support.ConnectionFactoryRegistry">
+        <property name="connectionFactories">
+            <list>
+                <ref bean="facebookConnectionFactory"/>
+            </list>
+        </property>
+    </bean>
+
+	<bean id="usersConnectionRepository" 
+	      class="org.mdeforge.common.spring.MongoUserConnectionRepository">
+	    <constructor-arg ref="dataSource" />
+	    <constructor-arg ref="connectionFactoryLocator" />
+	    <constructor-arg ref="textEncryptor" />
+	</bean>
+	<bean id="dataSource" class="org.mdeforge.integration.UserSocialConnectionRepository"></bean>
+	<bean id="connectionRepository" factory-method="createConnectionRepository" 
+	      factory-bean="usersConnectionRepository" scope="request">
+	    <constructor-arg value="#{request.userPrincipal.name}" />
+	    <aop:scoped-proxy proxy-target-class="false" />
+	</bean>
+
+	
+    <bean id="facebookConnectionFactory" class="org.springframework.social.facebook.connect.FacebookConnectionFactory">
+        <constructor-arg value="1560350474202581"/>
+        <constructor-arg value="8bd5e895428d8eef788691ba5876df14"/>
+    </bean>
+	<bean class="org.springframework.social.connect.web.ConnectController">
+	    <!-- relies on by-type autowiring for the constructor-args -->
+	</bean>
+<!--     <bean id="usersConnectionRepository" class="org.springframework.social.security.service.SocialUserServiceImpl"/> -->
+	<beans profile="dev">
+        <bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" 
+            factory-method="noOpText" />
+    </beans>
+	
+    <beans profile="prod">
+        <bean id="textEncryptor" class="org.springframework.security.crypto.encrypt.Encryptors" 
+                factory-method="text">
+            <constructor-arg value="${security.encryptPassword}" />
+            <constructor-arg value="${security.encryptSalt}" />
+        </bean>
+    </beans>
+  	
+
+</beans>

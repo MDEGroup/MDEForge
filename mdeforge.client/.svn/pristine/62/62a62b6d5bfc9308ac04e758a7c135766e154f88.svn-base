@@ -1,0 +1,231 @@
+package org.mdeforge.client;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+import org.apache.commons.codec.binary.Base64;
+import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Metamodel;
+import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Transformation;
+import org.mdeforge.business.model.Workspace;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+public class MDEForgeClient {
+
+	final String connectionUrl;
+	final ObjectMapper mapper;
+	final String username;
+	final String password;
+	private String accessToken;
+	private String auth;
+	public MDEForgeClient(String connectionUrl, String username, String password) throws Exception {
+		this.connectionUrl = connectionUrl;
+		mapper = new ObjectMapper();
+		this.username = username;
+		this.password = password;
+		setToken();
+	}
+
+	private void setToken() throws MalformedURLException, IOException {
+
+		URL token = new URL(connectionUrl + "oauth/token?grant_type=password&client_id=my-trusted-client&password=" 
+				+ password + "&username=" + username);
+		HttpURLConnection conn = (HttpURLConnection) token.openConnection();
+		conn.setRequestMethod("GET");
+		if (conn.getResponseCode() != 200) {
+			conn.disconnect();
+			throw new MalformedURLException("Unable to connect to MDEFORGE REST API. Check URL.\n" + conn.getResponseCode() 
+				+ "\t" + conn.getResponseMessage());
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuffer sb = new StringBuffer();
+		String output;
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+		JsonNode actualObj = mapper.readTree(sb.toString());
+		JsonNode jsonNode = actualObj.get("access_token");
+		accessToken = jsonNode.asText();
+		auth = "?access_token=" + accessToken;
+		conn.disconnect();
+	}
+
+	public Project getProject(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/" + id);
+		return mapper.readValue(result, Project.class);
+	}
+
+	
+	public List<Project> getProjects() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/");
+		return mapper.readValue(result, new TypeReference<List<Project>>() {
+		});
+	}
+
+	public List<Workspace> getWorkspaces() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/");
+		return mapper.readValue(result, new TypeReference<List<Workspace>>() {
+		});
+	}
+
+	public Workspace getWorkspace(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/" + id);
+		return mapper.readValue(result, Workspace.class);
+	}
+
+	public List<Metamodel> getMetamodelsInWorkspace(String idWorkspace) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/metamodel/");
+		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+	}
+	public List<Metamodel> getMetamodelsInProject(String idProject) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/metamodel/");
+		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+	}
+	public List<EcoreMetamodel> getEcoreMetamodelsInWorkspace(String idWorkspace) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/ecoreMetamodel/");
+		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
+	}
+	public List<EcoreMetamodel> getEcoreMetamodelsInProject(String idProject) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/ecoreMetamodel/");
+		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
+	}
+	
+	public List<Transformation> getTransformationsInWorkspace(String idWorkspace) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/transformation/");
+		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+	}
+	public List<Transformation> getTransformationsInProject(String idProject) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/transformation/");
+		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
+	}
+	public List<Artifact> getArtifactsInProject(String idProject) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/artifact/");
+		return mapper.readValue(result, new TypeReference<List<Artifact>>() {});
+	}
+	public List<Artifact> getArtifactsInWorkspace(String idWorkspace) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/artifact/");
+		return mapper.readValue(result, new TypeReference<List<Artifact>>() {});
+	}
+	public List<Transformation> getTransformationsPublic() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/transformation/");
+		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
+	}
+	
+	public List<Metamodel> getMetamodels() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/metamodel/shared");
+		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+	}
+
+	public List<EcoreMetamodel> getEcoreMetamodels() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/shared");
+		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+	}
+	
+	public List<Transformation> getTransformations() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/transformation/shared");
+		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
+	}
+	
+	public Metamodel getMetamodel(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/metamodel/" + id);
+		return mapper.readValue(result, Metamodel.class);
+	}
+
+	public EcoreMetamodel getEcoreMetamodel(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/" + id);
+		return mapper.readValue(result, EcoreMetamodel.class);
+	}
+	public Transformation getTransformation(String id) throws Exception{
+		String result = doGetRequest(connectionUrl + "api/transformation/" + id);
+		return mapper.readValue(result, Transformation.class);
+	}
+	public List<Metric> getEcoreMetamodelMetrics(String idMetamodel) throws Exception{
+		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/" + idMetamodel + "/metrics");
+		return mapper.readValue(result, new TypeReference<List<Metric>>() {});
+	}
+	public void addMetamodel(Metamodel metamodel) throws Exception {
+		ObjectNode on = mapper.valueToTree(metamodel);
+		doPostRequest(connectionUrl + "api/metamodel/", on);
+	}
+	
+	public void addMetamodel(Metamodel metamodel, String file) throws Exception {
+		GridFileMedia gfm = new GridFileMedia();
+		String s = MDEForgeClient.readFile(file);		
+		gfm.setContent(s);
+		metamodel.setFile(gfm);
+		ObjectNode on = mapper.valueToTree(metamodel);
+		doPostRequest(connectionUrl + "api/metamodel/", on);
+	}
+
+	public void addEcoreMetamodel(EcoreMetamodel metamodel) throws Exception {
+		ObjectNode on = mapper.valueToTree(metamodel);
+		doPostRequest(connectionUrl + "api/ecoreMetamodel/", on);
+	}
+	
+	public void addEcoreMetamodel(EcoreMetamodel metamodel, String file) throws Exception {
+		GridFileMedia gfm = new GridFileMedia();
+		String s = MDEForgeClient.readFile(file);		
+		gfm.setContent(s);
+		metamodel.setFile(gfm);
+		ObjectNode on = mapper.valueToTree(metamodel);
+		doPostRequest(connectionUrl + "api/ecoreMetamodel/", on);
+	}
+	private String doGetRequest(String urlString) throws Exception {
+		urlString += auth;
+		URL url = new URL(urlString);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Accept", "application/json");
+		conn.connect();
+		if (conn.getResponseCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuffer sb = new StringBuffer();
+		String output;
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+		conn.disconnect();
+		return sb.toString();
+	}
+
+	private void doPostRequest(String urlString, JsonNode json) throws Exception {
+		urlString += auth;
+		URL url = new URL(urlString);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setDoOutput(true);
+		OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+		wr.write(json.toString());
+		wr.flush();
+		wr.close();
+		conn.connect();
+		if (conn.getResponseCode() != 201 && conn.getResponseCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
+		conn.disconnect();
+	}
+	public static String readFile(String path) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(Base64.encodeBase64(encoded));
+		
+	}
+}

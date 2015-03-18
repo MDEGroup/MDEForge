@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="web_app_mm" nsURI="web_app_mm" nsPrefix="cipciop.mde">
+  <eClassifiers xsi:type="ecore:EClass" name="namedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WebApplication" eSuperTypes="#//namedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainElements" upperBound="-1"
+        eType="#//model/DomainElement" containment="true" eOpposite="#//model/DomainElement/webapp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="navigable" upperBound="-1"
+        eType="#//Navigable" containment="true" eOpposite="#//Navigable/application"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Navigable" eSuperTypes="#//namedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" eType="#//WebApplication"
+        eOpposite="#//WebApplication/navigable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="view" nsURI="web_app_mm.view" nsPrefix="cipciop.mde">
+    <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="#//view/Widget">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="widgets" upperBound="-1"
+          eType="#//view/Widget" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Widget" eSuperTypes="#//namedElement"/>
+  </eSubpackages>
+  <eSubpackages name="control" nsURI="web_app_mm.control" nsPrefix="cipciop.mde">
+    <eClassifiers xsi:type="ecore:EClass" name="Controller" eSuperTypes="#//Navigable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="page" lowerBound="1"
+          upperBound="-1" eType="#//view/Page" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" upperBound="-1"
+          eType="#//model/DomainElement"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="model" nsURI="web_app_mm.model" nsPrefix="cipciop.mde">
+    <eClassifiers xsi:type="ecore:EClass" name="DomainElement" eSuperTypes="#//namedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="webapp" lowerBound="1"
+          eType="#//WebApplication" eOpposite="#//WebApplication/domainElements"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>
