@@ -48,6 +48,7 @@ import org.mdeforge.integration.RelationRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -102,6 +103,8 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 	@Autowired
 	private RelationRepository relationRepository;
 	
+	@Value("#{cfgproperties[basePath]}")
+	private String basePath;
 	
 	@Override
 	public ETLTransformation findOneBySharedUser(String idMetamodel, User user)
@@ -261,14 +264,10 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 			fileMedia.setByteArray(Base64.decode(transformation.getFile()
 					.getContent().getBytes()));
 			transformation.setFile(fileMedia);
-			
-			
-			
+		
 			if (transformation.getId() != null)
 				throw new BusinessException();
 			// UploadFile
-			
-
 			for (Workspace ws : transformation.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), transformation.getAuthor());
 			}
@@ -434,16 +433,16 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
 					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
-					sourceMetamodel.add(rel.getToArtifact().getName() + ".ecore");
+					sourceMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}
 			if (rel instanceof CoDomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
 					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
-					targetMetamodel.add(rel.getToArtifact().getName() + ".ecore");
+					targetMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}		
 		}
-		
+		System.out.println("CI ARRIVO");
 		transformation.getFile().setByteArray(Base64.decode(transformation.getFile()
 				.getContent().getBytes()));
 		try {
@@ -552,9 +551,6 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 		return new File(fileName);
 	}
 	
-	
-	
-
 	@Override
 	public List<ETLTransformation> findTransformationsBySourceMetamodels(
 			ETLTransformation metamodel) {

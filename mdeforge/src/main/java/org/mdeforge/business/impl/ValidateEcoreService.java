@@ -12,12 +12,17 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ValidateEcoreService implements ValidateService {
 
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
+	
 	@Override
 	public boolean isValid(Artifact art) {
 		if (art instanceof EcoreMetamodel){
@@ -25,7 +30,7 @@ public class ValidateEcoreService implements ValidateService {
 				EcoreFactory factory = EcoreFactory.eINSTANCE;
 				ResourceSet resourceSet = new ResourceSetImpl();
 				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
-				File temp = new File("metamodels_unified/Ecore.ecore");
+				File temp = new File(gridFileMediaService.getFilePath(art));
 				Resource resource = resourceSet.createResource(URI.createFileURI(temp.getAbsolutePath()));
 
 				resource.load(null);

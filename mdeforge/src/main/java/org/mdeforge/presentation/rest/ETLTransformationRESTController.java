@@ -9,6 +9,7 @@ import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ETLTransformation;
@@ -159,10 +160,15 @@ public class ETLTransformationRESTController {
 	}
 
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/execute")
-	public @ResponseBody HttpEntity<String> executeTransformation (@RequestBody ETLTransformation transformation) {
+	@RequestMapping(method = RequestMethod.POST, value = "/execute/{id_transformation}")
+	public @ResponseBody HttpEntity<String> executeTransformation (
+			@PathVariable("id_transformation") String idETLTransformation,
+			@ModelAttribute List<Model> model) {
+		ETLTransformation transformation = ETLtransformationService.findOne(idETLTransformation);
+		//le transformazioni per ora sono solo 1 a 1???
 		Model m = new Model();
-		transformation.setModel_in(m);/*setModel_in("models/android.model");*/
+		transformation.setModel_in(m);
+		/*setModel_in("models/android.model");*/
 //		transformation.getRelations().get(0).get
 		// model out
 		transformation.setTargetName("Target");

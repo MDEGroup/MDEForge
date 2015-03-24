@@ -145,11 +145,11 @@ public class TestClient extends TestCase {
 //		List<Transformation> workspace = c.getTransformationsPublic();
 //		assertNotNull(workspace);
 //	}
-	
+//	@Ignore
 //	@Test
 //	public void testaddMetamodel() throws Exception {
 //		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
-//		List<Metric> lm = c.getEcoreMetamodelMetrics("54b54da1ead2f00843ec9ee6");
+//		List<Metric> lm = c.getEcoreMetamodelMetrics("5502f0b5e568510368e0d073");
 //		for (Metric metric : lm) 
 //			System.out.println(metric.getName());
 //	}
@@ -261,7 +261,7 @@ public class TestClient extends TestCase {
 		transformation.getRelations().add(coDomainConformToRelation);
 		transformation.getRelations().add(domainConformToRelation);
 		try {
-			c.executeETLTransformation(transformation);
+			c.addETLTransformatio(transformation);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
