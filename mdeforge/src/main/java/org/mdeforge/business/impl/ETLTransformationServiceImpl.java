@@ -443,28 +443,29 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 				}		
 		}
 		System.out.println("CI ARRIVO");
-		transformation.getFile().setByteArray(Base64.decode(transformation.getFile()
-				.getContent().getBytes()));
-		try {
-			FileOutputStream out = new FileOutputStream(transformation.getName() + ".etl");//TODO
-			out.write(transformation.getFile().getByteArray());
-			out.close();
-		} catch (FileNotFoundException e1) {
-			throw new BusinessException(); 
-		} catch (IOException e) {
-			throw new BusinessException(); 
-		}
-		String transformationPath = transformation.getName() + ".etl";
+		
+		
+		String transformationPath = gridFileMediaService.getFilePath(transformation);
 		
 		EtlModule module = new EtlModule();
 		try {
 			module.parse(getSource(transformationPath));
-		
+			
 			List<IModel> models = new ArrayList<IModel>();
-			//TODO occhio al getModel_in deve essere un model non una stringa...
-			models.add(createEmfModel(transformation.getSourceName(),
-					"android.model", sourceMetamodel,
+			//TODO DANIELE
+			//occhio al getModel_in deve essere un model non una stringa...
+			//TODO Dovrebbe fare forEach sui models_in 
+			//OCCHIO AD ASSOCIARE IL GIUSTO METAMODELLO AL MODELLO
+			for (Model model : transformation.getModels_in()) {
+				String path = gridFileMediaService.getFilePath(model);
+				models.add(createEmfModel(transformation.getSourceName(),
+					path, sourceMetamodel,
 					true, false));
+			}
+			//QUESTO VA VIA
+//			models.add(createEmfModel(transformation.getSourceName(),
+//					"android.model", sourceMetamodel,
+//					true, false));
 	
 			models.add(loadEmptyModel(transformation.getTargetName(),
 					targetMetamodel, transformation.getTargetPath()));

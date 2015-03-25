@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ETLTransformationService {
 	void upload(Transformation transformation);
 	
-	void execute(ETLTransformation transformation);
+	void execute(ETLTransformation transformation) throws BusinessException;
 	List<ETLTransformation> findTransformationsBySourceMetamodels(ETLTransformation metamodel);
 	List<ETLTransformation> findTransformationsByTargetMetamodels(ETLTransformation metamodel);
 		

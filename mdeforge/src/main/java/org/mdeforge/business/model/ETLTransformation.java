@@ -15,7 +15,7 @@ public class ETLTransformation extends Transformation {
 
 	
 	protected String modules;
-	protected Model model_in;
+	protected List<Model> model_in;
 	
 	protected String sourceName;
 	protected String targetName;
@@ -26,7 +26,7 @@ public class ETLTransformation extends Transformation {
 		return modules;
 	}
 
-	public Model getModel_in() {
+	public List<Model> getModels_in() {
 		return model_in;
 	}
 
@@ -47,7 +47,7 @@ public class ETLTransformation extends Transformation {
 		this.modules = modules;
 	}
 
-	public void setModel_in(Model model_in) {
+	public void setModels_in(List<Model> model_in) {
 		this.model_in = model_in;
 	}
 

@@ -8,8 +8,10 @@ import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetricProvider;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ETLTransformation;
@@ -50,6 +52,8 @@ public class ETLTransformationRESTController {
 
 	@Autowired
 	private ETLTransformationService ETLtransformationService;
+	@Autowired
+	private ModelService modelService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -104,78 +108,30 @@ public class ETLTransformationRESTController {
 
 	}
 
-	@RequestMapping(value = "OLD/workspace/{id_workspace}", method = RequestMethod.POST)
-	public @ResponseBody HttpEntity<String> createArtifactInWorkspace(
-			@ModelAttribute ETLTransformation transformation,
-			@PathVariable("id_workspace") String idWorkspace,
-			@RequestParam("_file") MultipartFile file) {
-		try {
-			transformation.setWorkspaces(new ArrayList<Workspace>());
-			Workspace workspace = new Workspace();
-			workspace.setId(idWorkspace);
-			transformation.getWorkspaces().add(workspace);
-			transformation.setAuthor(user);
-			transformation.getShared().add(user);
-
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(file.getName());
-			fileMedia.setByteArray(file.getBytes());
-			transformation.setFile(fileMedia);
-
-			ETLtransformationService.create(transformation);
-			return new ResponseEntity<String>("Transformation inserted.",
-					HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: Project not inserted.",
-					HttpStatus.OK);
-		}
-	}
-
-	@RequestMapping(value = "OLD/project/{id_project}", method = RequestMethod.POST)
-	public @ResponseBody HttpEntity<String> createArtifactInPoject(
-			@ModelAttribute ETLTransformation ETLtransformation,
-			@PathVariable("id_project") String idProject,
-			@RequestParam("_file") MultipartFile file) {
-		try {
-			ETLtransformation.setWorkspaces(new ArrayList<Workspace>());
-			Project project = projectService.findById(idProject, user);
-			ETLtransformation.getProjects().add(project);
-			ETLtransformation.setAuthor(user);
-			ETLtransformation.getShared().add(user);
-
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(file.getName());
-			fileMedia.setByteArray(file.getBytes());
-			ETLtransformation.setFile(fileMedia);
-
-			ETLtransformationService.create(ETLtransformation);
-			return new ResponseEntity<String>("Transformation inserted.",
-					HttpStatus.OK);
-
-		} catch (Exception e) {
-			return new ResponseEntity<String>(
-					"Erron: Transformation not inserted.",
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
-
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/execute/{id_transformation}")
+	@RequestMapping(method = RequestMethod.POST, value = "/execute/{id_transformation}", consumes = "application/json")
 	public @ResponseBody HttpEntity<String> executeTransformation (
 			@PathVariable("id_transformation") String idETLTransformation,
-			@ModelAttribute List<Model> model) {
+			@RequestBody ArrayList<Model> models) {
+		for (Model model : models) {
+			model.setAuthor(user);
+			model.setOpen(false);
+			modelService.create(model);
+			
+		}
 		ETLTransformation transformation = ETLtransformationService.findOne(idETLTransformation);
-		//le transformazioni per ora sono solo 1 a 1???
-		Model m = new Model();
-		transformation.setModel_in(m);
-		/*setModel_in("models/android.model");*/
-//		transformation.getRelations().get(0).get
-		// model out
-		transformation.setTargetName("Target");
+		//TODO DANIELE
+		//ADESSO E' UNA LISTA DI MODEL
+		transformation.setModels_in(models);
 		
+		
+		//NON VA QUI!!!! QUESTI VALORI DEVONO ESSERE GENERICI E SPOSTATI NEL
+		//BUSINESS
+		transformation.setTargetName("Target");
 		Random randomGenerator = new Random();
 		transformation.setTargetPath("temp/"+ randomGenerator.nextInt(100) +".model");
+		
 		ETLtransformationService.execute(transformation);
+		
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	

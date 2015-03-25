@@ -19,6 +19,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.Transformation;
@@ -221,7 +222,7 @@ public class TestClient extends TestCase {
 //		c.addEcoreMetamodel(m2, "RSS.ecore");
 //		c.addETLTransformation(t, "ATOM2RSS.atl");		
 //	}	
-
+	
 	@Test
 	public void testETLTransformation () {
 		try {
@@ -230,38 +231,50 @@ public class TestClient extends TestCase {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		ETLTransformation transformation = new ETLTransformation();
-		transformation.setName("Android2Web");
+//		ETLTransformation transformation = new ETLTransformation();
+//		transformation.setName("Android2Web");
+//		try {
+//			String s = MDEForgeClient.readFile("temp/android2web.etl");
+//			GridFileMedia gfmMmIn= new GridFileMedia();
+//			gfmMmIn.setContent(s);
+//			transformation.setFile(gfmMmIn);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		// model in
+//		transformation.setSourceName("Source");
+//		EcoreMetamodel mmIn = new EcoreMetamodel();
+//		EcoreMetamodel mmOut = new EcoreMetamodel();
+//		
+//		
+//		mmIn.setId("5502f050e568510368e0d06f");		
+//		GridFileMedia gfmMmOut = new GridFileMedia();
+//		
+//		mmOut.setId("5502f0b5e568510368e0d073");		
+//		
+//		DomainConformToRelation domainConformToRelation = new DomainConformToRelation();
+//		domainConformToRelation.setFromArtifact(transformation);
+//		domainConformToRelation.setToArtifact(mmIn);
+//		CoDomainConformToRelation coDomainConformToRelation = new CoDomainConformToRelation();
+//		coDomainConformToRelation.setFromArtifact(transformation);
+//		coDomainConformToRelation.setToArtifact(mmOut);
+//		transformation.getRelations().add(coDomainConformToRelation);
+//		transformation.getRelations().add(domainConformToRelation);
+		List<Model> models = new ArrayList<Model>();
+		Model model = new Model();
+		model.setName("nome");
+		GridFileMedia gfm = new GridFileMedia();
+		String s;
 		try {
-			String s = MDEForgeClient.readFile("temp/android2web.etl");
-			GridFileMedia gfmMmIn= new GridFileMedia();
-			gfmMmIn.setContent(s);
-			transformation.setFile(gfmMmIn);
-		} catch (IOException e1) {
+			s = MDEForgeClient.readFile("temp/android.model");
+			gfm.setContent(s);
+			model.setFile(gfm);
+			models.add(model);
+			c.executeETLTransformation("55114a0e7d84340010bbb538",models);
+		}catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		}
-		// model in
-		transformation.setSourceName("Source");
-		EcoreMetamodel mmIn = new EcoreMetamodel();
-		EcoreMetamodel mmOut = new EcoreMetamodel();
-		
-		
-		mmIn.setId("5502f050e568510368e0d06f");		
-		GridFileMedia gfmMmOut = new GridFileMedia();
-		
-		mmOut.setId("5502f0b5e568510368e0d073");		
-		
-		DomainConformToRelation domainConformToRelation = new DomainConformToRelation();
-		domainConformToRelation.setFromArtifact(transformation);
-		domainConformToRelation.setToArtifact(mmIn);
-		CoDomainConformToRelation coDomainConformToRelation = new CoDomainConformToRelation();
-		coDomainConformToRelation.setFromArtifact(transformation);
-		coDomainConformToRelation.setToArtifact(mmOut);
-		transformation.getRelations().add(coDomainConformToRelation);
-		transformation.getRelations().add(domainConformToRelation);
-		try {
-			c.addETLTransformatio(transformation);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

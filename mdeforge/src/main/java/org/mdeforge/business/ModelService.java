@@ -1,10 +1,7 @@
 package org.mdeforge.business;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 
@@ -20,20 +17,13 @@ public interface ModelService {
 	Model findByName(String name);
 	void update(Model model);
 	List<Model> findAll();
-	
+	String create(Model model) throws BusinessException ;	
 	///
 //	public boolean isValid(EmfModel model);
 	
-	/**
-	 * 
-	 * @return
-	 */
+
 //	public List<String> getMetamodelsURIs();
 	
-	/**
-	 * 
-	 * @param model
-	 * @return
-	 */
+
 //	public List<URI> getMetamodelFileUris(EmfModel model);
 }

@@ -75,7 +75,9 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		try {
 			String path = basePath + artifact.getName();
 			out = new FileOutputStream(path);
-			out.write(grm.getByteArray());
+			if(grm.getByteArray() != null)
+				out.write(grm.getByteArray());
+			else out.write(grm.getContent().getBytes());
 			out.close();
 			return path;
 		} catch (FileNotFoundException e) {
