@@ -124,11 +124,6 @@ public class ETLTransformationRESTController {
 		transformation.setModels_in(models);
 		
 		
-		//NON VA QUI!!!! QUESTI VALORI DEVONO ESSERE GENERICI E SPOSTATI NEL
-		//BUSINESS
-		transformation.setTargetName("Target");
-		Random randomGenerator = new Random();
-		transformation.setTargetPath("temp/"+ randomGenerator.nextInt(100) +".model");
 		
 		ETLtransformationService.execute(transformation);
 		

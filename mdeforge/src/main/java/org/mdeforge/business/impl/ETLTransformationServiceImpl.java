@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.URI;
@@ -423,11 +424,8 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 	
 	@Override
 	public void execute(ETLTransformation transformation) {
-		//TODO da modificare
-		
 		List<String> sourceMetamodel = new ArrayList<String>();
 		List<String> targetMetamodel = new ArrayList<String>();
-		
 		for(Relation rel : transformation.getRelations()) {
 			if (rel instanceof DomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
@@ -442,33 +440,32 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 					targetMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}		
 		}
-		System.out.println("CI ARRIVO");
-		
-		
 		String transformationPath = gridFileMediaService.getFilePath(transformation);
-		
 		EtlModule module = new EtlModule();
+		//TODO DANIELE DEVE ESSERE SETTATO DINAMICAMENTE E NON 
+		//STATICAMENTE
+		transformation.setTargetName("Target");
+		Random randomGenerator = new Random();
+		String outputPath = basePath + randomGenerator.nextInt(100);
+		
 		try {
 			module.parse(getSource(transformationPath));
 			
 			List<IModel> models = new ArrayList<IModel>();
-			//TODO DANIELE
-			//occhio al getModel_in deve essere un model non una stringa...
-			//TODO Dovrebbe fare forEach sui models_in 
+			
+			//TODO DANIELE Dovrebbe fare forEach sui models_in 
 			//OCCHIO AD ASSOCIARE IL GIUSTO METAMODELLO AL MODELLO
 			for (Model model : transformation.getModels_in()) {
 				String path = gridFileMediaService.getFilePath(model);
+				//TODO DANIELE vedi commento nel data model
 				models.add(createEmfModel(transformation.getSourceName(),
 					path, sourceMetamodel,
 					true, false));
 			}
-			//QUESTO VA VIA
-//			models.add(createEmfModel(transformation.getSourceName(),
-//					"android.model", sourceMetamodel,
-//					true, false));
-	
+			//TODO DANIELE Anche qui dovrebbe diventare una lista di modelli in output
+			//con foreach sui modelli in output
 			models.add(loadEmptyModel(transformation.getTargetName(),
-					targetMetamodel, transformation.getTargetPath()));
+					targetMetamodel, outputPath));
 	
 			// to register the emf models into models repository
 			for (IModel model : models) {
