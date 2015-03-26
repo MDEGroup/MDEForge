@@ -51,6 +51,7 @@ import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -87,8 +88,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider {
-
+public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider, SearchProvider {
+	//TODO implements search inteface methods
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -414,11 +415,9 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 		try {
 			
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, basePath + "/Metric.ecore");
+			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
-			
 			injector.inject(inputMetamodel, org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-			
 			
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
@@ -435,7 +434,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			transformationLauncher.addInModel(inputModel, "IN", "Ecore");
 			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
 			transformationLauncher.launch(ILauncher.RUN_MODE, null, new HashMap<String,Object>(), 
-					(Object[])getModulesList(basePath + "/EcoreMetric.asm"));
+					(Object[])getModulesList(basePath + "EcoreMetric.asm"));
 
 			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
@@ -445,6 +444,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			List<Metric> result = getMetricList(basePath + "sampleCompany_Cut.xmi", emm);
 			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
 			temp2.delete();
+			temp.delete();
 			return result;
 		} catch (ATLCoreException e) {
 			throw new BusinessException();

@@ -140,51 +140,6 @@ public class EcoreMetamodelsRESTController {
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "OLD/workspace/{id_workspace}", method = RequestMethod.POST)
-	public @ResponseBody HttpEntity<String> createArtifactInWorkspace(@ModelAttribute EcoreMetamodel ecoreMetamodel, @PathVariable("id_workspace") String idWorkspace, @RequestParam("_file") MultipartFile file) {
-		try {
-
-			ecoreMetamodel.setWorkspaces(new ArrayList<Workspace>());
-			Workspace workspace = new Workspace();
-			workspace.setId(idWorkspace);
-			ecoreMetamodel.getWorkspaces().add(workspace);
-			ecoreMetamodel.setAuthor(user);
-			ecoreMetamodel.getShared().add(user);
-
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(file.getName());
-			fileMedia.setByteArray(file.getBytes());
-			ecoreMetamodel.setFile(fileMedia);
-			ecoreMetamodelService.create(ecoreMetamodel);
-			return new ResponseEntity<String>(ecoreMetamodel.getId(), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: Project not inserted.", HttpStatus.OK);
-		}
-	}
-
-	@RequestMapping(value = "OLD/project/{id_project}", method = RequestMethod.POST)
-	public @ResponseBody HttpEntity<String> createArtifactInPoject(@ModelAttribute EcoreMetamodel ecoreMetamodel, @PathVariable("id_project") String idProject, @RequestParam("_file") MultipartFile file) {
-		try {
-
-			ecoreMetamodel.setWorkspaces(new ArrayList<Workspace>());
-			Project project = projectService.findById(idProject, user);
-			ecoreMetamodel.getProjects().add(project);
-			ecoreMetamodel.setAuthor(user);
-			ecoreMetamodel.getShared().add(user);
-
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(file.getName());
-			fileMedia.setByteArray(file.getBytes());
-			ecoreMetamodel.setFile(fileMedia);
-
-			ecoreMetamodelService.create(ecoreMetamodel);
-			return new ResponseEntity<String>("EcoreMetamodel inserted.", HttpStatus.OK);
-
-		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: EcoreMetamodel not inserted.", HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
-
 	// Create metamodel
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpEntity<String> createArtifact(@RequestBody EcoreMetamodel ecoreMetamodel) {

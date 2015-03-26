@@ -1,6 +1,5 @@
 package org.mdeforge.business.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,7 +14,7 @@ public class ETLTransformation extends Transformation {
 
 	
 	protected String modules;
-	protected Model model_in;
+	protected List<Model> models_in;
 	
 	protected String sourceName;
 	protected String targetName;
@@ -26,8 +25,8 @@ public class ETLTransformation extends Transformation {
 		return modules;
 	}
 
-	public Model getModel_in() {
-		return model_in;
+	public List<Model> getModels_in() {
+		return models_in;
 	}
 
 	public String getSourceName() {
@@ -47,8 +46,8 @@ public class ETLTransformation extends Transformation {
 		this.modules = modules;
 	}
 
-	public void setModel_in(Model model_in) {
-		this.model_in = model_in;
+	public void setModels_in(List<Model> models_in) {
+		this.models_in = models_in;
 	}
 
 	
