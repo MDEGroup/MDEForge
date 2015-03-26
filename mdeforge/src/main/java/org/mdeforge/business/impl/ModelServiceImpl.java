@@ -1,12 +1,8 @@
 package org.mdeforge.business.impl;
 
-import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.primitiveExpression_return;
-import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
@@ -15,7 +11,6 @@ import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
