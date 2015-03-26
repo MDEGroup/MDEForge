@@ -27,7 +27,7 @@ public class Project implements java.io.Serializable{
 	private List<User> users = new ArrayList<User>();
 
 	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces;
+	private List<Workspace> workspaces = new ArrayList<Workspace>();
 
 	private String name = null;
 
