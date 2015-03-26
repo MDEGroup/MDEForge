@@ -19,13 +19,16 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class MDEForgeClient {
@@ -171,9 +174,9 @@ public class MDEForgeClient {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		doPostRequest(connectionUrl + "api/metamodel/", on);
 	}
-	public void executeETLTransformation(ETLTransformation transformation) throws Exception {
-		ObjectNode on = mapper.valueToTree(transformation);
-		doPostRequest(connectionUrl + "/api/ETLtransformation/execute", on);
+	public void executeETLTransformation(String id, List<Model> models) throws Exception {
+		ArrayNode on = mapper.valueToTree(new ArtifactList(models));
+		doPostRequest(connectionUrl + "/api/ETLtransformation/execute/" + id, on);
 	}
 	public void addMetamodel(Metamodel metamodel, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();

@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -72,6 +74,7 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -85,8 +88,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider {
-
+public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider, SearchProvider {
+	//TODO implements search inteface methods
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -396,10 +399,12 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 		return aList;
 	}
 
+	@Value("#{cfgproperties[basePath]}")
+	private String basePath;
 	@Override
 	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException{
-//		if (emm instanceof EcoreMetamodel)
-//			throw new BusinessException();
+		
+		
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -408,18 +413,15 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 		 * Load metamodels
 		 */
 		try {
+			
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, "/Users/juridirocco/Documents/workspace/MDEForgeLuna2/mdeforge/utils/Metric.ecore");
+			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
-			
 			injector.inject(inputMetamodel, org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-			
 			
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-//			
-//			
-			
+
 			String mm = new String (emm.getFile().getByteArray()); 
 	    		
 			File temp = File.createTempFile("tempfile", ".tmp"); 
@@ -432,16 +434,17 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			transformationLauncher.addInModel(inputModel, "IN", "Ecore");
 			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
 			transformationLauncher.launch(ILauncher.RUN_MODE, null, new HashMap<String,Object>(), 
-					(Object[])getModulesList("/Users/juridirocco/Documents/workspace/MDEForgeLuna2/mdeforge/utils/EcoreMetric.asm"));
+					(Object[])getModulesList(basePath + "EcoreMetric.asm"));
 
-			extractor.extract(outModel, "sampleCompany_Cut.xmi");
+			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
 			
-			List<Metric> result = getMetricList("sampleCompany_Cut.xmi", emm);
-			File temp2 = new File("sampleCompany_Cut.xmi");
+			List<Metric> result = getMetricList(basePath + "sampleCompany_Cut.xmi", emm);
+			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
 			temp2.delete();
+			temp.delete();
 			return result;
 		} catch (ATLCoreException e) {
 			throw new BusinessException();
@@ -528,40 +531,20 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 
 	@Override
 	public void registerMetamodel(EcoreMetamodel ecoreMetamodel) throws BusinessException {
-		//TODO
-		//file salva file temporaneo
-		//get Path
 		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
 		ecoreMetamodel.getFile();
 		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
-		
-		try {
-			FileOutputStream out = new FileOutputStream(ecoreMetamodel.getName() + ".ecore");
-			out.write(ecoreMetamodel.getFile().getByteArray());
-			out.close();
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		String path = ecoreMetamodel.getName() + ".ecore";
-		
+		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
-		
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
 				"ecore", new EcoreResourceFactoryImpl());
-
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
 		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
 				rs.getPackageRegistry());
 		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
 				extendedMetaData);
-
 		Resource r = rs.getResource(uri, true);
 		EObject eObject = r.getContents().get(0);
 		if (eObject instanceof EPackage) {

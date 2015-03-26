@@ -280,27 +280,10 @@ public class ATLTransformationServiceImpl implements ATLTransformationService, M
 			fileMedia.setByteArray(Base64.decode(transformation.getFile()
 					.getContent().getBytes()));
 			transformation.setFile(fileMedia);
-			//injection TEST
-			Injector inj = new Injector();
-			
-			
-			String mm = new String (transformation.getFile().getByteArray()); 
-    		
-			File tempFile = File.createTempFile("tempfile", ".tmp"); 
-			FileInputStream fis = new FileInputStream(tempFile);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-    	    bw.write(mm);
-    	    bw.close();
-			
-			inj.inject(fis);
-			
-			
 			
 			if (transformation.getId() != null)
 				throw new BusinessException();
 			// UploadFile
-			
-
 			for (Workspace ws : transformation.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), transformation.getAuthor());
 			}

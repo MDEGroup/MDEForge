@@ -2,12 +2,17 @@ package org.mdeforge.business.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.integration.GridFileMediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -48,7 +53,6 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
             // error while reading data
             e.printStackTrace();
         }
-
         return data;
     }
 
@@ -59,6 +63,29 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		q.addCriteria(Criteria.where("id").is(file.getIdFile()));
 		operations.delete(q);
 		gridFileMediaRepository.delete(file);
+	}
+	
+	@Value("#{cfgproperties[basePath]}")
+	private String basePath;
+	
+	@Override
+	public String getFilePath(Artifact artifact) throws BusinessException{
+		GridFileMedia grm = getGridFileMedia(artifact.getFile());
+		FileOutputStream out;
+		try {
+			String path = basePath + artifact.getName();
+			out = new FileOutputStream(path);
+			if(grm.getByteArray() != null)
+				out.write(grm.getByteArray());
+			else out.write(grm.getContent().getBytes());
+			out.close();
+			return path;
+		} catch (FileNotFoundException e) {
+			throw new BusinessException();
+		}
+		catch (IOException e) {
+			throw new BusinessException();
+		}
 		
 	}
 

@@ -71,10 +71,10 @@ public class ATLTransformationRESTController {
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Transformation> getMetamodel(@PathVariable("id_transformation") String idtransformation) {
+	public @ResponseBody HttpEntity<Transformation> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
-			Transformation metamodel = ATLtransformationService.findOneBySharedUser(idtransformation, user);
-			return new ResponseEntity<Transformation>(metamodel, HttpStatus.OK);
+			Transformation transformation = ATLtransformationService.findOneBySharedUser(idtransformation, user);
+			return new ResponseEntity<Transformation>(transformation, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Transformation>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
