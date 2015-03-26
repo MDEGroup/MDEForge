@@ -51,6 +51,7 @@ import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -87,8 +88,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider {
-
+public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider, SearchProvider {
+	//TODO implements search inteface methods
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
