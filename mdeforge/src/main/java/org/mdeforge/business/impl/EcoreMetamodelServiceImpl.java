@@ -73,6 +73,7 @@ import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
+import org.mdeforge.search.jsonMongoUtils.EmfjsonMongo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -89,6 +90,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider, SearchProvider {
+	
+	public static final String jsonMongoUriBase = "mongodb://maja:majacdg@localhost:27017/MDEForge/jsonArtifact/";
+	
 	//TODO implements search inteface methods
 	@Autowired
 	private ProjectService projectService;
@@ -234,12 +238,19 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			if (ecoreMetamodel.getId() != null)
 				throw new BusinessException();
 
-			// File handler
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(ecoreMetamodel.getName());
-			fileMedia.setByteArray(Base64.decode(ecoreMetamodel.getFile()
-					.getContent().getBytes()));
-			ecoreMetamodel.setFile(fileMedia);
+//			// File handler
+//			GridFileMedia fileMedia = new GridFileMedia();
+//			fileMedia.setFileName(ecoreMetamodel.getName());
+//			fileMedia.setByteArray(Base64.decode(ecoreMetamodel.getFile()
+//					.getContent().getBytes()));
+//			ecoreMetamodel.setFile(fileMedia);
+			
+			String sourceUri = ecoreMetamodel.getUri();
+			
+			ObjectId id = new ObjectId();
+			ecoreMetamodel.setUri(jsonMongoUriBase+id.toString());
+			
+			ecoreMetamodel.setExtractedContents(EmfjsonMongo.getInstance().serializeAndSaveMetamodel(sourceUri, ecoreMetamodel.getUri()));
 
 			// check workspace Auth
 			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
