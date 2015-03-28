@@ -91,7 +91,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider, SearchProvider {
 	
-	public static final String jsonMongoUriBase = "mongodb://maja:majacdg@localhost:27017/MDEForge/jsonArtifact/";
+	public static final String jsonMongoUriBase = "mongodb://localhost:27017/MDEForge/jsonArtifact/";
 	
 	//TODO implements search inteface methods
 	@Autowired
@@ -293,6 +293,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			}
 			return ecoreMetamodel.getId();
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BusinessException();
 		}
 	}

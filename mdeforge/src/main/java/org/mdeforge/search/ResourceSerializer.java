@@ -10,7 +10,12 @@ import java.util.Set;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -142,5 +147,49 @@ public class ResourceSerializer {
 		}
 		
 		return contentsString;
+	}
+
+	/**
+	 * Prints the names of classes, attributes, references, enums, enum literals, and datatypes in a package.
+	 */
+	public static void printPackage(EPackage ePackage)
+	{
+		for (EClassifier classifier : ePackage.getEClassifiers())
+		{
+			System.out.println(classifier.getName());
+			System.out.print("  ");
+
+			if (classifier instanceof EClass)
+			{
+				EClass eClass = (EClass)classifier;
+				for (EAttribute attribute : eClass.getEAttributes())
+				{
+					System.out.print(attribute.getName() + " ");
+				}
+				if (!eClass.getEAttributes().isEmpty() && !eClass.getEReferences().isEmpty())
+				{
+					System.out.println();
+					System.out.print("  ");
+				}
+				for (EReference reference : eClass.getEReferences())
+				{
+					System.out.print(reference.getName() + " ");
+				}
+			}
+			else if (classifier instanceof EEnum)
+			{
+				EEnum eEnum = (EEnum)classifier;
+				for (EEnumLiteral literal : eEnum.getELiterals())
+				{
+					System.out.print(literal.getName() + " ");
+				}
+			}
+			else if (classifier instanceof EDataType)
+			{
+				EDataType eDataType = (EDataType)classifier;
+				System.out.print(eDataType.getInstanceClassName());
+			}
+			System.out.println();
+		}
 	}
 }
