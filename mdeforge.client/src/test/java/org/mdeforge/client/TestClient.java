@@ -45,11 +45,9 @@ public class TestClient {
 			Project p = c.getProjects().get(0);
 			EcoreMetamodel emm = new EcoreMetamodel();
 			emm.setName("ProvaSalvi");
-			emm.setUri("temp/Database.ecore");
 			emm.getProjects().add(p);
-			//p.getArtifacts().add(emm);
-			c.addEcoreMetamodel(emm);
-			System.out.println("Fatto");
+			c.addEcoreMetamodel(emm, "temp/Database.ecore");
+			System.out.println("Done!!!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

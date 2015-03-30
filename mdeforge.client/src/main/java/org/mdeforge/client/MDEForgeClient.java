@@ -1,6 +1,7 @@
 package org.mdeforge.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -219,10 +220,13 @@ public class MDEForgeClient {
 	}
 	
 	public void addEcoreMetamodel(EcoreMetamodel metamodel, String file) throws Exception {
-		GridFileMedia gfm = new GridFileMedia();
-		String s = MDEForgeClient.readFile(file);		
-		gfm.setContent(s);
-		metamodel.setFile(gfm);
+//		GridFileMedia gfm = new GridFileMedia();
+//		File f = new File(file);
+//		String path = f.getAbsolutePath();
+//		String s = MDEForgeClient.readFile(file);		
+//		gfm.setContent(s);
+//		metamodel.setFile(gfm);
+		metamodel.setUri((new File(file)).toURI().getPath());
 		ObjectNode on = mapper.valueToTree(metamodel);
 		metamodel.setId(doPostRequest(connectionUrl + "api/ecoreMetamodel/", on));
 	}
