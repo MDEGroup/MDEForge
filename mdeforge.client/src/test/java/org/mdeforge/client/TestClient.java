@@ -28,6 +28,7 @@ public class TestClient {
 			
 			w = ws.get(0);
 			p.getWorkspaces().add(w);
+			w.getProjects().add(p);
 			c.addProject(p);
 			System.out.println("project created");
 			
@@ -36,14 +37,12 @@ public class TestClient {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
 			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-			
-			Project p = new Project();
-			p.setId("551414e26dd0d289c2e2b990");
+			Project p = c.getProjects().get(0);
 			EcoreMetamodel emm = new EcoreMetamodel();
 			emm.setName("ProvaSalvi");
 			emm.setUri("temp/Database.ecore");
