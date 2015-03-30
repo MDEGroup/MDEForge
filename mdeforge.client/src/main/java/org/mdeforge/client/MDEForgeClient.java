@@ -230,6 +230,20 @@ public class MDEForgeClient {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		metamodel.setId(doPostRequest(connectionUrl + "api/ecoreMetamodel/", on));
 	}
+	
+	public void addModel(Model model, String file, String idMetamodel) throws Exception {
+//		GridFileMedia gfm = new GridFileMedia();
+//		File f = new File(file);
+//		String path = f.getAbsolutePath();
+//		String s = MDEForgeClient.readFile(file);		
+//		gfm.setContent(s);
+//		metamodel.setFile(gfm);
+		model.setMetamodel(idMetamodel);
+		model.setUri((new File(file)).toURI().getPath());
+		ObjectNode on = mapper.valueToTree(model);
+		model.setId(doPostRequest(connectionUrl + "api/model/", on));
+	}
+	
 	private String doGetRequest(String urlString) throws Exception {
 		urlString += auth;
 		URL url = new URL(urlString);

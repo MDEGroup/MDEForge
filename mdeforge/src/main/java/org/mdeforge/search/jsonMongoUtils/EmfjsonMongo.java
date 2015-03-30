@@ -88,7 +88,8 @@ public class EmfjsonMongo {
 		return resource;
 	}
 	
-	public String saveModel(Resource mm, String sourceURI, String mongoURI){
+	public String saveModel(String metamodelURI, String sourceURI, String mongoURI){
+		Resource mm = loadMetamodel(metamodelURI);
 		EPackage mmePackage = null;
 		
 		ResourceSet load_resourceSet = new ResourceSetImpl();

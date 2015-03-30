@@ -260,9 +260,9 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			for (Project p : ecoreMetamodel.getProjects()) {
 				projectService.findById(p.getId(), ecoreMetamodel.getAuthor());
 			}
-			if (ecoreMetamodel.getFile() != null) {
-				gridFileMediaService.store(ecoreMetamodel.getFile());
-			}
+//			if (ecoreMetamodel.getFile() != null) {
+//				gridFileMediaService.store(ecoreMetamodel.getFile());
+//			}
 			ecoreMetamodel.setCreated(new Date());
 			ecoreMetamodel.setModified(new Date());
 			
