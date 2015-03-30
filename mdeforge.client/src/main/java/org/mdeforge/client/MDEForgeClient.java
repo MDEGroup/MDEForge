@@ -171,6 +171,11 @@ public class MDEForgeClient {
 		return result;
 	}
 	
+	public String createIndex() throws Exception{
+		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
+		return result;
+	}
+	
 	public void addMetamodel(Metamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		doPostRequest(connectionUrl + "api/metamodel/", on);

@@ -10,8 +10,10 @@ import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -41,9 +43,18 @@ public class Artifact implements java.io.Serializable{
 	private boolean open = false;
 	private String name = null;
 	private String description = null;
+	private String authors = null;
 	private List<String> tags = null;
 	private String version = null;
 	private String extractedContents = null;
+
+//	private @TextIndexed(weight=20) String name = null;
+//	private @TextIndexed(weight=10) String description = null;
+//	private @TextIndexed(weight=5) String authors = null;
+//	private @TextIndexed(weight=7) List<String> tags = null;
+//	private String version = null;
+//	private @TextIndexed(weight=1) String extractedContents = null;
+//	private @TextScore Float score;
 	
 	
 	@DBRef(lazy = true)
@@ -229,12 +240,23 @@ public class Artifact implements java.io.Serializable{
 	public String getDescription() {
 		return description;
 	}
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public String getAuthors() {
+		return authors;
+	}
+	
+	public void setAuthors(String authors) {
+		this.authors = authors;
+	}
+	
 	public List<String> getTags() {
 		return tags;
 	}
+	
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}

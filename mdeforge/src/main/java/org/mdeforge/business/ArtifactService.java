@@ -50,4 +50,6 @@ public interface ArtifactService {
 	ArtifactList findArtifactInProject(String idProject, User user);
 
 	ArtifactList findArtifactInWorkspace(String id, User user);
+
+	void createIndex();
 }

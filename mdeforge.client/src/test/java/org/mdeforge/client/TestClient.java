@@ -1,5 +1,6 @@
 package org.mdeforge.client;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -46,7 +47,11 @@ public class TestClient {
 			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
 			Project p = c.getProjects().get(0);
 			EcoreMetamodel emm = new EcoreMetamodel();
-			emm.setName("ProvaSalvi");
+			emm.setName("Prova Salvi");
+			List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
+			emm.setTags(tags);
+			emm.setDescription("Describes the basic structure of a general Relational DB");
+			emm.setAuthors("Metamodels Authors");
 			emm.getProjects().add(p);
 			c.addEcoreMetamodel(emm, "temp/Database.ecore");
 			System.out.println("Metamodel Saved!!!");
@@ -56,6 +61,7 @@ public class TestClient {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testAddModel(){
 		try {
@@ -64,9 +70,25 @@ public class TestClient {
 			String idMM = p.getArtifacts().get(0).getId();
 			Model m = new Model();
 			m.setName("ModelSalvi");
+			List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
+			m.setTags(tags);
+			m.setDescription("Rapresent a model of a general Relational DB");
+			m.setAuthors("Models Authors");
 			m.getProjects().add(p);
 			c.addModel(m, "temp/My.database", idMM);
 			System.out.println("Model Saved!!!");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testCreateIndex(){
+		try {
+			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
+			String result = c.createIndex();
+			System.out.println(result);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

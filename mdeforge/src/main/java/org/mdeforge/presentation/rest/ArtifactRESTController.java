@@ -95,6 +95,15 @@ public class ArtifactRESTController {
 
 	}
 
+	@RequestMapping(value = "/createIndex", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> createIndex() {
+
+		artifactService.createIndex();
+		
+		return new ResponseEntity<String>("OK", HttpStatus.OK);
+
+	}
+
 
 
 }
