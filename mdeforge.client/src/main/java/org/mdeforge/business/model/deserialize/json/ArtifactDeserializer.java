@@ -25,12 +25,26 @@ public class ArtifactDeserializer extends JsonDeserializer<Artifact>{
 
         String id = node.get("id").textValue();
         String name = node.get("name").textValue();
-        Artifact art = new Artifact();
-        art.setId(id);
-        art.setName(name);
-        //String userId = node.get("createdBy").textValue();
-
-        return art;
+        String href = node.get("href").textValue();
+        String className = node.get("_class").textValue();
+        try {
+			Class<?> cls = Class.forName(className);
+			Object clsInstance = (Object) cls.newInstance();
+			Artifact art = (Artifact) clsInstance;
+	        art.setId(id);
+	        art.setName(name);
+	        art.setHref("");
+	        return art;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

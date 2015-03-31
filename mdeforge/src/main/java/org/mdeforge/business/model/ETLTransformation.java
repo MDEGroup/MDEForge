@@ -1,6 +1,8 @@
 package org.mdeforge.business.model;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * A representation of the model object '<em><b>Transformation</b></em>'. <!--
  * begin-user-doc --> <!-- end-user-doc -->
@@ -13,10 +15,13 @@ public class ETLTransformation extends Transformation {
 	
 	protected String modules;
 	protected List<Model> model_in;
+	@JsonIgnore
 	protected List<Model> targetModel;
 	//TODO DANIELE: DEVE ESSERE ELIMINATO (VEDERE SE PUO ESSERE DEDOTTO)!!!! COMUNQUE DEVE DIVENTARE UNA LISTA in ipotesi n a m
+	@JsonIgnore
 	private String targetName;
 	//TODO DANIELE: DEVE ESSERE ELIMINATO (VEDERE SE PUO ESSERE DEDOTTO)!!!! COMUNQUE DEVE DIVENTARE UNA LISTA in ipotesi n a m
+	@JsonIgnore
 	private String sourceName;
 	
 	public String getSourceName() {

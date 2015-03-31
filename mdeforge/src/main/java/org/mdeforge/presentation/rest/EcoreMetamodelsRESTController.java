@@ -43,7 +43,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 
 @Controller
 @RestController
-@RequestMapping("/api/ecoreMetamodel")
+@RequestMapping("/api/EcoreMetamodel")
 public class EcoreMetamodelsRESTController {
 
 	@Autowired
@@ -137,7 +137,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodelsByUser() {
 		ArtifactList list = ecoreMetamodelService.findAllEcoreMetamodelsByUserId(user);
-		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 	}
 
 	// Create metamodel

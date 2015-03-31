@@ -52,6 +52,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SearchProvider;
+import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -233,7 +234,8 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 			// GetUser
 			if (ecoreMetamodel.getId() != null)
 				throw new BusinessException();
-
+			ecoreMetamodel.setCreated(new Date());
+			ecoreMetamodel.setModified(ecoreMetamodel.getCreated());
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName(ecoreMetamodel.getName());

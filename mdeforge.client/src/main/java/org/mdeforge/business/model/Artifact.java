@@ -56,6 +56,7 @@ public class Artifact implements java.io.Serializable{
 	@JsonSerialize(using = UserSerializer.class)
 	private User author = new User();
 	private List<Property> properties = new ArrayList<Property>();
+	@JsonIgnore private String href;
 //	
 	//	@DBRef(lazy=true)
 //	@JsonBackReference
@@ -228,5 +229,12 @@ public class Artifact implements java.io.Serializable{
 
 	public void set_class(String _class) {
 		this._class = _class;
+	}
+
+	public void setHref(String string) {
+		this.href = string;
+	}
+	public String getHref() {
+		return this.href;
 	}
 }

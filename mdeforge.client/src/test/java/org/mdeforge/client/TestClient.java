@@ -52,25 +52,43 @@ public class TestClient extends TestCase {
 //		}
 //	}
 	
+//	@Test
+//	public void testAddEcoreMetamodel () {
+//		try {
+//			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+//			EcoreMetamodel emm = new EcoreMetamodel();
+//			emm.setName("ProvaSalvi");
+//			Project p = new Project();
+//			p.setId("55141440456855157ebc5716");
+//			//p.getArtifacts().add(emm);
+//			emm.getProjects().add(p);
+//			c.addEcoreMetamodel(emm, "temp/WebAppMM.ecore");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	@Test
-	public void testAddEcoreMetamodel () {
+	public void testSimilarityEcoreMetamodel () {
 		try {
 			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
-			EcoreMetamodel emm = new EcoreMetamodel();
-			emm.setName("ProvaSalvi");
-			Project p = new Project();
-			p.setId("55141440456855157ebc5716");
-			//p.getArtifacts().add(emm);
-			emm.getProjects().add(p);
-			c.addEcoreMetamodel(emm, "temp/WebAppMM.ecore");
+			c.getEcoreMetamodelSimilarity("5502ef52e568aba0ce3c8c6c", "54d0997b8252e88f947f9a76");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+	@Test
+	public void testSimilarityEcoreMetamodel2 () {
+		try {
+			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+			c.getEcoreMetamodelSimilarity("5502ef52e568aba0ce3c8c6c", "54d0997b8252e88f947f9a76");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 //	@Test
 //	public void addETLTransformation() throws Exception {
 //		ETLTransformation etl = new ETLTransformation();

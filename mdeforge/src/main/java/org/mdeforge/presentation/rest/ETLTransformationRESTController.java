@@ -47,7 +47,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 ;
 
 @Controller
-@RequestMapping("/api/ETLtransformation")
+@RequestMapping("/api/ETLTransformation")
 public class ETLTransformationRESTController {
 
 	@Autowired
@@ -64,9 +64,9 @@ public class ETLTransformationRESTController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
-		ArtifactList result = ETLtransformationService
+		List<ETLTransformation> result = ETLtransformationService
 				.findAllWithPublic(user.getId());
-		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
+		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
@@ -82,8 +82,8 @@ public class ETLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		ArtifactList list = ETLtransformationService.findAllPublic();
-		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		List<ETLTransformation> list = ETLtransformationService.findAllPublic();
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
 	}
@@ -102,9 +102,9 @@ public class ETLTransformationRESTController {
 
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
-		ArtifactList list = ETLtransformationService
+		List<ETLTransformation> list = ETLtransformationService
 				.findAllTransformationsByUserId(user.getId());
-		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 
 	}
 

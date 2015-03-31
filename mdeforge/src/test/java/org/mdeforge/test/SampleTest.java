@@ -20,8 +20,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.m2m.atl.digraphs2weightedbipartitegraph.files.Digraphs2weightedbipartitegraph;
-import org.eclipse.m2m.atl.ecore2digraph_v2.files.Ecore2directgraph;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -40,14 +39,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import algorithm.HungarianAlgorithm;
-
 import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
 import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
 import com.google.common.io.Files;
 
-import digraphMM.impl.DigraphMMFactoryImpl;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
 								   "file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml"})
@@ -139,12 +134,12 @@ public class SampleTest {
 //		}
 //
 //	}
-	@Test
-	public void testValidationNoIoc() {
-		ValidateEcoreService va = new ValidateEcoreService();
-		boolean b = va.isValid(null);
-
-	}
+//	@Test
+//	public void testValidationNoIoc() {
+//		ValidateEcoreService va = new ValidateEcoreService();
+//		boolean b = va.isValid(null);
+//
+//	}
 
 	@Test
 	public void testSimilarityNoIoc() {

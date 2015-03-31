@@ -19,6 +19,7 @@ public class ArtifactListSerializer extends JsonSerializer<List<Artifact>> {
 		jgen.writeStartArray();
 		for (Artifact artifact : arg0) {
 			jgen.writeStartObject();
+			jgen.writeStringField("href","/api/artifact/" + artifact.getId());
 	        jgen.writeStringField("id", artifact.getId());
 	        jgen.writeStringField("name", artifact.getName() );
 	        jgen.writeStringField("_class", artifact.getClass().getCanonicalName() );

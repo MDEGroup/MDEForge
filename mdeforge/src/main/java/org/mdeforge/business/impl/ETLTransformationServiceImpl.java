@@ -241,7 +241,7 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 	}
 
 	@Override
-	public ArtifactList findAllTransformationsByUserId(String username)
+	public List<ETLTransformation> findAllTransformationsByUserId(String username)
 			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
@@ -250,10 +250,10 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 				.in(username)
 				.andOperator(
 						Criteria.where("_class").is(
-								Transformation.class.getCanonicalName())));
-		List<Transformation> metamodels = operations.find(query,
-				Transformation.class);
-		return new ArtifactList(metamodels);
+								ETLTransformation.class.getCanonicalName())));
+		List<ETLTransformation> metamodels = operations.find(query,
+				ETLTransformation.class);
+		return metamodels;
 	}
 
 	@Override
@@ -335,19 +335,19 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 	}
 
 	@Override
-	public ArtifactList findAllWithPublic(String user)
+	public List<ETLTransformation> findAllWithPublic(String user)
 			throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared").in(user);
 		Criteria c2 = Criteria.where("open").is("true");
 		query.addCriteria(c1.orOperator(c2));
-		List<Transformation> result = n.find(query, Transformation.class);
-		return new ArtifactList(result);
+		List<ETLTransformation> result = n.find(query, ETLTransformation.class);
+		return result;
 	}
 
 	@Override
-	public ArtifactList findAllPublic() throws BusinessException {
+	public List<ETLTransformation> findAllPublic() throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		query.addCriteria(Criteria
@@ -355,10 +355,10 @@ public class ETLTransformationServiceImpl implements ETLTransformationService {
 				.is(true)
 				.andOperator(
 						Criteria.where("_class").is(
-								Transformation.class.getCanonicalName())));
+								ETLTransformation.class.getCanonicalName())));
 
-		List<Transformation> result = n.find(query, Transformation.class);
-		return new ArtifactList(result);
+		List<ETLTransformation> result = n.find(query, ETLTransformation.class);
+		return result;
 	}
 
 	// Inizio Alexander

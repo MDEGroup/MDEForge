@@ -35,7 +35,7 @@ public class RelationListSerializer extends JsonSerializer<List<Relation>> {
 	//					jgen.writeStringField("fromArtifact", relation.getToArtifact().getId());
 	//					jjgengen.writeStringField("toArtifact", relation.getFromArtifact().getId());				
 						jgen.writeStringField("name", relation.getName());
-						jgen.writeStringField("@class", relation.getClass().getCanonicalName());
+						jgen.writeStringField("_class", relation.getClass().getCanonicalName());
 					jgen.writeEndObject();
 				}
 			}

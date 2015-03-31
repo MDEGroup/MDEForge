@@ -103,11 +103,11 @@ public class MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
 	}
 	public List<EcoreMetamodel> getEcoreMetamodelsInWorkspace(String idWorkspace) throws Exception {
-		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/ecoreMetamodel/");
+		String result = doGetRequest(connectionUrl + "api/workspace/" + idWorkspace + "/EcoreMetamodel/");
 		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
 	}
 	public List<EcoreMetamodel> getEcoreMetamodelsInProject(String idProject) throws Exception {
-		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/ecoreMetamodel/");
+		String result = doGetRequest(connectionUrl + "api/project/" + idProject + "/EcoreMetamodel/");
 		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
 	}
 
@@ -138,7 +138,7 @@ public class MDEForgeClient {
 	}
 
 	public List<EcoreMetamodel> getEcoreMetamodels() throws Exception {
-		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/shared");
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/shared");
 		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
 	}
 	
@@ -153,7 +153,7 @@ public class MDEForgeClient {
 	}
 
 	public EcoreMetamodel getEcoreMetamodel(String id) throws Exception {
-		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/" + id);
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/" + id);
 		return mapper.readValue(result, EcoreMetamodel.class);
 	}
 	public Transformation getTransformation(String id) throws Exception{
@@ -161,22 +161,22 @@ public class MDEForgeClient {
 		return mapper.readValue(result, Transformation.class);
 	}
 	public List<Metric> getEcoreMetamodelMetrics(String idMetamodel) throws Exception{
-		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/" + idMetamodel + "/metrics");
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/" + idMetamodel + "/metrics");
 		return mapper.readValue(result, new TypeReference<List<Metric>>() {});
 	}
 	
 	public String getEcoreMetamodelSimilarity(String idMetamodel1, String idMetamodel2) throws Exception{
-		String result = doGetRequest(connectionUrl + "api/ecoreMetamodel/similarity/" + idMetamodel1 + "/" + idMetamodel2);
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/similarity/" + idMetamodel1 + "/" + idMetamodel2);
 		return result;
 	}
-	
+		
 	public void addMetamodel(Metamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		doPostRequest(connectionUrl + "api/metamodel/", on);
 	}
 	public void executeETLTransformation(String id, List<Model> models) throws Exception {
 		ArrayNode on = mapper.valueToTree(new ArtifactList(models));
-		doPostRequest(connectionUrl + "/api/ETLtransformation/execute/" + id, on);
+		doPostRequest(connectionUrl + "/api/ETLTransformation/execute/" + id, on);
 	}
 	public void addMetamodel(Metamodel metamodel, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
@@ -191,12 +191,12 @@ public class MDEForgeClient {
 		gfm.setContent(MDEForgeClient.readFile(file));
 		transformation.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(transformation);
-		doPostRequest(connectionUrl + "api/ATLtransformation/", on);
+		doPostRequest(connectionUrl + "api/ATLTransformation/", on);
 	}
 
 	public void addATLTransformatio(ATLTransformation transofrmation) throws Exception {
 		ObjectNode on = mapper.valueToTree(transofrmation);
-		transofrmation.setId(doPostRequest(connectionUrl + "api/ATLtransformation/", on));
+		transofrmation.setId(doPostRequest(connectionUrl + "api/ATLTransformation/", on));
 		
 	}
 	public void addETLTransformation(ETLTransformation transformation, String file) throws Exception {
@@ -204,17 +204,17 @@ public class MDEForgeClient {
 		gfm.setContent(MDEForgeClient.readFile(file));
 		transformation.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(transformation);
-		doPostRequest(connectionUrl + "api/ETLtransformation/", on);
+		doPostRequest(connectionUrl + "api/ETLTransformation/", on);
 	}
 
 	public void addETLTransformatio(ETLTransformation transofrmation) throws Exception {
 		ObjectNode on = mapper.valueToTree(transofrmation);
-		transofrmation.setId(doPostRequest(connectionUrl + "api/ETLtransformation/", on));
+		transofrmation.setId(doPostRequest(connectionUrl + "api/ETLTransformation/", on));
 		
 	}
 	public void addEcoreMetamodel(EcoreMetamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
-		metamodel.setId(doPostRequest(connectionUrl + "api/ecoreMetamodel/", on));
+		metamodel.setId(doPostRequest(connectionUrl + "api/EcoreMetamodel/", on));
 		
 	}
 	
@@ -224,7 +224,7 @@ public class MDEForgeClient {
 		gfm.setContent(s);
 		metamodel.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(metamodel);
-		metamodel.setId(doPostRequest(connectionUrl + "api/ecoreMetamodel/", on));
+		metamodel.setId(doPostRequest(connectionUrl + "api/EcoreMetamodel/", on));
 	}
 	private String doGetRequest(String urlString) throws Exception {
 		urlString += auth;
@@ -285,5 +285,15 @@ public class MDEForgeClient {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(Base64.encodeBase64(encoded));
 		
+	}
+
+	public List<ETLTransformation> getETLTransformations() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ETLTransformation/shared");
+		return mapper.readValue(result, new TypeReference<List<ETLTransformation>>() {});
+	}
+	
+	public List<ATLTransformation> getATLTransformations() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ATLTransformation/shared");
+		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
 	}
 }

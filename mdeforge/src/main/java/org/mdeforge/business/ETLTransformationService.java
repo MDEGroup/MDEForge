@@ -30,11 +30,11 @@ public interface ETLTransformationService {
 	
 	List<ETLTransformation> findAllTransformations() throws BusinessException;
 	
-	ArtifactList findAllTransformationsByUserId(String user) throws BusinessException;
+	List<ETLTransformation> findAllTransformationsByUserId(String user) throws BusinessException;
 	
-	ArtifactList findAllWithPublic(String user) throws BusinessException;
+	List<ETLTransformation> findAllWithPublic(String user) throws BusinessException;
 	
-	ArtifactList findAllPublic() throws BusinessException;
+	List<ETLTransformation> findAllPublic() throws BusinessException;
 	
 	ETLTransformation findByName(String name);
 	

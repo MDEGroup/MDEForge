@@ -71,8 +71,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
-			workspace.getArtifacts().add(m);
+			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
+			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
 		for (Project p : workspace.getProjects()) {

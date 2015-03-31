@@ -155,17 +155,17 @@ public class ProjectServiceImpl implements ProjectService {
 		projectRepository.save(project);
 		for (Workspace ws : workspaces) {
 			Workspace w = workspaceRepository.findOne(ws.getId());
-			ws.getProjects().add(project);
+			w.getProjects().add(project);
 			workspaceRepository.save(w);
 		}
 		for (User us : project.getUsers()) {
 			User u = userRepository.findOne(us.getId());
-			us.getSharedProject().add(project);
+			u.getSharedProject().add(project);
 			userRepository.save(u);
 		}
 		for (Artifact art : project.getArtifacts()) {
 			Artifact u = artifactRepository.findOne(art.getId());
-			art.getProjects().add(project);
+			u.getProjects().add(project);
 			artifactRepository.save(u);
 		}
 	}

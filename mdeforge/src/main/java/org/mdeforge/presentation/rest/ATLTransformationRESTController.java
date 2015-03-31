@@ -41,7 +41,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 ;
 
 @Controller
-@RequestMapping("/api/ATLtransformation")
+@RequestMapping("/api/ATLTransformation")
 public class ATLTransformationRESTController {
 
 	@Autowired
