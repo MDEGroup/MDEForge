@@ -7,6 +7,7 @@ import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
@@ -27,11 +28,13 @@ import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class ArtifactServiceImpl implements ArtifactService {
+public class ArtifactServiceImpl implements ArtifactService, SearchProvider {
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
@@ -327,6 +330,31 @@ public class ArtifactServiceImpl implements ArtifactService {
 			.build();
 
 		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
+	
+	@Override
+	public List<Artifact> search(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+		List<Artifact> artifacts = operations.find(Query.query(criteria), Artifact.class);
+		
+		return artifacts;
+	}
+	
+	@Override
+	public List<Artifact> orederedSearch(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+
+		TextQuery query = new TextQuery(criteria);
+		query.setScoreFieldName("score");
+		query.sortByScore();
+
+		List<Artifact> artifacts = operations.find(query, Artifact.class);
+		
+		return artifacts;
 	}
 
 }

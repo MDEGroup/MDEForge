@@ -5,8 +5,10 @@ import java.util.List;
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -72,7 +74,6 @@ public class ArtifactRESTController {
 	public @ResponseBody HttpEntity<List<Artifact>> getPublicArtifacts() {
 		List<Artifact> list = artifactService.findAllPublic();
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
-
 	}
 
 	// get shared artifact
@@ -80,7 +81,6 @@ public class ArtifactRESTController {
 	public @ResponseBody HttpEntity<List<Artifact>> getArtifactsByUser() {
 		List<Artifact> list = artifactService.findAllWithPublic(user);
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
-
 	}
 
 	// get single artifact
@@ -92,18 +92,31 @@ public class ArtifactRESTController {
 		} catch (BusinessException e) {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-
 	}
 
+	//create artifact index
 	@RequestMapping(value = "/createIndex", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> createIndex() {
-
-		artifactService.createIndex();
-		
-		return new ResponseEntity<String>("OK", HttpStatus.OK);
-
+		try {
+			artifactService.createIndex();
+			
+			return new ResponseEntity<String>("OK", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 	}
 
-
-
+	// search artifacts ordered by score
+	@RequestMapping(value = "/orederedSearch/{text}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> orderedSearch(@PathVariable("text") String text) {
+		try {
+			SearchProvider searchProvider = (SearchProvider) artifactService;
+			ArtifactList list = new ArtifactList(searchProvider.orederedSearch(text));
+			
+			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	
 }

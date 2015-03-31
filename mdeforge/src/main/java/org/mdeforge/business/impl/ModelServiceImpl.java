@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class ModelServiceImpl implements ModelService, SearchProvider {
+public class ModelServiceImpl implements ModelService {
 	
 	public static final String jsonMongoUriBase = "mongodb://localhost:27017/MDEForge/jsonArtifact/";
 

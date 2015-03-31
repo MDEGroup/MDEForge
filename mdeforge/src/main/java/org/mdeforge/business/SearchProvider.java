@@ -1,6 +1,11 @@
 package org.mdeforge.business;
 
+import java.util.List;
+
+import org.mdeforge.business.model.Artifact;
+
 public interface SearchProvider {
 
-	//TODO put search methods interface
+	public List<Artifact> search(String text);
+	public List<Artifact> orederedSearch(String text);
 }

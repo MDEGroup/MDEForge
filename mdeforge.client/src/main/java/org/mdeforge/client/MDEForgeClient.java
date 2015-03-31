@@ -175,6 +175,10 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
 		return result;
 	}
+	public List<Artifact> orderedSearch(String text) throws Exception{
+		String result = doGetRequest(connectionUrl + "api/artifact/orederedSearch/" + text);
+		return mapper.readValue(result, new TypeReference<List<Artifact>>() {});
+	}
 	
 	public void addMetamodel(Metamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
