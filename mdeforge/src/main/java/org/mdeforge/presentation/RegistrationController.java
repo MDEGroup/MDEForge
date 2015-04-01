@@ -1,9 +1,7 @@
 package org.mdeforge.presentation;
 
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.model.Role;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

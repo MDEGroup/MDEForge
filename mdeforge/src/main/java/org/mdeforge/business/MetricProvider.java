@@ -3,7 +3,6 @@ package org.mdeforge.business;
 import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.Metric;
 
 public interface MetricProvider {
 

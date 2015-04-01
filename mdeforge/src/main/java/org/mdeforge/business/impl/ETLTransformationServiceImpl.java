@@ -1,9 +1,6 @@
 package org.mdeforge.business.impl;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +8,10 @@ import java.util.Random;
 
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.epsilon.common.util.StringProperties;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelElementTypeNotFoundException;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.models.IModel;
-import org.eclipse.epsilon.eol.models.IRelativePathResolver;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;

@@ -3,7 +3,6 @@ package org.mdeforge.business.model.serializer.json;
 import java.io.IOException;
 import java.util.List;
 
-import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 
 import com.fasterxml.jackson.core.JsonGenerator;

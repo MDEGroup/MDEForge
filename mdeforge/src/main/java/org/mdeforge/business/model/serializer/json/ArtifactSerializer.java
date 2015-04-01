@@ -1,7 +1,6 @@
 package org.mdeforge.business.model.serializer.json;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
 

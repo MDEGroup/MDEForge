@@ -1,6 +1,5 @@
 package org.mdeforge.presentation.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
@@ -9,15 +8,9 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityService;
-import org.mdeforge.business.ValidateService;
-import org.mdeforge.business.impl.SimilarityServiceImpl;
-import org.mdeforge.business.impl.ValidateEcoreService;
-import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
-import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +18,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -55,8 +45,7 @@ public class EcoreMetamodelsRESTController {
 	@Autowired
 	private User user;
 	
-	@Autowired
-	private SimilarityService similarityService;
+	
 //	@Autowired
 //	private ValidateService validateService;
 	
@@ -67,13 +56,10 @@ public class EcoreMetamodelsRESTController {
 			@PathVariable("id_MM1") String id_MM1,
 			@PathVariable("id_MM2") String id_MM2) {
 		
-		//SimilarityServiceImpl si = new SimilarityServiceImpl();
-		
 		EcoreMetamodel mm1 = ecoreMetamodelService.findOne(id_MM1);
 		EcoreMetamodel mm2 = ecoreMetamodelService.findOne(id_MM2);
-		
-		//si.calculateSimilarity(mm1, mm2);
-		similarityService.calculateSimilarity(mm1, mm2);
+		SimilarityService si = (SimilarityService) ecoreMetamodelService;
+		si.calculateSimilarity(mm1, mm2);
 		return null;
 	}
 	

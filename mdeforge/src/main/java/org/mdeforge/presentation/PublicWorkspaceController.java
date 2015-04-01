@@ -2,7 +2,6 @@ package org.mdeforge.presentation;
 
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ModelService;
@@ -14,7 +13,6 @@ import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Transformation;
-import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;

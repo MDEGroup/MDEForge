@@ -220,8 +220,11 @@ public class MDEForgeClient {
 	
 	public void addEcoreMetamodel(EcoreMetamodel metamodel, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
+		String[] temp = file.split("/");
+		String fileName = temp[temp.length -1];
 		String s = MDEForgeClient.readFile(file);		
 		gfm.setContent(s);
+		gfm.setFileName(fileName);
 		metamodel.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(metamodel);
 		metamodel.setId(doPostRequest(connectionUrl + "api/EcoreMetamodel/", on));

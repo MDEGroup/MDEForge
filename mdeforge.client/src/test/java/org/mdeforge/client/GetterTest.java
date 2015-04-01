@@ -1,7 +1,6 @@
 package org.mdeforge.client;
 
 import static org.junit.Assert.assertNotNull;
-import junit.framework.TestCase;
 
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -1,16 +1,11 @@
 package org.mdeforge.client;
 
-import static org.junit.Assert.assertNotNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ETLTransformation;

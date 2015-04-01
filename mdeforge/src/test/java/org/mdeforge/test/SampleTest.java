@@ -1,26 +1,6 @@
 package org.mdeforge.test;
 
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.maven.artifact.Artifact;
-import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -28,20 +8,11 @@ import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.impl.SimilarityServiceImpl;
-import org.mdeforge.business.impl.ValidateEcoreService;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Metamodel;
-import org.mdeforge.business.model.SimilarityRelation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.fasterxml.jackson.module.jsonSchema.annotation.JsonHyperSchema;
-import com.fasterxml.jackson.module.jsonSchema.annotation.Link;
-import com.google.common.io.Files;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml",

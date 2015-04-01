@@ -2,9 +2,8 @@ package org.mdeforge.presentation;
 
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
