@@ -8,6 +8,7 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityService;
+import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
@@ -67,12 +68,12 @@ public class EcoreMetamodelsRESTController {
 	public @ResponseBody HttpEntity<String> isValid(
 			@PathVariable("id_MM1") String id_MM1) {
 		
-		//ValidateEcoreService va = new ValidateEcoreService();
+		ValidateService va = (ValidateService)ecoreMetamodelService;
 		
 		EcoreMetamodel mm1 = ecoreMetamodelService.findOne(id_MM1);
 		
-		boolean v = true;
-		//boolean v = va.isValid(null);
+		
+		boolean v = va.isValid(mm1);
 		//boolean v = validationService.isValid(null);
 		return new ResponseEntity<String>(((v)?"Is valid":"Not valid"), HttpStatus.OK);
 	}
@@ -89,7 +90,7 @@ public class EcoreMetamodelsRESTController {
 	// Get specified metamodel
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodels() {
-		ArtifactList result = ecoreMetamodelService.findAllWithPublic(user);
+		ArtifactList result = new ArtifactList(ecoreMetamodelService.findAllWithPublic(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
@@ -115,14 +116,14 @@ public class EcoreMetamodelsRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getPublicEcoreMetamodels() {
-		ArtifactList list = ecoreMetamodelService.findAllPublic();
+		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllPublic());
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodelsByUser() {
-		ArtifactList list = ecoreMetamodelService.findAllEcoreMetamodelsByUserId(user);
+		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllEcoreMetamodelsByUserId(user));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 	}
 

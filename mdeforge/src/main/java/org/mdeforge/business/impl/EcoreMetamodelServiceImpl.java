@@ -17,6 +17,7 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicMonitor;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.Diff;
@@ -29,10 +30,13 @@ import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
+import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
@@ -60,6 +64,7 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.UserService;
+import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
@@ -98,7 +103,7 @@ import com.google.common.collect.Lists;
 
 @Service
 public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
-		MetricProvider, SearchProvider, SimilarityService {
+		MetricProvider, SearchProvider, SimilarityService, ValidateService {
 	// TODO implements search inteface methods
 	@Autowired
 	private ProjectService projectService;
@@ -223,7 +228,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 	}
 
 	@Override
-	public ArtifactList findAllEcoreMetamodelsByUserId(User user)
+	public List<EcoreMetamodel> findAllEcoreMetamodelsByUserId(User user)
 			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
@@ -235,7 +240,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 								EcoreMetamodel.class.getCanonicalName())));
 		List<EcoreMetamodel> ecoreMetamodels = operations.find(query,
 				EcoreMetamodel.class);
-		return new ArtifactList(ecoreMetamodels);
+		return ecoreMetamodels;
 	}
 
 	@Override
@@ -304,18 +309,18 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 	}
 
 	@Override
-	public ArtifactList findAllWithPublic(User user) throws BusinessException {
+	public List<EcoreMetamodel> findAllWithPublic(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared").in(user.getId());
 		Criteria c2 = Criteria.where("open").is("true");
 		query.addCriteria(c1.orOperator(c2));
 		List<EcoreMetamodel> result = n.find(query, EcoreMetamodel.class);
-		return new ArtifactList(result);
+		return result;
 	}
 
 	@Override
-	public ArtifactList findAllPublic() throws BusinessException {
+	public List<EcoreMetamodel> findAllPublic() throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria
@@ -326,7 +331,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 								EcoreMetamodel.class.getCanonicalName()));
 		query.addCriteria(c2);
 		List<EcoreMetamodel> result = n.find(query, EcoreMetamodel.class);
-		return new ArtifactList(result);
+		return result;
 	}
 
 	// Inizio Alexander
@@ -408,23 +413,21 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 	}
 
 	@Override
-	public ArtifactList findEcoreMetamodelInWorkspace(String idWorkspace,
+	public List<EcoreMetamodel> findEcoreMetamodelInWorkspace(String idWorkspace,
 			User user) throws BusinessException {
 		workspaceService.findById(idWorkspace, user);
-		ArtifactList aList = new ArtifactList(
+		return
 				ecoreMetamodelRepository.findByWorkspaceId(new ObjectId(
-						idWorkspace)));
-		return aList;
+						idWorkspace));
 	}
 
 	@Override
-	public ArtifactList findEcoreMetamodelInProject(String idProject, User user)
+	public List<EcoreMetamodel> findEcoreMetamodelInProject(String idProject, User user)
 			throws BusinessException {
 		projectService.findById(idProject, user);
-		ArtifactList aList = new ArtifactList(
+		return
 				ecoreMetamodelRepository
-						.findByProjectId(new ObjectId(idProject)));
-		return aList;
+						.findByProjectId(new ObjectId(idProject));
 	}
 
 	@Override
@@ -515,7 +518,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 
 		Container myForge = (Container) resource.getContents().get(0);
 		List<Metric> result = new ArrayList<Metric>();
-		Iterator it = myForge.getMetrics().iterator();
+		Iterator<org.mdeforge.emf.metric.Metric> it = myForge.getMetrics().iterator();
 		while (it.hasNext()) {
 			org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric) it
 					.next();
@@ -585,12 +588,44 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
 				extendedMetaData);
 		Resource r = rs.getResource(uri, true);
-		EObject eObject = r.getContents().get(0);
-		if (eObject instanceof EPackage) {
-			EPackage p = (EPackage) eObject;
-			EPackage.Registry.INSTANCE.put(p.getNsURI(), p);
+		List<EObject> eObject = r.getContents();
+		for (EObject eObject2 : eObject) {
+			if (eObject2 instanceof EPackage) {
+				EPackage p = (EPackage) eObject2;
+				registerSubPackage(p);
+			}
 		}
+	}
+	private void registerSubPackage(EPackage p){
+		EPackage.Registry.INSTANCE.put(p.getNsURI(), p);
+		for (EPackage pack : p.getESubpackages()) {
+			registerSubPackage(pack);
+		}
+	}
+	@Override
+	public boolean isValid(Artifact art) {
+		if (art instanceof EcoreMetamodel){
+			try {
+				EcoreFactory factory = EcoreFactory.eINSTANCE;
+				ResourceSet resourceSet = new ResourceSetImpl();
+				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+				File temp = new File(gridFileMediaService.getFilePath(art));
+				Resource resource = resourceSet.createResource(URI.createFileURI(temp.getAbsolutePath()));
 
+				resource.load(null);
+				EcoreUtil.resolveAll(resourceSet);
+				EObject eo = resource.getContents().get(0);
+				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
+				if (diagnostic.getSeverity() == Diagnostic.ERROR) 
+					return false;
+				else return true;
+				
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		else return false;
+		// TODO Auto-generated method stub
 	}
 
 	@Override

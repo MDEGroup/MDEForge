@@ -22,11 +22,11 @@ public interface EcoreMetamodelService {
 	
 	List<EcoreMetamodel> findAll();
 	
-	ArtifactList findAllEcoreMetamodelsByUserId(User user) throws BusinessException;
+	List<EcoreMetamodel> findAllEcoreMetamodelsByUserId(User user) throws BusinessException;
 	
-	ArtifactList findAllWithPublic(User user) throws BusinessException;
+	List<EcoreMetamodel> findAllWithPublic(User user) throws BusinessException;
 	
-	ArtifactList findAllPublic() throws BusinessException;
+	List<EcoreMetamodel> findAllPublic() throws BusinessException;
 	
 	EcoreMetamodel findByName(String name);
 	
@@ -40,9 +40,9 @@ public interface EcoreMetamodelService {
 
 	void deleteEcoreMetamodel(String idMetamodel, User user);
 
-	ArtifactList findEcoreMetamodelInWorkspace(String idWorkspace, User user);
+	List<EcoreMetamodel> findEcoreMetamodelInWorkspace(String idWorkspace, User user);
 
-	ArtifactList findEcoreMetamodelInProject(String idProject, User user) throws BusinessException;
+	List<EcoreMetamodel> findEcoreMetamodelInProject(String idProject, User user) throws BusinessException;
 	
 	void registerMetamodel (EcoreMetamodel ecoreMetamodel) throws BusinessException;
 }

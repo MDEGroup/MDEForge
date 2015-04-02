@@ -65,14 +65,15 @@ public class ArtifactServiceImpl implements ArtifactService {
 	@Override
 	public Artifact findOneForUser(String idArtifact, User idUser)
 			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria.where("users").in(idUser.getId())
-				.orOperator(Criteria.where("public").is(true)));
-		Artifact project = operations.findOne(query, Artifact.class);
-		if (project == null)
+		Artifact art = artifactRepository.findOne(idArtifact);
+		boolean finded = false;
+		if (art != null)
+			for (User user : art.getShared())
+				if (user.getId().equals(idUser.getId()))
+					finded = true;
+		if (finded == false)
 			throw new BusinessException();
-		return project;
+		return art;
 	}
 
 	@Override

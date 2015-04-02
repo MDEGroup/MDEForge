@@ -141,7 +141,14 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/shared");
 		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
 	}
-	
+	public String validateEcoreMetamodels(String idMetamodel) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/validate/" + idMetamodel);
+		return result;
+	}
+	public String validateModels(String idMetamodel) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/validate/" + idMetamodel);
+		return result;
+	}
 	public List<Transformation> getTransformations() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/transformation/shared");
 		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
@@ -212,6 +219,25 @@ public class MDEForgeClient {
 		transofrmation.setId(doPostRequest(connectionUrl + "api/ETLTransformation/", on));
 		
 	}
+	
+	public void addModel(Model model) throws Exception {
+		ObjectNode on = mapper.valueToTree(model);
+		model.setId(doPostRequest(connectionUrl + "api/Model/", on));
+		
+	}
+	
+	public void addModel(Model model, String file) throws Exception {
+		GridFileMedia gfm = new GridFileMedia();
+		String[] temp = file.split("/");
+		String fileName = temp[temp.length -1];
+		String s = MDEForgeClient.readFile(file);		
+		gfm.setContent(s);
+		gfm.setFileName(fileName);
+		model.setFile(gfm);
+		ObjectNode on = mapper.valueToTree(model);
+		model.setId(doPostRequest(connectionUrl + "api/Model/", on));
+	}
+	
 	public void addEcoreMetamodel(EcoreMetamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		metamodel.setId(doPostRequest(connectionUrl + "api/EcoreMetamodel/", on));

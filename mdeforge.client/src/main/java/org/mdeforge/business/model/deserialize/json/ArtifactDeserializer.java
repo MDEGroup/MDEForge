@@ -27,7 +27,7 @@ public class ArtifactDeserializer extends JsonDeserializer<Artifact>{
 			Artifact art = (Artifact) clsInstance;
 	        art.setId(id);
 	        art.setName(name);
-	        art.setHref("");
+	        art.setHref(href);
 	        return art;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

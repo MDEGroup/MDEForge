@@ -150,10 +150,7 @@ public class WadlController {
                   
                 wadlResource.getMethodOrResource().add(wadlMethod);
                   
-            }
-              
-     
-              
+            }            
         }
         result.getResources().add(wadResources);
           
