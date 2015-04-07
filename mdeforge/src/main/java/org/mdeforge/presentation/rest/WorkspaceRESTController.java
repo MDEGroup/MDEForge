@@ -85,7 +85,7 @@ public class WorkspaceRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = metamodelService.findtMetamodelInWorkspace(id, user);
+			ArtifactList workspace = new ArtifactList(metamodelService.findArtifactInWorkspace(id, user));
 			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -98,7 +98,7 @@ public class WorkspaceRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = artifactService.findArtifactInWorkspace(id, user);
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
 			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {

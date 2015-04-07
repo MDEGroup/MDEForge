@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/project2")
+@RequestMapping("/project")
 public class ProjectController {
 	
 	@Autowired
@@ -44,9 +44,6 @@ public class ProjectController {
 	private TransformationService transformationService;
 	@Autowired
 	private EditorService editorService;
-	
-//	@Autowired
-//	private User user;
 	
 	
 	@RequestMapping("/list")
@@ -215,7 +212,7 @@ public class ProjectController {
 	@RequestMapping(value = "/model/create", method = { RequestMethod.POST })
 	public String createmodel(@ModelAttribute Model model_forge, @RequestParam("modelfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 //		model_forge.setFile(IOUtils.toString(file.getInputStream()));
-		modelService.upload(model_forge);
+		modelService.create(model_forge);
 		for (Project p : model_forge.getProjects()) {
 			Project project = projectService.findById(p.getId(), user);
 			model.addAttribute("projectname",project.getName());
@@ -226,7 +223,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/model/update", method = { RequestMethod.GET })
 	public String updatemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "project.model.update";
 	}
@@ -234,7 +231,7 @@ public class ProjectController {
 	@RequestMapping(value = "/model/update", method = { RequestMethod.POST })
 	public String updatemodel(@ModelAttribute Model model_forge, @RequestParam("modelfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 		if(file.isEmpty()){
-			Model modelOLD = modelService.findByName(model_forge.getName());
+			Model modelOLD = (Model) modelService.findByName(model_forge.getName(), user);
 			model_forge.setFile(modelOLD.getFile());
 		}else{
 //			model_forge.setFile(IOUtils.toString(file.getInputStream()));
@@ -250,14 +247,14 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.GET)
 	public String deletemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "project.model.delete";
 	}
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.POST)
 	public String deletemodel(@ModelAttribute Model model_forge, org.springframework.ui.Model model) {
-		modelService.delete(model_forge);
+		modelService.delete(model_forge, user);
 		Project project = null;
 		if(!model_forge.getProjects().isEmpty())
 			project = projectService.findById(model_forge.getProjects().iterator().next().getId(), user);
@@ -267,7 +264,8 @@ public class ProjectController {
 	
 	@RequestMapping("/findmodelspaginated")
 	public @ResponseBody ResponseGrid<Model> findmodelspaginated(@ModelAttribute RequestGrid requestGrid) {
-		return modelService.findAllPaginated(requestGrid);
+		//return modelService.findAllPaginated(requestGrid);
+		return null;
 	}
 	
 	

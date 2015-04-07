@@ -7,7 +7,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface TransformationService {
+public interface TransformationService extends ArtifactService {
 	void upload(Transformation transformation);
 	
 	void execute(Transformation transformation);
@@ -25,7 +25,7 @@ public interface TransformationService {
 	void create(Transformation metamodel) throws BusinessException;
 	
 	
-	List<Transformation> findAll();
+//	List<Transformation> findAll();
 	
 	List<Transformation> findAllTransformations() throws BusinessException;
 	

@@ -2,12 +2,12 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.web.multipart.MultipartFile;
 
-public interface MetamodelService {
+public interface MetamodelService extends ArtifactService{
 	void upload(Metamodel metamodel, MultipartFile file);
 	
 	void download(Metamodel metamodel);
@@ -20,15 +20,15 @@ public interface MetamodelService {
 	
 	List<Metamodel> findMetamodelByURI(String URI);
 	
-	List<Metamodel> findAll();
+//	List<Metamodel> findAll();
 	
-	ArtifactList findAllMetamodels() throws BusinessException;
+	List<Artifact> findAllMetamodels() throws BusinessException;
 	
-	ArtifactList findAllMetamodelsByUserId(User user) throws BusinessException;
+	List<Artifact> findAllMetamodelsByUserId(User user) throws BusinessException;
 	
-	ArtifactList findAllWithPublic(User user) throws BusinessException;
+	List<Artifact> findAllWithPublic(User user) throws BusinessException;
 	
-	ArtifactList findAllPublic() throws BusinessException;
+	List<Artifact> findAllPublic() throws BusinessException;
 	
 	Metamodel findByName(String name);
 	
@@ -42,7 +42,7 @@ public interface MetamodelService {
 
 	void deleteMetamodel(String idMetamodel, User user);
 
-	ArtifactList findtMetamodelInWorkspace(String idWorkspace, User user);
+	List<Artifact> findtMetamodelInWorkspace(String idWorkspace, User user);
 
-	ArtifactList findtMetamodelInProject(String idProject, User user) throws BusinessException;
+	List<Artifact> findMetamodelInProject(String idProject, User user) throws BusinessException;
 }

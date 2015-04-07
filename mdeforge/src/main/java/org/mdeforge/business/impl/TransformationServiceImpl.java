@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.mdeforge.business.ArtifactService;
+//import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class TransformationServiceImpl implements TransformationService {
+public class TransformationServiceImpl extends ArtifactServiceImpl implements TransformationService {
 
 	@Autowired
 	private TransformationRepository transformationRepository;
@@ -66,9 +66,6 @@ public class TransformationServiceImpl implements TransformationService {
 
 	@Autowired
 	private UserService userService;
-
-	@Autowired
-	private ArtifactService artifactService;
 
 	@Autowired
 	private ArtifactRepository artifactRepository;
@@ -154,9 +151,9 @@ public class TransformationServiceImpl implements TransformationService {
 			transformationRepository.save(transformation);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = artifactService.findOneForUser(rel
+				Artifact toArtifact = findOneForUser(rel
 						.getToArtifact().getId(), transformation.getAuthor());
-				if (artifactService.existRelation(toArtifact.getId(),
+				if (existRelation(toArtifact.getId(),
 						transformation.getId())) {
 					rel.setFromArtifact(transformation);
 					transformation.getRelations().add(rel);
@@ -173,7 +170,7 @@ public class TransformationServiceImpl implements TransformationService {
 
 			for (Workspace ws : transformation.getWorkspaces()) {
 				Workspace w = workspaceService.findOne(ws.getId());
-				if (!artifactService.isArtifactInWorkspace(w.getId(),
+				if (!isArtifactInWorkspace(w.getId(),
 						transformation.getId())) {
 					w.getArtifacts().add(transformation);
 					workspaceRepository.save(w);
@@ -181,7 +178,7 @@ public class TransformationServiceImpl implements TransformationService {
 			}
 			for (Project ps : transformation.getProjects()) {
 				Project p = projectService.findById(ps.getId(), transformation.getAuthor());
-				if (!artifactService.isArtifactInProject(p.getId(),
+				if (!isArtifactInProject(p.getId(),
 						transformation.getId())) {
 					p.getArtifacts().add(transformation);
 					projectRepository.save(p);
@@ -191,7 +188,7 @@ public class TransformationServiceImpl implements TransformationService {
 				User u = userService.findOne(us.getId());
 				if (u == null)
 					throw new BusinessException();
-				if (!artifactService.isArtifactInUser(u,
+				if (!isArtifactInUser(u,
 						transformation.getId())) {
 					u.getSharedArtifact().add(transformation);
 					userRepository.save(u);
@@ -202,10 +199,10 @@ public class TransformationServiceImpl implements TransformationService {
 		}
 	}
 
-	@Override
-	public List<Transformation> findAll() {
-		return transformationRepository.findAll();
-	}
+//	@Override
+//	public List<Transformation> findAll() {
+//		return transformationRepository.findAll();
+//	}
 
 	@Override
 	public List<Transformation> findAllTransformations()
@@ -263,7 +260,7 @@ public class TransformationServiceImpl implements TransformationService {
 
 			// check relation
 			for (Relation rel : relationTemp) {
-				artifactService.findByOwner(rel.getToArtifact().getId(),
+				findByOwnerEcore(rel.getToArtifact().getId(),
 						transformation.getAuthor());
 				rel.setFromArtifact(transformation);
 				transformation.getRelations().add(rel);
@@ -413,7 +410,7 @@ public class TransformationServiceImpl implements TransformationService {
 	@Override
 	public void deleteTransformation(String idMetamodel, User user)
 			throws BusinessException {
-		artifactService.delete(idMetamodel, user);
+		delete(idMetamodel, user);
 	}
 	
 	@Override

@@ -56,7 +56,7 @@ public class MetamodelsRESTController {
 		// String name = auth.getName(); //get logged in username
 		// User user = userService.findOneByUsername(name);
 
-		ArtifactList result = metamodelService.findAllWithPublic(user);
+		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublic(user));
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -82,14 +82,14 @@ public class MetamodelsRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getPublicMetamodels() {
-		ArtifactList list = metamodelService.findAllPublic();
+		ArtifactList list = new ArtifactList(metamodelService.findAllPublic());
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getMetamodelsByUser() {
-		ArtifactList list = metamodelService.findAllMetamodelsByUserId(user);
+		ArtifactList list = new ArtifactList(metamodelService.findAllWithPublic(user));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 

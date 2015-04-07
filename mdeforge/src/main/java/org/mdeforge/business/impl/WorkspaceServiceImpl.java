@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -51,7 +52,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	private ProjectService projectSerivce;
 
 	@Autowired
-	private ArtifactService artifactService;
+	private EcoreMetamodelService ecoreMetamodelService;
 
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -71,7 +72,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact art = ecoreMetamodelService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
@@ -133,7 +134,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact m = ecoreMetamodelService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(m);
 		}
 		workspaceRepository.save(workspace);

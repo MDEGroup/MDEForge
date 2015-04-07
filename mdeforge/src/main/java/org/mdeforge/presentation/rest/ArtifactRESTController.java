@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.User;
@@ -32,7 +33,7 @@ public class ArtifactRESTController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	private ArtifactService artifactService;
+	private EcoreMetamodelService ecoreMetamodelService;
 
 	@Autowired
 	private User user;
@@ -45,7 +46,7 @@ public class ArtifactRESTController {
 		// String name = auth.getName(); //get logged in username
 		// User user = userService.findOneByUsername(name);
 
-		List<Artifact> result = artifactService.findAllWithPublic(user);
+		List<Artifact> result = ecoreMetamodelService.findAllWithPublic(user);
 		return new ResponseEntity<List<Artifact>>(result, HttpStatus.OK);
 	}
 
@@ -70,7 +71,7 @@ public class ArtifactRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Artifact>> getPublicArtifacts() {
-		List<Artifact> list = artifactService.findAllPublic();
+		List<Artifact> list = ecoreMetamodelService.findAllPublic();
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
 
 	}
@@ -78,7 +79,7 @@ public class ArtifactRESTController {
 	// get shared artifact
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Artifact>> getArtifactsByUser() {
-		List<Artifact> list = artifactService.findAllWithPublic(user);
+		List<Artifact> list = ecoreMetamodelService.findAllWithPublic(user);
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
 
 	}
@@ -87,7 +88,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Artifact> getArtifact(@PathVariable("id_artifact") String idArtifact) {
 		try {
-			Artifact artifact = artifactService.findOneById(idArtifact, user);
+			Artifact artifact = ecoreMetamodelService.findOneById(idArtifact, user);
 			return new ResponseEntity<Artifact>(artifact, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);

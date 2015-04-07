@@ -9,6 +9,7 @@ import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.ValidateService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
@@ -57,11 +58,11 @@ public class EcoreMetamodelsRESTController {
 			@PathVariable("id_MM1") String id_MM1,
 			@PathVariable("id_MM2") String id_MM2) {
 		
-		EcoreMetamodel mm1 = ecoreMetamodelService.findOne(id_MM1);
-		EcoreMetamodel mm2 = ecoreMetamodelService.findOne(id_MM2);
+		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM1);
+		EcoreMetamodel mm2 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM2);
 		SimilarityService si = (SimilarityService) ecoreMetamodelService;
-		si.calculateSimilarity(mm1, mm2);
-		return null;
+		String simiString = si.calculateSimilarity(mm1, mm2);
+		return new ResponseEntity<String>(simiString, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/validate/{id_MM1}", method = RequestMethod.GET)
@@ -70,7 +71,7 @@ public class EcoreMetamodelsRESTController {
 		
 		ValidateService va = (ValidateService)ecoreMetamodelService;
 		
-		EcoreMetamodel mm1 = ecoreMetamodelService.findOne(id_MM1);
+		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM1);
 		
 		
 		boolean v = va.isValid(mm1);
@@ -82,7 +83,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
 	{
-		EcoreMetamodel emm = ecoreMetamodelService.findOne(idEcoreMetamodel);
+		EcoreMetamodel emm = (EcoreMetamodel) ecoreMetamodelService.findOne(idEcoreMetamodel);
 		MetricProvider mp = (MetricProvider) ecoreMetamodelService;
 		List<Metric> lm = mp.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
@@ -129,17 +130,17 @@ public class EcoreMetamodelsRESTController {
 
 	// Create metamodel
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody HttpEntity<String> createArtifact(@RequestBody EcoreMetamodel ecoreMetamodel) {
+	public @ResponseBody HttpEntity<Artifact> createArtifact(@RequestBody EcoreMetamodel ecoreMetamodel) {
 		try {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
 			// metamodel create
-			String s = ecoreMetamodelService.create(ecoreMetamodel);
+			Artifact s = ecoreMetamodelService.create(ecoreMetamodel);
 			// Response success
-			return new ResponseEntity<String>(s, HttpStatus.OK);
+			return new ResponseEntity<Artifact>(s, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: EcoreMetamodel not inserted.", HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
@@ -163,7 +164,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodel(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneBySharedUser(idEcoreMetamodel, user);
+			EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneBySharedUserEcore(idEcoreMetamodel, user);
 			return new ResponseEntity<EcoreMetamodel>(ecoreMetamodel, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<EcoreMetamodel>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -173,7 +174,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			ecoreMetamodelService.deleteEcoreMetamodel(idEcoreMetamodel, user);
+			ecoreMetamodelService.delete(idEcoreMetamodel, user);
 			return new ResponseEntity<String>("EcoreMetamodel deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("EcoreMetamodel not deleted", HttpStatus.UNPROCESSABLE_ENTITY);

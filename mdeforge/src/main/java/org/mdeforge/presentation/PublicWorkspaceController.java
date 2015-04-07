@@ -13,6 +13,7 @@ import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Transformation;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,10 +37,8 @@ public class PublicWorkspaceController {
 	private TransformationService transformationService;
 	@Autowired
 	private EditorService editorService;
-
-	
-//	@Autowired
-//	private User user;
+	@Autowired
+	private User user;
 
 	
 	@RequestMapping("/metamodel/list")
@@ -119,13 +118,13 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/model/create", method = { RequestMethod.POST })
 	public String createmodel(@ModelAttribute Model model,@ RequestParam("modelfile") MultipartFile file) throws IOException {
 //		model.setFile(IOUtils.toString(file.getInputStream()));
-		modelService.upload(model);
+		modelService.create(model);
 		return "redirect:/public/model/list";		
 	}
 	
 	@RequestMapping(value = "/model/update", method = { RequestMethod.GET })
 	public String updatemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "public.model.update";
 	}
@@ -133,7 +132,7 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/model/update", method = { RequestMethod.POST })
 	public String updatemodel(@ModelAttribute Model model, @RequestParam("modelfile") MultipartFile file) throws IOException {
 		if(file.isEmpty()){
-			Model modelOLD = modelService.findByName(model.getName());
+			Model modelOLD = (Model) modelService.findByName(model.getName(), user);
 			model.setFile(modelOLD.getFile());
 		}else{
 //			model.setFile(IOUtils.toString(file.getInputStream()));
@@ -145,14 +144,14 @@ public class PublicWorkspaceController {
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.GET)
 	public String deletemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "public.model.delete";
 	}
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.POST)
 	public String deletemodel(@ModelAttribute Model model) {
-		modelService.delete(model);
+		modelService.delete(model, user);
 		return "redirect:/public/model/list";
 	}
 	
@@ -273,7 +272,8 @@ public class PublicWorkspaceController {
 	
 	@RequestMapping("/findmodelspaginated")
 	public @ResponseBody ResponseGrid<org.mdeforge.business.model.Model> findmodelspaginated(@ModelAttribute RequestGrid requestGrid) {
-		return modelService.findAllPaginated(requestGrid);
+//		return modelService.findAllPaginated(requestGrid);
+		return null;
 	}
 	
 	@RequestMapping("/findtransformationspaginated")

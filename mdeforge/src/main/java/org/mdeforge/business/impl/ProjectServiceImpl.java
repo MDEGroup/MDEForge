@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -35,7 +36,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Autowired
-	private ArtifactService artifactService;
+	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -80,7 +81,7 @@ public class ProjectServiceImpl implements ProjectService {
 			for (Project p : u.getProjects()) {
 				Project appProg = findOne(p.getId());
 				if (p.getId().equals(project.getId())) {
-					Artifact app = artifactService.findOneById(u.getId(), userId);
+					Artifact app = ecoreMetamodelService.findOneById(u.getId(), userId);
 					app.getProjects().remove(appProg);
 					artifactRepository.save(u);
 					break;
@@ -147,7 +148,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), user);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), user);
+			ecoreMetamodelService.findOneById(ws.getId(), user);
 
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.getUsers().clear();
@@ -179,7 +180,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), idUser);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), idUser);
+			ecoreMetamodelService.findOneById(ws.getId(), idUser);
 		
 		List<Workspace> workspaces = project.getWorkspaces();
 		projectRepository.save(project);

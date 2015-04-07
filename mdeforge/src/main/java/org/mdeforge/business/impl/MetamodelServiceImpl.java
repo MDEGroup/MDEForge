@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.MetamodelService;
@@ -38,12 +37,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class MetamodelServiceImpl implements MetamodelService {
+public class MetamodelServiceImpl extends ArtifactServiceImpl implements MetamodelService {
 
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
 	@Autowired
 	private WorkspaceService workspaceService;
 	@Autowired
@@ -123,7 +120,7 @@ public class MetamodelServiceImpl implements MetamodelService {
 			metamodelRepository.save(metamodel);
 			for (Workspace ws : metamodel.getWorkspaces()) {
 				Workspace w = workspaceService.findOne(ws.getId());
-				if (!artifactService.isArtifactInWorkspace(w.getId(),
+				if (!isArtifactInWorkspace(w.getId(),
 						metamodel.getId())) {
 					w.getArtifacts().add(metamodel);
 					workspaceRepository.save(w);
@@ -131,7 +128,7 @@ public class MetamodelServiceImpl implements MetamodelService {
 			}
 			for (Project ps : metamodel.getProjects()) {
 				Project p = projectService.findById(ps.getId(), metamodel.getAuthor());
-				if (!artifactService.isArtifactInProject(p.getId(),
+				if (!isArtifactInProject(p.getId(),
 						metamodel.getId())) {
 					p.getArtifacts().add(metamodel);
 					projectRepository.save(p);
@@ -141,7 +138,7 @@ public class MetamodelServiceImpl implements MetamodelService {
 				User u = userService.findOne(us.getId());
 				if (u == null)
 					throw new BusinessException();
-				if (!artifactService.isArtifactInUser(u,
+				if (!isArtifactInUser(u,
 						metamodel.getId())) {
 					u.getSharedArtifact().add(metamodel);
 					userRepository.save(u);
@@ -152,13 +149,13 @@ public class MetamodelServiceImpl implements MetamodelService {
 		}
 	}
 
-	@Override
-	public List<Metamodel> findAll() {
-		return metamodelRepository.findAll();
-	}
+//	@Override
+//	public List<Metamodel> findAll() {
+//		return metamodelRepository.findAll();
+//	}
 
 	@Override
-	public ArtifactList findAllMetamodels() throws BusinessException {
+	public List<Artifact> findAllMetamodels() throws BusinessException {
 		return new ArtifactList(metamodelRepository.findAllMetamodels());
 	}
 
@@ -330,7 +327,7 @@ public class MetamodelServiceImpl implements MetamodelService {
 
 	@Override
 	public void deleteMetamodel(String idMetamodel, User user) {
-		artifactService.delete(idMetamodel, user);
+		delete(idMetamodel, user);
 	}
 	@Override
 	public ArtifactList findtMetamodelInWorkspace(String idWorkspace, User user) throws BusinessException{
@@ -341,7 +338,7 @@ public class MetamodelServiceImpl implements MetamodelService {
 	
 
 	@Override
-	public ArtifactList findtMetamodelInProject(String idProject, User user) throws BusinessException{
+	public ArtifactList findMetamodelInProject(String idProject, User user) throws BusinessException{
 		projectService.findById(idProject, user);
 		ArtifactList aList = new ArtifactList(metamodelRepository.findByProjectId(new ObjectId(idProject)));
 		return aList;

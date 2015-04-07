@@ -8,6 +8,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Transformation;
@@ -49,8 +50,8 @@ public class ETLTransformationRESTController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
-		List<ETLTransformation> result = ETLtransformationService
-				.findAllWithPublic(user.getId());
+		List<Artifact> result = ETLtransformationService
+				.findAllWithPublic(user);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
@@ -67,7 +68,7 @@ public class ETLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<ETLTransformation> list = ETLtransformationService.findAllPublic();
+		List<Artifact> list = ETLtransformationService.findAllPublic();
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
@@ -103,7 +104,7 @@ public class ETLTransformationRESTController {
 			modelService.create(model);
 			
 		}
-		ETLTransformation transformation = ETLtransformationService.findOne(idETLTransformation);
+		ETLTransformation transformation = (ETLTransformation) ETLtransformationService.findOne(idETLTransformation);
 		//TODO DANIELE
 		//ADESSO E' UNA LISTA DI MODEL
 		transformation.setModels_in(models);
@@ -159,7 +160,7 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ETLtransformationService.deleteTransformation(idTranformation, user);
+			ETLtransformationService.delete(idTranformation, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

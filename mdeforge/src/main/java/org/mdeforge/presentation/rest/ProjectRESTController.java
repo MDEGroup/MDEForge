@@ -81,7 +81,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = metamodelService.findtMetamodelInProject(idProject, user);
+			ArtifactList project = new ArtifactList(metamodelService.findArtifactInProject(idProject, user));
 			
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -105,7 +105,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = artifactService.findArtifactInProject(idProject, user);
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(

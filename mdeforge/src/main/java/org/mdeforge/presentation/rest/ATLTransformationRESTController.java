@@ -9,6 +9,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
@@ -54,7 +55,7 @@ public class ATLTransformationRESTController {
 @RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
 	{
-		Transformation emm = ATLtransformationService.findOne(idEcoreMetamodel);
+		Transformation emm = (Transformation) ATLtransformationService.findOne(idEcoreMetamodel);
 		MetricProvider mp = (MetricProvider) ATLtransformationService;
 		List<Metric> lm = mp.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
@@ -63,26 +64,26 @@ public class ATLTransformationRESTController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
-		ArtifactList result = ATLtransformationService
-				.findAllWithPublic(user.getId());
+		ArtifactList result = new ArtifactList(ATLtransformationService
+				.findAllWithPublic(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Transformation> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
+	public @ResponseBody HttpEntity<Artifact> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
-			Transformation transformation = ATLtransformationService.findOneBySharedUser(idtransformation, user);
-			return new ResponseEntity<Transformation>(transformation, HttpStatus.OK);
+			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user);
+			return new ResponseEntity<Artifact>(transformation, HttpStatus.OK);
 		} catch (BusinessException e) {
-			return new ResponseEntity<Transformation>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 	}
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		ArtifactList list = ATLtransformationService.findAllPublic();
-		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		List<Artifact> list = ATLtransformationService.findAllPublic();
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
 	}
@@ -101,8 +102,8 @@ public class ATLTransformationRESTController {
 
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
-		ArtifactList list = ATLtransformationService
-				.findAllTransformationsByUserId(user.getId());
+		ArtifactList list = new ArtifactList(ATLtransformationService
+				.findAllTransformationsByUserId(user.getId()));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 
 	}
@@ -206,7 +207,7 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ATLtransformationService.deleteTransformation(idTranformation, user);
+			ATLtransformationService.delete(idTranformation, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {
