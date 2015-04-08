@@ -12,6 +12,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +42,7 @@ public class ProjectRESTController {
 	@Autowired
 	private MetamodelService metamodelService;
 	@Autowired
+	@Qualifier("Artifact")
 	private ArtifactService artifactService;
 	
 	@Autowired

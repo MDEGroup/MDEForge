@@ -20,6 +20,7 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -52,7 +53,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	private ProjectService projectSerivce;
 
 	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
+	@Qualifier("Artifact")
+	private ArtifactService artifactService;
 
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -72,7 +74,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact art = ecoreMetamodelService.findOneById(a.getId(), workspace.getOwner());
+			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
@@ -134,7 +136,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = ecoreMetamodelService.findOneById(a.getId(), workspace.getOwner());
+			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(m);
 		}
 		workspaceRepository.save(workspace);

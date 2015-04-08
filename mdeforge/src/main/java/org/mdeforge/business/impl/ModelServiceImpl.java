@@ -13,7 +13,6 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ValidateService;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -23,16 +22,14 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
-@Service
+@Service(value="Model")
 public class ModelServiceImpl extends ArtifactServiceImpl implements ModelService, ValidateService {
 	@Autowired
+	@Qualifier("EcoreMetamodel")
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private ModelRepository modelRepository;
@@ -90,24 +87,24 @@ public class ModelServiceImpl extends ArtifactServiceImpl implements ModelServic
 //			throw new BusinessException();
 //		return model;
 //	}
+//	@Override
+//	public List<Model> findAllModelsByUser(User user)
+//			throws BusinessException {
+//		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+//		Query query = new Query();
+//		query.addCriteria(Criteria
+//				.where("shared")
+//				.in(user.getId())
+//				.andOperator(
+//						Criteria.where("_class").is(
+//								Model.class.getCanonicalName())));
+//		List<Model> models = operations.find(query,
+//				Model.class);
+//		return models;
+//	}
 	@Override
-	public List<Model> findAllModelsByUserId(User user)
-			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria
-				.where("shared")
-				.in(user.getId())
-				.andOperator(
-						Criteria.where("_class").is(
-								Model.class.getCanonicalName())));
-		List<Model> models = operations.find(query,
-				Model.class);
-		return models;
-	}
-	@Override
-	public List<Artifact> findAllWithPublic(User user) throws BusinessException {
-		return findAllWithPublic(user, ATLTransformation.class);
+	public List<Artifact> findAllWithPublicByUser(User user) throws BusinessException {
+		return findAllWithPublicByUser(user, Model.class);
 	}
 //
 //	@Override

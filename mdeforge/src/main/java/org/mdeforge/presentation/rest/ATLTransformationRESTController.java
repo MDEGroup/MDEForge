@@ -6,6 +6,7 @@ import java.util.List;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
@@ -48,7 +49,7 @@ public class ATLTransformationRESTController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	private ArtifactService artifactService;
+	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private User user;
 
@@ -65,7 +66,7 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
 		ArtifactList result = new ArtifactList(ATLtransformationService
-				.findAllWithPublic(user));
+				.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
@@ -103,7 +104,7 @@ public class ATLTransformationRESTController {
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
 		ArtifactList list = new ArtifactList(ATLtransformationService
-				.findAllTransformationsByUserId(user.getId()));
+				.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 
 	}

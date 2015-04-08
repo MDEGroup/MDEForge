@@ -2,7 +2,6 @@ package org.mdeforge.presentation.rest;
 
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetricProvider;
@@ -42,8 +41,7 @@ public class EcoreMetamodelsRESTController {
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
+
 	@Autowired
 	private User user;
 	
@@ -91,7 +89,7 @@ public class EcoreMetamodelsRESTController {
 	// Get specified metamodel
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodels() {
-		ArtifactList result = new ArtifactList(ecoreMetamodelService.findAllWithPublic(user));
+		ArtifactList result = new ArtifactList(ecoreMetamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
@@ -124,7 +122,7 @@ public class EcoreMetamodelsRESTController {
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodelsByUser() {
-		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllEcoreMetamodelsByUserId(user));
+		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 	}
 

@@ -29,6 +29,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.integration.ETLTransformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -38,12 +39,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service(value="ETLTransformation")
 public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements ETLTransformationService {
 
 	@Autowired
 	private ETLTransformationRepository ETLTransformationRepository;
 	@Autowired
+	@Qualifier("EcoreMetamodel")
 	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Override
@@ -97,9 +99,9 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 
 	
 	@Override
-	public List<Artifact> findAllWithPublic(User user)
+	public List<Artifact> findAllWithPublicByUser(User user)
 			throws BusinessException {
-		return findAllWithPublic(user, ETLTransformation.class);
+		return findAllWithPublicByUser(user, ETLTransformation.class);
 	}
 
 	@Override

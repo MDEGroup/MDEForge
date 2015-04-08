@@ -234,7 +234,7 @@ public class MetamodelServiceImpl extends ArtifactServiceImpl implements Metamod
 	}
 
 	@Override
-	public ArtifactList findAllWithPublic(User user)
+	public ArtifactList findAllWithPublicByUser(User user)
 			throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

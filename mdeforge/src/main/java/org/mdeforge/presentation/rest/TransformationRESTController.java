@@ -41,8 +41,7 @@ public class TransformationRESTController {
 	private TransformationService transformationService;
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
+
 	@Autowired
 	private User user;
 

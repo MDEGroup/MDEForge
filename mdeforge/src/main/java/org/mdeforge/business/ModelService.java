@@ -14,7 +14,7 @@ public interface ModelService extends ArtifactService {
 //	public Model findOneBySharedUser(String idEcoreMetamodel, User user);
 //	public List<Model> findAllWithPublic(User user) throws BusinessException;
 //	public List<Model> findAllPublic() throws BusinessException;
-	public List<Model> findAllModelsByUserId(User user);
+	//public List<Model> findAllModelsByUser(User user);
 	
 //	Model findByName(String name);
 	

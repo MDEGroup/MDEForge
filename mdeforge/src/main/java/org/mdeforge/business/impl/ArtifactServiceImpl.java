@@ -34,7 +34,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service(value="Artifact")
 public class ArtifactServiceImpl implements ArtifactService {
 	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
@@ -100,6 +100,8 @@ public class ArtifactServiceImpl implements ArtifactService {
 		return art;
 	}
 
+	
+	
 	protected Artifact findOneForUser(String idArtifact, User idUser, Class c)
 			throws BusinessException {
 		Artifact art = artifactRepository.findOne(idArtifact);
@@ -338,7 +340,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public List<Artifact> findAllWithPublic(User user) throws BusinessException {
+	public List<Artifact> findAllWithPublicByUser(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared").in(user.getId());
@@ -348,14 +350,14 @@ public class ArtifactServiceImpl implements ArtifactService {
 		return result;
 	}
 
-	protected List<Artifact> findAllWithPublic(User user, Class type)
+	protected List<Artifact> findAllWithPublicByUser(User user, Class type)
 			throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared").in(user.getId());
-		Criteria c2 = Criteria.where("open").is("true");
+		//Criteria c2 = Criteria.where("open").is("true");
 		Criteria c3 = Criteria.where("_class").is(type.getCanonicalName());
-		query.addCriteria((c1.orOperator(c2)).andOperator(c3));
+		query.addCriteria(c1.andOperator(c3));
 		List<Artifact> result = n.find(query, type);
 		return result;
 	}

@@ -26,7 +26,7 @@ public interface MetamodelService extends ArtifactService{
 	
 	List<Artifact> findAllMetamodelsByUserId(User user) throws BusinessException;
 	
-	List<Artifact> findAllWithPublic(User user) throws BusinessException;
+	List<Artifact> findAllWithPublicByUser(User user) throws BusinessException;
 	
 	List<Artifact> findAllPublic() throws BusinessException;
 	

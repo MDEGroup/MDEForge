@@ -2,15 +2,14 @@ package org.mdeforge.presentation.rest;
 
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.ModelService;
 import org.mdeforge.business.MetricProvider;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.ValidateService;
-import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
@@ -41,8 +40,7 @@ public class ModelRESTController {
 	private ModelService modelService;
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
+	
 	@Autowired
 	private User user;
 	
@@ -87,7 +85,7 @@ public class ModelRESTController {
 	// Get specified metamodel
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getModels() {
-		ArtifactList result = new ArtifactList(modelService.findAllWithPublic(user));
+		ArtifactList result = new ArtifactList(modelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
@@ -120,7 +118,7 @@ public class ModelRESTController {
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getModelsByUser() {
-		ArtifactList list = new ArtifactList(modelService.findAllModelsByUserId(user));
+		ArtifactList list = new ArtifactList(modelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 	}
 

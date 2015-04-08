@@ -76,15 +76,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
-@Service
+@Service(value = "EcoreMetamodel")
 public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements EcoreMetamodelService,
 		MetricProvider, SearchProvider, SimilarityService, ValidateService {
 	// TODO implements search inteface methods
@@ -99,10 +95,10 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		return null;
 	}
 
-	@Override
-	public EcoreMetamodel findEcoreByName(String name) throws BusinessException {
-		return ecoreMetamodelRepository.findByName(name);
-	}
+//	@Override
+//	public EcoreMetamodel findEcoreByName(String name) throws BusinessException {
+//		return ecoreMetamodelRepository.findByName(name);
+//	}
 
 
 
@@ -112,19 +108,9 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	}
 
 	@Override
-	public List<EcoreMetamodel> findAllEcoreMetamodelsByUserId(User user)
+	public List<Artifact> findAllWithPublicByUser(User user)
 			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria
-				.where("shared")
-				.in(user.getId())
-				.andOperator(
-						Criteria.where("_class").is(
-								EcoreMetamodel.class.getCanonicalName())));
-		List<EcoreMetamodel> ecoreMetamodels = operations.find(query,
-				EcoreMetamodel.class);
-		return ecoreMetamodels;
+		return findAllWithPublicByUser(user, EcoreMetamodel.class);
 	}
 
 	
@@ -185,7 +171,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 //	}
 
 	@Override
-	public EcoreMetamodel findOneBySharedUserEcore(String idEcoreMetamodel, User user)
+	public EcoreMetamodel findOneForUser(String idEcoreMetamodel, User user)
 			throws BusinessException {
 		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
 		for (User us : mm.getShared()) {

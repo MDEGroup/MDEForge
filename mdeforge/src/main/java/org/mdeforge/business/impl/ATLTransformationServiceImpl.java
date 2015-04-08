@@ -62,7 +62,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service (value="ATLTransformation")
 public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements ATLTransformationService, MetricProvider {
 
 	@Autowired
@@ -104,27 +104,27 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return ATLTransformationRepository.find();
 	}
 
-	@Override
-	public ArtifactList findAllTransformationsByUserId(String username)
-			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria
-				.where("shared")
-				.in(username)
-				.andOperator(
-						Criteria.where("_class").is(
-								Transformation.class.getCanonicalName())));
-		List<Transformation> metamodels = operations.find(query,
-				Transformation.class);
-		return new ArtifactList(metamodels);
-	}
+//	@Override
+//	public ArtifactList findAllTransformationsByUserId(String username)
+//			throws BusinessException {
+//		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+//		Query query = new Query();
+//		query.addCriteria(Criteria
+//				.where("shared")
+//				.in(username)
+//				.andOperator(
+//						Criteria.where("_class").is(
+//								Transformation.class.getCanonicalName())));
+//		List<Transformation> metamodels = operations.find(query,
+//				Transformation.class);
+//		return new ArtifactList(metamodels);
+//	}
 
 
 	@Override
-	public List<Artifact> findAllWithPublic(User user)
+	public List<Artifact> findAllWithPublicByUser(User user)
 			throws BusinessException {
-		return findAllWithPublic(user, ATLTransformation.class);
+		return findAllWithPublicByUser(user, ATLTransformation.class);
 	}
 //
 //	@Override

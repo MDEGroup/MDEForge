@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Model;
 
 public class GetterTest {
 
@@ -15,6 +16,15 @@ public class GetterTest {
 	@BeforeClass
 	public static void setup() throws Exception {
 		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+	}
+	
+	@Test
+	public void getModelsTest() throws Exception {
+		System.out.println("###Model");
+		for (Model iterable_element : c.getModels()) {
+			System.out.println(iterable_element.getName());
+		}
+		assertNotNull(c);
 	}
 	
 	@Test

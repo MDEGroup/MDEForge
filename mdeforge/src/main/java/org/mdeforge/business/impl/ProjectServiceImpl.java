@@ -19,6 +19,7 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,7 +37,8 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
+	@Qualifier("Artifact")
+	private ArtifactService artifactService;
 	
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -81,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
 			for (Project p : u.getProjects()) {
 				Project appProg = findOne(p.getId());
 				if (p.getId().equals(project.getId())) {
-					Artifact app = ecoreMetamodelService.findOneById(u.getId(), userId);
+					Artifact app = artifactService.findOneById(u.getId(), userId);
 					app.getProjects().remove(appProg);
 					artifactRepository.save(u);
 					break;
@@ -148,7 +150,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), user);
 		for (Artifact ws : project.getArtifacts())
-			ecoreMetamodelService.findOneById(ws.getId(), user);
+			artifactService.findOneById(ws.getId(), user);
 
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.getUsers().clear();
@@ -180,7 +182,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), idUser);
 		for (Artifact ws : project.getArtifacts())
-			ecoreMetamodelService.findOneById(ws.getId(), idUser);
+			artifactService.findOneById(ws.getId(), idUser);
 		
 		List<Workspace> workspaces = project.getWorkspaces();
 		projectRepository.save(project);

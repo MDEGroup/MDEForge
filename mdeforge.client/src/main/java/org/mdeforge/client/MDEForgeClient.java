@@ -141,6 +141,12 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/shared");
 		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
 	}
+	
+	public List<Model> getModels() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/shared");
+		return mapper.readValue(result, new TypeReference<List<Model>>() {});
+	}
+	
 	public String validateEcoreMetamodels(String idMetamodel) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/validate/" + idMetamodel);
 		return result;

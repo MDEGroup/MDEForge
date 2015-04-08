@@ -16,7 +16,7 @@ public interface ArtifactService{
 	List<Artifact> findAll() throws BusinessException;
 	Artifact findOne(String id) throws BusinessException;	
 	Artifact findOneForUser(String idArtifact, User idUser)	throws BusinessException;
-	List<Artifact> findAllWithPublic(User user) throws BusinessException;
+	List<Artifact> findAllWithPublicByUser(User user) throws BusinessException;
 	List<Artifact> findAllPublic() throws BusinessException;
 	List<Artifact> findArtifactInProject(String idProject, User user);
 	List<Artifact> findArtifactInWorkspace(String id, User user);

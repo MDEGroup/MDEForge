@@ -40,7 +40,7 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
+@Service(value="Transformation")
 public class TransformationServiceImpl extends ArtifactServiceImpl implements TransformationService {
 
 	@Autowired

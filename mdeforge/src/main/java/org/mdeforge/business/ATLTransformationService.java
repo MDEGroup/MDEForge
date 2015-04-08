@@ -21,7 +21,7 @@ public interface ATLTransformationService extends ArtifactService{
 	ATLTransformation findByName(String name);	
 	ATLTransformation findByOwner(String idTransformation, String idUser) throws BusinessException;
 	List<ATLTransformation> findAllTransformations() throws BusinessException;
-	List<Artifact> findAllTransformationsByUserId(String user) throws BusinessException;
+	//List<Artifact> findAllTransformationsByUserId(String user) throws BusinessException;
 	
 	ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;
 }

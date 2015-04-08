@@ -2,7 +2,6 @@ package org.mdeforge.presentation.rest;
 
 import java.util.ArrayList;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ProjectService;
@@ -42,8 +41,8 @@ public class MetamodelsRESTController {
 	private MetamodelService metamodelService;
 	@Autowired
 	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
+//	@Autowired
+//	private ArtifactService artifactService;
 
 	@Autowired
 	private User user;
@@ -56,7 +55,7 @@ public class MetamodelsRESTController {
 		// String name = auth.getName(); //get logged in username
 		// User user = userService.findOneByUsername(name);
 
-		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublic(user));
+		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -89,7 +88,7 @@ public class MetamodelsRESTController {
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getMetamodelsByUser() {
-		ArtifactList list = new ArtifactList(metamodelService.findAllWithPublic(user));
+		ArtifactList list = new ArtifactList(metamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
