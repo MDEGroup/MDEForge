@@ -21,8 +21,8 @@ public interface ArtifactService{
 	List<Artifact> findArtifactInWorkspace(String id, User user);
 	List<Artifact> findArtifactInProject(String idProject, User user, Class c);
 	List<Artifact> findArtifactInWorkspace(String id, User user, Class c);
-	Artifact findByName(String artifactId, User id);
-	Artifact findByOwnerEcore(String idArtifact, User user)
+	Artifact findOneByName(String artifactId, User id);
+	Artifact findOneByOwner(String idArtifact, User user)
 			throws BusinessException;
 	Artifact findOneById(String idArtifact, User idUser)
 			throws BusinessException;

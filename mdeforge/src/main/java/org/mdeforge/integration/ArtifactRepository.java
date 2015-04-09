@@ -17,5 +17,7 @@ public interface ArtifactRepository extends MongoRepository<Artifact, String>{
 	@Query("{ projects :  {$elemMatch : {\"$id\" : ?0}}, \"_class\" : ?1}")
 	List<Artifact> findByProjectId(ObjectId objectId, Class c);
 	@Query("{ workspaces :  {$elemMatch : {\"$id\" : ?0}}, \"_class\" : ?1}")
-	List<Artifact> findByWorkspaceId(ObjectId objectId, Class c);	
+	List<Artifact> findByWorkspaceId(ObjectId objectId, Class c);
+	@Query("{_class : ?1}")
+	Artifact findOne(String objectId, Class c);
 }

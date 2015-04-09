@@ -427,7 +427,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	}
 
 	@Override
-	public EcoreMetamodel findByOwnerEcore(String idEcoreMetamodel, User user)
+	public EcoreMetamodel findOneByOwner(String idEcoreMetamodel, User user)
 			throws BusinessException {
 		// TODO Auto-generated method stub
 		return null;

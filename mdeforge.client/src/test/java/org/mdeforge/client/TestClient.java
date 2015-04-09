@@ -1,14 +1,9 @@
 package org.mdeforge.client;
 
 import org.junit.Test;
-import org.mdeforge.business.model.ConformToRelation;
-import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Model;
-import org.mdeforge.business.model.Project;
 
-import junit.framework.TestCase;
 
-public class TestClient extends TestCase {
+public class TestClient {
 
 	private MDEForgeClient c;
 

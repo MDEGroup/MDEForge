@@ -259,7 +259,7 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 
 			// check relation
 			for (Relation rel : relationTemp) {
-				findByOwnerEcore(rel.getToArtifact().getId(),
+				findOneByOwner(rel.getToArtifact().getId(),
 						transformation.getAuthor());
 				rel.setFromArtifact(transformation);
 				transformation.getRelations().add(rel);

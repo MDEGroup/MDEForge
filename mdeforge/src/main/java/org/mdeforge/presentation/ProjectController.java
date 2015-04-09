@@ -225,7 +225,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/model/update", method = { RequestMethod.GET })
 	public String updatemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = (Model) modelService.findByName(name, user);
+		Model model_forge = (Model) modelService.findOneByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "project.model.update";
 	}
@@ -233,7 +233,7 @@ public class ProjectController {
 	@RequestMapping(value = "/model/update", method = { RequestMethod.POST })
 	public String updatemodel(@ModelAttribute Model model_forge, @RequestParam("modelfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 		if(file.isEmpty()){
-			Model modelOLD = (Model) modelService.findByName(model_forge.getName(), user);
+			Model modelOLD = (Model) modelService.findOneByName(model_forge.getName(), user);
 			model_forge.setFile(modelOLD.getFile());
 		}else{
 //			model_forge.setFile(IOUtils.toString(file.getInputStream()));
@@ -249,7 +249,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.GET)
 	public String deletemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = (Model) modelService.findByName(name, user);
+		Model model_forge = (Model) modelService.findOneByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "project.model.delete";
 	}
@@ -298,7 +298,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.GET })
 	public String updatetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = (Transformation) artifactService.findByName(name, user);
+		Transformation transformation = (Transformation) artifactService.findOneByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "project.transformation.update";
 	}
@@ -306,7 +306,7 @@ public class ProjectController {
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.POST })
 	public String updatetransformation(@ModelAttribute Transformation transformation, @RequestParam("transformationfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 		if(file.isEmpty()){
-			Transformation transformationOLD = (Transformation) artifactService.findByName(transformation.getName(), user);
+			Transformation transformationOLD = (Transformation) artifactService.findOneByName(transformation.getName(), user);
 			transformation.setFile(transformationOLD.getFile());
 		}else{
 //			transformation.setFile(IOUtils.toString(file.getInputStream()));
@@ -322,7 +322,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/transformation/delete", method = RequestMethod.GET)
 	public String deletetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = (Transformation) artifactService.findByName(name, user);
+		Transformation transformation = (Transformation) artifactService.findOneByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "project.transformation.delete";
 	}
