@@ -8,6 +8,10 @@ import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ETLTransformation;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -78,12 +82,11 @@ public class ProjectRESTController {
 		Project p = projectService.findById(id, user);
 		return new ResponseEntity<Project>(p,HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "/{id}/metamodel/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInProject(
+	@RequestMapping(value = "/{id}/Model/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findModelsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(metamodelService.findArtifactInProject(idProject, user));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, Model.class));
 			
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -91,18 +94,40 @@ public class ProjectRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	@RequestMapping(value = "/{id}/transformation/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findTransformationsInProject(
+	@RequestMapping(value = "/{id}/EcoreMetamodel/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = transformationService.findtTransformationInProject(idProject, user);
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, EcoreMetamodel.class));
+			
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+	@RequestMapping(value = "/{id}/ATLTransformation/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findATLTransformationsInProject(
+			@PathVariable("id") String idProject) {
+		try {
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, ATLTransformation.class));
+			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/{id}/ETLTransformation/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findETLTransformationsInProject(
+			@PathVariable("id") String idProject) {
+		try {
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, ETLTransformation.class));
+			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	@RequestMapping(value = "/{id}/artifact/", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInProject(
 			@PathVariable("id") String idProject) {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-//import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
@@ -117,7 +116,7 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 	}
 
 	@Override
-	public void update(Transformation transformation) {
+	public void update(Artifact transformation) {
 		try {
 			if (transformation.getId() == null)
 				throw new BusinessException();
@@ -139,7 +138,7 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 			for (Project p : transformation.getProjects()) {
 				projectService.findById(p.getId(), transformation.getAuthor());
 			}
-			Transformation transTemp = transformationRepository
+			Transformation transTemp = (Transformation) artifactRepository
 					.findOne(transformation.getId());
 			gridFileMediaService.delete(transTemp.getFile().getId());
 			if (transformation.getFile() != null) {
@@ -148,7 +147,7 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 
 			List<Relation> relationTemp = transformation.getRelations();
 			transformation.setRelations(new ArrayList<Relation>());
-			transformationRepository.save(transformation);
+			artifactRepository.save(transformation);
 			// check relation
 			for (Relation rel : relationTemp) {
 				Artifact toArtifact = findOneForUser(rel
@@ -332,8 +331,8 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 
 	// Inizio Alexander
 	@Override
-	public void upload(Transformation metamodel, MultipartFile file) {
-		transformationRepository.save(metamodel);
+	public void upload(Artifact metamodel, MultipartFile file) {
+		artifactRepository.save(metamodel);
 	}
 
 	@Override
@@ -356,25 +355,7 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 				rows.getContent());
 	}
 
-	@Override
-	public void download(Transformation metamodel) {
-	}
-
-	// fine Alexander
-
-	@Override
-	public Transformation findByOwner(String idMetamodel, String idUser)
-			throws BusinessException {
-		Transformation mm = transformationRepository.findOne(idMetamodel);
-		try {
-			if (!mm.getAuthor().getId().equals(idUser))
-				throw new BusinessException();
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-		return mm;
-
-	}
+	
 
 	@Override
 	public Transformation findOne(String id) throws BusinessException {
@@ -424,6 +405,14 @@ public class TransformationServiceImpl extends ArtifactServiceImpl implements Tr
 		projectService.findById(idProject, user);
 		ArtifactList aList =  new ArtifactList(transformationRepository.findByProjectId(new ObjectId(idProject)));
 		return aList;
+	}
+
+
+	@Override
+	public Transformation findByOwner(String idTransformation, String idUser)
+			throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

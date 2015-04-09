@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.User;

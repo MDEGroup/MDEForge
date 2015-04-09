@@ -51,4 +51,12 @@ public class GetterTest {
 		}
 		assertNotNull(c);
 	}
+	@Test
+	public void getEcoreMetanmodelInWorkspaceTest() throws Exception {
+		System.out.println("###EcoreWorkspace");
+		for (EcoreMetamodel iterable_element : c.getEcoreMetamodelsInWorkspace("5514aa53d4c67eee3e2c1b12")) {
+			System.out.println(iterable_element.getName());
+		}
+		assertNotNull(c);
+	}
 }

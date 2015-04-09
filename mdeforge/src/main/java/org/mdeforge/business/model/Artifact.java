@@ -9,6 +9,7 @@ import org.mdeforge.business.model.serializer.json.RelationListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
+import org.mdeforge.common.mongo.CascadeSave;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -45,6 +46,7 @@ public class Artifact implements java.io.Serializable{
 	
 	@DBRef(lazy = true)
 	@JsonSerialize(using = RelationListSerializer.class)
+	//@CascadeSave
 	private List<Relation> relations = new ArrayList<Relation>();
 
 

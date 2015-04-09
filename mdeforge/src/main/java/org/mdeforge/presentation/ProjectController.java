@@ -2,13 +2,13 @@ package org.mdeforge.presentation;
 
 import java.io.IOException;
 
+import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
@@ -17,6 +17,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +42,8 @@ public class ProjectController {
 	@Autowired
 	private ModelService modelService;
 	@Autowired
-	private TransformationService transformationService;
+	@Qualifier("Artifact")
+	private ArtifactService artifactService;
 	@Autowired
 	private EditorService editorService;
 	
@@ -286,7 +288,7 @@ public class ProjectController {
 	@RequestMapping(value = "/transformation/create", method = { RequestMethod.POST })
 	public String createtransformation(@ModelAttribute Transformation transformation, @RequestParam("transformationfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 //		transformation.setFile(IOUtils.toString(file.getInputStream()));
-		transformationService.upload(transformation);
+		artifactService.create(transformation);
 		Project project = null;
 		if(!transformation.getProjects().isEmpty())
 			project = projectService.findById(transformation.getProjects().iterator().next().getId(), user);
@@ -296,7 +298,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.GET })
 	public String updatetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = transformationService.findByName(name);
+		Transformation transformation = (Transformation) artifactService.findByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "project.transformation.update";
 	}
@@ -304,13 +306,13 @@ public class ProjectController {
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.POST })
 	public String updatetransformation(@ModelAttribute Transformation transformation, @RequestParam("transformationfile") MultipartFile file, org.springframework.ui.Model model) throws IOException {
 		if(file.isEmpty()){
-			Transformation transformationOLD = transformationService.findByName(transformation.getName());
+			Transformation transformationOLD = (Transformation) artifactService.findByName(transformation.getName(), user);
 			transformation.setFile(transformationOLD.getFile());
 		}else{
 //			transformation.setFile(IOUtils.toString(file.getInputStream()));
 		}
 		
-		transformationService.update(transformation);
+		artifactService.update(transformation);
 		Project project = null;
 		if(!transformation.getProjects().isEmpty())
 			project = projectService.findById(transformation.getProjects().iterator().next().getId(), user);
@@ -320,7 +322,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/transformation/delete", method = RequestMethod.GET)
 	public String deletetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = transformationService.findByName(name);
+		Transformation transformation = (Transformation) artifactService.findByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "project.transformation.delete";
 	}
@@ -328,7 +330,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/transformation/delete", method = RequestMethod.POST)
 	public String deletetransformation(@ModelAttribute Transformation transformation, org.springframework.ui.Model model) {
-		transformationService.delete(transformation);
+		artifactService.delete(transformation, user);
 		Project project = null;
 		if(!transformation.getProjects().isEmpty())
 			project = projectService.findById(transformation.getProjects().iterator().next().getId(), user);
@@ -338,7 +340,7 @@ public class ProjectController {
 	
 	@RequestMapping("/findtransformationspaginated")
 	public @ResponseBody ResponseGrid<Transformation> findtransformationspaginated(@ModelAttribute RequestGrid requestGrid) {
-		return transformationService.findAllPaginated(requestGrid);
+		return null;//artifactService.findAllPaginated(requestGrid);
 	}
 
 	

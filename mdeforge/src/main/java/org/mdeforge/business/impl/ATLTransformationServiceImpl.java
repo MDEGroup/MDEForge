@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -44,7 +43,6 @@ import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.emf.metric.Container;
@@ -56,10 +54,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service (value="ATLTransformation")
@@ -70,33 +64,10 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 	@Autowired
 	private MetricRepository metricRepository;
 
-//	@Override
-//	public ATLTransformation findOneBySharedUser(String idMetamodel, User user)
-//			throws BusinessException {
-//		ATLTransformation mm = ATLTransformationRepository.findOne(idMetamodel);
-//		for (User us : mm.getShared()) {
-//			if (us.getId().equals(user.getId()))
-//			{
-//				mm.setFile(gridFileMediaService.getGridFileMedia(mm.getFile()));
-//				return mm;
-//			}
-//				
-//		}
-//		throw new BusinessException();
-//	}
-
-
-
 	@Override
 	public ATLTransformation findByName(String name) throws BusinessException {
 		return ATLTransformationRepository.findByName(name);
 	}
-
-	//TODO DA VERIFICARE
-//	@Override
-//	public List<ATLTransformation> findAll() {
-//		return ATLTransformationRepository.findAll();
-//	}
 
 	@Override
 	public List<ATLTransformation> findAllTransformations()
@@ -104,21 +75,6 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return ATLTransformationRepository.find();
 	}
 
-//	@Override
-//	public ArtifactList findAllTransformationsByUserId(String username)
-//			throws BusinessException {
-//		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-//		Query query = new Query();
-//		query.addCriteria(Criteria
-//				.where("shared")
-//				.in(username)
-//				.andOperator(
-//						Criteria.where("_class").is(
-//								Transformation.class.getCanonicalName())));
-//		List<Transformation> metamodels = operations.find(query,
-//				Transformation.class);
-//		return new ArtifactList(metamodels);
-//	}
 
 
 	@Override
@@ -126,21 +82,7 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 			throws BusinessException {
 		return findAllWithPublicByUser(user, ATLTransformation.class);
 	}
-//
-//	@Override
-//	public ArtifactList findAllPublic() throws BusinessException {
-//		MongoOperations n = new MongoTemplate(mongoDbFactory);
-//		Query query = new Query();
-//		query.addCriteria(Criteria
-//				.where("open")
-//				.is(true)
-//				.andOperator(
-//						Criteria.where("_class").is(
-//								Transformation.class.getCanonicalName())));
-//
-//		List<Transformation> result = n.find(query, Transformation.class);
-//		return new ArtifactList(result);
-//	}
+
 
 
 	@Override
@@ -205,16 +147,14 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 	}
 	
 	@Override
-	public ArtifactList findtTransformationInWorkspace(String idWorkspace, User user) throws BusinessException{
+	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
 		workspaceService.findById(idWorkspace, user);
-		ArtifactList aList = new ArtifactList( ATLTransformationRepository.findByWorkspaceId(new ObjectId(idWorkspace)));
-		return aList;
+		return findArtifactInWorkspace(idWorkspace, user, ATLTransformation.class);
 	}
 	@Override
-	public ArtifactList findtTransformationInProject(String idProject, User user) throws BusinessException{
+	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
 		projectService.findById(idProject, user);
-		ArtifactList aList =  new ArtifactList(ATLTransformationRepository.findByProjectId(new ObjectId(idProject)));
-		return aList;
+		return findArtifactInProject(idProject, user, ATLTransformation.class);
 	}
 
 

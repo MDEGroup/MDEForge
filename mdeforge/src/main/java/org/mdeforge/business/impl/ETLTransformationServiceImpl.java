@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelElementTypeNotFoundException;
@@ -62,19 +61,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		}
 		throw new BusinessException();
 	}
-
-//	@Override
-//	public ETLTransformation findByName(String name) throws BusinessException {
-//		return ETLTransformationRepository.findByName(name);
-//	}
-
-	
-
-//	@Override
-//	public List<ETLTransformation> findAll() {
-//		return ETLTransformationRepository.findAll();
-//	}
-
 	@Override
 	public List<ETLTransformation> findAllTransformations()
 			throws BusinessException {
@@ -109,8 +95,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return findAllPublic(ETLTransformation.class);
 	}
 
-
-
 	@Override
 	public ResponseGrid<ETLTransformation> findAllPaginated(RequestGrid requestGrid)
 			throws BusinessException {
@@ -131,20 +115,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 				rows.getContent());
 	}
 	// fine Alexander
-
-//	@Override
-//	public Artifact findByOwner(String idMetamodel, User idUser)
-//			throws BusinessException {
-//		ETLTransformation mm = ETLTransformationRepository.findOne(idMetamodel);
-//		try {
-//			if (!mm.getAuthor().getId().equals(idUser))
-//				throw new BusinessException();
-//		} catch (Exception e) {
-//			throw new BusinessException();
-//		}
-//		return mm;
-//
-//	}
 
 	@Override
 	public ETLTransformation findOne(String id) throws BusinessException {
@@ -249,6 +219,7 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 
 		return emfModel;
 	}
+	
 	private EmfModel loadEmptyModel(String name, List<String> metamodelPath,
 			String outPath) throws EolModelLoadingException, URISyntaxException {
 
@@ -299,16 +270,14 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 	}
 
 	@Override
-	public ArtifactList findtTransformationInWorkspace(String idWorkspace, User user) throws BusinessException{
+	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
 		workspaceService.findById(idWorkspace, user);
-		ArtifactList aList = new ArtifactList( ETLTransformationRepository.findByWorkspaceId(new ObjectId(idWorkspace)));
-		return aList;
+		return findArtifactInWorkspace(idWorkspace, user, ETLTransformation.class);
 	}
 	@Override
-	public ArtifactList findtTransformationInProject(String idProject, User user) throws BusinessException{
+	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
 		projectService.findById(idProject, user);
-		ArtifactList aList =  new ArtifactList(ETLTransformationRepository.findByProjectId(new ObjectId(idProject)));
-		return aList;
+		return findArtifactInWorkspace(idProject, user, ETLTransformation.class);
 	}
 }
 

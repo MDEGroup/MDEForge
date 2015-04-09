@@ -2,7 +2,6 @@ package org.mdeforge.presentation.rest;
 
 import java.util.ArrayList;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.TransformationService;

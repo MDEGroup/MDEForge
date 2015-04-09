@@ -9,47 +9,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface TransformationService extends ArtifactService {
 	void upload(Transformation transformation);
-	
 	void execute(Transformation transformation);
 	List<Transformation> findTransformationsBySourceMetamodels(Transformation metamodel);
-	List<Transformation> findTransformationsByTargetMetamodels(Transformation metamodel);
-		
-	void upload(Transformation metamodel, MultipartFile file);
-	
-	void download(Transformation metamodel);
-	
-	void delete(Transformation metamodel);
-
-	void update(Transformation metamodel);
-	
+	List<Transformation> findTransformationsByTargetMetamodels(Transformation metamodel);	
 	void create(Transformation metamodel) throws BusinessException;
-	
-	
-//	List<Transformation> findAll();
-	
 	List<Transformation> findAllTransformations() throws BusinessException;
-	
 	ArtifactList findAllTransformationsByUserId(String user) throws BusinessException;
-	
 	ArtifactList findAllWithPublic(String user) throws BusinessException;
-	
 	ArtifactList findAllPublic() throws BusinessException;
-	
 	Transformation findByName(String name);
-	
 	Transformation findByOwner(String idTransformation, String idUser) throws BusinessException;
-	
 	Transformation findOne(String id) throws BusinessException;
-	
 	ResponseGrid<Transformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;
-
 	void deleteTransformation(String idMetamodel, User user) throws BusinessException;
-
 	ArtifactList findtTransformationInWorkspace(String idWorkspace, User user) throws BusinessException;
-
 	ArtifactList findtTransformationInProject(String idProject, User user) throws BusinessException;
-
 	Transformation findOneBySharedUser(String idMetamodel, User user) throws BusinessException;
-	
-	
 }

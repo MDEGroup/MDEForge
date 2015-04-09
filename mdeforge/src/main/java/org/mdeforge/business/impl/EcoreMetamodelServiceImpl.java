@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -95,13 +94,6 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		return null;
 	}
 
-//	@Override
-//	public EcoreMetamodel findEcoreByName(String name) throws BusinessException {
-//		return ecoreMetamodelRepository.findByName(name);
-//	}
-
-
-
 	@Override
 	public List<EcoreMetamodel> findAllEcore() {
 		return ecoreMetamodelRepository.findAll();
@@ -114,17 +106,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	}
 
 	
-//	@Override
-//	public List<EcoreMetamodel> findAllWithPublic(User user) throws BusinessException {
-//		MongoOperations n = new MongoTemplate(mongoDbFactory);
-//		Query query = new Query();
-//		Criteria c1 = Criteria.where("shared").in(user.getId());
-//		Criteria c2 = Criteria.where("open").is("true");
-//		query.addCriteria(c1.orOperator(c2));
-//		List<EcoreMetamodel> result = n.find(query, EcoreMetamodel.class);
-//		return result;
-//	}
-//
+
 	@Override
 	public List<Artifact> findAllPublic() throws BusinessException {
 		return findAllPublic(EcoreMetamodel.class);
@@ -157,18 +139,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 
 	// fine Alexander
 
-//	@Override
-//	public EcoreMetamodel findByOwner(String idEcoreMetamodel, User user)
-//			throws BusinessException {
-//		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
-//		try {
-//			if (!mm.getAuthor().getId().equals(user.getId()))
-//				throw new BusinessException();
-//		} catch (Exception e) {
-//			throw new BusinessException();
-//		}
-//		return mm;
-//	}
+
 
 	@Override
 	public EcoreMetamodel findOneForUser(String idEcoreMetamodel, User user)
@@ -184,34 +155,18 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		throw new BusinessException();
 	}
 
-//	@Override
-//	public EcoreMetamodel findOne(String id) throws BusinessException {
-//		EcoreMetamodel emm = ecoreMetamodelRepository.findOne(id);
-//		if (emm != null)
-//			emm.setFile(gridFileMediaService.getGridFileMedia(emm.getFile()));
-//		else
-//			throw new BusinessException();
-//		return emm;
-//	}
-
-	
-
 	@Override
-	public List<EcoreMetamodel> findEcoreMetamodelInWorkspace(String idWorkspace,
+	public List<Artifact> findArtifactInWorkspace(String idWorkspace,
 			User user) throws BusinessException {
 		workspaceService.findById(idWorkspace, user);
-		return
-				ecoreMetamodelRepository.findByWorkspaceId(new ObjectId(
-						idWorkspace));
+		return	findArtifactInWorkspace(idWorkspace,user, EcoreMetamodel.class);
 	}
 
 	@Override
-	public List<EcoreMetamodel> findEcoreMetamodelInProject(String idProject, User user)
+	public List<Artifact> findArtifactInProject(String idProject, User user)
 			throws BusinessException {
 		projectService.findById(idProject, user);
-		return
-				ecoreMetamodelRepository
-						.findByProjectId(new ObjectId(idProject));
+		return findArtifactInProject(idProject, user, EcoreMetamodel.class);
 	}
 
 	@Override
@@ -349,7 +304,6 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		}
 
 		return result;
-		// return null;
 	}
 
 	@Override

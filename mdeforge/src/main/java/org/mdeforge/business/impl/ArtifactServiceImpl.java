@@ -17,7 +17,6 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -293,7 +292,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
 			artifactRepository.save(artifact);
-			// check relation
+			//check relation
 			for (Relation rel : relationTemp) {
 				Artifact toArtifact = findOneForUser(rel
 						.getToArtifact().getId(), artifact.getAuthor());
@@ -311,7 +310,8 @@ public class ArtifactServiceImpl implements ArtifactService {
 					artifactRepository.save(temp);
 				}
 			}
-			// Update bi-directional reference
+			//Update bi-directional reference
+			artifact.setRelations(relationTemp);
 			artifactRepository.save(artifact);
 			for (Workspace ws : artifact.getWorkspaces()) {
 				Workspace w = workspaceService.findOne(ws.getId());
@@ -459,13 +459,21 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public ArtifactList findArtifactInWorkspace(String idProject, User user) {
+	public List<Artifact> findArtifactInWorkspace(String idProject, User user) {
 		workspaceService.findById(idProject, user);
-		ArtifactList aList = new ArtifactList(
-				artifactRepository.findByWorkspaceId(new ObjectId(idProject)));
-		return aList;
+		return artifactRepository.findByWorkspaceId(new ObjectId(idProject));
+	}
+	
+	public List<Artifact> findArtifactInProject(String idProject, User user, Class c) {
+		projectService.findById(idProject, user);
+		return artifactRepository.findByProjectId(new ObjectId(idProject), c);
 	}
 
+	public List<Artifact> findArtifactInWorkspace(String idProject, User user, Class c) {
+		workspaceService.findById(idProject, user);
+		return artifactRepository.findByWorkspaceId(new ObjectId(idProject), c);
+	}
+	
 	@Override
 	public Artifact findByName(String name, User user) {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);

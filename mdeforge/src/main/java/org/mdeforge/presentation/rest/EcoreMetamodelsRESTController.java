@@ -162,7 +162,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodel(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneBySharedUserEcore(idEcoreMetamodel, user);
+			EcoreMetamodel ecoreMetamodel = (EcoreMetamodel)ecoreMetamodelService.findOneForUser(idEcoreMetamodel, user);
 			return new ResponseEntity<EcoreMetamodel>(ecoreMetamodel, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<EcoreMetamodel>(HttpStatus.UNPROCESSABLE_ENTITY);
