@@ -62,7 +62,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void create(Workspace workspace) throws BusinessException {
 		User user = userService.findOne(workspace.getOwner().getId());
 		workspace.setOwner(user);
-		if (workspace.getId() != null)
+		if (!workspace.getId().isEmpty())
 			throw new BusinessException();
 		List<Project> ps = workspace.getProjects();
 		workspace.setProjects(new ArrayList<Project>());
@@ -110,7 +110,23 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-
+	
+	@Override
+	public ResponseGrid<Workspace> findAllPaginatedByOwner(RequestGrid requestGrid, User user)
+			throws BusinessException {
+		Page<Workspace> rows = null;
+		if (requestGrid.getSortDir().compareTo("asc") == 0) {
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid
+					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					Direction.ASC, requestGrid.getSortCol()), user.getId());
+		} else
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid
+					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					Direction.DESC, requestGrid.getSortCol()));
+		return new ResponseGrid<Workspace>(requestGrid.getsEcho(),
+				rows.getNumberOfElements(), rows.getTotalElements(),
+				rows.getContent());
+	}
 	@Override
 	public Workspace findByName(String name) throws BusinessException {
 		return workspaceRepository.findByName(name);
@@ -123,7 +139,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void update(Workspace workspace) throws BusinessException {
 		User user = userService.findOne(workspace.getOwner().getId());
 		workspace.setOwner(user);
-		if (workspace.getId() == null)
+		if (workspace.getId().isEmpty())
 			throw new BusinessException();
 		List<Project> ps = workspace.getProjects();
 		findById(workspace.getId(), user);
