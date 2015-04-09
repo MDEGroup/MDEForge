@@ -3,6 +3,7 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Workspace;
@@ -15,14 +16,15 @@ public class CreateTest {
 	public static void setup() throws Exception {
 		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 	}
-//	@Ignore
-//	@Test
-//	public void addWorkspace() throws Exception {
-//		Workspace w = new Workspace();
-//		w.setName("Juri WorkSpace");
-//		w.setDescription("Test Project");
-//		c.addWorkspace(w);
-//	}
+	
+	@Test
+	public void addWorkspace() throws Exception {
+		Workspace w = new Workspace();
+		w.setName("Francesco WorkSpace");
+		w.setDescription("Test Project");
+		c.addWorkspace(w);
+	}
+	
 //	@Ignore
 //	@Test
 //	public void addProject() throws Exception {
@@ -35,6 +37,7 @@ public class CreateTest {
 //		}
 //		c.addProject(p);
 //	}
+	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();

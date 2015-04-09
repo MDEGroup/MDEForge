@@ -65,8 +65,8 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 	private MetricRepository metricRepository;
 
 	@Override
-	public ATLTransformation findByName(String name) throws BusinessException {
-		return ATLTransformationRepository.findByName(name);
+	public Artifact findOneByName(String name, User user) throws BusinessException {
+		return findOneByName(name, user, ATLTransformation.class);
 	}
 
 	@Override
@@ -107,9 +107,9 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 	// fine Alexander
 
 	@Override
-	public ATLTransformation findByOwner(String idMetamodel, String idUser)
+	public Artifact findOneByOwner(String idMetamodel, User idUser)
 			throws BusinessException {
-		ATLTransformation mm = ATLTransformationRepository.findOne(idMetamodel);
+		Artifact mm = findOneByOwner(idMetamodel, idUser, ATLTransformation.class);
 		try {
 			if (!mm.getAuthor().getId().equals(idUser))
 				throw new BusinessException();

@@ -121,7 +121,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 
 	@Override
 	public void delete(String idArtifact, User user) {
-		Artifact artifact = findByOwnerEcore(idArtifact, user);
+		Artifact artifact = findOneByOwner(idArtifact, user);
 		for (Project project : artifact.getProjects())
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(idArtifact)) {
@@ -181,7 +181,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 			if (artifact.getId() == null)
 				throw new BusinessException();
 			// verify metamodel owner
-			findByOwnerEcore(artifact.getId(), artifact.getAuthor());
+			findOneByOwner(artifact.getId(), artifact.getAuthor());
 
 			// UploadFile
 			GridFileMedia fileMedia = new GridFileMedia();
@@ -391,9 +391,21 @@ public class ArtifactServiceImpl implements ArtifactService {
 	// fine Alexander
 
 	@Override
-	public Artifact findByOwnerEcore(String idArtifact, User idUser)
+	public Artifact findOneByOwner(String idArtifact, User idUser)
 			throws BusinessException {
 		Artifact mm = artifactRepository.findOne(idArtifact);
+		try {
+			if (!mm.getAuthor().getId().equals(idUser.getId()))
+				throw new BusinessException();
+		} catch (Exception e) {
+			throw new BusinessException();
+		}
+		return mm;
+
+	}
+	protected Artifact findOneByOwner(String idArtifact, User idUser, Class c)
+			throws BusinessException {
+		Artifact mm = artifactRepository.findOne(idArtifact, c);
 		try {
 			if (!mm.getAuthor().getId().equals(idUser.getId()))
 				throw new BusinessException();
@@ -475,7 +487,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 	
 	@Override
-	public Artifact findByName(String name, User user) {
+	public Artifact findOneByName(String name, User user) {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users").in(user.getId());
@@ -488,7 +500,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 		return project;
 	}
 
-	protected Artifact findByName(String name, User user, Class c)
+	protected Artifact findOneByName(String name, User user, Class c)
 			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
