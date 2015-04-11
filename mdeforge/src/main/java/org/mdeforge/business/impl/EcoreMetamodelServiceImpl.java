@@ -53,19 +53,14 @@ import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SearchProvider;
-import org.mdeforge.business.SimilarityService;
-import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -80,10 +75,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 @Service(value = "EcoreMetamodel")
-public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements EcoreMetamodelService,
-		MetricProvider, SearchProvider, SimilarityService, ValidateService {
-	// TODO implements search inteface methods
-	
+public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamodel> implements EcoreMetamodelService {
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
@@ -93,25 +85,6 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
 		return null;
 	}
-
-	@Override
-	public List<EcoreMetamodel> findAllEcore() {
-		return ecoreMetamodelRepository.findAll();
-	}
-
-	@Override
-	public List<Artifact> findAllWithPublicByUser(User user)
-			throws BusinessException {
-		return findAllWithPublicByUser(user, EcoreMetamodel.class);
-	}
-
-	
-
-	@Override
-	public List<Artifact> findAllPublic() throws BusinessException {
-		return findAllPublic(EcoreMetamodel.class);
-	}
-
 
 	@Override
 	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)
@@ -136,42 +109,8 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-
-	// fine Alexander
-
-
-
-	@Override
-	public EcoreMetamodel findOneForUser(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
-		for (User us : mm.getShared()) {
-			if (us.getId().equals(user.getId())) {
-				mm.setFile(gridFileMediaService.getGridFileMedia(mm.getFile()));
-				return mm;
-			}
-
-		}
-		throw new BusinessException();
-	}
-
-	@Override
-	public List<Artifact> findArtifactInWorkspace(String idWorkspace,
-			User user) throws BusinessException {
-		workspaceService.findById(idWorkspace, user);
-		return	findArtifactInWorkspace(idWorkspace,user, EcoreMetamodel.class);
-	}
-
-	@Override
-	public List<Artifact> findArtifactInProject(String idProject, User user)
-			throws BusinessException {
-		projectService.findById(idProject, user);
-		return findArtifactInProject(idProject, user, EcoreMetamodel.class);
-	}
-
 	@Override
 	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException {
-
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -180,18 +119,14 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		 * Load metamodels
 		 */
 		try {
-
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(inputMetamodel,
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-
 			String mm = new String(emm.getFile().getByteArray());
-
 			File temp = File.createTempFile("tempfile", ".tmp");
 			FileInputStream fis = new FileInputStream(temp);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
@@ -204,12 +139,10 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
 					(Object[]) getModulesList(basePath + "EcoreMetric.asm"));
-
 			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-
 			List<Metric> result = getMetricList(basePath
 					+ "sampleCompany_Cut.xmi", emm);
 			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
@@ -237,9 +170,9 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	}
 
 	private List<Metric> getMetricList(String path, Artifact art) {
-
 		MetricPackage.eINSTANCE.eClass();
 		// Retrieve the default factory singleton
+		@SuppressWarnings("unused")
 		MetricFactory factory = MetricFactory.eINSTANCE;
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
@@ -247,14 +180,12 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		// Obtain a new resource set
 		ResourceSet resSet = new ResourceSetImpl();
 		// Create a resource
-
 		Resource resource = resSet.createResource(URI.createURI(path));
 		try {
 			resource.load(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		Container myForge = (Container) resource.getContents().get(0);
 		List<Metric> result = new ArrayList<Metric>();
 		Iterator<org.mdeforge.emf.metric.Metric> it = myForge.getMetrics().iterator();
@@ -302,7 +233,6 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			metricRepository.save(metric);
 			result.add(metric);
 		}
-
 		return result;
 	}
 
@@ -344,12 +274,12 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 	public boolean isValid(Artifact art) {
 		if (art instanceof EcoreMetamodel){
 			try {
+				@SuppressWarnings("unused")
 				EcoreFactory factory = EcoreFactory.eINSTANCE;
 				ResourceSet resourceSet = new ResourceSetImpl();
 				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 				File temp = new File(gridFileMediaService.getFilePath(art));
 				Resource resource = resourceSet.createResource(URI.createFileURI(temp.getAbsolutePath()));
-
 				resource.load(null);
 				EcoreUtil.resolveAll(resourceSet);
 				EObject eo = resource.getContents().get(0);
@@ -357,13 +287,11 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 				if (diagnostic.getSeverity() == Diagnostic.ERROR) 
 					return false;
 				else return true;
-				
 			} catch (Exception e) {
 				return false;
 			}
 		}
 		else return false;
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -424,12 +352,5 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			throw new BusinessException();
 		}
 		return resultValue;
-	}
-
-	@Override
-	public EcoreMetamodel findOneByOwner(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

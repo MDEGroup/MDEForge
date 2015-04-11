@@ -8,7 +8,6 @@ import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.impl.SimilarityServiceImpl;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,10 +114,9 @@ public class SampleTest {
 
 	@Test
 	public void testSimilarityNoIoc() {
-		SimilarityServiceImpl si = new SimilarityServiceImpl();
-		Artifact a = ecoreMetamodelService.findOne("54d0997b8252e88f947f9a76");
-		Artifact b = ecoreMetamodelService.findOne("54d0997c8252e88f947f9a7a");
-		si.calculateSimilarity(a, b);
+		EcoreMetamodel a = ecoreMetamodelService.findOne("54d0997b8252e88f947f9a76",EcoreMetamodel.class);
+		EcoreMetamodel b = ecoreMetamodelService.findOne("54d0997c8252e88f947f9a7a", EcoreMetamodel.class);
+		ecoreMetamodelService.calculateSimilarity(a, b);
 	}
 	
 //	@Test
@@ -187,8 +185,8 @@ public class SampleTest {
 //
 	@Test
 	public void testSimilarityIoc() {
-		Artifact a = ecoreMetamodelService.findOne("54d099b48252e88f947f9c7e");
-		Artifact b = ecoreMetamodelService.findOne("54d099d18252e88f947f9d86");
+		Artifact a = ecoreMetamodelService.findOne("54d099b48252e88f947f9c7e", EcoreMetamodel.class);
+		Artifact b = ecoreMetamodelService.findOne("54d099d18252e88f947f9d86", EcoreMetamodel.class);
 		similarityService.calculateSimilarity(a, b);
 	}
 	

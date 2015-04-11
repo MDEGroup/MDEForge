@@ -3,6 +3,7 @@ package org.mdeforge.presentation.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.ModelService;
@@ -43,6 +44,9 @@ public class ETLTransformationRESTController {
 	private ModelService modelService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	@Qualifier("Artifact")
+	private ArtifactService<Artifact> artifactService;
 	
 	@Autowired
 	private User user;
@@ -50,8 +54,8 @@ public class ETLTransformationRESTController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
-		List<Artifact> result = ETLTransformationService
-				.findAllWithPublicByUser(user);
+		List<ETLTransformation> result = ETLTransformationService
+				.findAllWithPublicByUser(user, ETLTransformation.class);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
@@ -68,7 +72,7 @@ public class ETLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<Artifact> list = ETLTransformationService.findAllPublic();
+		List<ETLTransformation> list = ETLTransformationService.findAllPublic(ETLTransformation.class);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
@@ -88,8 +92,8 @@ public class ETLTransformationRESTController {
 
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
-		List<ETLTransformation> list = ETLTransformationService
-				.findAllTransformationsByUserId(user.getId());
+		ArtifactList list = new ArtifactList(
+				ETLTransformationService.findAll(ETLTransformation.class));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 
 	}
@@ -101,17 +105,17 @@ public class ETLTransformationRESTController {
 		for (Model model : models) {
 			model.setAuthor(user);
 			model.setOpen(false);
-			modelService.create(model);
+			modelService.create(model, Model.class);
 			
 		}
-		ETLTransformation transformation = (ETLTransformation) ETLTransformationService.findOne(idETLTransformation);
+		ETLTransformation transformation =  ETLTransformationService.findOne(idETLTransformation, ETLTransformation.class);
 		//TODO DANIELE
 		//ADESSO E' UNA LISTA DI MODEL
 		transformation.setModels_in(models);
 		
 		
 		
-		ETLTransformationService.execute(transformation);
+		//ETLTransformationService.execute(transformation);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -125,7 +129,7 @@ public class ETLTransformationRESTController {
 			transformation.setAuthor(user);
 
 			// transformation save
-			ETLTransformationService.create(transformation);
+			ETLTransformationService.create(transformation, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -146,7 +150,7 @@ public class ETLTransformationRESTController {
 			// add author to shared
 			transformation.getShared().add(user);
 			// transformation update
-			ETLTransformationService.update(transformation);
+			ETLTransformationService.update(transformation, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation updated.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -160,7 +164,7 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ETLTransformationService.delete(idTranformation, user);
+			ETLTransformationService.delete(idTranformation, user, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

@@ -2,9 +2,6 @@ package org.mdeforge.business;
 
 public class BusinessException extends RuntimeException {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2836217323379334954L;
 
 	public BusinessException() {

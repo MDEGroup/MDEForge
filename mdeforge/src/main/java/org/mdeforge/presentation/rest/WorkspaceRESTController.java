@@ -7,6 +7,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
@@ -100,7 +101,7 @@ public class WorkspaceRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, Artifact.class));
 			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -114,7 +115,6 @@ public class WorkspaceRESTController {
 			@PathVariable("id") String id) {
 		try {
 			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, ATLTransformation.class));
-			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(

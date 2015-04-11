@@ -34,7 +34,6 @@ import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.model.ATLTransformation;
@@ -43,8 +42,6 @@ import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -57,31 +54,30 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service (value="ATLTransformation")
-public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements ATLTransformationService, MetricProvider {
-
+public class ATLTransformationServiceImpl extends ArtifactServiceImpl<ATLTransformation> implements ATLTransformationService {
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
 	private MetricRepository metricRepository;
 
-	@Override
-	public Artifact findOneByName(String name, User user) throws BusinessException {
-		return findOneByName(name, user, ATLTransformation.class);
-	}
+//	@Override
+//	public Artifact findOneByName(String name, User user) throws BusinessException {
+//		return findOneByName(name, user, ATLTransformation.class);
+//	}
 
 	@Override
 	public List<ATLTransformation> findAllTransformations()
 			throws BusinessException {
 		return ATLTransformationRepository.find();
 	}
-
-
-
-	@Override
-	public List<Artifact> findAllWithPublicByUser(User user)
-			throws BusinessException {
-		return findAllWithPublicByUser(user, ATLTransformation.class);
-	}
+//
+//
+//
+//	@Override
+//	public List<Artifact> findAllWithPublicByUser(User user)
+//			throws BusinessException {
+//		return findAllWithPublicByUser(user, ATLTransformation.class);
+//	}
 
 
 
@@ -105,25 +101,25 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 				rows.getContent());
 	}
 	// fine Alexander
+//
+//	@Override
+//	public Artifact findOneByOwner(String idMetamodel, User idUser)
+//			throws BusinessException {
+//		Artifact mm = findOneByOwner(idMetamodel, idUser, ATLTransformation.class);
+//		try {
+//			if (!mm.getAuthor().getId().equals(idUser))
+//				throw new BusinessException();
+//		} catch (Exception e) {
+//			throw new BusinessException();
+//		}
+//		return mm;
+//
+//	}
 
-	@Override
-	public Artifact findOneByOwner(String idMetamodel, User idUser)
-			throws BusinessException {
-		Artifact mm = findOneByOwner(idMetamodel, idUser, ATLTransformation.class);
-		try {
-			if (!mm.getAuthor().getId().equals(idUser))
-				throw new BusinessException();
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-		return mm;
-
-	}
-
-	@Override
-	public ATLTransformation findOne(String id) throws BusinessException {
-		return ATLTransformationRepository.findOne(id);
-	}
+//	@Override
+//	public ATLTransformation findOne(String id) throws BusinessException {
+//		return ATLTransformationRepository.findOne(id);
+//	}
 
 
 	@Override
@@ -146,16 +142,16 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return null;
 	}
 	
-	@Override
-	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
-		workspaceService.findById(idWorkspace, user);
-		return findArtifactInWorkspace(idWorkspace, user, ATLTransformation.class);
-	}
-	@Override
-	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
-		projectService.findById(idProject, user);
-		return findArtifactInProject(idProject, user, ATLTransformation.class);
-	}
+//	@Override
+//	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
+//		workspaceService.findById(idWorkspace, user);
+//		return findArtifactInWorkspace(idWorkspace, user, ATLTransformation.class);
+//	}
+//	@Override
+//	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
+//		projectService.findById(idProject, user);
+//		return findArtifactInProject(idProject, user, ATLTransformation.class);
+//	}
 
 
 	@Override
@@ -224,6 +220,7 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 		
 		MetricPackage.eINSTANCE.eClass();
 	    // Retrieve the default factory singleton
+		@SuppressWarnings("unused")
 		MetricFactory factory = MetricFactory.eINSTANCE;
 	    Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 	    Map<String, Object> m = reg.getExtensionToFactoryMap();
@@ -242,7 +239,8 @@ public class ATLTransformationServiceImpl extends ArtifactServiceImpl implements
 
 	    Container myForge = (Container) resource.getContents().get(0);
 	    List<Metric> result = new ArrayList<Metric>();
-	    Iterator it = myForge.getMetrics().iterator();	    
+	    @SuppressWarnings("rawtypes")
+		Iterator it = myForge.getMetrics().iterator();	    
 	    while (it.hasNext())
 	    {
 	    	org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric)it.next();

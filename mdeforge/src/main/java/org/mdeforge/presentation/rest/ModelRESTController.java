@@ -6,7 +6,6 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -55,10 +54,9 @@ public class ModelRESTController {
 			@PathVariable("id_MM1") String id_MM1,
 			@PathVariable("id_MM2") String id_MM2) {
 		
-		Model mm1 = (Model) modelService.findOne(id_MM1);
-		Model mm2 = (Model) modelService.findOne(id_MM2);
-		SimilarityService si = (SimilarityService) modelService;
-		si.calculateSimilarity(mm1, mm2);
+		Model mm1 = modelService.findOne(id_MM1,Model.class);
+		Model mm2 = (Model) modelService.findOne(id_MM2,Model.class);
+		modelService.calculateSimilarity(mm1, mm2);
 		return null;
 	}
 	
@@ -67,7 +65,7 @@ public class ModelRESTController {
 			@PathVariable("id_MM1") String id_MM1) {
 		
 		ValidateService va = (ValidateService)modelService;
-		Model mm1 = (Model) modelService.findOne(id_MM1);
+		Model mm1 = (Model) modelService.findOne(id_MM1,Model.class);
 		boolean v = va.isValid(mm1);
 		//boolean v = validationService.isValid(null);
 		return new ResponseEntity<String>(((v)?"Is valid":"Not valid"), HttpStatus.OK);
@@ -77,7 +75,7 @@ public class ModelRESTController {
 	@RequestMapping(value="/{id_model}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_model") String idModel)
 	{
-		Model emm = (Model) modelService.findOne(idModel);
+		Model emm = (Model) modelService.findOne(idModel,Model.class);
 		MetricProvider mp = (MetricProvider) modelService;
 		List<Metric> lm = mp.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
@@ -85,7 +83,7 @@ public class ModelRESTController {
 	// Get specified metamodel
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getModels() {
-		ArtifactList result = new ArtifactList(modelService.findAllWithPublicByUser(user));
+		ArtifactList result = new ArtifactList(modelService.findAllWithPublicByUser(user, Model.class));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
@@ -111,14 +109,14 @@ public class ModelRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getPublicModels() {
-		ArtifactList list = new ArtifactList(modelService.findAllPublic());
+		ArtifactList list = new ArtifactList(modelService.findAllPublic(Model.class));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getModelsByUser() {
-		ArtifactList list = new ArtifactList(modelService.findAllWithPublicByUser(user));
+		ArtifactList list = new ArtifactList(modelService.findAllWithPublicByUser(user, Model.class));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 	}
 
@@ -130,7 +128,7 @@ public class ModelRESTController {
 			model.setAuthor(user);
 			// add author to shared
 			// metamodel create
-			Model s = (Model) modelService.create(model);
+			Model s = (Model) modelService.create(model, Model.class);
 			// Response success
 			return new ResponseEntity<Model>(s, HttpStatus.OK);
 		} catch (Exception e) {
@@ -147,7 +145,7 @@ public class ModelRESTController {
 			// add author to shared
 			model.getShared().add(user);
 			// metamodel save
-			modelService.update(model);
+			modelService.update(model, Model.class);
 			return new ResponseEntity<String>("Model updated.", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Erron: metamodel not updated", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -158,7 +156,7 @@ public class ModelRESTController {
 	@RequestMapping(value = "/{id_model}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Model> getModel(@PathVariable("id_model") String idModel) {
 		try {
-			Model model = (Model) modelService.findOneForUser(idModel, user);
+			Model model = (Model) modelService.findOneById(idModel, user, Model.class);
 			return new ResponseEntity<Model>(model, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Model>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -168,7 +166,7 @@ public class ModelRESTController {
 	@RequestMapping(value = "/{id_model}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteModel(@PathVariable("id_model") String idModel) {
 		try {
-			modelService.delete(idModel, user);
+			modelService.delete(idModel, user, Model.class);
 			return new ResponseEntity<String>("Model deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Model not deleted", HttpStatus.UNPROCESSABLE_ENTITY);

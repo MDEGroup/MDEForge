@@ -73,7 +73,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner(),Artifact.class);
 			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
@@ -151,7 +151,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner(), Artifact.class);
 			workspace.getArtifacts().add(m);
 		}
 		workspaceRepository.save(workspace);
