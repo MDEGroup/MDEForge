@@ -19,6 +19,7 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -51,6 +52,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	private ProjectService projectSerivce;
 
 	@Autowired
+	@Qualifier("Artifact")
 	private ArtifactService artifactService;
 
 	@Autowired
@@ -60,7 +62,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void create(Workspace workspace) throws BusinessException {
 		User user = userService.findOne(workspace.getOwner().getId());
 		workspace.setOwner(user);
-		if (workspace.getId() != null)
+		if (!workspace.getId().isEmpty())
 			throw new BusinessException();
 		List<Project> ps = workspace.getProjects();
 		workspace.setProjects(new ArrayList<Project>());
@@ -71,7 +73,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner(),Artifact.class);
 			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
@@ -108,7 +110,23 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-
+	
+	@Override
+	public ResponseGrid<Workspace> findAllPaginatedByOwner(RequestGrid requestGrid, User user)
+			throws BusinessException {
+		Page<Workspace> rows = null;
+		if (requestGrid.getSortDir().compareTo("asc") == 0) {
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid
+					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					Direction.ASC, requestGrid.getSortCol()), user.getId());
+		} else
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid
+					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					Direction.DESC, requestGrid.getSortCol()));
+		return new ResponseGrid<Workspace>(requestGrid.getsEcho(),
+				rows.getNumberOfElements(), rows.getTotalElements(),
+				rows.getContent());
+	}
 	@Override
 	public Workspace findByName(String name) throws BusinessException {
 		return workspaceRepository.findByName(name);
@@ -121,7 +139,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void update(Workspace workspace) throws BusinessException {
 		User user = userService.findOne(workspace.getOwner().getId());
 		workspace.setOwner(user);
-		if (workspace.getId() == null)
+		if (workspace.getId().isEmpty())
 			throw new BusinessException();
 		List<Project> ps = workspace.getProjects();
 		findById(workspace.getId(), user);
@@ -133,7 +151,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
+			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner(), Artifact.class);
 			workspace.getArtifacts().add(m);
 		}
 		workspaceRepository.save(workspace);

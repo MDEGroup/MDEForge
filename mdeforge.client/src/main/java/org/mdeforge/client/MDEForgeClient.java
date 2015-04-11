@@ -78,7 +78,7 @@ public class MDEForgeClient {
 
 	
 	public List<Project> getProjects() throws Exception {
-		String result = doGetRequest(connectionUrl + "api/project/");
+		String result = doGetRequest(connectionUrl + "api/project/shared");
 		return mapper.readValue(result, new TypeReference<List<Project>>() {
 		});
 	}
@@ -141,6 +141,12 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/shared");
 		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
 	}
+	
+	public List<Model> getModels() throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/shared");
+		return mapper.readValue(result, new TypeReference<List<Model>>() {});
+	}
+	
 	public String validateEcoreMetamodels(String idMetamodel) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/validate/" + idMetamodel);
 		return result;
@@ -253,7 +259,9 @@ public class MDEForgeClient {
 		gfm.setFileName(fileName);
 		metamodel.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(metamodel);
-		metamodel.setId(doPostRequest(connectionUrl + "api/EcoreMetamodel/", on));
+		String app = doPostRequest(connectionUrl + "api/EcoreMetamodel/", on);
+		EcoreMetamodel emm = mapper.readValue(app, new TypeReference<EcoreMetamodel>() {});
+		metamodel.setId(emm.getId());
 	}
 	private String doGetRequest(String urlString) throws Exception {
 		urlString += auth;

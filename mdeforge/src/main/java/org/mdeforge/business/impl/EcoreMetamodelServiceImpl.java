@@ -8,13 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -53,295 +51,43 @@ import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
-import org.mdeforge.business.MetricProvider;
-import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SearchProvider;
-import org.mdeforge.business.SimilarityService;
-import org.mdeforge.business.UserService;
-import org.mdeforge.business.ValidateService;
-import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
-import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
-import org.mdeforge.integration.ProjectRepository;
-import org.mdeforge.integration.UserRepository;
-import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 
-@Service
-public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
-		MetricProvider, SearchProvider, SimilarityService, ValidateService {
-	// TODO implements search inteface methods
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private ArtifactService artifactService;
-	@Autowired
-	private WorkspaceService workspaceService;
-	@Autowired
-	private SimpleMongoDbFactory mongoDbFactory;
+@Service(value = "EcoreMetamodel")
+public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamodel> implements EcoreMetamodelService {
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
-	@Autowired
-	private WorkspaceRepository workspaceRepository;
-	@Autowired
-	private UserRepository userRepository;
-	@Autowired
-	private ProjectRepository projectRepository;
-	@Value("#{cfgproperties[basePath]}")
-	private String basePath;
-	@Autowired
-	private UserService userService;
-
-	@Autowired
-	private GridFileMediaService gridFileMediaService;
-
-	@Override
-	public void delete(EcoreMetamodel ecoreMetamodel) {
-		for (Project p : ecoreMetamodel.getProjects())
-			for (Artifact mm : p.getArtifacts())
-				if (mm.getId().equals(ecoreMetamodel.getId()))
-					p.getArtifacts().remove(mm);
-		for (Workspace p : ecoreMetamodel.getWorkspaces())
-			for (Artifact mm : p.getArtifacts())
-				if (mm.getId().equals(ecoreMetamodel.getId()))
-					p.getArtifacts().remove(mm);
-		for (User p : ecoreMetamodel.getShared())
-			for (Artifact m : p.getSharedArtifact())
-				if (m.getId().equals(ecoreMetamodel.getId()))
-					p.getSharedArtifact().remove(m);
-		// gridFileMediaService.delete(metamodel.getFile());
-		ecoreMetamodelRepository.delete(ecoreMetamodel);
-
-	}
-
+	
 	@Override
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
 		return null;
 	}
 
 	@Override
-	public EcoreMetamodel findByName(String name) throws BusinessException {
-		return ecoreMetamodelRepository.findByName(name);
-	}
-
-	@Override
-	public void update(EcoreMetamodel ecoreMetamodel) {
-		try {
-			if (ecoreMetamodel.getId() == null)
-				throw new BusinessException();
-
-			// UploadFile
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName("");
-			fileMedia.setByteArray(Base64.decode(ecoreMetamodel.getFile()
-					.getContent().getBytes()));
-			ecoreMetamodel.setFile(fileMedia);
-
-			// verify s owner
-			findByOwner(ecoreMetamodel.getId(), ecoreMetamodel.getAuthor());
-
-			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
-				workspaceService.findById(ws.getId(),
-						ecoreMetamodel.getAuthor());
-			}
-			// check project Auth
-			for (Project p : ecoreMetamodel.getProjects()) {
-				projectService.findById(p.getId(), ecoreMetamodel.getAuthor());
-			}
-			if (ecoreMetamodel.getFile() != null) {
-				gridFileMediaService.store(ecoreMetamodel.getFile());
-			}
-
-			ecoreMetamodel.setModified(new Date());
-			ecoreMetamodelRepository.save(ecoreMetamodel);
-			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
-				Workspace w = workspaceService.findOne(ws.getId());
-				if (!artifactService.isArtifactInWorkspace(w.getId(),
-						ecoreMetamodel.getId())) {
-					w.getArtifacts().add(ecoreMetamodel);
-					workspaceRepository.save(w);
-				}
-			}
-			for (Project ps : ecoreMetamodel.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						ecoreMetamodel.getAuthor());
-				if (!artifactService.isArtifactInProject(p.getId(),
-						ecoreMetamodel.getId())) {
-					p.getArtifacts().add(ecoreMetamodel);
-					projectRepository.save(p);
-				}
-			}
-			for (User us : ecoreMetamodel.getShared()) {
-				User u = userService.findOne(us.getId());
-				if (u == null)
-					throw new BusinessException();
-				if (!artifactService
-						.isArtifactInUser(u, ecoreMetamodel.getId())) {
-					u.getSharedArtifact().add(ecoreMetamodel);
-					userRepository.save(u);
-				}
-			}
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-	}
-
-	@Override
-	public List<EcoreMetamodel> findAll() {
-		return ecoreMetamodelRepository.findAll();
-	}
-
-	@Override
-	public List<EcoreMetamodel> findAllEcoreMetamodelsByUserId(User user)
-			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria
-				.where("shared")
-				.in(user.getId())
-				.andOperator(
-						Criteria.where("_class").is(
-								EcoreMetamodel.class.getCanonicalName())));
-		List<EcoreMetamodel> ecoreMetamodels = operations.find(query,
-				EcoreMetamodel.class);
-		return ecoreMetamodels;
-	}
-
-	@Override
-	public String create(EcoreMetamodel ecoreMetamodel)
-			throws BusinessException {
-		// check workspace Auth
-		try {
-			// GetUser
-			if (ecoreMetamodel.getId() != null)
-				throw new BusinessException();
-			ecoreMetamodel.setCreated(new Date());
-			ecoreMetamodel.setModified(ecoreMetamodel.getCreated());
-			// File handler
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(ecoreMetamodel.getName());
-			fileMedia.setByteArray(Base64.decode(ecoreMetamodel.getFile()
-					.getContent().getBytes()));
-			ecoreMetamodel.setFile(fileMedia);
-
-			// check workspace Auth
-			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
-				workspaceService.findById(ws.getId(),
-						ecoreMetamodel.getAuthor());
-			}
-			// check project Auth
-			for (Project p : ecoreMetamodel.getProjects()) {
-				projectService.findById(p.getId(), ecoreMetamodel.getAuthor());
-			}
-			if (ecoreMetamodel.getFile() != null) {
-				gridFileMediaService.store(ecoreMetamodel.getFile());
-			}
-			ecoreMetamodel.setCreated(new Date());
-			ecoreMetamodel.setModified(new Date());
-
-			User user = userRepository.findOne(ecoreMetamodel.getAuthor()
-					.getId());
-			ecoreMetamodel.setAuthor(user);
-			ecoreMetamodel.getShared().add(user);
-
-			// Update bi-directional reference
-			ecoreMetamodelRepository.save(ecoreMetamodel);
-			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
-				Workspace w = workspaceService.findOne(ws.getId());
-				if (w == null)
-					throw new BusinessException();
-				w.getArtifacts().add(ecoreMetamodel);
-				workspaceRepository.save(w);
-			}
-			for (Project ps : ecoreMetamodel.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						ecoreMetamodel.getAuthor());
-				p.getArtifacts().add(ecoreMetamodel);
-				projectRepository.save(p);
-			}
-			for (User us : ecoreMetamodel.getShared()) {
-				User u = userService.findOne(us.getId());
-				if (u == null)
-					throw new BusinessException();
-				u.getSharedArtifact().add(ecoreMetamodel);
-				userRepository.save(u);
-			}
-			return ecoreMetamodel.getId();
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-	}
-
-	@Override
-	public List<EcoreMetamodel> findAllWithPublic(User user) throws BusinessException {
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c1 = Criteria.where("shared").in(user.getId());
-		Criteria c2 = Criteria.where("open").is("true");
-		query.addCriteria(c1.orOperator(c2));
-		List<EcoreMetamodel> result = n.find(query, EcoreMetamodel.class);
-		return result;
-	}
-
-	@Override
-	public List<EcoreMetamodel> findAllPublic() throws BusinessException {
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c2 = Criteria
-				.where("open")
-				.is(true)
-				.orOperator(
-						Criteria.where("_class").is(
-								EcoreMetamodel.class.getCanonicalName()));
-		query.addCriteria(c2);
-		List<EcoreMetamodel> result = n.find(query, EcoreMetamodel.class);
-		return result;
-	}
-
-	// Inizio Alexander
-	@Override
-	public void upload(EcoreMetamodel ecoreMetamodel, MultipartFile file) {
-		ecoreMetamodelRepository.save(ecoreMetamodel);
-	}
-
-	@Override
-	public ResponseGrid<EcoreMetamodel> findAllPaginated(RequestGrid requestGrid)
+	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)
 			throws BusinessException {
 		Page<EcoreMetamodel> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
@@ -363,76 +109,8 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-
-	@Override
-	public void download(EcoreMetamodel ecoreMetamodel) {
-	}
-
-	// fine Alexander
-
-	@Override
-	public EcoreMetamodel findByOwner(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
-		try {
-			if (!mm.getAuthor().getId().equals(user.getId()))
-				throw new BusinessException();
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-		return mm;
-	}
-
-	@Override
-	public EcoreMetamodel findOneBySharedUser(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
-		for (User us : mm.getShared()) {
-			if (us.getId().equals(user.getId())) {
-				mm.setFile(gridFileMediaService.getGridFileMedia(mm.getFile()));
-				return mm;
-			}
-
-		}
-		throw new BusinessException();
-	}
-
-	@Override
-	public EcoreMetamodel findOne(String id) throws BusinessException {
-		EcoreMetamodel emm = ecoreMetamodelRepository.findOne(id);
-		if (emm != null)
-			emm.setFile(gridFileMediaService.getGridFileMedia(emm.getFile()));
-		else
-			throw new BusinessException();
-		return emm;
-	}
-
-	@Override
-	public void deleteEcoreMetamodel(String idEcoreMetamodel, User user) {
-		artifactService.delete(idEcoreMetamodel, user);
-	}
-
-	@Override
-	public List<EcoreMetamodel> findEcoreMetamodelInWorkspace(String idWorkspace,
-			User user) throws BusinessException {
-		workspaceService.findById(idWorkspace, user);
-		return
-				ecoreMetamodelRepository.findByWorkspaceId(new ObjectId(
-						idWorkspace));
-	}
-
-	@Override
-	public List<EcoreMetamodel> findEcoreMetamodelInProject(String idProject, User user)
-			throws BusinessException {
-		projectService.findById(idProject, user);
-		return
-				ecoreMetamodelRepository
-						.findByProjectId(new ObjectId(idProject));
-	}
-
 	@Override
 	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException {
-
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -441,18 +119,14 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 		 * Load metamodels
 		 */
 		try {
-
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(inputMetamodel,
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-
 			String mm = new String(emm.getFile().getByteArray());
-
 			File temp = File.createTempFile("tempfile", ".tmp");
 			FileInputStream fis = new FileInputStream(temp);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
@@ -465,12 +139,10 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
 					(Object[]) getModulesList(basePath + "EcoreMetric.asm"));
-
 			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-
 			List<Metric> result = getMetricList(basePath
 					+ "sampleCompany_Cut.xmi", emm);
 			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
@@ -498,9 +170,9 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 	}
 
 	private List<Metric> getMetricList(String path, Artifact art) {
-
 		MetricPackage.eINSTANCE.eClass();
 		// Retrieve the default factory singleton
+		@SuppressWarnings("unused")
 		MetricFactory factory = MetricFactory.eINSTANCE;
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
@@ -508,14 +180,12 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 		// Obtain a new resource set
 		ResourceSet resSet = new ResourceSetImpl();
 		// Create a resource
-
 		Resource resource = resSet.createResource(URI.createURI(path));
 		try {
 			resource.load(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		Container myForge = (Container) resource.getContents().get(0);
 		List<Metric> result = new ArrayList<Metric>();
 		Iterator<org.mdeforge.emf.metric.Metric> it = myForge.getMetrics().iterator();
@@ -563,9 +233,7 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 			metricRepository.save(metric);
 			result.add(metric);
 		}
-
 		return result;
-		// return null;
 	}
 
 	@Override
@@ -606,12 +274,12 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 	public boolean isValid(Artifact art) {
 		if (art instanceof EcoreMetamodel){
 			try {
+				@SuppressWarnings("unused")
 				EcoreFactory factory = EcoreFactory.eINSTANCE;
 				ResourceSet resourceSet = new ResourceSetImpl();
 				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 				File temp = new File(gridFileMediaService.getFilePath(art));
 				Resource resource = resourceSet.createResource(URI.createFileURI(temp.getAbsolutePath()));
-
 				resource.load(null);
 				EcoreUtil.resolveAll(resourceSet);
 				EObject eo = resource.getContents().get(0);
@@ -619,13 +287,11 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService,
 				if (diagnostic.getSeverity() == Diagnostic.ERROR) 
 					return false;
 				else return true;
-				
 			} catch (Exception e) {
 				return false;
 			}
 		}
 		else return false;
-		// TODO Auto-generated method stub
 	}
 
 	@Override

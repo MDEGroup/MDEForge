@@ -8,12 +8,14 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,28 +38,31 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 public class ETLTransformationRESTController {
 
 	@Autowired
-	private ETLTransformationService ETLtransformationService;
+	@Qualifier("ETLTransformation")
+	private ETLTransformationService ETLTransformationService;
 	@Autowired
 	private ModelService modelService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	private ArtifactService artifactService;
+	@Qualifier("Artifact")
+	private ArtifactService<Artifact> artifactService;
+	
 	@Autowired
 	private User user;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
-		List<ETLTransformation> result = ETLtransformationService
-				.findAllWithPublic(user.getId());
+		List<ETLTransformation> result = ETLTransformationService
+				.findAllWithPublicByUser(user, ETLTransformation.class);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Transformation> getTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
-			Transformation metamodel = ETLtransformationService.findOneBySharedUser(idtransformation, user);
+			Transformation metamodel = ETLTransformationService.findOneBySharedUser(idtransformation, user);
 			return new ResponseEntity<Transformation>(metamodel, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Transformation>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -67,7 +72,7 @@ public class ETLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<ETLTransformation> list = ETLtransformationService.findAllPublic();
+		List<ETLTransformation> list = ETLTransformationService.findAllPublic(ETLTransformation.class);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
@@ -87,8 +92,8 @@ public class ETLTransformationRESTController {
 
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
-		List<ETLTransformation> list = ETLtransformationService
-				.findAllTransformationsByUserId(user.getId());
+		ArtifactList list = new ArtifactList(
+				ETLTransformationService.findAll(ETLTransformation.class));
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 
 	}
@@ -100,17 +105,17 @@ public class ETLTransformationRESTController {
 		for (Model model : models) {
 			model.setAuthor(user);
 			model.setOpen(false);
-			modelService.create(model);
+			modelService.create(model, Model.class);
 			
 		}
-		ETLTransformation transformation = ETLtransformationService.findOne(idETLTransformation);
+		ETLTransformation transformation =  ETLTransformationService.findOne(idETLTransformation, ETLTransformation.class);
 		//TODO DANIELE
 		//ADESSO E' UNA LISTA DI MODEL
 		transformation.setModels_in(models);
 		
 		
 		
-		ETLtransformationService.execute(transformation);
+		//ETLTransformationService.execute(transformation);
 		
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
@@ -124,7 +129,7 @@ public class ETLTransformationRESTController {
 			transformation.setAuthor(user);
 
 			// transformation save
-			ETLtransformationService.create(transformation);
+			ETLTransformationService.create(transformation, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -145,7 +150,7 @@ public class ETLTransformationRESTController {
 			// add author to shared
 			transformation.getShared().add(user);
 			// transformation update
-			ETLtransformationService.update(transformation);
+			ETLTransformationService.update(transformation, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation updated.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -159,7 +164,7 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ETLtransformationService.deleteTransformation(idTranformation, user);
+			ETLTransformationService.delete(idTranformation, user, ETLTransformation.class);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

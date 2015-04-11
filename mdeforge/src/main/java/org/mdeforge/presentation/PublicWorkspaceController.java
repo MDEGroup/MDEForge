@@ -2,18 +2,20 @@ package org.mdeforge.presentation;
 
 import java.io.IOException;
 
+import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Transformation;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,13 +35,12 @@ public class PublicWorkspaceController {
 	@Autowired
 	private ModelService modelService;
 	@Autowired
-	private TransformationService transformationService;
+	@Qualifier("Artifact")
+	private ArtifactService artifactService;
 	@Autowired
 	private EditorService editorService;
-
-	
-//	@Autowired
-//	private User user;
+	@Autowired
+	private User user;
 
 	
 	@RequestMapping("/metamodel/list")
@@ -119,13 +120,13 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/model/create", method = { RequestMethod.POST })
 	public String createmodel(@ModelAttribute Model model,@ RequestParam("modelfile") MultipartFile file) throws IOException {
 //		model.setFile(IOUtils.toString(file.getInputStream()));
-		modelService.upload(model);
+		modelService.create(model);
 		return "redirect:/public/model/list";		
 	}
 	
 	@RequestMapping(value = "/model/update", method = { RequestMethod.GET })
 	public String updatemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findOneByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "public.model.update";
 	}
@@ -133,7 +134,7 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/model/update", method = { RequestMethod.POST })
 	public String updatemodel(@ModelAttribute Model model, @RequestParam("modelfile") MultipartFile file) throws IOException {
 		if(file.isEmpty()){
-			Model modelOLD = modelService.findByName(model.getName());
+			Model modelOLD = (Model) modelService.findOneByName(model.getName(), user);
 			model.setFile(modelOLD.getFile());
 		}else{
 //			model.setFile(IOUtils.toString(file.getInputStream()));
@@ -145,14 +146,14 @@ public class PublicWorkspaceController {
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.GET)
 	public String deletemodel_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Model model_forge = modelService.findByName(name);
+		Model model_forge = (Model) modelService.findOneByName(name, user);
 		model.addAttribute("model", model_forge);
 		return "public.model.delete";
 	}
 	
 	@RequestMapping(value = "/model/delete", method = RequestMethod.POST)
 	public String deletemodel(@ModelAttribute Model model) {
-		modelService.delete(model);
+		modelService.delete(model, user);
 		return "redirect:/public/model/list";
 	}
 	
@@ -171,13 +172,13 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/transformation/create", method = { RequestMethod.POST })
 	public String createtransformation(@ModelAttribute Transformation transformation,@ RequestParam("transformationfile") MultipartFile file) throws IOException {
 		//transformation.setFile(IOUtils.toString(file.getInputStream()));
-		transformationService.upload(transformation);
+		artifactService.create(transformation);
 		return "redirect:/public/transformation/list";		
 	}
 	
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.GET })
 	public String updatetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = transformationService.findByName(name);
+		Transformation transformation = (Transformation) artifactService.findOneByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "public.transformation.update";
 	}
@@ -185,26 +186,26 @@ public class PublicWorkspaceController {
 	@RequestMapping(value = "/transformation/update", method = { RequestMethod.POST })
 	public String updatetransformation(@ModelAttribute Transformation transformation, @RequestParam("transformationfile") MultipartFile file) throws IOException {
 		if(file.isEmpty()){
-			Transformation transformationOLD = transformationService.findByName(transformation.getName());
+			Transformation transformationOLD = (Transformation) artifactService.findOneByName(transformation.getName(), user);
 			transformation.setFile(transformationOLD.getFile());
 		}else{
 //			transformation.setFile(IOUtils.toString(file.getInputStream()));
 		}
 		
-		transformationService.update(transformation);
+		artifactService.update(transformation);
 		return "redirect:/public/transformation/list";
 	}
 	
 	@RequestMapping(value = "/transformation/delete", method = RequestMethod.GET)
 	public String deletetransformation_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
-		Transformation transformation = transformationService.findByName(name);
+		Transformation transformation = (Transformation) artifactService.findOneByName(name, user);
 		model.addAttribute("transformation", transformation);
 		return "public.transformation.delete";
 	}
 	
 	@RequestMapping(value = "/transformation/delete", method = RequestMethod.POST)
 	public String deletetransformation(@ModelAttribute Transformation transformation) {
-		transformationService.delete(transformation);
+		artifactService.delete(transformation, user);
 		return "redirect:/public/transformation/list";
 	}
 
@@ -273,12 +274,13 @@ public class PublicWorkspaceController {
 	
 	@RequestMapping("/findmodelspaginated")
 	public @ResponseBody ResponseGrid<org.mdeforge.business.model.Model> findmodelspaginated(@ModelAttribute RequestGrid requestGrid) {
-		return modelService.findAllPaginated(requestGrid);
+//		return modelService.findAllPaginated(requestGrid);
+		return null;
 	}
 	
 	@RequestMapping("/findtransformationspaginated")
 	public @ResponseBody ResponseGrid<Transformation> findtransformationspaginated(@ModelAttribute RequestGrid requestGrid) {
-		return transformationService.findAllPaginated(requestGrid);
+		return null;//artifactService.findAllPaginated(requestGrid);
 	}
 	
 	@RequestMapping("/findeditorspaginated")

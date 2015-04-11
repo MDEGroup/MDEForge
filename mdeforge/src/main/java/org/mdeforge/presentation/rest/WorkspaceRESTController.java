@@ -4,13 +4,17 @@ import java.util.List;
 
 import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,11 +42,10 @@ public class WorkspaceRESTController {
 	private WorkspaceService workspaceService;
 
 	@Autowired
-	private MetamodelService metamodelService;
-	@Autowired
 	private TransformationService transformationService;
 
 	@Autowired
+	@Qualifier("Artifact")
 	private ArtifactService artifactService;
 
 	
@@ -81,11 +84,11 @@ public class WorkspaceRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	@RequestMapping(value = "/{id}/metamodel/", method = RequestMethod.GET)
+	@RequestMapping(value = "/{id}/EcoreMetamodel/", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = metamodelService.findtMetamodelInWorkspace(id, user);
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, EcoreMetamodel.class));
 			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -98,7 +101,7 @@ public class WorkspaceRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = artifactService.findArtifactInWorkspace(id, user);
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, Artifact.class));
 			
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -107,12 +110,11 @@ public class WorkspaceRESTController {
 		}
 	}
 	
-	@RequestMapping(value = "/{id}/transformation/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findTransformationInWorkspace(
+	@RequestMapping(value = "/{id}/ATLTransformation/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findATLTransformationInWorkspace(
 			@PathVariable("id") String id) {
 		try {
-			ArtifactList workspace = transformationService.findtTransformationInWorkspace(id, user);
-			
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, ATLTransformation.class));
 			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(
@@ -120,6 +122,30 @@ public class WorkspaceRESTController {
 		}
 	}
 	
+	@RequestMapping(value = "/{id}/ETLTransformation/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findETLTransformationInWorkspace(
+			@PathVariable("id") String id) {
+		try {
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, ATLTransformation.class));
+			
+			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/{id}/Model/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> findModelInWorkspace(
+			@PathVariable("id") String id) {
+		try {
+			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user, Model.class));
+			
+			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	@RequestMapping(method = RequestMethod.POST, consumes="application/json")
 	public @ResponseBody HttpEntity<String> create(
 			@RequestBody Workspace workspace) {

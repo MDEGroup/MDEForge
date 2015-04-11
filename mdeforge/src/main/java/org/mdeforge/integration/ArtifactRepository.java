@@ -10,8 +10,16 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface ArtifactRepository extends MongoRepository<Artifact, String>{
 	Metamodel findByName(String name);
+	@Query("{ \"name\" : ?0, \"_class\" : ?1}")
+	Metamodel findByName(String name, String type);
 	@Query("{ projects :  {$elemMatch : {\"$id\" : ?0}}}")
-	List<? extends Artifact> findByProjectId(ObjectId objectId);
+	List<Artifact> findByProjectId(ObjectId objectId);
 	@Query("{ workspaces :  {$elemMatch : {\"$id\" : ?0}}}")
-	List<? extends Artifact> findByWorkspaceId(ObjectId objectId);
+	List<Artifact> findByWorkspaceId(ObjectId objectId);
+	@Query("{ projects :  {$elemMatch : {\"$id\" : ?0}}, \"_class\" : ?1}")
+	List<Artifact> findByProjectId(ObjectId objectId, String c);
+	@Query("{ workspaces :  {$elemMatch : {\"$id\" : ?0}}, \"_class\" : ?1}")
+	List<Artifact> findByWorkspaceId(ObjectId objectId, String type);
+	
+	
 }
