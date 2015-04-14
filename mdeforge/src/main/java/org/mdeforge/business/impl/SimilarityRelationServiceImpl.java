@@ -4,8 +4,8 @@ package org.mdeforge.business.impl;
 import java.util.List;
 
 import org.mdeforge.business.SimilarityRelationService;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.integration.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -26,16 +26,17 @@ public class SimilarityRelationServiceImpl implements SimilarityRelationService 
 		relationRepository.save(r);
 	}
 	@Override
-	public List<Relation> findAll(double treshold) {
+	public List<SimilarityRelation> findAll(double treshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria.where("value").gt(treshold);
-		query.addCriteria(c2);
-		return n.find(query, Relation.class);
+		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
+		query.addCriteria(c2.andOperator(c1));
+		return n.find(query, SimilarityRelation.class);
 	}
 	@Override
-	public List<Relation> findAll() {
+	public List<SimilarityRelation> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		return n.findAll(Relation.class);
+		return n.findAll(SimilarityRelation.class);
 	}
 }
