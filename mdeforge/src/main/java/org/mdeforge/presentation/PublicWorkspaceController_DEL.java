@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/public")
-public class PublicWorkspaceController {
+public class PublicWorkspaceController_DEL {
 	
 //	@Autowired
 //	private MetamodelService metamodelService;

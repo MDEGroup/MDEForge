@@ -72,7 +72,7 @@
 <div class="col-xs-6 col-md-6">
 	<div class="box">
 		<div class="box-content">
-			<form:form cssClass="form-horizontal" modelAttribute="workspace" action="${pageContext.request.contextPath}${requestScope.action}" role="form" method="POST">
+			<form:form cssClass="form-horizontal" modelAttribute="workspace" action="${pageContext.request.contextPath}/private${requestScope.action}" role="form" method="POST">
 				<form:hidden path="id" />
 				<div class="form-group">
 					<label class="col-sm-3 control-label"><spring:message code="mdeforge.workspace.name"/>:</label>
@@ -103,7 +103,7 @@
 								</c:otherwise>
 							</c:choose>
 						</button>
-						<a href="${pageContext.request.contextPath}/workspace/list"><button type="button" class="btn btn-warning "><spring:message code="common.action.cancel"/></button></a>
+						<a href="${pageContext.request.contextPath}/private/workspace/list"><button type="button" class="btn btn-warning "><spring:message code="common.action.cancel"/></button></a>
 					</div>
 				</div>
 			</form:form>

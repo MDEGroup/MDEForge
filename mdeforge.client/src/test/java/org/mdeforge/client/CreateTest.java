@@ -5,7 +5,9 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Workspace;
 
 public class CreateTest {
@@ -17,6 +19,7 @@ public class CreateTest {
 		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 	}
 	
+	@Ignore
 	@Test
 	public void addWorkspace() throws Exception {
 		Workspace w = new Workspace();
@@ -72,7 +75,31 @@ public class CreateTest {
 //		c.addETLTransformation(etl, "temp/Android2Web.etl");
 		
 	}
-
-	
-	
+	@Ignore
+	@Test
+	public void testAddProjectToWorkspace() {
+		try {
+			Workspace w = c.getWorkspace("5514aa53d4c67eee3e2c1b12");
+			Project p = new Project();
+			p.setName("Test bascio");
+			p.getWorkspaces().add(w);
+			c.addProject(p);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Test
+	public void testArtifactToWorkspace() {
+		try {
+			Workspace w = c.getWorkspace("5514aa53d4c67eee3e2c1b12");
+			ETLTransformation p = new ETLTransformation();
+			p.setName("Android2Web");
+			p.getWorkspaces().add(w);
+			c.addETLTransformation(p, "temp/Android2Web.etl");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

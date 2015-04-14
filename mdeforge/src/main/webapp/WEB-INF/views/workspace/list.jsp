@@ -1,4 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <script type="text/javascript">
 	function MakeSelect2() {
@@ -39,18 +40,18 @@
 														"bSortable" : false,
 														"sDefaultContent" : "",
 														"fnRender" : function(oObj) {
-															return "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/project/list?workspacename="
-															+ oObj.aData['name']
+															return "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace?id="
+															+ oObj.aData['id']
 															+ "'><i class='fa fa-plus-square-o'></i></a>"
-															+ "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/workspace/update?name="
-															+ oObj.aData['name']
+															+ "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace/update?id="
+															+ oObj.aData['id']
 															+ "'><i class='fa fa-edit'></i></a>"
-															+ "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/workspace/delete?name="
-															+ oObj.aData['name']
+															+ "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace/delete?id="
+															+ oObj.aData['id']
 															+ "'><i class='fa fa-trash-o'></i></a>";
 														}
 													} ],
-											"sAjaxSource" : "${pageContext.request.contextPath}/workspace/findelementspaginated",
+											"sAjaxSource" : "${pageContext.request.contextPath}/private/workspace/findelementspaginated",
 											"oLanguage" : {
 												"sSearch" : "",
 												"sLengthMenu" : '_MENU_',
@@ -125,7 +126,7 @@
 </div>
 <div class="row">
 	<div class="col-xs-12"> 
-		<a href="${pageContext.request.contextPath}/workspace/create"><button type="button" class="btn btn-success"><spring:message code="mdeforge.workspace.create.lowercase"/></button></a>
+		<a href="${pageContext.request.contextPath}/private/workspace/create"><button type="button" class="btn btn-success"><spring:message code="mdeforge.workspace.create.lowercase"/></button></a>
 	</div>
 </div>
 <div class="row">
@@ -149,6 +150,23 @@
 						</tr>
 					</thead>
 					<tbody>
+						<c:forEach items="workspaces_list" var="workspace">
+   							<tr>
+   								<td>
+   								Y
+	   							</td>
+   								<td>
+   								Y
+	   							</td>
+   								<td>
+   								Y
+	   							</td>
+   								<td>
+   								Y
+	   							</td>
+   								
+   							</tr>							
+						</c:forEach>
 					</tbody>
 					<tfoot>
 						<tr>
