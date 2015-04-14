@@ -375,7 +375,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 			}
 			result += "]\n";
 			result += "edges = [\n";
-			List<SimilarityRelation> relations = similarityRelationService.findAll(0.3);
+			List<SimilarityRelation> relations = similarityRelationService.findAll(treshold);
 			System.out.println(relations.size());
 			size = relations.size();
 			for (SimilarityRelation relation : relations) {
@@ -385,7 +385,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 					result +=",\n";
 				else result +="\n";
 			}
-			result += "]\n";
+			result += "];\n";
 			return result;
 		} catch (Exception e) {
 			throw new BusinessException();
