@@ -17,7 +17,6 @@ import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ETLTransformation;
@@ -25,7 +24,6 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.integration.ETLTransformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,7 +37,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service(value="ETLTransformation")
-public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements ETLTransformationService {
+public class ETLTransformationServiceImpl extends ArtifactServiceImpl<ETLTransformation> implements ETLTransformationService {
+
+	
 
 	@Autowired
 	private ETLTransformationRepository ETLTransformationRepository;
@@ -83,18 +83,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return metamodels;
 	}
 
-	
-	@Override
-	public List<Artifact> findAllWithPublicByUser(User user)
-			throws BusinessException {
-		return findAllWithPublicByUser(user, ETLTransformation.class);
-	}
-
-	@Override
-	public List<Artifact> findAllPublic() throws BusinessException {
-		return findAllPublic(ETLTransformation.class);
-	}
-
 	@Override
 	public ResponseGrid<ETLTransformation> findAllPaginated(RequestGrid requestGrid)
 			throws BusinessException {
@@ -114,18 +102,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-	// fine Alexander
-
-	@Override
-	public ETLTransformation findOne(String id) throws BusinessException {
-		return ETLTransformationRepository.findOne(id);
-	}
-
-	
-
-	private File getSource(String filePath) throws URISyntaxException {
-		return new File(filePath);
-	}
 	
 	@Override
 	public void execute(ETLTransformation transformation) {
@@ -135,13 +111,13 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 			if (rel instanceof DomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
-					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
+					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId(), EcoreMetamodel.class));
 					sourceMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}
 			if (rel instanceof CoDomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
-					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
+					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId(), EcoreMetamodel.class));
 					targetMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}		
 		}
@@ -154,7 +130,7 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		String outputPath = basePath + randomGenerator.nextInt(100);
 		
 		try {
-			module.parse(getSource(transformationPath));
+			module.parse(new File(transformationPath));
 			
 			List<IModel> models = new ArrayList<IModel>();
 			
@@ -204,6 +180,7 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		return emfModel;
 	}
 	
+	@SuppressWarnings("unused")
 	private EmfModel createEmfModel(String name, Model model, List<String> metamodel,
 			boolean readOnLoad, boolean storeOnDisposal)
 			throws EolModelLoadingException, URISyntaxException,
@@ -236,7 +213,7 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		ArrayList<URI> metamodelFiles = new ArrayList<URI>();
 		for (String path : metamodelPath) {
 			metamodelFiles.add(
-					URI.createFileURI(getFile(path).getAbsolutePath())
+					URI.createFileURI(new File(path).getAbsolutePath())
 					);
 		}
 		
@@ -245,14 +222,8 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 		emfModel.setStoredOnDisposal(true);
 		emfModel.setReadOnLoad(false);
 		emfModel.setName(name);
-		
 		emfModel.load();
 		return emfModel;
-	}
-
-
-	protected File getFile(String fileName) throws URISyntaxException {
-		return new File(fileName);
 	}
 	
 	@Override
@@ -267,17 +238,6 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl implements
 			ETLTransformation metamodel) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
-		workspaceService.findById(idWorkspace, user);
-		return findArtifactInWorkspace(idWorkspace, user, ETLTransformation.class);
-	}
-	@Override
-	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
-		projectService.findById(idProject, user);
-		return findArtifactInWorkspace(idProject, user, ETLTransformation.class);
 	}
 }
 

@@ -47,7 +47,7 @@ public class ArtifactRESTController {
 		// String name = auth.getName(); //get logged in username
 		// User user = userService.findOneByUsername(name);
 
-		List<Artifact> result = artifactService.findAllWithPublicByUser(user);
+		List<Artifact> result = artifactService.findAllWithPublicByUser(user, Artifact.class);
 		return new ResponseEntity<List<Artifact>>(result, HttpStatus.OK);
 	}
 
@@ -72,7 +72,7 @@ public class ArtifactRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Artifact>> getPublicArtifacts() {
-		List<Artifact> list = artifactService.findAllPublic();
+		List<Artifact> list = artifactService.findAllPublic(Artifact.class);
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
 
 	}
@@ -80,7 +80,7 @@ public class ArtifactRESTController {
 	// get shared artifact
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Artifact>> getArtifactsByUser() {
-		List<Artifact> list = artifactService.findAllWithPublicByUser(user);
+		List<Artifact> list = artifactService.findAllWithPublicByUser(user, Artifact.class);
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
 
 	}
@@ -89,7 +89,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Artifact> getArtifact(@PathVariable("id_artifact") String idArtifact) {
 		try {
-			Artifact artifact = artifactService.findOneById(idArtifact, user);
+			Artifact artifact = artifactService.findOneById(idArtifact, user, Artifact.class);
 			return new ResponseEntity<Artifact>(artifact, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);

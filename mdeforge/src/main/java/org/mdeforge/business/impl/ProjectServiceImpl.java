@@ -82,14 +82,13 @@ public class ProjectServiceImpl implements ProjectService {
 			for (Project p : u.getProjects()) {
 				Project appProg = findOne(p.getId());
 				if (p.getId().equals(project.getId())) {
-					Artifact app = artifactService.findOneById(u.getId(), userId);
+					Artifact app = artifactService.findOneById(u.getId(), userId, Artifact.class);
 					app.getProjects().remove(appProg);
 					artifactRepository.save(u);
 					break;
 				}
 			}
 		projectRepository.delete(project);
-
 	}
 
 	@Override
@@ -149,7 +148,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), user);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), user);
+			artifactService.findOneById(ws.getId(), user, Artifact.class);
 
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.getUsers().clear();
@@ -181,7 +180,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), idUser);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), idUser);
+			artifactService.findOneById(ws.getId(), idUser, Artifact.class);
 		
 		List<Workspace> workspaces = project.getWorkspaces();
 		projectRepository.save(project);

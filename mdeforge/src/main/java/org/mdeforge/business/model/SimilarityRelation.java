@@ -2,7 +2,7 @@ package org.mdeforge.business.model;
 
 public class SimilarityRelation extends Relation {
 
-	private Double value;
+	private double value;
 
 	public double getValue() {
 		return value;

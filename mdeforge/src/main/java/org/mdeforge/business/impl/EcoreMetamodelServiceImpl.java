@@ -53,19 +53,15 @@ import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SearchProvider;
-import org.mdeforge.business.SimilarityService;
-import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -80,98 +76,37 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 @Service(value = "EcoreMetamodel")
-public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements EcoreMetamodelService,
-		MetricProvider, SearchProvider, SimilarityService, ValidateService {
-	// TODO implements search inteface methods
-	
+public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamodel> implements EcoreMetamodelService {
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
-	
+
 	@Override
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
 		return null;
 	}
 
 	@Override
-	public List<EcoreMetamodel> findAllEcore() {
-		return ecoreMetamodelRepository.findAll();
-	}
-
-	@Override
-	public List<Artifact> findAllWithPublicByUser(User user)
-			throws BusinessException {
-		return findAllWithPublicByUser(user, EcoreMetamodel.class);
-	}
-
-	
-
-	@Override
-	public List<Artifact> findAllPublic() throws BusinessException {
-		return findAllPublic(EcoreMetamodel.class);
-	}
-
-
-	@Override
-	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)
-			throws BusinessException {
+	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid) throws BusinessException {
 		Page<EcoreMetamodel> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = ecoreMetamodelRepository.findByOpen(
 					true,
-					new PageRequest(requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.ASC, requestGrid
-							.getSortCol()));
+					new PageRequest(requestGrid.getiDisplayStart() / requestGrid.getiDisplayLength(), requestGrid
+							.getiDisplayLength(), Direction.ASC, requestGrid.getSortCol()));
 		} else {
 			rows = ecoreMetamodelRepository.findByOpen(
 					true,
-					new PageRequest(requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.DESC, requestGrid
-							.getSortCol()));
+					new PageRequest(requestGrid.getiDisplayStart() / requestGrid.getiDisplayLength(), requestGrid
+							.getiDisplayLength(), Direction.DESC, requestGrid.getSortCol()));
 		}
-		return new ResponseGrid<EcoreMetamodel>(requestGrid.getsEcho(),
-				rows.getNumberOfElements(), rows.getTotalElements(),
-				rows.getContent());
-	}
-
-	// fine Alexander
-
-
-
-	@Override
-	public EcoreMetamodel findOneForUser(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		EcoreMetamodel mm = ecoreMetamodelRepository.findOne(idEcoreMetamodel);
-		for (User us : mm.getShared()) {
-			if (us.getId().equals(user.getId())) {
-				mm.setFile(gridFileMediaService.getGridFileMedia(mm.getFile()));
-				return mm;
-			}
-
-		}
-		throw new BusinessException();
-	}
-
-	@Override
-	public List<Artifact> findArtifactInWorkspace(String idWorkspace,
-			User user) throws BusinessException {
-		workspaceService.findById(idWorkspace, user);
-		return	findArtifactInWorkspace(idWorkspace,user, EcoreMetamodel.class);
-	}
-
-	@Override
-	public List<Artifact> findArtifactInProject(String idProject, User user)
-			throws BusinessException {
-		projectService.findById(idProject, user);
-		return findArtifactInProject(idProject, user, EcoreMetamodel.class);
+		return new ResponseGrid<EcoreMetamodel>(requestGrid.getsEcho(), rows.getNumberOfElements(),
+				rows.getTotalElements(), rows.getContent());
 	}
 
 	@Override
 	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException {
-
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -180,18 +115,13 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		 * Load metamodels
 		 */
 		try {
-
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(inputMetamodel,
-					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-
+			injector.inject(inputMetamodel, org.eclipse.emf.ecore.EcorePackage.eNS_URI);
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-
 			String mm = new String(emm.getFile().getByteArray());
-
 			File temp = File.createTempFile("tempfile", ".tmp");
 			FileInputStream fis = new FileInputStream(temp);
 			BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
@@ -201,17 +131,13 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "Ecore");
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
-			transformationLauncher.launch(ILauncher.RUN_MODE, null,
-					new HashMap<String, Object>(),
+			transformationLauncher.launch(ILauncher.RUN_MODE, null, new HashMap<String, Object>(),
 					(Object[]) getModulesList(basePath + "EcoreMetric.asm"));
-
 			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-
-			List<Metric> result = getMetricList(basePath
-					+ "sampleCompany_Cut.xmi", emm);
+			List<Metric> result = getMetricList(basePath + "sampleCompany_Cut.xmi", emm);
 			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
 			temp2.delete();
 			temp.delete();
@@ -223,23 +149,22 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		}
 	}
 
-	private InputStream[] getModulesList(String modules_input)
-			throws IOException {
+	private InputStream[] getModulesList(String modules_input) throws IOException {
 		InputStream[] modules = null;
 		String[] moduleNames = modules_input.split(",");
 		modules = new InputStream[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
-			String asmModulePath = new Path(moduleNames[i].trim())
-					.removeFileExtension().addFileExtension("asm").toString();
+			String asmModulePath = new Path(moduleNames[i].trim()).removeFileExtension().addFileExtension("asm")
+					.toString();
 			modules[i] = new FileInputStream(asmModulePath);
 		}
 		return modules;
 	}
 
 	private List<Metric> getMetricList(String path, Artifact art) {
-
 		MetricPackage.eINSTANCE.eClass();
 		// Retrieve the default factory singleton
+		@SuppressWarnings("unused")
 		MetricFactory factory = MetricFactory.eINSTANCE;
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
@@ -247,53 +172,41 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		// Obtain a new resource set
 		ResourceSet resSet = new ResourceSetImpl();
 		// Create a resource
-
 		Resource resource = resSet.createResource(URI.createURI(path));
 		try {
 			resource.load(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		Container myForge = (Container) resource.getContents().get(0);
 		List<Metric> result = new ArrayList<Metric>();
 		Iterator<org.mdeforge.emf.metric.Metric> it = myForge.getMetrics().iterator();
 		while (it.hasNext()) {
-			org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric) it
-					.next();
+			org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric) it.next();
 			Metric metric = null;
 			if (at2 instanceof org.mdeforge.emf.metric.impl.SimpleMetricImpl) {
 				SimpleMetric metric2 = new SimpleMetric();
 				metric2.setName(at2.getName());
 				metric2.setDescription(at2.getDescription());
-				metric2.setValue(((org.mdeforge.emf.metric.impl.SimpleMetricImpl) at2)
-						.getValue());
+				metric2.setValue(((org.mdeforge.emf.metric.impl.SimpleMetricImpl) at2).getValue());
 				metric = metric2;
 			}
 			if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) {
 				AggregatedIntegerMetric metric2 = new AggregatedIntegerMetric();
-				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
-						.getAverage());
-				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
-						.getMaximum());
-				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
-						.getMedian());
-				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
-						.getMinimum());
+				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getAverage());
+				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMaximum());
+				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMedian());
+				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMinimum());
 				metric2.setName(at2.getName());
 				metric2.setDescription(at2.getDescription());
 				metric = metric2;
 			}
 			if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) {
 				AggregatedRealMetric metric2 = new AggregatedRealMetric();
-				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
-						.getAverage());
-				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
-						.getMaximum());
-				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
-						.getMedian());
-				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
-						.getMinimum());
+				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getAverage());
+				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMaximum());
+				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMedian());
+				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMinimum());
 				metric2.setName(at2.getName());
 				metric2.setDescription(at2.getDescription());
 				metric = metric2;
@@ -302,29 +215,22 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			metricRepository.save(metric);
 			result.add(metric);
 		}
-
 		return result;
 	}
 
 	@Override
-	public void registerMetamodel(EcoreMetamodel ecoreMetamodel)
-			throws BusinessException {
-		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
-				.getId());
+	public void registerMetamodel(EcoreMetamodel ecoreMetamodel) throws BusinessException {
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
 		ecoreMetamodel.getFile();
-		ecoreMetamodel.setFile(gridFileMediaService
-				.getGridFileMedia(ecoreMetamodel.getFile()));
+		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-				"ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
-				rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
-				extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		for (EObject eObject2 : eObject) {
@@ -334,40 +240,43 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 			}
 		}
 	}
-	private void registerSubPackage(EPackage p){
+
+	private void registerSubPackage(EPackage p) {
 		EPackage.Registry.INSTANCE.put(p.getNsURI(), p);
 		for (EPackage pack : p.getESubpackages()) {
 			registerSubPackage(pack);
 		}
 	}
+
 	@Override
 	public boolean isValid(Artifact art) {
-		if (art instanceof EcoreMetamodel){
+		if (art instanceof EcoreMetamodel) {
 			try {
+				@SuppressWarnings("unused")
 				EcoreFactory factory = EcoreFactory.eINSTANCE;
 				ResourceSet resourceSet = new ResourceSetImpl();
-				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+						.put("ecore", new EcoreResourceFactoryImpl());
 				File temp = new File(gridFileMediaService.getFilePath(art));
 				Resource resource = resourceSet.createResource(URI.createFileURI(temp.getAbsolutePath()));
-
 				resource.load(null);
 				EcoreUtil.resolveAll(resourceSet);
 				EObject eo = resource.getContents().get(0);
 				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
-				if (diagnostic.getSeverity() == Diagnostic.ERROR) 
+				if (diagnostic.getSeverity() == Diagnostic.ERROR)
 					return false;
-				else return true;
-				
+				else
+					return true;
 			} catch (Exception e) {
 				return false;
 			}
-		}
-		else return false;
-		// TODO Auto-generated method stub
+		} else
+			return false;
 	}
 
 	@Override
-	public String calculateSimilarity(Artifact art1, Artifact art2) {
+	public double calculateSimilarity(Artifact art1, Artifact art2) {
+		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
 
@@ -404,7 +313,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 				.createStandaloneInstance();
 		IBatchMerger merger = new BatchMerger(mergerRegistry);
 		merger.copyAllLeftToRight(differences, new BasicMonitor());
-		String resultValue = "" + (counter * 1.0) / total;
+		double resultValue = (counter * 1.0) / total;
 
 		
 		//Used to save Diff model
@@ -417,19 +326,21 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl implements Ec
 		Resource resource = resSet.createResource(URI.createURI(basePath
 				+ "/compare.xmi"));
 		resource.getContents().add(comparison);
-		try {
-			resource.save(Collections.EMPTY_MAP);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new BusinessException();
-		}
+//		try {
+//			resource.save(Collections.EMPTY_MAP);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new BusinessException();
+//		}
+		SimilarityRelation sr = new SimilarityRelation();
+		sr.setFromArtifact(art1);
+		sr.setToArtifact(art2);
+		sr.setValue(resultValue);
+		relationRepository.save(sr);
 		return resultValue;
-	}
-
-	@Override
-	public EcoreMetamodel findOneByOwner(String idEcoreMetamodel, User user)
-			throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		}catch(Exception e) {
+			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
+			return 0;
+		}
 	}
 }

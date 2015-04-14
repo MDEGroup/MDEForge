@@ -6,5 +6,5 @@ import org.mdeforge.business.model.Artifact;
 
 public interface SimilarityService {
 	
-	String calculateSimilarity(Artifact art1, Artifact art2);
+	double calculateSimilarity(Artifact art1, Artifact art2);
 }

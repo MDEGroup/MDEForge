@@ -1,5 +1,6 @@
 package org.mdeforge.client;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -30,16 +31,17 @@ public class TestClient {
 //			e.printStackTrace();
 //		}
 //	}
-//	@Test	
-//	public void testSimilarityEcoreMetamodel () {
-//		try {
-//			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
-//			System.out.println(c.getEcoreMetamodelSimilarity("551baa6545686c2b30f1351f", "551baa6545686c2b30f1351f"));
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}		
+	@Test	
+	public void testSimilarityEcoreMetamodel () {
+		try {
+			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+			System.out.println(c.getEcoreMetamodelSimilarity("552657f44568f64e28214b2d", "552657f44568f64e28214b31"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Ignore
 	@Test	
 	public void testValidateEcoreMetamodel () {
 		try {

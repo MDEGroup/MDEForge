@@ -9,6 +9,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
@@ -132,7 +133,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, Artifact.class));
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(

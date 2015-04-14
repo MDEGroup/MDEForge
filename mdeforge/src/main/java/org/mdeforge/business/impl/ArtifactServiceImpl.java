@@ -31,10 +31,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-@Service(value="Artifact")
-public class ArtifactServiceImpl implements ArtifactService {
+@Service(value = "Artifact")
+public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<T> {
+
 	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
@@ -59,69 +59,41 @@ public class ArtifactServiceImpl implements ArtifactService {
 	protected String basePath;
 
 	@Override
-	public Artifact findOneById(String idArtifact, User user)
-			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.addCriteria(Criteria.where("users").in(user.getId()));
-		Artifact project = operations.findOne(query, Artifact.class);
-		if (project == null)
-			throw new BusinessException();
-		return project;
-	}
-
-	protected Artifact findOneById(String idArtifact, User user, Class c)
-			throws BusinessException {
+	public T findOneById(String idArtifact, User user, Class<T> c) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users").in(user.getId());
-		Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
-
-		query.addCriteria(c1.andOperator(c2).andOperator(c3));
-		Artifact project = operations.findOne(query, c);
-		if (project == null)
+		if (c != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2).andOperator(c3));
+		} else 
+			query.addCriteria(c1.andOperator(c3));
+		
+		T artifact = operations.findOne(query, c);
+		if (artifact == null)
 			throw new BusinessException();
-		return project;
+		return artifact;
+	}
+
+
+	@Override
+	public List<T> findAll(Class<T> t) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+
+		Query query = new Query();
+		if (t != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(t.getCanonicalName());
+			query.addCriteria(c);
+			return n.find(query, t);
+		}
+		else return n.findAll(t);
+		
 	}
 
 	@Override
-	public Artifact findOneForUser(String idArtifact, User idUser)
-			throws BusinessException {
-		Artifact art = artifactRepository.findOne(idArtifact);
-		boolean finded = false;
-		if (art != null)
-			for (User user : art.getShared())
-				if (user.getId().equals(idUser.getId()))
-					finded = true;
-		if (finded == false)
-			throw new BusinessException();
-		return art;
-	}
-
-	
-	
-	protected Artifact findOneForUser(String idArtifact, User idUser, Class c)
-			throws BusinessException {
-		Artifact art = artifactRepository.findOne(idArtifact);
-		boolean finded = false;
-		if (art != null)
-			for (User user : art.getShared())
-				if (user.getId().equals(idUser.getId()))
-					finded = true;
-		if (finded == false)
-			throw new BusinessException();
-		return art;
-	}
-
-	@Override
-	public List<Artifact> findAll() {
-		return artifactRepository.findAll();
-	}
-
-	@Override
-	public void delete(String idArtifact, User user) {
-		Artifact artifact = findOneByOwner(idArtifact, user);
+	public void delete(String idArtifact, User user, Class<T> c) {
+		Artifact artifact = findOneByOwner(idArtifact, user, c);
 		for (Project project : artifact.getProjects())
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(idArtifact)) {
@@ -146,10 +118,10 @@ public class ArtifactServiceImpl implements ArtifactService {
 		artifactRepository.delete(artifact);
 
 	}
-	
+
 	@Override
-	public void delete(Artifact artifact, User user) {
-		artifact = findOneById(artifact.getId(), user);
+	public void delete(T artifact, User user, Class<T> c) {
+		artifact = findOneById(artifact.getId(), user, c);
 		for (Project project : artifact.getProjects())
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(artifact.getId())) {
@@ -176,18 +148,17 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public void update(Artifact artifact) {
+	public void update(T artifact, Class<T> c) {
 		try {
 			if (artifact.getId() == null)
 				throw new BusinessException();
 			// verify metamodel owner
-			findOneByOwner(artifact.getId(), artifact.getAuthor());
+			findOneByOwner(artifact.getId(), artifact.getAuthor(), c);
 
 			// UploadFile
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName("");
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
+			fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 			artifact.setFile(fileMedia);
 
 			for (Workspace ws : artifact.getWorkspaces()) {
@@ -208,16 +179,13 @@ public class ArtifactServiceImpl implements ArtifactService {
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneForUser(rel
-						.getToArtifact().getId(), artifact.getAuthor());
-				if (existRelation(toArtifact.getId(),
-						artifact.getId())) {
+				Artifact toArtifact = findOneById(rel.getToArtifact().getId(), artifact.getAuthor(), c);
+				if (existRelation(toArtifact.getId(), artifact.getId(), c)) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel
-							.getToArtifact().getId());
+					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
 					if (temp.getRelations() == null)
 						temp.setRelations(new ArrayList<Relation>());
 					temp.getRelations().add(rel);
@@ -227,17 +195,14 @@ public class ArtifactServiceImpl implements ArtifactService {
 
 			for (Workspace ws : artifact.getWorkspaces()) {
 				Workspace w = workspaceService.findOne(ws.getId());
-				if (!isArtifactInWorkspace(w.getId(),
-						artifact.getId())) {
+				if (!isArtifactInWorkspace(w.getId(), artifact.getId(), c)) {
 					w.getArtifacts().add(artifact);
 					workspaceRepository.save(w);
 				}
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						artifact.getAuthor());
-				if (!isArtifactInProject(p.getId(),
-						artifact.getId())) {
+				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
+				if (!isArtifactInProject(p.getId(), artifact.getId(), c)) {
 					p.getArtifacts().add(artifact);
 					projectRepository.save(p);
 				}
@@ -246,7 +211,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 				User u = userService.findOne(us.getId());
 				if (u == null)
 					throw new BusinessException();
-				if (!isArtifactInUser(u, artifact.getId())) {
+				if (!isArtifactInUser(u, artifact.getId(), c)) {
 					u.getSharedArtifact().add(artifact);
 					userRepository.save(u);
 				}
@@ -257,60 +222,49 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public Artifact create(Artifact artifact) throws BusinessException {
+	public T create(T artifact, Class<T> c) throws BusinessException {
 		// check workspace Auth
 		try {
 			// GetUser
 			if (artifact.getId() != null)
 				throw new BusinessException();
-
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(artifact.getName());
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
+			fileMedia.setFileName(artifact.getFile().getFileName());
+			fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 			artifact.setFile(fileMedia);
-
 			// check workspace Auth
-			for (Workspace ws : artifact.getWorkspaces()) {
+			for (Workspace ws : artifact.getWorkspaces())
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
-			}
 			// check project Auth
-			for (Project p : artifact.getProjects()) {
+			for (Project p : artifact.getProjects())
 				projectService.findById(p.getId(), artifact.getAuthor());
-			}
-			if (artifact.getFile() != null) {
+			if (artifact.getFile() != null)
 				gridFileMediaService.store(artifact.getFile());
-			}
 			artifact.setCreated(new Date());
 			artifact.setModified(new Date());
-
 			User user = userRepository.findOne(artifact.getAuthor().getId());
 			artifact.setAuthor(user);
 			artifact.getShared().add(user);
-
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
 			artifactRepository.save(artifact);
-			//check relation
+			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneForUser(rel
-						.getToArtifact().getId(), artifact.getAuthor());
-				if (!existRelation(toArtifact.getId(),
-						artifact.getId())) {
+				Artifact toArtifact = findOneById(rel.getToArtifact().getId(), artifact.getAuthor(), c);
+				if (!existRelation(toArtifact.getId(), artifact.getId(), c)) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel
-							.getToArtifact().getId());
+					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
 					if (temp.getRelations() == null)
 						temp.setRelations(new ArrayList<Relation>());
 					temp.getRelations().add(rel);
 					artifactRepository.save(temp);
 				}
 			}
-			//Update bi-directional reference
+			// Update bi-directional reference
 			artifact.setRelations(relationTemp);
 			artifactRepository.save(artifact);
 			for (Workspace ws : artifact.getWorkspaces()) {
@@ -321,8 +275,7 @@ public class ArtifactServiceImpl implements ArtifactService {
 				workspaceRepository.save(w);
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						artifact.getAuthor());
+				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				p.getArtifacts().add(artifact);
 				projectRepository.save(p);
 			}
@@ -339,92 +292,66 @@ public class ArtifactServiceImpl implements ArtifactService {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Artifact> findAllWithPublicByUser(User user) throws BusinessException {
+	public List<T> findAllWithPublicByUser(User user, Class<T> type) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared").in(user.getId());
-		Criteria c2 = Criteria.where("open").is("true");
-		query.addCriteria(c1.orOperator(c2));
-		List<Artifact> result = n.find(query, Artifact.class);
-		return result;
+		Criteria c1 = Criteria.where("shared.id").is(user.getId());
+//		 CRITERIA C2 = CRITERIA.WHERE("OPEN").IS("TRUE");
+		Criteria c2 = Criteria.where("open").is(true);
+		if (type != Artifact.class) {
+			Criteria c3 = Criteria.where("_class").is(type.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2,c3));
+		} else 
+			query.addCriteria(c1.andOperator(c2));
+		return n.find(query, type);
+		// RETURN RESULT;
 	}
 
-	protected List<Artifact> findAllWithPublicByUser(User user, Class type)
-			throws BusinessException {
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c1 = Criteria.where("shared").in(user.getId());
-		//Criteria c2 = Criteria.where("open").is("true");
-		Criteria c3 = Criteria.where("_class").is(type.getCanonicalName());
-		query.addCriteria(c1.andOperator(c3));
-		List<Artifact> result = n.find(query, type);
-		return result;
-	}
 
-	@Override
-	public List<Artifact> findAllPublic() throws BusinessException {
+	public List<T> findAllPublic(Class<T> c) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria.where("open").is(true);
-		query.addCriteria(c2);
-		List<Artifact> result = n.find(query, Artifact.class);
-		return result;
+		if(c != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(c.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2));		
+		}
+		else 
+			query.addCriteria(c2);
+		return n.find(query, c);
 	}
 
-	protected List<Artifact> findAllPublic(Class c) {
+	public T findOneByOwner(String idArtifact, User user, Class<T> t) throws BusinessException {
+		// TODO change method
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c2 = Criteria.where("open").is(true);
-		Criteria c1 = Criteria.where("_class").is(c.getCanonicalName());
+		Criteria c2 = Criteria.where("author.$id").is(user.getId());
+		if (t != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(t.getCanonicalName());
+			query.addCriteria(c2.andOperator(c1));
+		}
 		query.addCriteria(c2);
-		List<Artifact> result = n.find(query, c);
-		return result;
+		return n.findOne(query, t);
 	}
 
-	// Inizio Alexander
 	@Override
-	public void upload(Artifact metamodel, MultipartFile file) {
-		artifactRepository.save(metamodel);
-	}
-
-	// fine Alexander
-
-	@Override
-	public Artifact findOneByOwner(String idArtifact, User idUser)
-			throws BusinessException {
-		Artifact mm = artifactRepository.findOne(idArtifact);
-		try {
-			if (!mm.getAuthor().getId().equals(idUser.getId()))
-				throw new BusinessException();
-		} catch (Exception e) {
-			throw new BusinessException();
+	public T findOne(String id, Class<T> c) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c2 = Criteria.where("id").is(id);
+		if (c != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(c.getCanonicalName());
+			query.addCriteria(c2.andOperator(c1));
 		}
-		return mm;
-
-	}
-	protected Artifact findOneByOwner(String idArtifact, User idUser, Class c)
-			throws BusinessException {
-		Artifact mm = artifactRepository.findOne(idArtifact, c);
-		try {
-			if (!mm.getAuthor().getId().equals(idUser.getId()))
-				throw new BusinessException();
-		} catch (Exception e) {
-			throw new BusinessException();
-		}
-		return mm;
-
+		else query.addCriteria(c2);
+		return n.findOne(query, c);
 	}
 
 	@Override
-	public Artifact findOne(String id) throws BusinessException {
-		return artifactRepository.findOne(id);
-	}
-
-	@Override
-	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)
-			throws BusinessException {
-		Artifact artifact = findOne(idArtfact);
+	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact, Class<T> c) throws BusinessException {
+		Artifact artifact = findOne(idArtfact, c);
 		for (Workspace workspace : artifact.getWorkspaces()) {
 			if (workspace.getId().equals(idWorkspace))
 				return true;
@@ -433,9 +360,8 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public boolean isArtifactInProject(String idProject, String idArtfact)
-			throws BusinessException {
-		Artifact artifact = findOne(idArtfact);
+	public boolean isArtifactInProject(String idProject, String idArtfact, Class<T> c) throws BusinessException {
+		Artifact artifact = findOne(idArtfact, c);
 		for (Project workspace : artifact.getProjects()) {
 			if (workspace.getId().equals(idProject))
 				return true;
@@ -444,9 +370,8 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public boolean isArtifactInUser(User idUser, String idArtfact)
-			throws BusinessException {
-		Artifact artifact = findOne(idArtfact);
+	public boolean isArtifactInUser(User idUser, String idArtfact, Class<T> c) throws BusinessException {
+		Artifact artifact = findOne(idArtfact, c);
 		for (User user : artifact.getShared()) {
 			if (user.getId().equals(idUser.getId()))
 				return true;
@@ -455,64 +380,42 @@ public class ArtifactServiceImpl implements ArtifactService {
 	}
 
 	@Override
-	public boolean existRelation(String idTo, String idFrom)
-			throws BusinessException {
-		Artifact artifactFrom = findOne(idFrom);
-		for (Relation rel : artifactFrom.getRelations())
-			if (rel.getToArtifact().getId().equals(idTo))
-				return true;
-		return false;
+	public boolean existRelation(String idTo, String idFrom, Class<T> c) throws BusinessException {
+		List<Relation> r = relationRepository.findByFromArtifactIdOrToArtifactId(idFrom, idTo);
+		return (r.size() == 0) ? false : true;
 	}
 
-	@Override
-	public List<Artifact> findArtifactInProject(String idProject, User user) {
+	public List<T> findArtifactInProject(String idProject, User user, Class<T> c) {
+		// TODO Change method
 		projectService.findById(idProject, user);
-		return artifactRepository.findByProjectId(new ObjectId(idProject));
+		if(c!=Artifact.class)
+			return (List<T>) artifactRepository.findByProjectId(new ObjectId(idProject), c.getCanonicalName());
+		else
+			return (List<T>) artifactRepository.findByProjectId(new ObjectId(idProject));
 	}
 
-	@Override
-	public List<Artifact> findArtifactInWorkspace(String idProject, User user) {
+	public List<T> findArtifactInWorkspace(String idProject, User user, Class<T> c) {
 		workspaceService.findById(idProject, user);
-		return artifactRepository.findByWorkspaceId(new ObjectId(idProject));
-	}
-	
-	public List<Artifact> findArtifactInProject(String idProject, User user, Class c) {
-		projectService.findById(idProject, user);
-		return artifactRepository.findByProjectId(new ObjectId(idProject), c);
+		if(c!=Artifact.class)
+			return (List<T>) artifactRepository.findByWorkspaceId(new ObjectId(idProject), c.getCanonicalName());
+		else
+			return (List<T>) artifactRepository.findByWorkspaceId(new ObjectId(idProject));
 	}
 
-	public List<Artifact> findArtifactInWorkspace(String idProject, User user, Class c) {
-		workspaceService.findById(idProject, user);
-		return artifactRepository.findByWorkspaceId(new ObjectId(idProject), c);
-	}
-	
-	@Override
-	public Artifact findOneByName(String name, User user) {
+	protected T findOneByName(String name, User user, Class<T> c) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("users").in(user.getId());
+		Criteria c1 = Criteria.where("users.$id").is(user.getId());
 		Criteria c3 = Criteria.where("name").is(name);
 
+		if(c != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2).andOperator(c3));
+		}
 		query.addCriteria(c1.andOperator(c3));
-		Artifact project = operations.findOne(query, Artifact.class);
+		T project = operations.findOne(query, c);
 		if (project == null)
 			throw new BusinessException();
 		return project;
 	}
-
-	protected Artifact findOneByName(String name, User user, Class c)
-			throws BusinessException {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c1 = Criteria.where("users").in(user.getId());
-		Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
-		Criteria c3 = Criteria.where("name").is(name);
-
-		query.addCriteria(c1.andOperator(c2).andOperator(c3));
-		Artifact project = operations.findOne(query, c);
-		if (project == null)
-			throw new BusinessException();
-		return project;
-	}
-
 }

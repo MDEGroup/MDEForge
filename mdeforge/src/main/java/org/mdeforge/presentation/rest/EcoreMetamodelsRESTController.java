@@ -6,7 +6,6 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.SimilarityService;
 import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -39,69 +38,69 @@ public class EcoreMetamodelsRESTController {
 
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
+	
 	@Autowired
 	private ProjectService projectService;
 
 	@Autowired
 	private User user;
-	
-	
-//	@Autowired
-//	private ValidateService validateService;
-	
-
 
 	@RequestMapping(value = "/similarity/{id_MM1}/{id_MM2}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> getSimilarity(
 			@PathVariable("id_MM1") String id_MM1,
 			@PathVariable("id_MM2") String id_MM2) {
-		
-		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM1);
-		EcoreMetamodel mm2 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM2);
-		SimilarityService si = (SimilarityService) ecoreMetamodelService;
-		String simiString = si.calculateSimilarity(mm1, mm2);
-		return new ResponseEntity<String>(simiString, HttpStatus.OK);
+
+		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(
+				id_MM1, EcoreMetamodel.class);
+		EcoreMetamodel mm2 = (EcoreMetamodel) ecoreMetamodelService.findOne(
+				id_MM2, EcoreMetamodel.class);
+		double simiString = ecoreMetamodelService.calculateSimilarity(mm1, mm2);
+		return new ResponseEntity<String>(simiString+"", HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/validate/{id_MM1}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> isValid(
 			@PathVariable("id_MM1") String id_MM1) {
-		
-		ValidateService va = (ValidateService)ecoreMetamodelService;
-		
-		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM1);
-		
-		
+
+		ValidateService va = (ValidateService) ecoreMetamodelService;
+
+		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(
+				id_MM1, EcoreMetamodel.class);
+
 		boolean v = va.isValid(mm1);
-		//boolean v = validationService.isValid(null);
-		return new ResponseEntity<String>(((v)?"Is valid":"Not valid"), HttpStatus.OK);
+		// boolean v = validationService.isValid(null);
+		return new ResponseEntity<String>(((v) ? "Is valid" : "Not valid"),
+				HttpStatus.OK);
 	}
-	
-	
-	@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
-	{
-		EcoreMetamodel emm = (EcoreMetamodel) ecoreMetamodelService.findOne(idEcoreMetamodel);
+
+	@RequestMapping(value = "/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<MetricList> getMetrics(
+			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
+		EcoreMetamodel emm = (EcoreMetamodel) ecoreMetamodelService.findOne(
+				idEcoreMetamodel, EcoreMetamodel.class);
 		MetricProvider mp = (MetricProvider) ecoreMetamodelService;
 		List<Metric> lm = mp.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
 	}
+
 	// Get specified metamodel
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodels() {
-		ArtifactList result = new ArtifactList(ecoreMetamodelService.findAllWithPublicByUser(user));
+		ArtifactList result = new ArtifactList(
+				ecoreMetamodelService.findAllWithPublicByUser(user, EcoreMetamodel.class));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
 		try {
-			
+
 			ObjectMapper MAPPER = new ObjectMapper();
 			HyperSchemaFactoryWrapper visitor = new HyperSchemaFactoryWrapper();
-	        MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(EcoreMetamodel.class), visitor);
-	        JsonSchema jsonSchema = visitor.finalSchema();
-	        try {
+			MAPPER.acceptJsonFormatVisitor(
+					MAPPER.constructType(EcoreMetamodel.class), visitor);
+			JsonSchema jsonSchema = visitor.finalSchema();
+			try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
 				// TODO Auto-generated catch block
@@ -109,32 +108,38 @@ public class EcoreMetamodelsRESTController {
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
 		} catch (JsonMappingException e) {
-			return new ResponseEntity<JsonSchema>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<JsonSchema>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getPublicEcoreMetamodels() {
-		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllPublic());
+		ArtifactList list = new ArtifactList(
+				ecoreMetamodelService.findAllPublic(EcoreMetamodel.class));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodelsByUser() {
-		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAllWithPublicByUser(user));
-		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
+		ArtifactList list = new ArtifactList(
+				ecoreMetamodelService.findAll(EcoreMetamodel.class));
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list),
+				HttpStatus.OK);
 	}
 
 	// Create metamodel
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody HttpEntity<Artifact> createArtifact(@RequestBody EcoreMetamodel ecoreMetamodel) {
+	public @ResponseBody HttpEntity<Artifact> createArtifact(
+			@RequestBody EcoreMetamodel ecoreMetamodel) {
 		try {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
 			// metamodel create
-			Artifact s = ecoreMetamodelService.create(ecoreMetamodel);
+			Artifact s = ecoreMetamodelService.create(ecoreMetamodel,
+					EcoreMetamodel.class);
 			// Response success
 			return new ResponseEntity<Artifact>(s, HttpStatus.OK);
 		} catch (Exception e) {
@@ -144,38 +149,50 @@ public class EcoreMetamodelsRESTController {
 
 	// update metamodel
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody HttpEntity<String> updateArtifact(@RequestBody EcoreMetamodel ecoreMetamodel) {
+	public @ResponseBody HttpEntity<String> updateArtifact(
+			@RequestBody EcoreMetamodel ecoreMetamodel) {
 		try {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
 			ecoreMetamodel.getShared().add(user);
 			// metamodel save
-			ecoreMetamodelService.update(ecoreMetamodel);
-			return new ResponseEntity<String>("EcoreMetamodel updated.", HttpStatus.OK);
+			ecoreMetamodelService.update(ecoreMetamodel, EcoreMetamodel.class);
+			return new ResponseEntity<String>("EcoreMetamodel updated.",
+					HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: metamodel not updated", HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<String>("Erron: metamodel not updated",
+					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
 	// get single metamodel
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodel(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
+	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodel(
+			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			EcoreMetamodel ecoreMetamodel = (EcoreMetamodel)ecoreMetamodelService.findOneForUser(idEcoreMetamodel, user);
-			return new ResponseEntity<EcoreMetamodel>(ecoreMetamodel, HttpStatus.OK);
+			EcoreMetamodel ecoreMetamodel = (EcoreMetamodel) ecoreMetamodelService
+					.findOneById(idEcoreMetamodel, user,
+							EcoreMetamodel.class);
+			return new ResponseEntity<EcoreMetamodel>(ecoreMetamodel,
+					HttpStatus.OK);
 		} catch (BusinessException e) {
-			return new ResponseEntity<EcoreMetamodel>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<EcoreMetamodel>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.DELETE)
-	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
+	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(
+			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			ecoreMetamodelService.delete(idEcoreMetamodel, user);
-			return new ResponseEntity<String>("EcoreMetamodel deleted", HttpStatus.OK);
+			ecoreMetamodelService.delete(idEcoreMetamodel, user,
+					EcoreMetamodel.class);
+			return new ResponseEntity<String>("EcoreMetamodel deleted",
+					HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("EcoreMetamodel not deleted", HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<String>("EcoreMetamodel not deleted",
+					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
