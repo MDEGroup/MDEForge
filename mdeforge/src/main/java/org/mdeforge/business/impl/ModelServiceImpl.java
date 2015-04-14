@@ -69,8 +69,8 @@ public class ModelServiceImpl extends ArtifactServiceImpl<Model> implements Mode
 	}
 
 	@Override
-	public String calculateSimilarity(Artifact art1, Artifact art2) {
+	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 }

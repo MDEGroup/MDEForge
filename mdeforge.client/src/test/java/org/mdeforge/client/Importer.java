@@ -74,10 +74,9 @@ public class Importer extends TestCase {
 						String encoding = con.getContentEncoding();
 						encoding = encoding == null ? "UTF-8" : encoding;
 						String body = IOUtils.toString(in, encoding);
-						System.out.println(body);
 						String file = body;
-						System.out.println("Prova" + file);
 						GridFileMedia gfm = new GridFileMedia();
+						gfm.setFileName(emm.getName().replace(" ", "").replace("%20", "").replace(".", "_")+ ".ecore");
 						gfm.setContent(new String(Base64.encodeBase64(file.getBytes())));
 						emm.setFile(gfm);
 						enable = false;

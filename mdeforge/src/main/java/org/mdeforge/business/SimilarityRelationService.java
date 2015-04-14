@@ -10,5 +10,6 @@ public interface SimilarityRelationService {
 	void save(Relation r);
 
 	List<Relation> findAll();
+	List<Relation> findAll(double treshold);
 
 }

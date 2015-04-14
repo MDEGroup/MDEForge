@@ -45,9 +45,6 @@ public class EcoreMetamodelsRESTController {
 	@Autowired
 	private User user;
 
-	// @Autowired
-	// private ValidateService validateService;
-
 	@RequestMapping(value = "/similarity/{id_MM1}/{id_MM2}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> getSimilarity(
 			@PathVariable("id_MM1") String id_MM1,
@@ -57,8 +54,8 @@ public class EcoreMetamodelsRESTController {
 				id_MM1, EcoreMetamodel.class);
 		EcoreMetamodel mm2 = (EcoreMetamodel) ecoreMetamodelService.findOne(
 				id_MM2, EcoreMetamodel.class);
-		String simiString = ecoreMetamodelService.calculateSimilarity(mm1, mm2);
-		return new ResponseEntity<String>(simiString, HttpStatus.OK);
+		double simiString = ecoreMetamodelService.calculateSimilarity(mm1, mm2);
+		return new ResponseEntity<String>(simiString+"", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/validate/{id_MM1}", method = RequestMethod.GET)

@@ -230,7 +230,7 @@ public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<
 				throw new BusinessException();
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName(artifact.getName());
+			fileMedia.setFileName(artifact.getFile().getFileName());
 			fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
@@ -345,7 +345,7 @@ public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<
 			Criteria c1 = Criteria.where("_class").is(c.getCanonicalName());
 			query.addCriteria(c2.andOperator(c1));
 		}
-		query.addCriteria(c2);
+		else query.addCriteria(c2);
 		return n.findOne(query, c);
 	}
 
