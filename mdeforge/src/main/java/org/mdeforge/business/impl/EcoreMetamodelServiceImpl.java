@@ -3,15 +3,18 @@ package org.mdeforge.business.impl;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.BasicMonitor;
@@ -55,11 +58,13 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.emf.metric.Container;
@@ -68,6 +73,7 @@ import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -81,7 +87,10 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
-
+	@Autowired
+	private SimilarityRelationService similarityRelationService;
+	@Value("#{cfgproperties[basePath]}")
+	protected String basePath;
 	@Override
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
 		return null;
@@ -341,6 +350,45 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 		}catch(Exception e) {
 			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
 			return 0;
+		}
+	}
+
+	@Override
+	public String getSimilarityGraph(double treshold) throws BusinessException {
+		try {
+			
+			String result = "nodes = [\n";
+			List<EcoreMetamodel> ecoreMetamodels = findAllPublic(EcoreMetamodel.class);
+			int size = ecoreMetamodels.size();
+			HashMap	<String, Integer>  hm = new HashMap<String, Integer>();
+			AtomicInteger i = new AtomicInteger();
+			for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
+				if(!hm.containsKey( ecoreMetamodel.getId())) {
+					int unique = i.incrementAndGet();
+					hm.put(ecoreMetamodel.getId(), unique);
+				}
+				result += "\t{id: "+ hm.get(ecoreMetamodel.getId()) +", label:'"+ ecoreMetamodel.getName() +"'}";
+				if(--size != 0)
+					result +=",\n";
+				else result +="\n";
+				
+			}
+			result += "]\n";
+			result += "edges = [\n";
+			List<SimilarityRelation> relations = similarityRelationService.findAll(0.3);
+			System.out.println(relations.size());
+			size = relations.size();
+			for (SimilarityRelation relation : relations) {
+				Double d = (relation.getValue()*10);
+				result += "{from:"+ hm.get(relation.getFromArtifact().getId())+", to: " + hm.get(relation.getToArtifact().getId()) + ", value: " + d.intValue() + ", label:" + (relation.getValue()) + "}";
+				if(--size != 0)
+					result +=",\n";
+				else result +="\n";
+			}
+			result += "]\n";
+			return result;
+		} catch (Exception e) {
+			throw new BusinessException();
 		}
 	}
 }
