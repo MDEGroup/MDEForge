@@ -26,10 +26,10 @@ public class SimilarityRelationServiceImpl implements SimilarityRelationService 
 		relationRepository.save(r);
 	}
 	@Override
-	public List<SimilarityRelation> findAll(double treshold) {
+	public List<SimilarityRelation> findAll(double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c2 = Criteria.where("value").gt(treshold);
+		Criteria c2 = Criteria.where("value").gt(threshold);
 		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
 		query.addCriteria(c2.andOperator(c1));
 		return n.find(query, SimilarityRelation.class);

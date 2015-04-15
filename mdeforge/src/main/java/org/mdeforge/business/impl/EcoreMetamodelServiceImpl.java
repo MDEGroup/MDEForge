@@ -380,7 +380,7 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 			size = relations.size();
 			for (SimilarityRelation relation : relations) {
 				Double d = (relation.getValue()*10);
-				result += "{from:"+ hm.get(relation.getFromArtifact().getId())+", to: " + hm.get(relation.getToArtifact().getId()) + ", value: " + d.intValue() + ", label:" + (relation.getValue()) + "}";
+				result += "{from:"+ hm.get(relation.getFromArtifact().getId())+", to: " + hm.get(relation.getToArtifact().getId()) + ", value: " + d.intValue() + ", label:" + relation.getValue() + "}";
 				if(--size != 0)
 					result +=",\n";
 				else result +="\n";

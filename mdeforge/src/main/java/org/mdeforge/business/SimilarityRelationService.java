@@ -11,6 +11,6 @@ public interface SimilarityRelationService {
 	void save(Relation r);
 
 	List<SimilarityRelation> findAll();
-	List<SimilarityRelation> findAll(double treshold);
+	List<SimilarityRelation> findAll(double threshold);
 
 }
