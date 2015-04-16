@@ -64,6 +64,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspace.setOwner(user);
 		if (!workspace.getId().isEmpty())
 			throw new BusinessException();
+		workspace.setId(null);
 		List<Project> ps = workspace.getProjects();
 		workspace.setProjects(new ArrayList<Project>());
 		for (Project p : ps) {
