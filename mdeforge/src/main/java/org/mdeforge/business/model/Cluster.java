@@ -2,7 +2,9 @@ package org.mdeforge.business.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Cluster implements Serializable {
 
@@ -11,18 +13,18 @@ public class Cluster implements Serializable {
 	 */
 	private static final long serialVersionUID = -2956823730164268028L;
 	
-	private List<Artifact> artifacts = new ArrayList<Artifact>();
-	private List<String> domains = new ArrayList<String>();
-	public List<Artifact> getArtifacts() {
+	private Set<Artifact> artifacts = new HashSet<Artifact>();
+	private Set<String> domains = new HashSet<String>();
+	public Set<Artifact> getArtifacts() {
 		return artifacts;
 	}
-	public void setArtifacts(List<Artifact> artifacts) {
+	public void setArtifacts(Set<Artifact> artifacts) {
 		this.artifacts = artifacts;
 	}
-	public List<String> getDomains() {
+	public Set<String> getDomains() {
 		return domains;
 	}
-	public void setDomains(List<String> domains) {
+	public void setDomains(Set<String> domains) {
 		this.domains = domains;
 	}
 }

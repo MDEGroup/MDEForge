@@ -21,20 +21,27 @@
 <div class="row-fluid">
 	<spring:message code="mdeforge.metamodel.cluster.total" />: ${clusters.size()}<br/>
 	<spring:message code="mdeforge.metamodel.cluster.average" />: ${average}<br>
+	<spring:message code="mdeforge.metamodel.cluster.max" />: ${max}<br>
+	<spring:message code="mdeforge.metamodel.cluster.max" />: ${noCluster}<br>
 	<br> 
 	<c:forEach items="${clusters}"  var="cluster">
 		
 			<div class="col-xs-6">
-				<div class="box">
+				<div class="box ui-draggable">
 					<div class="box-header">
 						<div class="box-name">
-							<i class="fa fa-list"></i>
+							<i class="fa fa-table"></i>
 							<span>Cluster</span>
 						</div>
 						<div class="no-move"></div>
 					</div>
-					<div class="box-content no-padding">
-						<table id="workspace_datatable" class="table table-bordered table-striped table-hover table-heading table-datatable" >
+					<div class="box-content">
+						<table class="table" >
+							<thead>
+								<tr>
+									<th>Artifact</th>
+								</tr>
+							</thead>
 							<tbody>
 								<c:forEach items="${cluster.artifacts}" var="artifact">
 									<tr>

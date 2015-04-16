@@ -3,13 +3,10 @@ package org.mdeforge.business.impl;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,16 +14,11 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.Path;
-import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.compare.Comparison;
-import org.eclipse.emf.compare.Diff;
 import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.Match;
-import org.eclipse.emf.compare.merge.BatchMerger;
-import org.eclipse.emf.compare.merge.IBatchMerger;
-import org.eclipse.emf.compare.merge.IMerger;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
@@ -62,9 +54,10 @@ import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
-import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.emf.metric.Container;
@@ -315,13 +308,13 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 				counter++;
 		}
 
-		List<Diff> differences = comparison.getDifferences();
-		// Let's merge every single diff
-		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
-		IMerger.Registry mergerRegistry = IMerger.RegistryImpl
-				.createStandaloneInstance();
-		IBatchMerger merger = new BatchMerger(mergerRegistry);
-		merger.copyAllLeftToRight(differences, new BasicMonitor());
+//		List<Diff> differences = comparison.getDifferences();
+//		// Let's merge every single diff
+//		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
+//		IMerger.Registry mergerRegistry = IMerger.RegistryImpl
+//				.createStandaloneInstance();
+//		IBatchMerger merger = new BatchMerger(mergerRegistry);
+//		merger.copyAllLeftToRight(differences, new BasicMonitor());
 		double resultValue = (counter * 1.0) / total;
 
 		
@@ -354,30 +347,35 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 	}
 
 	@Override
-	public String getSimilarityGraph(double treshold) throws BusinessException {
+	public String getSimilarityGraph(double threshold) throws BusinessException {
 		try {
 			
 			String result = "nodes = [\n";
-			List<EcoreMetamodel> ecoreMetamodels = findAllPublic(EcoreMetamodel.class);
-			int size = ecoreMetamodels.size();
+			List<Cluster> clusterList = getClusters(threshold);
+			//List<EcoreMetamodel> ecoreMetamodels = findAllPublic(EcoreMetamodel.class);
+			//int size = ecoreMetamodels.size();
 			HashMap	<String, Integer>  hm = new HashMap<String, Integer>();
 			AtomicInteger i = new AtomicInteger();
-			for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
-				if(!hm.containsKey( ecoreMetamodel.getId())) {
-					int unique = i.incrementAndGet();
-					hm.put(ecoreMetamodel.getId(), unique);
+			AtomicInteger j = new AtomicInteger();
+
+			for (Cluster cluster : clusterList) {
+				int groupId = j.incrementAndGet();
+				for (Artifact ecoreMetamodel : cluster.getArtifacts()) {
+					if(!hm.containsKey( ecoreMetamodel.getId())) {
+						int unique = i.incrementAndGet();
+						hm.put(ecoreMetamodel.getId(), unique);
+					}
+					result += "\t{id: "+ hm.get(ecoreMetamodel.getId()) 
+							+ ", label:'"+ ecoreMetamodel.getName() +"', group:" + groupId + "},\n";
 				}
-				result += "\t{id: "+ hm.get(ecoreMetamodel.getId()) +", label:'"+ ecoreMetamodel.getName() +"'}";
-				if(--size != 0)
-					result +=",\n";
-				else result +="\n";
-				
 			}
-			result += "]\n";
+
+			result = result.substring(0,result.length()-2);
+			result += "];\n";
 			result += "edges = [\n";
-			List<SimilarityRelation> relations = similarityRelationService.findAll(treshold);
+			List<SimilarityRelation> relations = similarityRelationService.findAll(threshold);
 			System.out.println(relations.size());
-			size = relations.size();
+			int size = relations.size();
 			for (SimilarityRelation relation : relations) {
 				Double d = (relation.getValue()*10);
 				result += "{from:"+ hm.get(relation.getFromArtifact().getId())+", to: " + hm.get(relation.getToArtifact().getId()) + ", value: " + d.intValue() + ", label:" + relation.getValue() + "}";
@@ -391,4 +389,77 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 			throw new BusinessException();
 		}
 	}
+	
+	@Override
+	public List<Cluster> getClusters(double threshold) throws BusinessException {
+		List<Cluster> clusterList = new ArrayList<Cluster>();
+		List<SimilarityRelation> similarityRelations = similarityRelationService.findAll(threshold);
+		Map<String,Cluster> tempHash = new HashMap<String,Cluster>();
+		for (SimilarityRelation similarityRelation : similarityRelations) {
+			String fromId = similarityRelation.getFromArtifact().getId();
+			String toId = similarityRelation.getToArtifact().getId();
+			if(!tempHash.containsKey(fromId) && 
+					!tempHash.containsKey(toId)) {
+				Cluster c = new Cluster();
+				c.getArtifacts().add(similarityRelation.getFromArtifact());
+				c.getArtifacts().add(similarityRelation.getToArtifact());
+				List<Property> propertyList = similarityRelation.getFromArtifact().getProperties();
+				propertyList.addAll(similarityRelation.getToArtifact().getProperties());
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				tempHash.put(fromId, c);
+				tempHash.put(toId, c);
+				clusterList.add(c);
+			}
+			if(tempHash.containsKey(fromId) && 
+					!tempHash.containsKey(toId)) {
+				Cluster c = tempHash.get(fromId);
+				c.getArtifacts().add(similarityRelation.getToArtifact());
+				List<Property> propertyList = similarityRelation.getToArtifact().getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				tempHash.put(toId, c);
+			}
+			if(!tempHash.containsKey(fromId) && 
+					tempHash.containsKey(toId)) {
+				Cluster c = tempHash.get(similarityRelation.getToArtifact().getId());
+				c.getArtifacts().add(similarityRelation.getFromArtifact());
+				List<Property> propertyList = similarityRelation.getFromArtifact().getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				tempHash.put(fromId, c);
+			}
+			if(tempHash.containsKey(fromId) && 
+					tempHash.containsKey(toId) &&
+					tempHash.get(fromId) != tempHash.get(toId)) {
+				Cluster fromCluster = tempHash.get(fromId);
+				Cluster toCluster = tempHash.get(toId);
+				fromCluster.getArtifacts().addAll(toCluster.getArtifacts());
+				clusterList.remove(toCluster);
+				//fromCluster.getArtifacts().
+				tempHash.put(toId, fromCluster);
+			}
+		}
+		List<EcoreMetamodel> ecoreMetamodels = findAllPublic(EcoreMetamodel.class);
+		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
+			if(tempHash.get(ecoreMetamodel.getId())==null) {
+				Cluster c = new Cluster();
+				c.getArtifacts().add(ecoreMetamodel);
+				List<Property> propertyList = ecoreMetamodel.getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				clusterList.add(c);
+			}
+				
+		}
+		return clusterList;
+	}
+
 }

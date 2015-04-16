@@ -19,11 +19,6 @@ public class TestController {
 	
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-	@Autowired
-	private ClusterService clusterService;
-	
-	
-	
 	
 	@RequestMapping(value = "/clusterGraph", method = { RequestMethod.GET })
 	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold ) {
@@ -33,23 +28,23 @@ public class TestController {
 	}
 	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })
 	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold ) {
-		List<Cluster> clusters = clusterService.getClusters(threshold);
-		for (Cluster cluster : clusters) {
-			
-			for (Artifact artifact : cluster.getArtifacts()) {
-				System.out.println(artifact.getName());
-			}
-			System.out.println("___________________");
-		}
-		model.addAttribute("clusters", clusters);
+		List<Cluster> clusters = ecoreMetamodelService.getClusters(threshold);
+		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
+		int noCluster = 0;
 		for (Cluster cluster : clusters) {
+			maxCluster = (maxCluster < cluster.getArtifacts().size())?cluster.getArtifacts().size():maxCluster;
 			count += cluster.getArtifacts().size();
+			if(cluster.getArtifacts().size()==1)
+				noCluster++;
 		}
 		average =  (count*1.0)/(clusters.size()*1.0);
+		model.addAttribute("clusters", clusters);
 		model.addAttribute("average", average);
+		model.addAttribute("max", maxCluster);
+		model.addAttribute("noCluster", noCluster);
+		
 		return "test.cluster";
 	}
-
 }
