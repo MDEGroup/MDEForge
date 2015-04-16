@@ -292,13 +292,11 @@ public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findAllWithPublicByUser(User user, Class<T> type) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared.id").is(user.getId());
-//		 CRITERIA C2 = CRITERIA.WHERE("OPEN").IS("TRUE");
 		Criteria c2 = Criteria.where("open").is(true);
 		if (type != Artifact.class) {
 			Criteria c3 = Criteria.where("_class").is(type.getCanonicalName());
@@ -306,7 +304,6 @@ public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<
 		} else 
 			query.addCriteria(c1.andOperator(c2));
 		return n.find(query, type);
-		// RETURN RESULT;
 	}
 
 

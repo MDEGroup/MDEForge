@@ -22,7 +22,7 @@
 	<spring:message code="mdeforge.metamodel.cluster.total" />: ${clusters.size()}<br/>
 	<spring:message code="mdeforge.metamodel.cluster.average" />: ${average}<br>
 	<spring:message code="mdeforge.metamodel.cluster.max" />: ${max}<br>
-	<spring:message code="mdeforge.metamodel.cluster.max" />: ${noCluster}<br>
+	<spring:message code="mdeforge.metamodel.cluster.noCluster" />: ${noCluster}<br>
 	<br> 
 	<c:forEach items="${clusters}"  var="cluster">
 		

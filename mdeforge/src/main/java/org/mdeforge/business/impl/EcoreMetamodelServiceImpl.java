@@ -9,8 +9,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.Path;
@@ -58,6 +60,7 @@ import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.emf.metric.Container;
@@ -417,33 +420,44 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 					!tempHash.containsKey(toId)) {
 				Cluster c = tempHash.get(fromId);
 				c.getArtifacts().add(similarityRelation.getToArtifact());
+				tempHash.put(toId, c);
+				tempHash.put(fromId, c);
 				List<Property> propertyList = similarityRelation.getToArtifact().getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain") || 
 							property.getName().toLowerCase().contains("domains"))
 						c.getDomains().add(property.getValue());
-				tempHash.put(toId, c);
 			}
 			if(!tempHash.containsKey(fromId) && 
 					tempHash.containsKey(toId)) {
 				Cluster c = tempHash.get(similarityRelation.getToArtifact().getId());
 				c.getArtifacts().add(similarityRelation.getFromArtifact());
+				tempHash.put(fromId, c);
+				tempHash.put(toId, c);
 				List<Property> propertyList = similarityRelation.getFromArtifact().getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain") || 
 							property.getName().toLowerCase().contains("domains"))
 						c.getDomains().add(property.getValue());
-				tempHash.put(fromId, c);
 			}
 			if(tempHash.containsKey(fromId) && 
 					tempHash.containsKey(toId) &&
 					tempHash.get(fromId) != tempHash.get(toId)) {
 				Cluster fromCluster = tempHash.get(fromId);
 				Cluster toCluster = tempHash.get(toId);
-				fromCluster.getArtifacts().addAll(toCluster.getArtifacts());
 				clusterList.remove(toCluster);
-				//fromCluster.getArtifacts().
+				clusterList.remove(fromCluster);
+				fromCluster.getArtifacts().addAll(toCluster.getArtifacts());
+				fromCluster.getDomains().addAll(toCluster.getDomains());
+				for (Artifact art : fromCluster.getArtifacts()) {
+					Cluster cc = tempHash.get(art.getId());
+					clusterList.remove(cc);
+					tempHash.put(art.getId(), fromCluster);
+					
+				}
+				clusterList.add(fromCluster);
 				tempHash.put(toId, fromCluster);
+				tempHash.put(fromId, fromCluster);
 			}
 		}
 		List<EcoreMetamodel> ecoreMetamodels = findAllPublic(EcoreMetamodel.class);
@@ -459,7 +473,34 @@ public class EcoreMetamodelServiceImpl extends ArtifactServiceImpl<EcoreMetamode
 			}
 				
 		}
+		
 		return clusterList;
 	}
+
+	private List<Cluster> removeElement(List<Cluster> clustersList, Cluster clusterInput) {
+		List<Cluster> result = new ArrayList<Cluster>();
+		for (Cluster cluster : clustersList) {
+			boolean sameCluster = true;
+			if (cluster.getArtifacts().size()==clusterInput.getArtifacts().size())
+			{
+				for (Artifact artifact : cluster.getArtifacts()) {
+					boolean sameArtifact = false;
+					for (Artifact artifact2 : clusterInput.getArtifacts()) 
+						if (artifact.getId().equals(artifact2.getId()))
+							sameArtifact = true;
+					if(!sameArtifact) {
+						sameCluster = false;
+					}
+				}
+			}
+			else {
+				sameCluster = false;
+			}
+			if (!sameCluster)
+				result.add(cluster);
+		}
+		return result;
+	}
+
 
 }
