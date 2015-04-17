@@ -1,11 +1,17 @@
 package org.mdeforge.test;
 
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,5 +33,19 @@ public class SampleTest {
 	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Test
+	public void getListSimilarity() {
+		try {
+			List<SimilarityRelation> similarityRelationList = similarityRelationService.findAll();
+			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/result.txt");
+			for (SimilarityRelation similarityRelation : similarityRelationList) {
+				p.println(similarityRelation.getValue());
+			}
+			p.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 }
