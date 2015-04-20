@@ -64,11 +64,12 @@ public class ArtifactServiceImpl<T extends Artifact> implements ArtifactService<
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users").in(user.getId());
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
+		Criteria c4 = Criteria.where("open").is(true);
 		if (c != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2).andOperator(c3));
+			query.addCriteria(c3.andOperator(c2.orOperator(c1,c4)));
 		} else 
-			query.addCriteria(c1.andOperator(c3));
+			query.addCriteria(c3.orOperator(c1,c4));
 		
 		T artifact = operations.findOne(query, c);
 		if (artifact == null)
