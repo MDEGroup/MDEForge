@@ -53,6 +53,8 @@
 	</div>
 </div>
 
+
+<div class="box-content">
 <div id="dashboard-overview" class="row" style="visibility: visible; position: relative;">
 			<div id="ow-marketplace" class="col-sm-12 col-md-6">
 				<div id="ow-setting">
@@ -189,3 +191,4 @@
 				</div>
 			</div>
 		</div>
+</div>

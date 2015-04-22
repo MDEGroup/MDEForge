@@ -35,7 +35,15 @@
 		<script src='${pageContext.request.contextPath}/resources/plugins/datatables/columnfilter151.js'></script>    
 		<script src="${pageContext.request.contextPath}/resources/plugins/datatables/TableTools.js"></script>
 		<script src="${pageContext.request.contextPath}/resources/plugins/select2/select2.min.js"></script>
+
 		
+		<!-- Basciani -->
+		<script src="${pageContext.request.contextPath}/resources/plugins/jQuery-Knob/jquery.knob.js"></script>
+		<script src="${pageContext.request.contextPath}/resources/plugins/sparkline/jquery.sparkline.min.js"></script>
+		
+		
+		
+				
 		<script src="${pageContext.request.contextPath}/resources/js/devoops.js"></script>
 	</head>
 <body>

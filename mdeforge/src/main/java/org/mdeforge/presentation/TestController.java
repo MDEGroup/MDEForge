@@ -47,4 +47,13 @@ public class TestController {
 		
 		return "test.cluster";
 	}
+	
+	
+	@RequestMapping(value = "/editor", method = { RequestMethod.GET })
+	public String editor(org.springframework.ui.Model model) {
+		
+		
+		return "test.editor";
+	}
+	
 }

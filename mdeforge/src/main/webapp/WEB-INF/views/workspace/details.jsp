@@ -1,6 +1,6 @@
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 
 
@@ -30,15 +30,16 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">
-					<i class="fa fa-list"></i>
+					<i class=""></i>
 					<span>Info Workspace</span>
 				</div>
 				<div class="no-move"></div>
 			</div>
 			<div class="box-content no-padding">
-				${workspace.getName()}
-				<br/>
-				${workspace.getDescription()}
+				<ul>
+					<li>Name: ${workspace.getName()}</li>
+					<li>Description: ${workspace.getDescription()}</li>
+				</ul>
 			</div>
 		</div>
 		
@@ -53,7 +54,7 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">
-					<i class="fa fa-list"></i>
+					<i class=""></i>
 					<span>Projects</span>
 				</div>
 				<div class="no-move"></div>
@@ -63,7 +64,7 @@
 				
 			
 			
-			<div class="box-content no-padding">
+			<div class="box-content">
 				<table id="workspace_datatable" class="table table-bordered table-striped table-hover table-heading table-datatable" >
 					<thead>
 						<tr>							
@@ -83,16 +84,7 @@
    								<td>${project.getArtifacts().size()}</td>   								   								
    							</tr>							
 						</c:forEach>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-							
-						</tr>
-					</tfoot>
+					</tbody>					
 				</table>
 			</div>
 			
@@ -100,13 +92,16 @@
 			
 		</div>
 	</div>
-	
-	<div class="col-xs-6">
+</div>
+
+
+<div class="row">	
+	<div class="col-xs-12">
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">
 					<i class="fa fa-list"></i>
-					<span></span>
+					<span>Artifacts</span>
 				</div>
 				<div class="no-move"></div>
 			</div>
@@ -119,6 +114,8 @@
 							<th>Description</th>
 							<th>Public</th>
 							<th>Details</th>
+							<th>Created</th>
+							<th>Modified</th>							
 						</tr>
 					</thead>
 					<tbody>
@@ -129,20 +126,16 @@
    								<td>${artifact.getClass().getCanonicalName().split("\\.")[4]}</td>
    								<td>${artifact.getOpen()}</td>
    								<td></td>
+   								<td><fmt:formatDate type="both" dateStyle="medium" timeStyle="medium"  value="${artifact.getCreated()}" /></td>      															   								
+   								<td><fmt:formatDate type="both" dateStyle="medium" timeStyle="medium"  value="${artifact.getModified()}" /></td>   	   								
    							</tr>							
 						</c:forEach>
-					</tbody>
-					<tfoot>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</tfoot>
+					</tbody>					
 				</table>
 			</div>
 		</div>
 	</div>
 	
 </div>
+
+

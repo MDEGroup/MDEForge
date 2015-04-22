@@ -36,11 +36,11 @@
 													},
 													{
 														"sName" : "id",
-														"bSearchable" : false,
+														"bSearchable" : true,
 														"bSortable" : false,
 														"sDefaultContent" : "",
 														"fnRender" : function(oObj) {
-															return "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace?id="
+															return "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace/dashboard?id="
 															+ oObj.aData['id']
 															+ "'><i class='fa fa-plus-square-o'></i></a>"
 															+ "<a class=\"col-xs-3\" href='${pageContext.request.contextPath}/private/workspace/update?id="

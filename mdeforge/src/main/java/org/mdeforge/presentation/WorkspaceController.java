@@ -27,7 +27,13 @@ public class WorkspaceController {
 	@Autowired
 	private User user;
 	
-	
+	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
+	public String dashboard(Model model, @RequestParam String id) {	
+		
+		Workspace workspace = workspaceService.findById(id, user);		
+		model.addAttribute("workspace", workspace);	
+		return "workspace.dashboard";
+	}
 	
 	@RequestMapping("")
 	public String details(Model model, @RequestParam String id) {	
@@ -35,7 +41,7 @@ public class WorkspaceController {
 		Workspace workspace = workspaceService.findById(id, user);		
 		model.addAttribute("workspace", workspace);		
 		
-		System.out.println(workspace.getProjects().size());
+//		System.out.println(workspace.getProjects().size());
 		
 		return "workspace.details";
 	}
