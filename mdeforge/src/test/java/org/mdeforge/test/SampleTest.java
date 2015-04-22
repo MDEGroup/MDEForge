@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.CRUDRelationService;
-import org.mdeforge.business.SimilarityRelationalService;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.SimilarityRelation;
@@ -33,7 +33,7 @@ public class SampleTest {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private SimilarityRelationalService similarityRelationService;
+	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 	@Test

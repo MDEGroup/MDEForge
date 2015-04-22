@@ -3,7 +3,7 @@ package org.mdeforge.business.impl;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.mdeforge.business.SimilarityRelationalService;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 @Service
-public class SimilarityRelationalServiceImpl extends CRUDRelationServiceImpl<SimilarityRelation> implements SimilarityRelationalService {
+public class SimilarityRelationServiceImpl extends CRUDRelationServiceImpl<SimilarityRelation> implements SimilarityRelationService {
 	@Override
 	public List<SimilarityRelation> findAll(double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -22,25 +22,25 @@ public class SimilarityRelationalServiceImpl extends CRUDRelationServiceImpl<Sim
 		query.addCriteria(c2.andOperator(c1));
 		return n.find(query, persistentClass);
 	}
-	@Override
-	public List<SimilarityRelation> findAll(double threshold, int computation) {
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c2 = Criteria.where("computation").is(computation);
-		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
-		Criteria c3 = Criteria.where("value").gt(threshold);
-		query.addCriteria(c2.andOperator(c1,c3));
-		return n.find(query, persistentClass);
-	}
-	@Override
-	public List<SimilarityRelation> findAll(int computation) {
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c2 = Criteria.where("computation").is(computation);
-		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
-		query.addCriteria(c2.andOperator(c1));
-		return n.find(query, persistentClass);
-	}
+//	@Override
+//	public List<SimilarityRelation> findAll(double threshold, int computation) {
+//		MongoOperations n = new MongoTemplate(mongoDbFactory);
+//		Query query = new Query();
+//		Criteria c2 = Criteria.where("computation").is(computation);
+//		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
+//		Criteria c3 = Criteria.where("value").gt(threshold);
+//		query.addCriteria(c2.andOperator(c1,c3));
+//		return n.find(query, persistentClass);
+//	}
+//	@Override
+//	public List<SimilarityRelation> findAll(int computation) {
+//		MongoOperations n = new MongoTemplate(mongoDbFactory);
+//		Query query = new Query();
+//		Criteria c2 = Criteria.where("computation").is(computation);
+//		Criteria c1 = Criteria.where("_class").is(SimilarityRelation.class.getCanonicalName());
+//		query.addCriteria(c2.andOperator(c1));
+//		return n.find(query, persistentClass);
+//	}
 	@Override
 	public List<SimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);

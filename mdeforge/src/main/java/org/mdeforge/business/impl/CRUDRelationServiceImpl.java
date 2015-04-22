@@ -5,10 +5,10 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDRelationService;
-import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.integration.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -16,7 +16,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
 
 public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRUDRelationService<T> {
 
@@ -39,5 +38,21 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 	public List<T> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		return n.findAll(persistentClass);
+	}
+	@Override
+	public List<T> findByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c;
+		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(toArt.getId()));
+		Criteria c4 = Criteria.where("fromArtifact.$id").is(new ObjectId(fromArt.getId()));
+		if(persistentClass!=Relation.class){
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			c = new Criteria().andOperator(c1,c2,c4);
+		}
+		else 
+			c = new Criteria().andOperator(c2,c4);
+		query.addCriteria(c);
+		return n.find(query, persistentClass);
 	}
 }

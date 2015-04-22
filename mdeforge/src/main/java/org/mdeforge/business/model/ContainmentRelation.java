@@ -1,6 +1,6 @@
 package org.mdeforge.business.model;
 
-public class SimilarityRelation extends Relation {
+public class ContainmentRelation extends Relation {
 
 	private double value;
 	//For my research.
