@@ -2,8 +2,8 @@ package org.mdeforge.business.impl;
 
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -18,7 +18,6 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -36,8 +35,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Autowired
-	@Qualifier("Artifact")
-	private ArtifactService artifactService;
+	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -82,7 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
 			for (Project p : u.getProjects()) {
 				Project appProg = findOne(p.getId());
 				if (p.getId().equals(project.getId())) {
-					Artifact app = artifactService.findOneById(u.getId(), userId, Artifact.class);
+					Artifact app = artifactService.findOneById(u.getId(), userId);
 					app.getProjects().remove(appProg);
 					artifactRepository.save(u);
 					break;
@@ -148,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), user);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), user, Artifact.class);
+			artifactService.findOneById(ws.getId(), user);
 
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.getUsers().clear();
@@ -180,7 +178,7 @@ public class ProjectServiceImpl implements ProjectService {
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), idUser);
 		for (Artifact ws : project.getArtifacts())
-			artifactService.findOneById(ws.getId(), idUser, Artifact.class);
+			artifactService.findOneById(ws.getId(), idUser);
 		
 		List<Workspace> workspaces = project.getWorkspaces();
 		projectRepository.save(project);

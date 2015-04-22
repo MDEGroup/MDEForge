@@ -5,7 +5,7 @@ import java.util.List;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.User;
 
-public interface ETLTransformationService extends ArtifactService<ETLTransformation>{
+public interface ETLTransformationService extends CRUDArtifactService<ETLTransformation>{
 	ETLTransformation findOneBySharedUser(String idMetamodel, User user) throws BusinessException;
 	List<ETLTransformation> findAllTransformations() throws BusinessException;
 	List<ETLTransformation> findAllTransformationsByUserId(String user) throws BusinessException;

@@ -54,7 +54,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service (value="ATLTransformation")
-public class ATLTransformationServiceImpl extends ArtifactServiceImpl<ATLTransformation> implements ATLTransformationService {
+public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation> implements ATLTransformationService {
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired

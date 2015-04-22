@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.mdeforge.business.model.ATLTransformation;
 
-public interface ATLTransformationService extends ArtifactService<ATLTransformation>, MetricProvider{	
+public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider{	
 	void execute(ATLTransformation transformation);
 	List<ATLTransformation> findTransformationsBySourceMetamodels(ATLTransformation metamodel);
 	List<ATLTransformation> findTransformationsByTargetMetamodels(ATLTransformation metamodel);

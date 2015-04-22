@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service(value="Model")
-public class ModelServiceImpl extends ArtifactServiceImpl<Model> implements ModelService {
+public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
 	
 
 	@Autowired
@@ -45,7 +45,7 @@ public class ModelServiceImpl extends ArtifactServiceImpl<Model> implements Mode
 		for (Relation rel : art.getRelations()) {
 			if (rel instanceof ConformToRelation) {
 				Artifact temm = rel.getToArtifact();
-				emm = ecoreMetamodelService.findOne(temm.getId(), EcoreMetamodel.class);
+				emm = ecoreMetamodelService.findOne(temm.getId());
 			}
 		}
 		if (emm == null) throw new BusinessException();

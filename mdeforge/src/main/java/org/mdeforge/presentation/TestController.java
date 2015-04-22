@@ -3,9 +3,7 @@ package org.mdeforge.presentation;
 
 import java.util.List;
 
-import org.mdeforge.business.ClusterService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,14 +19,14 @@ public class TestController {
 	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@RequestMapping(value = "/clusterGraph", method = { RequestMethod.GET })
-	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold ) {
-		String graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold,@RequestParam int computation ) {
+		String graph = ecoreMetamodelService.getSimilarityGraph(threshold,computation);
 		model.addAttribute("graph", graph);
 		return "test.cluster.graph";
 	}
 	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })
-	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold ) {
-		List<Cluster> clusters = ecoreMetamodelService.getClusters(threshold);
+	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
+		List<Cluster> clusters = ecoreMetamodelService.getClusters(threshold,computation);
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;

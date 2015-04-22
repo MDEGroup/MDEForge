@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Stack;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -32,7 +31,7 @@ public class GetterTest {
 		}
 		assertNotNull(c);
 	}
-	@Ignore
+	
 	@Test
 	public void getEcoreMetamodelsTest() throws Exception {
 		System.out.println("###Ecore");
@@ -68,6 +67,23 @@ public class GetterTest {
 		}
 		assertNotNull(c);
 	}
+	
+	@Test
+	public void getEcoreMetamodel() {
+		try {
+			EcoreMetamodel emm = c.getEcoreMetamodel("552bbd07d4c659da8e19ec99");
+			System.out.println(emm);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+	
+	
+	
 	@Ignore
 	@Test
 	public void getEcoreMetamodelsPublicTest() throws Exception {

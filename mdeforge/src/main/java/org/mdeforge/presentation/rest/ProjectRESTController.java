@@ -2,17 +2,13 @@ package org.mdeforge.presentation.rest;
 
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.ETLTransformation;
-import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -48,7 +44,7 @@ public class ProjectRESTController {
 	private MetamodelService metamodelService;
 	@Autowired
 	@Qualifier("Artifact")
-	private ArtifactService artifactService;
+	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired
 	private TransformationService transformationService;
@@ -87,7 +83,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findModelsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, Model.class));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -99,7 +95,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, EcoreMetamodel.class));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
@@ -111,7 +107,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findATLTransformationsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, ATLTransformation.class));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(
@@ -122,7 +118,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findETLTransformationsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, ETLTransformation.class));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(
@@ -133,7 +129,7 @@ public class ProjectRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInProject(
 			@PathVariable("id") String idProject) {
 		try {
-			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user, Artifact.class));
+			ArtifactList project = new ArtifactList(artifactService.findArtifactInProject(idProject, user));
 			return new ResponseEntity<ArtifactList>(project, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(
