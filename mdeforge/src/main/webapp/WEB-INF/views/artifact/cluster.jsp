@@ -23,6 +23,7 @@
 	<spring:message code="mdeforge.metamodel.cluster.average" />: ${average}<br>
 	<spring:message code="mdeforge.metamodel.cluster.max" />: ${max}<br>
 	<spring:message code="mdeforge.metamodel.cluster.noCluster" />: ${noCluster}<br>
+	<spring:message code="mdeforge.metamodel.cluster.effectiveCluster" />: ${clusters.size()- noCluster}<br>
 	<br> 
 	<c:forEach items="${clusters}"  var="cluster">
 		
@@ -54,11 +55,16 @@
 	   								<th>
 	   									<div>
 	   										<div>EMF zoo domain:</div>
-	   											<ul>
-													<c:forEach items="${cluster.domains}" var="domain">
-														<li>${domain} </li>
-													</c:forEach>
-												</ul>
+   											<ul>
+												<c:forEach items="${cluster.domains}" var="domain">
+													<li>${domain} </li>
+												</c:forEach>
+											</ul>
+											Most representive metamodel: ${cluster.mostRepresentive.name}<br/>
+											KMax: ${cluster.kMax}<br/>
+											KMin: ${cluster.kMin}<br/>
+											KAvg: ${cluster.kAvg}
+											
 										</div>
 									</th>
 	   							</tr>				

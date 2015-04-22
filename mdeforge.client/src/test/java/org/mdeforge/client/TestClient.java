@@ -31,11 +31,22 @@ public class TestClient {
 //			e.printStackTrace();
 //		}
 //	}
+	@Ignore
 	@Test	
 	public void testSimilarityEcoreMetamodel () {
 		try {
 			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 			System.out.println(c.getEcoreMetamodelSimilarity("552657f44568f64e28214b2d", "552657f44568f64e28214b31"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Test	
+	public void testMetricEcoreMetamodel () {
+		try {
+			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+			System.out.println(c.getEcoreMetamodelMetrics("552bbd07d4c659da8e19ec99"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

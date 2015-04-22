@@ -2,7 +2,7 @@ package org.mdeforge.presentation;
 
 import java.io.IOException;
 
-import org.mdeforge.business.ArtifactService;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ModelService;
@@ -43,7 +43,7 @@ public class ProjectController {
 	private ModelService modelService;
 	@Autowired
 	@Qualifier("Artifact")
-	private ArtifactService artifactService;
+	private CRUDArtifactService artifactService;
 	@Autowired
 	private EditorService editorService;
 	

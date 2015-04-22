@@ -37,7 +37,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service(value="ETLTransformation")
-public class ETLTransformationServiceImpl extends ArtifactServiceImpl<ETLTransformation> implements ETLTransformationService {
+public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTransformation> implements ETLTransformationService {
 
 	
 
@@ -111,13 +111,13 @@ public class ETLTransformationServiceImpl extends ArtifactServiceImpl<ETLTransfo
 			if (rel instanceof DomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
-					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId(), EcoreMetamodel.class));
+					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
 					sourceMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}
 			if (rel instanceof CoDomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
 					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
-					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId(), EcoreMetamodel.class));
+					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
 					targetMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}		
 		}

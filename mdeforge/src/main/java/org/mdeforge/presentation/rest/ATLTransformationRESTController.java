@@ -55,7 +55,7 @@ public class ATLTransformationRESTController {
 @RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
 	{
-		Transformation emm = (Transformation) ATLtransformationService.findOne(idEcoreMetamodel,ATLTransformation.class);
+		ATLTransformation emm = ATLtransformationService.findOne(idEcoreMetamodel);
 		MetricProvider mp = (MetricProvider) ATLtransformationService;
 		List<Metric> lm = mp.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
@@ -65,14 +65,14 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
 		ArtifactList result = new ArtifactList(ATLtransformationService
-				.findAllWithPublicByUser(user, ATLTransformation.class));
+				.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Artifact> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
-			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user, ATLTransformation.class);
+			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user);
 			return new ResponseEntity<Artifact>(transformation, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -82,7 +82,7 @@ public class ATLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<ATLTransformation> list = ATLtransformationService.findAllPublic(ATLTransformation.class);
+		List<ATLTransformation> list = ATLtransformationService.findAllPublic();
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
@@ -103,7 +103,7 @@ public class ATLTransformationRESTController {
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
 		ArtifactList list = new ArtifactList(ATLtransformationService
-				.findAllWithPublicByUser(user, ATLTransformation.class));
+				.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 
 	}
@@ -126,7 +126,7 @@ public class ATLTransformationRESTController {
 			fileMedia.setByteArray(file.getBytes());
 			transformation.setFile(fileMedia);
 
-			ATLtransformationService.create(transformation, ATLTransformation.class);
+			ATLtransformationService.create(transformation);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -152,7 +152,7 @@ public class ATLTransformationRESTController {
 			fileMedia.setByteArray(file.getBytes());
 			ATLtransformation.setFile(fileMedia);
 
-			ATLtransformationService.create(ATLtransformation, ATLTransformation.class);
+			ATLtransformationService.create(ATLtransformation);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 
@@ -172,7 +172,7 @@ public class ATLTransformationRESTController {
 			transformation.setAuthor(user);
 
 			// transformation save
-			ATLtransformationService.create(transformation, ATLTransformation.class);
+			ATLtransformationService.create(transformation);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -193,7 +193,7 @@ public class ATLTransformationRESTController {
 			// add author to shared
 			transformation.getShared().add(user);
 			// transformation update
-			ATLtransformationService.update(transformation, ATLTransformation.class);
+			ATLtransformationService.update(transformation);
 			return new ResponseEntity<String>("Transformation updated.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -207,7 +207,7 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ATLtransformationService.delete(idTranformation, user, ATLTransformation.class);
+			ATLtransformationService.delete(idTranformation, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

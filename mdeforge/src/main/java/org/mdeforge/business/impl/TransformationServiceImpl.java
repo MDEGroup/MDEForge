@@ -5,6 +5,6 @@ import org.mdeforge.business.model.Transformation;
 import org.springframework.stereotype.Service;
 
 @Service(value="Transformation")
-public class TransformationServiceImpl extends ArtifactServiceImpl<Transformation> implements TransformationService {
+public class TransformationServiceImpl extends CRUDArtifactServiceImpl<Transformation> implements TransformationService {
 
 }

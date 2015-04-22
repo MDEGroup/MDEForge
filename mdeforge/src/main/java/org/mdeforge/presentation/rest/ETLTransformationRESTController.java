@@ -3,8 +3,8 @@ package org.mdeforge.presentation.rest;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ETLTransformationService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
@@ -46,7 +46,7 @@ public class ETLTransformationRESTController {
 	private ProjectService projectService;
 	@Autowired
 	@Qualifier("Artifact")
-	private ArtifactService<Artifact> artifactService;
+	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired
 	private User user;
@@ -55,7 +55,7 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
 		List<ETLTransformation> result = ETLTransformationService
-				.findAllWithPublicByUser(user, ETLTransformation.class);
+				.findAllWithPublicByUser(user);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
@@ -72,7 +72,7 @@ public class ETLTransformationRESTController {
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<ETLTransformation> list = ETLTransformationService.findAllPublic(ETLTransformation.class);
+		List<ETLTransformation> list = ETLTransformationService.findAllPublic();
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
 
@@ -93,7 +93,7 @@ public class ETLTransformationRESTController {
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getTransformationsByUser() {
 		ArtifactList list = new ArtifactList(
-				ETLTransformationService.findAll(ETLTransformation.class));
+				ETLTransformationService.findAll());
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 
 	}
@@ -105,10 +105,10 @@ public class ETLTransformationRESTController {
 		for (Model model : models) {
 			model.setAuthor(user);
 			model.setOpen(false);
-			modelService.create(model, Model.class);
+			modelService.create(model);
 			
 		}
-		ETLTransformation transformation =  ETLTransformationService.findOne(idETLTransformation, ETLTransformation.class);
+		ETLTransformation transformation =  ETLTransformationService.findOne(idETLTransformation);
 		//TODO DANIELE
 		//ADESSO E' UNA LISTA DI MODEL
 		transformation.setModels_in(models);
@@ -129,7 +129,7 @@ public class ETLTransformationRESTController {
 			transformation.setAuthor(user);
 
 			// transformation save
-			ETLTransformationService.create(transformation, ETLTransformation.class);
+			ETLTransformationService.create(transformation);
 			return new ResponseEntity<String>("Transformation inserted.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -150,7 +150,7 @@ public class ETLTransformationRESTController {
 			// add author to shared
 			transformation.getShared().add(user);
 			// transformation update
-			ETLTransformationService.update(transformation, ETLTransformation.class);
+			ETLTransformationService.update(transformation);
 			return new ResponseEntity<String>("Transformation updated.",
 					HttpStatus.OK);
 		} catch (Exception e) {
@@ -164,7 +164,7 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ETLTransformationService.delete(idTranformation, user, ETLTransformation.class);
+			ETLTransformationService.delete(idTranformation, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

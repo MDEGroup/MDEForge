@@ -3,7 +3,7 @@ package org.mdeforge.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mdeforge.business.ArtifactService;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
@@ -52,8 +52,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	private ProjectService projectSerivce;
 
 	@Autowired
-	@Qualifier("Artifact")
-	private ArtifactService artifactService;
+	private CRUDArtifactService<Artifact> artifactService;
 
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -74,7 +73,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner(),Artifact.class);
+			Artifact art = artifactService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(art);
 		}
 		workspaceRepository.save(workspace);
@@ -152,7 +151,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		List<Artifact> as = workspace.getArtifacts();
 		workspace.setArtifacts(new ArrayList<Artifact>());
 		for (Artifact a : as) {
-			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner(), Artifact.class);
+			Artifact m = artifactService.findOneById(a.getId(), workspace.getOwner());
 			workspace.getArtifacts().add(m);
 		}
 		workspaceRepository.save(workspace);

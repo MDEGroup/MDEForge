@@ -55,7 +55,7 @@ public class MetamodelsRESTController {
 		// String name = auth.getName(); //get logged in username
 		// User user = userService.findOneByUsername(name);
 
-		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublicByUser(user, Metamodel.class));
+		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
@@ -81,14 +81,14 @@ public class MetamodelsRESTController {
 
 	@RequestMapping(value = "/public", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getPublicMetamodels() {
-		ArtifactList list = new ArtifactList(metamodelService.findAllPublic(Metamodel.class));
+		ArtifactList list = new ArtifactList(metamodelService.findAllPublic());
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getMetamodelsByUser() {
-		ArtifactList list = new ArtifactList(metamodelService.findAllWithPublicByUser(user, Metamodel.class));
+		ArtifactList list = new ArtifactList(metamodelService.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 	}
 
@@ -107,7 +107,7 @@ public class MetamodelsRESTController {
 			fileMedia.setFileName(file.getName());
 			fileMedia.setByteArray(file.getBytes());
 			metamodel.setFile(fileMedia);
-			metamodelService.create(metamodel, Metamodel.class);
+			metamodelService.create(metamodel);
 			return new ResponseEntity<String>("Metamodel inserted.", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Erron: Project not inserted.", HttpStatus.OK);
@@ -129,7 +129,7 @@ public class MetamodelsRESTController {
 			fileMedia.setByteArray(file.getBytes());
 			metamodel.setFile(fileMedia);
 
-			metamodelService.create(metamodel, Metamodel.class);
+			metamodelService.create(metamodel);
 			return new ResponseEntity<String>("Metamodel inserted.", HttpStatus.OK);
 
 		} catch (Exception e) {
@@ -145,7 +145,7 @@ public class MetamodelsRESTController {
 			metamodel.setAuthor(user);
 			// add author to shared
 			// metamodel create
-			metamodelService.create(metamodel, Metamodel.class);
+			metamodelService.create(metamodel);
 			// Response success
 			return new ResponseEntity<String>("Metamodel inserted.", HttpStatus.OK);
 		} catch (Exception e) {
@@ -162,7 +162,7 @@ public class MetamodelsRESTController {
 			// add author to shared
 			metamodel.getShared().add(user);
 			// metamodel save
-			metamodelService.update(metamodel, Metamodel.class);
+			metamodelService.update(metamodel);
 			return new ResponseEntity<String>("Metamodel updated.", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Erron: metamodel not updated", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -173,7 +173,7 @@ public class MetamodelsRESTController {
 	@RequestMapping(value = "/{id_metamodel}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Metamodel> getMetamodel(@PathVariable("id_metamodel") String idMetamodel) {
 		try {
-			Metamodel metamodel = metamodelService.findOneById(idMetamodel, user, Metamodel.class);
+			Metamodel metamodel = metamodelService.findOneById(idMetamodel, user);
 			return new ResponseEntity<Metamodel>(metamodel, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<Metamodel>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -183,7 +183,7 @@ public class MetamodelsRESTController {
 	@RequestMapping(value = "/{id_metamodel}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteMetamodel(@PathVariable("id_metamodel") String idMetamodel) {
 		try {
-			metamodelService.delete(idMetamodel, user, Metamodel.class);
+			metamodelService.delete(idMetamodel, user);
 			return new ResponseEntity<String>("Metamodel deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Metamodel not deleted", HttpStatus.UNPROCESSABLE_ENTITY);

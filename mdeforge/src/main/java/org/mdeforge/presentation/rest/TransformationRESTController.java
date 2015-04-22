@@ -34,7 +34,7 @@ public class TransformationRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> getTransformations() {
 		//http://localhost:8080/mdeforge/api/metamodel/?access_token=40846e42-fc43-46df-ad09-982d466b8955
 		List<Transformation> result = transformationService
-				.findAllWithPublicByUser(user, Transformation.class);
+				.findAllWithPublicByUser(user);
 		return new ResponseEntity<ArtifactList>(new ArtifactList(result), HttpStatus.OK);
 	}
 
