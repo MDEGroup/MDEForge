@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
@@ -62,21 +63,24 @@ public class TestClient {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void testAddModel(){
 		try {
 			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
 			Project p = c.getProjects().get(0);
-			String idMM = p.getArtifacts().get(0).getId();
+			Artifact mm = p.getArtifacts().get(0);
 			Model m = new Model();
 			m.setName("ModelSalvi");
 			List<String> tags = Arrays.asList("DB, Data, DataBase, Data Base, Relational".split(","));
 			m.setTags(tags);
 			m.setDescription("Rapresent a model of a general Relational DB");
 			m.setAuthors("Models Authors");
+			ConformToRelation rel = new ConformToRelation();
+			rel.setFromArtifact(m);
+			rel.setToArtifact(mm);
+			m.getRelations().add(rel);
 			m.getProjects().add(p);
-			c.addModel(m, "temp/My.database", idMM);
+			c.addModel(m, "temp/My.database");
 			System.out.println("Model Saved!!!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -97,6 +101,7 @@ public class TestClient {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testSearch(){
 		try {

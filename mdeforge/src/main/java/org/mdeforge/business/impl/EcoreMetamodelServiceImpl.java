@@ -82,10 +82,10 @@ import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.mongodb.Mongo;
+
 @Service
 public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricProvider {
-	
-	public static final String jsonMongoUriBase = "mongodb://localhost:27017/MDEForge/jsonArtifact/";
 	
 	@Autowired
 	private ProjectService projectService;
@@ -93,6 +93,8 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 	private ArtifactService artifactService;
 	@Autowired
 	private WorkspaceService workspaceService;
+	@Autowired
+	private Mongo mongo;
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
@@ -105,12 +107,14 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 	private UserRepository userRepository;
 	@Autowired
 	private ProjectRepository projectRepository;
-
 	@Autowired
 	private UserService userService;
-
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
 
 	@Override
 	public void delete(EcoreMetamodel ecoreMetamodel) {
@@ -237,13 +241,6 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 //			fileMedia.setByteArray(Base64.decode(ecoreMetamodel.getFile()
 //					.getContent().getBytes()));
 //			ecoreMetamodel.setFile(fileMedia);
-			
-			String sourceUri = ecoreMetamodel.getUri();
-			
-			ObjectId id = new ObjectId();
-			ecoreMetamodel.setUri(jsonMongoUriBase+id.toString());
-			
-			ecoreMetamodel.setExtractedContents(EmfjsonMongo.getInstance().serializeAndSaveMetamodel(sourceUri, ecoreMetamodel.getUri()));
 
 			// check workspace Auth
 			for (Workspace ws : ecoreMetamodel.getWorkspaces()) {
@@ -284,6 +281,11 @@ public class EcoreMetamodelServiceImpl implements EcoreMetamodelService, MetricP
 				u.getSharedArtifact().add(ecoreMetamodel);
 				userRepository.save(u);
 			}
+
+			String jsonMongoUriBase = mongoPrefix+mongo.getAddress().toString()+"/"+mongoDbFactory.getDb().getName()+"/"+jsonArtifactCollection+"/";
+			
+			ecoreMetamodel.setExtractedContents(EmfjsonMongo.getInstance().serializeAndSaveMetamodel(ecoreMetamodel.getNsuri(), jsonMongoUriBase+ecoreMetamodel.getId()));
+			
 			return ecoreMetamodel.getId();
 		} catch (Exception e) {
 			e.printStackTrace();

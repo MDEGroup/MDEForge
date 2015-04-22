@@ -13,8 +13,7 @@ public class Model extends Artifact {
 	 * 
 	 */
 	private static final long serialVersionUID = -2527216408130316002L;
-	private String uri;
-	private String metamodel = null;
+	private String nsuri;
 	
 	/**
 	 * A toString method which prints the values of all EAttributes of this
@@ -27,19 +26,11 @@ public class Model extends Artifact {
 		return "Model ";
 	}
 
-	public String getUri() {
-		return uri;
+	public String getNsuri() {
+		return nsuri;
 	}
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
-
-	public String getMetamodel() {
-		return metamodel;
-	}
-
-	public void setMetamodel(String metamodel) {
-		this.metamodel = metamodel;
+	public void setNsuri(String nsuri) {
+		this.nsuri = nsuri;
 	}
 }

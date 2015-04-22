@@ -10,10 +10,10 @@ import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.ConformToRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
@@ -27,17 +27,23 @@ import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.mdeforge.search.jsonMongoUtils.EmfjsonMongo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.stereotype.Service;
+
+import com.mongodb.Mongo;
 
 
 @Service
 public class ModelServiceImpl implements ModelService {
-	
-	public static final String jsonMongoUriBase = "mongodb://localhost:27017/MDEForge/jsonArtifact/";
 
+	@Autowired
+	private Mongo mongo;
+	@Autowired
+	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
 	private ModelRepository modelRepository;
 	@Autowired
@@ -58,6 +64,11 @@ public class ModelServiceImpl implements ModelService {
 	private UserRepository userRepository;
 	@Autowired
 	private UserService userService;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
+	
 	@Override
 	public void upload(Model model) {
 		modelRepository.save(model);
@@ -138,16 +149,6 @@ public class ModelServiceImpl implements ModelService {
 //			fileMedia.setByteArray(Base64.decode(model.getFile()
 //					.getContent().getBytes()));
 //			model.setFile(fileMedia);
-			
-			String idMetamodel = model.getMetamodel();
-			Metamodel metamodel = ecoreMetamodelRepository.findOne(idMetamodel);
-			
-			String sourceUri = model.getUri();
-			
-			ObjectId id = new ObjectId();
-			model.setUri(jsonMongoUriBase+id.toString());
-			
-			model.setExtractedContents(EmfjsonMongo.getInstance().saveModel(metamodel.getUri(), sourceUri, model.getUri()));
 
 			// check workspace Auth
 			for (Workspace ws : model.getWorkspaces()) {
@@ -167,14 +168,20 @@ public class ModelServiceImpl implements ModelService {
 			model.setAuthor(user);
 			model.getShared().add(user);
 			
+//			ConformToRelation rel = new ConformToRelation();
+//			rel.setFromArtifact(model);
+//			rel.setToArtifact(metamodel);
+//			model.getRelations().add(rel);
+//			relationRepository.save(rel);
+			
+			model.setId((new ObjectId()).toString());
+			
+			ConformToRelation rel = (ConformToRelation) model.getRelations().get(0);
+			rel.setFromArtifact(model);
+			relationRepository.save(rel);
+			
 			// Update bi-directional reference
 			modelRepository.save(model);
-			
-			ConformToRelation rel = new ConformToRelation();
-			rel.setFromArtifact(model);
-			rel.setToArtifact(metamodel);
-			model.getRelations().add(rel);
-			relationRepository.save(rel);
 			
 			for (Workspace ws : model.getWorkspaces()) {
 				Workspace w = workspaceService.findOne(ws.getId());
@@ -195,16 +202,17 @@ public class ModelServiceImpl implements ModelService {
 				u.getSharedArtifact().add(model);
 				userRepository.save(u);
 			}
+			
+			String jsonMongoUriBase = mongoPrefix+mongo.getAddress().toString()+"/"+mongoDbFactory.getDb().getName()+"/"+jsonArtifactCollection+"/";
+			
+			String mmID = ((ConformToRelation) model.getRelations().get(0)).getToArtifact().getId();
+			
+			model.setExtractedContents(EmfjsonMongo.getInstance().saveModel(jsonMongoUriBase+mmID, model.getNsuri(), jsonMongoUriBase+model.getId()));
+			
 			return model.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException();
 		}
 	}
-
-
-
-
-
-
 }
