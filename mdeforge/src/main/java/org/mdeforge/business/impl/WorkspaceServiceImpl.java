@@ -3,8 +3,8 @@ package org.mdeforge.business.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -19,7 +19,6 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;

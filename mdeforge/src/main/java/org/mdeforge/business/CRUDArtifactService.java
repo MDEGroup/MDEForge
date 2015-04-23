@@ -16,7 +16,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> findAllWithPublicByUser(User user) throws BusinessException;
 	List<T> findAllPublic() throws BusinessException;
 	List<T> findArtifactInProject(String idProject, User user);
-	List<T> findArtifactInWorkspace(String id, User user);
+	List<T> findArtifactInWorkspace(String idWorkspace, User user);
 	boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)	throws BusinessException;
 	boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException;
 	boolean isArtifactInUser(User idUser, String idArtfact)	throws BusinessException;

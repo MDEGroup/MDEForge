@@ -4,7 +4,7 @@ public class SimilarityRelation extends Relation {
 
 	private double value;
 	//For my research.
-	private int computation;
+//	private int computation;
 	public double getValue() {
 		return value;
 	}
@@ -13,11 +13,11 @@ public class SimilarityRelation extends Relation {
 		this.value = value;
 	}
 
-	public int getComputation() {
-		return computation;
-	}
-
-	public void setComputation(int computation) {
-		this.computation = computation;
-	}
+//	public int getComputation() {
+//		return computation;
+//	}
+//
+//	public void setComputation(int computation) {
+//		this.computation = computation;
+//	}
 }

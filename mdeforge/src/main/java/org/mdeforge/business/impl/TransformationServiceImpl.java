@@ -4,7 +4,7 @@ import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.model.Transformation;
 import org.springframework.stereotype.Service;
 
-@Service(value="Transformation")
+@Service
 public class TransformationServiceImpl extends CRUDArtifactServiceImpl<Transformation> implements TransformationService {
 
 }

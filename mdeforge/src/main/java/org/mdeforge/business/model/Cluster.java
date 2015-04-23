@@ -14,6 +14,7 @@ public class Cluster implements Serializable {
 	private int kMin;
 	private double kAvg;
 	private Artifact mostRepresentive;
+	private Set<Relation> relations = new HashSet<Relation>();
 	public int getkMax() {
 		return kMax;
 	}
@@ -51,5 +52,11 @@ public class Cluster implements Serializable {
 	}
 	public void setMostRepresentive(Artifact mostRepresentive) {
 		this.mostRepresentive = mostRepresentive;
+	}
+	public Set<Relation> getRelations() {
+		return relations;
+	}
+	public void setRelations(Set<Relation> relations) {
+		this.relations = relations;
 	}
 }

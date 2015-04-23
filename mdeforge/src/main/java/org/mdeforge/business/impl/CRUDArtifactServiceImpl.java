@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
@@ -390,20 +389,31 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 	@Override
 	public List<T> findArtifactInProject(String idProject, User user) {
-		// TODO Change method
 		projectService.findById(idProject, user);
-		if(persistentClass!=Artifact.class)
-			return (List<T>) artifactRepository.findByProjectId(new ObjectId(idProject), persistentClass.getCanonicalName());
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("projects.$id").is(idProject);
+		if(persistentClass!=Artifact.class){
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c1,c2));
+		}
 		else
-			return (List<T>) artifactRepository.findByProjectId(new ObjectId(idProject));
+			query.addCriteria(c1);
+		return operations.find(query, persistentClass);
 	}
 	@Override
-	public List<T> findArtifactInWorkspace(String idProject, User user) {
-		workspaceService.findById(idProject, user);
-		if(persistentClass!=Artifact.class)
-			return (List<T>) artifactRepository.findByWorkspaceId(new ObjectId(idProject), persistentClass.getCanonicalName());
+	public List<T> findArtifactInWorkspace(String idWorkspace, User user) {
+		workspaceService.findById(idWorkspace, user);
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
+		if(persistentClass!=Artifact.class){
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c1,c2));
+		}
 		else
-			return (List<T>) artifactRepository.findByWorkspaceId(new ObjectId(idProject));
+			query.addCriteria(c1);
+		return operations.find(query, persistentClass);
 	}
 
 	protected T findOneByName(String name, User user, Class<T> c) throws BusinessException {

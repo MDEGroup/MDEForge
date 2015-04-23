@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.gridfs.GridFSDBFile;
@@ -75,9 +76,12 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		try {
 			String path = basePath + artifact.getFile().getFileName();
 			out = new FileOutputStream(path);
-			if(grm.getByteArray() != null)
+			if(grm.getByteArray() != null && grm.getByteArray().length != 0)
 				out.write(grm.getByteArray());
-			else out.write(grm.getContent().getBytes());
+			
+			else out.write(Base64.decode(grm.getContent().getBytes()));
+			
+			
 			out.close();
 			return path;
 		} catch (FileNotFoundException e) {
