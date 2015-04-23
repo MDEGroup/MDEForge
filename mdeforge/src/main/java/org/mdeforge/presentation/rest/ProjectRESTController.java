@@ -43,7 +43,6 @@ public class ProjectRESTController {
 	@Autowired
 	private MetamodelService metamodelService;
 	@Autowired
-	@Qualifier("Artifact")
 	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired

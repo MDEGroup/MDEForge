@@ -36,7 +36,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-@Service(value="ETLTransformation")
+@Service
 public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTransformation> implements ETLTransformationService {
 
 	
@@ -44,7 +44,6 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 	@Autowired
 	private ETLTransformationRepository ETLTransformationRepository;
 	@Autowired
-	@Qualifier("EcoreMetamodel")
 	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Override

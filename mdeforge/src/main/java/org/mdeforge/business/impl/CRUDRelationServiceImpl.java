@@ -37,7 +37,14 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 	@Override
 	public List<T> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		return n.findAll(persistentClass);
+		if(persistentClass!=Relation.class) {
+			Query query = new Query();
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			return n.find(query, persistentClass);
+		}
+		else 
+			return n.findAll(persistentClass);
 	}
 	@Override
 	public List<T> findByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException {

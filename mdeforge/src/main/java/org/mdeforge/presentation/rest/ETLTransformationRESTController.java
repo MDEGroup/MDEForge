@@ -38,14 +38,12 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 public class ETLTransformationRESTController {
 
 	@Autowired
-	@Qualifier("ETLTransformation")
 	private ETLTransformationService ETLTransformationService;
 	@Autowired
 	private ModelService modelService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	@Qualifier("Artifact")
 	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired

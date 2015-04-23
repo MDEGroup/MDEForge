@@ -36,6 +36,8 @@ public class SampleTest {
 	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	
+	@Ignore
 	@Test
 	public void getListSimilarity() {
 		try {
@@ -73,7 +75,7 @@ public class SampleTest {
 		try {
 			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/result2.txt");
 			for (double d : testArray) {
-				List<Cluster> clusters = ecoreMetamodelService.getClusters(d);
+				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d);
 				int maxCluster = 0;
 				double average = 0;
 				int count = 0;
@@ -93,6 +95,21 @@ public class SampleTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void getFileNode() {
+		try {
+			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/juri.txt");
+			List<SimilarityRelation> srl = similarityRelationService.findAll();
+			for (SimilarityRelation similarityRelation : srl) {
+				p.println(similarityRelation.getToArtifact().getName() + ";" + 
+						similarityRelation.getFromArtifact().getName() + ";" + similarityRelation.getValue());
+			}
+			p.close();
+		}
+		catch (Exception e) {}
+		
 	}
 	
 }

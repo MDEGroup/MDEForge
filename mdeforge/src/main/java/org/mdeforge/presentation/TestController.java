@@ -1,6 +1,7 @@
 package org.mdeforge.presentation;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.EcoreMetamodelService;
@@ -19,14 +20,22 @@ public class TestController {
 	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@RequestMapping(value = "/clusterGraph", method = { RequestMethod.GET })
-	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold) {
-		String graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
+		String graph = null;
+		if(computation == 1)
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+		else
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
 		model.addAttribute("graph", graph);
 		return "test.cluster.graph";
 	}
 	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })
-	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold) {
-		List<Cluster> clusters = ecoreMetamodelService.getClusters(threshold);
+	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
+		List<Cluster> clusters = new ArrayList<Cluster>();
+		if(computation == 1)
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
+		else 
+			clusters = ecoreMetamodelService.getContainmentClusters(threshold);
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;

@@ -24,12 +24,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 
-@Service(value="Model")
+@Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
 	
 
 	@Autowired
-	@Qualifier("EcoreMetamodel")
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private ModelRepository modelRepository;
@@ -38,7 +37,21 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	public Model create(Model artifact) throws BusinessException {
+		EcoreMetamodel emm = null;
+		for (Relation rel : artifact.getRelations()) {
+			if (rel instanceof ConformToRelation) {
+				Artifact temm = rel.getToArtifact();
+				emm = ecoreMetamodelService.findOne(temm.getId());
+			}
+		}
+		if (emm == null)
+			throw new BusinessException();
+		if(isValid(artifact))
+			return super.create(artifact);
+		throw new BusinessException();
+	}
 	@Override
 	public boolean isValid(Artifact art)throws BusinessException {
 		EcoreMetamodel emm = null;

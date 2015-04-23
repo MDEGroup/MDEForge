@@ -33,7 +33,6 @@ public class ArtifactRESTController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	@Qualifier("Artifact")
 	private CRUDArtifactService<Artifact> artifactService;
 
 	@Autowired

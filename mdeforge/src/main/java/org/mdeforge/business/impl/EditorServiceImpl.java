@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-@Service(value="Editor")
+@Service
 public class EditorServiceImpl implements EditorService {
 
 	@Autowired
