@@ -10,6 +10,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
@@ -42,8 +43,7 @@ public class ProjectController {
 	@Autowired
 	private ModelService modelService;
 	@Autowired
-	@Qualifier("Artifact")
-	private CRUDArtifactService artifactService;
+	private CRUDArtifactService<Artifact> artifactService;
 	@Autowired
 	private EditorService editorService;
 	
