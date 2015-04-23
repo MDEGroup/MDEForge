@@ -1,10 +1,7 @@
-package org.mdeforge.presentation;
-
-import java.util.List;
+package org.mdeforge.presentation.backend;
 
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,9 +22,9 @@ public class EcoreMetamodelController {
 	
 	
 	@RequestMapping(method = { RequestMethod.GET })
-	public String clusterGraph(Model model, @RequestParam String id) {
+	public String ecoreMetamodel(Model model, @RequestParam String id) {
 		
-		EcoreMetamodel ecoreMM = ecoreMetamodelService.findOneById(id, user, EcoreMetamodel.class);		
+		EcoreMetamodel ecoreMM = ecoreMetamodelService.findOneById(id, user);		
 		
 		model.addAttribute("ecoreMM", ecoreMM);
 		return "ecore_metamodel.details";

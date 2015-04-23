@@ -1,4 +1,4 @@
-package org.mdeforge.presentation;
+package org.mdeforge.presentation.backend;
 
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.User;
