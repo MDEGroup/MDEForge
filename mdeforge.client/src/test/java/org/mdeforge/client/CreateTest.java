@@ -40,7 +40,7 @@ public class CreateTest {
 //		}
 //		c.addProject(p);
 //	}
-	@Ignore
+	
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
@@ -89,6 +89,7 @@ public class CreateTest {
 			e.printStackTrace();
 		}
 	}
+	@Ignore
 	@Test
 	public void testArtifactToWorkspace() {
 		try {
