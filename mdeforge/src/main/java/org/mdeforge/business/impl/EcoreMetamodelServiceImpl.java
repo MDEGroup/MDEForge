@@ -520,7 +520,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		
 		List<EcoreMetamodel> ecoreMetamodels = findAllPublic();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
-			if(tempHash.containsKey(ecoreMetamodel.getId())) {
+			if(tempHash.get(ecoreMetamodel.getId())==null) {
 				Cluster c = new Cluster();
 				c.setMostRepresentive(ecoreMetamodel);
 				c.getArtifacts().add(ecoreMetamodel);
