@@ -94,6 +94,25 @@ public class PublicController {
 		
 		return "public.browse.cluster";
 	}
+	@RequestMapping(value = "/browse/cluster_test", method = { RequestMethod.GET })
+	public String test(Model model, 
+			@RequestParam (value="threshold", required=true, defaultValue="0.5") Double threshold, 
+			@RequestParam (value="computation", required=true, defaultValue="1") int computation
+		) {
+		
+		/*
+		 * GRAPH
+		 */
+		String graph = null;
+		if(computation == 1)
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+		else
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+		model.addAttribute("graph", graph);
+				
+		
+		return "public.browse.cluster.test";
+	}
 	
 
 }
