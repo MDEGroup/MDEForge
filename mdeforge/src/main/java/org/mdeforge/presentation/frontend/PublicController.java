@@ -83,6 +83,7 @@ public class PublicController {
 			if(cluster.getArtifacts().size()==1){
 				noCluster++;
 			}
+			System.out.println(cluster.getkMax());
 		}
 		average =  (count*1.0)/(clusters.size()*1.0);
 		model.addAttribute("clusters", clusters);
