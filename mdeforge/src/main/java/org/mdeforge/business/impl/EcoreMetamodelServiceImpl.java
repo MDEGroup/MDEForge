@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.core.runtime.Path;
@@ -62,6 +64,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -680,4 +683,162 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		
 		return clusterList;
 	}
+	///*****NEW****/////////////////
+	private List<HashMap<String, Cluster>> getHierarchicalCluster (double[] height) {
+		List<HashMap<String, Cluster>> privateStructure = new ArrayList<HashMap<String, Cluster>>();
+		List<EcoreMetamodel> ecoreMetamodels = findAllPublic();
+		Cluster first = new Cluster();
+		first.getDomains().add("Total");
+		HashMap<String, Cluster> root = new HashMap<String, Cluster>();
+		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
+			root.put(ecoreMetamodel.getId(), first);
+		}
+		privateStructure.add(root);
+
+		for(int i = 0; i < height.length; i++) {
+			privateStructure.add(getMapSimilarityClusters(height[i]));
+		}
+		
+		HashMap<String, Cluster> leaf = new HashMap<String, Cluster>();
+		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
+			Cluster c = new Cluster();
+			c.getArtifacts().add(ecoreMetamodel);
+			for (Property property : ecoreMetamodel.getProperties())
+				if (property.getName().toLowerCase().contains("domain") || 
+						property.getName().toLowerCase().contains("domains"))
+					c.getDomains().add(property.getValue());
+			leaf.put(ecoreMetamodel.getId(), c);
+		}
+
+		privateStructure.add(leaf);
+		
+		return privateStructure;
+	}
+	@Override
+	public String getHierarchicalClusterGraph(double[] height) {
+		List<HashMap<String, Cluster>> privateStructure = getHierarchicalCluster(height);
+		HashMap<String, Cluster> previousClusterMap = null;
+		String node = "var nodes = [\n";
+		String edge = "var edges = [\n";
+		HashMap<Cluster, String> idCluster = new HashMap<Cluster, String>();
+		AtomicInteger i = new AtomicInteger();
+		for (HashMap<String, Cluster> clusterMap : privateStructure) {
+			List<Cluster> arrayCluster = new ArrayList<Cluster>();
+			arrayCluster.addAll(getUniqueCluster(clusterMap));
+			for (Cluster cluster : arrayCluster) {
+				int l = i.incrementAndGet();
+				node += "{id : " + l +" },\n";
+				idCluster.put(cluster, l + "");
+				if (previousClusterMap != null){
+					Cluster previousCluster = previousClusterMap.get(cluster.getArtifacts().iterator().next().getId());
+					edge += "{from: " + idCluster.get(previousCluster) + ", to: "+ l +"},\n";
+				}
+				
+			}
+			previousClusterMap = clusterMap;
+		}
+		node = node.substring(0,node.length()-2);
+		edge = edge.substring(0,edge.length()-2);
+		
+		return node + "];\n" + edge + "];\n";
+	}
+	private Set<Cluster> getUniqueCluster(HashMap<String, Cluster> clustersMap) {
+		Iterator<Map.Entry<String, Cluster>> it =  clustersMap.entrySet().iterator();
+		Set<Cluster> set = new HashSet<>();
+		while (it.hasNext()) {
+			Map.Entry<String, Cluster> pair = it.next();
+			set.add(pair.getValue());
+		}
+		return set;
+	}
+	
+	private HashMap<String, Cluster> getMapSimilarityClusters(double threshold) throws BusinessException {
+		List<Cluster> clusterList = new ArrayList<Cluster>();
+		List<SimilarityRelation> similarityRelations = similarityRelationService.findAll(threshold);
+		HashMap<String,Cluster> tempHash = new HashMap<String,Cluster>();
+		for (SimilarityRelation similarityRelation : similarityRelations) {
+			String fromId = similarityRelation.getFromArtifact().getId();
+			String toId = similarityRelation.getToArtifact().getId();
+			if(!tempHash.containsKey(fromId) && 
+					!tempHash.containsKey(toId)) {
+				Cluster c = new Cluster();
+				c.getRelations().add(similarityRelation);
+				c.getArtifacts().add(similarityRelation.getFromArtifact());
+				c.getArtifacts().add(similarityRelation.getToArtifact());
+				List<Property> propertyList = similarityRelation.getFromArtifact().getProperties();
+				propertyList.addAll(similarityRelation.getToArtifact().getProperties());
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				tempHash.put(fromId, c);
+				tempHash.put(toId, c);
+				clusterList.add(c);
+			}
+			if(tempHash.containsKey(fromId) && 
+					!tempHash.containsKey(toId)) {
+				Cluster c = tempHash.get(fromId);
+				c.getArtifacts().add(similarityRelation.getToArtifact());
+				c.getRelations().add(similarityRelation);
+				tempHash.put(toId, c);
+				tempHash.put(fromId, c);
+				List<Property> propertyList = similarityRelation.getToArtifact().getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+			}
+			if(!tempHash.containsKey(fromId) && 
+					tempHash.containsKey(toId)) {
+				Cluster c = tempHash.get(similarityRelation.getToArtifact().getId());
+				c.getArtifacts().add(similarityRelation.getFromArtifact());
+				c.getRelations().add(similarityRelation);
+				tempHash.put(fromId, c);
+				tempHash.put(toId, c);
+				List<Property> propertyList = similarityRelation.getFromArtifact().getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+			}
+			if(tempHash.containsKey(fromId) && 
+					tempHash.containsKey(toId) &&
+					tempHash.get(fromId) != tempHash.get(toId)) {
+				Cluster fromCluster = tempHash.get(fromId);
+				Cluster toCluster = tempHash.get(toId);
+				clusterList.remove(toCluster);
+				clusterList.remove(fromCluster);
+				fromCluster.getRelations().addAll(toCluster.getRelations());
+				fromCluster.getArtifacts().addAll(toCluster.getArtifacts());
+				fromCluster.getDomains().addAll(toCluster.getDomains());
+				for (Artifact art : fromCluster.getArtifacts()) {
+					Cluster cc = tempHash.get(art.getId());
+					clusterList.remove(cc);
+					tempHash.put(art.getId(), fromCluster);
+				}
+				clusterList.add(fromCluster);
+				tempHash.put(toId, fromCluster);
+				tempHash.put(fromId, fromCluster);
+			}
+		}
+		
+		List<EcoreMetamodel> ecoreMetamodels = findAllPublic();
+		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
+			if(tempHash.get(ecoreMetamodel.getId())==null) {
+				Cluster c = new Cluster();
+				c.setMostRepresentive(ecoreMetamodel);
+				c.getArtifacts().add(ecoreMetamodel);
+				List<Property> propertyList = ecoreMetamodel.getProperties();
+				for (Property property : propertyList)
+					if (property.getName().toLowerCase().contains("domain") || property.getName().toLowerCase().contains("domains"))
+						c.getDomains().add(property.getValue());
+				tempHash.put(ecoreMetamodel.getId(), c);
+			}
+				
+		}
+		
+		
+		return tempHash;
+	}
+	////END NEW//////
 }

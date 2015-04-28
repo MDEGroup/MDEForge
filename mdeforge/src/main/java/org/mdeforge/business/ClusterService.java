@@ -11,4 +11,5 @@ public interface ClusterService {
 //	List<Cluster> getClusters(double threshold, int computation) throws BusinessException;
 //	String getSimilarityGraph(double threshold, int computation) throws BusinessException;
 	String getSimilarityGraph(double treshold) throws BusinessException;
+	String getHierarchicalClusterGraph(double[] height);
 }
