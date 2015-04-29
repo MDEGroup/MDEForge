@@ -48,7 +48,50 @@ public class PublicController {
 	
 	@RequestMapping(value = "/browse/cluster", method = { RequestMethod.GET })
 	public String cluster(Model model, 
-			@RequestParam (value="threshold", required=true, defaultValue="0.5") Double threshold, 
+			@RequestParam (value="threshold", required=true, defaultValue="0.3") Double threshold, 
+			@RequestParam (value="computation", required=true, defaultValue="1") int computation
+		) {
+		
+
+		/*
+		 * TABLE
+		 */
+		List<Cluster> clusters = new ArrayList<Cluster>();
+		if(computation == 1){
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
+		}else{
+			clusters = ecoreMetamodelService.getContainmentClusters(threshold);			
+		}
+		
+		int maxCluster = 0;
+		double average = 0;
+		int count = 0;
+		int noCluster = 0;
+		for (Cluster cluster : clusters) {
+			maxCluster = (maxCluster < cluster.getArtifacts().size())?cluster.getArtifacts().size():maxCluster;
+			count += cluster.getArtifacts().size();
+			if(cluster.getArtifacts().size()==1){
+				noCluster++;
+			}
+		}
+		average =  (count*1.0)/(clusters.size()*1.0);
+		model.addAttribute("clusters", clusters);
+		model.addAttribute("average", average);
+		model.addAttribute("max", maxCluster);
+		model.addAttribute("noCluster", noCluster);
+		
+		
+		//Mettiamo anche le informazioni relative alla Threshold e Computation
+		model.addAttribute("threshold", threshold);
+		model.addAttribute("computation", computation);
+		
+		
+		return "public.browse.cluster";
+	}
+	
+	@RequestMapping(value = "/browse/cluster_graph", method = { RequestMethod.GET })
+	public String test(Model model, 
+			@RequestParam (value="threshold", required=true, defaultValue="0.3") Double threshold, 
 			@RequestParam (value="computation", required=true, defaultValue="1") int computation
 		) {
 		
@@ -61,7 +104,6 @@ public class PublicController {
 		else
 			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
 		model.addAttribute("graph", graph);
-		
 		
 		/*
 		 * TABLE
@@ -83,7 +125,6 @@ public class PublicController {
 			if(cluster.getArtifacts().size()==1){
 				noCluster++;
 			}
-			System.out.println(cluster.getkMax());
 		}
 		average =  (count*1.0)/(clusters.size()*1.0);
 		model.addAttribute("clusters", clusters);
@@ -91,27 +132,12 @@ public class PublicController {
 		model.addAttribute("max", maxCluster);
 		model.addAttribute("noCluster", noCluster);
 		
-		
-		return "public.browse.cluster";
-	}
-	@RequestMapping(value = "/browse/cluster_test", method = { RequestMethod.GET })
-	public String test(Model model, 
-			@RequestParam (value="threshold", required=true, defaultValue="0.5") Double threshold, 
-			@RequestParam (value="computation", required=true, defaultValue="1") int computation
-		) {
-		
-		/*
-		 * GRAPH
-		 */
-		String graph = null;
-		if(computation == 1)
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
-		else
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
-		model.addAttribute("graph", graph);
+		//Mettiamo anche le informazioni relative alla Threshold e Computation
+		model.addAttribute("threshold", threshold);
+		model.addAttribute("computation", computation);
 				
 		
-		return "public.browse.cluster.test";
+		return "public.browse.cluster.graph";
 	}
 	
 	@RequestMapping(value = "/browse/cluster_test_hierarchical", method = { RequestMethod.GET })

@@ -3,17 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 
-<!-- PER GRAFICO DEL CLUSTER - START -->
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/plugins/vis/vis.js"></script>
-<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/resources/plugins/vis/vis.css">
-<style type="text/css">
-    #mynetwork {
-      width: 100%;
-      height: 600px;
-      border: 1px solid lightgray;
-    }
-</style>
-<!-- PER GRAFICO DEL CLUSTER - END -->
+
+
 
 
 
@@ -21,56 +12,174 @@
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 		<li>You are here</li>
-		<li><a href="index.html?lang=en&amp;layout_type=fluid&amp;menu_position=menu-left&amp;style=style-default&amp;sidebar-sticky=false&amp;top_style=full&amp;sidebar_style=full" class="glyphicons dashboard"><i></i> Private area</a></li>
+		<li><a href="index.html?lang=en&amp;layout_type=fluid&amp;menu_position=menu-left&amp;style=style-default&amp;sidebar-sticky=false&amp;top_style=full&amp;sidebar_style=full" class="glyphicons dashboard"><i></i> Public area</a></li>
 		<li class="divider"></li>
-		<li>Services</li>
+		<li>Browse</li>
 		<li class="divider"></li>
-		<li>Transformation Chain</li>
+		<li>Cluster</li>
+		<li class="divider"></li>
+		<li>Table View</li>
 </ul>
 <!-- Breadcrumb END -->
 
 
-<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/></h3>
+
+<!-- Heading -->
+<div class="heading-buttons">
+	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
+	<div class="buttons pull-right">
+		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Threshold</span>			
+		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
+	</div>
+	<div class="clearfix"></div>
+</div>
+<div class="separator bottom"></div>
+<!-- // Heading END -->
+
+
+
 
 
 <div class="innerLR">
 
-	<!-- Tabs -->
-	<div class="relativeWrap">
-		<div class="box-generic">
+
+
+
+
+		<div class="hide" id="threshold_form">
 		
-			<!-- Tabs Heading -->
-			<div class="tabsbar">
-				<ul>					
-					<li class="glyphicons folder_open active"><a href="#tab1-1" data-toggle="tab"><i></i> <spring:message code="mdeforge.public.back.browse.table"/> <strong>(${clusters.size()})</strong></a></li>
-					<li class="glyphicons vector_path_polygon tab-stacked"><a href="#tab1-2" data-toggle="tab"><i></i> <span><spring:message code="mdeforge.public.back.browse.graph"/></span></a></li>					
-				</ul>
-			</div>
-			<!-- // Tabs Heading END -->
 			
-			<div class="tab-content">
+			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">
+	
+				
+				
+				<div class="widget-body">
+					<div class="row-fluid">
+					<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+						<div class="span4">	
+						Threshold						
+							<input type="text" placeholder="Threshold" name="threshold" value="0.5"/>
+						</div>
+						<div class="span4">
+						Computation
+							<input type="text" placeholder="Computation" name="computation" value="1"/>
+						</div>
+						<div class="span4">
+							<button class="btn btn-block btn-success">Set</button>
+						</div>
+					</form>
+												
+						
+					</div>
+				</div>
+			</div>
+		
+		</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+	<!-- Widget -->
+	<div class="widget widget-heading-simple widget-body-simple">
 					
-				<!-- Tab content -->
-				<div class="tab-pane active" id="tab1-1">
-					<h4><spring:message code="mdeforge.public.back.browse.table"/></h4>
+		
+		
+							
+		<div class="widget-body">		
+			<!-- Row -->
+			<div class="row-fluid">
+				<div class="span2">
+					<div class="widget-stats widget-stats-gray widget-stats-1">
+						<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
+						<div class="clearfix"></div>
+						<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
+					</div>
+				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-gray widget-stats-1">
+						<span class="glyphicons riflescope"><i></i><span class="txt">Computation</span></span>
+						<div class="clearfix"></div>
+						<span class="count">${computation}</span>
+					</div>
+				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
+						<div class="clearfix"></div>
+						<span class="count">${clusters.size()}</span>
+					</div>
+				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
+						<div class="clearfix"></div>
+						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
+					</div>
+				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
+						<div class="clearfix"></div>
+						<span class="count">${max}</span>
+					</div>
+				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons buoy"><i></i><span class="txt">Clusters With One Element</span></span>
+						<div class="clearfix"></div>
+						<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
+					</div>
+				</div>
+					
+			</div>
+			<!-- // Row END -->									
+		</div>
 					
 					
 					
-					
-					
-		<div class="relativeWrap">
+		
+	
+	</div>
+	
+	
+	<div class="separator bottom"></div>
+	<!-- // Stats Widgets END -->	
+	
+
+	
+
+
+
+
+
+
+	<!-- Tabs -->
+	<div class="">
+		<div class="">
+		
+		
+			<div class="relativeWrap">
 		<div class="widget widget-tabs widget-tabs-double widget-tabs-vertical row-fluid row-merge">
 		
 			<!-- Tabs Heading -->
-			<div class="widget-head span3">
+			<div class="widget-head span3" style="height: 600px; overflow-y: scroll;">
 				<ul>
 					<c:forEach items="${clusters}"  var="cluster" varStatus="loop">
+						
 						<c:choose>
 						  <c:when test="${loop.index == 0}">
-						    <li class="active">
+						    <li class="active" style="padding:12px;">
 						  </c:when>						 
 						  <c:otherwise>
-						    <li>
+						    <li style="padding:12px;">
 						  </c:otherwise>
 						</c:choose>
 							<a href="#tab-${loop.index}" data-toggle="tab"><i></i><span class="strong">Cluster ${loop.index}</span>
@@ -80,9 +189,11 @@
 									</c:forEach>	
 								</span>
 							</a>
+							
 					</c:forEach>
 							</li>					
 				</ul>
+			
 			</div>
 			<!-- // Tabs Heading END -->
 			
@@ -91,9 +202,38 @@
 				
 					<c:forEach items="${clusters}"  var="cluster" varStatus="loop2">
 						<!-- Tab content -->
-						<div class="tab-pane" id="tab-${loop2.index}">
-							<h4>Cluster  ${loop2.index}</h4>
+						
+						
+						<c:choose>
+							 <c:when test="${loop2.index == 0}">		
+											<div class="tab-pane active" id="tab-${loop2.index}">										    
+							</c:when>						 
+							<c:otherwise>
+										<div class="tab-pane" id="tab-${loop2.index}">						  
+							 </c:otherwise>
+						</c:choose>
+						
+						
+						
+						
+						
 							
+							<div class="title">
+								<div class="row-fluid">
+									<div class="span8">
+										<h3 class="text-primary">Cluster  ${loop2.index}</h3>
+										<span class="muted">
+											<c:forEach items="${cluster.domains}" var="domain">															
+													${domain}
+											</c:forEach>		
+										</span>
+									</div>
+									<div class="span4 text-right">
+										<p class="muted">${cluster.artifacts.size()} Metamodels </p>										
+									</div>
+								</div>
+							</div>
+							<hr/>
 							
 							
 							
@@ -101,23 +241,6 @@
 							
 								<div class="innerLR">
 									<div class="row-fluid innerB">
-										<div class="span7">
-											<!-- Bio -->
-											<div class="widget widget-heading-simple widget-body-white margin-none">
-												<div class="widget-head"><h4 class="heading glyphicons calendar"><i></i>Domain(s) <span></span></h4></div>
-												<div class="widget-body">
-													<ul class="unstyled icons margin-none">		
-														<c:forEach items="${cluster.domains}" var="domain">
-															<li class=""><i></i>${domain}</li>
-														</c:forEach>												
-														
-													</ul>
-												</div>
-											</div>
-											<!-- // Bio END -->
-											
-										
-										</div>
 										<div class="span5">
 											<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
 				
@@ -147,7 +270,7 @@
 																												<!-- List item -->
 														<li>
 															<span>K AVG</span>
-															<span class="count">${cluster.getkAvg()}</span>
+															<span class="count"><fmt:formatNumber value="${cluster.getkAvg()}" maxFractionDigits="2" /></span>
 														</li>
 														<!-- // List item END -->
 																												
@@ -157,6 +280,32 @@
 											
 											
 										</div>
+										<div class="span7">											
+	
+											<div class="widget widget-heading-simple widget-body-gray">
+					
+												<!-- Widget Heading -->
+												<div class="widget-head">
+													<h4 class="heading glyphicons list"><i></i>Domain(s)</h4>
+												</div>
+												<!-- // Widget Heading END -->
+												
+												<div class="widget-body list">
+												
+													<!-- List -->
+													<ul>
+														<c:forEach items="${cluster.domains}" var="domain">															
+															<li>${domain}</li>
+														</c:forEach>																								
+														
+													</ul>
+													<!-- // List END -->
+													
+												</div>
+											</div>
+										</div>
+										
+										
 									</div>
 									<div class="row-fluid">
 										<div class="span12">
@@ -164,8 +313,7 @@
 											<table class="footable table table-striped table-bordered table-white table-primary table-pricing">	
 													<!-- Table heading -->
 													<thead>
-														<tr>							
-															<th data-hide="phone,tablet">Id</th>
+														<tr>																						
 															<th data-class="expand">Name</th>
 															<th data-hide="phone">Description</th>
 															<th data-hide="phone,tablet">Open</th>
@@ -182,9 +330,7 @@
 														<c:forEach items="${cluster.artifacts}" var="artifact">
 															<!-- Table row -->
 															 <tr class="gradeX">
-															
-															
-																<td>${artifact.getId()}</td>
+																																														
 																<td>${artifact.getName()}</td>
 																<td>${artifact.getDescription()}</td>
 																<td class="center">${artifact.getOpen()}</td>
@@ -255,30 +401,12 @@
 			</div>
 		</div>
 	</div>
-					
-					
-					
-					
-					
-					
-					
-					
-				</div>
-				<!-- // Tab content END -->
-				
-				<!-- Tab content -->
-				<div class="tab-pane" id="tab1-2">
-					<h4><spring:message code="mdeforge.public.back.browse.graph"/></h4>
-					
-						<div id="mynetwork"></div>
-					
-					
-					
-				</div>
-				<!-- // Tab content END -->
-								
-				
-			</div>
+		
+		
+		
+		
+		
+
 		</div>
 	</div>
 	<!-- // Tabs END -->
@@ -296,46 +424,3 @@
 
 
 
-<!-- PER GRAFICO DEL CLUSTER - START -->
-<script type="text/javascript">
-    var network;
-    function redrawAll() {
-      network = null;
-      // create an array with nodes
-     ${graph}
-      // create a network
-        var container = document.getElementById('mynetwork');
-      var data = {
-        nodes: nodes,
-        edges: edges
-      };
-      var options = {
-        nodes: {
-            shape: 'dot',
-            radiusMin: 10,
-            radiusMax: 30,
-            fontSize: 12,
-            fontFace: "Tahoma"
-            },
-        edges: {
-            width: 0.15,
-            inheritColor: "from"
-            },
-        tooltip: {
-            delay: 200,
-            fontSize: 12,
-            color: {
-                background: "#fff"
-                }
-            },
-          stabilize: false,
-        smoothCurves: {dynamic:false, type: "continuous"},
-        physics: {barnesHut: {gravitationalConstant: -80000, springConstant: 0.001, springLength: 200}},
-        hideEdgesOnDrag: true
-      };
-
-      network = new vis.Network(container, data, options);
-    }
-    redrawAll()
-</script>
-<!-- PER GRAFICO DEL CLUSTER - END -->
