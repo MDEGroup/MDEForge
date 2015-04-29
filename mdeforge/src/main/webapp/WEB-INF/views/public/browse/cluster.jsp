@@ -344,10 +344,8 @@
 																  <td></td>
 																  </c:otherwise>
 																</c:choose>
-																<td class="right actions">
-																	<a href="#" class="btn-action glyphicons eye_open btn-default"><i></i></a>
-																	<a href="#" class="btn-action glyphicons pencil btn-success"><i></i></a>
-																	<a href="#" class="btn-action glyphicons remove_2 btn-danger"><i></i></a>
+																<td class="center actions">
+																	<a href="#" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
 																</td>
 															</tr>
 															<!-- // Table row END -->
@@ -363,6 +361,39 @@
 													
 													
 												</div>										
+											</div>
+											<hr>
+											<div class="row-fluid">
+												<div class="span12">
+													<!-- Table -->
+													<table class="table table-bordered table-white">
+													
+													    <!-- Table heading -->
+													    <thead>
+													        <tr>
+													            <th>Artifact</th>
+													            <th class="center">Similarity Value</th>
+													            <th>Artifact</th>
+													        </tr>
+													    </thead>
+													    <!-- // Table heading END -->
+													
+													    <!-- Table body -->
+													    <tbody>
+															<c:forEach items="${cluster.relations}" var="relation">
+													        <!-- Table row -->
+													        <tr>
+													            <td>${relation.getFromArtifact().getName()}</td>
+													            <td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="2" /></span></td>
+													            <td>${relation.getToArtifact().getName()}</td>
+													        </tr>
+													        <!-- // Table row END -->
+															</c:forEach>
+													       
+													
+													</table>
+													<!-- // Table END -->
+												</div>
 											</div>
 										</div>
 										
