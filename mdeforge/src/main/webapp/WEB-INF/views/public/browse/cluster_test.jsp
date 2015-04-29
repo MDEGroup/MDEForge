@@ -73,11 +73,12 @@
 				shape : 'dot',
 				radiusMin : 10,
 				radiusMax : 30,
-				fontSize : 12,
+				fontSize : 40,
 				fontFace : "Tahoma"
 			},
 			edges : {
 				width : 0.15,
+				fontSize : 40,
 				inheritColor : "from"
 			},
 			tooltip : {
