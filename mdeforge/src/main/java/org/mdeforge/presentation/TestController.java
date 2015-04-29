@@ -56,11 +56,10 @@ public class TestController {
 	}
 	
 	
-	@RequestMapping(value = "/editor", method = { RequestMethod.GET })
+	@RequestMapping(value = "/temp", method = { RequestMethod.GET })
 	public String editor(org.springframework.ui.Model model) {
-		
-		
-		return "test.editor";
+		ecoreMetamodelService.plotHierarchicalCluster();
+		return "welcome";
 	}
 	
 }

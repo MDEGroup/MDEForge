@@ -146,12 +146,8 @@ public class PublicController {
 		/*
 		 * GRAPH
 		 */
-		String graph = null;
-		double [] d = {0.5,0.4,0.3,0.2,0.1};
-		graph = ecoreMetamodelService.getHierarchicalClusterGraph(d);
-		model.addAttribute("graph", graph);
-				
-		return "public.browse.cluster.test_hierarchical";
+		ecoreMetamodelService.plotHierarchicalCluster();
+		return "";
 	}
 	
 
