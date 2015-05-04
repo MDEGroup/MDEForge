@@ -433,6 +433,23 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		return project;
 	}
 
+	@Override
+	public T findOneByName(String name) throws BusinessException {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		
+		Criteria c3 = Criteria.where("name").is(name);
+
+		if(persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c2,c3));
+		}
+		query.addCriteria(c3);
+		T project = operations.findOne(query, persistentClass);
+		if (project == null)
+			throw new BusinessException();
+		return project;
+	}
 
 	@Override
 	public List<Metric> findMetricForArtifact(Artifact a) {

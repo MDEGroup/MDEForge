@@ -25,5 +25,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	T findOneByOwner(String idArtifact, User idUser);
 	T findOneById(String idArtifact, User idUser)
 			throws BusinessException;
+	T findOneByName(String artifactName)
+			throws BusinessException;
 	List<Metric> findMetricForArtifact(Artifact a);
 }

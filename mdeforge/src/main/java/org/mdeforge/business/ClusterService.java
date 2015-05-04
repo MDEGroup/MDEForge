@@ -12,5 +12,8 @@ public interface ClusterService {
 //	String getSimilarityGraph(double threshold, int computation) throws BusinessException;
 	String getSimilarityGraph(double treshold) throws BusinessException;
 //	String getHierarchicalClusterGraph(double[] height);
-	void plotHierarchicalCluster();
+	com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster() throws BusinessException;
+	void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster);
+	List<com.apporiented.algorithm.clustering.Cluster> getClustersWithThreshold(com.apporiented.algorithm.clustering.Cluster c, double threshold) throws BusinessException;
+	List<Cluster> getRealClustersFromHierarchicalCluster(List<com.apporiented.algorithm.clustering.Cluster> clusterList);
 }

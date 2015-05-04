@@ -307,7 +307,6 @@ class Injector {
 			e.printStackTrace();
 		}
 		
-		//System.out.println("\t\tSingle injection of "+ATLFile+" executed");
 		return ATLFile+".xmi";
 	}
 }

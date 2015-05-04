@@ -139,16 +139,4 @@ public class PublicController {
 		
 		return "public.browse.cluster.graph";
 	}
-	
-	@RequestMapping(value = "/browse/cluster_test_hierarchical", method = { RequestMethod.GET })
-	public String testHierachival(Model model) {
-		
-		/*
-		 * GRAPH
-		 */
-		ecoreMetamodelService.plotHierarchicalCluster();
-		return "";
-	}
-	
-
 }

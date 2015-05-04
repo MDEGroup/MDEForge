@@ -53,13 +53,5 @@ public class TestController {
 		model.addAttribute("noCluster", noCluster);
 		
 		return "test.cluster";
-	}
-	
-	
-	@RequestMapping(value = "/temp", method = { RequestMethod.GET })
-	public String editor(org.springframework.ui.Model model) {
-		ecoreMetamodelService.plotHierarchicalCluster();
-		return "welcome";
-	}
-	
+	}	
 }

@@ -399,7 +399,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			result += "];\n";
 			result += "edges = [\n";
 			List<SimilarityRelation> relations = similarityRelationService.findAll(threshold);
-			System.out.println(relations.size());
 			int size = relations.size();
 			for (SimilarityRelation relation : relations) {
 				Double d = (relation.getValue()*10);
@@ -653,7 +652,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	
 	
 	@Override
-	public void plotHierarchicalCluster() {
+	public com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster() throws BusinessException {
 		String [] names = getNames();
 		double[][] distances = getSimilarityMatrix();
 //		try {
@@ -669,28 +668,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 //			// TODO Auto-generated catch block
 //			e1.printStackTrace();
 //		}
-		
-		
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
 		com.apporiented.algorithm.clustering.Cluster cluster = alg.performClustering(distances, names,
 		    new SingleLinkageStrategy());
-		
-		DendrogramPanel dp = new DendrogramPanel();
-		dp.setModel(cluster);
-		int w = 10000;
-	    int h = 10000;
-	    dp.setSize(w, h);
-		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-	    Graphics2D g = bi.createGraphics();
-	    dp.paint(g);
-	    dp.print(g);
-	    File outputfile = new File("/Users/juridirocco/Desktop/tempForge/JJJJ.jpg");
-	    try {
-			ImageIO.write(bi, "jpg", outputfile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    return cluster;
 	}
 	
 	private String[] getNames() {
@@ -718,12 +699,74 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				if (srel != null)
 					result[i][j] = 1-srel.getValue();
 				else {
-					System.out.println(emms1.get(i).getId());
-					System.out.println(emms2.get(i).getId());
 					result[i][j] = 0;
 				}
 			}
 		}
+		return result;
+	}
+	@Override
+	public void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster) {
+		DendrogramPanel dp = new DendrogramPanel();
+		dp.setModel(cluster);
+		int w = 10000;
+	    int h = 10000;
+	    dp.setSize(w, h);
+		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+	    Graphics2D g = bi.createGraphics();
+	    dp.paint(g);
+	    dp.print(g);
+	    File outputfile = new File("/Users/juridirocco/Desktop/tempForge/JJJJ.jpg");
+	    try {
+			ImageIO.write(bi, "jpg", outputfile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			throw new BusinessException();
+		}
+		
+	}
+	@Override
+	public List<Cluster> getRealClustersFromHierarchicalCluster(List<com.apporiented.algorithm.clustering.Cluster> clusterList) {
+		List<Cluster> result = new ArrayList<Cluster>();
+		for (com.apporiented.algorithm.clustering.Cluster cluster : clusterList) {
+			Cluster myCluster = new Cluster();
+			List<com.apporiented.algorithm.clustering.Cluster> leaves = getClusterLeaf(cluster);
+			for (com.apporiented.algorithm.clustering.Cluster leaf : leaves) {
+				EcoreMetamodel emm = findOneByName(leaf.getName());
+				myCluster.getArtifacts().add(emm);
+				for (Property property : emm.getProperties())
+					if (property.getName().toLowerCase().contains("domain") || 
+							property.getName().toLowerCase().contains("domains"))
+						myCluster.getDomains().add(property.getValue());
+//				myCluster.getRelations().addAll(similarityRelationService.findByEcoreMetamodel(emm,
+//						(cluster.getDistance()!=null)?cluster.getDistance():0));
+			}
+			result.add(myCluster);
+		}
+		return result;
+	}
+	private List<com.apporiented.algorithm.clustering.Cluster> getClusterLeaf(com.apporiented.algorithm.clustering.Cluster cluster) {
+		List<com.apporiented.algorithm.clustering.Cluster> result = new ArrayList<com.apporiented.algorithm.clustering.Cluster>();
+		if (cluster.isLeaf())
+			result.add(cluster);
+		else 
+			for (com.apporiented.algorithm.clustering.Cluster c : cluster.getChildren()) {
+				result.addAll(getClusterLeaf(c));
+			}
+		return result;
+	}
+	@Override
+	public List<com.apporiented.algorithm.clustering.Cluster> getClustersWithThreshold(
+			com.apporiented.algorithm.clustering.Cluster c, double threshold) throws BusinessException {
+		List<com.apporiented.algorithm.clustering.Cluster> result = new ArrayList<com.apporiented.algorithm.clustering.Cluster>();
+		if(c.getDistance()!=null && c.getDistance()<=threshold)
+			result.add(c);
+		else if (c.isLeaf())
+			result.add(c);
+		else 
+			for (com.apporiented.algorithm.clustering.Cluster cluster : c.getChildren()) {
+				result.addAll(getClustersWithThreshold(cluster, threshold));
+			}
 		return result;
 	}
 }
