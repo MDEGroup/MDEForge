@@ -5,7 +5,7 @@ import java.util.List;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 
-public interface CosineSimilarityRelationService extends CRUDRelationService<CosineSimilarityRelation>{
+public interface CosineSimilarityRelationService extends ValuedRelationService<CosineSimilarityRelation>{
 	List<CosineSimilarityRelation> findAll(double threshold) throws BusinessException;
 	
 	List<CosineSimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) throws BusinessException;

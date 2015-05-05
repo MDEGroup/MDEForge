@@ -1,13 +1,5 @@
 package org.mdeforge.business.model;
 
-public class CosineSimilarityRelation extends Relation {
-	private double value;
+public class CosineSimilarityRelation extends ValuedRelation {
 
-	public double getValue() {
-		return value;
-	}
-
-	public void setValue(double value) {
-		this.value = value;
-	}
 }

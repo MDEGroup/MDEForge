@@ -51,6 +51,7 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
+import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -64,6 +65,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
 import org.mdeforge.emf.metric.Container;
@@ -89,14 +91,16 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
+	@Autowired
+	private RelationService relationService;
 //	@Autowired
 //	private SimilarityRelationService similarityRelationService;
 //	@Autowired
 //	private DiceSimilarityRelationService diceSimilarityRelationService;
 //	@Autowired
 //	private org.mdeforge.business.MetamodelSimilarityRelationService metamodelSimilarityRelationService;
-	@Autowired
-	private ContainmentRelationService containmentRelationService;
+//	@Autowired
+//	private ContainmentRelationService containmentRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 	@Override
@@ -317,17 +321,17 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		msr.setFromArtifact(art1);
 		msr.setToArtifact(art2);
 		msr.setValue(sim_score);
-		containmentRelationService.save(msr);
+		relationService.save(msr);
 		return sim_score;
 	}
 
 	
 	@Override
-	public String getSimilarityGraph(double threshold) throws BusinessException {
+	public String getSimilarityGraph(double threshold, ValuedRelationService valuedRelationService) throws BusinessException {
 		try {
 			
 			String result = "nodes = [\n";
-			List<Cluster> clusterList = getSimilarityClusters(threshold);
+			List<Cluster> clusterList = getSimilarityClusters(threshold, valuedRelationService);
 			HashMap	<String, Integer>  hm = new HashMap<String, Integer>();
 			AtomicInteger i = new AtomicInteger();
 			AtomicInteger j = new AtomicInteger();
@@ -347,9 +351,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			result = result.substring(0,result.length()-2);
 			result += "];\n";
 			result += "edges = [\n";
-			List<ContainmentRelation> relations = containmentRelationService.findAll(threshold);
+			List<ValuedRelation> relations = valuedRelationService.findAll(threshold);
 			int size = relations.size();
-			for (ContainmentRelation relation : relations) {
+			for (ValuedRelation relation : relations) {
 				Double d = (relation.getValue()*10);
 				String s = relation.getValue() + "";
 				s=(s.length()<5)?s:s.substring(0,5);
@@ -366,11 +370,11 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 	
 	@Override
-	public List<Cluster> getSimilarityClusters(double threshold) throws BusinessException {
+	public List<Cluster> getSimilarityClusters(double threshold, ValuedRelationService valuedRelationService) throws BusinessException {
 		List<Cluster> clusterList = new ArrayList<Cluster>();
-		List<ContainmentRelation> similarityRelations = containmentRelationService.findAll(threshold);
+		List<ValuedRelation> similarityRelations = valuedRelationService.findAll(threshold);
 		Map<String,Cluster> tempHash = new HashMap<String,Cluster>();
-		for (ContainmentRelation similarityRelation : similarityRelations) {
+		for (ValuedRelation similarityRelation : similarityRelations) {
 			String fromId = similarityRelation.getFromArtifact().getId();
 			String toId = similarityRelation.getToArtifact().getId();
 			if(!tempHash.containsKey(fromId) && 
@@ -490,11 +494,11 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 
 	@Override
-	public List<Cluster> getContainmentClusters(double threshold) throws BusinessException {
+	public List<Cluster> getContainmentClusters(double threshold, ValuedRelationService valuedRelationService) throws BusinessException {
 		List<Cluster> clusterList = new ArrayList<Cluster>();
-		List<ContainmentRelation> similarityRelations = containmentRelationService.findAll(threshold);
+		List<ValuedRelation> similarityRelations = valuedRelationService.findAll(threshold);
 		Map<String,Cluster> tempHash = new HashMap<String,Cluster>();
-		for (ContainmentRelation similarityRelation : similarityRelations) {
+		for (ValuedRelation similarityRelation : similarityRelations) {
 			String fromId = similarityRelation.getFromArtifact().getId();
 			String toId = similarityRelation.getToArtifact().getId();
 			if(!tempHash.containsKey(fromId) && 
@@ -601,9 +605,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	
 	
 	@Override
-	public com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster() throws BusinessException {
+	public com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster(ValuedRelationService valuedRelationService) throws BusinessException {
 		String [] names = getNames();
-		double[][] distances = getSimilarityMatrix();
+		double[][] distances = getSimilarityMatrix(valuedRelationService);
 //		try {
 //			PrintWriter pw = new PrintWriter(new File (basePath + "j.txt"));
 //			for (double[] ds : distances) {
@@ -630,10 +634,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			result[i] = emms.get(i).getName();
 		return result;
 	}
-	private double[][]getSimilarityMatrix(){
+	private double[][]getSimilarityMatrix(ValuedRelationService valuedRelationService){
 		List<EcoreMetamodel> emms1 = findAllPublic();
 		List<EcoreMetamodel> emms2 = emms1;
-		List<ContainmentRelation> sr = containmentRelationService.findAll();
+		List<ContainmentRelation> sr = valuedRelationService.findAll();
 		HashMap<String, ContainmentRelation> map = new HashMap<String, ContainmentRelation>();
 		for (ContainmentRelation similarityRelation : sr) {
 			map.put(similarityRelation.getToArtifact().getId()
@@ -655,7 +659,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return result;
 	}
 	@Override
-	public void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster) {
+	public void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster, ValuedRelationService valuedRelationService) {
 		DendrogramPanel dp = new DendrogramPanel();
 		dp.setModel(cluster);
 		int w = 10000;
@@ -675,7 +679,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		
 	}
 	@Override
-	public List<Cluster> getRealClustersFromHierarchicalCluster(List<com.apporiented.algorithm.clustering.Cluster> clusterList) {
+	public List<Cluster> getRealClustersFromHierarchicalCluster(List<com.apporiented.algorithm.clustering.Cluster> clusterList, ValuedRelationService valuedRelationService) {
 		List<Cluster> result = new ArrayList<Cluster>();
 		for (com.apporiented.algorithm.clustering.Cluster cluster : clusterList) {
 			Cluster myCluster = new Cluster();
@@ -706,7 +710,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 	@Override
 	public List<com.apporiented.algorithm.clustering.Cluster> getClustersWithThreshold(
-			com.apporiented.algorithm.clustering.Cluster c, double threshold) throws BusinessException {
+			com.apporiented.algorithm.clustering.Cluster c, double threshold, ValuedRelationService valuedRelationService) throws BusinessException {
 		List<com.apporiented.algorithm.clustering.Cluster> result = new ArrayList<com.apporiented.algorithm.clustering.Cluster>();
 		if(c.getDistance()!=null && c.getDistance()<=threshold)
 			result.add(c);
@@ -714,7 +718,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			result.add(c);
 		else 
 			for (com.apporiented.algorithm.clustering.Cluster cluster : c.getChildren()) {
-				result.addAll(getClustersWithThreshold(cluster, threshold));
+				result.addAll(getClustersWithThreshold(cluster, threshold, valuedRelationService));
 			}
 		return result;
 	}

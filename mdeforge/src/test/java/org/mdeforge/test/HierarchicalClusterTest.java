@@ -53,10 +53,10 @@ public class HierarchicalClusterTest {
 	@Ignore
 	@Test
 	public void testHC() {
-		Cluster hc = ecoreMetamodelService.getHierarchicalCluster();
-		List<Cluster> clusterList = ecoreMetamodelService.getClustersWithThreshold(hc, threshold);
+		Cluster hc = ecoreMetamodelService.getHierarchicalCluster(similarityRelationService);
+		List<Cluster> clusterList = ecoreMetamodelService.getClustersWithThreshold(hc, threshold, similarityRelationService);
 		List<org.mdeforge.business.model.Cluster> myClusterList = ecoreMetamodelService
-				.getRealClustersFromHierarchicalCluster(clusterList);
+				.getRealClustersFromHierarchicalCluster(clusterList, similarityRelationService);
 		for (org.mdeforge.business.model.Cluster cluster : myClusterList) {
 			System.out.println("_____________");
 			System.out.println("\n Art");

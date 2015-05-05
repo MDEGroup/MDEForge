@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +19,16 @@ public class TestController {
 	
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
+	private SimilarityRelationService similarityRelationService;
 	
 	@RequestMapping(value = "/clusterGraph", method = { RequestMethod.GET })
 	public String clusterGraph(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
 		String graph = null;
 		if(computation == 1)
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, similarityRelationService);
 		else
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, similarityRelationService);
 		model.addAttribute("graph", graph);
 		return "test.cluster.graph";
 	}
@@ -33,9 +36,9 @@ public class TestController {
 	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		if(computation == 1)
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
 		else 
-			clusters = ecoreMetamodelService.getContainmentClusters(threshold);
+			clusters = ecoreMetamodelService.getContainmentClusters(threshold, similarityRelationService);
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;

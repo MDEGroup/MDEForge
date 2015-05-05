@@ -3,8 +3,13 @@ package org.mdeforge.presentation.frontend;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.ContainmentRelationService;
+import org.mdeforge.business.CosineSimilarityRelationService;
+import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +25,14 @@ public class PublicController {
 
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-
-	
-	
+	@Autowired
+	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private CosineSimilarityRelationService cosineSimilarityRelationService;
+	@Autowired
+	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public String index() {			
 		return "public.index";
@@ -57,12 +67,20 @@ public class PublicController {
 		 * TABLE
 		 */
 		List<Cluster> clusters = new ArrayList<Cluster>();
-		if(computation == 1){
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
-		}else{
-			clusters = ecoreMetamodelService.getContainmentClusters(threshold);			
+		switch (computation) {
+		case 1:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			break;
+		case 2:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			break;
+		case 3:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);	
+			break;		
+		case 4:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
+			break;
 		}
-		
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
@@ -99,20 +117,39 @@ public class PublicController {
 		 * GRAPH
 		 */
 		String graph = null;
-		if(computation == 1)
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
-		else
-			graph = ecoreMetamodelService.getSimilarityGraph(threshold);
+		switch (computation) {
+		case 1:
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, similarityRelationService);
+			break;
+		case 2:
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, containmentRelationService);
+			break;
+		case 3:
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, cosineSimilarityRelationService);	
+			break;		
+		case 4:
+			graph = ecoreMetamodelService.getSimilarityGraph(threshold, diceSimilarityRelationService);
+			break;
+		}
 		model.addAttribute("graph", graph);
 		
 		/*
 		 * TABLE
 		 */
 		List<Cluster> clusters = new ArrayList<Cluster>();
-		if(computation == 1){
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
-		}else{
-			clusters = ecoreMetamodelService.getContainmentClusters(threshold);			
+		switch (computation) {
+		case 1:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			break;
+		case 2:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			break;
+		case 3:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);	
+			break;		
+		case 4:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
+			break;
 		}
 		
 		int maxCluster = 0;

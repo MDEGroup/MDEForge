@@ -11,13 +11,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 @Service
-public class ContainmentRelationServiceImpl extends CRUDRelationServiceImpl<ContainmentRelation> implements ContainmentRelationService {
+public class ContainmentRelationServiceImpl extends ValuedRelationServiceImpl<ContainmentRelation> implements ContainmentRelationService {
 
 	@Override
 	public List<ContainmentRelation> findAll(double threshold) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c2 = Criteria.where("value").gt(threshold);
+		Criteria c2 = Criteria.where("value").gte(threshold);
 		Criteria c1 = Criteria.where("_class").is(ContainmentRelation.class.getCanonicalName());
 		query.addCriteria(c2.andOperator(c1));
 		return n.find(query, persistentClass);

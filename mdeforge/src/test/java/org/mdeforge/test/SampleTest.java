@@ -75,7 +75,7 @@ public class SampleTest {
 		try {
 			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/result2.txt");
 			for (double d : testArray) {
-				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d);
+				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d, similarityRelationService);
 				int maxCluster = 0;
 				double average = 0;
 				int count = 0;

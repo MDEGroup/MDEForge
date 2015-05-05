@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 @Service
-public class DiceSimilarityRelationServiceImpl extends CRUDRelationServiceImpl<DiceSimilarityRelation> implements DiceSimilarityRelationService {
+public class DiceSimilarityRelationServiceImpl extends ValuedRelationServiceImpl<DiceSimilarityRelation> implements DiceSimilarityRelationService {
 	@Override
 	public List<DiceSimilarityRelation> findAll(double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);

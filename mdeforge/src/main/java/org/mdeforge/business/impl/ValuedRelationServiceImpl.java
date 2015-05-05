@@ -4,17 +4,19 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.mdeforge.business.CosineSimilarityRelationService;
+import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.ValuedRelation;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 @Service
-public class CosineSimilarityRelationServiceImpl extends ValuedRelationServiceImpl<CosineSimilarityRelation> implements CosineSimilarityRelationService {
+public abstract class ValuedRelationServiceImpl <T extends ValuedRelation> extends CRUDRelationServiceImpl<T> implements ValuedRelationService<T> {
 	@Override
-	public List<CosineSimilarityRelation> findAll(double threshold) {
+	public List<T> findAll(double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria.where("value").gte(threshold);
@@ -42,7 +44,7 @@ public class CosineSimilarityRelationServiceImpl extends ValuedRelationServiceIm
 //		return n.find(query, persistentClass);
 //	}
 	@Override
-	public List<CosineSimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) {
+	public List<T> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
@@ -54,7 +56,7 @@ public class CosineSimilarityRelationServiceImpl extends ValuedRelationServiceIm
 		return n.find(query, persistentClass);
 	}
 	@Override
-	public List<CosineSimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold, int computation) {
+	public List<T> findByEcoreMetamodel(EcoreMetamodel emm, double threshold, int computation) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
