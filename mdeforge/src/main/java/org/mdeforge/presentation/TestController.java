@@ -8,6 +8,7 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.model.Cluster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,4 +63,32 @@ public class TestController {
 		return "welcome";
 	}
 	
+	@RequestMapping(value = "/cluster_test", method = { RequestMethod.GET })
+	public String clusterTest(Model model, 
+			@RequestParam (value="threshold", required=true, defaultValue="0.3") Double threshold, 
+			@RequestParam (value="computation", required=true, defaultValue="1") int computation
+			) {
+		List<Cluster> clusters = new ArrayList<Cluster>();
+		if(computation == 1)
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold);
+		else 
+			clusters = ecoreMetamodelService.getContainmentClusters(threshold);
+		int maxCluster = 0;
+		double average = 0;
+		int count = 0;
+		int noCluster = 0;
+		for (Cluster cluster : clusters) {
+			maxCluster = (maxCluster < cluster.getArtifacts().size())?cluster.getArtifacts().size():maxCluster;
+			count += cluster.getArtifacts().size();
+			if(cluster.getArtifacts().size()==1)
+				noCluster++;
+		}
+		average =  (count*1.0)/(clusters.size()*1.0);
+		model.addAttribute("clusters", clusters);
+		model.addAttribute("average", average);
+		model.addAttribute("max", maxCluster);
+		model.addAttribute("noCluster", noCluster);
+		
+		return "public.browse.test";
+	}
 }
