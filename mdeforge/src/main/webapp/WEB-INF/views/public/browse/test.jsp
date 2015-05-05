@@ -26,15 +26,19 @@
 	
 	
 	<div class="row-fluid">
-			<div class="span12">
-									
-									<h3>
+				<div class="span2">
+						<h3>
 										
 										<c:forEach items="${cluster.domains}" var="domain">															
 															${domain} | 
 														</c:forEach>	
 														
 									</h3>		
+				</div>
+		
+			<div class="span6">
+									
+								
 				<table class="footable table table-striped table-bordered table-white table-primary table-pricing">	
 													<!-- Table heading -->
 										<thead>
@@ -85,7 +89,57 @@
 												</table>
 													
 													
-												</div>										
+												</div>	
+												
+												
+												
+												
+												
+												
+												
+												<div class="span4">
+													<!-- Table -->
+													<table class="table table-bordered table-white">
+													
+													    <!-- Table heading -->
+													    <thead>
+													        <tr>
+													            <th>Artifact</th>
+													            <th class="center">Similarity Value</th>
+													            <th>Artifact</th>
+													        </tr>
+													    </thead>
+													    <!-- // Table heading END -->
+													
+													    <!-- Table body -->
+													    <tbody>
+															<c:forEach items="${cluster.relations}" var="relation">
+													        <!-- Table row -->
+													        <tr>
+													            <td>${relation.getFromArtifact().getName()}</td>
+													            <td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="2" /></span></td>
+													            <td>${relation.getToArtifact().getName()}</td>
+													        </tr>
+													        <!-- // Table row END -->
+															</c:forEach>
+													       
+													
+													</table>
+													<!-- // Table END -->
+												</div>
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+																					
 											</div>
 											<hr>
 	
