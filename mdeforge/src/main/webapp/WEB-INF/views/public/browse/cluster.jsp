@@ -58,7 +58,7 @@
 					<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 						<div class="span4">	
 						Threshold						
-							<input type="text" placeholder="Threshold" name="threshold" value="0.5"/>
+							<input type="text" placeholder="Threshold" name="threshold" value="0.4"/>
 						</div>
 						<div class="span4">
 						Computation
@@ -103,13 +103,7 @@
 						<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 					</div>
 				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-gray widget-stats-1">
-						<span class="glyphicons riflescope"><i></i><span class="txt">Computation</span></span>
-						<div class="clearfix"></div>
-						<span class="count">${computation}</span>
-					</div>
-				</div>
+				
 				<div class="span2">
 					<div class="widget-stats widget-stats-1">
 						<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
@@ -121,7 +115,7 @@
 					<div class="widget-stats widget-stats-1">
 						<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
+						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="3" /></span>
 					</div>
 				</div>
 				<div class="span2">
@@ -138,7 +132,13 @@
 						<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
 					</div>
 				</div>
-					
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
+						<div class="clearfix"></div>
+						<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
+					</div>
+				</div>	
 			</div>
 			<!-- // Row END -->									
 		</div>
@@ -189,6 +189,7 @@
 									</c:forEach>	
 								</span>
 							</a>
+							${cluster.getArtifacts().size()}
 							
 					</c:forEach>
 							</li>					
@@ -398,30 +399,6 @@
 										</div>
 										
 									</div>
-									
-							
-							
-									
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
-							
 						</div>
 						<!-- // Tab content END -->
 					</c:forEach>

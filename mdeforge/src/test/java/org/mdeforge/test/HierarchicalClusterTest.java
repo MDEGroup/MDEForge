@@ -1,86 +1,130 @@
 package org.mdeforge.test;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mdeforge.business.CosineSimilarityRelationService;
+import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
+import org.mdeforge.business.model.CosineSimilarityRelation;
+import org.mdeforge.business.model.DiceSimilarityRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.search.ResourceSerializer;
+import org.mdeforge.business.search.SimilarityMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
+
 import com.apporiented.algorithm.clustering.Cluster;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-								   "file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml"})
+@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml" })
 public class HierarchicalClusterTest {
 
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-	
+
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
 	private final double threshold = 0.7;
+
+	@Ignore
 	@Test
 	public void testHC() {
 		Cluster hc = ecoreMetamodelService.getHierarchicalCluster();
 		List<Cluster> clusterList = ecoreMetamodelService.getClustersWithThreshold(hc, threshold);
-		List<org.mdeforge.business.model.Cluster> myClusterList = ecoreMetamodelService.getRealClustersFromHierarchicalCluster(clusterList);
+		List<org.mdeforge.business.model.Cluster> myClusterList = ecoreMetamodelService
+				.getRealClustersFromHierarchicalCluster(clusterList);
 		for (org.mdeforge.business.model.Cluster cluster : myClusterList) {
 			System.out.println("_____________");
 			System.out.println("\n Art");
-			for (org.mdeforge.business.model.Artifact art: cluster.getArtifacts()) {
+			for (org.mdeforge.business.model.Artifact art : cluster.getArtifacts()) {
 				System.out.println(art.getName());
 			}
 			System.out.println("\n Rel");
-			for (org.mdeforge.business.model.Relation art: cluster.getRelations()) {
+			for (org.mdeforge.business.model.Relation art : cluster.getRelations()) {
 				System.out.println(art.getFromArtifact().getName() + "_" + art.getToArtifact().getName());
 			}
 		}
-		
+
+	}
+	@Ignore
+	@Test
+	public void extractContent() {
+		EcoreMetamodel emm1 = ecoreMetamodelService.findOne("552bbd40d4c659da8e19eead");
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(emm1)),
+				true);
+
+		EcoreMetamodel emm2 = ecoreMetamodelService.findOne("552bbd2fd4c659da8e19ee19");
+		ResourceSet load_resourceSet2 = new ResourceSetImpl();
+		load_resourceSet2.getResourceFactoryRegistry().getExtensionToFactoryMap()
+				.put("*", new XMIResourceFactoryImpl());
+		Resource load_resource2 = load_resourceSet2.getResource(URI.createURI(gridFileMediaService.getFilePath(emm2)),
+				true);
+
+		String test = ResourceSerializer.serialize(load_resource);
+		String test2 = ResourceSerializer.serialize(load_resource2);
+		System.out.println(test);
+		System.out.println(test2);
+		SimilarityMethods cs = new SimilarityMethods();
+		double sim_score = cs.cosineSimilarityScore(test, test2);
+		System.out.println("Vediamo: "+ sim_score );
+	}
+	@Ignore
+	@Test
+	public void similaritt() {
+		 
+		System.out.println("###START");
+		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
+		EcoreMetamodel [] ecoreMMArray = ecoreMMlist.toArray(new EcoreMetamodel[ecoreMMlist.size()]);
+		for (int i =0; i < ecoreMMArray.length-1; i++) 
+			for (int j = i+1; j <ecoreMMArray.length; j++) {
+				System.out.println(i + "_" + j);
+				ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
+			}
+		System.out.println("Stop");
+	 }
+	
+	@Test
+	public void exportDiceSimilarity() {
+		try {
+			PrintWriter pw = new PrintWriter(new File(basePath + "cosibeDistance.txt"));
+			List<CosineSimilarityRelation> dsrl = cosineSimilarityRelationService.findAll();
+			int i = 1;
+			for (CosineSimilarityRelation diceSimilarityRelation : dsrl){ 
+				pw.println(diceSimilarityRelation.getValue());
+				System.out.println(i);
+				i++;
+			}
+			pw.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	
-//	public static void main(String[] args) {
-//		String[] names = new String[] { "O1", "O2", "O3", "O4", "O5", "O6" };
-//		double[][] distances = new double[][] { 
-//		    { 0, 1, 9, 7, 11, 14 },
-//		    { 1, 0, 4, 3, 8, 10 }, 
-//		    { 9, 4, 0, 9, 2, 8 },
-//		    { 7, 3, 9, 0, 6, 13 }, 
-//		    { 11, 8, 2, 6, 0, 10 },
-//		    { 14, 10, 8, 13, 10, 0 }};
-//
-//		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
-//		Cluster cluster = alg.performClustering(distances, names,
-//		    new SingleLinkageStrategy());
-//		
-//		DendrogramPanel dp = new DendrogramPanel();
-//		dp.setModel(cluster);
-//		int w = 1000;
-//	    int h = 1000;
-//	    dp.setSize(w, h);
-//		BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-//	    Graphics2D g = bi.createGraphics();
-//	    dp.paint(g);
-//	    dp.print(g);
-//	    File outputfile = new File("/Users/juridirocco/Desktop/tempForge/asd.jpx");
-//	    try {
-//			ImageIO.write(bi, "jpg", outputfile);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
-	
-	
-
 }
