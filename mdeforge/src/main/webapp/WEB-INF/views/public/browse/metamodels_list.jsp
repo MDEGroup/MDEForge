@@ -36,6 +36,7 @@
 						<th>Open</th>
 						<th>Created</th>
 						<th>Modified</th>
+						<th>Action</th>
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -51,6 +52,9 @@
 						<td class="center">${ecoreMetamodel.getOpen()}</td>
 						<td class="center">${ecoreMetamodel.getCreated()}</td>
 						<td class="center">${ecoreMetamodel.getModified()}</td>
+						<td class="center actions">
+								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
+						</td>
 					</tr>
 					<!-- // Table row END -->
 					</c:forEach>

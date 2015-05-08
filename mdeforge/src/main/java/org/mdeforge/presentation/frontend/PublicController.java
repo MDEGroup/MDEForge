@@ -7,6 +7,7 @@ import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
@@ -33,18 +34,30 @@ public class PublicController {
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Autowired
 	private DiceSimilarityRelationService diceSimilarityRelationService;
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
+	
+	
+	
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public String index() {			
 		return "public.index";
 	}
 	
-	
-	
-	
-	
 	@RequestMapping(value = "/browse/dashboard", method = { RequestMethod.GET })
 	public String dashboard() {			
 		return "public.browse.dashboard";
+	}
+	
+	@RequestMapping(value = "/browse/metamodel_details", method = { RequestMethod.GET })
+	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {	
+		
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOne(metamodel_id);
+		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
+//		String filePath = gridFileMediaService.getFilePath(ecoreMetamodel);
+//		System.out.println(filePath);
+		
+		return "public.browse.metamodel_details";
 	}
 	
 	@RequestMapping(value = "/browse/metamodels_list", method = { RequestMethod.GET })

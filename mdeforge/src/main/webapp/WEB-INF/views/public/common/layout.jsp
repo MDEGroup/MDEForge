@@ -33,6 +33,8 @@
 	<!-- PrettyPhoto -->
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
+    
     <!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -141,6 +143,10 @@
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/DT_bootstrap.js"></script>
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.js"></script>
+
 	
 	<!-- Tables Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
