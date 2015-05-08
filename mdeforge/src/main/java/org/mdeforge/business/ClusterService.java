@@ -13,7 +13,7 @@ public interface ClusterService {
 	String getSimilarityGraph(double treshold, ValuedRelationService valuedRelationService) throws BusinessException;
 //	String getHierarchicalClusterGraph(double[] height);
 	com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster(ValuedRelationService valuedRelationService) throws BusinessException;
-	void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster, ValuedRelationService valuedRelationService);
+	void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster, ValuedRelationService valuedRelationService) throws BusinessException;
 	List<com.apporiented.algorithm.clustering.Cluster> getClustersWithThreshold(com.apporiented.algorithm.clustering.Cluster c, double threshold, ValuedRelationService valuedRelationService) throws BusinessException;
 	List<Cluster> getRealClustersFromHierarchicalCluster(List<com.apporiented.algorithm.clustering.Cluster> clusterList, ValuedRelationService valuedRelationService);
 }

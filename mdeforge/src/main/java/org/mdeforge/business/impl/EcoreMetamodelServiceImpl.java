@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
+import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
@@ -614,7 +615,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 //			}
 //			pw.close();
 //		} catch (FileNotFoundException e1) {
-//			// TODO Auto-generated catch block
 //			e1.printStackTrace();
 //		}
 		ClusteringAlgorithm alg = new DefaultClusteringAlgorithm();
@@ -680,7 +680,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return result;
 	}
 	@Override
-	public void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster, ValuedRelationService valuedRelationService) {
+	public void printHierarchicalCluster(com.apporiented.algorithm.clustering.Cluster cluster, ValuedRelationService valuedRelationService) throws BusinessException {
 		DendrogramPanel dp = new DendrogramPanel();
 		dp.setModel(cluster);
 		int w = 10000;
@@ -694,7 +694,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	    try {
 			ImageIO.write(bi, "jpg", outputfile);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			throw new BusinessException();
 		}
 		
@@ -742,5 +741,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				result.addAll(getClustersWithThreshold(cluster, threshold, valuedRelationService));
 			}
 		return result;
+	}
+	@Override
+	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
+		List<Metric> metricList = metricRepository.findByArtifactId(new ObjectId(emm.getId()));
+		if(metricList.size()==0)
+			metricList = calculateMetrics(emm);
+		return metricList;
 	}
 }

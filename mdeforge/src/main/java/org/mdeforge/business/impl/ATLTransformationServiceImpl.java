@@ -283,6 +283,14 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	    return result;
 //		return null;
 	}
+
+
+
+	@Override
+	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 class Injector {

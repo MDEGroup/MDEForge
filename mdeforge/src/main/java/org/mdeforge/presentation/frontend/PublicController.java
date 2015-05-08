@@ -64,7 +64,7 @@ public class PublicController {
 		File ecoreMetamodelFile = new File(pathToDownload);
 		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
 
-		List<Metric> metrics = ecoreMetamodelService.calculateMetrics(ecoreMetamodel);
+		List<Metric> metrics = ecoreMetamodelService.getMetrics(ecoreMetamodel);
 		model.addAttribute("metrics", metrics);
 		
 		String serializedContext = ecoreMetamodelService.serializeContent(ecoreMetamodel);		
