@@ -151,7 +151,7 @@
 	<!-- Tables Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
 	
-	
+	<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/bootbox.js"></script>
 	
 </body>
 </html>

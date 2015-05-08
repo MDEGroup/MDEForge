@@ -4,6 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 
+
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/worldcloud2.js"></script>
+
+
+
+
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 		<li><spring:message code="mdeforge.public.back.browse.breadcrumbs.you_are_here"/></li>
@@ -123,7 +129,8 @@
 											<div class="row-fluid">
 												<div class="span4">
 													<h5 class="strong">Metamodel File</h5>
-													<a href="" class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>
+													<a href="#modal-simple" class="btn btn-primary btn-small btn-block" data-toggle="modal"><i class="icon-eye-open icon-fixed-width"></i> Visualize Metamodel</a>													
+													<a href="${ecoreMetamodelFile.getAbsolutePath()}"  class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>																								
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -149,7 +156,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
+					</div>									
 					
 				</div>
 			</div>
@@ -184,7 +191,33 @@
 			</table>
 			
 			
+			<hr>
 			
+			<h4>Metrics</h4>
+			<table class="table table-bordered table-white">
+
+				<!-- Table heading -->
+				<thead>
+					<tr>
+						<th>Artifact</th>
+						<th class="center">Name</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<!-- // Table heading END -->
+
+				<!-- Table body -->
+				<tbody>
+					<c:forEach items="${metrics}" var="metric">
+						<!-- Table row -->
+						<tr>
+							<td>${metric.getArtifact().getName()}</td>
+							<td class="center"><span class="badge badge-success">${metric.getName()}</span></td>
+							<td>${metric.getDescription()}</td>
+						</tr>
+						<!-- // Table row END -->
+					</c:forEach>
+			</table>
 			
 			
 			
@@ -296,6 +329,24 @@
 			</div>
 			<!-- // Widget END -->			
 			
+			<!-- Widget -->
+			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">
+					
+				<!-- Widget Heading -->
+				<div class="widget-head">
+					<h4 class="heading glyphicons notes"><i></i>Extracted Word Context</h4>
+				</div>
+				<!-- // Widget Heading END -->
+				
+				<div class="widget-body list">
+					
+					
+													
+				</div>
+			</div>
+			<!-- // Widget END -->
+			
+			
 			
 						
 		</div>
@@ -307,45 +358,49 @@
 	
 	
 	
-	<div class="row-fluid">
-	
 
-		
-		<!-- Column -->
-		<div class="span12">
-		
-			<!-- Widget Scroll -->
-			<div class="widget widget-scroll" data-scroll-height="219px">
-				<div class="widget-head">
-					<h4 class="heading">Large content scrollable box</h4>
-				</div>
-				<div class="widget-body">
-					<pre class="prettyprint">
-&lt;div class="box-generic"&gt;
-	&lt;div class="slim-scroll" data-scroll-height="250px"&gt;
-		&lt;h4&gt;Large content scrollable box&lt;/h4&gt;
-		&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tristique porttitor elit, faucibus convallis enim fringilla eu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Sed nibh nunc, egestas sit amet convallis ac, molestie vitae dui. Pellentesque placerat fermentum mauris, eu tempus dui egestas eget. Mauris sodales, lectus quis accumsan adipiscing, ante libero porta risus, eu posuere sapien magna a metus. Phasellus laoreet fermentum risus, sed congue nisl facilisis nec. Curabitur ullamcorper ultricies erat, non posuere ipsum adipiscing tincidunt. Vivamus molestie hendrerit odio at rutrum. Suspendisse porta ligula ac eros hendrerit bibendum. Integer quis metus est, eu accumsan enim.&lt;/p&gt;
-		&lt;p&gt;Nam commodo imperdiet condimentum. Maecenas in orci odio, quis sagittis augue. Aenean eu nisl turpis. Etiam gravida risus vitae nunc porttitor vestibulum. Praesent ut lorem erat, accumsan ornare erat. Nam in magna magna, nec posuere mi. Curabitur semper mi sed dui ornare vel posuere magna imperdiet. Quisque id tellus ipsum. Maecenas accumsan velit id velit pulvinar tincidunt. Nullam in ante dui. Suspendisse ut orci lectus. Nulla in nunc nec enim interdum auctor. Etiam imperdiet volutpat porta. In bibendum, tortor suscipit facilisis eleifend, lectus lacus laoreet enim, non aliquam nisi justo sit amet leo.&lt;/p&gt;
-		&lt;p&gt;Nunc sed dapibus diam. Suspendisse aliquam ultricies sem et semper. Nulla varius, purus ac sodales fermentum, velit sem scelerisque tellus, et hendrerit neque justo bibendum mauris. Etiam vel neque vel dolor aliquam dignissim non sit amet mauris. Ut purus ante, accumsan in venenatis eget, auctor sit amet quam. Morbi nibh quam, lacinia id porta et, pretium id arcu. Mauris justo justo, tincidunt a rhoncus sit amet, mattis id enim. Vivamus vehicula, mi ac dapibus aliquet, sapien metus dignissim odio, vel ornare elit nulla non quam. Suspendisse id ligula odio. Maecenas nunc massa, pharetra sit amet condimentum id, tempus suscipit nisl. Nulla facilisi.&lt;/p&gt;
-		&lt;p&gt;Maecenas blandit libero a enim faucibus porta. Proin id mauris non lorem tristique dignissim. Duis hendrerit commodo lorem, ac pellentesque dolor sodales sed. Vivamus accumsan erat sed sem mollis facilisis. Praesent vel magna felis, quis convallis augue. Donec dictum, dolor in fermentum venenatis, est nunc fermentum nulla, at suscipit magna dolor a metus. Pellentesque malesuada pellentesque tellus, tristique eleifend dolor tempor vitae. Phasellus sed sem non massa varius mollis. Curabitur non suscipit nunc. Sed vel metus sapien, in pharetra nisi. In vel nibh et odio congue tristique. Praesent non eros purus. Aenean eleifend lacus iaculis tellus eleifend sodales. Cras auctor tellus ac dui vehicula pretium. Proin non ipsum a elit molestie sodales eu in nisi. In ac nulla tortor, sollicitudin imperdiet nisl.&lt;/p&gt;
-	&lt;/div&gt;
-&lt;/div&gt;
-</pre>
-				</div>
-			</div>
-			<!-- // Widget Scroll END -->
-
-	
-		</div>
-		<!-- // Column END -->
-		
-	</div>
-	
-	
-	
 	
 	
 	
 	
 </div>	
+
+
+
+
+
+
+
+
+
+
+
+
+
+<c:import var="fileToVisualize" url="file:///${ecoreMetamodelFile.getAbsolutePath()}" />
+
+
+<!-- Modal -->
+<div class="modal hide fade" id="modal-simple" style="width:800px; left:42%">
+
+<pre class="prettyprint">
+${fn:escapeXml(fileToVisualize)}
+</pre>
+
+<!-- Modal footer -->
+	<div class="modal-footer">
+		<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a> 		
+	</div>
+	<!-- // Modal footer END -->
+
+</div>
+<!-- // Modal END -->	
+
+
+
+
+<script type="text/javascript">
+
+WordCloud(document.getElementById('my_canvas'), { list: list } );
+</script>
 	

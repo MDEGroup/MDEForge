@@ -1,5 +1,6 @@
 package org.mdeforge.presentation.frontend;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Metric;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -54,8 +56,20 @@ public class PublicController {
 		
 		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOne(metamodel_id);
 		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-//		String filePath = gridFileMediaService.getFilePath(ecoreMetamodel);
-//		System.out.println(filePath);
+		
+		
+		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
+		
+		
+		File ecoreMetamodelFile = new File(pathToDownload);
+		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
+
+		List<Metric> metrics = ecoreMetamodelService.calculateMetrics(ecoreMetamodel);
+		model.addAttribute("metrics", metrics);
+		
+		String serializedContext = ecoreMetamodelService.serializeContent(ecoreMetamodel);		
+		model.addAttribute("serializedContext", serializedContext);
+		
 		
 		return "public.browse.metamodel_details";
 	}
