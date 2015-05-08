@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.Locale;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -13,13 +14,13 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.CosineSimilarityRelation;
-import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
@@ -27,8 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 import com.apporiented.algorithm.clustering.Cluster;
 
@@ -42,6 +41,10 @@ public class HierarchicalClusterTest {
 
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private DiceSimilarityRelationService diceRelationService;
 	@Autowired
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
@@ -108,7 +111,7 @@ public class HierarchicalClusterTest {
 			}
 		System.out.println("Stop");
 	 }
-	
+	@Ignore
 	@Test
 	public void exportDiceSimilarity() {
 		try {
@@ -119,6 +122,27 @@ public class HierarchicalClusterTest {
 				pw.println(diceSimilarityRelation.getValue());
 				System.out.println(i);
 				i++;
+			}
+			pw.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void exportSimilarityMatrix() {
+		try {
+			PrintWriter pw = new PrintWriter(new File(basePath + "proximityMatrixDice.txt"));
+			double [][] dsrl = ecoreMetamodelService.getProximityMatrix(diceRelationService);
+			for (int i=0; i < dsrl.length; i++){
+				for (int j = 0; j < dsrl[i].length; j++) {
+					if(j < dsrl[i].length-1)
+						pw.print(  String.format(Locale.US,"%.6f;", dsrl[i][j] ) );
+					else pw.print(String.format(Locale.US,"%.6f", dsrl[i][j] ));
+				}
+				pw.println();
+				
 			}
 			pw.close();
 		} catch (FileNotFoundException e) {

@@ -44,13 +44,9 @@ import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.ContainmentRelationService;
-import org.mdeforge.business.CosineSimilarityRelationService;
-import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
@@ -58,12 +54,10 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
-import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
@@ -296,22 +290,24 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			return false;
 	}
 
+	@Override 
+	public String serializeContent(EcoreMetamodel emm) {
+		
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(emm)),
+				true);
+		String test = ResourceSerializer.serialize(load_resource);
+		return test;
+	}
+	
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-		ResourceSet load_resourceSet = new ResourceSetImpl();
-		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(emm1)),
-				true);
 		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
-		ResourceSet load_resourceSet2 = new ResourceSetImpl();
-		load_resourceSet2.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", new XMIResourceFactoryImpl());
-		String temp = gridFileMediaService.getFilePath(emm2);
-		Resource load_resource2 = load_resourceSet2.getResource(URI.createURI(temp),
-				true);
-		String test = ResourceSerializer.serialize(load_resource);
-		String test2 = ResourceSerializer.serialize(load_resource2);
+		
+		String test = serializeContent(emm1);
+		String test2 = serializeContent(emm2);
 		System.out.println(test);
 		System.out.println(test2);
 		double sim_score = new SimilarityMethods().cosineSimilarityScore(test, test2);
@@ -637,9 +633,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private double[][]getSimilarityMatrix(ValuedRelationService valuedRelationService){
 		List<EcoreMetamodel> emms1 = findAllPublic();
 		List<EcoreMetamodel> emms2 = emms1;
-		List<ContainmentRelation> sr = valuedRelationService.findAll();
-		HashMap<String, ContainmentRelation> map = new HashMap<String, ContainmentRelation>();
-		for (ContainmentRelation similarityRelation : sr) {
+		List<ValuedRelation> sr = valuedRelationService.findAll();
+		HashMap<String, ValuedRelation> map = new HashMap<String, ValuedRelation>();
+		for (ValuedRelation similarityRelation : sr) {
 			map.put(similarityRelation.getToArtifact().getId()
 					+ similarityRelation.getFromArtifact().getId(), similarityRelation);
 			map.put(similarityRelation.getFromArtifact().getId()
@@ -648,11 +644,36 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		double[][] result = new double[emms1.size()][emms2.size()];
 		for (int i=0; i < emms1.size(); i++) {
 			for (int j=0; j < emms2.size(); j++) {
-				ContainmentRelation srel = map.get(emms1.get(i).getId() + emms2.get(j).getId());
+				ValuedRelation srel = map.get(emms1.get(i).getId() + emms2.get(j).getId());
 				if (srel != null)
 					result[i][j] = 1-srel.getValue();
 				else {
 					result[i][j] = 0;
+				}
+			}
+		}
+		return result;
+	}
+	@Override
+	public double[][]getProximityMatrix(ValuedRelationService valuedRelationService){
+		List<EcoreMetamodel> emms1 = findAllPublic();
+		List<EcoreMetamodel> emms2 = emms1;
+		List<ValuedRelation> sr = valuedRelationService.findAll();
+		HashMap<String, ValuedRelation> map = new HashMap<String, ValuedRelation>();
+		for (ValuedRelation similarityRelation : sr) {
+			map.put(similarityRelation.getToArtifact().getId()
+					+ similarityRelation.getFromArtifact().getId(), similarityRelation);
+			map.put(similarityRelation.getFromArtifact().getId()
+					+ similarityRelation.getToArtifact().getId(), similarityRelation);
+		}
+		double[][] result = new double[emms1.size()][emms2.size()];
+		for (int i=0; i < emms1.size(); i++) {
+			for (int j=0; j < emms2.size(); j++) {
+				ValuedRelation srel = map.get(emms1.get(i).getId() + emms2.get(j).getId());
+				if (srel != null)
+					result[i][j] = srel.getValue();
+				else {
+					result[i][j] = 1;
 				}
 			}
 		}
