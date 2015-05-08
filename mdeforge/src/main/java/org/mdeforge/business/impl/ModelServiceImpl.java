@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
+import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -85,5 +86,12 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	@Override
+	public double[][] getProximityMatrix(
+			ValuedRelationService valuedRelationService)
+			throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

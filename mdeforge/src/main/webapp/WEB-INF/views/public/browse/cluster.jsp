@@ -316,7 +316,7 @@
 													<thead>
 														<tr>																						
 															<th data-class="expand">Name</th>
-															<th data-hide="phone">Description</th>
+<!-- 															<th data-hide="phone">Description</th> -->
 															<th data-hide="phone,tablet">Open</th>
 															<th data-hide="phone,tablet">Created</th>
 															<th data-hide="phone,tablet">Modified</th>
@@ -333,7 +333,7 @@
 															 <tr class="gradeX">
 																																														
 																<td>${artifact.getName()}</td>
-																<td>${artifact.getDescription()}</td>
+<%-- 																<td>${artifact.getDescription()}</td> --%>
 																<td class="center">${artifact.getOpen()}</td>
 																<td class="center"><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getCreated()}" /></td>
 																<td class="center"><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getModified()}" /></td>

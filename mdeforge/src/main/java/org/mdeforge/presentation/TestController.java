@@ -10,6 +10,11 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.ContainmentRelation;
+import org.mdeforge.business.model.CosineSimilarityRelation;
+import org.mdeforge.business.model.DiceSimilarityRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -113,6 +118,40 @@ public class TestController {
 		model.addAttribute("noCluster", noCluster);
 		
 		return "public.browse.test";
+	}
+	@RequestMapping(value = "/test_content", method = { RequestMethod.GET })
+	public String getMetamodelContent(Model model, @RequestParam (value="name") String name) {
+		EcoreMetamodel emm = ecoreMetamodelService.findOneByName(name);
+		String s = ecoreMetamodelService.serializeContent(emm);
+		model.addAttribute("content", s);
+		return "public.browse.test.content";
+	}
+	@RequestMapping(value = "/test_relation", method = { RequestMethod.GET })
+	public String getMetamodelRelation(Model model, @RequestParam (value="name1") String name1,
+			@RequestParam (value="name2") String name2) {
+		EcoreMetamodel emm1 = ecoreMetamodelService.findOneByName(name1);
+		EcoreMetamodel emm2 = ecoreMetamodelService.findOneByName(name2);
+		SimilarityRelation similarity = 
+				(similarityRelationService.findOneByArtifacts(emm1, emm2)==null)
+					?similarityRelationService.findOneByArtifacts(emm2, emm1)
+						:similarityRelationService.findOneByArtifacts(emm1, emm2);
+		ContainmentRelation containment = 
+				(containmentRelationService.findOneByArtifacts(emm1, emm2)==null)
+					?containmentRelationService.findOneByArtifacts(emm2, emm1)
+						:containmentRelationService.findOneByArtifacts(emm1, emm2);
+		CosineSimilarityRelation cosine = 
+				(cosineSimilarityRelationService.findOneByArtifacts(emm1, emm2)==null)
+					?cosineSimilarityRelationService.findOneByArtifacts(emm2, emm1)
+						:cosineSimilarityRelationService.findOneByArtifacts(emm1, emm2);
+		DiceSimilarityRelation dice = 
+				(diceSimilarityRelationService.findOneByArtifacts(emm1, emm2)==null)
+				?diceSimilarityRelationService.findOneByArtifacts(emm2, emm1)
+					:diceSimilarityRelationService.findOneByArtifacts(emm1, emm2);
+		model.addAttribute("similarity", similarity.getValue());
+		model.addAttribute("containment", containment.getValue());
+		model.addAttribute("cosine", cosine.getValue());
+		model.addAttribute("dice", dice.getValue());
+		return "public.browse.test.relation";
 	}
 
 }

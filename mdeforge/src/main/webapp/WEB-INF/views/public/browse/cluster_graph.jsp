@@ -104,13 +104,7 @@
 						<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 					</div>
 				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-gray widget-stats-1">
-						<span class="glyphicons riflescope"><i></i><span class="txt">Computation</span></span>
-						<div class="clearfix"></div>
-						<span class="count">${computation}</span>
-					</div>
-				</div>
+				
 				<div class="span2">
 					<div class="widget-stats widget-stats-1">
 						<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
@@ -122,7 +116,7 @@
 					<div class="widget-stats widget-stats-1">
 						<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
+						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="3" /></span>
 					</div>
 				</div>
 				<div class="span2">
@@ -134,11 +128,18 @@
 				</div>
 				<div class="span2">
 					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons buoy"><i></i><span class="txt">Clusters With One Element</span></span>
+						<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
 						<div class="clearfix"></div>
 						<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
 					</div>
 				</div>
+				<div class="span2">
+					<div class="widget-stats widget-stats-1">
+						<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
+						<div class="clearfix"></div>
+						<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
+					</div>
+				</div>	
 					
 			</div>
 			<!-- // Row END -->
@@ -190,11 +191,12 @@
 				shape : 'dot',
 				radiusMin : 10,
 				radiusMax : 30,
-				fontSize : 12,
+				fontSize : 40,
 				fontFace : "Tahoma"
 			},
 			edges : {
 				width : 0.15,
+				fontSize : 40,
 				inheritColor : "from"
 			},
 			tooltip : {
