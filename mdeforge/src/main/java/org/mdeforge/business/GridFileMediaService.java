@@ -1,5 +1,7 @@
 package org.mdeforge.business;
 
+import java.io.InputStream;
+
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 
@@ -13,5 +15,7 @@ public interface GridFileMediaService {
 	void delete(String idGridFileMedia) throws BusinessException;
 
 	byte[] getFileByte(Artifact artifact) throws BusinessException;
+
+	InputStream getFileInputStream(Artifact artifact) throws BusinessException;
 	
 }

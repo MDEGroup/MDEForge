@@ -243,7 +243,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				metric = metric2;
 			}
 			metric.setArtifact(art);
-			metricRepository.save(metric);
+//			metricRepository.save(metric);
 			result.add(metric);
 		}
 		return result;

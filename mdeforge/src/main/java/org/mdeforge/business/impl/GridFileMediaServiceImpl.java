@@ -116,4 +116,13 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		return baos.toByteArray();
 	}
 
+	@Override
+	public InputStream getFileInputStream(Artifact artifact) throws BusinessException {
+		GridFileMedia grm = getGridFileMedia(artifact.getFile());
+		GridFS fileStore = new GridFS(mongoDbFactory.getDb());
+		GridFSDBFile found = fileStore.findOne(grm.getIdFile());
+		return found.getInputStream();
+
+	}
+	
 }
