@@ -10,5 +10,7 @@ public interface SimilarityRelationService extends ValuedRelationService<Similar
 	
 	List<SimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) throws BusinessException;
 	List<SimilarityRelation> findByEcoreMetamodel(EcoreMetamodel emm, double threshold, int computation);
+
+	
 	
 }

@@ -45,15 +45,18 @@ import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.ContainmentRelationService;
+import org.mdeforge.business.CosineSimilarityRelationService;
+import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
-import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
@@ -88,14 +91,14 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private MetricRepository metricRepository;
 	@Autowired
 	private RelationService relationService;
-//	@Autowired
-//	private SimilarityRelationService similarityRelationService;
-//	@Autowired
-//	private DiceSimilarityRelationService diceSimilarityRelationService;
-//	@Autowired
-//	private org.mdeforge.business.MetamodelSimilarityRelationService metamodelSimilarityRelationService;
-//	@Autowired
-//	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private DiceSimilarityRelationService diceSimilarityRelationService;
+	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 	@Override
@@ -103,6 +106,17 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		if(isValid(artifact))
 			return super.create(artifact);
 		throw new BusinessException();
+	}
+	@Override
+	public EcoreMetamodel findOnePublic(String id) {
+		EcoreMetamodel a = super.findOnePublic(id);
+		a.setMetrics(getMetrics(a));
+		a.getRelations().addAll(similarityRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(containmentRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(diceSimilarityRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(cosineSimilarityRelationService.findTopProximity(a, 5));
+		
+		return a;
 	}
 	@Override
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
