@@ -11,5 +11,7 @@ public interface GridFileMediaService {
 	GridFileMedia getGridFileMedia(GridFileMedia id) throws BusinessException;
 
 	void delete(String idGridFileMedia) throws BusinessException;
+
+	byte[] getFileByte(Artifact artifact) throws BusinessException;
 	
 }

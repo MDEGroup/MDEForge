@@ -41,7 +41,35 @@ public class Artifact implements java.io.Serializable{
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
-	private String description;
+
+	private String description = null;
+	//private List<String> tags = null;
+	private String version = null;
+	private String extractedContents = null;
+//	public List<String> getTags() {
+//		return tags;
+//	}
+//
+//	public void setTags(List<String> tags) {
+//		this.tags = tags;
+//	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getExtractedContents() {
+		return extractedContents;
+	}
+
+	public void setExtractedContents(String extractedContents) {
+		this.extractedContents = extractedContents;
+	}
+
 	@Transient
 	private List<Metric> metrics;
 	
