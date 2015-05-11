@@ -19,11 +19,12 @@
 					<div class="span3">
 						<h4>Authors</h4>
 						<ul>
-							<li><a href="http://www.di.univaq.it/home.php?users_username=alfonso">Alfonso Pierantonio</a></li>
-							<li><a href="http://www.di.univaq.it/diruscio/">Davide Di Ruscio</a></li>
-							<li><a href="http://www.di.univaq.it/home.php?users_username=ludovico.iovino">Ludovico Iovino</a></li>
 							<li><a href="http://www.basciani.it">Francesco Basciani</a></li>
-							<li><a href="#">Juri Di Rocco</a></li>
+							<li><a href="https://scholar.google.it/citations?user=PNagLbIAAAAJ&hl=it">Juri Di Rocco</a></li>
+							<li><a href="http://www.di.univaq.it/diruscio/">Davide Di Ruscio</a></li>
+							<li><a href="#">Amleto Di Salle</a></li>
+							<li><a href="http://www.di.univaq.it/home.php?users_username=ludovico.iovino">Ludovico Iovino</a></li>
+							<li><a href="http://www.di.univaq.it/home.php?users_username=alfonso">Alfonso Pierantonio</a></li>
 						</ul>
 					</div>
 					<div class="span4">
