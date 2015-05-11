@@ -1,9 +1,11 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 
-
+<!-- JQRangeSlider Sliders Plugin -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/css/iThing.css" rel="stylesheet" />
 
 
 
@@ -49,24 +51,42 @@
 		<div class="hide" id="threshold_form">
 		
 			
-			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">
+			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
 	
 				
 				
 				<div class="widget-body">
 					<div class="row-fluid">
 					<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
-						<div class="span4">	
-						Threshold						
-							<input type="text" placeholder="Threshold" name="threshold" value="0.4"/>
+						<div class="span6">		
+									<!-- Slider -->
+									<div class="slider-range-min row-fluid">
+										<div class="span3">
+											<label class="span8">Threshold:</label> 
+											<input type="text" class="amount span4" name="threshold"/>
+										</div>
+										<div class="span9" style="padding: 5px 0 0;">
+											<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+											<div class="slider slider-primary"></div>
+										</div>
+									</div>
+									<!-- // Slider END -->
+
 						</div>
-						<div class="span4">
-						Computation
-							<input type="text" placeholder="Computation" name="computation" value="1"/>
+						<div class="span3" style="padding-left:100px;">
+						
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="1" checked="checked"/> Computation 1
+							</label><br/>
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="2"  /> Computation 2
+							</label>
+							
 						</div>
-						<div class="span4">
-							<button class="btn btn-block btn-success">Set</button>
+						<div class="span3">
+							<button class="btn btn-block btn-success">Calculate</button>
 						</div>
+	
 					</form>
 												
 						
@@ -176,21 +196,24 @@
 						
 						<c:choose>
 						  <c:when test="${loop.index == 0}">
-						    <li class="active" style="padding:12px;">
+						    <li class="active" style="padding:12px; height:70px">
 						  </c:when>						 
 						  <c:otherwise>
-						    <li style="padding:12px;">
+						    <li style="padding:12px; height:70px">
 						  </c:otherwise>
 						</c:choose>
-							<a href="#tab-${loop.index}" data-toggle="tab"><i></i><span class="strong">Cluster ${loop.index}</span>
+							<div class="span9">
+							<a href="#tab-${loop.index}" data-toggle="tab" style="height:74px !important;"><i></i><span class="strong">Cluster ${loop.index}</span>
 								<span>
 									<c:forEach items="${cluster.domains}" var="domain">
 										${domain}
 									</c:forEach>	
 								</span>
 							</a>
-							${cluster.getArtifacts().size()}
-							
+							</div>
+							<div class="span2">
+								<span style="float:right;">${cluster.getArtifacts().size()}</span>
+							</div>
 					</c:forEach>
 							</li>					
 				</ul>
@@ -346,7 +369,7 @@
 																  </c:otherwise>
 																</c:choose>
 																<td class="center actions">
-																	<a href="#" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
+																	<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
 																</td>
 															</tr>
 															<!-- // Table row END -->
@@ -419,6 +442,10 @@
 	</div>
 	<!-- // Tabs END -->
 	
+	
+	
+	
+	
 </div>	
 
 
@@ -431,4 +458,20 @@
 
 
 
+	
+	
+	
+	
+	<!-- JQueryUI -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+
+<!-- JQueryUI -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/js/jquery-ui-1.9.2.custom.min.js"></script>
+
+
+<!-- jQRangeSlider Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
+	
+	<!-- Sliders Page Demo Script -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/my_sliders.js"></script>
 
