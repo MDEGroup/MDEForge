@@ -10,10 +10,12 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +40,8 @@ public class PublicController {
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
+	@Autowired
+	private UserService userService;
 	
 	
 	
@@ -46,8 +50,15 @@ public class PublicController {
 		return "public.index";
 	}
 	
-	@RequestMapping(value = "/browse/dashboard", method = { RequestMethod.GET })
-	public String dashboard() {			
+	@RequestMapping(value = "/browse", method = { RequestMethod.GET })
+	public String dashboard(Model model) {			
+		
+		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService.findAll();		
+		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
+		
+		List<User> users = userService.findAll();
+		model.addAttribute("users", users);
+		
 		return "public.browse.dashboard";
 	}
 	
@@ -69,7 +80,6 @@ public class PublicController {
 		
 		String serializedContext = ecoreMetamodelService.serializeContent(ecoreMetamodel);		
 		model.addAttribute("serializedContext", serializedContext);
-		
 		
 		return "public.browse.metamodel_details";
 	}

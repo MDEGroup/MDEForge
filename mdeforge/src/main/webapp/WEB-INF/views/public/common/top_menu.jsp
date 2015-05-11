@@ -10,8 +10,8 @@
 			
 						
 			<ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/dashboard.htm" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
-				<li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
+				<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
+				<%-- <li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
 				
 					
 				
@@ -32,7 +32,7 @@
 					</ul>
 				</li>
 				
-				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li>
+				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li> --%>
 				
 									
 				

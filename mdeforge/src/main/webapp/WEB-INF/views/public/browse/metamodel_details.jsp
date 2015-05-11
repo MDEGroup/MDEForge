@@ -5,9 +5,14 @@
 
 
 
-<script src="${pageContext.request.contextPath}/resources/theme/scripts/worldcloud2.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
-
+<style type="text/css">    
+#my_canvas{
+width: 100%;
+height:200px;
+}
+</style>
 
 
 <!-- Breadcrumb START -->
@@ -163,9 +168,69 @@
 			
 			
 			<hr>
-			
+	
+		<div class="row-fluid">
+			<div class="span6">	
+			<h4>Metrics</h4>
+		
+				<table class="table table-bordered table-striped table-white">
+	
+					<!-- Table heading -->
+					<thead>
+						<tr>						
+							<th rowspan="2">Name</th>
+							<th rowspan="2">Description</th>
+							<th class="center" colspan="5">Value</th>	
+						</tr>					
+						<tr>					
+							<th>Max</th>						
+							<th>Min</th>						
+							<th>Avg</th>						
+							<th>Median</th>						
+							<th>Standard Deviation</th>						
+						</tr>
+					</thead>
+					<!-- // Table heading END -->
+	
+					<!-- Table body -->
+					<tbody>
+						<c:forEach items="${metrics}" var="metric">
+							<!-- Table row -->
+							<tr>
+								
+								<td class="left">${metric.getName()}</td>
+								<td>${metric.getDescription()}</td>
+								
+								<c:choose>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+								    <td colspan="5" class="center">${metric.getValue()}</td>
+								  </c:when>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:when>
+								  <c:otherwise>
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:otherwise>
+								</c:choose>														
+								
+							</tr>
+							<!-- // Table row END -->
+						</c:forEach>						
+				</table>
+
+		</div>
+		
+		<div class="span6">
 			<h4>Relations</h4>
-			<table class="table table-bordered table-white">
+			<table class="table table-bordered table-striped table-white">
 
 				<!-- Table heading -->
 				<thead>
@@ -183,7 +248,8 @@
 						<!-- Table row -->
 						<tr>
 							<td>${relation.getFromArtifact().getName()}</td>
-							<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="2" /></span></td>
+							
+							<td class="center"><span class="badge badge-success">${relation.getValue()}</span></td>
 							<td>${relation.getToArtifact().getName()}</td>
 						</tr>
 						<!-- // Table row END -->
@@ -191,46 +257,16 @@
 			</table>
 			
 			
-			<hr>
-			
-			<h4>Metrics</h4>
-			<table class="table table-bordered table-white">
-
-				<!-- Table heading -->
-				<thead>
-					<tr>
-						<th>Artifact</th>
-						<th class="center">Name</th>
-						<th>Description</th>
-					</tr>
-				</thead>
-				<!-- // Table heading END -->
-
-				<!-- Table body -->
-				<tbody>
-					<c:forEach items="${metrics}" var="metric">
-						<!-- Table row -->
-						<tr>
-							<td>${metric.getArtifact().getName()}</td>
-							<td class="center"><span class="badge badge-success">${metric.getName()}</span></td>
-							<td>${metric.getDescription()}</td>
-						</tr>
-						<!-- // Table row END -->
-					</c:forEach>
-			</table>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 		</div>
+		
+		
+		
+		</div>
+		
+
+</div>
+		
+		
 		
 		<div class="span3 tablet-column-reset">
 			<!-- Latest Orders/List Widget -->
@@ -330,7 +366,7 @@
 			<!-- // Widget END -->			
 			
 			<!-- Widget -->
-			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">
+			<div class="widget widget-heading-simple widget-body-white">
 					
 				<!-- Widget Heading -->
 				<div class="widget-head">
@@ -338,11 +374,48 @@
 				</div>
 				<!-- // Widget Heading END -->
 				
-				<div class="widget-body list">
+				
+				
+				
+				<div class="relativeWrap">
+					<div class="widget widget-tabs">
 					
-					
-													
-				</div>
+						<!-- Tabs Heading -->
+						<div class="widget-head">
+							<ul>
+								<li class="active"><a class="glyphicons cloud" href="#cloud" data-toggle="tab"><i></i>Word Cloud</a></li>
+								<li><a class="glyphicons font" href="#standard" data-toggle="tab"><i></i>Standard</a></li>
+							</ul>
+						</div>
+						<!-- // Tabs Heading END -->
+						
+						<div class="widget-body">
+							<div class="tab-content">
+							
+								<!-- Tab content -->
+								<div class="tab-pane active" id="cloud">
+									
+									<canvas id="my_canvas"></canvas>
+
+								</div>
+								<!-- // Tab content END -->
+								
+								<!-- Tab content -->
+								<div class="tab-pane" id="standard">
+									
+									<c:set var="serializedContext_trim" value="${fn:trim(serializedContext)}" />
+									<c:set var="serializedContext_splitted" value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
+									${serializedContext_splitted}
+									
+								</div>
+								<!-- // Tab content END -->
+								
+							</div>
+						</div>
+					</div>
+	</div>
+				
+				
 			</div>
 			<!-- // Widget END -->
 			
@@ -358,7 +431,11 @@
 	
 	
 	
-
+	
+	
+	
+	
+	
 	
 	
 	
@@ -399,8 +476,46 @@ ${fn:escapeXml(fileToVisualize)}
 
 
 
-<script type="text/javascript">
+<script>
 
-WordCloud(document.getElementById('my_canvas'), { list: list } );
+var res = '${serializedContext}'.trim();
+res = res.split(" ");
+
+var wordlist = [];
+
+for (var i = 0; i < res.length; ++i){
+	var numOccurrences = 1;
+	for(var j=0; j<res.length; ++j){		
+	    if(res[j].toUpperCase() === res[i].toUpperCase()){
+	    	numOccurrences++;
+	    	/*Elimino l'elemento ripetuto dall'array*/
+	    	res.splice(j, 1);
+		}
+	}
+	wordlist.push([res[i], numOccurrences]);
+}
+
+
+
+
+
+
+var options = 
+{
+  list : 
+	wordlist
+  ,
+  gridSize: Math.round(1 * document.getElementById('my_canvas').offsetWidth / 1024),
+  weightFactor: function (size) {
+    return Math.pow(size, 4.9) * document.getElementById('my_canvas').offsetWidth / 1024;
+  },
+  fontFamily: 'Open Sans, sans-serif',  
+  rotateRatio: 0.5
+
+}
+
+
+WordCloud(document.getElementById('my_canvas'), options); 
+
 </script>
 	

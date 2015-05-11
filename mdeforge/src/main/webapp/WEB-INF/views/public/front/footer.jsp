@@ -22,7 +22,7 @@
 							<li><a href="http://www.di.univaq.it/home.php?users_username=alfonso">Alfonso Pierantonio</a></li>
 							<li><a href="http://www.di.univaq.it/diruscio/">Davide Di Ruscio</a></li>
 							<li><a href="http://www.di.univaq.it/home.php?users_username=ludovico.iovino">Ludovico Iovino</a></li>
-							<li><a href="#">Francesco Basciani</a></li>
+							<li><a href="http://www.basciani.it">Francesco Basciani</a></li>
 							<li><a href="#">Juri Di Rocco</a></li>
 						</ul>
 					</div>

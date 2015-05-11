@@ -1,6 +1,15 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
+
+
+<!-- JQRangeSlider Sliders Plugin -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/css/iThing.css" rel="stylesheet" />
+	
+	
+	
 
 <!-- PER GRAFICO DEL CLUSTER - START -->
 <script type="text/javascript"
@@ -60,24 +69,42 @@
 	<div class="hide" id="threshold_form">
 		
 			
-			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">
+			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
 	
 				
 				
 				<div class="widget-body">
 					<div class="row-fluid">
 					<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
-						<div class="span4">		
-						Threshold					
-							<input type="text" placeholder="Threshold" name="threshold" value="0.5"/>
+						<div class="span6">		
+									<!-- Slider -->
+									<div class="slider-range-min row-fluid">
+										<div class="span3">
+											<label class="span8">Threshold:</label> 
+											<input type="text" class="amount span4" name="threshold"/>
+										</div>
+										<div class="span9" style="padding: 5px 0 0;">
+											<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+											<div class="slider slider-primary"></div>
+										</div>
+									</div>
+									<!-- // Slider END -->
+
 						</div>
-						<div class="span4">
-						Computation
-							<input type="text" placeholder="Computation" name="computation" value="1"/>
+						<div class="span3" style="padding-left:100px;">
+						
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="1" checked="checked"/> Computation 1
+							</label><br/>
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="2"  /> Computation 2
+							</label>
+							
 						</div>
-						<div class="span4">
-							<button class="btn btn-block btn-success">Set</button>
+						<div class="span3">
+							<button class="btn btn-block btn-success">Calculate</button>
 						</div>
+	
 					</form>
 												
 						
@@ -226,3 +253,31 @@
 	redrawAll()
 </script>
 <!-- PER GRAFICO DEL CLUSTER - END -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	<!-- JQueryUI -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
+
+<!-- JQueryUI -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/js/jquery-ui-1.9.2.custom.min.js"></script>
+
+
+<!-- jQRangeSlider Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
+	
+	<!-- Sliders Page Demo Script -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/my_sliders.js"></script>

@@ -12,44 +12,56 @@
 	<div class="container-960 innerT">
 	
 		<div class="row-fluid">
-			<div class="span4">				
+			<div class="span4">		
+				<a href="${pageContext.request.contextPath}/public/browse">		
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top folder_open glyphicon-primary">
 							<i></i>
 							<h4>Browse</h4>							
 							<p class="margin-none">You can search for models, metamodels, transformations (in general artifacts) in our repository. Intelligent search by type, name, property etc...<br/>  
-								<a href="${pageContext.request.contextPath}/public/browse/dashboard">learn more</a> 
+								
 							</p>							
 						</div>
 					</div>
+					<!-- Ribbon -->
+					<div class="ribbon-wrapper"><div class="ribbon success">Available</div></div>
 				</div>
+				</a>
 			</div>			
 			<div class="span4">
+				<a href="#">
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top search glyphicon-primary">
 							<i></i>
 							<h4>Search</h4>
 							<p class="margin-none">You can perform chains of transformations entrusting to the system that automatically determines whether there is a chain of transformations that starting from a model input arrives to a model output conforming to the target metamodel defined by the user himself.<br/>  
-								<a href="">learn more</a>
+								
 							</p>
 						</div>
 					</div>
+					<!-- Ribbon -->
+					<div class="ribbon-wrapper"><div class="ribbon">Soon</div></div>
 				</div>
+				</a>
 			</div>
 			<div class="span4">
+				<a href="#">
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top edit glyphicon-primary">
 							<i></i>
 							<h4>Use</h4>
-							<p class="margin-none">You can create new artifacts and insert them in the corpus of artifacts already present in the repository.<br/>  
-								<a href="">learn more</a> 
+							<p class="margin-none">You can create new artifacts and insert them in the corpus of artifacts already present in the repository.<br/>  								
 							</p>
 						</div>
 					</div>
+					<!-- Ribbon -->
+					<div class="ribbon-wrapper"><div class="ribbon">Soon</div></div>
+					
 				</div>
+				</a>
 			</div>
 		</div>
 	</div>
