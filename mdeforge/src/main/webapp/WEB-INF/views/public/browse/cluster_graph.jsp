@@ -94,10 +94,16 @@
 						<div class="span3" style="padding-left:100px;">
 						
 							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="1" checked="checked"/> Computation 1
+								<input type="radio" class="radio" name="computation" value="1" checked="checked"/> EMF Match
 							</label><br/>
 							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="2"  /> Computation 2
+								<input type="radio" class="radio" name="computation" value="2"  /> EMF Containment
+							</label>
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="3"  /> Cosine coefficient
+							</label>
+							<label class="radio">
+								<input type="radio" class="radio" name="computation" value="4"  /> Dice distance	
 							</label>
 							
 						</div>

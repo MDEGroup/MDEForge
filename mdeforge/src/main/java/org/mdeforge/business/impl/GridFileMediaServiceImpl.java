@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.model.Artifact;
@@ -117,12 +116,12 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	}
 
 	@Override
-	public InputStream getFileInputStream(Artifact artifact) throws BusinessException {
-		GridFileMedia grm = getGridFileMedia(artifact.getFile());
-		GridFS fileStore = new GridFS(mongoDbFactory.getDb());
-		GridFSDBFile found = fileStore.findOne(grm.getIdFile());
-		return found.getInputStream();
-
-	}
+	 public InputStream getFileInputStream(Artifact artifact) throws BusinessException {
+	  GridFileMedia grm = getGridFileMedia(artifact.getFile());
+	  Query q = new Query();
+	  q.addCriteria(Criteria.where("_id").is(grm.getIdFile()));
+	  GridFSDBFile dbFile = operations.findOne(q);
+	  return dbFile.getInputStream();
+	 }
 	
 }

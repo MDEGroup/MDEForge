@@ -130,12 +130,19 @@ height:200px;
 										</div>
 										<div class="span8">
 											<h5 class="strong">Description</h5>
-											<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+											<p>
+												<c:forEach items="${ecoreMetamodel.properties}" var="property">
+														<c:if test="${property.getName() == 'Description '}">
+															${property.getValue()}
+														</c:if>
+														
+												</c:forEach>	
+											</p>
 											<div class="row-fluid">
 												<div class="span4">
 													<h5 class="strong">Metamodel File</h5>
 													<a href="#modal-simple" class="btn btn-primary btn-small btn-block" data-toggle="modal"><i class="icon-eye-open icon-fixed-width"></i> Visualize Metamodel</a>													
-													<a href="${ecoreMetamodelFile.getAbsolutePath()}"  class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>																								
+													<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}"  class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>																								
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -194,7 +201,7 @@ height:200px;
 	
 					<!-- Table body -->
 					<tbody>
-						<c:forEach items="${metrics}" var="metric">
+						<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
 							<!-- Table row -->
 							<tr>
 								
@@ -403,7 +410,7 @@ height:200px;
 								<!-- Tab content -->
 								<div class="tab-pane" id="standard">
 									
-									<c:set var="serializedContext_trim" value="${fn:trim(serializedContext)}" />
+									<c:set var="serializedContext_trim" value="${fn:trim(ecoreMetamodel.getExtractedContents())}" />
 									<c:set var="serializedContext_splitted" value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
 									${serializedContext_splitted}
 									
@@ -478,7 +485,7 @@ ${fn:escapeXml(fileToVisualize)}
 
 <script>
 
-var res = '${serializedContext}'.trim();
+var res = '${ecoreMetamodel.getExtractedContents()}'.trim();
 res = res.split(" ");
 
 var wordlist = [];

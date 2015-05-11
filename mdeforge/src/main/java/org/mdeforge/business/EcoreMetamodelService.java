@@ -11,5 +11,7 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)  throws BusinessException;
 	void registerMetamodel (EcoreMetamodel ecoreMetamodel) throws BusinessException;
 	String serializeContent(EcoreMetamodel emm) throws BusinessException;
+	List<String> getNSUris(EcoreMetamodel ecoreMetamodel)
+			throws BusinessException;
 	
 }

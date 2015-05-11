@@ -234,7 +234,14 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			throw new BusinessException();
 		}
 	}
-
+	@Override
+	public void updateSimple(T artifact) {
+		try {
+			artifactRepository.save(artifact);
+		} catch (Exception e) {
+			throw new BusinessException();
+		}
+	}
 	@Override
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
