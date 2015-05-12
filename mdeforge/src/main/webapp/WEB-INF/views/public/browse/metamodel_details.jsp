@@ -82,7 +82,7 @@ height:200px;
 											<span class="muted">Artifact</span>
 										</div>
 										<div class="span4 text-right">
-											<p class="muted">${ecoreMetamodel.getProjects().size()} projects <a href=""><i class="icon-circle-arrow-right"></i></a></p>
+											<p class="muted">Used in ${ecoreMetamodel.getProjects().size()} projects <a href=""><i class="icon-circle-arrow-right"></i></a></p>
 											<div class="margin-bottom-none progress progress-small count-outside"><div class="count">30%</div><div class="bar" style="width: 30%;"></div></div>
 										</div>
 									</div>
@@ -142,6 +142,7 @@ height:200px;
 												<div class="span4">
 													<h5 class="strong">Metamodel File</h5>
 													<a href="#modal-simple" class="btn btn-primary btn-small btn-block" data-toggle="modal"><i class="icon-eye-open icon-fixed-width"></i> Visualize Metamodel</a>													
+													<a href="#"  class="btn btn-default btn-small btn-block" onclick="return false;"><i class="icon-eye-open icon-fixed-width"></i> Visualize Tree View</a>																								
 													<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}"  class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>																								
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
@@ -254,10 +255,26 @@ height:200px;
 					<c:forEach items="${ecoreMetamodel.relations}" var="relation">
 						<!-- Table row -->
 						<tr>
-							<td>${relation.getFromArtifact().getName()}</td>
+								<c:choose>
+								  <c:when test="${relation.getFromArtifact().getId() == ecoreMetamodel.getId()}">
+								   	<td><span class="badge badge-success">${relation.getFromArtifact().getName()}</span></td>
+								  </c:when>							
+								  <c:otherwise>
+								    <td>${relation.getFromArtifact().getName()}</td>
+								  </c:otherwise>
+								</c:choose>														
 							
-							<td class="center"><span class="badge badge-success">${relation.getValue()}</span></td>
-							<td>${relation.getToArtifact().getName()}</td>
+							
+							<td class="center"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></td>
+							
+								<c:choose>
+								  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+								   	<td><span class="badge badge-success">${relation.getToArtifact().getName()}</span></td>
+								  </c:when>							
+								  <c:otherwise>
+								    <td>${relation.getToArtifact().getName()}</td>
+								  </c:otherwise>
+								</c:choose>		
 						</tr>
 						<!-- // Table row END -->
 					</c:forEach>

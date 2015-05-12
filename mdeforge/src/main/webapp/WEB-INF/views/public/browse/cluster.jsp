@@ -51,53 +51,140 @@
 		<div class="hide" id="threshold_form">
 		
 			
-			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
-	
-				
-				
-				<div class="widget-body">
-					<div class="row-fluid">
-					<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
-						<div class="span6">		
-									<!-- Slider -->
-									<div class="slider-range-min row-fluid">
-										<div class="span3">
-											<label class="span8">Threshold:</label> 
-											<input type="text" class="amount span4" name="threshold"/>
-										</div>
-										<div class="span9" style="padding: 5px 0 0;">
-											<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-											<div class="slider slider-primary"></div>
-										</div>
-									</div>
-									<!-- // Slider END -->
-
-						</div>
-						<div class="span3" style="padding-left:100px;">
-						
-							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="1" checked="checked"/> EMF Match
-							</label><br/>
-							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="2"  /> EMF Containment
-							</label>
-							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="3"  /> Cosine coefficient
-							</label>
-							<label class="radio">
-								<input type="radio" class="radio" name="computation" value="4"  /> Dice distance	
-							</label>
+			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">													
+					
+					<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+								<div class="span9">		
+											<!-- Slider -->
+											<div class="slider-range-min row-fluid">
+												<div class="span3">
+													<label class="span8">Threshold:</label> 
+													<input type="text" class="amount span4" name="threshold"/>
+												</div>
+												<div class="span9" style="padding: 5px 0 0;">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+													<div class="slider slider-primary"></div>
+												</div>
+											</div>
+											<!-- // Slider END -->
+		
+								</div>
+								
+								<div class="span3">														
+									<button class="btn btn-block btn-success" name="computation" value="1">EMF Match</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
 							
 						</div>
-						<div class="span3">
-							<button class="btn btn-block btn-success">Calculate</button>
+					
+					
+					<hr>
+					
+					<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+								<div class="span9">		
+											<!-- Slider -->
+											<div class="slider-range-min2 row-fluid">
+												<div class="span3">
+													<label class="span8">Threshold:</label> 
+													<input type="text" class="amount span4" name="threshold"/>
+												</div>
+												<div class="span9" style="padding: 5px 0 0;">
+													<input type="hidden" id="actual_threshold" value="0.3 - ${fn:substringAfter(threshold, '0.')}">
+													<div class="slider slider-primary"></div>
+												</div>
+											</div>
+											<!-- // Slider END -->
+		
+								</div>
+								
+								<div class="span3">														
+									<button class="btn btn-block btn-success" name="computation" value="2">EMF Containment</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
 						</div>
-	
-					</form>
-												
 						
-					</div>
-				</div>
+						
+						
+						<hr>
+					
+					<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+								<div class="span9">		
+											<!-- Slider -->
+											<div class="slider-range-min row-fluid">
+												<div class="span3">
+													<label class="span8">Threshold:</label> 
+													<input type="text" class="amount span4" name="threshold"/>
+												</div>
+												<div class="span9" style="padding: 5px 0 0;">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+													<div class="slider slider-primary"></div>
+												</div>
+											</div>
+											<!-- // Slider END -->
+		
+								</div>
+								
+								<div class="span3">														
+									<button class="btn btn-block btn-success" name="computation" value="3">Cosine coefficient</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+						
+						
+						<hr>
+					
+					<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+								<div class="span9">		
+											<!-- Slider -->
+											<div class="slider-range-min row-fluid">
+												<div class="span3">
+													<label class="span8">Threshold:</label> 
+													<input type="text" class="amount span4" name="threshold"/>
+												</div>
+												<div class="span9" style="padding: 5px 0 0;">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+													<div class="slider slider-primary"></div>
+												</div>
+											</div>
+											<!-- // Slider END -->
+		
+								</div>
+								
+								<div class="span3">														
+									<button class="btn btn-block btn-success" name="computation" value="4">Dice distance</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+					
+					
+					
 			</div>
 		
 		</div>

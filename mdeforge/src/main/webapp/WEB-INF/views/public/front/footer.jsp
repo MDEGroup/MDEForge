@@ -38,16 +38,14 @@
 					<div class="span3">
 						<h4>Contact</h4>
 						<ul class="icons">
-							<li class="glyphicons phone"><i></i>+39 0862 433183</li>
+							<!-- <li class="glyphicons phone"><i></i>+39 0862 433183</li> -->
 							<li class="glyphicons envelope"><i></i>mde@disim.univaq.it</li>
 						</ul>
 						
 						<h4>Social</h4>
-						<a href="" class="glyphicons standard primary facebook"><i></i></a>
-						<a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a>
-						<a href="" class="glyphicons standard google_plus"><i></i></a>
-						<a href="" class="glyphicons standard vimeo"><i></i></a>
+						<a href="https://github.com/MDEGroup/MDEForge" class="glyphicons standard primary github"><i></i></a>
+						<a href="http://mdegroup.disim.univaq.it/" class="glyphicons standard link"><i></i></a>
+						<a href="#" class="glyphicons standard twitter"><i></i></a>					
 					</div>
 				</div>
 				

@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.ContainmentRelationService;
@@ -50,16 +51,23 @@ public class PublicController {
 	public String index() {
 		return "public.index";
 	}
+	@RequestMapping(value = "/about", method = { RequestMethod.GET })
+	public String about() {
+		return "public.about";
+	}
 
 	@RequestMapping(value = "/browse", method = { RequestMethod.GET })
-	public String dashboard(Model model) {
+	public String dashboard(Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		
+		response.sendRedirect(request.getContextPath()+"/public/browse/cluster_graph");
 
-		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService
-				.findAll();
-		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
-		List<User> users = userService.findAll();
-		model.addAttribute("users", users);
-		return "public.browse.dashboard";
+//		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService
+//				.findAll();
+//		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
+//		List<User> users = userService.findAll();
+//		model.addAttribute("users", users);
+//		return "public.browse.dashboard";
+		return null;
 	}
 
 	@RequestMapping(value = "/browse/metamodel_details", method = { RequestMethod.GET })
@@ -160,6 +168,48 @@ public class PublicController {
 			@RequestParam(value = "threshold", required = true, defaultValue = "0.3") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
 
+		List<Cluster> clusters = new ArrayList<Cluster>();
+		switch (computation) {
+		case 1:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					similarityRelationService);
+			break;
+		case 2:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					containmentRelationService);
+			break;
+		case 3:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					cosineSimilarityRelationService);
+			break;
+		case 4:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					diceSimilarityRelationService);
+			break;
+		}
+		
+		int maxCluster = 0;
+		double average = 0;
+		int count = 0;
+		int noCluster = 0;
+		for (Cluster cluster : clusters) {
+			maxCluster = (maxCluster < cluster.getArtifacts().size()) ? cluster
+					.getArtifacts().size() : maxCluster;
+			count += cluster.getArtifacts().size();
+			if (cluster.getArtifacts().size() == 1) {
+				noCluster++;
+			}
+		}
+		average = (count * 1.0) / (clusters.size() * 1.0);
+		model.addAttribute("clusters", clusters);
+		model.addAttribute("average", average);
+		model.addAttribute("max", maxCluster);
+		model.addAttribute("noCluster", noCluster);
+		// Mettiamo anche le informazioni relative alla Threshold e Computation
+		model.addAttribute("threshold", threshold);
+		model.addAttribute("computation", computation);
+		
+		
 		/*
 		 * GRAPH
 		 */
