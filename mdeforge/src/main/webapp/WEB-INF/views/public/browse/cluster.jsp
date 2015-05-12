@@ -30,8 +30,8 @@
 <div class="heading-buttons">
 	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
 	<div class="buttons pull-right">
-		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Threshold</span>			
-		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
+		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
+		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
 	</div>
 	<div class="clearfix"></div>
 </div>
@@ -50,10 +50,16 @@
 
 		<div class="hide" id="threshold_form">
 		
+			<div class="row-fluid">
+				<div class="span2">
+				
+				</div>	
 			
+				<div class="span8">	
 			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">													
 					
-					<div class="widget-body">
+					
+					<div class="widget-body ">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 								<div class="span9">		
@@ -189,10 +195,17 @@
 		
 		</div>
 		
+		<div class="span2">
+				
+				</div>	
+		</div>
+		</div>
 		
 		
 		
 		
+			<div class="separator bottom"></div>
+			<div class="separator bottom"></div>
 		
 		
 		
@@ -209,48 +222,82 @@
 		<div class="widget-body">		
 			<!-- Row -->
 			<div class="row-fluid">
-				<div class="span2">
-					<div class="widget-stats widget-stats-gray widget-stats-1">
-						<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
-						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
+			
+			
+				<div class="span6">
+					<div class="span4">
+						<div class="widget-stats widget-stats-gray widget-stats-1">
+							<span class="glyphicons adjust_alt"><i></i><span class="txt">Computation</span></span>
+							<div class="clearfix"></div>
+							<span class="count" style="font-size:26px; line-height:28px;">								
+								<c:choose>
+								  <c:when test="${computation == '1'}">
+								 	 Match-based similarity								   
+								  </c:when>
+								  <c:when test="${computation == '2'}">
+								  	Containment-based similarity
+								  </c:when>
+								  <c:when test="${computation == '3'}">
+								   	 Cosine similarity
+								  </c:when>
+								  <c:when test="${computation == '4'}">
+								   	Dice's coefficient
+								  </c:when>								  
+								</c:choose>							
+							</span>
+						</div>
 					</div>
+					
+					<div class="span4">
+						<div class="widget-stats widget-stats-gray widget-stats-1">
+							<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
+							<div class="clearfix"></div>
+							<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
+						</div>
+					</div>
+					
+					<div class="span4">
+						<div class="widget-stats widget-stats-gray widget-stats-1">
+							<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
+							<div class="clearfix"></div>
+							<span class="count">${clusters.size()}</span>
+						</div>
+					</div>
+					
 				</div>
-				
-				<div class="span2">
-					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
-						<div class="clearfix"></div>
-						<span class="count">${clusters.size()}</span>
+					
+					
+				<div class="span6">
+					
+					<div class="span3">
+						<div class="widget-stats widget-stats-1">
+							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
+							<div class="clearfix"></div>
+							<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
+						</div>
 					</div>
-				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
-						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="3" /></span>
+					<div class="span3">
+						<div class="widget-stats widget-stats-1">
+							<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
+							<div class="clearfix"></div>
+							<span class="count">${max}</span>
+						</div>
 					</div>
-				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
-						<div class="clearfix"></div>
-						<span class="count">${max}</span>
+					<div class="span3">
+						<div class="widget-stats widget-stats-1">
+							<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
+							<div class="clearfix"></div>
+							<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
+						</div>
 					</div>
-				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons buoy"><i></i><span class="txt">Clusters With One Element</span></span>
-						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
-					</div>
-				</div>
-				<div class="span2">
-					<div class="widget-stats widget-stats-1">
-						<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
-						<div class="clearfix"></div>
-						<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
-					</div>
+					<div class="span3">
+						<div class="widget-stats widget-stats-1">
+							<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
+							<div class="clearfix"></div>
+							<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
+						</div>
+					</div>	
+					
 				</div>	
 			</div>
 			<!-- // Row END -->									

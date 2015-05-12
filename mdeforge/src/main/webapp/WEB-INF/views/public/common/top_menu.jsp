@@ -39,7 +39,7 @@
 			</ul>
 						
 						<!-- Top Menu Right -->
-			<ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
+			<%-- <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
 								
 				<!-- Language menu -->
 				<li class="hidden-tablet hidden-phone hidden-desktop-1 dropdown dd-1 dd-flags" id="lang_nav">
@@ -84,7 +84,7 @@
 									</li>
 				<!-- // Profile / Logout menu END -->
 				
-			</ul>
+			</ul> --%>
 			<!-- // Top Menu Right END -->
 						<div class="clearfix"></div>
 			

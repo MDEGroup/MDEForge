@@ -29,8 +29,7 @@
 			
 				<!-- Table heading -->
 				<thead>
-					<tr>
-						<th>Id</th>
+					<tr>						
 						<th>Name</th>
 						<th>Description</th>
 						<th>Open</th>
@@ -45,10 +44,15 @@
 				<tbody>
 					<c:forEach items="${ecoreMetamodelsList}" var="ecoreMetamodel">
 					<!-- Table row -->
-					<tr class="gradeX">
-						<td>${ecoreMetamodel.getId()}</td>
+					<tr class="gradeX">						
 						<td>${ecoreMetamodel.getName()}</td>
-						<td>${ecoreMetamodel.getDescription()}</td>
+						<td>
+							<c:forEach items="${ecoreMetamodel.properties}" var="property">
+								<c:if test="${property.getName() == 'Description '}">
+										${property.getValue()}
+								</c:if>
+							</c:forEach>
+						</td>
 						<td class="center">${ecoreMetamodel.getOpen()}</td>
 						<td class="center">${ecoreMetamodel.getCreated()}</td>
 						<td class="center">${ecoreMetamodel.getModified()}</td>

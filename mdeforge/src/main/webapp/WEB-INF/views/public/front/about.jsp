@@ -30,7 +30,7 @@
 						
 							<!-- Thumbnail -->
 							<div class="thumbnail widget-thumbnail">
-								<img src="${pageContext.request.contextPath}/resources/theme/images/MDEForge_platform.png" alt="MDE Forge Platform" />
+								<img src="${pageContext.request.contextPath}/resources/theme/images/architecture.png" alt="MDE Forge Platform" />
 								<div class="caption">
 									<h4>MDE Forge Platform</h4>
 									<p>MDEForge platform consists of a number of services that can be used by means of both a Web access and programmatic interfaces (API) that enable their adoption as software as a service. 

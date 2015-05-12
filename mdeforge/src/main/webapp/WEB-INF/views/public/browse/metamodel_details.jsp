@@ -181,7 +181,7 @@ height:200px;
 			<div class="span6">	
 			<h4>Metrics</h4>
 		
-				<table class="table table-bordered table-striped table-white">
+				<%-- <table class="table table-bordered table-striped table-white">
 	
 					<!-- Table heading -->
 					<thead>
@@ -232,53 +232,105 @@ height:200px;
 							</tr>
 							<!-- // Table row END -->
 						</c:forEach>						
+				</table> --%>
+				<table class="table table-bordered table-striped table-white">
+	
+					<!-- Table heading -->
+					<thead>
+						<tr>						
+							<th>Name</th>
+							<th class="center" >Value</th>	
+						</tr>					
+						
+					</thead>
+					<!-- // Table heading END -->
+	
+					<!-- Table body -->
+					<tbody>
+						<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
+							<!-- Table row -->
+							<tr>
+								<td class="left">${metric.getName()}</td>
+								<td class="center"><span class="badge badge-success">${metric.getValue()}</span></td>
+							</tr>
+							<!-- // Table row END -->
+						</c:forEach>						
 				</table>
 
 		</div>
 		
 		<div class="span6">
-			<h4>Relations</h4>
-			<table class="table table-bordered table-striped table-white">
+		<h4>&nbsp;</h4>
+				<div class="relativeWrap">
+						<div class="widget widget-tabs">
+						
+							<!-- Tabs Heading -->
+							<div class="widget-head">
+								<ul>
+									<li class="active"><a class="glyphicons more_items" href="#mio_tab_1" data-toggle="tab"><i></i>Similarity</a></li>
+									<li><a class="glyphicons font" href="#mio_tab_2" data-toggle="tab"><i></i>Other</a></li>
+								</ul>
+							</div>
+							<!-- // Tabs Heading END -->
+							
+							<div class="widget-body">
+								<div class="tab-content">
+								
+									<!-- Tab content -->
+									<div class="tab-pane active" id="mio_tab_1">
+										<table class="table table-bordered table-striped table-white">
 
-				<!-- Table heading -->
-				<thead>
-					<tr>
-						<th>Artifact</th>
-						<th class="center">Similarity Value</th>
-						<th>Artifact</th>
-					</tr>
-				</thead>
-				<!-- // Table heading END -->
-
-				<!-- Table body -->
-				<tbody>
-					<c:forEach items="${ecoreMetamodel.relations}" var="relation">
-						<!-- Table row -->
-						<tr>
-								<c:choose>
-								  <c:when test="${relation.getFromArtifact().getId() == ecoreMetamodel.getId()}">
-								   	<td><span class="badge badge-success">${relation.getFromArtifact().getName()}</span></td>
-								  </c:when>							
-								  <c:otherwise>
-								    <td>${relation.getFromArtifact().getName()}</td>
-								  </c:otherwise>
-								</c:choose>														
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th>Artifact</th>
+													<th class="center">Similarity Value</th>													
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
 							
-							
-							<td class="center"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></td>
-							
-								<c:choose>
-								  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-								   	<td><span class="badge badge-success">${relation.getToArtifact().getName()}</span></td>
-								  </c:when>							
-								  <c:otherwise>
-								    <td>${relation.getToArtifact().getName()}</td>
-								  </c:otherwise>
-								</c:choose>		
-						</tr>
-						<!-- // Table row END -->
-					</c:forEach>
-			</table>
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
+													<!-- Table row -->
+													<tr>
+															<c:choose>
+															  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+															   	<td>${relation.getFromArtifact().getName()}</td>
+															  </c:when>																	  				
+															  <c:otherwise>
+															    <td>${relation.getToArtifact().getName()}</td>
+															  </c:otherwise>
+															</c:choose>														
+														
+														
+														<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
+																														
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+										
+	
+									</div>
+									<!-- // Tab content END -->
+									
+									<!-- Tab content -->
+									<div class="tab-pane" id="mio_tab_2">
+										
+										
+										
+									</div>
+									<!-- // Tab content END -->
+									
+								</div>
+							</div>
+						</div>
+			</div>
+		
+		
+			
+			
 			
 			
 		</div>
@@ -362,17 +414,17 @@ height:200px;
 			</div>
 			<!-- // Widget END -->
 			<!-- Widget -->
-			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
+<!-- 			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
 					
-				<!-- Widget Heading -->
+				Widget Heading
 				<div class="widget-head">
 					<h4 class="heading glyphicons tags"><i></i>TAGS</h4>
 				</div>
-				<!-- // Widget Heading END -->
+				// Widget Heading END
 				
 				<div class="widget-body list">
 				
-					<!-- List -->
+					List
 					<ul>
 						<li>
 							<a href="">Tag 1</a>
@@ -383,10 +435,10 @@ height:200px;
 							
 						</li>						
 					</ul>
-					<!-- // List END -->
+					// List END
 					
 				</div>
-			</div>
+			</div> -->
 			<!-- // Widget END -->			
 			
 			<!-- Widget -->
