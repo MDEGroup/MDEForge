@@ -32,7 +32,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 
-public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
+public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
+		CRUDArtifactService<T> {
 
 	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
@@ -56,13 +57,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	protected GridFileMediaService gridFileMediaService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	
+
 	protected Class<T> persistentClass;
-	
+
 	@SuppressWarnings("unchecked")
 	public CRUDArtifactServiceImpl() {
-        this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+		this.persistentClass = (Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0];
+	}
+
 	@Override
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -71,17 +74,17 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
 		Criteria c4 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c3.andOperator(c2.orOperator(c1,c4)));
-		} else 
-			query.addCriteria(c3.orOperator(c1,c4));
-		
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c3.andOperator(c2.orOperator(c1, c4)));
+		} else
+			query.addCriteria(c3.orOperator(c1, c4));
+
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
 			throw new BusinessException();
 		return artifact;
 	}
-
 
 	@Override
 	public List<T> findAll() {
@@ -89,12 +92,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
-			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			Criteria c = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			return n.find(query, persistentClass);
-		}
-		else return n.findAll(persistentClass);
-		
+		} else
+			return n.findAll(persistentClass);
+
 	}
 
 	@Override
@@ -164,7 +168,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			// UploadFile
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName("");
-			fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
+			fileMedia.setByteArray(Base64.decode(artifact.getFile()
+					.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 
 			for (Workspace ws : artifact.getWorkspaces()) {
@@ -185,13 +190,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(), artifact.getAuthor());
+				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
+						artifact.getAuthor());
 				if (existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
+					Artifact temp = artifactRepository.findOne(rel
+							.getToArtifact().getId());
 					if (temp.getRelations() == null)
 						temp.setRelations(new ArrayList<Relation>());
 					temp.getRelations().add(rel);
@@ -207,7 +214,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				}
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
+				Project p = projectService.findById(ps.getId(),
+						artifact.getAuthor());
 				if (!isArtifactInProject(p.getId(), artifact.getId())) {
 					p.getArtifacts().add(artifact);
 					projectRepository.save(p);
@@ -226,7 +234,14 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			throw new BusinessException();
 		}
 	}
-
+	@Override
+	public void updateSimple(T artifact) {
+		try {
+			artifactRepository.save(artifact);
+		} catch (Exception e) {
+			throw new BusinessException();
+		}
+	}
 	@Override
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
@@ -237,7 +252,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName(artifact.getFile().getFileName());
-			fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
+			fileMedia.setByteArray(Base64.decode(artifact.getFile()
+					.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
 			for (Workspace ws : artifact.getWorkspaces())
@@ -257,13 +273,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(), artifact.getAuthor());
+				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
+						artifact.getAuthor());
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
+					Artifact temp = artifactRepository.findOne(rel
+							.getToArtifact().getId());
 					if (temp.getRelations() == null)
 						temp.setRelations(new ArrayList<Relation>());
 					temp.getRelations().add(rel);
@@ -281,7 +299,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				workspaceRepository.save(w);
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
+				Project p = projectService.findById(ps.getId(),
+						artifact.getAuthor());
 				p.getArtifacts().add(artifact);
 				projectRepository.save(p);
 			}
@@ -305,9 +324,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Criteria c1 = Criteria.where("shared.id").is(user.getId());
 		Criteria c2 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c3 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2,c3));
-		} else 
+			Criteria c3 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2, c3));
+		} else
 			query.addCriteria(c1.andOperator(c2));
 		return n.find(query, persistentClass);
 	}
@@ -317,22 +337,25 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria.where("open").is(true);
-		if(persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2));		
-		}
-		else 
+		if (persistentClass != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2));
+		} else
 			query.addCriteria(c2);
 		return n.find(query, persistentClass);
 	}
+
 	@Override
-	public T findOneByOwner(String idArtifact, User user) throws BusinessException {
+	public T findOneByOwner(String idArtifact, User user)
+			throws BusinessException {
 		// TODO change method
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c2 = Criteria.where("author.$id").is(user.getId());
 		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			Criteria c1 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
 			query.addCriteria(c2.andOperator(c1));
 		}
 		query.addCriteria(c2);
@@ -345,15 +368,31 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Query query = new Query();
 		Criteria c2 = Criteria.where("id").is(id);
 		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			Criteria c1 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
 			query.addCriteria(c2.andOperator(c1));
-		}
-		else query.addCriteria(c2);
+		} else
+			query.addCriteria(c2);
+		return n.findOne(query, persistentClass);
+	}
+	@Override
+	public T findOnePublic(String id) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c2 = Criteria.where("id").is(id);
+		Criteria c3 = Criteria.where("open").is(true);
+		if (persistentClass != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c1, c2, c3));
+		} else
+			query.addCriteria(new Criteria().andOperator(c2, c3));
 		return n.findOne(query, persistentClass);
 	}
 
 	@Override
-	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact) throws BusinessException {
+	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)
+			throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (Workspace workspace : artifact.getWorkspaces()) {
 			if (workspace.getId().equals(idWorkspace))
@@ -363,7 +402,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
-	public boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException {
+	public boolean isArtifactInProject(String idProject, String idArtfact)
+			throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (Project workspace : artifact.getProjects()) {
 			if (workspace.getId().equals(idProject))
@@ -373,7 +413,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
-	public boolean isArtifactInUser(User idUser, String idArtfact) throws BusinessException {
+	public boolean isArtifactInUser(User idUser, String idArtfact)
+			throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (User user : artifact.getShared()) {
 			if (user.getId().equals(idUser.getId()))
@@ -383,46 +424,51 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
-	public boolean existRelation(String idTo, String idFrom) throws BusinessException {
-		List<Relation> r = relationRepository.findByFromArtifactIdOrToArtifactId(idFrom, idTo);
+	public boolean existRelation(String idTo, String idFrom)
+			throws BusinessException {
+		List<Relation> r = relationRepository
+				.findByFromArtifactIdOrToArtifactId(idFrom, idTo);
 		return (r.size() == 0) ? false : true;
 	}
+
 	@Override
 	public List<T> findArtifactInProject(String idProject, User user) {
 		projectService.findById(idProject, user);
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("projects.$id").is(idProject);
-		if(persistentClass!=Artifact.class){
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c1,c2));
-		}
-		else
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c1, c2));
+		} else
 			query.addCriteria(c1);
 		return operations.find(query, persistentClass);
 	}
+
 	@Override
 	public List<T> findArtifactInWorkspace(String idWorkspace, User user) {
 		workspaceService.findById(idWorkspace, user);
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
-		if(persistentClass!=Artifact.class){
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c1,c2));
-		}
-		else
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c1, c2));
+		} else
 			query.addCriteria(c1);
 		return operations.find(query, persistentClass);
 	}
 
-	protected T findOneByName(String name, User user, Class<T> c) throws BusinessException {
+	protected T findOneByName(String name, User user, Class<T> c)
+			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users.$id").is(user.getId());
 		Criteria c3 = Criteria.where("name").is(name);
 
-		if(c != Artifact.class) {
+		if (c != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
 			query.addCriteria(c1.andOperator(c2).andOperator(c3));
 		}
@@ -433,6 +479,24 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		return project;
 	}
 
+	@Override
+	public T findOneByName(String name) throws BusinessException {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+
+		Criteria c3 = Criteria.where("name").is(name);
+
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(new Criteria().andOperator(c2, c3));
+		}
+		query.addCriteria(c3);
+		T project = operations.findOne(query, persistentClass);
+		if (project == null)
+			throw new BusinessException();
+		return project;
+	}
 
 	@Override
 	public List<Metric> findMetricForArtifact(Artifact a) {
@@ -441,6 +505,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Criteria c1 = Criteria.where("artifact.$id").is(a.getId());
 		query.addCriteria(c1);
 		return operations.find(query, Metric.class);
-		
+
 	}
 }

@@ -10,8 +10,8 @@
 			
 						
 			<ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/dashboard.htm" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
-				<li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
+				<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
+				<%-- <li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
 				
 					
 				
@@ -32,14 +32,14 @@
 					</ul>
 				</li>
 				
-				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li>
+				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li> --%>
 				
 									
 				
 			</ul>
 						
 						<!-- Top Menu Right -->
-			<ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
+			<%-- <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
 								
 				<!-- Language menu -->
 				<li class="hidden-tablet hidden-phone hidden-desktop-1 dropdown dd-1 dd-flags" id="lang_nav">
@@ -84,7 +84,7 @@
 									</li>
 				<!-- // Profile / Logout menu END -->
 				
-			</ul>
+			</ul> --%>
 			<!-- // Top Menu Right END -->
 						<div class="clearfix"></div>
 			

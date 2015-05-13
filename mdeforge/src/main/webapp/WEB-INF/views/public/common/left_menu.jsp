@@ -2,7 +2,7 @@
 <div id="menu" class="hidden-phone hidden-print">
 		
 			<!-- Brand -->
-			<a href="#" class="appbrand"><spring:message code="mdeforge"/></a>
+			<a href="${pageContext.request.contextPath}/" class="appbrand"><spring:message code="mdeforge"/></a>
 		
 			<!-- Scrollable menu wrapper with Maximum height -->
 			<div class="slim-scroll" data-scroll-height="800px">
@@ -37,11 +37,11 @@
 			<div class="clearfix"></div>
 			<!-- // Regular Size Menu END -->
 			
-						<div class="alert alert-primary">
+			<!-- <div class="alert alert-primary">
 				<a class="close" data-dismiss="alert">&times;</a>
 				<p>Integer quis tempor mi. Donec venenatis dui in neque fringilla at iaculis libero ullamcorper. In velit sem, sodales id hendrerit ac, fringilla et est.</p>
 			</div>
-						
+					 -->	
 			</div>
 			<!-- // Scrollable Menu wrapper with Maximum Height END -->
 			

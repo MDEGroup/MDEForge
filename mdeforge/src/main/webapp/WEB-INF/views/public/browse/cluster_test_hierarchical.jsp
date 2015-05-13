@@ -69,38 +69,12 @@
 			edges : edges
 		};
 		var options = {
-			nodes : {
-				shape : 'dot',
-				radiusMin : 10,
-				radiusMax : 30,
-				fontSize : 12,
-				fontFace : "Tahoma"
-			},
-			edges : {
-				width : 0.15,
-				inheritColor : "from"
-			},
-			tooltip : {
-				delay : 200,
-				fontSize : 12,
-				color : {
-					background : "#fff"
-				}
-			},
-			stabilize : false,
-			smoothCurves : {
-				dynamic : false,
-				type : "continuous"
-			},
-			physics : {
-				barnesHut : {
-					gravitationalConstant : -80000,
-					springConstant : 0.001,
-					springLength : 200
-				}
-			},
-			hideEdgesOnDrag : true
-		};
+                hierarchicalLayout: {
+                    layout: "direction"
+                },
+                edges: {style:"arrow"},
+                smoothCurves:false
+            };
 
 		network = new vis.Network(container, data, options);
 	}

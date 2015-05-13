@@ -10,6 +10,7 @@ import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -40,9 +41,46 @@ public class Artifact implements java.io.Serializable{
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
-	private String description;
+
+	private String description = null;
+	//private List<String> tags = null;
+	private String version = null;
+	private String extractedContents = null;
+//	public List<String> getTags() {
+//		return tags;
+//	}
+//
+//	public void setTags(List<String> tags) {
+//		this.tags = tags;
+//	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getExtractedContents() {
+		return extractedContents;
+	}
+
+	public void setExtractedContents(String extractedContents) {
+		this.extractedContents = extractedContents;
+	}
+
+	@Transient
+	private List<Metric> metrics;
 	
-	
+	public List<Metric> getMetrics() {
+		return metrics;
+	}
+
+	public void setMetrics(List<Metric> metrics) {
+		this.metrics = metrics;
+	}
+
 	@DBRef(lazy = true)
 	@JsonSerialize(using = RelationListSerializer.class)
 	//@CascadeSave

@@ -283,6 +283,14 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	    return result;
 //		return null;
 	}
+
+
+
+	@Override
+	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 class Injector {
@@ -307,7 +315,6 @@ class Injector {
 			e.printStackTrace();
 		}
 		
-		//System.out.println("\t\tSingle injection of "+ATLFile+" executed");
 		return ATLFile+".xmi";
 	}
 }

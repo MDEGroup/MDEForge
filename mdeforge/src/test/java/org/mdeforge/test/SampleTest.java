@@ -14,6 +14,7 @@ import org.mdeforge.business.CRUDRelationService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,7 +76,7 @@ public class SampleTest {
 		try {
 			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/result2.txt");
 			for (double d : testArray) {
-				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d);
+				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d, similarityRelationService);
 				int maxCluster = 0;
 				double average = 0;
 				int count = 0;
@@ -96,7 +97,7 @@ public class SampleTest {
 			e.printStackTrace();
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void getFileNode() {
 		try {
@@ -111,5 +112,17 @@ public class SampleTest {
 		catch (Exception e) {}
 		
 	}
-	
+	@Test
+	public void getStringTest() {
+		try {
+			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/listaMetamodelli.txt");
+			List<EcoreMetamodel> srl = ecoreMetamodelService.findAllPublic();
+			for (EcoreMetamodel similarityRelation : srl) {
+				p.println(similarityRelation.getName());
+			}
+			p.close();
+		}
+		catch (Exception e) {}
+		
+	}
 }

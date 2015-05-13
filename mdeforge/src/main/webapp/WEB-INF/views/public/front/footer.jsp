@@ -19,11 +19,12 @@
 					<div class="span3">
 						<h4>Authors</h4>
 						<ul>
-							<li><a href="http://www.di.univaq.it/home.php?users_username=alfonso">Alfonso Pierantonio</a></li>
+							<li><a href="http://www.basciani.it">Francesco Basciani</a></li>
+							<li><a href="https://scholar.google.it/citations?user=PNagLbIAAAAJ&hl=it">Juri Di Rocco</a></li>
 							<li><a href="http://www.di.univaq.it/diruscio/">Davide Di Ruscio</a></li>
+							<li><a href="#">Amleto Di Salle</a></li>
 							<li><a href="http://www.di.univaq.it/home.php?users_username=ludovico.iovino">Ludovico Iovino</a></li>
-							<li><a href="#">Francesco Basciani</a></li>
-							<li><a href="#">Juri Di Rocco</a></li>
+							<li><a href="http://www.di.univaq.it/home.php?users_username=alfonso">Alfonso Pierantonio</a></li>
 						</ul>
 					</div>
 					<div class="span4">
@@ -37,16 +38,14 @@
 					<div class="span3">
 						<h4>Contact</h4>
 						<ul class="icons">
-							<li class="glyphicons phone"><i></i>+39 0862 433183</li>
+							<!-- <li class="glyphicons phone"><i></i>+39 0862 433183</li> -->
 							<li class="glyphicons envelope"><i></i>mde@disim.univaq.it</li>
 						</ul>
 						
 						<h4>Social</h4>
-						<a href="" class="glyphicons standard primary facebook"><i></i></a>
-						<a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a>
-						<a href="" class="glyphicons standard google_plus"><i></i></a>
-						<a href="" class="glyphicons standard vimeo"><i></i></a>
+						<a href="https://github.com/MDEGroup/MDEForge" class="glyphicons standard primary github"><i></i></a>
+						<a href="http://mdegroup.disim.univaq.it/" class="glyphicons standard link"><i></i></a>
+						<a href="#" class="glyphicons standard twitter"><i></i></a>					
 					</div>
 				</div>
 				

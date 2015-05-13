@@ -11,6 +11,7 @@ public interface CRUDRelationService<T extends Relation> {
 	void save(Relation r);
 	List<T> findAll() throws BusinessException;
 	List<T> findByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException;
+	T findOneByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException;
 	
 
 }
