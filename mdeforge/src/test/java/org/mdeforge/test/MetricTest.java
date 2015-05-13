@@ -84,6 +84,7 @@ public class MetricTest {
 			ecoreMetamodelService.updateSimple(ecoreMetamodel);
 		}
 	}
+	@Ignore
 	@Test
 	public void addSerializedContent() {
 		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService
