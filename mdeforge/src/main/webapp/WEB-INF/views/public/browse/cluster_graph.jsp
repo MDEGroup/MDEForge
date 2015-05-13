@@ -209,10 +209,13 @@
 					
 					
 			</div>
-			</div>
-			</div>
-			</div>
 		
+		</div>
+		
+		<div class="span2">
+				
+				</div>	
+		</div>
 		</div>
 
 
