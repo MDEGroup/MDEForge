@@ -10,6 +10,7 @@
 			<!-- Sidebar Profile -->
 			<span class="profile center">
 				<a href="#"><img data-src="holder.js/36x36/white" alt="Avatar" /></a>
+				<%-- <a href="#"><img src="${pageContext.request.contextPath}/resources/theme/images/logo-small.gif" alt="Avatar" /></a> --%>
 			</span>
 			<!-- // Sidebar Profile END -->
 			
