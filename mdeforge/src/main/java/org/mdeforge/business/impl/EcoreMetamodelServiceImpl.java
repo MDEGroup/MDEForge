@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -599,6 +601,18 @@ public class EcoreMetamodelServiceImpl extends
 			cluster.setMostRepresentive(mostRepresentive);
 		}
 
+		Collections.sort(clusterList, new Comparator<Cluster>() {
+	        @Override
+	        public int compare(Cluster  cluster1, Cluster  cluster2)
+	        {
+
+	            return  cluster1.getArtifacts().size() > cluster2.getArtifacts().size() ? 
+	            				-1 : 
+	            					cluster1.getArtifacts().size() < cluster2.getArtifacts().size() ? +1 : 0;
+	            		//cluster1.getArtifacts().size().compareTo(cluster2.getArtifacts().size());
+	        }
+	    });
+		
 		return clusterList;
 	}
 
