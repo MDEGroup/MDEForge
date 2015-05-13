@@ -267,8 +267,10 @@ height:200px;
 							<!-- Tabs Heading -->
 							<div class="widget-head">
 								<ul>
-									<li class="active"><a class="glyphicons more_items" href="#mio_tab_1" data-toggle="tab"><i></i>Similarity</a></li>
-									<li><a class="glyphicons font" href="#mio_tab_2" data-toggle="tab"><i></i>Other</a></li>
+									<li class="active"><a  href="#mio_tab_1" data-toggle="tab"><i></i>Similarity</a></li>
+									<li><a href="#mio_tab_2" data-toggle="tab"><i></i>Containment</a></li>
+									<li><a href="#mio_tab_3" data-toggle="tab"><i></i>Cosine</a></li>
+									<li><a href="#mio_tab_4" data-toggle="tab"><i></i>Dice</a></li>
 								</ul>
 							</div>
 							<!-- // Tabs Heading END -->
@@ -294,18 +296,21 @@ height:200px;
 												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
 													<!-- Table row -->
 													<tr>
-															<c:choose>
-															  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-															   	<td>${relation.getFromArtifact().getName()}</td>
-															  </c:when>																	  				
-															  <c:otherwise>
-															    <td>${relation.getToArtifact().getName()}</td>
-															  </c:otherwise>
-															</c:choose>														
+														<c:choose>
+															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.SimilarityRelation'}">
+																<c:choose>
+																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																   	<td>${relation.getFromArtifact().getName()}</td>
+																  </c:when>																	  				
+																  <c:otherwise>
+																    <td>${relation.getToArtifact().getName()}</td>
+																  </c:otherwise>
+																</c:choose>
+															
 														
-														
-														<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
-																														
+															<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
+														</c:when>														
+														</c:choose>																
 													</tr>
 													<!-- // Table row END -->
 												</c:forEach>
@@ -318,11 +323,124 @@ height:200px;
 									<!-- Tab content -->
 									<div class="tab-pane" id="mio_tab_2">
 										
-										
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th>Artifact</th>
+													<th class="center">Containment Value</th>													
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+							
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.ContainmentRelation'}">
+																<c:choose>
+																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																   	<td>${relation.getFromArtifact().getName()}</td>
+																  </c:when>																	  				
+																  <c:otherwise>
+																    <td>${relation.getToArtifact().getName()}</td>
+																  </c:otherwise>
+																</c:choose>
+															
+														
+															<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
+														</c:when>														
+														</c:choose>																
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
 										
 									</div>
 									<!-- // Tab content END -->
-									
+									<div class="tab-pane" id="mio_tab_3">
+										
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th>Artifact</th>
+													<th class="center">Containment Value</th>													
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+							
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.CosineSimilarityRelation'}">
+																<c:choose>
+																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																   	<td>${relation.getFromArtifact().getName()}</td>
+																  </c:when>																	  				
+																  <c:otherwise>
+																    <td>${relation.getToArtifact().getName()}</td>
+																  </c:otherwise>
+																</c:choose>
+															
+														
+															<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
+														</c:when>														
+														</c:choose>																
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+										
+									</div>
+									<!-- // Tab content END -->
+									<div class="tab-pane" id="mio_tab_4">
+										
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th>Artifact</th>
+													<th class="center">Containment Value</th>													
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+							
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.DiceSimilarityRelation'}">
+																<c:choose>
+																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																   	<td>${relation.getFromArtifact().getName()}</td>
+																  </c:when>																	  				
+																  <c:otherwise>
+																    <td>${relation.getToArtifact().getName()}</td>
+																  </c:otherwise>
+																</c:choose>
+															
+														
+															<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="3" /></span></td>
+														</c:when>														
+														</c:choose>																
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+										
+									</div>
+									<!-- // Tab content END -->
 								</div>
 							</div>
 						</div>
