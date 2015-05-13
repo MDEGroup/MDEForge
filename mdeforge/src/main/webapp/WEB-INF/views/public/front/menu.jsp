@@ -45,7 +45,7 @@
 			</ul>
 			
 			<!-- Top Menu Right -->
-			<ul class="topnav pull-right border-none hidden-tablet">
+			<%-- <ul class="topnav pull-right border-none hidden-tablet">
 				
 				<li class="search open margin-none border-none box-shadow-none">
 					<form autocomplete="off" class="dropdown dd-1">
@@ -54,7 +54,7 @@
 					</form>
 				</li>
 				
-			</ul>
+			</ul> --%>
 			<div class="clearfix"></div>
 			<!-- // Top Menu Right END -->
 			

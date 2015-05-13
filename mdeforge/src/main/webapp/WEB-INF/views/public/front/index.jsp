@@ -1,15 +1,15 @@
 <div id="landing_2">
 	
 	
-	<div class="mosaic-line mosaic-line-2">
+	<!-- <div class="mosaic-line mosaic-line-2">
 		<div class="container-960 center">
 			<h2 class="margin-none"><strong class="text-primary">MDE Forge</strong> <span class="hidden-phone"> an extensible Web-based modeling platform</span></h2>
 		</div>
-	</div>
+	</div> -->
 	
 	
-	<div class="widget widget-heading-simple widget-body-simple">
-			<div class="widget-body">
+	<div class="">
+			<div class="">
 				
 							<div class="carousel carousel-1 slide" id="myCarousel">
 								<div class="carousel-inner">

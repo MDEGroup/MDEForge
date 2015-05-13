@@ -240,7 +240,7 @@
 				<div class="span6">
 					<div class="span4">
 						<div class="widget-stats widget-stats-gray widget-stats-1">
-							<span class="glyphicons adjust_alt"><i></i><span class="txt">Computation</span></span>
+							<span class="txt">Similarity Measure</span>
 							<div class="clearfix"></div>
 							<span class="count" style="font-size:26px; line-height:28px;">								
 								<c:choose>
