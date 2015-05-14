@@ -26,9 +26,11 @@
 
 
 
+
 <!-- Heading -->
 <div class="heading-buttons">
 	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
+	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
 	<div class="buttons pull-right">
 		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
 		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
@@ -56,9 +58,9 @@
 				</div>	
 			
 				<div class="span8">	
-			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">													
+			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
 					
-					
+				<div class="widget-body">		
 					<div class="widget-body ">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
@@ -69,8 +71,17 @@
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+												<div class="span9" style="padding: 5px 0 0;">													
+													<c:choose>
+													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
+													  </c:when>
+													  <c:otherwise>
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}"/>
+													  </c:otherwise>
+													</c:choose>																										
+													
+													<input type="hidden" id="actual_threshold" value="${newThreshold}">
 													<div class="slider slider-primary"></div>
 												</div>
 											</div>
@@ -79,7 +90,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">EMF Match</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
 								</div>
 			
 							</form>
@@ -103,7 +114,7 @@
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
 												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="0.3 - ${fn:substringAfter(threshold, '0.')}">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
 													<div class="slider slider-primary"></div>
 												</div>
 											</div>
@@ -112,7 +123,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">EMF Containment</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
 								</div>
 			
 							</form>
@@ -131,7 +142,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min3 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -146,7 +157,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine coefficient</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
 								</div>
 			
 							</form>
@@ -164,7 +175,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min4 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -179,7 +190,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="4">Dice distance</button>
+									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
 								</div>
 			
 							</form>
@@ -188,6 +199,29 @@
 							</div>
 							
 						</div>
+						
+						<hr>
+						
+						<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
+								<div class="span9">		
+											
+		
+								</div>
+								
+								<div class="span3" style="text-align:right;">		
+																				
+									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+					</div>
 					
 					
 					
@@ -593,6 +627,64 @@
 
 
 
+
+
+
+
+
+<!-- Tour DEMO -->
+	<ul id="tlyPageGuide" data-tourtitle="My Tour" class="hidden-print">
+	
+		<!-- Tour Item -->
+		<li class="tlypageguide_left" data-tourtarget="#tour-step-1 .span6:last">
+			<div>
+				<h4>Step 1: 2 Column / Half</h4>
+				<p>Here is the item description. The number will appear to the left of the element.</p>
+			</div>
+		</li>
+		<!-- // Tour Item END -->
+		
+		<!-- Tour Item -->
+		<li class="tlypageguide_right" data-tourtarget="#tour-step-2 .heading">
+			<div>
+				<h4>Step 2: 3 Column / One Third</h4>
+				<p>Here is the item description. The number will appear to the right of the element.</p>
+			</div>
+		</li>
+		<!-- // Tour Item END -->
+		
+		<!-- Tour Item -->
+		<li class="tlypageguide_top" data-tourtarget="#tour-step-3 .heading">
+			<div>
+				<h4>Step 3: 2 Column / One Third &amp; Two Third</h4>
+				<p>Here is the item description. The number will appear above the element.</p>
+			</div>
+		</li>
+		<!-- // Tour Item END -->
+		
+		<!-- Tour Item -->
+		<li class="tlypageguide_bottom" data-tourtarget="#tour-step-4 .span3:eq(2)">
+			<div>
+				<h4>Step 4: 4 Column / One Fourth</h4>
+				<p>Here is the item description. The number will appear under the element.</p>
+			</div>
+		</li>
+		<!-- // Tour Item END -->
+		
+		<!-- Tour Item -->
+		<li class="tlypageguide_right" data-tourtarget="#tour-step-5 .heading">
+			<div>
+				<h4>Step 5: 2 Column / One Fourth &amp; Three Fourth</h4>
+				<p>Here is the item description. The number will appear to the right of the element.</p>
+			</div>
+		</li>
+		<!-- // Tour Item END -->
+		
+	</ul>
+	<!-- // Tour DEMO END -->
+	
+	
+	
 
 
 

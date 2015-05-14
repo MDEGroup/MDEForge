@@ -31,6 +31,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/public")
 public class PublicController {
+	
+	final double thresholdSimilarityRelation = 		0.15;
+	final double thresholdContainmentRelation = 		0.4;
+	final double thresholdCosineSimilarityRelation = 	0.2;
+	final double thresholdDiceSimilarityRelation = 	0.6;
 
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
@@ -115,30 +120,36 @@ public class PublicController {
 	@RequestMapping(value = "/browse/cluster", method = { RequestMethod.GET })
 	public String cluster(
 			Model model,
-			@RequestParam(value = "threshold", required = true, defaultValue = "0.3") Double threshold,
+			@RequestParam(value = "threshold", required = true, defaultValue = "0.30") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
+		
+		
 		/*
 		 * TABLE
 		 */
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
-		case 1:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					similarityRelationService);
+		case 1:	
+			
+			
+			
+			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;			
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);			
 			break;
 		case 2:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					containmentRelationService);
+			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
 			break;
 		case 3:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					cosineSimilarityRelationService);
+			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);
 			break;
 		case 4:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					diceSimilarityRelationService);
+			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
 			break;
 		}
+		
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
@@ -159,32 +170,35 @@ public class PublicController {
 		// Mettiamo anche le informazioni relative alla Threshold e Computation
 		model.addAttribute("threshold", threshold);
 		model.addAttribute("computation", computation);
+		model.addAttribute("numberOfMetamodels", count);
 		return "public.browse.cluster";
 	}
 
 	@RequestMapping(value = "/browse/cluster_graph", method = { RequestMethod.GET })
 	public String test(
 			Model model,
-			@RequestParam(value = "threshold", required = true, defaultValue = "0.3") Double threshold,
+			@RequestParam(value = "threshold", required = true, defaultValue = "0.30") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
 
+		
+		
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
-		case 1:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					similarityRelationService);
+		case 1:			
+			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;			
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);			
 			break;
 		case 2:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					containmentRelationService);
+			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
 			break;
 		case 3:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					cosineSimilarityRelationService);
+			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);
 			break;
 		case 4:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					diceSimilarityRelationService);
+			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
 			break;
 		}
 		
@@ -208,7 +222,7 @@ public class PublicController {
 		// Mettiamo anche le informazioni relative alla Threshold e Computation
 		model.addAttribute("threshold", threshold);
 		model.addAttribute("computation", computation);
-		
+		model.addAttribute("numberOfMetamodels", count);
 		
 		/*
 		 * GRAPH

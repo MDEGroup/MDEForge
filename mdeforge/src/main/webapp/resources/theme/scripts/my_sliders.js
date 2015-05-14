@@ -23,7 +23,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 0,
+            min: 15,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min .amount" ).val( "0." + ui.value );
@@ -43,7 +43,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 3,
+            min: 40,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min2 .amount" ).val( "0." + ui.value );
@@ -52,6 +52,46 @@ $(function()
 	        stop: function() { if (typeof mainYScroller != 'undefined') mainYScroller.enable(); }
         });
         $( ".slider-range-min2 .amount" ).val( "0." + $( ".slider-range-min2 .slider" ).slider( "value" ) );
+	}
+	
+	/*
+	 * JQueryUI Slider: Range fixed minimum
+	 */
+	if ($('.slider-range-min3').size() > 0)
+	{
+		$( ".slider-range-min3 .slider" ).slider({
+			create: JQSliderCreate,
+            range: "min",
+            value: $( "#actual_threshold" ).val(),
+            min: 20,
+            max: 99,
+            slide: function( event, ui ) {
+                $( ".slider-range-min3 .amount" ).val( "0." + ui.value );
+            },
+            start: function() { if (typeof mainYScroller != 'undefined') mainYScroller.disable(); },
+	        stop: function() { if (typeof mainYScroller != 'undefined') mainYScroller.enable(); }
+        });
+        $( ".slider-range-min3 .amount" ).val( "0." + $( ".slider-range-min3 .slider" ).slider( "value" ) );
+	}
+	
+	/*
+	 * JQueryUI Slider: Range fixed minimum
+	 */
+	if ($('.slider-range-min4').size() > 0)
+	{
+		$( ".slider-range-min4 .slider" ).slider({
+			create: JQSliderCreate,
+            range: "min",
+            value: $( "#actual_threshold" ).val(),
+            min: 60,
+            max: 99,
+            slide: function( event, ui ) {
+                $( ".slider-range-min4 .amount" ).val( "0." + ui.value );
+            },
+            start: function() { if (typeof mainYScroller != 'undefined') mainYScroller.disable(); },
+	        stop: function() { if (typeof mainYScroller != 'undefined') mainYScroller.enable(); }
+        });
+        $( ".slider-range-min4 .amount" ).val( "0." + $( ".slider-range-min4 .slider" ).slider( "value" ) );
 	}
 	
 	

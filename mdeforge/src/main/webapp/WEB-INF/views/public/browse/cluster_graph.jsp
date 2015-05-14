@@ -50,6 +50,7 @@
 <!-- Heading -->
 <div class="heading-buttons">
 	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel" /> <spring:message code="mdeforge.public.back.browse.graph"/></h3>
+	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
 	<div class="buttons pull-right">
 		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
 		<a href="${pageContext.request.contextPath}/public/browse/cluster?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons show_big_thumbnails"><i></i> Table View</a>				
@@ -74,8 +75,9 @@
 				</div>	
 			
 				<div class="span8">	
-			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">													
-					
+				
+			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
+				<div class="widget-body">	
 					<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
@@ -87,7 +89,16 @@
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
 												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+													<c:choose>
+													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
+													  </c:when>
+													  <c:otherwise>
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}"/>
+													  </c:otherwise>
+													</c:choose>																										
+													
+													<input type="hidden" id="actual_threshold" value="${newThreshold}">
 													<div class="slider slider-primary"></div>
 												</div>
 											</div>
@@ -96,7 +107,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">EMF Match</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
 								</div>
 			
 							</form>
@@ -129,7 +140,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">EMF Containment</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
 								</div>
 			
 							</form>
@@ -148,7 +159,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min3 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -163,7 +174,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine coefficient</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
 								</div>
 			
 							</form>
@@ -181,7 +192,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min4 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -196,7 +207,29 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="4">Dice distance</button>
+									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+						
+						<hr>
+						
+						<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
+								<div class="span9">		
+											
+		
+								</div>
+								
+								<div class="span3" style="text-align:right;">		
+																				
+									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
 								</div>
 			
 							</form>
@@ -209,6 +242,7 @@
 					
 					
 			</div>
+			</div>
 		
 		</div>
 		
@@ -217,6 +251,7 @@
 				</div>	
 		</div>
 		</div>
+		
 
 
 
