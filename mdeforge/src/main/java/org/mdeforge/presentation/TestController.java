@@ -53,7 +53,7 @@ public class TestController {
 		if(computation == 1)
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
 		else 
-			clusters = ecoreMetamodelService.getContainmentClusters(threshold, similarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
