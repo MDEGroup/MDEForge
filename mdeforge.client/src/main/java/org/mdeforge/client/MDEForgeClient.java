@@ -338,7 +338,7 @@ public class MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
 	}
 	public List<Cluster> getEcoreMetamodelCluster(int computation, double threshold) throws Exception {
-		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster");
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster/" + threshold + "/" + computation);
 		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
 }

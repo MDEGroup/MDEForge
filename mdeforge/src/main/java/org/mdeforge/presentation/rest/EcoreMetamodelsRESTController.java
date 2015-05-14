@@ -201,14 +201,14 @@ public class EcoreMetamodelsRESTController {
 		}
 	}
 	
-	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })
+	@RequestMapping(value = "/cluster/{threshold}/{computation}", method = { RequestMethod.GET })
 	public @ResponseBody HttpEntity<List<Cluster>> cluster(
-			) {
+			@PathVariable("computation") int computation,
+			@PathVariable("threshold") double threshold) {
 		/*
 		 * TABLE
 		 */
-		int computation = 1;
-		double threshold = 0.3;
+		
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
 		case 1:
