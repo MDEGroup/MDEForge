@@ -384,6 +384,10 @@
 <!-- PER GRAFICO DEL CLUSTER - START -->
 <script type="text/javascript">
 	var network;
+/* 	function onSelect (data) {
+		  alert('selected nodes: '.data[0]);
+	}
+	 */
 	function redrawAll() {
 		network = null;
 		// create an array with nodes
@@ -395,6 +399,7 @@
 			edges : edges
 		};
 		var options = {
+			/* height:  '1000px', */
 			nodes : {
 				shape : 'dot',
 				radiusMin : 10,
@@ -429,8 +434,23 @@
 			hideEdgesOnDrag : true
 		};
 
+		
 		network = new vis.Network(container, data, options);
+		
+		/* // add event listener*/
+		  network.on('doubleClick', function(properties) {
+			  var node_id = properties.nodes;
+			  var node = data.nodes[node_id-1];
+			  if(node['label']){
+				  location.href = "/mdeforge/public/browse/metamodel_name_from_graph?name="+node['label'];
+			  }
+			  /* alert(node['label']); */
+    
+		  });
 	}
+	
+
+		
 	redrawAll()
 </script>
 <!-- PER GRAFICO DEL CLUSTER - END -->

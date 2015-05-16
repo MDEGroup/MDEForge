@@ -76,14 +76,11 @@ public class PublicController {
 	}
 
 	@RequestMapping(value = "/browse/metamodel_details", method = { RequestMethod.GET })
-	public String metamodelDetails(Model model,
-			@RequestParam String metamodel_id) {
+	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
 
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService
-				.findOnePublic(metamodel_id);
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
 		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService
-				.getFilePath(ecoreMetamodel);
+		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File ecoreMetamodelFile = new File(pathToDownload);
 		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
 
@@ -175,7 +172,7 @@ public class PublicController {
 	}
 
 	@RequestMapping(value = "/browse/cluster_graph", method = { RequestMethod.GET })
-	public String test(
+	public String clusterGraph(
 			Model model,
 			@RequestParam(value = "threshold", required = true, defaultValue = "0.30") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
@@ -248,5 +245,13 @@ public class PublicController {
 		}
 		model.addAttribute("graph", graph);
 		return "public.browse.cluster.graph";
+	}
+	
+	@RequestMapping(value = "/browse/metamodel_name_from_graph", method = { RequestMethod.GET })
+	public void clusterGraphMetamodelNameFromGraph(@RequestParam String name,Model model, HttpServletResponse response, HttpServletRequest request) throws IOException{
+		
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneByName(name);
+		
+		response.sendRedirect(request.getContextPath()+"/public/browse/metamodel_details?metamodel_id="+ecoreMetamodel.getId());
 	}
 }

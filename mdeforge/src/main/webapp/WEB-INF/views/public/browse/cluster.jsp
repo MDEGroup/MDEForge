@@ -628,68 +628,6 @@
 
 
 
-
-
-
-
-<!-- Tour DEMO -->
-	<ul id="tlyPageGuide" data-tourtitle="My Tour" class="hidden-print">
-	
-		<!-- Tour Item -->
-		<li class="tlypageguide_left" data-tourtarget="#tour-step-1 .span6:last">
-			<div>
-				<h4>Step 1: 2 Column / Half</h4>
-				<p>Here is the item description. The number will appear to the left of the element.</p>
-			</div>
-		</li>
-		<!-- // Tour Item END -->
-		
-		<!-- Tour Item -->
-		<li class="tlypageguide_right" data-tourtarget="#tour-step-2 .heading">
-			<div>
-				<h4>Step 2: 3 Column / One Third</h4>
-				<p>Here is the item description. The number will appear to the right of the element.</p>
-			</div>
-		</li>
-		<!-- // Tour Item END -->
-		
-		<!-- Tour Item -->
-		<li class="tlypageguide_top" data-tourtarget="#tour-step-3 .heading">
-			<div>
-				<h4>Step 3: 2 Column / One Third &amp; Two Third</h4>
-				<p>Here is the item description. The number will appear above the element.</p>
-			</div>
-		</li>
-		<!-- // Tour Item END -->
-		
-		<!-- Tour Item -->
-		<li class="tlypageguide_bottom" data-tourtarget="#tour-step-4 .span3:eq(2)">
-			<div>
-				<h4>Step 4: 4 Column / One Fourth</h4>
-				<p>Here is the item description. The number will appear under the element.</p>
-			</div>
-		</li>
-		<!-- // Tour Item END -->
-		
-		<!-- Tour Item -->
-		<li class="tlypageguide_right" data-tourtarget="#tour-step-5 .heading">
-			<div>
-				<h4>Step 5: 2 Column / One Fourth &amp; Three Fourth</h4>
-				<p>Here is the item description. The number will appear to the right of the element.</p>
-			</div>
-		</li>
-		<!-- // Tour Item END -->
-		
-	</ul>
-	<!-- // Tour DEMO END -->
-	
-	
-	
-
-
-
-
-
 	
 	
 	
