@@ -112,6 +112,7 @@ public class SampleTest {
 		catch (Exception e) {}
 		
 	}
+	@Ignore
 	@Test
 	public void getStringTest() {
 		try {

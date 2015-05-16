@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.codec.binary.Base64;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
@@ -335,5 +336,9 @@ public class MDEForgeClient {
 	public List<ATLTransformation> getATLTransformations() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/ATLTransformation/shared");
 		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});
+	}
+	public List<Cluster> getEcoreMetamodelCluster(int computation, double threshold) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster/" + threshold + "/" + computation);
+		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
 }

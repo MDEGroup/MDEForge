@@ -9,9 +9,13 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.ValuedRelation;
 
 public class GetterTest {
 
@@ -19,7 +23,7 @@ public class GetterTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
 	@Ignore
@@ -31,7 +35,7 @@ public class GetterTest {
 		}
 		assertNotNull(c);
 	}
-	
+	@Ignore
 	@Test
 	public void getEcoreMetamodelsTest() throws Exception {
 		System.out.println("###Ecore");
@@ -67,7 +71,7 @@ public class GetterTest {
 		}
 		assertNotNull(c);
 	}
-	
+	@Ignore
 	@Test
 	public void getEcoreMetamodel() {
 		try {
@@ -114,6 +118,27 @@ public class GetterTest {
 		p.close();
 		System.out.println("FINITO!!!");
 		assertNotNull(c);
+	}
+	
+	@Test
+	public void getCluster() {
+		try {
+			List<Cluster> clusterList = c.getEcoreMetamodelCluster(1, 0.3);
+			for (Cluster cluster : clusterList) {
+				System.out.println("=======");
+				
+				for (Artifact art : cluster.getArtifacts()) {
+					System.out.println(art.getName());
+				}
+				System.out.println("°°°");
+				for (ValuedRelation rel  : cluster.getRelations()) {
+					System.out.println(rel.getValue());
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }
