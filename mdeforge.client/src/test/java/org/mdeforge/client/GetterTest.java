@@ -23,7 +23,7 @@ public class GetterTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
+		c = new MDEForgeClient("http://www.mdeforge.org/", "Admin", "test123");
 	}
 	
 	@Ignore
@@ -119,7 +119,7 @@ public class GetterTest {
 		System.out.println("FINITO!!!");
 		assertNotNull(c);
 	}
-	
+	@Ignore
 	@Test
 	public void getCluster() {
 		try {

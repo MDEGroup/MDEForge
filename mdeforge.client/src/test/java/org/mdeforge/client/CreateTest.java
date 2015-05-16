@@ -40,7 +40,7 @@ public class CreateTest {
 //		}
 //		c.addProject(p);
 //	}
-	
+	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
