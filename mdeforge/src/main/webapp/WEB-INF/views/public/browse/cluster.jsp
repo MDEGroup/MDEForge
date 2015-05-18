@@ -260,7 +260,7 @@
 			
 				<div class="span6">
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Computation" data-placement="top">
 							<span class="txt">Similarity Measure</span>
 							<div class="clearfix"></div>
 							<span class="count" style="font-size:26px; line-height:28px;">								
@@ -283,15 +283,15 @@
 					</div>
 					
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Threshold of this cluster" data-placement="top">
 							<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
-							<div class="clearfix"></div>
+							<div class="clearfix"></div>							
 							<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 						</div>
 					</div>
 					
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Number of clusters" data-placement="top">
 							<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${clusters.size()}</span>
@@ -304,29 +304,29 @@
 				<div class="span6">
 					
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Average number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Maximum number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${max}</span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Number of metamodels that are not found in any cluster" data-placement="top">
 							<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
-							<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Effective cluster" data-placement="top">
+							<span class="glyphicons certificate"><i></i><span class="txt">Effective cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
 						</div>

@@ -300,10 +300,12 @@ height:200px;
 															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.SimilarityRelation'}">
 																<c:choose>
 																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-																   	<td>${relation.getFromArtifact().getName()}</td>
+																  	
+																   		<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																   
 																  </c:when>																	  				
 																  <c:otherwise>
-																    <td>${relation.getToArtifact().getName()}</td>
+																    <td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																  </c:otherwise>
 																</c:choose>
 															
@@ -343,10 +345,10 @@ height:200px;
 															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.ContainmentRelation'}">
 																<c:choose>
 																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-																   	<td>${relation.getFromArtifact().getName()}</td>
+																   	<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																  </c:when>																	  				
 																  <c:otherwise>
-																    <td>${relation.getToArtifact().getName()}</td>
+																    <td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																  </c:otherwise>
 																</c:choose>
 															
@@ -383,10 +385,10 @@ height:200px;
 															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.CosineSimilarityRelation'}">
 																<c:choose>
 																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-																   	<td>${relation.getFromArtifact().getName()}</td>
+																   	<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																  </c:when>																	  				
 																  <c:otherwise>
-																    <td>${relation.getToArtifact().getName()}</td>
+																    <td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																  </c:otherwise>
 																</c:choose>
 															
@@ -423,10 +425,10 @@ height:200px;
 															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.DiceSimilarityRelation'}">
 																<c:choose>
 																  <c:when test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-																   	<td>${relation.getFromArtifact().getName()}</td>
+																   	<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																  </c:when>																	  				
 																  <c:otherwise>
-																    <td>${relation.getToArtifact().getName()}</td>
+																    <td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																  </c:otherwise>
 																</c:choose>
 															
