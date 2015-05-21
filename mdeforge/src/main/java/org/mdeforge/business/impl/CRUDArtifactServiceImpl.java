@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
@@ -506,5 +508,21 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		query.addCriteria(c1);
 		return operations.find(query, Metric.class);
 
+	}
+	//TODO Da eliminare Assolutamente
+	@Override
+	public void createIndex(){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+			.onField("name", 20F)
+			.onField("description", 10F)
+			.onField("authors", 5F)
+			.onField("tags", 7F)
+			.onField("extractedContents")
+			.named("ArtifactIndex")
+			.build();
+
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
 	}
 }

@@ -15,9 +15,10 @@ public class Metamodel extends Artifact {
 	 * 
 	 */
 	private static final long serialVersionUID = -8514238418981408258L;
-
 	
+	//TODO 
 	private List<String> uri;
+
 	/**
 	 * A toString method which prints the values of all EAttributes of this
 	 * instance. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -34,6 +35,5 @@ public class Metamodel extends Artifact {
 	public void setUri(List<String> uri) {
 		this.uri = uri;
 	}
-	
 	
 }

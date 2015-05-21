@@ -35,14 +35,15 @@ public class Artifact implements java.io.Serializable{
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
-	private String description;
-	//private List<String> tags = null;
+	private String description = null;
+	private String authors = null;
+	private List<String> tags = null;
 	private String version = null;
 	private String extractedContents = null;
 	@JsonIgnore
 	private String _class;
 	private List<Metric> metrics;
-	
+	private String nsuri;
 	public List<Metric> getMetrics() {
 		return metrics;
 	}
@@ -235,6 +236,14 @@ public class Artifact implements java.io.Serializable{
 		this.description = description;
 	}
 
+	public String getAuthors() {
+		return authors;
+	}
+	
+	public void setAuthors(String authors) {
+		this.authors = authors;
+	}
+
 	public String get_class() {
 		return _class;
 	}
@@ -247,8 +256,15 @@ public class Artifact implements java.io.Serializable{
 		this.href = string;
 	}
 	public String getHref() {
-		return this.href;
+	 	return this.href;
 	}
+	public List<String> getTags() {
+		return tags;
+	}
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+	
 
 	public String getVersion() {
 		return version;
@@ -264,5 +280,13 @@ public class Artifact implements java.io.Serializable{
 
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
+	}
+
+	public String getNsuri() {
+		return nsuri;
+	}
+
+	public void setNsuri(String nsuri) {
+		this.nsuri = nsuri;
 	}
 }

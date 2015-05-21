@@ -57,11 +57,15 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.InvalidArtifactException;
+import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.ValuedRelationService;
+import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -76,16 +80,24 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
+import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
+import org.mdeforge.integration.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
@@ -93,11 +105,21 @@ import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
+import com.mongodb.Mongo;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
 		CRUDArtifactServiceImpl<EcoreMetamodel> implements
 		EcoreMetamodelService {
+	
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private WorkspaceService workspaceService;
+	@Autowired
+	private Mongo mongo;
+	@Autowired
+	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
@@ -114,14 +136,32 @@ public class EcoreMetamodelServiceImpl extends
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
+
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact)
 			throws BusinessException {
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
-		if (isValid(artifact))
-			return super.create(artifact);
+		if (isValid(artifact)) {
+			EcoreMetamodel result = super.create(artifact);
+			String jsonMongoUriBase = mongoPrefix +
+					mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName()
+					+ "/" + jsonArtifactCollection + "/";
+			artifact.setExtractedContents( EmfjsonMongo.getInstance()
+					.serializeAndSaveMetamodel(artifact.getNsuri(), 
+							jsonMongoUriBase + artifact.getId()));
+			return result;
+
+		}
 		else throw new InvalidArtifactException();
 	}
 
@@ -890,4 +930,30 @@ public class EcoreMetamodelServiceImpl extends
 			metricList = calculateMetrics(emm);
 		return metricList;
 	}
+	//TODO Antonio: classe intermedia
+	@Override
+	public List<Artifact> search(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+		List<Artifact> artifacts = operations.find(Query.query(criteria), Artifact.class);
+		
+		return artifacts;
+	}
+	
+	@Override
+	public List<Artifact> orederedSearch(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+
+		TextQuery query = new TextQuery(criteria);
+		query.setScoreFieldName("score");
+		query.sortByScore();
+
+		List<Artifact> artifacts = operations.find(query, Artifact.class);
+		
+		return artifacts;
+	}
+
 }

@@ -29,7 +29,6 @@ property = "_class")
 
 public class Artifact implements java.io.Serializable{
 
-
 	/**
 	 * 
 	 */
@@ -41,18 +40,14 @@ public class Artifact implements java.io.Serializable{
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
-
+	@Transient
+	private List<Metric> metrics;
 	private String description = null;
-	//private List<String> tags = null;
-	private String version = null;
+	private String authors = null;
+	private List<String> tags = null;
 	private String extractedContents = null;
-//	public List<String> getTags() {
-//		return tags;
-//	}
-//
-//	public void setTags(List<String> tags) {
-//		this.tags = tags;
-//	}
+
+	private String version = null;
 
 	public String getVersion() {
 		return version;
@@ -61,18 +56,31 @@ public class Artifact implements java.io.Serializable{
 	public void setVersion(String version) {
 		this.version = version;
 	}
+//	private @TextIndexed(weight=20) String name = null;
+//	private @TextIndexed(weight=10) String description = null;
+//	private @TextIndexed(weight=5) String authors = null;
+//	private @TextIndexed(weight=7) List<String> tags = null;
+//	private String version = null;
+//	private @TextIndexed(weight=1) String extractedContents = null;
+//	private @TextScore Float score;
 
-	public String getExtractedContents() {
-		return extractedContents;
-	}
-
-	public void setExtractedContents(String extractedContents) {
-		this.extractedContents = extractedContents;
-	}
-
-	@Transient
-	private List<Metric> metrics;
-	
+	@DBRef(lazy = true)
+	@JsonSerialize(using = RelationListSerializer.class)
+	//@CascadeSave
+	private List<Relation> relations = new ArrayList<Relation>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = ProjectListSerializer.class)
+	private List<Project> projects = new ArrayList<Project>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserListSerializer.class)
+	private List<User> shared = new ArrayList<User>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = WorkspaceListSerializer.class)
+	private List<Workspace> workspaces = new ArrayList<Workspace>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserSerializer.class)
+	private User author = new User();	
+	private List<Property> properties = new ArrayList<Property>();
 	public List<Metric> getMetrics() {
 		return metrics;
 	}
@@ -81,45 +89,6 @@ public class Artifact implements java.io.Serializable{
 		this.metrics = metrics;
 	}
 
-	@DBRef(lazy = true)
-	@JsonSerialize(using = RelationListSerializer.class)
-	//@CascadeSave
-	private List<Relation> relations = new ArrayList<Relation>();
-
-
-	@DBRef(lazy = true)
-	@JsonSerialize(using = ProjectListSerializer.class)
-	private List<Project> projects = new ArrayList<Project>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserListSerializer.class)
-	private List<User> shared = new ArrayList<User>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();	
-	private List<Property> properties = new ArrayList<Property>();
-	
-//	
-	//	@DBRef(lazy=true)
-//	@JsonBackReference
-//	private Set<Tag> tags = new HashSet<Tag>();	
-
-//	public Set<Tag> getTags() {
-//		return tags;
-//	}
-//
-//	
-//	public void setTags(Set<Tag> newTags) {
-//		tags = newTags;
-//	}
-//
-//	
-//
 	public List<Relation> getRelations() {
 		return relations;
 	}
@@ -128,7 +97,6 @@ public class Artifact implements java.io.Serializable{
 		relations = newRelations;
 	}
 
-	
 	public List<Property> getProperties() {
 		return properties;
 	}
@@ -137,12 +105,10 @@ public class Artifact implements java.io.Serializable{
 		properties = newProperties;
 	}
 
-	
 	public List<Project> getProjects() {
 		return projects;
 	}
 
-	
 	public boolean addToProjects(Project projectsValue) {
 		if (!projects.contains(projectsValue)) {
 			boolean result = projects.add(projectsValue);
@@ -151,7 +117,6 @@ public class Artifact implements java.io.Serializable{
 		return false;
 	}
 
-	
 	public boolean removeFromProjects(Project projectsValue) {
 		if (projects.contains(projectsValue)) {
 			boolean result = projects.remove(projectsValue);
@@ -265,8 +230,34 @@ public class Artifact implements java.io.Serializable{
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getAuthors() {
+		return authors;
+	}
+	
+	public void setAuthors(String authors) {
+		this.authors = authors;
+	}
+	
+	public List<String> getTags() {
+		return tags;
+	}
+	
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+
+
+	public String getExtractedContents() {
+		return extractedContents;
+	}
+
+	public void setExtractedContents(String extractedContents) {
+		this.extractedContents = extractedContents;
 	}
 }

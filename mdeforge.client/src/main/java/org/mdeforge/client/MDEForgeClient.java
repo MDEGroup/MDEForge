@@ -1,6 +1,7 @@
 package org.mdeforge.client;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -186,7 +187,17 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/similarity/" + idMetamodel1 + "/" + idMetamodel2);
 		return result;
 	}
-		
+
+	
+	public String createIndex() throws Exception{
+		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
+		return result;
+	}
+	public List<Artifact> orderedSearch(String text) throws Exception{
+		String result = doGetRequest(connectionUrl + "api/artifact/orederedSearch/" + text);
+		return mapper.readValue(result, new TypeReference<List<Artifact>>() {});
+	}
+	
 	public void addMetamodel(Metamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		doPostRequest(connectionUrl + "api/metamodel/", on);
@@ -238,17 +249,18 @@ public class MDEForgeClient {
 		model.setId(doPostRequest(connectionUrl + "api/Model/", on));
 		
 	}
-	
+
+	//TODO ANTONIO
 	public void addModel(Model model, String file) throws Exception {
-		GridFileMedia gfm = new GridFileMedia();
-		String[] temp = file.split("/");
-		String fileName = temp[temp.length -1];
-		String s = MDEForgeClient.readFile(file);		
-		gfm.setContent(s);
-		gfm.setFileName(fileName);
-		model.setFile(gfm);
+//		GridFileMedia gfm = new GridFileMedia();
+//		File f = new File(file);
+//		String path = f.getAbsolutePath();
+//		String s = MDEForgeClient.readFile(file);		
+//		gfm.setContent(s);
+//		metamodel.setFile(gfm);
+		model.setNsuri((new File(file)).toURI().getPath());
 		ObjectNode on = mapper.valueToTree(model);
-		model.setId(doPostRequest(connectionUrl + "api/Model/", on));
+		model.setId(doPostRequest(connectionUrl + "api/model/", on));
 	}
 	
 	public void addEcoreMetamodel(EcoreMetamodel metamodel) throws Exception {
@@ -265,11 +277,24 @@ public class MDEForgeClient {
 		gfm.setContent(s);
 		gfm.setFileName(fileName);
 		metamodel.setFile(gfm);
+//		GridFileMedia gfm = new GridFileMedia();
+//		File f = new File(file);
+//		String path = f.getAbsolutePath();
+//		String s = MDEForgeClient.readFile(file);		
+//		gfm.setContent(s);
+//		metamodel.setFile(gfm);
+		
+		//TODO ANTONIO
+		metamodel.setNsuri((new File(file)).toURI().getPath());
+
 		ObjectNode on = mapper.valueToTree(metamodel);
 		String app = doPostRequest(connectionUrl + "api/EcoreMetamodel/", on);
 		EcoreMetamodel emm = mapper.readValue(app, new TypeReference<EcoreMetamodel>() {});
 		metamodel.setId(emm.getId());
 	}
+	
+
+	
 	private String doGetRequest(String urlString) throws Exception {
 		urlString += auth;
 		URL url = new URL(urlString);
