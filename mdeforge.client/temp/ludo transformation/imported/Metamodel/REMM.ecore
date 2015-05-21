@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="realestatemm" nsURI="http://www.disim.univaq.it/realestatemm"
+    nsPrefix="realestatemm">
+  <eClassifiers xsi:type="ecore:EClass" name="RealEstateModel" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" upperBound="-1"
+        eType="#//Customer" containment="true" eOpposite="#//Customer/remodel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemuser" upperBound="-1"
+        eType="#//SystemUser" containment="true" eOpposite="#//SystemUser/remodel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deal" upperBound="-1" eType="#//Deal"
+        containment="true" eOpposite="#//Deal/remodel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContactType">
+    <eLiterals name="email"/>
+    <eLiterals name="call" value="1"/>
+    <eLiterals name="other" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DealStatusType">
+    <eLiterals name="open"/>
+    <eLiterals name="close" value="1"/>
+    <eLiterals name="standBy" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Report" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="details" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ContactType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Deal" eSuperTypes="#//NamedElement #//Report">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" lowerBound="1"
+        eType="#//DealStatusType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="amount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemuser" lowerBound="1"
+        eType="#//SystemUser"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remodel" lowerBound="1"
+        eType="#//RealEstateModel" eOpposite="#//RealEstateModel/deal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemUser" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="role" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remodel" lowerBound="1"
+        eType="#//RealEstateModel" eOpposite="#//RealEstateModel/systemuser"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="QoS" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remodel" lowerBound="1"
+        eType="#//RealEstateModel" eOpposite="#//RealEstateModel/customer"/>
+  </eClassifiers>
+</ecore:EPackage>

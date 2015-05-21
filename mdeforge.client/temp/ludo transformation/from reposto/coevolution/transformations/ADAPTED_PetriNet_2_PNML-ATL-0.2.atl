@@ -1,0 +1,228 @@
+-- @nsURI PetriNetMM0=PetriNetMM0
+-- @nsURI XML=XML
+module ADAPTED_PetriNet_2_XML;
+create OUT : PNML from IN : PetriNetMM0;
+
+helper def: counter : Integer =
+  0;
+
+helper context --Warning: element Transition has been changed !
+PetriNetMM0!Transition def: createArcsSrc(parent : PNML!NetElement) : PNML!Arc =
+  self."incomingArc--incomingArc.from"->iterate("e--.from"; res : PNML!Arc = OclUndefined |
+    thisModule.createArcSrc("e--.from", parent, self)
+  );
+
+helper context --Warning: element Transition has been changed !
+PetriNetMM0!Transition def: createArcsTrs(parent : PNML!NetElement) : PNML!Arc =
+  self."outgoingArc--outgoingArc.to"->iterate("e--.to"; res : PNML!Arc = OclUndefined |
+    thisModule.createArcTrs(self, parent, "e--.to")
+  );
+
+rule createArcSrc(s : --Warning: element Place has been changed !
+PetriNetMM0!Place, parent_element : PNML!NetElement, target_transition : --Warning: element Transition has been changed !
+PetriNetMM0!Transition) {
+  to
+    t : PNML!Arc (
+      id <- thisModule.counter.toString(),
+      name <- name,
+      net <- parent_element,
+      --,
+      source <- s,
+      target <- target_transition
+    ),
+    name : PNML!Name (
+      labels <- label
+    ),
+    label : PNML!Label (
+      labeledElement <- name,
+      text <- s.name + '_to_' + target_transition.name
+    )
+  do {
+    thisModule.counter <- thisModule.counter + 1;
+    t;
+  }
+}
+
+rule createArcTrs(s : --Warning: element Transition has been changed !
+PetriNetMM0!Transition, parent_element : PNML!NetElement, target_place : --Warning: element Place has been changed !
+PetriNetMM0!Place) {
+  to
+    t : PNML!Arc (
+      id <- thisModule.counter.toString(),
+      name <- name,
+      net <- parent_element,
+      source <- s,
+      target <- target_place
+    ),
+    name : PNML!Name (
+      labels <- label
+    ),
+    label : PNML!Label (
+      labeledElement <- name,
+      text <- s.name + '_to_' + target_place.name
+    )
+  do {
+    thisModule.counter <- thisModule.counter + 1;
+    t;
+  }
+}
+
+helper context --Warning: element Net has been changed !
+PetriNetMM0!PetriNet def: totPlace() : String =
+  if not --Warning: this element has been merged from others metamodel elements
+  self.elements.oclIsUndefined() then
+    --Warning: this element has been merged from others metamodel elements and has been introduced optionality
+    self.elements->select(e |
+      e.oclIsKindOf(PetriNetMM0!Place)
+    )
+  else
+    OclUndefined
+  endif->select(e |
+    e.oclIsTypeOf(--Warning: element Place has been changed !
+    PetriNetMM0!Place)
+  ).size().toString();
+
+helper context --Warning: element Net has been changed !
+PetriNetMM0!PetriNet def: totTransition() : String =
+  --Warning: this element has been merged from others metamodel elements
+  self.elements->select(e |
+    e.oclIsKindOf(PetriNetMM0!Transition)
+  )->select(e |
+    e.oclIsTypeOf(--Warning: element Transition has been changed !
+    PetriNetMM0!Transition)
+  ).size().toString();
+
+helper def: root : PNML!PNMLDocument =
+  OclUndefined;
+
+rule PNMLDocument {
+  from
+    s : PetriNetMM0!PetriNetModel
+  to
+    t : PNML!PNMLDocument (
+      xmlns <- uri
+    ),
+    uri : PNML!URI (
+      value <- 'http://www.informatik.hu-berlin.de/top/pnml/ptNetb'
+    )
+  do {
+    thisModule.document <- t;
+  }
+}
+
+rule Net {
+  from
+    s : --Warning: element Net has been changed !
+    PetriNetMM0!PetriNet
+  to
+    t : PNML!NetElement (
+      name <- name,
+      document <- thisModule.document,
+      contents <- if not --Warning: this element has been merged from others metamodel elements
+      s.elements.oclIsUndefined() then
+        --Warning: this element has been merged from others metamodel elements and has been introduced optionality
+        s.elements->select(e |
+          e.oclIsKindOf(PetriNetMM0!Place)
+        )
+      else
+        OclUndefined
+      endif
+	  .union(--Warning: this element has been merged from others metamodel elements
+      s.elements->select(e |
+        e.oclIsKindOf(PetriNetMM0!Transition)
+      )),
+      type <- type_uri,
+      id <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name
+    ),
+    name : PNML!Name (
+      labels <- label
+    ),
+    label : PNML!Label (
+      text <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name
+    ),
+    type_uri : PNML!URI (
+      value <- 'http://www.informatik.hu-berlin.de/top/pntd/ptNetb'
+    )
+  do {
+    thisModule.document.nets <- t;
+  }
+}
+
+rule Place {
+  from
+    s : --Warning: element Place has been changed !
+    PetriNetMM0!Place
+    (
+      s.oclIsTypeOf(--Warning: element Place has been changed !
+      PetriNetMM0!Place)
+    )
+  to
+    t : --Warning: element Place has been changed !
+    PNML!Place (
+      --@Warning name binding element has been moved out in EXTRACTED superClass...check the log file for details
+      name <- name,
+      id <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name + '_src:' + s."incomingArc--incomingArc.from".size().toString() + '_dst:' + s."outgoingArc--outgoingArc.to".size().toString()
+    ),
+    name : PNML!Name,
+    label : PNML!Label (
+      text <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name + '_src:' + s."incomingArc--incomingArc.from".size().toString() + '_dst:' + s."outgoingArc--outgoingArc.to".size().toString(),
+      labeledElement <- name
+    )
+}
+
+rule Transitions {
+  from
+    s : --Warning: element Transition has been changed !
+    PetriNetMM0!Transition
+  to
+    t : --Warning: element Transition has been changed !
+    PNML!Transition (
+      --@Warning name binding element has been moved out in EXTRACTED superClass...check the log file for details
+      name <- name,
+      id <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name + '_dst:' + s."outgoingArc--outgoingArc.to".size().toString()
+    ),
+    name : PNML!Name,
+    label : PNML!Label (
+      text <- --Warning: this element was moved in a superclass but the navigation element remain the same
+      s.name + '_dst:' + s."outgoingArc--outgoingArc.to".size().toString(),
+      labeledElement <- name
+    )
+  do {
+    s.createArcsSrc(t.net);
+    s.createArcsTrs(t.net);
+  }
+}
+
+--@Rule for Arc added superclass : automatically generated
+rule Arc {
+  from
+    s_Arc : PetriNetMM0!Arc
+    (
+      s_Arc.oclIsTypeOf(PetriNetMM0!Arc)
+    )
+  to
+    t_Arc : --this module have these metamodels target: Sequence {'PNML'}
+    PNML!"Type your matching element name"
+} --@End Rule for Arc added superclass : automatically generated
+--@Rule for PlaceToTransition added subclass : automatically generated
+rule PlaceToTransition extends Arc {
+  from
+    s_PlaceToTransition : PetriNetMM0!PlaceToTransition
+  to
+    t_PlaceToTransition : --this module have these metamodels target: Sequence {'PNML'}
+    PNML!"Type your matching element name"
+} --@End Rule for PlaceToTransition added subclass : automatically generated
+--@Rule for TransitionToPlace added subclass : automatically generated
+rule TransitionToPlace extends Arc {
+  from
+    s_TransitionToPlace : PetriNetMM0!TransitionToPlace
+  to
+    t_TransitionToPlace : --this module have these metamodels target: Sequence {'PNML'}
+    PNML!"Type your matching element name"
+} --@End Rule for TransitionToPlace added subclass : automatically generated
+

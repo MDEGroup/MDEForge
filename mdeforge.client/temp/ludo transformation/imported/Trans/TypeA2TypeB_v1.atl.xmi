@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="4:1-29:2" name="TypeA2TypeB">
+    <commentsBefore>-- @path TypeA=/SideEffect/Metamodels/TypeA.ecore</commentsBefore>
+    <commentsBefore>-- @path TypeB=/SideEffect/Metamodels/TypeB.ecore</commentsBefore>
+    <inModels location="5:23-5:32" name="a" metamodel="/2"/>
+    <outModels location="5:8-5:17" name="b" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="8:1-9:39">
+      <commentsBefore>-- This helper retrieves all names and removes all duplicates</commentsBefore>
+      <definition location="8:8-9:38">
+        <feature xsi:type="ocl:Operation" location="8:34-9:38" name="getDefNameSet">
+          <returnType xsi:type="ocl:SetType" location="8:52-8:63">
+            <elementType xsi:type="ocl:StringType" location="8:56-8:62"/>
+          </returnType>
+          <body xsi:type="ocl:OperationCallExp" location="9:2-9:38" operationName="asSet">
+            <source xsi:type="ocl:IteratorExp" location="9:2-9:30" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="9:2-9:11" name="elms">
+                <source xsi:type="ocl:VariableExp" location="9:2-9:6" referredVariable="/4"/>
+              </source>
+              <body xsi:type="ocl:NavigationOrAttributeCallExp" location="9:23-9:29" name="name">
+                <source xsi:type="ocl:VariableExp" location="9:23-9:24" referredVariable="/0/@elements.0/@definition/@feature/@body/@source/@iterators.0"/>
+              </body>
+              <iterators location="9:21-9:22" varName="e" variableExp="/0/@elements.0/@definition/@feature/@body/@source/@body/@source"/>
+            </source>
+          </body>
+        </feature>
+        <context_ location="8:8-8:27">
+          <context_ xsi:type="ocl:OclModelElement" location="8:16-8:27" name="RootA" model="/3"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="11:1-29:2" name="RootA2RootB">
+      <outPattern location="14:2-28:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="16:3-21:4" varName="rtB" variableExp="/0/@elements.1/@outPattern/@elements.2/@bindings.0/@value/@source/@source/@source">
+          <commentsBefore>-- this rule is dangerous as we suppose the ATL engine executes...</commentsBefore>
+          <type xsi:type="ocl:OclModelElement" location="16:9-16:20" name="RootB" model="/6"/>
+          <bindings location="18:4-18:19" propertyName="defs">
+            <commentsBefore>-- this line before...</commentsBefore>
+            <value xsi:type="ocl:VariableExp" location="18:12-18:19" referredVariable="/0/@elements.1/@outPattern/@elements.1"/>
+          </bindings>
+          <bindings location="20:4-20:19" propertyName="elms">
+            <commentsBefore>-- this one.</commentsBefore>
+            <value xsi:type="ocl:VariableExp" location="20:12-20:19" referredVariable="/0/@elements.1/@outPattern/@elements.2"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:ForEachOutPatternElement" location="22:3-24:4" varName="defBLst" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value">
+          <type xsi:type="ocl:OclModelElement" location="22:22-22:39" name="DefinitionB" model="/7"/>
+          <bindings location="23:4-23:19" propertyName="name">
+            <value xsi:type="ocl:VariableExp" location="23:12-23:19" referredVariable="/0/@elements.1/@outPattern/@elements.1/@iterator"/>
+          </bindings>
+          <collection xsi:type="ocl:OperationCallExp" location="22:59-22:79" operationName="getDefNameSet">
+            <source xsi:type="ocl:VariableExp" location="22:59-22:62" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+          </collection>
+          <iterator location="22:48-22:55" varName="defName" variableExp="/0/@elements.1/@outPattern/@elements.1/@bindings.0/@value"/>
+        </elements>
+        <elements xsi:type="atl:ForEachOutPatternElement" location="25:3-28:4" varName="elmBLst" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.1/@value">
+          <type xsi:type="ocl:OclModelElement" location="25:22-25:36" name="ElementB" model="/8"/>
+          <bindings location="27:5-27:70" propertyName="definition">
+            <commentsBefore>-- here the target model is browsed</commentsBefore>
+            <value xsi:type="ocl:CollectionOperationCallExp" location="27:19-27:70" operationName="first">
+              <source xsi:type="ocl:IteratorExp" location="27:19-27:61" name="select">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="27:19-27:27" name="defs">
+                  <source xsi:type="ocl:VariableExp" location="27:19-27:22" referredVariable="/0/@elements.1/@outPattern/@elements.0"/>
+                </source>
+                <body xsi:type="ocl:OperatorCallExp" location="27:41-27:59" operationName="=">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="27:41-27:47" name="name">
+                    <source xsi:type="ocl:VariableExp" location="27:41-27:42" referredVariable="/0/@elements.1/@outPattern/@elements.2/@bindings.0/@value/@source/@iterators.0"/>
+                  </source>
+                  <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="27:50-27:59" name="name">
+                    <source xsi:type="ocl:VariableExp" location="27:50-27:54" referredVariable="/0/@elements.1/@outPattern/@elements.2/@iterator"/>
+                  </arguments>
+                </body>
+                <iterators location="27:37-27:38" varName="d" variableExp="/0/@elements.1/@outPattern/@elements.2/@bindings.0/@value/@source/@body/@source/@source"/>
+              </source>
+            </value>
+          </bindings>
+          <collection xsi:type="ocl:NavigationOrAttributeCallExp" location="25:54-25:62" name="elms">
+            <source xsi:type="ocl:VariableExp" location="25:54-25:57" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+          </collection>
+          <iterator location="25:46-25:50" varName="elmA" variableExp="/0/@elements.1/@outPattern/@elements.2/@bindings.0/@value/@source/@body/@arguments.0/@source"/>
+        </elements>
+      </outPattern>
+      <inPattern location="12:2-13:20">
+        <elements xsi:type="atl:SimpleInPatternElement" location="13:3-13:20" varName="rtA" variableExp="/0/@elements.1/@outPattern/@elements.1/@collection/@source /0/@elements.1/@outPattern/@elements.2/@collection/@source">
+          <type xsi:type="ocl:OclModelElement" location="13:9-13:20" name="RootA" model="/5"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="5:12-5:17" name="TypeB" model="/0/@outModels.0"/>
+  <ocl:OclModel location="5:27-5:32" name="TypeA" model="/0/@inModels.0"/>
+  <ocl:OclModel location="8:16-8:21" name="TypeA" elements="/0/@elements.0/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="9:2-9:6" varName="self" variableExp="/0/@elements.0/@definition/@feature/@body/@source/@source/@source"/>
+  <ocl:OclModel location="13:9-13:14" name="TypeA" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="16:9-16:14" name="TypeB" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="22:22-22:27" name="TypeB" elements="/0/@elements.1/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="25:22-25:27" name="TypeB" elements="/0/@elements.1/@outPattern/@elements.2/@type"/>
+</xmi:XMI>

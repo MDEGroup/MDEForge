@@ -1,0 +1,923 @@
+module ATL_WFR;
+create OUT : Problem from IN : ATL0_2;
+
+
+-------------------------------------------------------------------------------
+-- HELPERS --------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+-- This helper provides a set containing the name of the IteratorExp elements
+-- that accepts a single Iterator.
+-- CONTEXT:	thisModule
+-- RETURN:	Set(String)
+helper def: singleIteratorExps : Set(String) =
+	Set{
+		'isUnique', 'any', 'one', 'collect', 'select',
+		'reject', 'collectNested', 'sortedBy'
+	};
+
+
+-- This helper provides a set containing the name of the IteratorExp elements
+-- for which several Iterators may be declared according to the OCL spec.
+-- CONTEXT:	thisModule
+-- RETURN:	Set(String)
+helper def: multiIteratorExps : Set(String) = Set{'exists', 'forAll'};
+
+
+-- This helper computes the set of existing CollectionType elements within the
+-- input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Set(ATL!CollectionType)
+helper def: collectionTypes : Set(ATL!CollectionType) =
+	ATL!CollectionType.allInstances();
+
+
+-- This helper computes a sequence containing all the OclModel elements that
+-- are used in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!OclModel)
+helper def: allModels : Sequence(ATL!OclModel) =
+	let atlModule : ATL!Module =
+		ATL!Module.allInstances()->asSequence()->first()
+	in
+	Sequence{
+		atlModule.inModels,
+		atlModule.outModels
+	}->flatten();
+
+
+-- This helper computes the Query element that corresponds to the input ATL
+-- Unit. If the input ATL Unit corresponds to a Module (eg a transformation),
+-- the computed value is OclUndefined.
+-- CONTEXT:	thisModule
+-- RETURN:	ATL!Query
+helper def: queryElt : ATL!Query =
+	ATL!Query.allInstances()->asSequence()->first();
+
+
+-- This helper computes a sequence containing all the Binding elements that
+-- are defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!Binding)
+helper def: allBindings : Sequence(ATL!Binding) =
+	ATL!Binding.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the Pattern elements that
+-- are defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!InPattern)
+helper def: allInPatterns : Sequence(ATL!InPattern) =
+	ATL!InPattern.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the InPatternElement elements
+-- that are defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!InPatternElement)
+helper def: allInPatternElts : Sequence(ATL!InPatternElement) =
+	ATL!InPatternElement.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the OutPatternElement
+-- elements that are defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!OutPatternElement)
+helper def: allOutPatternElts : Sequence(ATL!OutPatternElement) =
+	ATL!OutPatternElement.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the Rule elements that are
+-- defined in the input ATL Unit. If the input Unit is a query, the computed
+-- sequence is empty.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!Rule)
+helper def: allRules : Sequence(ATL!Rule) =
+	ATL!Rule.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the Helper elements that are
+-- defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!Helper)
+helper def: allHelpers : Sequence(ATL!Helper) =
+	ATL!Helper.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the LoopExp elements that are
+-- defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!LoopExp)
+helper def: allLoopExps : Sequence(ATL!LoopExp) =
+	ATL!LoopExp.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the IterateExp elements that
+-- are defined in the input ATL Unit.
+-- CONTEXT:	thisModule
+-- RETURN:	Sequence(ATL!IterateExp)
+helper def: allIterateExps : Sequence(ATL!IterateExp) =
+	ATL!IterateExp.allInstances()->asSequence();
+
+
+-- This helper computes a sequence containing all the VariableDeclaration
+-- elements that are associated with the contextual Rule. These declarations
+-- can be of 3 different kinds:
+--  * the variables declared for the rule;
+--  * the OutPatternElements of the rule;
+--  * the InPatternElements of the rule if this last is a MatchedRule.
+-- CONTEXT:	ATL!Rule
+-- RETURN:	Sequence(ATL!VariableDeclaration)
+helper context ATL!Rule
+	def: namedElements : Sequence(ATL!VariableDeclaration) =
+	Sequence{
+		if self.oclIsTypeOf(ATL!MatchedRule)
+		then
+			self.inPattern.elements->asSequence()
+		else
+			Sequence{}
+		endif,
+		self.variables->asSequence(),
+		self.outPattern.elements->asSequence()
+	}->flatten();
+
+
+-- This helper computes the Rule element in which the contextual PatterElement
+-- is declared. This is achieved by returning the Rule referred by the "rule"
+-- reference of the Pattern that conatins the contexual PatternElement. This 
+-- last one is accessed through the "outPattern" reference if the contextual
+-- PatternElement is an OutPatternElement, throught the "inPattern" if it is
+-- an InPatternElement.
+-- CONTEXT:	ATL!PatternElement
+-- RETURN:	ATL!Rule
+helper context ATL!PatternElement def: "rule" : ATL!Rule =
+	if self.oclIsKindOf(ATL!OutPatternElement)
+	then
+		self.outPattern."rule"
+	else
+		self.inPattern."rule"
+	endif;
+
+
+-- This helper returns the immediate composite (container) of the contextual
+-- VariableDeclaration.
+-- If the "letExp" reference of the contextual VariableDeclaration is not
+-- undefined, the helper returns the pointed LetExp.
+-- Otherwise, if the "letExp" reference of the contextual VD is not undefined,
+-- the helper returns the pointed IterateExp.
+-- Otherwise, if the contextual VD is an InPatternElement, the helper returns
+-- the InPattern in which it is contained.
+-- Otherwise, if the contextual VD is an OutPatternElement, the helper returns
+-- the OutPattern in which it is contained.
+-- Otherwise, if there exists a LoopExp element that contains the contextual VD
+-- as an iterator, the helper returns this LoopExp.
+-- Otherwise, if there exists an IterateExp element that contains the contextual
+-- VD as its result, the helper returns this IterateExp.
+-- Otherwise, if there exists a Rule element that contains the contextual VD
+-- as a rule variable iterator, the helper returns this Rule element.
+-- Otherwise, the helper returns OclUndefined as a default value.
+-- CONTEXT:	ATL!VariableDeclaration
+-- RETURN:	ATL!Element
+helper context ATL!VariableDeclaration def: immediateComposite : ATL!Element =
+	if not self.letExp.oclIsUndefined() then
+		self.letExp
+	else if not self.baseExp.oclIsUndefined() then
+		self.baseExp
+	else if thisModule.allInPatternElts->exists(e | e = self) then
+		thisModule.allInPatternElts->select(e | e = self)->first().inPattern
+	else if thisModule.allOutPatternElts->exists(e | e = self) then
+		thisModule.allOutPatternElts->select(e | e = self)->first().outPattern
+	else if thisModule.allLoopExps
+				->exists(l | l.iterators->exists(e | self = e))	then
+		thisModule.allLoopExps
+			->select(l | l.iterators->exists(e | self = e))->first()
+	else if thisModule.allIterateExps->exists(e | self = e.result) then
+		thisModule.allIterateExps->select(e | self = e.result)->first()
+	else if thisModule.allRules
+				->exists(r | r.variables->exists(e | self = e)) then
+		thisModule.allRules
+			->select(r | r.variables->exists(e | self = e))
+			->first()
+	else OclUndefined
+	endif endif	endif endif endif endif endif;
+
+
+-- This helper returns the immediate composite (container) of the contextual
+-- OclExpression.
+-- If the one of the "ifExp1", "ifExp2" and "ifExp3" references of the
+-- contextual OclExpression is not undefined, the helper returns the pointed
+-- IfExp.
+-- Otherwise, if its "attribute" is not undefined, the helper returns the
+-- pointed Attribute.
+-- Otherwise, if its "operation" is not undefined, the helper returns the
+-- pointed Operation.
+-- Otherwise, if its "initializedVariable" is not undefined, the helper returns
+-- the pointed VariableDeclaration.
+-- Otherwise, if its "parentOperation" is not undefined, the helper returns the
+-- pointed OperationCallExp.
+-- Otherwise, if its "loopExp" is not undefined, the helper returns the pointed
+-- LoopExp.
+-- Otherwise, if its "letExp" is not undefined, the helper returns the
+-- pointed LetExp.
+-- Otherwise, if its "collection" is not undefined, the helper returns the
+-- pointed CollectionExp.
+-- Otherwise, if its "appliedProperty" is not undefined, the helper returns the
+-- pointed PropertyCallExp.
+-- Otherwise, if its "operation" is not undefined, the helper returns the
+-- pointed Operation.
+-- Otherwise, if there exists an InPattern that has the contextual OclExp as
+-- filter, the helper returns this InPattern.
+-- Otherwise, if there exists a Binding that has the contextual OclExp as
+-- value, the helper returns this Binding.
+-- Otherwise, if there exists a Query that has the contextual OclExp as body,
+-- the helper returns this Query.
+-- Otherwise, the helper retuns OclUndefined as default value.
+-- CONTEXT:	ATL!OclExpression
+-- RETURN:	ATL!Element
+helper context ATL!OclExpression def: immediateComposite : ATL!Element =
+	if not self.ifExp1.oclIsUndefined() then self.ifExp1
+	else if not self.ifExp2.oclIsUndefined() then self.ifExp2
+	else if not self.ifExp3.oclIsUndefined() then self.ifExp3
+	else if not self."attribute".oclIsUndefined() then self."attribute"
+	else if not self."operation".oclIsUndefined() then self."operation"
+	else if not self.initializedVariable.oclIsUndefined()
+		then self.initializedVariable
+	else if not self.parentOperation.oclIsUndefined() then self.parentOperation
+	else if not self.loopExp.oclIsUndefined() then self.loopExp
+	else if not self.letExp.oclIsUndefined() then self.letExp
+	else if not self.collection.oclIsUndefined() then self.collection
+	else if not self.appliedProperty.oclIsUndefined() then self.appliedProperty
+	else if thisModule.allInPatterns->exists(e | e.filter = self)
+		then thisModule.allInPatterns->select(e | e.filter = self)->first()
+	else if thisModule.allBindings->exists(e | e.value = self)
+		then thisModule.allBindings->select(e | e.value = self)->first()
+	else
+		if not thisModule.queryElt.oclIsUndefined()
+		then
+			if thisModule.queryElt.body = self
+			then
+				thisModule.queryElt
+			else
+				OclUndefined
+			endif
+		else
+			OclUndefined
+		endif
+	endif endif endif endif endif endif endif
+	endif endif endif endif endif endif;
+
+
+-- This helper computes a sequence containing the VariableDeclarations that
+-- precede the contextual VariableDeclaration in its namespace.
+-- If the contextual VariableDeclaration is a PatternElement, the helper only
+-- returns this VD.
+-- Otherwise, it computes the container of the contextual VD. If the container
+-- is a LetExp, it returns a Sequence composed of the VD, and the results of
+-- the calls of the getUpD helper on the calculated container.
+-- If the container is an IteratorExp, the helper returns a Sequence composed
+-- of the VD and the results of the call of getUpD on the computed container.
+-- If the container is an IterateExp, the helper a Sequence containing the same
+-- elements that the one computed for an IteratorExp.
+-- Otherwise, the helper returns the only contextual VD as default value.
+-- CONTEXT:	ATL!VariableDeclaration
+-- RETURN:	Sequence(ATL!VariableDeclaration)
+helper context ATL!VariableDeclaration
+	def: getDeclarations() : Sequence(ATL!VariableDeclaration) =
+	if self.oclIsKindOf(ATL!PatternElement)
+	then
+		Sequence{self}
+	else
+		let container : ATL!Element = self.immediateComposite in
+		if container.oclIsTypeOf(ATL!LetExp)
+		then
+			Sequence{
+				self,
+				container.getUpD()
+			}->flatten()
+		else
+			if container.oclIsTypeOf(ATL!IteratorExp)
+			then
+				Sequence{
+					self,
+					container.getUpD()
+				}->flatten()
+			else
+				if container.oclIsTypeOf(ATL!IterateExp)
+				then
+					Sequence{
+						self,
+						container.getUpD()
+					}->flatten()
+				else
+					Sequence{
+						self
+					}->flatten()
+				endif
+			endif
+		endif
+	endif;
+
+
+-- This helper computes a sequence containing the VariableDeclarations that are
+-- defined higher than the contextual OclExpression in its namespace tree.
+-- The helper first computes the container of the contextual OclExp. If this
+-- container is undefined, it retuns an empty sequence.
+-- Otherwise, if this container is not an OclExpression:
+--  * If the container is a RuleVariableDeclaration, the helper returns a
+--    sequence containing all the named elements of the rule that contains this
+--    InPattern.
+--  * If the container is a Binding, the helper returns a sequence containing
+--    all the named elements of the rule that contains this Binding.
+-- Otherwise, if the computed container is an OclExpression:
+--  * If the container is a LetExp, the helper returns a sequence composed of
+--    the LetExp variable and the result of its recursive call on the LetExp.
+--  * If the container is an IfExp, the helper returns a sequence composed of
+--    the result of its recursive call on the IfExp.
+--  * If the container is an IteratorExp, if the contextual OclExp is the
+--    source of the IteratorExp then the helper returns the result of its
+--    recursive call on the IteratorExp, else it returns this result with the
+--    "iterators" elements of the IteratorExp.
+--  * If the container is an IterateExp, the helper returns the same sequences
+--    that for an IteratorExp, with the additional "result" element in case the
+--    contextual OclExp is not the source of the IterateExp.
+-- Otherwise, the helper returns an empty sequence as default value.
+-- CONTEXT:	ATL!OclExpression
+-- RETURN:	Sequence(ATL!VariableDeclaration)
+helper context ATL!OclExpression
+	def: getUpD() : Sequence(ATL!VariableDeclaration) =
+	let container : ATL!Element = self.immediateComposite in
+	if container.oclIsUndefined() then
+		Sequence{}
+	else if not container.oclIsKindOf(ATL!OclExpression) then
+		if container.oclIsTypeOf(ATL!RuleVariableDeclaration)
+		then
+			Sequence{
+				container."rule".namedElements
+			}->flatten()
+		else
+			if container.oclIsTypeOf(ATL!Binding)
+			then
+				Sequence{
+					container.outPatternElement."rule".namedElements
+				}->flatten()
+			else
+				Sequence{}
+			endif
+		endif
+	else if container.oclIsTypeOf(ATL!LetExp) then
+		Sequence{
+			container.variable,
+			container.getUpD()
+		}->flatten()
+	else if container.oclIsTypeOf(ATL!IfExp) then
+		Sequence{
+			container.getUpD()
+		}->flatten()
+	else if container.oclIsTypeOf(ATL!IteratorExp) then
+		if container.source = self
+		then
+			Sequence{
+				container.getUpD()
+			}->flatten()
+		else
+			Sequence{
+				container.iterators,
+				container.getUpD()
+			}->flatten()
+		endif
+	else if container.oclIsTypeOf(ATL!IterateExp) then
+		if container.source = self
+		then
+			Sequence{
+				container.getUpD()
+			}->flatten()
+		else
+			Sequence{
+				container.iterators,
+				container.result,
+				container.getUpD()
+			}->flatten()
+		endif
+	else Sequence{}
+	endif endif endif endif endif endif;
+
+
+-- This helper computes a sequence containing the VariableDeclarations that are
+-- defined lower than the contextual OclExpression in its namespace tree.
+-- If the contextual OclExpression is a LetExp, the helper returns a sequence
+-- composed of the LetExp variable and the result of its recursive call on the
+-- "in_" reference of the LetExp.
+-- Otherwise, if the contextual OclExpression is a IfExp, the helper returns a
+-- sequence composed of the results of its recursive calls on the "condition",
+-- "thenExpression" and "elseExpression" references of the IfExp.
+-- Otherwise, if the contextual OclExpression is an IteratorExp, the helper
+-- returns a sequence composed of the IteratorExp iterators along with the
+-- results of its recursive calls on the "source" and the "body" references
+-- of the IteratorExp.
+-- Otherwise, if the contextual OclExpression is an IterateExp, the helper
+-- returns the sequence returned for an IteratorExp with its additional result
+-- element.
+-- Otherwise, the helper returns an empty sequence as default value.
+-- CONTEXT:	ATL!OclExpression
+-- RETURN:	Sequence(ATL!VariableDeclaration)
+--helper context ATL!OclExpression
+--	def: getDownD() : Sequence(ATL!VariableDeclaration) =
+--	if self.oclIsTypeOf(ATL!LetExp) then
+--		Sequence{
+--			self.variable,
+--			self.in_.getDownD()
+--		}->flatten()
+--	else if self.oclIsTypeOf(ATL!IfExp) then
+--		Sequence{
+--			self.condition.getDownD(),
+--			self.thenExpression.getDownD(),
+--			self.elseExpression.getDownD()
+--		}->flatten()
+--	else if self.oclIsTypeOf(ATL!IteratorExp) then
+--		Sequence{
+--			self.iterators,
+--			self.source.getDownD(),
+--			self.body.getDownD()
+--		}->flatten()
+--	else if self.oclIsTypeOf(ATL!IterateExp) then
+--		Sequence{
+--			self.iterators,
+--			self.result,
+--			self.source.getDownD(),
+--			self.body.getDownD()
+--		}->flatten()
+--	else Sequence{}
+--	endif endif endif endif;
+
+
+-- This helper returns the root composite (container) of the contextual
+-- OclExpression. For this purpose, the helper first computes the immediate
+-- composite of the contextual OclExpression.
+-- If this container is undefined, the helper returns OclUndefined.
+-- Otherwise, if it is a kind of OclExpression, the helper returns the value
+-- provided by its recursive call on the computed container.
+-- Finally, if this container is not an OclExpression, the root composite has
+-- been reached (Binding/InPattern/Operation/Query/Attribute) and is returned.
+-- CONTEXT:	ATL!OclExpression
+-- RETURN:	ATL!Element
+helper context ATL!OclExpression def: getRootComposite() : ATL!Element =
+	let container : ATL!Element = self.immediateComposite
+	in
+	if container.oclIsUndefined()
+	then
+		OclUndefined
+	else
+		if container.oclIsKindOf(ATL!OclExpression)
+		then
+			container.getRootComposite()
+		else
+			container
+		endif
+	endif;
+
+
+-------------------------------------------------------------------------------
+-- RULES ----------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+-- Rule 'FreeVariableIsSelfOrThisModule'
+-- This rule generates an 'error' Problem for each VariableDeclaration that has
+-- no composite, and whose name is different from both 'self' and 'thisModule'.
+-- The VariableExps that have not been previously declared in an ATL file are
+-- associated with a new VariableDeclaration without any composite in the
+-- correspoding ATL model.
+rule FreeVariableIsSelfOrThisModule {
+	from
+		s : ATL!VariableDeclaration (
+			s.immediateComposite.oclIsUndefined() and
+			s.varName <> 'self' and s.varName <> 'thisModule'
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <-
+				if s.variableExp->isEmpty()
+				then
+					s.location
+				else
+					s.variableExp->first().location
+				endif,
+			description <- 'variable \'' + s.varName + '\' undefined'
+		)
+}
+
+-- Rule 'ModelNameIsUnique'
+-- This rule generates an 'error' Problem when there exists models that have
+-- the same name that the checked model.
+rule ModelNameIsUnique {
+	from
+		s : ATL!OclModel (
+			thisModule.allModels->exists(e | e.name = s.name and e <> s)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <- 'model \'' + s.name + '\' already defined'
+		)
+}
+
+-- Rule 'RuleNameIsUnique'
+-- This rule generates an 'error' Problem when there exists rules that have
+-- the same name that the checked rule.
+rule RuleNameIsUnique {
+	from
+		s : ATL!Rule (
+			thisModule.allRules->exists(e | e.name = s.name and e <> s)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <- 'rule \'' + s.name + '\' already defined'
+		)
+}
+
+-- Rule 'HelperSignatureIsUnique'
+-- This rule generates an 'error' Problem when there exists helpers that have
+-- the same signature that the checked helper.
+-- Note that in current implementation, the helper signature corresponds to the
+-- name and the context of the helper.
+rule HelperSignatureIsUnique {
+	from
+		s : ATL!Helper (
+			thisModule.allHelpers
+				->exists(e |
+					e <> s and
+					s.definition.feature.name = e.definition.feature.name and
+					(
+					 if not s.definition.context_.oclIsUndefined()
+					 then
+					 	if not e.definition.context_.oclIsUndefined()
+					 	then
+						if not s.definition.context_.context_.name.oclIsUndefined()
+							then
+							if not e.definition.context_.context_.name.oclIsUndefined()
+								then
+									s.definition.context_.context_.name = e.definition.context_.context_.name
+								else
+									false
+								endif
+							else
+								e.definition.context_.context_.name.oclIsUndefined()
+							endif
+						else
+							false
+						endif
+					 else
+					 	e.definition.context_.oclIsUndefined()
+					 endif
+					 )
+				)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <- 'helper \'' + s.definition.feature.name
+							+ '\' already defined'
+		)
+}
+
+-- Rule 'BindingNameIsUniqueInPattern'
+-- This rule generates an 'error' Problem when there exists, in a same pattern,
+-- bindings that have the same name that the checked binding.
+rule BindingNameIsUniqueInPattern {
+	from
+		s : ATL!Binding (
+			s.outPatternElement.bindings
+				->exists(e | e.propertyName = s.propertyName and e <> s)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'binding \'' + s.propertyName + '\' already defined in pattern'
+		)
+}
+
+-- Rule 'PatternNameIsUniqueInRule'
+-- This rule generates an 'error' Problem when there exists, in a same rule,
+-- some named elements (InPatternElement/OutPatternElement/
+-- RuleVariableDeclaration) that have the same name that the checked pattern.
+rule PatternNameIsUniqueInRule {
+	from
+		s : ATL!PatternElement (
+			s."rule".namedElements
+				->exists(e | e.varName = s.varName and e <> s)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'pattern or variable named \''
+				+ s.varName	+ '\' already defined in rule'
+		)
+}
+
+-- Rule 'VariableNameIsUniqueInRule'
+-- This rule generates an 'error' Problem when there exists, in a same rule,
+-- some named elements (InPatternElement/OutPatternElement/
+-- RuleVariableDeclaration) that have the same name that the checked rule
+-- variable declaration.
+rule VariableNameIsUniqueInRule {
+	from
+		s : ATL!RuleVariableDeclaration (
+			s."rule".namedElements
+				->exists(e | e.varName = s.varName and e <> s)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'pattern or variable named \'' + s.varName
+				+ '\' already defined in rule'
+		)
+}
+
+-- Rule 'NoHelperWithCollectionAsContext'
+-- This rule generates an 'error' Problem for each Helper defined with a
+-- collection type as context.
+-- Note that this problem is due to the limitations of the current
+-- implementation
+rule NoHelperWithCollectionAsContext {
+	from
+		s : ATL!Helper (
+			if s.definition.context_.oclIsUndefined()
+			then
+				false
+			else
+				thisModule.collectionTypes
+					->exists(e | s.definition.context_.context_ = e)
+			endif
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'helper \'' + s.definition.feature.name
+					+ '\': current implementation does not '
+					+ 'support helpers with collection context'
+		)
+}
+
+-- Rule 'NoSelfOrThisModuleVariableDeclaration'
+-- This rule generates an 'error' Problem for each declaration of a variable
+-- named 'self' or 'thisModule' in the ATL program.
+-- Considered variable declarations must have a non-undefined immediate
+-- composite since the input ATL model may already include a 'self' and a
+-- 'thisModule' VD without any immediate composite that correspond to the
+-- global declarations of the 'self' and 'thisModule' variables.
+rule NoSelfOrThisModuleVariableDeclaration {
+	from
+		s : ATL!VariableDeclaration (
+			not s.immediateComposite.oclIsUndefined() and
+			(s.varName = 'self' or s.varName = 'thisModule')
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'helper \'' + s.varName	+ '\' is not valid variable name'
+		)
+}
+
+-- Rule 'NoSelfVariableInRule'
+-- This rule generates an 'error' Problem for each 'self' variable expression
+-- that is contained by a rule element.
+rule NoSelfVariableInRule {
+	from
+		s : ATL!VariableExp (
+--			s.referredVariable.varName = 'self' and 
+--			(
+--				let rComp : ATL!Element = s.getRootComposite() in
+--				rComp.oclIsTypeOf(ATL!Binding) or
+--				rComp.oclIsTypeOf(ATL!InPattern)
+--			)
+			if s.referredVariable.oclIsUndefined()
+			then
+				false
+			else
+				s.referredVariable.varName = 'self' and 
+				(
+					let rComp : ATL!Element = s.getRootComposite() in
+					rComp.oclIsTypeOf(ATL!Binding) or
+					rComp.oclIsTypeOf(ATL!InPattern)
+				)
+			endif
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'rule \'' + s.referredVariable.varName
+				+ '\': use of the \'self\' variable prohibited in rules'
+		)
+}
+
+-- Rule 'NoResolveTempInSourcePattern'
+-- This rule generates an 'error' Problem for each call of the
+-- 'thisModule.resolveTemp()' operation within a source pattern of a rule.
+rule NoResolveTempInSourcePattern {
+	from
+		s : ATL!OperationCallExp (
+			s.operationName = 'resolveTemp' and
+			(
+				if s.source.oclIsTypeOf(ATL!VariableExp)
+				then
+					if s.source.referredVariable.oclIsUndefined()
+					then
+						false
+					else
+						s.source.referredVariable.varName = 'thisModule'
+					endif
+				else
+					false
+				endif
+			) and
+			s.getRootComposite().oclIsTypeOf(ATL!InPattern)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'rule \'' + s.getRootComposite()."rule".name
+				+ '\': use of \'thisModule.resolveTemp()\' function '
+				+ 'is prohibited in source patterns'
+		)
+}
+
+-- Rule 'NoResolveTempInModuleAttribute'
+-- This rule generates an 'error' Problem for each call of the
+-- 'thisModule.resolveTemp()' operation within a model attribute.
+rule NoResolveTempInModuleAttribute {
+	from
+		s : ATL!OperationCallExp (
+			s.operationName = 'resolveTemp' and
+			(
+				if s.source.oclIsTypeOf(ATL!VariableExp)
+				then
+					if s.source.referredVariable.oclIsUndefined()
+					then
+						false
+					else
+						s.source.referredVariable.varName = 'thisModule'
+					endif
+				else
+					false
+				endif
+			) and
+			s.getRootComposite().oclIsTypeOf(ATL!Attribute)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'attribute \'' + s.getRootComposite().name
+				+ '\': use of \'thisModule.resolveTemp()\' function '
+				+ 'is prohibited in attributes'
+		)
+}
+
+-- Rule 'ProhibitedMultiIteratorCollectionOperation'
+-- This rule generates an 'error' Problem for each IteratorExp of the
+-- singleIteratorExps set that is associated with several Iterators.
+rule ProhibitedMultiIteratorCollectionOperation {
+	from
+		s : ATL!IteratorExp (
+			thisModule.singleIteratorExps->exists(e | s.name = e) and
+			s.iterators->size() > 1
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'iterator \'' + s.name
+				+ '\' may have at most one iterator variable'
+		)
+}
+
+-- Rule 'UnsupportedMultiIteratorCollectionOperation'
+-- This rule generates an 'error' Problem for each IteratorExp of the
+-- multiIteratorExps set that is associated with several Iterators.
+-- Note that this problem is due to limitations of the current implementation.
+rule UnsupportedMultiIteratorCollectionOperation {
+	from
+		s : ATL!IteratorExp (
+			thisModule.multiIteratorExps->exists(e | s.name = e) and
+			s.iterators->size() > 1
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'with current implementation, iterator \'' + s.name
+				+ '\' may have at most one iterator variable'
+		)
+}
+
+-- Rule 'ParameterNameIsUniqueInOperation'
+-- This rule generates an 'error' Problem for each parameter for which there
+-- exists another parameter of the same name in the operation declaration.
+rule ParameterNameIsUniqueInOperation {
+	from
+		s : ATL!Parameter (
+			s.operation.parameters
+				->exists(e | s.varName = e.varName and s <> e)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'a parameter named \'' + s.varName
+				+ '\' is already declared in this operation'
+		)
+}
+
+-- Rule 'IteratorNameIsUniqueInLoop'
+-- This rule generates an 'error' Problem for each Iterator declaration for
+-- which there exists either another Iterator or a result variable declaration
+-- (for Iterate loop only) of the same name within the same loop definition.
+rule VariableNameIsUniqueInLoop {
+	from
+		s : ATL!Iterator (
+			s.loopExpr.iterators
+				->exists(e | s.varName = e.varName and s <> e)
+			or
+			if s.loopExpr.oclIsTypeOf(ATL!IterateExp)
+			then
+				s.loopExpr.result.varName = s.varName
+			else
+				false
+			endif
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'a variable named \'' + s.varName
+				+ '\' is already declared in this loop'
+		)
+}
+
+-- Rule 'ResultNameIsUniqueInIterate'
+-- This rule generates an 'error' Problem for each 'result' variable
+-- declaration of an IterateExp for which there exists an Iterator variable of
+-- the same name in the Iterate loop definition.
+rule ResultNameIsUniqueInIterate {
+	from
+		s : ATL!VariableDeclaration (
+			if s.baseExp.oclIsUndefined()
+			then
+				false
+			else
+				s.baseExp.iterators
+					->exists(e | s.varName = e.varName and s <> e)
+			endif
+		)
+	to
+		t : Problem!Problem (
+			severity <- #error,
+			location <- s.location,
+			description <-
+				'a variable named \'' + s.varName
+				+ '\' is already declared in this loop'
+		)
+}
+
+-- Rule 'VariableNameIsUniqueInContainer'
+-- This rule generates a 'warning' Problem for each declaration of a variable
+-- for which there exists another variable declaration of the same name in the
+-- same namespace (except multiple intances of an Iterator name in a same loop
+-- which handle 'error' Problems).
+rule VariableNameIsUniqueInContainer {
+	from
+		s : ATL!VariableDeclaration (
+			s.getDeclarations()->exists(e | s.varName = e.varName and s <> e)
+		)
+	to
+		t : Problem!Problem (
+			severity <- #warning,
+			location <- s.location,
+			description <-
+				'a variable named \'' + s.varName
+				+ '\' is already declared in this container'
+		)
+}

@@ -1,0 +1,66 @@
+-- @nsURI PetriNetMM1=PetriNetMM1
+
+module MM1Transf; -- Module Template
+create OUT : PetriNetMM1 from IN : PetriNetMM1;
+
+helper context PetriNetMM1!Place def: isPlace: Boolean=
+	if(self.oclType().name='Place')then true
+	
+	else 
+		false
+		endif
+	;
+
+helper context PetriNetMM1!Net def: isNet: Boolean=
+	if(self.oclType().name='Net')then true
+	
+	else 
+		false
+		endif
+	;
+
+rule Model{
+	from p:   PetriNetMM1!PetriNetModel
+	to t: PetriNetMM1!PetriNetModel(
+	
+	elements<-p.elements
+	)
+}
+
+rule Place{
+	from p: PetriNetMM1!Place
+	to t: PetriNetMM1!Place(
+	name<-'new '+p.name	
+	)
+}
+
+rule PetriNet{
+	from p: PetriNetMM1!Net
+	to t: PetriNetMM1!Net(
+	name<-'new '+p.name	,
+	place<-p.place,
+	transition<-p.transition
+	)
+}
+rule Transitions{
+	from s: PetriNetMM1!Transition
+	to t: PetriNetMM1!Transition(
+	net<-s.net,
+	"in"<-s."in",
+	"out"<-s."out"
+	)
+}
+rule PTArc{
+	from p: PetriNetMM1!PTArc
+	to t: PetriNetMM1!PTArc(
+	src<-p.src,
+	dst<-p.dst
+	)
+}
+rule TPArc{
+	from p: PetriNetMM1!TPArc
+	to t: PetriNetMM1!TPArc(
+	src<-p.src,
+	dst<-p.dst
+	)
+}

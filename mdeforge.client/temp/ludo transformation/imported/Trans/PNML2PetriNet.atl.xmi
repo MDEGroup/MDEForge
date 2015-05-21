@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-94:2" name="PNML2PetriNet">
+    <inModels location="2:28-2:48" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:22" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:MatchedRule" location="8:1-26:2" name="PetriNet">
+      <commentsBefore>-- The PetriNet rule generates a PetriNet which corresponds to the input NetElement included in the PNMLDocument. </commentsBefore>
+      <commentsBefore>-- Name of the generated PetriNet is copied from the one of the input NetElement, by recovering the value of the PNML Label included in the PNML Name of the NetElement.</commentsBefore>
+      <commentsBefore>-- Its set of Elements is the corresponding set named &#x201c;elementsSet&#x201d; calculated in the using clause.</commentsBefore>
+      <commentsBefore>-- And its set of Arcs is the corresponding set named &#x201c;arcsSet&#x201d; calculated in the using clause.</commentsBefore>
+      <commentsAfter>-- The Place rule generates a Place which corresponds to the input Place. </commentsAfter>
+      <commentsAfter>-- Name of the generated Place is copied from the one of the input Place , by recovering the value of the PNML Label included in the PNML Name of the PNML Place.</commentsAfter>
+      <outPattern location="18:2-25:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="19:3-25:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="19:7-19:24" name="PetriNet" model="/8"/>
+          <bindings location="21:4-21:26" propertyName="location">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="21:16-21:26" name="location">
+              <source xsi:type="ocl:VariableExp" location="21:16-21:17" referredVariable="/0/@elements.0/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="22:4-22:51" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="22:12-22:51" name="text">
+              <source xsi:type="ocl:OperationCallExp" location="22:12-22:46" operationName="first">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="22:12-22:38" name="labels">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="22:12-22:31" name="name">
+                    <source xsi:type="ocl:OperationCallExp" location="22:12-22:26" operationName="first">
+                      <source xsi:type="ocl:NavigationOrAttributeCallExp" location="22:12-22:18" name="nets">
+                        <source xsi:type="ocl:VariableExp" location="22:12-22:13" referredVariable="/0/@elements.0/@inPattern/@elements.0"/>
+                      </source>
+                    </source>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="23:4-23:27" propertyName="elements">
+            <value xsi:type="ocl:VariableExp" location="23:16-23:27" referredVariable="/0/@elements.0/@variables.0"/>
+          </bindings>
+          <bindings location="24:4-24:19" propertyName="arcs">
+            <value xsi:type="ocl:VariableExp" location="24:12-24:19" referredVariable="/0/@elements.0/@variables.1"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <variables location="12:4-13:43" varName="elementsSet" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.2/@value">
+        <type xsi:type="ocl:SetType" location="12:18-12:39">
+          <elementType xsi:type="ocl:OclModelElement" location="12:22-12:38" name="Element" model="/4"/>
+        </type>
+        <initExpression xsi:type="ocl:OperationCallExp" location="13:5-13:42" operationName="allInstances">
+          <source xsi:type="ocl:OclModelElement" location="13:5-13:27" name="NetContentElement" model="/5"/>
+        </initExpression>
+      </variables>
+      <variables location="15:4-16:29" varName="arcsSet" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.3/@value">
+        <type xsi:type="ocl:SetType" location="15:14-15:31">
+          <elementType xsi:type="ocl:OclModelElement" location="15:18-15:30" name="Arc" model="/6"/>
+        </type>
+        <initExpression xsi:type="ocl:OperationCallExp" location="16:5-16:28" operationName="allInstances">
+          <source xsi:type="ocl:OclModelElement" location="16:5-16:13" name="Arc" model="/7"/>
+        </initExpression>
+      </variables>
+      <inPattern location="9:2-10:24">
+        <elements xsi:type="atl:SimpleInPatternElement" location="10:3-10:24" varName="n" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.0/@outPattern/@elements.0/@bindings.1/@value/@source/@source/@source/@source/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="10:7-10:24" name="PNMLDocument" model="/3"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="30:1-40:2" name="Place">
+      <commentsBefore>-- The Place rule generates a Place which corresponds to the input Place. </commentsBefore>
+      <commentsBefore>-- Name of the generated Place is copied from the one of the input Place , by recovering the value of the PNML Label included in the PNML Name of the PNML Place.</commentsBefore>
+      <commentsAfter>-- The Transition rule generates a Transition which corresponds to the input Transition . </commentsAfter>
+      <commentsAfter>-- Name of the generated Transition is copied from the one of the input Transition , by recovering the value of the PNML Label included in the PNML Name of the PNML Transition .</commentsAfter>
+      <outPattern location="33:2-39:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="34:3-39:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="34:7-34:21" name="Place" model="/10"/>
+          <bindings location="36:4-36:26" propertyName="location">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="36:16-36:26" name="location">
+              <source xsi:type="ocl:VariableExp" location="36:16-36:17" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="37:4-37:38" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="37:12-37:38" name="text">
+              <source xsi:type="ocl:OperationCallExp" location="37:12-37:33" operationName="first">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="37:12-37:25" name="labels">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="37:12-37:18" name="name">
+                    <source xsi:type="ocl:VariableExp" location="37:12-37:13" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="38:4-38:25" propertyName="net">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="38:11-38:25" name="document">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="38:11-38:16" name="net">
+                <source xsi:type="ocl:VariableExp" location="38:11-38:12" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="31:2-32:17">
+        <elements xsi:type="atl:SimpleInPatternElement" location="32:3-32:17" varName="n" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@source/@source/@source/@source /0/@elements.1/@outPattern/@elements.0/@bindings.2/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="32:7-32:17" name="Place" model="/9"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="44:1-54:2" name="Transition">
+      <commentsBefore>-- The Transition rule generates a Transition which corresponds to the input Transition . </commentsBefore>
+      <commentsBefore>-- Name of the generated Transition is copied from the one of the input Transition , by recovering the value of the PNML Label included in the PNML Name of the PNML Transition .</commentsBefore>
+      <commentsAfter>-- The PlaceToTransition rule generates a PlaceToTransition which corresponds to the input Arc which has a Place for source and a Transition for Target. </commentsAfter>
+      <commentsAfter>-- Name of the generated PlaceToTransition is copied from the one of the input Arc, by recovering the value of the PNML Label included in the PNML Name of the PNML Arc.</commentsAfter>
+      <commentsAfter>-- Its from and to references are also copied from the input Arc and correspond respectively to the source and target references.</commentsAfter>
+      <outPattern location="47:2-53:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="48:3-53:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="48:7-48:26" name="Transition" model="/12"/>
+          <bindings location="50:4-50:26" propertyName="location">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="50:16-50:26" name="location">
+              <source xsi:type="ocl:VariableExp" location="50:16-50:17" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="51:4-51:38" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="51:12-51:38" name="text">
+              <source xsi:type="ocl:OperationCallExp" location="51:12-51:33" operationName="first">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="51:12-51:25" name="labels">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="51:12-51:18" name="name">
+                    <source xsi:type="ocl:VariableExp" location="51:12-51:13" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="52:4-52:25" propertyName="net">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="52:11-52:25" name="document">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="52:11-52:16" name="net">
+                <source xsi:type="ocl:VariableExp" location="52:11-52:12" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="45:2-46:22">
+        <elements xsi:type="atl:SimpleInPatternElement" location="46:3-46:22" varName="n" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.2/@outPattern/@elements.0/@bindings.1/@value/@source/@source/@source/@source /0/@elements.2/@outPattern/@elements.0/@bindings.2/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="46:7-46:22" name="Transition" model="/11"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="59:1-74:2" name="PlaceToTransition">
+      <commentsBefore>-- The PlaceToTransition rule generates a PlaceToTransition which corresponds to the input Arc which has a Place for source and a Transition for Target. </commentsBefore>
+      <commentsBefore>-- Name of the generated PlaceToTransition is copied from the one of the input Arc, by recovering the value of the PNML Label included in the PNML Name of the PNML Arc.</commentsBefore>
+      <commentsBefore>-- Its from and to references are also copied from the input Arc and correspond respectively to the source and target references.</commentsBefore>
+      <commentsAfter>-- The TransitionToPlace rule generates a TransitionToPlace which corresponds to the input Arc which has a Transition for source and a Place for Target.</commentsAfter>
+      <commentsAfter>-- Name of the generated TransitionToPlace is copied from the one of the input Arc, by recovering the value of the PNML Label included in the PNML Name of the PNML Arc.</commentsAfter>
+      <commentsAfter>-- Its from and to references are also copied from the input Arc and correspond respectively to the source and target references.</commentsAfter>
+      <outPattern location="65:2-73:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="66:3-73:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="66:7-66:33" name="PlaceToTransition" model="/16"/>
+          <bindings location="68:4-68:26" propertyName="location">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="68:16-68:26" name="location">
+              <source xsi:type="ocl:VariableExp" location="68:16-68:17" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="69:4-69:38" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="69:12-69:38" name="text">
+              <source xsi:type="ocl:OperationCallExp" location="69:12-69:33" operationName="first">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="69:12-69:25" name="labels">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="69:12-69:18" name="name">
+                    <source xsi:type="ocl:VariableExp" location="69:12-69:13" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="70:4-70:25" propertyName="net">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="70:11-70:25" name="document">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="70:11-70:16" name="net">
+                <source xsi:type="ocl:VariableExp" location="70:11-70:12" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="71:4-71:22" propertyName="from">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="71:14-71:22" name="source">
+              <source xsi:type="ocl:VariableExp" location="71:14-71:15" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="72:4-72:20" propertyName="to">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="72:12-72:20" name="target">
+              <source xsi:type="ocl:VariableExp" location="72:12-72:13" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="60:2-64:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="61:3-61:15" varName="n" variableExp="/0/@elements.3/@inPattern/@filter/@source/@source/@source /0/@elements.3/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.3/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.3/@outPattern/@elements.0/@bindings.1/@value/@source/@source/@source/@source /0/@elements.3/@outPattern/@elements.0/@bindings.2/@value/@source/@source /0/@elements.3/@outPattern/@elements.0/@bindings.3/@value/@source /0/@elements.3/@outPattern/@elements.0/@bindings.4/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="61:7-61:15" name="Arc" model="/13"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="63:4-63:78" operationName="and">
+          <commentsBefore>-- arc source must be a place and arc target a transition</commentsBefore>
+          <source xsi:type="ocl:OperationCallExp" location="63:4-63:36" operationName="oclIsKindOf">
+            <commentsBefore>-- arc source must be a place and arc target a transition</commentsBefore>
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="63:4-63:12" name="source">
+              <commentsBefore>-- arc source must be a place and arc target a transition</commentsBefore>
+              <source xsi:type="ocl:VariableExp" location="63:4-63:5" referredVariable="/0/@elements.3/@inPattern/@elements.0">
+                <commentsBefore>-- arc source must be a place and arc target a transition</commentsBefore>
+              </source>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="63:25-63:35" name="Place" model="/14"/>
+          </source>
+          <arguments xsi:type="ocl:OperationCallExp" location="63:41-63:78" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="63:41-63:49" name="target">
+              <source xsi:type="ocl:VariableExp" location="63:41-63:42" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="63:62-63:77" name="Transition" model="/15"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="79:1-94:2" name="TransitionToPlace">
+      <commentsBefore>-- The TransitionToPlace rule generates a TransitionToPlace which corresponds to the input Arc which has a Transition for source and a Place for Target.</commentsBefore>
+      <commentsBefore>-- Name of the generated TransitionToPlace is copied from the one of the input Arc, by recovering the value of the PNML Label included in the PNML Name of the PNML Arc.</commentsBefore>
+      <commentsBefore>-- Its from and to references are also copied from the input Arc and correspond respectively to the source and target references.</commentsBefore>
+      <outPattern location="85:2-93:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="86:3-93:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="86:7-86:33" name="TransitionToPlace" model="/20"/>
+          <bindings location="88:4-88:26" propertyName="location">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="88:16-88:26" name="location">
+              <source xsi:type="ocl:VariableExp" location="88:16-88:17" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="89:4-89:38" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="89:12-89:38" name="text">
+              <source xsi:type="ocl:OperationCallExp" location="89:12-89:33" operationName="first">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="89:12-89:25" name="labels">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="89:12-89:18" name="name">
+                    <source xsi:type="ocl:VariableExp" location="89:12-89:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="90:4-90:25" propertyName="net">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="90:11-90:25" name="document">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="90:11-90:16" name="net">
+                <source xsi:type="ocl:VariableExp" location="90:11-90:12" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="91:4-91:22" propertyName="from">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="91:14-91:22" name="source">
+              <source xsi:type="ocl:VariableExp" location="91:14-91:15" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="92:4-92:20" propertyName="to">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="92:12-92:20" name="target">
+              <source xsi:type="ocl:VariableExp" location="92:12-92:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="80:2-84:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="81:3-81:15" varName="n" variableExp="/0/@elements.4/@inPattern/@filter/@source/@source/@source /0/@elements.4/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.4/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.4/@outPattern/@elements.0/@bindings.1/@value/@source/@source/@source/@source /0/@elements.4/@outPattern/@elements.0/@bindings.2/@value/@source/@source /0/@elements.4/@outPattern/@elements.0/@bindings.3/@value/@source /0/@elements.4/@outPattern/@elements.0/@bindings.4/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="81:7-81:15" name="Arc" model="/17"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="83:4-83:78" operationName="and">
+          <commentsBefore>-- arc source must be a transition and arc target a place</commentsBefore>
+          <source xsi:type="ocl:OperationCallExp" location="83:4-83:41" operationName="oclIsKindOf">
+            <commentsBefore>-- arc source must be a transition and arc target a place</commentsBefore>
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="83:4-83:12" name="source">
+              <commentsBefore>-- arc source must be a transition and arc target a place</commentsBefore>
+              <source xsi:type="ocl:VariableExp" location="83:4-83:5" referredVariable="/0/@elements.4/@inPattern/@elements.0">
+                <commentsBefore>-- arc source must be a transition and arc target a place</commentsBefore>
+              </source>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="83:25-83:40" name="Transition" model="/18"/>
+          </source>
+          <arguments xsi:type="ocl:OperationCallExp" location="83:46-83:78" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="83:46-83:54" name="target">
+              <source xsi:type="ocl:VariableExp" location="83:46-83:47" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="83:67-83:77" name="Place" model="/19"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:22" name="PetriNet" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:33-2:48" name="PNML_simplified" model="/0/@inModels.0"/>
+  <ocl:OclModel location="10:7-10:11" name="PNML" elements="/0/@elements.0/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="12:22-12:30" name="PetriNet" elements="/0/@elements.0/@variables.0/@type/@elementType"/>
+  <ocl:OclModel location="13:5-13:9" name="PNML" elements="/0/@elements.0/@variables.0/@initExpression/@source"/>
+  <ocl:OclModel location="15:18-15:26" name="PetriNet" elements="/0/@elements.0/@variables.1/@type/@elementType"/>
+  <ocl:OclModel location="16:5-16:9" name="PNML" elements="/0/@elements.0/@variables.1/@initExpression/@source"/>
+  <ocl:OclModel location="19:7-19:15" name="PetriNet" elements="/0/@elements.0/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="32:7-32:11" name="PNML" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="34:7-34:15" name="PetriNet" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="46:7-46:11" name="PNML" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="48:7-48:15" name="PetriNet" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="61:7-61:11" name="PNML" elements="/0/@elements.3/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="63:25-63:29" name="PNML" elements="/0/@elements.3/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="63:62-63:66" name="PNML" elements="/0/@elements.3/@inPattern/@filter/@arguments.0/@arguments.0"/>
+  <ocl:OclModel location="66:7-66:15" name="PetriNet" elements="/0/@elements.3/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="81:7-81:11" name="PNML" elements="/0/@elements.4/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="83:25-83:29" name="PNML" elements="/0/@elements.4/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="83:67-83:71" name="PNML" elements="/0/@elements.4/@inPattern/@filter/@arguments.0/@arguments.0"/>
+  <ocl:OclModel location="86:7-86:15" name="PetriNet" elements="/0/@elements.4/@outPattern/@elements.0/@type"/>
+</xmi:XMI>

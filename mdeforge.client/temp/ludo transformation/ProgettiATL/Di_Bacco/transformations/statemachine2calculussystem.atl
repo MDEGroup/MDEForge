@@ -1,0 +1,185 @@
+-- @ ccsMM=/MDE_statemachine2calculussystem/metamodel/ccsMM.ecore
+-- @ stateMachineMM=/MDE_statemachine2calculussystem/metamodel/statemachineMM.ecore
+
+module statemachine2calculussystem;
+create OUT : ccsMM from IN : stateMachineMM;
+
+------------------------------------------------------------------------------------------------------
+-- HELPER
+------------------------------------------------------------------------------------------------------
+-- mantain a global refer to CCS system
+helper def: CCS: ccsMM!CCS=OclUndefined;
+
+-- true if the State has exactly one outgoing transition			
+helper context stateMachineMM!StateElement def: hasSingleTransition(): Boolean =	
+	let transitionOutList : Set(stateMachineMM!Transition) =
+		stateMachineMM!Transition.allInstances()->select(t|t.source.label=self.label)
+	in 
+		 transitionOutList.size()=1;
+
+--true if the State has more than one outgoing transitions	
+helper context stateMachineMM!StateElement def: hasMultipleTransition(): Boolean =	
+	let transitionOutList : Set(stateMachineMM!Transition) = 
+		stateMachineMM!Transition.allInstances()->select(t|t.source.label=self.label)
+	in 
+		transitionOutList.size()>1;
+
+-- return a ProcessTerm from Transition representing destination ProcessTerm 
+helper context stateMachineMM!Transition def: getNextProcess(): ccsMM!ProcessTerm =	
+	thisModule.CCS.processSet->select(e|e.name=self.destination.label).first();
+
+-- return a ProcessTerm from Event representing destination ProcessTerm 
+helper context stateMachineMM!Event def: getNextProcess(): ccsMM!ProcessTerm =
+	thisModule.CCS.processSet->select(e|e.name=self.refImmediateComposite().destination.label).first();
+
+-- return a ProcessTerm from Composed representing destination ProcessTerm 
+helper context stateMachineMM!Composed def: getNextProcess(): ccsMM!ProcessTerm =
+	thisModule.CCS.processSet->select(e|e.name=self.substatemachine.starts.label).first();
+
+-- return a set of ProcessTerm from Transition create by its Events using LazyRule
+helper context stateMachineMM!Transition def: getNextProcesses(): Set(ccsMM!ProcessTerm) =
+	self.triggeredBy->collect(e|thisModule.Event2ActionPrefix(e));
+
+-- find ProcessTerm from process set in the model
+helper def: getReferenced(t:stateMachineMM!Transition): ccsMM!ProcessTerm =
+	thisModule.CCS.processSet->select(e|e.name=t.source.label).first();
+
+-- return Action created by lazy rule
+helper context stateMachineMM!Transition def: getAction(): ccsMM!Action =
+	thisModule.Event2Action(self.triggeredBy.first());
+
+-- return an integer representing number of Transition's trigger events 
+helper context stateMachineMM!Transition def: getTriggerNum(): Integer =
+	self.triggeredBy->collect(e|e).size();
+
+-- return true if the Transition is the only that go out from its source state
+helper context stateMachineMM!Transition def: isOnlyOutputTransition(): Boolean =
+	self.source.hasSingleTransition() ;
+
+
+------------------------------------------------------------------------------------------------------
+-- RULE
+------------------------------------------------------------------------------------------------------
+-- Starting from most general state machine in the model (it can be contain several substatemachine)
+-- it creates the container and CCS(calculus system). After binded the last one in the first one,
+-- it mantains a refer to CCS in a global defintion
+rule StateMachine2CCS{
+	from 	sm: stateMachineMM!StateMachine(sm.refImmediateComposite().oclIsUndefined())
+	to		container: ccsMM!CCScontainer(
+				contains<-ccs
+			),			
+			ccs: ccsMM!CCS(
+				name<-sm.label,			
+				processSet<-Set{}
+			)
+	do	{thisModule.CCS<-ccs;}
+ }
+
+-- Each StateElement is transformed into ProcessTerm. Based on its outgoing transitions number
+-- it will be transformed into an appropriate ProcessTerm kind.
+-- Possible ProcessTerm in this case are EmptyProcess, ProcessIdentifier, Choice
+-- Special reguards for ComposedState wich not have an explicit transition to its initial state
+abstract rule State2Process{
+	from	s:	stateMachineMM!StateElement
+	to		p:	ccsMM!ProcessTerm
+}
+
+rule Final2EmptyProcess extends State2Process{
+	from	s:	stateMachineMM!Final
+	to		p:	ccsMM!EmptyProcess(
+				name<-s.label
+			)		
+	do{	thisModule.CCS.processSet<-p;}	
+}
+
+rule State2ProcessIdentifier extends State2Process{
+	from	s:	stateMachineMM!StateElement(s.hasSingleTransition() and not s.oclIsTypeOf(stateMachineMM!Composed))
+	to		p:	ccsMM!ProcessIdentifier(
+				name<-s.label
+			)			
+	do {thisModule.CCS.processSet<-p;}
+}
+
+rule State2Choice extends State2Process{
+	from	s:	stateMachineMM!StateElement(s.hasMultipleTransition())
+	to		p:	ccsMM!Choice(
+				name<-s.label
+			)			
+	do {thisModule.CCS.processSet<-p;}
+}
+
+rule StateComposed2ProcessIdentifier extends State2Process{
+	from	s:	stateMachineMM!Composed
+	to		p:	ccsMM!ProcessIdentifier(
+				name<-s.label,
+				nextProcess<-s.getNextProcess()
+				
+			)			
+	do {thisModule.CCS.processSet<-p;}
+}
+
+-- Each Transition is transformed into a ProcessTerm too. In this case valid ProcessTerm
+-- are ActionPrefix or Choice (of ActionPrefix) based on trigger events number
+
+abstract rule Transition2ActionPrefix  {
+	from	s:	stateMachineMM!Transition
+	to		p:	ccsMM!ActionPrefix(
+				name<-'P'+s.source.label,
+				actionRef<-s.getAction(),
+				nextProcess<-s.getNextProcess()
+			)
+}
+
+rule Transition2ActionPrefixA extends Transition2ActionPrefix{
+	from	s:	stateMachineMM!Transition(s.getTriggerNum()<=1 and s.isOnlyOutputTransition())
+	to		p:	ccsMM!ActionPrefix			
+	do {
+		thisModule.CCS.processSet<-p;	
+		thisModule.getReferenced(s).nextProcess<-p;
+	}
+}
+
+rule Transition2ActionPrefixB extends Transition2ActionPrefix{
+	from	s:	stateMachineMM!Transition(s.getTriggerNum()<=1 and not s.isOnlyOutputTransition())
+	to		p:	ccsMM!ActionPrefix(
+					name<-'P'+s.source.label+'_'+s.triggeredBy.first().label.substring(1, 1)	--to create an ID
+				)
+	do {
+		thisModule.CCS.processSet<-p;	
+		thisModule.getReferenced(s).choices<-p;
+	}
+}
+
+rule Transition2Choice {
+	from	s:	stateMachineMM!Transition(s.getTriggerNum()>1)
+	to		p:	ccsMM!Choice(
+				name<-'P'+s.source.label,
+				choices<-s.getNextProcesses() 
+			)
+	do {
+		thisModule.CCS.processSet<-p;	
+		thisModule.getReferenced(s).nextProcess<-p;		
+	}
+}
+------------------------------------------------------------------------------------------------------
+-- LAZY RULE
+------------------------------------------------------------------------------------------------------
+-- Each trigger Event of state machine becomes an Action in the action set.
+-- Each ones was created from relative transition rule 
+lazy rule Event2Action{
+	from	s:	stateMachineMM!Event
+	to		a:	ccsMM!Action(
+				name<-'a_'+s.label+'_'+s.refImmediateComposite().label --to create an ID
+				)
+	do{	thisModule.CCS.actionSet<-a;}
+}
+
+lazy rule Event2ActionPrefix{
+	from	s:	stateMachineMM!Event
+	to		p:	ccsMM!ActionPrefix(
+				name<-'P'+s.refImmediateComposite().label+'_'+s.label.substring(1, 1), --to create an ID
+				actionRef<-thisModule.Event2Action(s),
+				nextProcess<-s.getNextProcess()
+			)
+	do{	thisModule.CCS.processSet<-p; }
+}

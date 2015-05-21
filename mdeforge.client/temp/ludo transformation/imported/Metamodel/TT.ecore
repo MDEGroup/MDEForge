@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+  <ecore:EPackage name="TT">
+    <eClassifiers xsi:type="ecore:EClass" name="LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TruthTable" eSuperTypes="/0/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ports" ordered="false" lowerBound="1" upperBound="-1" eType="/0/Port" containment="true" eOpposite="/0/Port/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rows" ordered="false" lowerBound="2" upperBound="-1" eType="/0/Row" containment="true" eOpposite="/0/Row/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true" eSuperTypes="/0/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/TruthTable" eOpposite="/0/TruthTable/ports"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cells" ordered="false" upperBound="-1" eType="/0/Cell" eOpposite="/0/Cell/port"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="/0/Port"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="/0/Port"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Row" eSuperTypes="/0/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/TruthTable" eOpposite="/0/TruthTable/rows"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cells" ordered="false" lowerBound="1" upperBound="-1" eType="/0/Cell" containment="true" eOpposite="/0/Cell/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Cell" eSuperTypes="/0/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false" unique="false" lowerBound="1" eType="/1/Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/Row" eOpposite="/0/Row/cells"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" ordered="false" lowerBound="1" eType="/0/Port" eOpposite="/0/Port/cells"/>
+    </eClassifiers>
+  </ecore:EPackage>
+  <ecore:EPackage name="PrimitiveTypes">
+    <eClassifiers xsi:type="ecore:EDataType" name="String"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Boolean"/>
+  </ecore:EPackage>
+</xmi:XMI>

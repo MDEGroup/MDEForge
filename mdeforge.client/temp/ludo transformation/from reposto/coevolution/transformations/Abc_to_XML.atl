@@ -1,0 +1,115 @@
+
+
+module Abc_to_XML; -- Module Template
+create OUT : XML from IN : ABC;
+
+helper def: getRoot() : ABC!abc =
+	ABC!abc.allInstances()->asSequence()->first();
+
+
+rule ABC2Root{
+	from
+		s	:	ABC!abc
+	to
+		t	:	XML!Root(
+			name <- 'abc',
+			children <- Sequence{xmlns, name,s.aElements,s.bElements,s.cElements,s.dElements}
+		),
+		xmlns	:	XML!Attribute(
+			name <- 'xmlns',
+			value <- 'http://abc'
+		),
+		name	:	XML!Attribute(
+			name <- 'name',
+			value <- 'abc'
+		)
+}
+
+rule A2Element{
+	from
+		s	:	ABC!A
+	to
+		t	:	XML!Element(
+			name <- 'a',
+			value<-s.a,
+
+			children<-s.bs
+		),
+		attr: XML!Attribute(
+		name<-'label',
+		value<-s.a,
+		parent<-t
+		)
+}
+
+rule B2Element{
+	from
+		s	:	ABC!B
+	to
+		t	:	XML!Element(
+			name <- 'b',
+			value<-s.b,
+			parent<-thisModule.resolveTemp(s.refA, 't'),
+			children<- s.cs 
+		),
+		attr: XML!Attribute(
+		name<-'number_of_childrens',
+		value<-(s.b.size()+s.cs.size()).toString(),
+		parent<-t
+		),
+		attr_e1: XML!Attribute(
+		name<-'e1',
+		value<-s.eRef.e1,
+		parent<-t
+		),
+		attr_e2: XML!Attribute(
+		name<-'e2',
+		value<-s.eRef.e2,
+		parent<-t
+		)
+}
+
+rule C2Element{
+	from
+		s	:	ABC!C
+	to
+		t	:	XML!Element(
+			name <- 'c',
+			value<-s.c,
+			parent<-thisModule.resolveTemp(s.refB, 't')
+		),
+		attr: XML!Attribute(
+		name<-'label',
+		value<-s.c,
+		parent<-t
+		)	
+}
+rule D2Element{
+	from
+		s	:	ABC!D
+	to
+		t	:	XML!Element(
+			name <- 'd',
+			value<-s.d,
+			parent<-thisModule.resolveTemp(s.refB, 't')
+		),
+		attr: XML!Attribute(
+		name<-'label',
+		value<-s.d,
+		parent<-t
+		)	
+}
+
+rule E2Element{
+	from
+		s	:	ABC!E
+	to
+		t	:	XML!Element(
+			name <- 'E'
+		),
+		attr: XML!Attribute(
+		name<-'label',
+		value<-s.e1+s.e2,
+		parent<-t
+		)	
+}

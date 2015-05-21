@@ -1,0 +1,127 @@
+-- @atlcompiler atl2006
+
+
+module AADL_Abeh_aadl_ManualCode; -- Module Template
+create OUT : Abeh_aadl  from IN : AADL;
+
+-- GENERATED ::: Global
+
+--helper def : softArch : Abeh_aadl!"Abeh_aadl::core::SoftwareArchitecture" = OclUndefined;
+--helper def : typesSpec : Abeh_aadl!"Abeh_aadl::core::TypesSpecification" = OclUndefined;
+
+-- deve avere lo stesso nome della endpoint rule nella trasf principale
+endpoint rule setTraces() {
+	do {
+		thisModule.rightSide__AadlSpec_SoftwareArchitecture.subElement <- thisModule.rightSide__AadlSpec_SoftwareArchitecture.subElement.union(Abeh_aadl!Component.allInstancesFrom('OUT')->select(e | e.refImmediateComposite().oclIsUndefined()));
+ 		thisModule.rightSide1__AadlSpec_SoftwareArchitecture.types <- thisModule.rightSide1__AadlSpec_SoftwareArchitecture.types.union(Abeh_aadl!Type.allInstancesFrom('OUT')->select(e | e.refImmediateComposite().oclIsUndefined()));
+		for(e in thisModule.traces) {
+      		e.target.setElementIDbyRefType('ElementRefXMI', e.source.getElementIDbyRefType('ElementRefXMI'));
+    	}
+	}
+}
+
+-- helper che prende una direction di AADL e mi restituisce una direction di A0:
+
+helper def : getInterfaceDirection(aadlDirection : AADL!Direction) :
+	A0!SAinterfaceDirection =	
+if(aadlDirection = #"in")
+	then #input
+else
+if(aadlDirection = #out) then #output
+else
+#inputOutput
+endif
+endif;
+
+
+helper context AADL!AadlPublic def : getUnionPublic():Set(AADL!AadlPublic) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+		(self.dataImpl.union(self.dataType))
+	endif;
+
+helper context AADL!AadlSpec def : getUnionSpec():Set(AADL!AadlSpec) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+		(self.dataImpl.union(self.threadImpl).union(self.processImpl).union(self.dataType))
+	endif;
+
+--helper che prende un AAdlPublic
+--helper def getPublic:(a: AADL!AadlSpec):
+	--a->thisModule.getUnionSpec();
+
+
+helper context AADL!Features def : getFeatures():Sequence(AADL!Features) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.portGroup.union(self.dataPort).union(self.eventPort).union(self.eventDataPort).union(self.serverSubprogram))
+	endif;
+
+helper context AADL!Features def : getFeaturesSub():Sequence(AADL!Features) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.portGroup.union(self.eventPort).union(self.eventDataPort).union(self.dataAccess).union(self.parameter))
+	endif;
+helper context AADL!Subcomponents def : getSubcomponentsSystem():Sequence(AADL!Subcomponents) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.processSubcomponent.union(self.deviceSubcomponent).union(self.systemSubcomponent).union(self.dataSubcomponent))--.union(self.processSubcomponet).union(self.subprogramSubcomponet).union(self.deviceSubcomponet))
+	endif;
+
+helper context AADL!Subcomponents def : getSubcomponentsProcess():Sequence(AADL!Subcomponents) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.dataSubcomponent.union(self.threadSubcomponent).union(self.threadGroupSubcomponent))
+	endif;
+
+helper context AADL!Connections def : getConnections():Sequence(AADL!Connections) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.eventDataConnection.union(self.eventConnection).union(self.dataConnection))
+	endif;
+
+helper context AADL!Properties def : getProperty():Sequence(AADL!Properties) =
+	if(self.oclIsUndefined()) then OclUndefined
+	else
+	(self.propertyAssociation)
+	endif;
+
+
+
+---per prendere solo le properties degli elementi che trasformiamo
+helper context AADL!PropertyAssociation def: isElement() : Boolean =
+	if ( (self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!MemoryImpl) )or  
+			(self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!MemoryType)) or
+				 (self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!BusImpl) )or
+				 	 (self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!BusType))or 
+				 	 	 (self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!ProcessorImpl)) or
+				 	 	 	 (self.refImmediateComposite().refImmediateComposite().oclIsTypeOf(AADL!ProcessorType))) then
+	true
+	else
+		 false
+	endif;
+
+---controlla se gli elementi sono contenuti in altri
+helper context AADL!Connection def: isComposed() : Boolean =
+	if  (self.srcContext.refImmediateComposite().refImmediateComposite() = self.dstContext.refImmediateComposite().refImmediateComposite()) then
+		true --->debug('') ---livelli diversi  SABinding
+	else
+		 false --->debug('')---stesso livello --SAChannel
+	endif;
+
+---lo stato è iniziale ---
+helper context AADL!BehaviorState def: TypeStateInitial() : Boolean =
+	if   self.Initial.oclIsUndefined() then
+		false
+	else
+			self.Initial
+	endif;
+
+---lo stato è finale ---
+helper context AADL!BehaviorState def: TypeStateFinal() : Boolean =
+	if  self.Return.oclIsUndefined() then
+		false
+	else
+			self.Return
+	endif;
+

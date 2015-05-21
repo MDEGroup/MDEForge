@@ -1,0 +1,936 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-261:2" name="BibTeX2DocBook">
+    <inModels location="2:27-2:38" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:21" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="13:1-19:30">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- HELPERS --------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- This helper builds the set of distinct authors referenced in the input BibTeX</commentsBefore>
+      <commentsBefore>-- model.</commentsBefore>
+      <commentsBefore>-- Built set is sorted by author name.</commentsBefore>
+      <commentsBefore>-- RETURN: Sequence(BibTeX!Author)</commentsBefore>
+      <commentsAfter>-- This helper builds the set of distinct titles referenced in the input BibTeX</commentsAfter>
+      <commentsAfter>-- model.</commentsAfter>
+      <commentsAfter>-- Built set is sorted by title.</commentsAfter>
+      <commentsAfter>-- RETURN: Sequence(BibTeX!TitledEntry)</commentsAfter>
+      <definition location="13:8-19:29">
+        <feature xsi:type="ocl:Attribute" location="13:13-19:29" name="authorSet">
+          <initExpression xsi:type="ocl:IteratorExp" location="13:51-19:29" name="sortedBy">
+            <source xsi:type="ocl:IterateExp" location="13:51-19:5">
+              <source xsi:type="ocl:OperationCallExp" location="13:51-13:79" operationName="allInstances">
+                <source xsi:type="ocl:OclModelElement" location="13:51-13:64" name="Author" model="/4"/>
+              </source>
+              <body xsi:type="ocl:IfExp" location="14:5-18:10">
+                <thenExpression xsi:type="ocl:VariableExp" location="15:6-15:9" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@result"/>
+                <condition xsi:type="ocl:CollectionOperationCallExp" location="14:8-14:54" operationName="includes">
+                  <source xsi:type="ocl:IteratorExp" location="14:8-14:34" name="collect">
+                    <source xsi:type="ocl:VariableExp" location="14:8-14:11" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@result"/>
+                    <body xsi:type="ocl:NavigationOrAttributeCallExp" location="14:25-14:33" name="author">
+                      <source xsi:type="ocl:VariableExp" location="14:25-14:26" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@body/@condition/@source/@iterators.0"/>
+                    </body>
+                    <iterators location="14:21-14:22" varName="e" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@source/@body/@condition/@source/@body/@source"/>
+                  </source>
+                  <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="14:45-14:53" name="author">
+                    <source xsi:type="ocl:VariableExp" location="14:45-14:46" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                  </arguments>
+                </condition>
+                <elseExpression xsi:type="ocl:CollectionOperationCallExp" location="17:6-17:23" operationName="including">
+                  <source xsi:type="ocl:VariableExp" location="17:6-17:9" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@result"/>
+                  <arguments xsi:type="ocl:VariableExp" location="17:21-17:22" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                </elseExpression>
+              </body>
+              <iterators location="13:89-13:90" varName="e" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@source/@body/@condition/@arguments.0/@source /0/@elements.0/@definition/@feature/@initExpression/@source/@body/@elseExpression/@arguments.0"/>
+              <result location="13:92-13:135" varName="ret" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@source/@body/@condition/@source/@source /0/@elements.0/@definition/@feature/@initExpression/@source/@body/@thenExpression /0/@elements.0/@definition/@feature/@initExpression/@source/@body/@elseExpression/@source">
+                <type xsi:type="ocl:SequenceType" location="13:98-13:121">
+                  <elementType xsi:type="ocl:OclModelElement" location="13:107-13:120" name="Author" model="/5"/>
+                </type>
+                <initExpression xsi:type="ocl:SequenceExp" location="13:124-13:135"/>
+              </result>
+            </source>
+            <body xsi:type="ocl:NavigationOrAttributeCallExp" location="19:20-19:28" name="author">
+              <source xsi:type="ocl:VariableExp" location="19:20-19:21" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@iterators.0"/>
+            </body>
+            <iterators location="19:16-19:17" varName="e" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@body/@source"/>
+          </initExpression>
+          <type xsi:type="ocl:SequenceType" location="13:25-13:48">
+            <elementType xsi:type="ocl:OclModelElement" location="13:34-13:47" name="Author" model="/3"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="25:1-31:29">
+      <commentsBefore>-- This helper builds the set of distinct titles referenced in the input BibTeX</commentsBefore>
+      <commentsBefore>-- model.</commentsBefore>
+      <commentsBefore>-- Built set is sorted by title.</commentsBefore>
+      <commentsBefore>-- RETURN: Sequence(BibTeX!TitledEntry)</commentsBefore>
+      <commentsAfter>-- This helper builds the set of distinct journals referenced in the input BibTeX</commentsAfter>
+      <commentsAfter>-- model.</commentsAfter>
+      <commentsAfter>-- Built set is sorted by journal name.</commentsAfter>
+      <commentsAfter>-- RETURN: Sequence(BibTeX!Article)</commentsAfter>
+      <definition location="25:8-31:28">
+        <feature xsi:type="ocl:Attribute" location="25:13-31:28" name="titledEntrySet">
+          <initExpression xsi:type="ocl:IteratorExp" location="25:61-31:28" name="sortedBy">
+            <source xsi:type="ocl:IterateExp" location="25:61-31:5">
+              <source xsi:type="ocl:OperationCallExp" location="25:61-25:94" operationName="allInstances">
+                <source xsi:type="ocl:OclModelElement" location="25:61-25:79" name="TitledEntry" model="/7"/>
+              </source>
+              <body xsi:type="ocl:IfExp" location="26:5-30:10">
+                <thenExpression xsi:type="ocl:VariableExp" location="27:6-27:9" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@result"/>
+                <condition xsi:type="ocl:CollectionOperationCallExp" location="26:8-26:52" operationName="includes">
+                  <source xsi:type="ocl:IteratorExp" location="26:8-26:33" name="collect">
+                    <source xsi:type="ocl:VariableExp" location="26:8-26:11" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@result"/>
+                    <body xsi:type="ocl:NavigationOrAttributeCallExp" location="26:25-26:32" name="title">
+                      <source xsi:type="ocl:VariableExp" location="26:25-26:26" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@body/@condition/@source/@iterators.0"/>
+                    </body>
+                    <iterators location="26:21-26:22" varName="e" variableExp="/0/@elements.1/@definition/@feature/@initExpression/@source/@body/@condition/@source/@body/@source"/>
+                  </source>
+                  <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="26:44-26:51" name="title">
+                    <source xsi:type="ocl:VariableExp" location="26:44-26:45" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                  </arguments>
+                </condition>
+                <elseExpression xsi:type="ocl:CollectionOperationCallExp" location="29:6-29:23" operationName="including">
+                  <source xsi:type="ocl:VariableExp" location="29:6-29:9" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@result"/>
+                  <arguments xsi:type="ocl:VariableExp" location="29:21-29:22" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                </elseExpression>
+              </body>
+              <iterators location="25:104-25:105" varName="e" variableExp="/0/@elements.1/@definition/@feature/@initExpression/@source/@body/@condition/@arguments.0/@source /0/@elements.1/@definition/@feature/@initExpression/@source/@body/@elseExpression/@arguments.0"/>
+              <result location="25:107-25:155" varName="ret" variableExp="/0/@elements.1/@definition/@feature/@initExpression/@source/@body/@condition/@source/@source /0/@elements.1/@definition/@feature/@initExpression/@source/@body/@thenExpression /0/@elements.1/@definition/@feature/@initExpression/@source/@body/@elseExpression/@source">
+                <type xsi:type="ocl:SequenceType" location="25:113-25:141">
+                  <elementType xsi:type="ocl:OclModelElement" location="25:122-25:140" name="TitledEntry" model="/8"/>
+                </type>
+                <initExpression xsi:type="ocl:SequenceExp" location="25:144-25:155"/>
+              </result>
+            </source>
+            <body xsi:type="ocl:NavigationOrAttributeCallExp" location="31:20-31:27" name="title">
+              <source xsi:type="ocl:VariableExp" location="31:20-31:21" referredVariable="/0/@elements.1/@definition/@feature/@initExpression/@iterators.0"/>
+            </body>
+            <iterators location="31:16-31:17" varName="e" variableExp="/0/@elements.1/@definition/@feature/@initExpression/@body/@source"/>
+          </initExpression>
+          <type xsi:type="ocl:SequenceType" location="25:30-25:58">
+            <elementType xsi:type="ocl:OclModelElement" location="25:39-25:57" name="TitledEntry" model="/6"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="37:1-43:31">
+      <commentsBefore>-- This helper builds the set of distinct journals referenced in the input BibTeX</commentsBefore>
+      <commentsBefore>-- model.</commentsBefore>
+      <commentsBefore>-- Built set is sorted by journal name.</commentsBefore>
+      <commentsBefore>-- RETURN: Sequence(BibTeX!Article)</commentsBefore>
+      <commentsAfter>-- This helper builds a string containing all information on a given BibTeXEntry.</commentsAfter>
+      <commentsAfter>-- Content of the generated string depends on the entry type.</commentsAfter>
+      <commentsAfter>-- IN: BibTeX!BibTeXEntry</commentsAfter>
+      <commentsAfter>-- RETURN: Sequence(BibTeX!Author)</commentsAfter>
+      <definition location="37:8-43:30">
+        <feature xsi:type="ocl:Attribute" location="37:13-43:30" name="articleSet">
+          <initExpression xsi:type="ocl:IteratorExp" location="37:53-43:30" name="sortedBy">
+            <source xsi:type="ocl:IterateExp" location="37:53-43:5">
+              <source xsi:type="ocl:OperationCallExp" location="37:53-37:82" operationName="allInstances">
+                <source xsi:type="ocl:OclModelElement" location="37:53-37:67" name="Article" model="/10"/>
+              </source>
+              <body xsi:type="ocl:IfExp" location="38:5-42:10">
+                <thenExpression xsi:type="ocl:VariableExp" location="39:6-39:9" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@result"/>
+                <condition xsi:type="ocl:CollectionOperationCallExp" location="38:8-38:56" operationName="includes">
+                  <source xsi:type="ocl:IteratorExp" location="38:8-38:35" name="collect">
+                    <source xsi:type="ocl:VariableExp" location="38:8-38:11" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@result"/>
+                    <body xsi:type="ocl:NavigationOrAttributeCallExp" location="38:25-38:34" name="journal">
+                      <source xsi:type="ocl:VariableExp" location="38:25-38:26" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@body/@condition/@source/@iterators.0"/>
+                    </body>
+                    <iterators location="38:21-38:22" varName="e" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@source/@body/@condition/@source/@body/@source"/>
+                  </source>
+                  <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="38:46-38:55" name="journal">
+                    <source xsi:type="ocl:VariableExp" location="38:46-38:47" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                  </arguments>
+                </condition>
+                <elseExpression xsi:type="ocl:CollectionOperationCallExp" location="41:6-41:23" operationName="including">
+                  <source xsi:type="ocl:VariableExp" location="41:6-41:9" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@result"/>
+                  <arguments xsi:type="ocl:VariableExp" location="41:21-41:22" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                </elseExpression>
+              </body>
+              <iterators location="37:92-37:93" varName="e" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@source/@body/@condition/@arguments.0/@source /0/@elements.2/@definition/@feature/@initExpression/@source/@body/@elseExpression/@arguments.0"/>
+              <result location="37:95-37:139" varName="ret" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@source/@body/@condition/@source/@source /0/@elements.2/@definition/@feature/@initExpression/@source/@body/@thenExpression /0/@elements.2/@definition/@feature/@initExpression/@source/@body/@elseExpression/@source">
+                <type xsi:type="ocl:SequenceType" location="37:101-37:125">
+                  <elementType xsi:type="ocl:OclModelElement" location="37:110-37:124" name="Article" model="/11"/>
+                </type>
+                <initExpression xsi:type="ocl:SequenceExp" location="37:128-37:139"/>
+              </result>
+            </source>
+            <body xsi:type="ocl:NavigationOrAttributeCallExp" location="43:20-43:29" name="journal">
+              <source xsi:type="ocl:VariableExp" location="43:20-43:21" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@iterators.0"/>
+            </body>
+            <iterators location="43:16-43:17" varName="e" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@body/@source"/>
+          </initExpression>
+          <type xsi:type="ocl:SequenceType" location="37:26-37:50">
+            <elementType xsi:type="ocl:OclModelElement" location="37:35-37:49" name="Article" model="/9"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="49:1-64:3">
+      <commentsBefore>-- This helper builds a string containing all information on a given BibTeXEntry.</commentsBefore>
+      <commentsBefore>-- Content of the generated string depends on the entry type.</commentsBefore>
+      <commentsBefore>-- IN: BibTeX!BibTeXEntry</commentsBefore>
+      <commentsBefore>-- RETURN: Sequence(BibTeX!Author)</commentsBefore>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- RULES ----------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- Rule 'Main'</commentsAfter>
+      <commentsAfter>-- This rule generates the structure of the DocBook model from a BibTeXFile element</commentsAfter>
+      <definition location="49:8-63:89">
+        <feature xsi:type="ocl:Operation" location="49:40-63:89" name="buildEntryPara">
+          <returnType xsi:type="ocl:StringType" location="49:59-49:65"/>
+          <body xsi:type="ocl:OperatorCallExp" location="50:2-63:89" operationName="+">
+            <source xsi:type="ocl:OperatorCallExp" location="50:2-62:78" operationName="+">
+              <source xsi:type="ocl:OperatorCallExp" location="50:2-61:80" operationName="+">
+                <source xsi:type="ocl:OperatorCallExp" location="50:2-60:79" operationName="+">
+                  <source xsi:type="ocl:OperatorCallExp" location="50:2-59:83" operationName="+">
+                    <source xsi:type="ocl:OperatorCallExp" location="50:2-58:89" operationName="+">
+                      <source xsi:type="ocl:OperatorCallExp" location="50:2-57:79" operationName="+">
+                        <source xsi:type="ocl:OperatorCallExp" location="50:2-56:11" operationName="+">
+                          <source xsi:type="ocl:OperatorCallExp" location="50:2-52:81" operationName="+">
+                            <source xsi:type="ocl:OperatorCallExp" location="50:2-51:29" operationName="+">
+                              <source xsi:type="ocl:OperatorCallExp" location="50:2-51:7" operationName="+">
+                                <source xsi:type="ocl:OperatorCallExp" location="50:2-50:21" operationName="+">
+                                  <source xsi:type="ocl:OperatorCallExp" location="50:2-50:15" operationName="+">
+                                    <source xsi:type="ocl:StringExp" location="50:2-50:5" stringSymbol="["/>
+                                    <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="50:8-50:15" name="id">
+                                      <source xsi:type="ocl:VariableExp" location="50:8-50:12" referredVariable="/13"/>
+                                    </arguments>
+                                  </source>
+                                  <arguments xsi:type="ocl:StringExp" location="50:18-50:21" stringSymbol="]"/>
+                                </source>
+                                <arguments xsi:type="ocl:StringExp" location="51:4-51:7" stringSymbol=" "/>
+                              </source>
+                              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="51:10-51:29" name="name">
+                                <source xsi:type="ocl:OperationCallExp" location="51:10-51:24" operationName="oclType">
+                                  <source xsi:type="ocl:VariableExp" location="51:10-51:14" referredVariable="/14"/>
+                                </source>
+                              </arguments>
+                            </source>
+                            <arguments xsi:type="ocl:IfExp" location="52:5-52:80">
+                              <thenExpression xsi:type="ocl:OperatorCallExp" location="52:50-52:66" operationName="+">
+                                <source xsi:type="ocl:StringExp" location="52:50-52:53" stringSymbol=" "/>
+                                <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="52:56-52:66" name="title">
+                                  <source xsi:type="ocl:VariableExp" location="52:56-52:60" referredVariable="/17"/>
+                                </arguments>
+                              </thenExpression>
+                              <condition xsi:type="ocl:OperationCallExp" location="52:8-52:44" operationName="oclIsKindOf">
+                                <source xsi:type="ocl:VariableExp" location="52:8-52:12" referredVariable="/15"/>
+                                <arguments xsi:type="ocl:OclModelElement" location="52:25-52:43" name="TitledEntry" model="/16"/>
+                              </condition>
+                              <elseExpression xsi:type="ocl:StringExp" location="52:72-52:74" stringSymbol=""/>
+                            </arguments>
+                          </source>
+                          <arguments xsi:type="ocl:IfExp" location="53:5-56:10">
+                            <thenExpression xsi:type="ocl:IterateExp" location="54:10-54:76">
+                              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="54:10-54:22" name="authors">
+                                <source xsi:type="ocl:VariableExp" location="54:10-54:14" referredVariable="/20"/>
+                              </source>
+                              <body xsi:type="ocl:OperatorCallExp" location="54:55-54:75" operationName="+">
+                                <source xsi:type="ocl:OperatorCallExp" location="54:55-54:64" operationName="+">
+                                  <source xsi:type="ocl:VariableExp" location="54:55-54:58" referredVariable="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@result"/>
+                                  <arguments xsi:type="ocl:StringExp" location="54:61-54:64" stringSymbol=" "/>
+                                </source>
+                                <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="54:67-54:75" name="author">
+                                  <source xsi:type="ocl:VariableExp" location="54:67-54:68" referredVariable="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@iterators.0"/>
+                                </arguments>
+                              </body>
+                              <iterators location="54:32-54:33" varName="e" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@body/@arguments.0/@source"/>
+                              <result location="54:35-54:52" varName="str" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@body/@source/@source">
+                                <type xsi:type="ocl:StringType" location="54:41-54:47"/>
+                                <initExpression xsi:type="ocl:StringExp" location="54:50-54:52" stringSymbol=""/>
+                              </result>
+                            </thenExpression>
+                            <condition xsi:type="ocl:OperationCallExp" location="53:8-53:46" operationName="oclIsKindOf">
+                              <source xsi:type="ocl:VariableExp" location="53:8-53:12" referredVariable="/18"/>
+                              <arguments xsi:type="ocl:OclModelElement" location="53:25-53:45" name="AuthoredEntry" model="/19"/>
+                            </condition>
+                            <elseExpression xsi:type="ocl:StringExp" location="55:10-55:12" stringSymbol=""/>
+                          </arguments>
+                        </source>
+                        <arguments xsi:type="ocl:IfExp" location="57:5-57:78">
+                          <thenExpression xsi:type="ocl:OperatorCallExp" location="57:49-57:64" operationName="+">
+                            <source xsi:type="ocl:StringExp" location="57:49-57:52" stringSymbol=" "/>
+                            <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="57:55-57:64" name="year">
+                              <source xsi:type="ocl:VariableExp" location="57:55-57:59" referredVariable="/23"/>
+                            </arguments>
+                          </thenExpression>
+                          <condition xsi:type="ocl:OperationCallExp" location="57:8-57:43" operationName="oclIsKindOf">
+                            <source xsi:type="ocl:VariableExp" location="57:8-57:12" referredVariable="/21"/>
+                            <arguments xsi:type="ocl:OclModelElement" location="57:25-57:42" name="DatedEntry" model="/22"/>
+                          </condition>
+                          <elseExpression xsi:type="ocl:StringExp" location="57:70-57:72" stringSymbol=""/>
+                        </arguments>
+                      </source>
+                      <arguments xsi:type="ocl:IfExp" location="58:5-58:88">
+                        <thenExpression xsi:type="ocl:OperatorCallExp" location="58:54-58:74" operationName="+">
+                          <source xsi:type="ocl:StringExp" location="58:54-58:57" stringSymbol=" "/>
+                          <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="58:60-58:74" name="booktitle">
+                            <source xsi:type="ocl:VariableExp" location="58:60-58:64" referredVariable="/26"/>
+                          </arguments>
+                        </thenExpression>
+                        <condition xsi:type="ocl:OperationCallExp" location="58:8-58:48" operationName="oclIsKindOf">
+                          <source xsi:type="ocl:VariableExp" location="58:8-58:12" referredVariable="/24"/>
+                          <arguments xsi:type="ocl:OclModelElement" location="58:25-58:47" name="BookTitledEntry" model="/25"/>
+                        </condition>
+                        <elseExpression xsi:type="ocl:StringExp" location="58:80-58:82" stringSymbol=""/>
+                      </arguments>
+                    </source>
+                    <arguments xsi:type="ocl:IfExp" location="59:5-59:82">
+                      <thenExpression xsi:type="ocl:OperatorCallExp" location="59:50-59:68" operationName="+">
+                        <source xsi:type="ocl:StringExp" location="59:50-59:53" stringSymbol=" "/>
+                        <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="59:57-59:68" name="school">
+                          <source xsi:type="ocl:VariableExp" location="59:57-59:61" referredVariable="/29"/>
+                        </arguments>
+                      </thenExpression>
+                      <condition xsi:type="ocl:OperationCallExp" location="59:8-59:44" operationName="oclIsKindOf">
+                        <source xsi:type="ocl:VariableExp" location="59:8-59:12" referredVariable="/27"/>
+                        <arguments xsi:type="ocl:OclModelElement" location="59:25-59:43" name="ThesisEntry" model="/28"/>
+                      </condition>
+                      <elseExpression xsi:type="ocl:StringExp" location="59:74-59:76" stringSymbol=""/>
+                    </arguments>
+                  </source>
+                  <arguments xsi:type="ocl:IfExp" location="60:5-60:78">
+                    <thenExpression xsi:type="ocl:OperatorCallExp" location="60:46-60:64" operationName="+">
+                      <source xsi:type="ocl:StringExp" location="60:46-60:49" stringSymbol=" "/>
+                      <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="60:52-60:64" name="journal">
+                        <source xsi:type="ocl:VariableExp" location="60:52-60:56" referredVariable="/32"/>
+                      </arguments>
+                    </thenExpression>
+                    <condition xsi:type="ocl:OperationCallExp" location="60:8-60:40" operationName="oclIsKindOf">
+                      <source xsi:type="ocl:VariableExp" location="60:8-60:12" referredVariable="/30"/>
+                      <arguments xsi:type="ocl:OclModelElement" location="60:25-60:39" name="Article" model="/31"/>
+                    </condition>
+                    <elseExpression xsi:type="ocl:StringExp" location="60:70-60:72" stringSymbol=""/>
+                  </arguments>
+                </source>
+                <arguments xsi:type="ocl:IfExp" location="61:5-61:79">
+                  <thenExpression xsi:type="ocl:OperatorCallExp" location="61:50-61:65" operationName="+">
+                    <source xsi:type="ocl:StringExp" location="61:50-61:53" stringSymbol=" "/>
+                    <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="61:56-61:65" name="note">
+                      <source xsi:type="ocl:VariableExp" location="61:56-61:60" referredVariable="/35"/>
+                    </arguments>
+                  </thenExpression>
+                  <condition xsi:type="ocl:OperationCallExp" location="61:8-61:44" operationName="oclIsKindOf">
+                    <source xsi:type="ocl:VariableExp" location="61:8-61:12" referredVariable="/33"/>
+                    <arguments xsi:type="ocl:OclModelElement" location="61:25-61:43" name="Unpublished" model="/34"/>
+                  </condition>
+                  <elseExpression xsi:type="ocl:StringExp" location="61:71-61:73" stringSymbol=""/>
+                </arguments>
+              </source>
+              <arguments xsi:type="ocl:IfExp" location="62:5-62:77">
+                <thenExpression xsi:type="ocl:OperatorCallExp" location="62:43-62:63" operationName="+">
+                  <source xsi:type="ocl:StringExp" location="62:43-62:46" stringSymbol=" "/>
+                  <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="62:49-62:63" name="publisher">
+                    <source xsi:type="ocl:VariableExp" location="62:49-62:53" referredVariable="/38"/>
+                  </arguments>
+                </thenExpression>
+                <condition xsi:type="ocl:OperationCallExp" location="62:8-62:37" operationName="oclIsKindOf">
+                  <source xsi:type="ocl:VariableExp" location="62:8-62:12" referredVariable="/36"/>
+                  <arguments xsi:type="ocl:OclModelElement" location="62:25-62:36" name="Book" model="/37"/>
+                </condition>
+                <elseExpression xsi:type="ocl:StringExp" location="62:69-62:71" stringSymbol=""/>
+              </arguments>
+            </source>
+            <arguments xsi:type="ocl:IfExp" location="63:5-63:88">
+              <thenExpression xsi:type="ocl:OperatorCallExp" location="63:45-63:74" operationName="+">
+                <source xsi:type="ocl:StringExp" location="63:45-63:48" stringSymbol=" "/>
+                <arguments xsi:type="ocl:OperationCallExp" location="63:51-63:74" operationName="toString">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="63:51-63:63" name="chapter">
+                    <source xsi:type="ocl:VariableExp" location="63:51-63:55" referredVariable="/41"/>
+                  </source>
+                </arguments>
+              </thenExpression>
+              <condition xsi:type="ocl:OperationCallExp" location="63:8-63:39" operationName="oclIsKindOf">
+                <source xsi:type="ocl:VariableExp" location="63:8-63:12" referredVariable="/39"/>
+                <arguments xsi:type="ocl:OclModelElement" location="63:25-63:38" name="InBook" model="/40"/>
+              </condition>
+              <elseExpression xsi:type="ocl:StringExp" location="63:80-63:82" stringSymbol=""/>
+            </arguments>
+          </body>
+        </feature>
+        <context_ location="49:8-49:34">
+          <context_ xsi:type="ocl:OclModelElement" location="49:16-49:34" name="BibTeXEntry" model="/12"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="73:1-103:2" name="Main">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- RULES ----------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- Rule 'Main'</commentsBefore>
+      <commentsBefore>-- This rule generates the structure of the DocBook model from a BibTeXFile element</commentsBefore>
+      <commentsAfter>-- Rule 'Author'</commentsAfter>
+      <commentsAfter>-- This rule generates a section_2 paragraph for each distinct author.</commentsAfter>
+      <outPattern location="76:2-102:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="77:3-79:4" varName="doc">
+          <type xsi:type="ocl:OclModelElement" location="77:9-77:24" name="DocBook" model="/43"/>
+          <bindings location="78:4-78:16" propertyName="books">
+            <value xsi:type="ocl:VariableExp" location="78:13-78:16" referredVariable="/0/@elements.4/@outPattern/@elements.1"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="80:3-82:4" varName="boo" variableExp="/0/@elements.4/@outPattern/@elements.0/@bindings.0/@value">
+          <type xsi:type="ocl:OclModelElement" location="80:9-80:21" name="Book" model="/44"/>
+          <bindings location="81:4-81:19" propertyName="articles">
+            <value xsi:type="ocl:VariableExp" location="81:16-81:19" referredVariable="/0/@elements.4/@outPattern/@elements.2"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="83:3-86:4" varName="art" variableExp="/0/@elements.4/@outPattern/@elements.1/@bindings.0/@value">
+          <type xsi:type="ocl:OclModelElement" location="83:9-83:24" name="Article" model="/45"/>
+          <bindings location="84:4-84:34" propertyName="title">
+            <value xsi:type="ocl:StringExp" location="84:13-84:34" stringSymbol="BibTeXML to DocBook"/>
+          </bindings>
+          <bindings location="85:4-85:46" propertyName="sections_1">
+            <value xsi:type="ocl:SequenceExp" location="85:18-85:46">
+              <elements xsi:type="ocl:VariableExp" location="85:27-85:30" referredVariable="/0/@elements.4/@outPattern/@elements.3"/>
+              <elements xsi:type="ocl:VariableExp" location="85:32-85:35" referredVariable="/0/@elements.4/@outPattern/@elements.4"/>
+              <elements xsi:type="ocl:VariableExp" location="85:37-85:40" referredVariable="/0/@elements.4/@outPattern/@elements.5"/>
+              <elements xsi:type="ocl:VariableExp" location="85:42-85:45" referredVariable="/0/@elements.4/@outPattern/@elements.6"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="87:3-90:4" varName="se1" variableExp="/0/@elements.4/@outPattern/@elements.2/@bindings.1/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="87:9-87:22" name="Sect1" model="/46"/>
+          <bindings location="88:4-88:30" propertyName="title">
+            <value xsi:type="ocl:StringExp" location="88:13-88:30" stringSymbol="References List"/>
+          </bindings>
+          <bindings location="89:4-89:66" propertyName="paras">
+            <value xsi:type="ocl:IteratorExp" location="89:13-89:66" name="sortedBy">
+              <source xsi:type="ocl:OperationCallExp" location="89:13-89:46" operationName="allInstances">
+                <source xsi:type="ocl:OclModelElement" location="89:13-89:31" name="BibTeXEntry" model="/47"/>
+              </source>
+              <body xsi:type="ocl:NavigationOrAttributeCallExp" location="89:61-89:65" name="id">
+                <source xsi:type="ocl:VariableExp" location="89:61-89:62" referredVariable="/0/@elements.4/@outPattern/@elements.3/@bindings.1/@value/@iterators.0"/>
+              </body>
+              <iterators location="89:57-89:58" varName="e" variableExp="/0/@elements.4/@outPattern/@elements.3/@bindings.1/@value/@body/@source"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="91:3-94:4" varName="se2" variableExp="/0/@elements.4/@outPattern/@elements.2/@bindings.1/@value/@elements.1">
+          <type xsi:type="ocl:OclModelElement" location="91:9-91:22" name="Sect1" model="/48"/>
+          <bindings location="92:4-92:27" propertyName="title">
+            <value xsi:type="ocl:StringExp" location="92:13-92:27" stringSymbol="Authors list"/>
+          </bindings>
+          <bindings location="93:4-93:33" propertyName="paras">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="93:13-93:33" name="authorSet">
+              <source xsi:type="ocl:VariableExp" location="93:13-93:23" referredVariable="/49"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="95:3-98:4" varName="se3" variableExp="/0/@elements.4/@outPattern/@elements.2/@bindings.1/@value/@elements.2">
+          <type xsi:type="ocl:OclModelElement" location="95:9-95:22" name="Sect1" model="/50"/>
+          <bindings location="96:4-96:26" propertyName="title">
+            <value xsi:type="ocl:StringExp" location="96:13-96:26" stringSymbol="Titles List"/>
+          </bindings>
+          <bindings location="97:4-97:92" propertyName="paras">
+            <value xsi:type="ocl:IteratorExp" location="97:13-97:92" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="97:13-97:38" name="titledEntrySet">
+                <source xsi:type="ocl:VariableExp" location="97:13-97:23" referredVariable="/51"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="97:52-97:91" operationName="resolveTemp">
+                <source xsi:type="ocl:VariableExp" location="97:52-97:62" referredVariable="/52"/>
+                <arguments xsi:type="ocl:VariableExp" location="97:75-97:76" referredVariable="/0/@elements.4/@outPattern/@elements.5/@bindings.1/@value/@iterators.0"/>
+                <arguments xsi:type="ocl:StringExp" location="97:78-97:90" stringSymbol="title_para"/>
+              </body>
+              <iterators location="97:48-97:49" varName="e" variableExp="/0/@elements.4/@outPattern/@elements.5/@bindings.1/@value/@body/@arguments.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="99:3-102:4" varName="se4" variableExp="/0/@elements.4/@outPattern/@elements.2/@bindings.1/@value/@elements.3">
+          <type xsi:type="ocl:OclModelElement" location="99:9-99:22" name="Sect1" model="/53"/>
+          <bindings location="100:4-100:28" propertyName="title">
+            <value xsi:type="ocl:StringExp" location="100:13-100:28" stringSymbol="Journals List"/>
+          </bindings>
+          <bindings location="101:4-101:90" propertyName="paras">
+            <value xsi:type="ocl:IteratorExp" location="101:13-101:90" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="101:13-101:34" name="articleSet">
+                <source xsi:type="ocl:VariableExp" location="101:13-101:23" referredVariable="/54"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="101:48-101:89" operationName="resolveTemp">
+                <source xsi:type="ocl:VariableExp" location="101:48-101:58" referredVariable="/55"/>
+                <arguments xsi:type="ocl:VariableExp" location="101:71-101:72" referredVariable="/0/@elements.4/@outPattern/@elements.6/@bindings.1/@value/@iterators.0"/>
+                <arguments xsi:type="ocl:StringExp" location="101:74-101:88" stringSymbol="journal_para"/>
+              </body>
+              <iterators location="101:44-101:45" varName="e" variableExp="/0/@elements.4/@outPattern/@elements.6/@bindings.1/@value/@body/@arguments.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="74:2-75:32">
+        <elements xsi:type="atl:SimpleInPatternElement" location="75:9-75:32" varName="bib">
+          <type xsi:type="ocl:OclModelElement" location="75:15-75:32" name="BibTeXFile" model="/42"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="107:1-116:2" name="Author">
+      <commentsBefore>-- Rule 'Author'</commentsBefore>
+      <commentsBefore>-- This rule generates a section_2 paragraph for each distinct author.</commentsBefore>
+      <commentsAfter>-- Rule 'UntitledEntry'</commentsAfter>
+      <commentsAfter>-- This rule generates a section_1 paragraph for each untitled entry.</commentsAfter>
+      <outPattern location="112:2-115:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="113:3-115:4" varName="p1">
+          <type xsi:type="ocl:OclModelElement" location="113:8-113:20" name="Para" model="/58"/>
+          <bindings location="114:4-114:23" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="114:15-114:23" name="author">
+              <source xsi:type="ocl:VariableExp" location="114:15-114:16" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="108:2-111:5">
+        <elements xsi:type="atl:SimpleInPatternElement" location="109:3-109:20" varName="a" variableExp="/0/@elements.5/@inPattern/@filter/@arguments.0 /0/@elements.5/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="109:7-109:20" name="Author" model="/56"/>
+        </elements>
+        <filter xsi:type="ocl:CollectionOperationCallExp" location="110:6-110:39" operationName="includes">
+          <source xsi:type="ocl:NavigationOrAttributeCallExp" location="110:6-110:26" name="authorSet">
+            <source xsi:type="ocl:VariableExp" location="110:6-110:16" referredVariable="/57"/>
+          </source>
+          <arguments xsi:type="ocl:VariableExp" location="110:37-110:38" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="120:1-129:2" name="UntitledEntry">
+      <commentsBefore>-- Rule 'UntitledEntry'</commentsBefore>
+      <commentsBefore>-- This rule generates a section_1 paragraph for each untitled entry.</commentsBefore>
+      <commentsAfter>-- Rule 'TitledEntry_Title_NoArticle'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each &quot;no article&quot; titled entry that belongs to titledEntrySet,</commentsAfter>
+      <commentsAfter>-- this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <commentsAfter>--   * a section_3 paragraph.</commentsAfter>
+      <outPattern location="125:2-128:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="126:3-128:4" varName="p">
+          <type xsi:type="ocl:OclModelElement" location="126:7-126:19" name="Para" model="/61"/>
+          <bindings location="127:4-127:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="127:15-127:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="127:15-127:16" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="121:2-124:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="122:3-122:25" varName="e" variableExp="/0/@elements.6/@inPattern/@filter/@source/@source /0/@elements.6/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="122:7-122:25" name="BibTeXEntry" model="/59"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="123:4-123:41" operationName="not">
+          <source xsi:type="ocl:OperationCallExp" location="123:8-123:41" operationName="oclIsKindOf">
+            <source xsi:type="ocl:VariableExp" location="123:8-123:9" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+            <arguments xsi:type="ocl:OclModelElement" location="123:22-123:40" name="TitledEntry" model="/60"/>
+          </source>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="138:1-151:2" name="TitledEntry_Title_NoArticle">
+      <commentsBefore>-- Rule 'TitledEntry_Title_NoArticle'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each &quot;no article&quot; titled entry that belongs to titledEntrySet,</commentsBefore>
+      <commentsBefore>-- this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <commentsBefore>--   * a section_3 paragraph.</commentsBefore>
+      <commentsAfter>-- Rule 'TitledEntry_NoTitle_NoArticle'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each &quot;no article&quot; titled entry that does not belong to titledEntrySet,</commentsAfter>
+      <commentsAfter>-- this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <outPattern location="144:2-150:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="145:3-147:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="145:16-145:28" name="Para" model="/65"/>
+          <bindings location="146:4-146:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="146:15-146:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="146:15-146:16" referredVariable="/0/@elements.7/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="148:3-150:4" varName="title_para">
+          <type xsi:type="ocl:OclModelElement" location="148:16-148:28" name="Para" model="/66"/>
+          <bindings location="149:4-149:22" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="149:15-149:22" name="title">
+              <source xsi:type="ocl:VariableExp" location="149:15-149:16" referredVariable="/0/@elements.7/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="139:2-143:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="140:3-140:25" varName="e" variableExp="/0/@elements.7/@inPattern/@filter/@source/@arguments.0 /0/@elements.7/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.7/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.7/@outPattern/@elements.1/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="140:7-140:25" name="TitledEntry" model="/62"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="141:4-142:37" operationName="and">
+          <source xsi:type="ocl:CollectionOperationCallExp" location="141:4-141:42" operationName="includes">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="141:4-141:29" name="titledEntrySet">
+              <source xsi:type="ocl:VariableExp" location="141:4-141:14" referredVariable="/63"/>
+            </source>
+            <arguments xsi:type="ocl:VariableExp" location="141:40-141:41" referredVariable="/0/@elements.7/@inPattern/@elements.0"/>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="142:4-142:37" operationName="not">
+            <source xsi:type="ocl:OperationCallExp" location="142:8-142:37" operationName="oclIsKindOf">
+              <source xsi:type="ocl:VariableExp" location="142:8-142:9" referredVariable="/0/@elements.7/@inPattern/@elements.0"/>
+              <arguments xsi:type="ocl:OclModelElement" location="142:22-142:36" name="Article" model="/64"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="159:1-169:2" name="TitledEntry_NoTitle_NoArticle">
+      <commentsBefore>-- Rule 'TitledEntry_NoTitle_NoArticle'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each &quot;no article&quot; titled entry that does not belong to titledEntrySet,</commentsBefore>
+      <commentsBefore>-- this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <commentsAfter>-- Rule 'Article_Title_Journal'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- [articleSet contains a subset of Article, so that each journal</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each article entry that belongs to articleSet, this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <commentsAfter>--   * a section_3 paragraph;</commentsAfter>
+      <commentsAfter>--   * a section_4 paragraph.</commentsAfter>
+      <outPattern location="165:2-168:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="166:3-168:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="166:16-166:28" name="Para" model="/70"/>
+          <bindings location="167:4-167:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="167:15-167:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="167:15-167:16" referredVariable="/0/@elements.8/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="160:2-164:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="161:3-161:25" varName="e" variableExp="/0/@elements.8/@inPattern/@filter/@source/@source/@arguments.0 /0/@elements.8/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.8/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="161:7-161:25" name="TitledEntry" model="/67"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="162:4-163:37" operationName="and">
+          <source xsi:type="ocl:OperatorCallExp" location="162:4-162:46" operationName="not">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="162:8-162:46" operationName="includes">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="162:8-162:33" name="titledEntrySet">
+                <source xsi:type="ocl:VariableExp" location="162:8-162:18" referredVariable="/68"/>
+              </source>
+              <arguments xsi:type="ocl:VariableExp" location="162:44-162:45" referredVariable="/0/@elements.8/@inPattern/@elements.0"/>
+            </source>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="163:4-163:37" operationName="not">
+            <source xsi:type="ocl:OperationCallExp" location="163:8-163:37" operationName="oclIsKindOf">
+              <source xsi:type="ocl:VariableExp" location="163:8-163:9" referredVariable="/0/@elements.8/@inPattern/@elements.0"/>
+              <arguments xsi:type="ocl:OclModelElement" location="163:22-163:36" name="Article" model="/69"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="180:1-196:2" name="Article_Title_Journal">
+      <commentsBefore>-- Rule 'Article_Title_Journal'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- [articleSet contains a subset of Article, so that each journal</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each article entry that belongs to articleSet, this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <commentsBefore>--   * a section_3 paragraph;</commentsBefore>
+      <commentsBefore>--   * a section_4 paragraph.</commentsBefore>
+      <commentsAfter>-- Rule 'Article_NoTitle_Journal'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- [articleSet contains a subset of Article, so that each journal</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each article entry that belongs to articleSet, this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <commentsAfter>--   * a section_4 paragraph.</commentsAfter>
+      <outPattern location="186:2-195:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="187:3-189:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="187:16-187:28" name="Para" model="/74"/>
+          <bindings location="188:4-188:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="188:15-188:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="188:15-188:16" referredVariable="/0/@elements.9/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="190:3-192:4" varName="title_para">
+          <type xsi:type="ocl:OclModelElement" location="190:16-190:28" name="Para" model="/75"/>
+          <bindings location="191:4-191:22" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="191:15-191:22" name="title">
+              <source xsi:type="ocl:VariableExp" location="191:15-191:16" referredVariable="/0/@elements.9/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="193:3-195:4" varName="journal_para">
+          <type xsi:type="ocl:OclModelElement" location="193:18-193:30" name="Para" model="/76"/>
+          <bindings location="194:4-194:24" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="194:15-194:24" name="journal">
+              <source xsi:type="ocl:VariableExp" location="194:15-194:16" referredVariable="/0/@elements.9/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="181:2-185:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="182:3-182:21" varName="e" variableExp="/0/@elements.9/@inPattern/@filter/@source/@arguments.0 /0/@elements.9/@inPattern/@filter/@arguments.0/@arguments.0 /0/@elements.9/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.9/@outPattern/@elements.1/@bindings.0/@value/@source /0/@elements.9/@outPattern/@elements.2/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="182:7-182:21" name="Article" model="/71"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="183:4-184:38" operationName="and">
+          <source xsi:type="ocl:CollectionOperationCallExp" location="183:4-183:42" operationName="includes">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="183:4-183:29" name="titledEntrySet">
+              <source xsi:type="ocl:VariableExp" location="183:4-183:14" referredVariable="/72"/>
+            </source>
+            <arguments xsi:type="ocl:VariableExp" location="183:40-183:41" referredVariable="/0/@elements.9/@inPattern/@elements.0"/>
+          </source>
+          <arguments xsi:type="ocl:CollectionOperationCallExp" location="184:4-184:38" operationName="includes">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="184:4-184:25" name="articleSet">
+              <source xsi:type="ocl:VariableExp" location="184:4-184:14" referredVariable="/73"/>
+            </source>
+            <arguments xsi:type="ocl:VariableExp" location="184:36-184:37" referredVariable="/0/@elements.9/@inPattern/@elements.0"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="206:1-219:2" name="Article_NoTitle_Journal">
+      <commentsBefore>-- Rule 'Article_NoTitle_Journal'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- [articleSet contains a subset of Article, so that each journal</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each article entry that belongs to articleSet, this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <commentsBefore>--   * a section_4 paragraph.</commentsBefore>
+      <commentsAfter>-- Rule 'Article_Title_NoJournal'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- [articleSet contains a subset of Article, so that each journal</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each article entry that belongs to articleSet, this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <commentsAfter>--   * a section_3 paragraph.</commentsAfter>
+      <outPattern location="212:2-218:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="213:3-215:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="213:16-213:28" name="Para" model="/80"/>
+          <bindings location="214:4-214:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="214:15-214:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="214:15-214:16" referredVariable="/0/@elements.10/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="216:3-218:4" varName="journal_para">
+          <type xsi:type="ocl:OclModelElement" location="216:18-216:30" name="Para" model="/81"/>
+          <bindings location="217:4-217:24" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="217:15-217:24" name="journal">
+              <source xsi:type="ocl:VariableExp" location="217:15-217:16" referredVariable="/0/@elements.10/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="207:2-211:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="208:3-208:21" varName="e" variableExp="/0/@elements.10/@inPattern/@filter/@source/@source/@arguments.0 /0/@elements.10/@inPattern/@filter/@arguments.0/@arguments.0 /0/@elements.10/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.10/@outPattern/@elements.1/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="208:7-208:21" name="Article" model="/77"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="209:4-210:38" operationName="and">
+          <source xsi:type="ocl:OperatorCallExp" location="209:4-209:46" operationName="not">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="209:8-209:46" operationName="includes">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="209:8-209:33" name="titledEntrySet">
+                <source xsi:type="ocl:VariableExp" location="209:8-209:18" referredVariable="/78"/>
+              </source>
+              <arguments xsi:type="ocl:VariableExp" location="209:44-209:45" referredVariable="/0/@elements.10/@inPattern/@elements.0"/>
+            </source>
+          </source>
+          <arguments xsi:type="ocl:CollectionOperationCallExp" location="210:4-210:38" operationName="includes">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="210:4-210:25" name="articleSet">
+              <source xsi:type="ocl:VariableExp" location="210:4-210:14" referredVariable="/79"/>
+            </source>
+            <arguments xsi:type="ocl:VariableExp" location="210:36-210:37" referredVariable="/0/@elements.10/@inPattern/@elements.0"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="229:1-242:2" name="Article_Title_NoJournal">
+      <commentsBefore>-- Rule 'Article_Title_NoJournal'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- [articleSet contains a subset of Article, so that each journal</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each article entry that belongs to articleSet, this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <commentsBefore>--   * a section_3 paragraph.</commentsBefore>
+      <commentsAfter>-- Rule 'Article_NoTitle_NoJournal'</commentsAfter>
+      <commentsAfter>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- [articleSet contains a subset of Article, so that each journal</commentsAfter>
+      <commentsAfter>-- appears only once in the set]</commentsAfter>
+      <commentsAfter>-- For each article entry that belongs to articleSet, this rule generates:</commentsAfter>
+      <commentsAfter>--   * a section_1 paragraph;</commentsAfter>
+      <outPattern location="235:2-241:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="236:3-238:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="236:16-236:28" name="Para" model="/85"/>
+          <bindings location="237:4-237:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="237:15-237:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="237:15-237:16" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="239:3-241:4" varName="title_para">
+          <type xsi:type="ocl:OclModelElement" location="239:16-239:28" name="Para" model="/86"/>
+          <bindings location="240:4-240:22" propertyName="content">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="240:15-240:22" name="title">
+              <source xsi:type="ocl:VariableExp" location="240:15-240:16" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="230:2-234:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="231:3-231:21" varName="e" variableExp="/0/@elements.11/@inPattern/@filter/@source/@arguments.0 /0/@elements.11/@inPattern/@filter/@arguments.0/@source/@arguments.0 /0/@elements.11/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.11/@outPattern/@elements.1/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="231:7-231:21" name="Article" model="/82"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="232:4-233:42" operationName="and">
+          <source xsi:type="ocl:CollectionOperationCallExp" location="232:4-232:42" operationName="includes">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="232:4-232:29" name="titledEntrySet">
+              <source xsi:type="ocl:VariableExp" location="232:4-232:14" referredVariable="/83"/>
+            </source>
+            <arguments xsi:type="ocl:VariableExp" location="232:40-232:41" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="233:4-233:42" operationName="not">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="233:8-233:42" operationName="includes">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="233:8-233:29" name="articleSet">
+                <source xsi:type="ocl:VariableExp" location="233:8-233:18" referredVariable="/84"/>
+              </source>
+              <arguments xsi:type="ocl:VariableExp" location="233:40-233:41" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="251:1-261:2" name="Article_NoTitle_NoJournal">
+      <commentsBefore>-- Rule 'Article_NoTitle_NoJournal'</commentsBefore>
+      <commentsBefore>-- [titledEntrySet contains a subset of TitledEntry, so that each title</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- [articleSet contains a subset of Article, so that each journal</commentsBefore>
+      <commentsBefore>-- appears only once in the set]</commentsBefore>
+      <commentsBefore>-- For each article entry that belongs to articleSet, this rule generates:</commentsBefore>
+      <commentsBefore>--   * a section_1 paragraph;</commentsBefore>
+      <outPattern location="257:2-260:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="258:3-260:4" varName="entry_para">
+          <type xsi:type="ocl:OclModelElement" location="258:16-258:28" name="Para" model="/90"/>
+          <bindings location="259:4-259:33" propertyName="content">
+            <value xsi:type="ocl:OperationCallExp" location="259:15-259:33" operationName="buildEntryPara">
+              <source xsi:type="ocl:VariableExp" location="259:15-259:16" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="252:2-256:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="253:3-253:21" varName="e" variableExp="/0/@elements.12/@inPattern/@filter/@source/@source/@arguments.0 /0/@elements.12/@inPattern/@filter/@arguments.0/@source/@arguments.0 /0/@elements.12/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="253:7-253:21" name="Article" model="/87"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="254:4-255:42" operationName="and">
+          <source xsi:type="ocl:OperatorCallExp" location="254:4-254:46" operationName="not">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="254:8-254:46" operationName="includes">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="254:8-254:33" name="titledEntrySet">
+                <source xsi:type="ocl:VariableExp" location="254:8-254:18" referredVariable="/88"/>
+              </source>
+              <arguments xsi:type="ocl:VariableExp" location="254:44-254:45" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+            </source>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="255:4-255:42" operationName="not">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="255:8-255:42" operationName="includes">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="255:8-255:29" name="articleSet">
+                <source xsi:type="ocl:VariableExp" location="255:8-255:18" referredVariable="/89"/>
+              </source>
+              <arguments xsi:type="ocl:VariableExp" location="255:40-255:41" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:21" name="DocBook" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:32-2:38" name="BibTeX" model="/0/@inModels.0"/>
+  <ocl:OclModel location="13:34-13:40" name="BibTeX" elements="/0/@elements.0/@definition/@feature/@type/@elementType"/>
+  <ocl:OclModel location="13:51-13:57" name="BibTeX" elements="/0/@elements.0/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="13:107-13:113" name="BibTeX" elements="/0/@elements.0/@definition/@feature/@initExpression/@source/@result/@type/@elementType"/>
+  <ocl:OclModel location="25:39-25:45" name="BibTeX" elements="/0/@elements.1/@definition/@feature/@type/@elementType"/>
+  <ocl:OclModel location="25:61-25:67" name="BibTeX" elements="/0/@elements.1/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="25:122-25:128" name="BibTeX" elements="/0/@elements.1/@definition/@feature/@initExpression/@source/@result/@type/@elementType"/>
+  <ocl:OclModel location="37:35-37:41" name="BibTeX" elements="/0/@elements.2/@definition/@feature/@type/@elementType"/>
+  <ocl:OclModel location="37:53-37:59" name="BibTeX" elements="/0/@elements.2/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="37:110-37:116" name="BibTeX" elements="/0/@elements.2/@definition/@feature/@initExpression/@source/@result/@type/@elementType"/>
+  <ocl:OclModel location="49:16-49:22" name="BibTeX" elements="/0/@elements.3/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="50:8-50:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="51:10-51:14" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@source/@source"/>
+  <ocl:VariableDeclaration location="52:8-52:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="52:25-52:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="52:56-52:60" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="53:8-53:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="53:25-53:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="54:10-54:14" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@source/@source"/>
+  <ocl:VariableDeclaration location="57:8-57:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="57:25-57:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="57:55-57:59" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="58:8-58:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="58:25-58:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="58:60-58:64" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="59:8-59:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="59:25-59:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="59:57-59:61" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="60:8-60:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="60:25-60:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="60:52-60:56" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="61:8-61:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="61:25-61:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="61:56-61:60" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="62:8-62:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="62:25-62:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@source/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="62:49-62:53" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@arguments.0/@thenExpression/@arguments.0/@source"/>
+  <ocl:VariableDeclaration location="63:8-63:12" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@arguments.0/@condition/@source"/>
+  <ocl:OclModel location="63:25-63:31" name="BibTeX" elements="/0/@elements.3/@definition/@feature/@body/@arguments.0/@condition/@arguments.0"/>
+  <ocl:VariableDeclaration location="63:51-63:55" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@arguments.0/@thenExpression/@arguments.0/@source/@source"/>
+  <ocl:OclModel location="75:15-75:21" name="BibTeX" elements="/0/@elements.4/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="77:9-77:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="80:9-80:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="83:9-83:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.2/@type"/>
+  <ocl:OclModel location="87:9-87:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.3/@type"/>
+  <ocl:OclModel location="89:13-89:19" name="BibTeX" elements="/0/@elements.4/@outPattern/@elements.3/@bindings.1/@value/@source/@source"/>
+  <ocl:OclModel location="91:9-91:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.4/@type"/>
+  <ocl:VariableDeclaration location="93:13-93:23" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.4/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="95:9-95:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.5/@type"/>
+  <ocl:VariableDeclaration location="97:13-97:23" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.5/@bindings.1/@value/@source/@source"/>
+  <ocl:VariableDeclaration location="97:52-97:62" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.5/@bindings.1/@value/@body/@source"/>
+  <ocl:OclModel location="99:9-99:16" name="DocBook" elements="/0/@elements.4/@outPattern/@elements.6/@type"/>
+  <ocl:VariableDeclaration location="101:13-101:23" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.6/@bindings.1/@value/@source/@source"/>
+  <ocl:VariableDeclaration location="101:48-101:58" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.6/@bindings.1/@value/@body/@source"/>
+  <ocl:OclModel location="109:7-109:13" name="BibTeX" elements="/0/@elements.5/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="110:6-110:16" varName="thisModule" variableExp="/0/@elements.5/@inPattern/@filter/@source/@source"/>
+  <ocl:OclModel location="113:8-113:15" name="DocBook" elements="/0/@elements.5/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="122:7-122:13" name="BibTeX" elements="/0/@elements.6/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="123:22-123:28" name="BibTeX" elements="/0/@elements.6/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="126:7-126:14" name="DocBook" elements="/0/@elements.6/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="140:7-140:13" name="BibTeX" elements="/0/@elements.7/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="141:4-141:14" varName="thisModule" variableExp="/0/@elements.7/@inPattern/@filter/@source/@source/@source"/>
+  <ocl:OclModel location="142:22-142:28" name="BibTeX" elements="/0/@elements.7/@inPattern/@filter/@arguments.0/@source/@arguments.0"/>
+  <ocl:OclModel location="145:16-145:23" name="DocBook" elements="/0/@elements.7/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="148:16-148:23" name="DocBook" elements="/0/@elements.7/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="161:7-161:13" name="BibTeX" elements="/0/@elements.8/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="162:8-162:18" varName="thisModule" variableExp="/0/@elements.8/@inPattern/@filter/@source/@source/@source/@source"/>
+  <ocl:OclModel location="163:22-163:28" name="BibTeX" elements="/0/@elements.8/@inPattern/@filter/@arguments.0/@source/@arguments.0"/>
+  <ocl:OclModel location="166:16-166:23" name="DocBook" elements="/0/@elements.8/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="182:7-182:13" name="BibTeX" elements="/0/@elements.9/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="183:4-183:14" varName="thisModule" variableExp="/0/@elements.9/@inPattern/@filter/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="184:4-184:14" varName="thisModule" variableExp="/0/@elements.9/@inPattern/@filter/@arguments.0/@source/@source"/>
+  <ocl:OclModel location="187:16-187:23" name="DocBook" elements="/0/@elements.9/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="190:16-190:23" name="DocBook" elements="/0/@elements.9/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="193:18-193:25" name="DocBook" elements="/0/@elements.9/@outPattern/@elements.2/@type"/>
+  <ocl:OclModel location="208:7-208:13" name="BibTeX" elements="/0/@elements.10/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="209:8-209:18" varName="thisModule" variableExp="/0/@elements.10/@inPattern/@filter/@source/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="210:4-210:14" varName="thisModule" variableExp="/0/@elements.10/@inPattern/@filter/@arguments.0/@source/@source"/>
+  <ocl:OclModel location="213:16-213:23" name="DocBook" elements="/0/@elements.10/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="216:18-216:25" name="DocBook" elements="/0/@elements.10/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="231:7-231:13" name="BibTeX" elements="/0/@elements.11/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="232:4-232:14" varName="thisModule" variableExp="/0/@elements.11/@inPattern/@filter/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="233:8-233:18" varName="thisModule" variableExp="/0/@elements.11/@inPattern/@filter/@arguments.0/@source/@source/@source"/>
+  <ocl:OclModel location="236:16-236:23" name="DocBook" elements="/0/@elements.11/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="239:16-239:23" name="DocBook" elements="/0/@elements.11/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="253:7-253:13" name="BibTeX" elements="/0/@elements.12/@inPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="254:8-254:18" varName="thisModule" variableExp="/0/@elements.12/@inPattern/@filter/@source/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="255:8-255:18" varName="thisModule" variableExp="/0/@elements.12/@inPattern/@filter/@arguments.0/@source/@source/@source"/>
+  <ocl:OclModel location="258:16-258:23" name="DocBook" elements="/0/@elements.12/@outPattern/@elements.0/@type"/>
+</xmi:XMI>

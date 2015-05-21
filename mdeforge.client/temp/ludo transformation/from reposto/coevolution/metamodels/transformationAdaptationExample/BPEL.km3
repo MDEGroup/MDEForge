@@ -1,0 +1,1281 @@
+-- @name		BPEL
+-- @version		1.0
+-- @domains		business process
+-- @authors		Frédéric Jouault (frederic.jouault@univ-nantes.fr)
+-- @date		2006/09/15
+-- @description	This metamodel was semi-automatically derived from the BPEL metamodel used by the Eclipse BPEL project (http://www.eclipse.org/bpel/), which uses the XSD (from http://www.eclipse.org/xsd/), and WSDL (from http://www.eclipse.org/webtools/) metamodels. Elements from XSD and WSDL are therefore included in the KM3 version. Moreover, some Ecore artefacts remain (see ecore package).
+-- @see			http://www.eclipse.org/bpel/
+package BPEL {
+
+	class Process extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		attribute targetNamespace[0-1] : EString;
+		attribute queryLanguage[0-1] : EString;
+		attribute expressionLanguage[0-1] : EString;
+		attribute suppressJoinFailure[0-1] : EBooleanObject;
+		attribute variableAccessSerializable[0-1] : EBooleanObject;
+		reference partnerLinks[0-1] container : PartnerLinks;
+		reference variables[0-1] container : Variables;
+		reference activity container : Activity;
+		reference faultHandlers[0-1] container : FaultHandler;
+		reference eventHandlers[0-1] container : EventHandler;
+		reference correlationSets[0-1] container : CorrelationSets;
+		reference imports[*] ordered container : BPELImport;
+		reference extensions[0-1] container : Extensions;
+		attribute exitOnStandardFault[0-1] : EBooleanObject;
+	}
+
+	class PartnerLink extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		reference myRole[0-1] : Role;
+		reference partnerRole[0-1] : Role;
+		reference PartnerLinkType[0-1] : PartnerLinkType;
+		attribute initializePartnerRole[0-1] : EBooleanObject;
+	}
+
+	class FaultHandler extends BPELExtensibleElement {
+		reference catch[*] ordered container : Catch;
+		reference catchAll[0-1] container : CatchAll;
+	}
+
+	class Activity extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		attribute suppressJoinFailure[0-1] : EBooleanObject;
+		reference targets[0-1] container : Targets;
+		reference sources[0-1] container : Sources;
+	}
+
+	class CorrelationSet extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		reference properties[*] ordered : Property;
+	}
+
+	class Invoke extends PartnerActivity {
+		reference outputVariable[0-1] : Variable;
+		reference inputVariable[0-1] : Variable;
+		reference compensationHandler[0-1] container : CompensationHandler;
+		reference faultHandler[0-1] container : FaultHandler;
+		reference toPart[*] ordered : ToPart;
+		reference fromPart[*] ordered : FromPart;
+	}
+
+	class Link extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		reference sources[*] ordered : Source oppositeOf Link;
+		reference targets[*] ordered : Target oppositeOf Link;
+	}
+
+	class Catch extends BPELExtensibleElement {
+		attribute faultName[0-1] : QName;
+		reference faultVariable[0-1] container : Variable;
+		reference activity container : Activity;
+		reference faultMessageType[0-1] : Message;
+		reference faultElement[0-1] : XSDElementDeclaration;
+	}
+
+	class Reply extends PartnerActivity, Activity {
+		attribute faultName[0-1] : QName;
+		reference variable[0-1] : Variable;
+		reference toPart[*] ordered : ToPart;
+	}
+
+	class PartnerActivity extends Activity {
+		reference partnerLink : PartnerLink;
+		reference correlations[0-1] container : Correlations;
+		reference portType : PortType;
+		reference "operation" : Operation;
+	}
+
+	class Receive extends PartnerActivity {
+		attribute createInstance[0-1] : EBooleanObject;
+		reference variable : Variable;
+		reference fromPart[*] ordered : FromPart;
+	}
+
+	class Exit extends Activity {
+		
+	}
+
+	class Throw extends Activity {
+		attribute faultName[0-1] : QName;
+		reference faultVariable[0-1] : Variable;
+	}
+
+	class Wait extends Activity {
+		reference for[0-1] container : Expression;
+		reference until[0-1] container : Expression;
+	}
+
+	class Empty extends Activity {
+		
+	}
+
+	class Sequence extends Activity {
+		reference activities[1-*] ordered container : Activity;
+	}
+
+	class Switch extends Activity {
+		reference cases[1-*] ordered container : Case;
+		reference otherwise[*] container : Otherwise;	-- should be [0-1] but mediumStructured.bpel has several otherwise elements for a single switch
+	}
+
+	class Case extends BPELExtensibleElement {
+		reference activity container : Activity;
+		reference condition container : Condition;
+	}
+
+	class While extends Activity {
+		reference activity container : Activity;
+		reference condition container : Condition;
+	}
+
+	class Pick extends Activity {
+		attribute createInstance[0-1] : EBooleanObject;
+		reference messages[1-*] ordered container : OnMessage;
+		reference alarm[*] ordered container : OnAlarm;
+	}
+
+	class Flow extends Activity {
+		reference activities[1-*] ordered container : Activity;
+		reference links[0-1] container : Links;
+		reference completionCondition[0-1] container : CompletionCondition;
+	}
+
+	class OnAlarm extends BPELExtensibleElement {
+		reference activity container : Activity;
+		reference for[0-1] container : Expression;
+		reference until[0-1] container : Expression;
+		reference repeatEvery[0-1] container : Expression;
+	}
+
+	class Assign extends Activity {
+		reference copy[1-*] ordered container : Copy;
+		attribute validate[0-1] : EBooleanObject;
+	}
+
+	class Copy extends BPELExtensibleElement {
+		reference to container : To;
+		reference from container : From;
+		attribute keepSrcElementName[0-1] : EBooleanObject;
+	}
+
+	class Extension extends BPELExtensibleElement {
+		attribute namespace[0-1] : EString;
+		attribute mustUnderstand[0-1] : EBooleanObject;
+	}
+
+	class Scope extends Activity {
+		attribute isolated[0-1] : EBooleanObject;
+		reference faultHandlers[0-1] container : FaultHandler;
+		reference compensationHandler[0-1] container : CompensationHandler;
+		reference activity container : Activity;
+		reference variables[0-1] container : Variables;
+		reference correlationSets[0-1] container : CorrelationSets;
+		reference eventHandlers[0-1] container : EventHandler;
+		reference partnerLinks[0-1] container : PartnerLinks;
+		reference terminationHandler[0-1] container : TerminationHandler;
+	}
+
+	class Compensate extends Activity {
+		reference scope[0-1] : EObject;
+	}
+
+	class CompensationHandler extends BPELExtensibleElement {
+		reference activity container : Activity;
+	}
+
+	class To extends BPELExtensibleElement {
+		reference variable[0-1] : Variable;
+		reference part[0-1] : Part;
+		reference partnerLink[0-1] : PartnerLink;
+		reference property[0-1] : Property;
+		reference query[0-1] container : BPELQuery;
+	}
+
+	class From extends To, BPELExtensibleElement {
+		attribute opaque[0-1] : EBooleanObject;
+		attribute endpointReference[0-1] : EndpointReferenceRole;
+		attribute "literal"[0-1] : EString;
+		attribute unsafeLiteral[0-1] : EBooleanObject;
+		reference expression[0-1] container : Expression;
+		reference serviceRef[0-1] container : ServiceRef;
+		reference type[0-1] : XSDTypeDefinition;
+	}
+
+	class OnMessage extends BPELExtensibleElement {
+		reference variable[0-1] : Variable;
+		reference activity[0-1] container : Activity;
+		reference portType : PortType;
+		reference partnerLink : PartnerLink;
+		reference correlations[0-1] container : Correlations;
+		reference "operation" : Operation;
+		reference fromPart[*] ordered : FromPart;
+	}
+
+	class Expression extends ExtensibilityElement {
+		attribute body[0-1] : EJavaObject;
+		attribute expressionLanguage[0-1] : EString;
+		attribute opaque[0-1] : EBooleanObject;
+	}
+
+	class BooleanExpression extends Expression {
+		
+	}
+
+	class Correlation extends BPELExtensibleElement {
+		attribute initiate[0-1] : EString;
+		attribute pattern[0-1] : CorrelationPattern;
+		reference set : CorrelationSet;
+	}
+
+	enumeration CorrelationPattern {
+		literal outin;
+		literal in;
+		literal out;
+	}
+
+	enumeration EndpointReferenceRole {
+		literal partnerRole;
+		literal myRole;
+	}
+
+	class EventHandler extends BPELExtensibleElement {
+		reference alarm[*] ordered container : OnAlarm;
+		reference events[*] ordered container : OnEvent;
+	}
+
+	class Source extends BPELExtensibleElement {
+		reference Link : Link oppositeOf sources;
+		reference activity : Activity;
+		reference transitionCondition[0-1] container : Condition;
+	}
+
+	class Target extends BPELExtensibleElement {
+		reference Link : Link oppositeOf targets;
+		reference activity : Activity;
+	}
+
+	class PartnerLinks extends BPELExtensibleElement {
+		reference children[*] ordered container : PartnerLink;
+	}
+
+	class Variables extends BPELExtensibleElement {
+		reference children[*] ordered container : Variable;
+	}
+
+	class CorrelationSets extends BPELExtensibleElement {
+		reference children[*] ordered container : CorrelationSet;
+	}
+
+	class Links extends BPELExtensibleElement {
+		reference children[*] ordered container : Link;
+	}
+
+	class CatchAll extends BPELExtensibleElement {
+		reference activity container : Activity;
+	}
+
+	class Correlations extends BPELExtensibleElement {
+		reference children[*] ordered container : Correlation;
+	}
+
+	class Variable extends BPELExtensibleElement {
+		attribute name[0-1] : EString;
+		reference messageType[0-1] : Message;
+		reference XSDElement[0-1] : XSDElementDeclaration;
+		reference type[0-1] : XSDTypeDefinition;
+		reference from[0-1] : From;
+	}
+
+	class Otherwise extends BPELExtensibleElement {
+		reference activity container : Activity;
+	}
+
+	class UnknownExtensibilityAttribute extends UnknownExtensibilityElement {
+		
+	}
+
+	class OnEvent extends BPELExtensibleElement {
+		reference activity[0-1] container : Activity;
+		reference variable[0-1] container : Variable;
+		reference partnerLink : PartnerLink;
+		reference correlations[0-1] container : Correlations;
+		reference "operation" : Operation;
+		reference portType : PortType;
+		reference messageType : Message;
+		reference fromPart[*] ordered : FromPart;
+		reference correlationSets[0-1] container : CorrelationSets;
+	}
+
+	class BPELImport {
+		attribute namespace[0-1] : EString;
+		attribute location[0-1] : EString;
+		attribute importType[0-1] : EString;
+	}
+
+	class Rethrow extends Activity {
+		
+	}
+
+	class Condition extends Expression {
+		attribute value : EString; --added to store the textual value of the condition
+	}
+
+	class Targets extends BPELExtensibleElement {
+		reference children[*] ordered container : Target;
+		reference joinCondition[0-1] container : Condition;
+	}
+
+	class Sources extends BPELExtensibleElement {
+		reference children[*] ordered container : Source;
+	}
+
+	class BPELQuery {
+		attribute value[0-1] : EString;
+		attribute queryLanguage[0-1] : EString;
+	}
+
+	class ServiceRef {
+		attribute referenceScheme[0-1] : EString;
+		attribute value[0-1] : EJavaObject;
+	}
+
+	class Extensions extends BPELExtensibleElement {
+		reference children[*] ordered container : Extension;
+	}
+
+	class ExtensionActivity extends Activity {
+		
+	}
+
+	class FromPart {
+		attribute part[0-1] : EString;
+		reference to[0-1] : To;
+	}
+
+	class ToPart {
+		attribute part[0-1] : EString;
+		reference from[0-1] : From;
+	}
+
+	class OpaqueActivity extends Activity {
+		
+	}
+
+	class ForEach extends Activity {
+		attribute parallel[0-1] : EBooleanObject;
+		reference counterName container : Variable;
+		reference completionCondition[0-1] container : CompletionCondition;
+		reference iterator container : Iterator;
+		reference activity container : Activity;
+	}
+
+	class RepeatUntil extends Activity {
+		reference activity container : Activity;
+		reference condition container : Condition;
+	}
+
+	class TerminationHandler extends BPELExtensibleElement {
+		reference activity[0-1] container : Activity;
+	}
+
+	class Validate extends Activity {
+		reference variables[*] ordered : Variable;
+	}
+
+	class If extends Activity {
+		reference condition[0-1] container : Condition;
+		reference then[0-1] container : Then;
+		reference elseIf[*] ordered container : ElseIf;
+		reference else[0-1] container : Else;
+	}
+
+	class Then extends BPELExtensibleElement {
+		reference activity container : Activity;
+	}
+
+	class ElseIf extends BPELExtensibleElement {
+		reference condition[0-1] container : Condition;
+		reference activity container : Activity;
+	}
+
+	class Else extends BPELExtensibleElement {
+		reference activity container : Activity;
+	}
+
+	class CompletionCondition {
+		reference branches[0-1] container : Branches;
+	}
+
+	class Branches extends Expression {
+		attribute countCompletedBranchesOnly[0-1] : EBooleanObject;
+	}
+
+	class BPELExtensibleElement extends WSDLExtensibleElement {
+		reference documentation[0-1] container : Documentation;
+	}
+
+	class Documentation {
+		attribute lang[0-1] : EString;
+		attribute source[0-1] : EString;
+		attribute value[0-1] : EString;
+	}
+
+	class Iterator {
+		reference finalCounterValue[0-1] container : Expression;
+		reference startCounterValue[0-1] container : Expression;
+	}
+}
+
+package messageproperties {
+
+	class Property extends ExtensibilityElement {
+		attribute qName[0-1] : QName;
+		attribute name[0-1] : EString;
+		attribute type[0-1] : EJavaObject;
+		attribute ID[0-1] : EString;
+	}
+
+	class PropertyAlias extends ExtensibilityElement {
+		attribute messageType[0-1] : EJavaObject;
+		attribute part[0-1] : EString;
+		attribute propertyName[0-1] : EJavaObject;
+		attribute ID[0-1] : EString;
+		reference wsdlPart : Part;
+		reference query[0-1] container : messagepropertiesQuery;
+		attribute type[0-1] : EJavaObject;
+		attribute XSDElement[0-1] : EJavaObject;
+	}
+
+	class messagepropertiesQuery extends ExtensibilityElement {
+		attribute queryLanguage[0-1] : EString;
+		attribute value[0-1] : EString;
+	}
+}
+
+package WSDL {
+
+	abstract class WSDLElement {
+		attribute documentationElement[0-1] : WSDLDOMElement;
+		attribute element[0-1] : WSDLDOMElement;
+	}
+
+	class PortType extends WSDLElement, IPortType {
+		attribute qName[0-1] : QName;
+		attribute undefined[0-1] : EBoolean;
+		attribute proxy[0-1] : EBoolean;
+		attribute resourceURI[0-1] : EString;
+		reference eOperations[*] ordered container : Operation;
+	}
+
+	class Operation extends WSDLElement, IOperation {
+		attribute style[0-1] : OperationType;
+		attribute name[0-1] : EString;
+		attribute undefined[0-1] : EBoolean;
+		attribute proxy[0-1] : EBoolean;
+		attribute resourceURI[0-1] : EString;
+		reference eInput[0-1] container : Input;
+		reference eOutput[0-1] container : Output;
+		reference eFaults[*] ordered container : Fault;
+		reference eParameterOrdering[*] ordered : Part;
+	}
+
+	class Message extends WSDLElement, IMessage {
+		attribute qName[0-1] : QName;
+		attribute undefined[0-1] : EBoolean;
+		attribute proxy[0-1] : EBoolean;
+		attribute resourceURI[0-1] : EString;
+		reference eParts[*] ordered container : Part;
+	}
+
+	class Part extends WSDLElement, IPart {
+		attribute name[0-1] : EString;
+		attribute elementName[0-1] : QName;
+		attribute typeName[0-1] : QName;
+		reference typeDefinition[0-1] : XSDTypeDefinition;
+		reference elementDeclaration[0-1] : XSDElementDeclaration;
+		reference eMessage[0-1] : Message;
+	}
+
+	class Binding extends WSDLExtensibleElement, IBinding {
+		attribute qName[0-1] : QName;
+		attribute undefined[0-1] : EBoolean;
+		attribute proxy[0-1] : EBoolean;
+		attribute resourceURI[0-1] : EString;
+		reference ePortType : PortType;
+		reference eBindingOperations[*] ordered container : BindingOperation;
+	}
+
+	class BindingOperation extends WSDLExtensibleElement, IBindingOperation {
+		attribute name[0-1] : EString;
+		reference eOperation : Operation;
+		reference eBindingInput[0-1] container : BindingInput;
+		reference eBindingOutput[0-1] container : BindingOutput;
+		reference eBindingFaults[*] ordered container : BindingFault;
+	}
+
+	class Service extends WSDLExtensibleElement, IService {
+		attribute qName[0-1] : QName;
+		attribute undefined[0-1] : EBoolean;
+		attribute proxy[0-1] : EBoolean;
+		attribute resourceURI[0-1] : EString;
+		reference ePorts[*] ordered container : Port;
+	}
+
+	class Port extends WSDLExtensibleElement, IPort {
+		attribute name[0-1] : EString;
+		reference eBinding : Binding;
+	}
+
+	class ExtensibilityElement extends WSDLElement, IExtensibilityElement {
+		attribute required[0-1] : EBoolean;
+		attribute elementType[0-1] : QName;
+	}
+
+	class Definition extends WSDLExtensibleElement, IDefinition {
+		attribute targetNamespace[0-1] : EString;
+		attribute location[0-1] : EString;
+		attribute qName[0-1] : QName;
+		attribute encoding[0-1] : EString;
+		reference eImports[*] ordered container : WSDLImport;
+		reference eTypes[0-1] container : Types;
+		reference eMessages[*] ordered container : Message;
+		reference ePortTypes[*] ordered container : PortType;
+		reference eBindings[*] ordered container : Binding;
+		reference eServices[*] ordered container : Service;
+		reference eNamespaces[*] ordered container : Namespace;
+	}
+
+	class WSDLImport extends WSDLElement, IImport {
+		attribute namespaceURI[0-1] : EString;
+		attribute locationURI[0-1] : EString;
+		reference eDefinition[0-1] : Definition;
+		reference eSchema[0-1] : XSDSchema;
+	}
+
+	abstract class WSDLExtensibleElement extends WSDLElement {
+		reference eExtensibilityElements[*] ordered container : ExtensibilityElement;
+	}
+
+	class Input extends MessageReference, WSDLElement, IInput {
+		
+	}
+
+	class Output extends MessageReference, WSDLElement, IOutput {
+		
+	}
+
+	class Fault extends MessageReference, WSDLElement, IFault {
+		
+	}
+
+	class BindingInput extends WSDLExtensibleElement, IBindingInput {
+		attribute name[0-1] : EString;
+		reference eInput : Input;
+	}
+
+	class BindingOutput extends WSDLExtensibleElement, IBindingOutput {
+		attribute name[0-1] : EString;
+		reference eOutput : Output;
+	}
+
+	class BindingFault extends WSDLExtensibleElement, IBindingFault {
+		attribute name[0-1] : EString;
+		reference eFault : Fault;
+	}
+
+	datatype QName;
+
+	class Namespace {
+		attribute URI[0-1] : EString;
+		attribute prefix[0-1] : EString;
+	}
+
+	datatype OperationType;
+
+	abstract class IPortType {
+		
+	}
+
+	abstract class IOperation {
+		
+	}
+
+	abstract class IInput {
+		
+	}
+
+	abstract class IOutput {
+		
+	}
+
+	abstract class IFault {
+		
+	}
+
+	abstract class IMessage {
+		
+	}
+
+	abstract class IPart {
+		
+	}
+
+	abstract class IService {
+		
+	}
+
+	abstract class IPort {
+		
+	}
+
+	abstract class IBinding {
+		
+	}
+
+	abstract class IBindingOperation {
+		
+	}
+
+	abstract class IBindingInput {
+		
+	}
+
+	abstract class IBindingOutput {
+		
+	}
+
+	abstract class IBindingFault {
+		
+	}
+
+	datatype WSDLDOMElement;
+
+	abstract class IExtensibilityElement {
+		
+	}
+
+	abstract class IDefinition {
+		
+	}
+
+	abstract class IImport {
+		
+	}
+
+	abstract class IList {
+		
+	}
+
+	abstract class IMap {
+		
+	}
+
+	abstract class IURL {
+		
+	}
+
+	abstract class IExtensionRegistry {
+		
+	}
+
+	class Types extends WSDLExtensibleElement, ITypes {
+		
+	}
+
+	abstract class IIterator {
+		
+	}
+
+	datatype WSDLException;
+
+	abstract class ITypes {
+		
+	}
+
+	class UnknownExtensibilityElement extends ExtensibilityElement {
+		reference children[*] ordered container : UnknownExtensibilityElement;
+	}
+
+	class XSDSchemaExtensibilityElement extends ExtensibilityElement {
+		reference schema[0-1] container : XSDSchema;
+	}
+
+	datatype WSDLDOMDocument;
+
+	abstract class MessageReference extends WSDLElement {
+		attribute name[0-1] : EString;
+		reference eMessage : Message;
+	}
+}
+
+package partnerlinktype {
+
+	class PartnerLinkType extends ExtensibilityElement {
+		attribute name[0-1] : EString;
+		attribute ID[0-1] : EString;
+		reference role[*] ordered container : Role;
+	}
+
+	class Role extends ExtensibilityElement {
+		attribute ID[0-1] : EString;
+		attribute name[0-1] : EString;
+		attribute portType[0-1] : EJavaObject;
+	}
+}
+
+package ecore {
+
+	class EObject {
+		
+	}
+
+	datatype EBoolean;
+
+	datatype EBooleanObject;
+
+	datatype EInt;
+
+	datatype EJavaObject;
+
+	datatype EString;
+}
+
+package XSD {
+
+	class XSDAnnotation extends XSDComponent, XSDRedefineContent {
+		attribute applicationInformation[*] ordered unique : XSDDOMElement;
+		attribute userInformation[*] ordered unique : XSDDOMElement;
+		attribute attributes[*] ordered unique : DOMAttr;
+	}
+
+	class XSDAttributeDeclaration extends XSDFeature, XSDSchemaContent {
+		attribute attributeDeclarationReference[0-1] : EBoolean;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference anonymousTypeDefinition[0-1] container : XSDSimpleTypeDefinition;
+		reference typeDefinition : XSDSimpleTypeDefinition;
+		reference resolvedAttributeDeclaration : XSDAttributeDeclaration;
+	}
+
+	abstract class XSDAttributeGroupContent extends XSDConcreteComponent {
+		
+	}
+
+	class XSDAttributeGroupDefinition extends XSDRedefinableComponent, XSDAttributeGroupContent, XSDRedefineContent {
+		attribute attributeGroupDefinitionReference[0-1] : EBoolean;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference contents[*] ordered container : XSDAttributeGroupContent;
+		reference attributeUses[*] ordered : XSDAttributeUse;
+		reference attributeWildcardContent[0-1] container : XSDWildcard;
+		reference attributeWildcard[0-1] : XSDWildcard;
+		reference resolvedAttributeGroupDefinition : XSDAttributeGroupDefinition;
+		reference syntheticWildcard[0-1] container : XSDWildcard;
+	}
+
+	class XSDAttributeUse extends XSDComponent, XSDAttributeGroupContent {
+		attribute required[0-1] : EBoolean;
+		attribute value[0-1] : Value;
+		attribute constraint[0-1] : XSDConstraint;
+		attribute use[0-1] : XSDAttributeUseCategory;
+		attribute lexicalValue[0-1] : EString;
+		reference attributeDeclaration : XSDAttributeDeclaration;
+		reference content container : XSDAttributeDeclaration;
+	}
+
+	class XSDBoundedFacet extends XSDFundamentalFacet {
+		attribute value[0-1] : EBoolean;
+	}
+
+	class XSDCardinalityFacet extends XSDFundamentalFacet {
+		attribute value[0-1] : XSDCardinality;
+	}
+
+	abstract class XSDComplexTypeContent extends XSDComponent {
+		
+	}
+
+	class XSDComplexTypeDefinition extends XSDTypeDefinition, XSDScope {
+		attribute derivationMethod[0-1] : XSDDerivationMethod;
+		attribute final[*] ordered unique : XSDComplexFinal;
+		attribute "abstract"[0-1] : EBoolean;
+		attribute contentTypeCategory[0-1] : XSDContentTypeCategory;
+		attribute prohibitedSubstitutions[*] ordered unique : XSDProhibitedSubstitutions;
+		attribute lexicalFinal[*] ordered unique : XSDComplexFinal;
+		attribute block[*] ordered unique : XSDProhibitedSubstitutions;
+		attribute mixed[0-1] : EBoolean;
+		reference contentAnnotation[0-1] container : XSDAnnotation;
+		reference baseTypeDefinition : XSDTypeDefinition;
+		reference content[0-1] container : XSDComplexTypeContent;
+		reference contentType[0-1] : XSDComplexTypeContent;
+		reference attributeUses[*] ordered : XSDAttributeUse;
+		reference attributeContents[*] ordered container : XSDAttributeGroupContent;
+		reference attributeWildcard[0-1] : XSDWildcard;
+		reference attributeWildcardContent[0-1] container : XSDWildcard;
+		reference rootTypeDefinition : XSDTypeDefinition;
+		reference syntheticParticle[0-1] container : XSDParticle;
+		reference syntheticWildcard[0-1] container : XSDWildcard;
+	}
+
+	abstract class XSDComponent extends XSDConcreteComponent {
+		
+	}
+
+	abstract class XSDConcreteComponent {
+		attribute element[0-1] : XSDDOMElement;
+		reference "container"[0-1] : XSDConcreteComponent;
+		reference rootContainer : XSDConcreteComponent;
+		reference schema[0-1] : XSDSchema;
+		reference diagnostics[*] ordered container : XSDDiagnostic;
+	}
+
+	abstract class XSDConstrainingFacet extends XSDFacet {
+		
+	}
+
+	class XSDDiagnostic extends XSDConcreteComponent {
+		attribute severity[0-1] : XSDDiagnosticSeverity;
+		attribute message[0-1] : EString;
+		attribute locationURI[0-1] : EString;
+		attribute line[0-1] : EInt;
+		attribute column[0-1] : EInt;
+		attribute node[0-1] : DOMNode;
+		attribute annotationURI[0-1] : EString;
+		attribute key[0-1] : EString;
+		attribute substitutions[*] ordered unique : EString;
+		reference components[1-*] ordered : XSDConcreteComponent;
+		reference primaryComponent : XSDConcreteComponent;
+	}
+
+	class XSDElementDeclaration extends XSDFeature, XSDSchemaContent, XSDTerm {
+		attribute nillable[0-1] : EBoolean;
+		attribute disallowedSubstitutions[*] ordered unique : XSDDisallowedSubstitutions;
+		attribute substitutionGroupExclusions[*] ordered unique : XSDSubstitutionGroupExclusions;
+		attribute "abstract"[0-1] : EBoolean;
+		attribute lexicalFinal[*] ordered unique : XSDProhibitedSubstitutions;
+		attribute block[*] ordered unique : XSDDisallowedSubstitutions;
+		attribute elementDeclarationReference[0-1] : EBoolean;
+		attribute circular[0-1] : EBoolean;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference anonymousTypeDefinition[0-1] container : XSDTypeDefinition;
+		reference typeDefinition : XSDTypeDefinition;
+		reference identityConstraintDefinitions[*] ordered container : XSDIdentityConstraintDefinition;
+		reference resolvedElementDeclaration : XSDElementDeclaration;
+		reference substitutionGroupAffiliation[0-1] : XSDElementDeclaration;
+		reference substitutionGroup[*] ordered : XSDElementDeclaration;
+	}
+
+	class XSDEnumerationFacet extends XSDRepeatableFacet {
+		attribute value[*] ordered unique : Value;
+	}
+
+	abstract class XSDFacet extends XSDComponent {
+		attribute lexicalValue[0-1] : EString;
+		attribute facetName[0-1] : EString;
+		attribute effectiveValue[0-1] : Value;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference simpleTypeDefinition[0-1] : XSDSimpleTypeDefinition;
+	}
+
+	abstract class XSDFeature extends XSDNamedComponent {
+		attribute value[0-1] : Value;
+		attribute constraint[0-1] : XSDConstraint;
+		attribute form[0-1] : XSDForm;
+		attribute lexicalValue[0-1] : EString;
+		attribute global[0-1] : EBoolean;
+		attribute featureReference[0-1] : EBoolean;
+		reference scope[0-1] : XSDScope;
+		reference resolvedFeature : XSDFeature;
+		reference type : XSDTypeDefinition;
+	}
+
+	abstract class XSDFixedFacet extends XSDConstrainingFacet {
+		attribute fixed[0-1] : EBoolean;
+	}
+
+	class XSDFractionDigitsFacet extends XSDFixedFacet {
+		attribute value[0-1] : EInt;
+	}
+
+	abstract class XSDFundamentalFacet extends XSDFacet {
+		
+	}
+
+	class XSDIdentityConstraintDefinition extends XSDNamedComponent {
+		attribute identityConstraintCategory[0-1] : XSDIdentityConstraintCategory;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference referencedKey[0-1] : XSDIdentityConstraintDefinition;
+		reference selector container : XSDXPathDefinition;
+		reference fields[1-*] ordered container : XSDXPathDefinition;
+	}
+
+	class XSDImport extends XSDSchemaDirective {
+		attribute namespace[0-1] : EString;
+		reference annotation[0-1] container : XSDAnnotation;
+	}
+
+	class XSDInclude extends XSDSchemaCompositor {
+		reference annotation[0-1] container : XSDAnnotation;
+	}
+
+	class XSDLengthFacet extends XSDFixedFacet {
+		attribute value[0-1] : EInt;
+	}
+
+	class XSDMaxExclusiveFacet extends XSDMaxFacet {
+		
+	}
+
+	abstract class XSDMaxFacet extends XSDFixedFacet {
+		attribute value[0-1] : Value;
+		attribute inclusive[0-1] : EBoolean;
+		attribute exclusive[0-1] : EBoolean;
+	}
+
+	class XSDMaxInclusiveFacet extends XSDMaxFacet {
+		
+	}
+
+	class XSDMaxLengthFacet extends XSDFixedFacet {
+		attribute value[0-1] : EInt;
+	}
+
+	class XSDMinExclusiveFacet extends XSDMinFacet {
+		
+	}
+
+	abstract class XSDMinFacet extends XSDFixedFacet {
+		attribute value[0-1] : Value;
+		attribute inclusive[0-1] : EBoolean;
+		attribute exclusive[0-1] : EBoolean;
+	}
+
+	class XSDMinInclusiveFacet extends XSDMinFacet {
+		
+	}
+
+	class XSDMinLengthFacet extends XSDFixedFacet {
+		attribute value[0-1] : EInt;
+	}
+
+	class XSDModelGroup extends XSDTerm {
+		attribute compositor[0-1] : XSDCompositor;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference contents[*] ordered container : XSDParticle;
+		reference particles[1-*] ordered : XSDParticle;
+	}
+
+	class XSDModelGroupDefinition extends XSDRedefinableComponent, XSDParticleContent, XSDRedefineContent {
+		attribute modelGroupDefinitionReference[0-1] : EBoolean;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference modelGroup container : XSDModelGroup;
+		reference resolvedModelGroupDefinition : XSDModelGroupDefinition;
+	}
+
+	abstract class XSDNamedComponent extends XSDComponent {
+		attribute name[0-1] : EString;
+		attribute targetNamespace[0-1] : EString;
+		attribute aliasName[0-1] : EString;
+		attribute uRI[0-1] : EString;
+		attribute aliasURI[0-1] : EString;
+		attribute qName[0-1] : EString;
+	}
+
+	class XSDNotationDeclaration extends XSDNamedComponent, XSDSchemaContent {
+		attribute systemIdentifier[0-1] : EString;
+		attribute publicIdentifier[0-1] : EString;
+		reference annotation[0-1] container : XSDAnnotation;
+	}
+
+	class XSDNumericFacet extends XSDFundamentalFacet {
+		attribute value[0-1] : EBoolean;
+	}
+
+	class XSDOrderedFacet extends XSDFundamentalFacet {
+		attribute value[0-1] : XSDOrdered;
+	}
+
+	class XSDParticle extends XSDComplexTypeContent {
+		attribute minOccurs[0-1] : EInt;
+		attribute maxOccurs[0-1] : EInt;
+		reference content container : XSDParticleContent;
+		reference term : XSDTerm;
+	}
+
+	abstract class XSDParticleContent extends XSDConcreteComponent {
+		
+	}
+
+	class XSDPatternFacet extends XSDRepeatableFacet {
+		attribute value[*] ordered unique : EString;
+	}
+
+	abstract class XSDRedefinableComponent extends XSDNamedComponent, XSDRedefineContent {
+		attribute circular[0-1] : EBoolean;
+	}
+
+	abstract class XSDRedefineContent extends XSDSchemaContent {
+		
+	}
+
+	class XSDRedefine extends XSDSchemaCompositor {
+		reference annotations[*] ordered : XSDAnnotation;
+		reference contents[*] ordered container : XSDRedefineContent;
+	}
+
+	abstract class XSDRepeatableFacet extends XSDConstrainingFacet {
+		reference annotations[*] ordered : XSDAnnotation;
+	}
+
+	class XSDSchema extends XSDScope {
+		attribute document[0-1] : XSDDOMDocument;
+		attribute schemaLocation[0-1] : EString;
+		attribute targetNamespace[0-1] : EString;
+		attribute attributeFormDefault[0-1] : XSDForm;
+		attribute elementFormDefault[0-1] : XSDForm;
+		attribute finalDefault[*] ordered unique : XSDProhibitedSubstitutions;
+		attribute blockDefault[*] ordered unique : XSDDisallowedSubstitutions;
+		attribute version[0-1] : EString;
+		reference contents[*] ordered container : XSDSchemaContent;
+		reference elementDeclarations[*] ordered : XSDElementDeclaration;
+		reference attributeDeclarations[*] ordered : XSDAttributeDeclaration;
+		reference attributeGroupDefinitions[*] ordered : XSDAttributeGroupDefinition;
+		reference typeDefinitions[*] ordered : XSDTypeDefinition;
+		reference modelGroupDefinitions[*] ordered : XSDModelGroupDefinition;
+		reference identityConstraintDefinitions[*] ordered : XSDIdentityConstraintDefinition;
+		reference notationDeclarations[*] ordered : XSDNotationDeclaration;
+		reference annotations[*] ordered : XSDAnnotation;
+		reference allDiagnostics[*] ordered : XSDDiagnostic;
+		reference referencingDirectives[*] ordered : XSDSchemaDirective;
+		reference rootVersion : XSDSchema;
+		reference originalVersion[0-1] : XSDSchema;
+		reference incorporatedVersions[*] ordered container : XSDSchema;
+		reference schemaForSchema : XSDSchema;
+	}
+
+	abstract class XSDSchemaCompositor extends XSDSchemaDirective {
+		reference incorporatedSchema[0-1] : XSDSchema;
+	}
+
+	abstract class XSDSchemaContent extends XSDConcreteComponent {
+		
+	}
+
+	abstract class XSDSchemaDirective extends XSDSchemaContent {
+		attribute schemaLocation[0-1] : EString;
+		reference resolvedSchema[0-1] : XSDSchema;
+	}
+
+	abstract class XSDScope extends XSDComponent {
+		
+	}
+
+	class XSDSimpleTypeDefinition extends XSDTypeDefinition, XSDComplexTypeContent {
+		attribute variety[0-1] : XSDVariety;
+		attribute final[*] ordered unique : XSDSimpleFinal;
+		attribute lexicalFinal[*] ordered unique : XSDSimpleFinal;
+		attribute validFacets[*] ordered unique : EString;
+		reference contents[*] ordered container : XSDSimpleTypeDefinition;
+		reference facetContents[*] ordered container : XSDConstrainingFacet;
+		reference facets[*] ordered : XSDConstrainingFacet;
+		reference memberTypeDefinitions[*] ordered : XSDSimpleTypeDefinition;
+		reference fundamentalFacets[1-*] ordered container : XSDFundamentalFacet;
+		reference baseTypeDefinition : XSDSimpleTypeDefinition;
+		reference primitiveTypeDefinition[0-1] : XSDSimpleTypeDefinition;
+		reference itemTypeDefinition[0-1] : XSDSimpleTypeDefinition;
+		reference rootTypeDefinition : XSDSimpleTypeDefinition;
+		reference minFacet[0-1] : XSDMinFacet;
+		reference maxFacet[0-1] : XSDMaxFacet;
+		reference maxInclusiveFacet[0-1] : XSDMaxInclusiveFacet;
+		reference minInclusiveFacet[0-1] : XSDMinInclusiveFacet;
+		reference minExclusiveFacet[0-1] : XSDMinExclusiveFacet;
+		reference maxExclusiveFacet[0-1] : XSDMaxExclusiveFacet;
+		reference lengthFacet[0-1] : XSDLengthFacet;
+		reference whiteSpaceFacet[0-1] : XSDWhiteSpaceFacet;
+		reference enumerationFacets[*] ordered : XSDEnumerationFacet;
+		reference patternFacets[*] ordered : XSDPatternFacet;
+		reference cardinalityFacet : XSDCardinalityFacet;
+		reference numericFacet : XSDNumericFacet;
+		reference maxLengthFacet[0-1] : XSDMaxLengthFacet;
+		reference minLengthFacet[0-1] : XSDMinLengthFacet;
+		reference totalDigitsFacet[0-1] : XSDTotalDigitsFacet;
+		reference fractionDigitsFacet[0-1] : XSDFractionDigitsFacet;
+		reference orderedFacet : XSDOrderedFacet;
+		reference boundedFacet : XSDBoundedFacet;
+		reference effectiveMaxFacet[0-1] : XSDMaxFacet;
+		reference effectiveWhiteSpaceFacet[0-1] : XSDWhiteSpaceFacet;
+		reference effectiveMaxLengthFacet[0-1] : XSDMaxLengthFacet;
+		reference effectiveFractionDigitsFacet[0-1] : XSDFractionDigitsFacet;
+		reference effectivePatternFacet[0-1] : XSDPatternFacet;
+		reference effectiveEnumerationFacet[0-1] : XSDEnumerationFacet;
+		reference effectiveTotalDigitsFacet[0-1] : XSDTotalDigitsFacet;
+		reference effectiveMinLengthFacet[0-1] : XSDMinLengthFacet;
+		reference effectiveLengthFacet[0-1] : XSDLengthFacet;
+		reference effectiveMinFacet[0-1] : XSDMinFacet;
+		reference syntheticFacets[*] ordered container : XSDFacet;
+	}
+
+	abstract class XSDTerm extends XSDComponent, XSDParticleContent {
+		
+	}
+
+	class XSDTotalDigitsFacet extends XSDFixedFacet {
+		attribute value[0-1] : EInt;
+	}
+
+	abstract class XSDTypeDefinition extends XSDRedefinableComponent, XSDRedefineContent {
+		reference annotation[0-1] container : XSDAnnotation;
+		reference derivationAnnotation[0-1] container : XSDAnnotation;
+		reference annotations[*] ordered : XSDAnnotation;
+		reference rootType : XSDTypeDefinition;
+		reference baseType : XSDTypeDefinition;
+		reference simpleType[0-1] : XSDSimpleTypeDefinition;
+		reference complexType[0-1] : XSDParticle;
+	}
+
+	class XSDWhiteSpaceFacet extends XSDFixedFacet {
+		attribute value[0-1] : XSDWhiteSpace;
+	}
+
+	class XSDWildcard extends XSDTerm {
+		attribute namespaceConstraintCategory[0-1] : XSDNamespaceConstraintCategory;
+		attribute namespaceConstraint[*] ordered unique : EString;
+		attribute processContents[0-1] : XSDProcessContents;
+		attribute lexicalNamespaceConstraint[*] ordered unique : EString;
+		reference annotation[0-1] container : XSDAnnotation;
+		reference annotations[*] ordered : XSDAnnotation;
+	}
+
+	class XSDXPathDefinition extends XSDComponent {
+		attribute variety[0-1] : XSDXPathVariety;
+		attribute value[0-1] : EString;
+		reference annotation[0-1] container : XSDAnnotation;
+	}
+
+	datatype DOMAttr;
+
+	datatype XSDDOMDocument;
+
+	datatype XSDDOMElement;
+
+	datatype DOMNode;
+
+	datatype Value;
+
+	enumeration XSDAttributeUseCategory {
+		literal prohibited;
+		literal optional;
+		literal required;
+	}
+
+	enumeration XSDCardinality {
+		literal countablyInfinite;
+		literal finite;
+	}
+
+	enumeration XSDComplexFinal {
+		literal all;
+		literal restriction;
+		literal extension;
+	}
+
+	enumeration XSDCompositor {
+		literal all;
+		literal choice;
+		literal sequence;
+	}
+
+	enumeration XSDConstraint {
+		literal fixed;
+		literal default;
+	}
+
+	enumeration XSDContentTypeCategory {
+		literal elementOnly;
+		literal mixed;
+		literal simple;
+		literal empty;
+	}
+
+	enumeration XSDDerivationMethod {
+		literal extension;
+		literal restriction;
+	}
+
+	enumeration XSDDiagnosticSeverity {
+		literal fatal;
+		literal warning;
+		literal error;
+		literal information;
+	}
+
+	enumeration XSDDisallowedSubstitutions {
+		literal extension;
+		literal substitution;
+		literal all;
+		literal restriction;
+	}
+
+	enumeration XSDForm {
+		literal unqualified;
+		literal qualified;
+	}
+
+	enumeration XSDIdentityConstraintCategory {
+		literal keyref;
+		literal "unique";
+		literal key;
+	}
+
+	enumeration XSDNamespaceConstraintCategory {
+		literal set;
+		literal not;
+		literal any;
+	}
+
+	enumeration XSDOrdered {
+		literal "false";
+		literal total;
+		literal partial;
+	}
+
+	enumeration XSDProcessContents {
+		literal skip;
+		literal lax;
+		literal strict;
+	}
+
+	enumeration XSDProhibitedSubstitutions {
+		literal extension;
+		literal restriction;
+		literal all;
+	}
+
+	enumeration XSDSimpleFinal {
+		literal list;
+		literal restriction;
+		literal all;
+		literal union;
+	}
+
+	enumeration XSDSubstitutionGroupExclusions {
+		literal restriction;
+		literal extension;
+	}
+
+	enumeration XSDVariety {
+		literal union;
+		literal list;
+		literal atomic;
+	}
+
+	enumeration XSDWhiteSpace {
+		literal replace;
+		literal collapse;
+		literal preserve;
+	}
+
+	enumeration XSDXPathVariety {
+		literal field;
+		literal selector;
+	}
+}

@@ -1,0 +1,209 @@
+module MM2MMD; -- Module Template
+create OUT : KM3 from IN : KM3;
+
+
+
+rule Metamodel2Metamodel {
+	from
+		s: KM3!Metamodel
+	
+	to
+		t: KM3!Metamodel(
+			contents <- s.contents
+		)
+}
+
+rule PTPackage2PTPackageDiff {
+	from
+		s: KM3!Package (
+			s.name='PrimitiveTypes'
+		)
+	to
+		t: KM3!Package(
+			name <- s.name,
+			contents <- s.contents,
+			metamodel<- s.metamodel
+		)
+			
+}
+
+
+rule Package2PackageDiff {
+	from
+		s: KM3!Package (
+			not (s.name='PrimitiveTypes')
+		)
+		
+	to
+		t: KM3!Package(
+			name <- s.name+'Diff',
+			--contents <- Sequence {ad,dd,cd,s.contents},
+			contents <- s.contents,
+			metamodel<- s.metamodel
+		)
+		
+--		ad : KM3!Class ( --addDiffClass
+--			name <- 'Added',
+--			isAbstract <- true
+--		),
+--		
+--		dd : KM3!Class ( --delDiffClass
+--			name <- 'Deleted',
+--			isAbstract <- true
+--		),
+--		
+--		cd : KM3!Class ( --changeDiffClass
+--			name <- 'Changed',
+--			isAbstract <- true
+--		)		
+}
+
+
+rule AbstractClass2AbstractClassDiff {
+	from
+		s : KM3!Class 
+		(
+			s.isAbstract
+		)
+			
+	to
+		t : KM3!Class (	--topClass
+			name <- s.name,
+			package <-s.package,
+			supertypes <-s.supertypes,
+			isAbstract <-s.isAbstract,
+			structuralFeatures <- Sequence {s.structuralFeatures}
+		)
+}
+
+rule Class2ClassDiff {
+	from
+		s : KM3!Class 
+		(
+			not s.isAbstract
+		)
+			
+	to
+		t : KM3!Class (	--topClass
+			name <- s.name,
+			package <-s.package,
+			supertypes <-s.supertypes,
+			isAbstract <-s.isAbstract,
+			structuralFeatures <- Sequence {s.structuralFeatures}
+		),
+	
+		a : KM3!Class ( --addClass
+			name <- 'Added'+s.name,
+			package <-s.package,
+			--supertypes <- Sequence {t,(thisModule.resolveTemp(s.package,'ad'))}
+			supertypes <- t
+		),
+		
+		d : KM3!Class ( --delClass
+			name <- 'Deleted'+s.name,
+			package <-s.package,
+			--supertypes <-Sequence {t,(thisModule.resolveTemp(s.package,'dd'))}
+			supertypes <- t
+		),
+		
+		c : KM3!Class ( --changeClass
+			name <- 'Changed'+s.name,
+			package <-s.package,
+			supertypes <- t,
+			--supertypes <-Sequence {t,(thisModule.resolveTemp(s.package,'cd'))},
+			structuralFeatures <- Sequence {ass}
+		),
+		
+		ass : KM3!Reference (
+			name<-'upDatedElement',
+			package<-s.package,
+			isContainer<-false,
+			owner<-c,
+	--		subsetOf<-s.subsetOf,
+	--		derivedFrom<-s.derivedFrom,
+			lower <- 1,
+			upper<-1, 
+			isOrdered <-false,
+			isUnique <-false,
+			type <-t
+			)
+}
+
+
+
+rule Attribute2AttributeDiff {
+	from
+		s: KM3!Attribute 
+		
+	to
+		t: KM3!Attribute
+		(
+			name<-s.name,
+			package<-thisModule.resolveTemp(s.owner.package,'t'),
+			owner<-s.owner,
+			subsetOf<-s.subsetOf,
+			derivedFrom<-s.derivedFrom,
+			lower <- s.lower,
+			upper<-s.upper, 
+			isOrdered <-s.isOrdered,
+			isUnique <-s.isUnique,
+			type <-s.type
+		)
+}
+ 
+
+rule Reference2ReferenceDiff {
+	from
+		s: KM3!Reference  
+
+	to
+		t : KM3!Reference (
+			name<-s.name,
+			package<-thisModule.resolveTemp(s.owner.package,'t'),
+			isContainer<-s.isContainer,
+			opposite<-s.opposite,
+			owner<-s.owner,
+			subsetOf<-s.subsetOf,
+			derivedFrom<-s.derivedFrom,
+			lower <- s.lower,
+			upper<-s.upper, 
+			isOrdered <-s.isOrdered,
+			isUnique <-s.isUnique,
+			type <-s.type
+		)
+}
+
+
+rule DataType2DataTypeDiff {
+	from
+		s : KM3!DataType 
+			
+	to
+		t : KM3!DataType (
+			name <- s.name,
+			package <- s.package
+		)
+}
+
+rule Enumeration2Enumeration {
+	from
+		s : KM3!Enumeration
+		
+	to
+		t : KM3!Enumeration (
+			literals <-s.literals,
+			name <- s.name,
+			package <- s.package
+		)
+}
+
+rule EnumLiteral2EnumLiteral {
+	from
+		s: KM3!EnumLiteral
+	to
+		t: KM3!EnumLiteral (
+			enum <- s.enum,
+			name <- s.name,
+			package <- s.package
+		) 
+}

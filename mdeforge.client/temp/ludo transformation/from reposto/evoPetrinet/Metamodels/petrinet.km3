@@ -1,0 +1,89 @@
+-- @name		petrinet
+-- @version		1.0
+-- @authors		amministratore
+-- @date		2011/03/05
+-- @description	${description}
+package petrinet {
+
+
+abstract class LocatedElement {
+		attribute location : String;
+		attribute commentsBefore[*] : String;
+		attribute commentsAfter[*] : String;
+	}
+
+	abstract class NamedElement extends LocatedElement {
+		attribute name : String;
+	}
+
+
+
+	
+	
+	class PetriNetModel extends NamedElement {
+		reference nets[*] ordered container : Net oppositeOf modelContainer;
+	}
+
+	class Net extends NamedElement {
+		reference modelContainer : PetriNetModel oppositeOf nets;
+	
+
+		reference places[*] ordered container : Place oppositeOf net;
+		reference transitions[*] ordered container : Transition oppositeOf net;
+	}
+	
+
+
+	
+	
+	class Place {
+		attribute name : String;
+
+		reference net : Net oppositeOf places;
+
+		reference src[1-*] : Transition  oppositeOf dst;
+	
+		reference dst[1-*] : Transition oppositeOf src;
+		
+	}
+
+	
+
+	class Transition {
+
+		attribute name : String;
+
+		reference net : Net oppositeOf transitions;
+
+		reference src[1-*] : Place  oppositeOf dst;
+
+		reference dst[1-*] : Place oppositeOf src;
+
+	}
+
+
+	
+-- END Language-specific classes
+}
+
+package PrimitiveTypes {
+	datatype Boolean;
+	datatype Double;
+	datatype Integer;
+	datatype String;
+}
+
+
+-- @name		PetriNet
+
+-- @version		1.0
+
+-- @domains		Petri net
+
+-- @authors		Pierrick Guyard (pielepsy@gmail.com)
+
+-- @date		2005/06/29
+
+-- @description		This basic metamodel describes Petri Net. It's consists of places, transitions and directed arcs that connect them, so arcs run between places and transitions, not between places and places or transitions and transitions.  There is two sorts of arcs : the ones which connect places with transitions, and the other start at a transition and end at a place.
+
+

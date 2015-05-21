@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ccsMM" nsURI="http://disim.univaq.it/ccsMM" nsPrefix="ccsMM">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CCScontainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contains" upperBound="-1"
+        eType="#//CCS" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CCS" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionSet" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processSet" lowerBound="1"
+        upperBound="-1" eType="#//ProcessTerm" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessTerm" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyProcess" eSuperTypes="#//ProcessTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionPrefix" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionRef" lowerBound="1"
+        eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextProcess" lowerBound="1"
+        eType="#//ProcessTerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessIdentifier" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextProcess" lowerBound="1"
+        eType="#//ProcessTerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="choices" lowerBound="2"
+        upperBound="2" eType="#//ProcessTerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParallelComposition" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composes" lowerBound="2"
+        upperBound="2" eType="#//ProcessTerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Renaming" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procRenamed" lowerBound="1"
+        eType="#//ProcessTerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldAction" lowerBound="1"
+        eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newAction" lowerBound="1"
+        eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Restriction" eSuperTypes="#//ProcessTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procRestricted" lowerBound="1"
+        eType="#//ProcessTerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionDeleted" lowerBound="1"
+        eType="#//Action"/>
+  </eClassifiers>
+</ecore:EPackage>

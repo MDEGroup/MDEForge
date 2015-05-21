@@ -1,0 +1,631 @@
+
+-- ******************************************************************************
+-- Copyright (c) 2009 INRIA. 
+-- All rights reserved. This program and the accompanying materials 
+-- are made available under the terms of the Eclipse Public License v1.0 
+-- which accompanies this distribution, and is available at
+-- http://www.eclipse.org/legal/epl-v10.html
+-- 
+-- Contributors: 
+-- 	INRIA - Initial implementation
+--  
+-- ******************************************************************************
+
+--@author Guillaume Doux (Guillaume . Doux <at> inria . fr)
+
+module BPMN2BPEL; -- Module Template
+create OUT : BPEL from IN : BPMN;
+
+
+
+helper def: getDocumentRoot : BPMN!DocumentRoot =
+	BPMN!DocumentRoot.allInstancesFrom('IN')->first();
+
+helper def: getArcs : Sequence(BPMN!Arc) =
+	BPMN!Arc.allInstancesFrom('IN');
+
+helper def: getNodes : Sequence(BPMN!Node) =
+	BPMN!Node.allInstancesFrom('IN');
+
+helper def: getNodeMap : Map(String, BPMN!Node) =
+	thisModule.getNodes->iterate(c; acc : Map(String, BPMN!Node) = Map{} |
+		acc->including(c.id, c));
+
+helper def: getNode(id : String) : BPMN!Node = 
+	thisModule.getNodeMap.get(id);
+
+helper def: getNodeNumberMap : Map(BPMN!Node, Integer) =
+	thisModule.getNodes->iterate(e;
+		acc : TupleType(map:Map(BPMN!Node, Integer),index:Integer) =
+			Tuple {map = Map {}, index = 1} |
+			Tuple {
+				map = acc.map->including(e, acc.index),
+				index = acc.index + 1
+			}
+		).map;
+
+helper context BPMN!Node def: number : Integer = 
+	thisModule.getNodeNumberMap.get(self);
+
+helper context BPMN!Arc def: getTarget : BPMN!Node =
+	thisModule.getNode(self.target);
+
+
+--return the arcs following directly the Node
+helper context BPMN!Node def: getFollowingsArcs: Sequence(BPMN!Arcs) =
+	thisModule.getArcs->select(c | c.source=self.id);
+
+--return true if the node is the first of a Sequence
+
+helper context BPMN!Node def: isFirstFromSequence : Boolean =
+	if self.type = #StartEvent then true
+	else
+		if (self.getFollowingsArcs.size()=1)
+			then let next : BPMN!Node = self.getFollowingsArcs->first().getTarget
+				in if next.type=#Task
+					then let precedings : Sequence(BPMN!Arcs) = thisModule.getArcs->select(c | c.target=self.id)
+						in if precedings.size()=1
+							then not ((thisModule.getNode(precedings->first().source).type=#StartEvent) or(thisModule.getNode(precedings->first().source).type=#Task))
+							else true
+						endif
+					else false
+					endif
+			else false
+		endif
+	endif;
+
+helper context BPMN!Node def: isFirstInFlow : Boolean =
+	let precedings : Sequence(BPMN!Arcs) = thisModule.getArcs->select(c | c.target=self.id)
+	in if (self.getFollowingsArcs.size()=1) 
+		then let next : BPMN!Node = self.getFollowingsArcs->first().getTarget
+			in if precedings.size()=1
+				then ((thisModule.getNode(precedings->first().source).type=#ANDSplit) and (not (next.type=#ANDJoin)))
+				else false
+			endif
+		else false
+	endif;
+
+helper context BPMN!Node def: isFirstInSwitch : Boolean =
+	let precedings : Sequence(BPMN!Arcs) = thisModule.getArcs->select(c | c.target=self.id)
+	in if (self.getFollowingsArcs.size()=1) 
+		then let next : BPMN!Node = self.getFollowingsArcs->first().getTarget
+			in if precedings.size()=1
+				then ((thisModule.getNode(precedings->first().source).type=#XORSplit) and (not (next.type=#XORJoin)))
+				else false
+			endif
+		else false
+	endif;
+
+helper context BPMN!Node def : getNext : BPMN!Node =
+	self.getFollowingsArcs->first().getTarget;
+
+helper context BPMN!Node def : getNexts : Sequence(BPMN!Node) =
+	self.getFollowingsArcs->collect(c | thisModule.getNode(c.target));
+
+helper context BPMN!Node def : nodeInSeq(current : Sequence(BPMN!Node)) : Sequence(BPMN!Node) =
+	if self.type=#EndEvent then current else
+		self.getNexts->collect(c | if current->includes(c) then current else
+	if c.type=#EBXORSplit
+		then if (current->select(c | c.type=#EBXORJoin)->size()-1) = current->select(c | c.type=#EBXORSplit)->size()
+				then Sequence{self, c.nodeInSeq(current->append(self))}->flatten()
+				else current
+			endif
+		else if c.type=#XORSplit
+				then Sequence{self, c.nodeInSeq(current->append(self))}->flatten()
+				else if c.type=#ANDJoin
+					then if (current->select(c | c.type=#ANDSplit)->size()-1) = current->select(c | c.type=#ANDJoin)->size()
+							then Sequence{self, c.nodeInSeq(current->append(self))}->flatten()
+							else current
+						endif
+					else Sequence{self, c.nodeInSeq(current->append(self))}->flatten()
+				endif
+			endif
+	endif endif)->flatten() endif;
+
+
+
+rule DocumentRoot2Process {
+	from
+		s	:	BPMN!DocumentRoot
+	to
+		t	:	BPEL!Process(
+			targetNamespace <- 'http://sample.org/'+s.bpmn->first().process.id.toString()+'.bpmn',
+			name <- s.bpmn->first().process.id.toString()+'.bpmn',
+			variables <- s.bpmn->first().process.code,
+			activity <- s.bpmn->first().process.nodes.node->select(c | c.type=#StartEvent)->first()
+		),
+		plink	:	BPEL!PartnerLink( --need to be created here to allow sharing
+			name <- 'local'	
+		),
+		ptyp	:	BPEL!PortType(
+			qName <- 'localPT'	
+		)
+}
+
+rule Code2Variable {
+	from
+		s	:	BPMN!Code
+	to
+		t	:	BPEL!Variables(
+			children <- s.variables
+		)
+}
+
+rule Variable2Variable {
+	from
+		s	:	BPMN!Variable
+	to
+		t	:	BPEL!Variable(
+			name <- s.name	
+		)
+}
+
+
+rule StartEvent2Receive {
+	from
+		s	:	BPMN!Node	(if (not s.type.oclIsUndefined())
+								then s.type=#StartEvent
+								else false
+							 endif)
+	to
+		seq	:	BPEL!"Sequence"(
+			name <- 'sequenceComponent_'+s.number.toString(),
+			activities <- Sequence{rec, s.nodeInSeq(Sequence{})->asOrderedSet()->excluding(s)}->flatten()
+		),
+		rec :	BPEL!Receive(
+			createInstance <- true,
+			name <- 'ProcessInstanciation',
+			partnerLink <- plink,
+			portType <- thisModule.resolveTemp(thisModule.getDocumentRoot, 'ptyp'),
+			operation <- op,
+			variable <- var
+		),
+		plink	:	BPEL!PartnerLink(
+			name <- 'client'	
+		),
+		op	:	BPEL!Operation(
+			name <- 'localPT'
+		),
+		var	:	BPEL!Variable(
+			name <- 'client_data'
+		)
+}
+
+
+rule Task2SequenceInvoke {
+	from
+		s	:	BPMN!Node	(if s.type.oclIsUndefined()
+								then true
+								else s.type=#Task
+							endif and s.isFirstFromSequence and not (s.isFirstInFlow or s.isFirstInSwitch)  )
+	to
+		seq	:	BPEL!"Sequence"(
+			name <- 'sequenceComponent_'+s.number.toString(),
+			activities <- Sequence{thisModule.Task2invokeLazy(s), s.nodeInSeq(Sequence{})->excluding(s)}->asOrderedSet()->flatten()
+		)
+}
+
+rule Task2Invoke {
+	from
+		s	:	BPMN!Node	(if s.type.oclIsUndefined()
+								then true
+								else s.type=#Task
+							endif and ((not s.isFirstFromSequence) or s.isFirstInFlow or s.isFirstInSwitch))
+	to
+		t	:	BPEL!Invoke(
+			name <- s.name,
+			partnerLink <- thisModule.resolveTemp(thisModule.getDocumentRoot, 'plink'),
+			portType <- thisModule.resolveTemp(thisModule.getDocumentRoot, 'ptyp'),
+			operation <- op,
+			inputVariable <- iv,
+			outputVariable <- ov
+		),
+		op	:	BPEL!Operation(
+			name <- s.name
+		),
+		iv	:	BPEL!Variable(
+			name <- s.name+'_data_in'
+		),
+		ov	:	BPEL!Variable(
+			name <- s.name+'_data_out'
+		)
+}
+
+lazy rule Task2invokeLazy {
+	from
+		s	:	BPMN!Node	(s.type='#Task')
+	to
+		t	:	BPEL!Invoke(
+			name <- s.name,
+			partnerLink <- thisModule.resolveTemp(thisModule.getDocumentRoot, 'plink'),
+			portType <- thisModule.resolveTemp(thisModule.getDocumentRoot, 'ptyp'),
+			operation <- op,
+			inputVariable <- iv,
+			outputVariable <- ov
+		),
+		op	:	BPEL!Operation(
+			name <- s.name
+		),
+		iv	:	BPEL!Variable(
+			name <- s.name+'_data_in'
+		),
+		ov	:	BPEL!Variable(
+			name <- s.name+'_data_out'
+		)
+}
+
+--helpers used to compute the while operations
+
+helper context BPMN!Node def: getXORJoin : BPMN!Node =	
+	thisModule.getArcs->select(c | c.source = self.id)
+		->select(c | not thisModule.getNode(c.target).type.oclIsUndefined())
+			->select(c | thisModule.getNode(c.target).type=#XORJoin)
+				->collect(c | thisModule.getNode(c.target))->first();
+	
+
+helper context BPMN!Node def: existArc2XorJoin : Boolean =
+	thisModule.getArcs->select(c | c.source = self.id)->
+		collect(c | if (not thisModule.getNode(c.target).oclIsUndefined())
+			then (thisModule.getNode(c.target).type=#XORJoin)
+			else false
+		endif)->includes(true);
+
+helper context BPMN!Node def: existArcFromXorJoin : Boolean =
+	thisModule.getArcs->select(c | c.target = self.id)->
+		collect(c | if (not thisModule.getNode(c.source).oclIsUndefined())
+			then (thisModule.getNode(c.source).type=#XORJoin)
+			else false
+		endif)->includes(true);
+
+helper context BPMN!Node def: getNodesBeforeSplitDoWhile(node : BPMN!Node) : Sequence(BPMN!Node) =
+	let nodeSource : BPMN!Node =
+		thisModule.getArcs->select(c | c.target = self.id)->collect(c | thisModule.getNode(c.source))->first()
+	in
+		if ((nodeSource=node) or (nodeSource.oclIsUndefined()))
+			then Sequence{}
+			else Sequence{nodeSource, nodeSource.getNodesBeforeSplitDoWhile(node)}->flatten()
+		endif;
+
+
+
+helper context BPMN!Node def: getArcBetweenXOR : BPMN!Arc =
+	thisModule.getArcs->select(c | c.source=self.id)->select(c | c.target=self.getXORJoin.id)->first();
+
+helper context BPMN!Node def: getArcAfterXOR : BPMN!Arc =
+	thisModule.getArcs->select(c | (c.source=self.id) and (c.target=self.getNodeInWhile(self.getXJW).id))->first();
+
+helper context BPMN!Node def: getXJW : BPMN!Node =
+	thisModule.getArcs->select(c | c.target=self.id)
+		->select(c | thisModule.getNode(c.source).type=#XORJoin)
+				->collect(c | thisModule.getNode(c.source))->first();
+
+helper context BPMN!Node def: getNodeInWhile(node : BPMN!Node) : BPMN!Node =
+	thisModule.getArcs->select(c | c.source=self.id)
+		->collect(c | thisModule.getNode(c.target))->asSet()
+		->intersection(thisModule.getArcs->select(c | c.target=node.id)
+			->collect(c | thisModule.getNode(c.source))->asSet())->asSequence()->first();
+
+helper context BPMN!Node def: existArc2XorSplit : Boolean =
+	thisModule.getArcs->select(c | c.source = self.id)->
+		collect(c | if (not thisModule.getNode(c.target).oclIsUndefined())
+			then (thisModule.getNode(c.target).type=#XORSplit)
+			else false
+		endif)->includes(true);
+
+helper context BPMN!Node def: existArcFromXorSplit : Boolean =
+	thisModule.getArcs->select(c | c.target = self.id)->
+		collect(c | if (not thisModule.getNode(c.source).oclIsUndefined())
+			then (thisModule.getNode(c.source).type=#XORSplit)
+			else false
+		endif)->includes(true);
+
+helper context BPMN!Node def: inWhile : Boolean = 
+	(((if (not self.type.oclIsUndefined())
+		then self.type=#XORSplit
+		else false
+	endif) and (self.existArc2XorJoin or self.existArcFromXorJoin))
+	or
+	((if (not self.type.oclIsUndefined())
+		then self.type=#XORJoin
+		else false
+	endif) and (self.existArc2XorSplit or self.existArcFromXorSplit)
+	));
+
+--end helpers
+
+rule XORSplit2doWhile {
+	from
+		s	:	BPMN!Node	((if (not s.type.oclIsUndefined())
+								then s.type=#XORSplit
+								else false
+							 endif) and
+							 (s.existArc2XorJoin)
+							 and (s.getNodesBeforeSplitDoWhile(s.getXORJoin)->size()=1)
+							 )
+	to
+		t	:	BPEL!"Sequence"(
+			activities <- Sequence{thisModule.Task2invokeLazy(s.getNodesBeforeSplitDoWhile(s.getXORJoin)->first()), 
+				t2}->flatten()		
+		),
+		t2	:	BPEL!While(
+			activity <- s.getNodesBeforeSplitDoWhile(s.getXORJoin)->first(),
+			condition <- cond
+		),
+		cond :	BPEL!Condition(
+			value <- s.getArcBetweenXOR.guard	
+		)
+}
+
+
+rule XORSplit2While {
+	from
+		s	:	BPMN!Node	((if (not s.type.oclIsUndefined())
+								then s.type=#XORSplit
+								else false
+							 endif) and s.existArcFromXorJoin )
+	to
+		t	:	BPEL!While(
+			condition <- cond,
+			activity <- s.getNodeInWhile(s.getXJW)
+		),
+		cond :	BPEL!Condition(
+			value <- s.getArcAfterXOR.guard	
+		)
+}
+
+--helpers for switch
+
+--return the XORJoin wich go with the source Node 
+helper context BPMN!Node def: getEndSwitchBranch(list : Sequence(BPMN!Node)): BPMN!Node =
+	if self.type = #XORJoin then self else
+	let following : BPMN!Node =  if list->includes(self.getFollowingsArcs->first().getTarget)
+									then self.getFollowingsArcs->last().getTarget
+									else self.getFollowingsArcs->first().getTarget
+								endif
+	in
+		if following.type=#XORJoin
+			then following
+			else if following.type=#XORSplit
+					then thisModule.getNode(following.getEndSwitchBranch(Sequence{}).getFollowingsArcs->first().target).getEndSwitchBranch(list->including(following))
+					else following.getEndSwitchBranch(list->including(following))
+				endif
+		endif
+	endif;
+
+--return the nodes contained in the branches
+helper context BPMN!Node def: getNodesInSwitch : Sequence(Sequence(BPMN!Node)) =
+	self.getFollowingsArcs->collect(c | thisModule.getNode(c.target))
+		->iterate(c; acc : Sequence(Sequence(BPMN!Node)) = Sequence{} |
+		acc->including(c.getSwitch(Sequence{self}, c.getEndSwitchBranch(Sequence{}))));
+
+helper context BPMN!Node def: getSwitch(list : Sequence(BMPN!Node), end : BPMN!Node) : Sequence(BPMN!Node) =
+	if (self = end)
+		then list->excluding(end)
+		else list->including(self)->union(self.getFollowingsArcs->collect(c | thisModule.getNode(c.target))
+			->collect(c | c.getSwitch(list->including(c), end))->flatten())
+	endif;
+
+--end switch helpers
+
+rule XORSplit2SwitchOtherwise {
+	from
+		s	:	BPMN!Node	((s.type=#XORSplit) and
+							 (not s.existArcFromXorJoin) and
+							 (not s.existArc2XorJoin) and --(not s.toPseudoStart) and
+							 (not s.getFollowingsArcs->select(c | c.guard.oclIsUndefined())->isEmpty()))
+	to
+		t	:	BPEL!Switch (
+			cases <- s.getFollowingsArcs->select(c | not c.guard.oclIsUndefined())->collect(c | thisModule.createCase(c)),
+			otherwise <- s.getFollowingsArcs->select(c | c.guard.oclIsUndefined())->collect(c | thisModule.createOtherwise(c))--->first() --why could we have many otherwise in a switch like in mediumStructured.bpel. removing the ->first() if usefull
+		)
+}
+
+rule XORSplit2Switch {
+	from
+		s	:	BPMN!Node	((s.type=#XORSplit) and
+							 (not s.existArcFromXorJoin) and
+							 (not s.existArc2XorJoin) and --(not s.toPseudoStart) and
+							 (s.getFollowingsArcs->select(c | c.guard.oclIsUndefined())->isEmpty()))
+	to
+		t	:	BPEL!Switch (
+			cases <- s.getFollowingsArcs->select(c | not c.guard.oclIsUndefined())->collect(c | thisModule.createCase(c))
+		)
+}
+
+lazy rule createCase {
+	from
+		s	:	BPMN!Arc
+	to
+		t	: BPEL!Case(
+			condition <- cond,
+			activity <-thisModule.getNode(s.target).getNodesInSwitch->iterate(c; acc : Sequence(OclAny)= Sequence{}|
+				acc->including(
+					if (c->asSet()->size()=1) then c->first() else thisModule.createSequence(c)endif
+					))->first()
+		),
+		cond :	BPEL!Condition(
+			value <- s.guard	
+		)
+}
+
+lazy rule createOtherwise {
+	from
+		s	:	BPMN!Arc
+	to
+		t	: BPEL!Otherwise(
+			activity <- thisModule.getNode(s.target).getNodesInSwitch->iterate(c; acc : Sequence(OclAny)= Sequence{}|
+				acc->including(
+					if (c->asSet()->size()=1) then c->first() else thisModule.createSequence(c)endif
+					)
+					)->first()
+		)
+}
+
+--helpers for flows
+
+
+--return the ANDJoin wich go with the source Node 
+helper context BPMN!Node def: getEndFlowBranch(list : Sequence(BPMN!Node)): BPMN!Node =
+	if self.type = #ANDJoin then self else
+	let following : BPMN!Node =  if list->includes(self.getFollowingsArcs->first().getTarget)
+									then self.getFollowingsArcs->last().getTarget
+									else self.getFollowingsArcs->first().getTarget
+								endif
+	in
+		if following.type=#ANDJoin
+			then following
+			else if following.type=#ANDSplit
+					then thisModule.getNode(following.getEndFlowBranch(Sequence{}).getFollowingsArcs->first().target).getEndFlowBranch(list->including(following))
+					else following.getEndFlowBranch(list->including(following))
+				endif
+		endif 
+	endif;
+
+--return the nodes contained in the branches
+helper context BPMN!Node def: getNodesInBranch : Sequence(Sequence(BPMN!Node)) =
+	self.getFollowingsArcs->collect(c | thisModule.getNode(c.target))
+		->iterate(c; acc : Sequence(Sequence(BPMN!Node)) = Sequence{} |
+		acc->including(c.getBranch(Sequence{}, c.getEndFlowBranch(Sequence{}))));
+
+helper context BPMN!Node def: getBranch(list : Sequence(BMPN!Node), end : BPMN!Node) : Sequence(BPMN!Node) =
+	if (self = end)
+		then list->excluding(end)
+		else list->including(self)->union(self.getFollowingsArcs->collect(c | thisModule.getNode(c.target))
+			->collect(c | c.getBranch(list->including(c), end))->flatten())
+	endif;
+		
+
+--end helpers
+
+
+
+rule ANDSplit2Flows {--simple one
+	from
+		s	:	BPMN!Node	(s.type=#ANDSplit)
+	to
+		t	:	BPEL!Flow(
+			name <- 'flowComponent_'+s.number.toString(),
+			activities <-
+			s.getNodesInBranch->iterate(c; acc : Sequence(OclAny)= Sequence{}|
+				acc->including(
+					if (c->asSet()->size()=1) then c->first() else thisModule.createSequence(c) endif
+					)
+			)
+		)
+}
+
+lazy rule createSequence {
+	from
+		s	:	Sequence(BPMN!Node)
+	to
+		t	:	BPEL!"Sequence"(
+			name <- 'sequenceComponent_'+s.first().number.toString(),
+			activities <- s->asOrderedSet()
+		)
+}
+
+rule EBXorSplit2Pick {
+	from
+		s	:	BPMN!Node	(s.type=#EBXORSplit)
+	to
+		t	:	BPEL!Pick(
+			messages <- s.getFollowingArcs->collect(c | thisModule.getNode(c.target))->select(c | (c.type=#MessageEvent) or ((c.type=#Task) and (if c.name.oclIsUndefined() then false else c.name.startsWith('receive') endif))),
+			alarm <- s.getFollowingArcs->collect(c | thisModule.getNode(c.target))->select(c | c.type=#TimerEvent)
+		)
+}
+
+helper context BPMN!Node def: followEBXORSplit : Boolean =
+	let arc : BPMN!Arc = thisModule.getArcs->select(c | c.target=self.id)->first()
+	in if arc.oclIsUndefined() 
+			then false
+			else let src : BPMN!Node = thisModule.getNode(arc.source)
+				in if src.oclIsUndefined() 
+						then false
+						else src.type=#EBXORSplit
+					endif
+		endif;
+
+helper context BPMN!Node def: isFollowedEBXORJoin : Boolean =
+	let arc : BPMN!Arc = thisModule.getArcs->select(c | c.source=self.id)->first()
+	in if arc.oclIsUndefined() 
+			then false
+			else let tg : BPMN!Node = thisModule.getNode(arc.target)
+				in if tg.oclIsUndefined() 
+						then false
+						else tg.type=#EBXORJoin
+					endif
+		endif;	
+	
+rule MessageEvent2OnMessage{
+	from
+		s	:	BPMN!Node	((s.type=#MessageEvent) and 
+								s.followEBXORSplit and
+								(s.isFollowedEBXORJoin))
+	to
+		t	:	BPEL!OnMessage(
+			name <- s.name.toString(), --added to the metamodel
+			activity <- t2
+		),
+		t2	:	BPEL!Empty()
+}
+
+rule TimerEvent2OnAlarm{
+	from
+		s	:	BPMN!Node	((s.type=#TimerEvent) and 
+								s.followEBXORSplit and
+								(s.isFollowedEBXORJoin))
+	to
+		t	:	BPEL!OnAlarm(
+			name <- s.name.toString(), --added to the metamodel
+			activity <- t2
+		),
+		t2	:	BPEL!Empty()
+}
+
+rule MessageEvent2OnMessage{
+	from
+		s	:	BPMN!Node	((s.type=#MessageEvent) and 
+								s.followEBXORSplit and
+								(not s.isFollowedEBXORJoin))
+	to
+		t	:	BPEL!OnMessage(
+			name <- s.name.toString(), --added to the metamodel
+			activity <- thisModule.getNode(s.getFollowingsArcs->first().target)
+		)
+}
+
+rule TimerEvent2OnAlarm{
+	from
+		s	:	BPMN!Node	((s.type=#TimerEvent) and 
+								s.followEBXORSplit and
+								(not s.isFollowedEBXORJoin))
+	to
+		t	:	BPEL!OnAlarm(
+			name <- s.name.toString(), --added to the metamodel
+			activity <- thisModule.getNode(s.getFollowingsArcs->first().target)
+		)
+}
+
+rule MessageEvent2Receive{
+	from
+		s	:	BPMN!Node	((s.type=#MessageEvent) and 
+								(not s.followEBXORSplit))
+	to
+		t	:	BPEL!Receive(
+			name <- s.name.toString(),
+			variable <- var
+		),
+		var	:	BPEL!Variable(
+			name <- s.name.toString()
+		)
+}
+
+rule TimerEvent2Wait{
+	from
+		s	:	BPMN!Node	((s.type=#TimerEvent) and 
+								(not s.followEBXORSplit))
+	to
+		t	:	BPEL!Wait(
+			name <- s.name.toString()
+		)
+}

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+  <ecore:EPackage name="PrimitiveTypes" nsURI="PrimitiveTypes">
+    <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="java.lang.Boolean"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.lang.Integer"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  </ecore:EPackage>
+  <ecore:EPackage name="mw_traceability" nsURI="mw_traceability">
+    <eClassifiers xsi:type="ecore:EClass" name="TraceModel" eSuperTypes="#/2/WModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="wovenModels" ordered="false"
+          upperBound="-1" eType="#/2/WModelRef" containment="true">
+        <eAnnotations source="wovenModel"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TraceModelRef" eSuperTypes="#/2/WModelRef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElementRef" ordered="false"
+          upperBound="-1" eType="#/1/ElementRef" containment="true" eOpposite="#/1/ElementRef/modelRef"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TraceLink" eSuperTypes="#/2/WLink">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleName" ordered="false"
+          lowerBound="1" eType="#/0/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceElements" upperBound="-1"
+          eType="#/2/WLinkEnd" containment="true">
+        <eAnnotations source="end"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targetElements" upperBound="-1"
+          eType="#/2/WLinkEnd" containment="true">
+        <eAnnotations source="end"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementRef" eSuperTypes="#/2/WElementRef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modelRef" ordered="false"
+          lowerBound="1" eType="#/1/TraceModelRef" eOpposite="#/1/TraceModelRef/ownedElementRef"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TraceLinkEnd" eSuperTypes="#/2/WLinkEnd"/>
+  </ecore:EPackage>
+  <ecore:EPackage name="mwcore" nsURI="mwcore">
+    <eClassifiers xsi:type="ecore:EClass" name="WElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          lowerBound="1" eType="#/0/String"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" ordered="false"
+          lowerBound="1" eType="#/0/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false"
+          lowerBound="1" eType="#/2/WModel" eOpposite="#/2/WModel/ownedElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WModel" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElement" ordered="false"
+          upperBound="-1" eType="#/2/WElement" containment="true" eOpposite="#/2/WElement/model"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="wovenModel" ordered="false"
+          lowerBound="1" upperBound="-1" eType="#/2/WModelRef" derived="true" containment="true">
+        <eAnnotations source="wovenModels"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WRef" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ref" ordered="false"
+          lowerBound="1" eType="#/0/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WModelRef" abstract="true" eSuperTypes="#/2/WRef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElementRef" ordered="false"
+          upperBound="-1" eType="#/2/WElementRef" containment="true" eOpposite="#/2/WElementRef/modelRef"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WElementRef" abstract="true" eSuperTypes="#/2/WRef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modelRef" ordered="false"
+          lowerBound="1" eType="#/2/WModelRef" eOpposite="#/2/WModelRef/ownedElementRef"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WAssociation" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="associationEnd" ordered="false"
+          lowerBound="1" upperBound="-1" eType="#/2/WAssociationEnd" containment="true"
+          eOpposite="#/2/WAssociationEnd/association"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WAssociationEnd" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="association" ordered="false"
+          lowerBound="1" eType="#/2/WAssociation" eOpposite="#/2/WAssociation/associationEnd"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relatedLink" ordered="false"
+          lowerBound="1" eType="#/2/WLink"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WLink" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="child" upperBound="-1"
+          eType="#/2/WLink" containment="true" eOpposite="#/2/WLink/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" ordered="false"
+          lowerBound="1" eType="#/2/WLink" eOpposite="#/2/WLink/child"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="end" ordered="false"
+          lowerBound="1" upperBound="-1" eType="#/2/WLinkEnd" derived="true" containment="true"
+          eOpposite="#/2/WLinkEnd/link">
+        <eAnnotations source="sourceElements,targetElements"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WLinkEnd" abstract="true" eSuperTypes="#/2/WElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="link" ordered="false"
+          lowerBound="1" eType="#/2/WLink" eOpposite="#/2/WLink/end"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="element" ordered="false"
+          lowerBound="1" eType="#/2/WElementRef"/>
+    </eClassifiers>
+  </ecore:EPackage>
+</xmi:XMI>
+

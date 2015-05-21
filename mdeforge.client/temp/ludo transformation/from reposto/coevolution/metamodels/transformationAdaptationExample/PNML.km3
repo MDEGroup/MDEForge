@@ -1,0 +1,89 @@
+-- @name		PNML
+-- @version		1.1
+-- @domains		Petri net, XML
+-- @authors		Pierrick Guyard (pielepsy@gmail.com)
+-- @date		2005/06/15
+-- @description		The Petri Net Markup Language (PNML) is a proposal of an XML-based interchange format for Petri nets. Originally, the PNML was intended to serve as a file format for the Java version of the Petri Net Kernel. PNML is a concept for defining the overall structure of a Petri net file. This metamodel describes simplified PNML (Petri Net Markup Language). PNML is a concept for defining the overall structure of a Petri net file. There are many different types of Petri nets. Thus, there is a generic concept for adjusting net type specific features via a specific Petri Net Type Definition (PNTD).  For implementing a specific PNTD, PNML is enlarged by type specific labels at certain net objects. A label assigns further meaning (besides the Petri net semantics) to a net or its objects. Typically, a label represents a name of a node, the initial marking of a place, the guard of a transition, or the inscription of an arc. The legal labels and the legal combination of labels are defined within a PNTD. This meta-model is based on ptNetb.pntd defined by Michael Weber on June 2003. It's implements the Petri net type for Place/Transition nets and it's based on the definition for simplified PNML.
+-- @see			http://www.informatik.hu-berlin.de/top/pnml/pnml.html
+
+package PNML {
+
+	abstract class LocatedElement {
+		attribute location : String;
+	}
+	
+	abstract class IdedElement extends LocatedElement {
+		attribute id : String;
+	}
+
+-- @begin declaration of types
+	
+	-- @comment URI (URL)
+	class URI extends LocatedElement {
+		attribute value : String;
+	}
+	
+
+-- @end declaration of types
+
+	-- @comment single top element (like in XML document)
+	class PNMLDocument extends LocatedElement {
+		reference xmlns container : URI;
+		reference nets[1-*] container : NetElement oppositeOf document;
+	}
+
+	-- @comment a petri net element
+	class NetElement extends IdedElement {
+		-- @comment typer reference the PNTD associed with the net
+		reference type container : URI;
+		reference document : PNMLDocument oppositeOf nets;
+		reference contents[*] container : NetContent oppositeOf net;
+		reference name[0-1] container : Name oppositeOf net;
+	}
+	
+	-- @comment content of a petri net element
+	abstract class NetContent extends LocatedElement {
+		reference net : NetElement oppositeOf contents;
+		reference name[0-1] container : Name oppositeOf netContent;
+	}
+	
+	-- @comment element used for abstraction (Name, Inscription and InitialMarking)
+	abstract class LabeledElement extends LocatedElement {
+		reference labels[*] container : Label oppositeOf labeledElement;
+	}
+	
+	-- @comment a label
+	class Label extends LocatedElement {
+		attribute text : String;
+		reference labeledElement : LabeledElement oppositeOf labels;		
+	}
+	
+	class Name extends LabeledElement {
+		reference net[0-1] : NetElement oppositeOf name;
+		reference netContent[0-1] : NetContent oppositeOf name;
+	}
+	
+	-- @comment element used for abstraction (Place and Transition)	
+	abstract class NetContentElement extends NetContent,IdedElement {
+	}
+	
+	
+	-- @comment a arc element
+	class Arc extends NetContent,IdedElement {
+		reference source : NetContentElement;
+		reference target : NetContentElement;
+	}	
+
+	-- @comment a place element
+	class Place extends NetContentElement {
+	}
+	
+	-- @comment a transition element
+	class Transition extends NetContentElement {
+	}
+
+}
+
+package PrimitiveTypes {
+	datatype String;
+}

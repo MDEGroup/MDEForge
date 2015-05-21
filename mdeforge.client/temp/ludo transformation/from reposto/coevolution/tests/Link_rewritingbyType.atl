@@ -1,0 +1,290 @@
+-- @atlcompiler atl2006
+
+-- Copyright (c) 2006 INRIA.
+-- All rights reserved. This program and the accompanying materials
+-- are made available under the terms of the Eclipse Public License v1.0
+-- which accompanies this distribution, and is available at
+-- http://www.eclipse.org/legal/epl-v10.html
+--
+-- Contributor : Marcos Didonet Del Fabro
+
+module Link_rewritingbyType; 
+create OUT : AMW from IN: AMW, left : MOF, right : MOF;
+
+
+helper def: amwModel : AMW!MatchModel = OclUndefined;
+
+helper def: listRef : Sequence(AMW!Element) = Sequence{};
+
+---------------------------------------------------------------------------------------------------
+---------------------- generic helpers used for auxiliar tasks-----------------------------------------------------------------------------
+
+helper def : leftPkgs : Sequence(MOF!EPackage) = MOF!EPackage.allInstancesFrom('left');
+
+helper context MOF!EClassifier def : isLeft() : Boolean =
+   thisModule.leftPkgs->exists(e | e = self.ePackage);
+   
+	--MOF!EModelElement.allInstancesFrom('left')->exists(e | e = self);	
+
+helper context MOF!EClassifier def : isRight() : Boolean =
+	not self.isLeft();
+	--MOF!EModelElement.allInstancesFrom('right')->exists(e | e = self);
+
+helper context MOF!EStructuralFeature def : isLeftsf() : Boolean =
+	self.eContainingClass.isLeft();
+
+helper context MOF!EStructuralFeature def : isRightsf() : Boolean =
+	self.eContainingClass.isRight();
+
+helper def : maxSim : Real = 0.0;
+
+helper def : targetRef : AMW!Element = OclUndefined;
+
+
+------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
+
+
+helper def : getMax(current : AMW!Equivalent, list : Sequence(AMW!Equivalent), max : AMW!Equivalent) : AMW!Equivalent =
+	if current.oclIsUndefined() then
+	   max
+	else
+	   thisModule.getMax(list->first(), list->subSequence(2, list->size()),  
+	   	    if max.oclIsUndefined() then
+			   current
+			else			  	
+		   		if current.similarity > max.similarity then
+				    current
+				else
+					max
+				endif	   
+			endif
+	   )		   
+	endif;
+
+rule matchmodel {
+	from
+		mmw: AMW!MatchModel 
+	to
+		model : AMW!MatchModel (
+			name <- mmw.name,
+			leftM <- mmw.leftM,
+			rightM <- mmw.rightM,
+			methods <- mmw.methods->union(Sequence{method})
+		),
+		method : AMW!Method (
+			name <- 'Link rewriting'
+		)
+	do {
+		thisModule.amwModel <- mmw;
+	}
+		
+}
+
+rule method {
+	from
+		mmw : AMW!Method
+	to 
+		method : AMW!Method (
+			name <- mmw.name			
+		)
+}
+
+rule modelref {
+	from
+		mmw : AMW!ModelRef
+	to
+		out : AMW!ModelRef (
+			name <- mmw.name,
+			ref <- mmw.ref
+		)
+}
+
+rule ElementRefs {
+	from
+		mmw : AMW!ElementRef 		
+	to
+		out : AMW!ElementRef (			
+			name <- mmw.name,
+			ref <- mmw.ref,
+			modelRef <- mmw.modelRef			
+		)
+}
+
+helper context MOF!EClassifier def : isLeft() : Boolean =
+   thisModule.leftPkgs->exists(e | e = self.ePackage);
+
+
+helper context MOF!EClassifier def : linksEEqual : Sequence(AMW!ElementEqual) =
+	 AMW!ElementEqual.allInstancesFrom('IN')->select (e | e.left.element.ref = self.__xmiID__);
+
+helper context MOF!EClassifier def : maxEEqual: AMW!ElementEqual = 
+	thisModule.getMax(  self.linksEEqual->first(), self.linksEEqual->subSequence(2, self.linksEEqual->size()), OclUndefined  );
+
+helper context MOF!EClassifier def : targetEEqual: OclAny = 
+	AMW!RightElement.allInstancesFrom('IN')->select(e | e.element.ref = self.maxEEqual.right.element.ref)->first().element;
+	
+
+
+-- gets the super classes , for the moment supports only simple inheritance
+helper context MOF!EClass def: getSuperTypesEqual : MOF!EClass =
+	if self.getSuperType.oclIsUndefined() then
+		OclUndefined
+	else
+		if self.getSuperType.maxEEqual.oclIsUndefined() then
+			OclUndefined
+		else
+			self.getSuperType
+		endif
+	endif;
+	
+	
+
+helper context MOF!EClass def : getSuperType : MOF!EClass =
+	self.eSuperTypes
+			-> select( e | e.oclIsTypeOf(MOF!EClass))
+			-> first()
+	;
+
+
+
+rule classElementRef {
+	from
+		element : MOF!EClass (
+			if element.isLeft() then
+				not element.maxEEqual.oclIsUndefined()
+			else
+				false
+			endif
+		)
+	to
+		left : AMW!LeftElement (
+			name <- element.name,
+			element <- --out
+			AMW!LeftElement.allInstancesFrom('IN')->select(e | e.element.ref = element.__xmiID__)->first().element
+			--AMW!MatchModel.allInstances()->first().leftM.allInstances()->select
+		),
+		right : AMW!RightElement (	
+			element <- element.targetEEqual, --targetEl
+			name <- element.targetEEqual.name --targetEl
+		),
+		wlink : AMW!ElementEqual (			
+	    	left <- left,
+			right <- right,
+			model <-
+					if element.getSuperTypesEqual.oclIsUndefined() then
+						thisModule.amwModel
+					else
+						OclUndefined --.debug('in a parent')
+					endif,
+			parent <- 
+					if not element.getSuperTypesEqual.oclIsUndefined() then
+						thisModule.resolveTemp(element.getSuperTypesEqual,'wlink')
+					else
+						OclUndefined 
+					endif,		
+			
+			similarity <- element.maxEEqual.similarity --link
+	    )
+}
+
+
+helper context MOF!EStructuralFeature def : linksAEqual : Sequence(AMW!AttributeEqual) =
+	 AMW!AttributeEqual.allInstancesFrom('IN')->select (e | e.left.element.ref = self.__xmiID__);
+
+helper context MOF!EStructuralFeature def : maxAEqual: AMW!AttributeEqual = 
+	thisModule.getMax(  self.linksAEqual->first(), self.linksAEqual->subSequence(2, self.linksAEqual->size()), OclUndefined  );
+
+helper context MOF!EStructuralFeature def : targetAEqual: OclAny = 
+	AMW!RightElement.allInstancesFrom('IN')->select(e | e.element.ref = self.maxAEqual.right.element.ref)->first().element;
+
+
+rule AttributeElementRef {
+	from
+		element : MOF!EAttribute (--element.isLeftsf())
+		if element.isLeftsf() then
+				not element.maxAEqual.oclIsUndefined() and not element.eContainingClass.maxEEqual.oclIsUndefined()
+			else
+				false
+			endif
+			)
+	to
+		source : AMW!LeftElement (
+			name <- element.name,
+			element <- 
+			AMW!LeftElement.allInstancesFrom('IN')->select(e | e.element.ref = element.__xmiID__)->first().element
+			--out
+		),
+		target : AMW!RightElement (	
+			element <- element.targetAEqual,
+			name <- element.targetAEqual.name
+		),
+		alink : AMW!AttributeEqual (
+	    	left <- source,
+			right <- target,
+			parent <- thisModule.resolveTemp(element.eContainingClass,'wlink'),
+			similarity <- element.maxAEqual.similarity
+	    )
+}
+
+helper context MOF!EStructuralFeature def : linksREqual : Sequence(AMW!ReferenceEqual) =
+	 AMW!ReferenceEqual.allInstancesFrom('IN')->select (e | e.left.element.ref = self.__xmiID__);
+
+helper context MOF!EStructuralFeature def : maxREqual: AMW!ReferenceEqual = 
+	thisModule.getMax(  self.linksREqual->first(), self.linksREqual->subSequence(2, self.linksREqual->size()), OclUndefined  );
+
+helper context MOF!EStructuralFeature def : targetREqual: OclAny = 
+	AMW!RightElement.allInstancesFrom('IN')->select(e | e.element.ref = self.maxREqual.right.element.ref)->first().element;
+
+rule ReferenceElementRef {
+	from
+		element : MOF!EReference (--element.isLeftsf())
+			if element.isLeftsf() then
+				not element.maxREqual.oclIsUndefined() and not element.eContainingClass.maxEEqual.oclIsUndefined()
+			else
+				false
+			endif)
+	to
+		source : AMW!LeftElement (
+			name <- element.name,
+			element <- AMW!LeftElement.allInstancesFrom('IN')->select(e | e.element.ref = element.__xmiID__)->first().element
+			--out
+		),
+		target : AMW!RightElement (	
+			element <- element.targetREqual,
+			name <- element.targetREqual.name
+		),
+		alink : AMW!ReferenceEqual (			
+	    	left <- source,
+			right <- target,
+			parent <- thisModule.resolveTemp(element.eContainingClass,'wlink'),
+			similarity <- element.maxREqual.similarity
+	    )
+}
+
+endpoint rule NormalizeSimilarity() {
+	using {
+		max : Real = 0;
+		curr : Real = 0;
+		list : Sequence (AMW!Equal) = Sequence{};
+		first : OclAny = OclUndefined;
+	}
+	do {
+		for(e in AMW!Equal.allInstancesFrom('OUT')) {
+			--if (e.model.oclIsUndefined() and e.parent.oclIsUndefined()){
+			--	e.model <- thisModule.amwModel;
+			--}
+		
+			if(e.similarity > max) {
+				max <- e.similarity;
+			}
+		}
+		if(max > 0) {
+			for(e in AMW!Equal.allInstancesFrom('OUT')) {
+				e.similarity <- e.similarity / max;
+			}
+		}
+	}
+}	
+
+

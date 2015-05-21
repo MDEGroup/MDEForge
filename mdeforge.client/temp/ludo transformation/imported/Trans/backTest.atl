@@ -1,0 +1,80 @@
+module MetamodelToDiff; -- Module Template
+create OUT : KM3 from  simpleUML:KM3 ;
+
+
+
+rule Metamodel2Metamodel {
+	from
+		s: KM3!Metamodel
+	
+	to
+		t: KM3!Metamodel(
+			contents <- s.contents
+		)
+}
+ 
+
+rule PackagePrimitive 
+{
+	from
+		s: KM3!Package
+		(
+			s.name = 'PrimitiveTypes'
+		)
+	to
+		t: KM3!Package
+		(
+			name <- s.name,
+			contents <- s.contents,
+			metamodel <-s.metamodel
+		)
+}
+
+rule Package2PackageDiff 
+{
+	from
+		s: KM3!Package
+		(
+			not (s.name='PrimitiveTypes')
+		)
+	to
+		t: KM3!Package(
+			name <- s.name+'_AfterTransfer',
+			contents <- Sequence {conflictBlock,
+				s.contents},
+			metamodel<- s.metamodel
+		),
+		
+		conflictBlock : KM3!Class ( --add Conflict Block
+			name <- 'ConflictBlcok222',
+			isAbstract <- false
+		)
+}
+
+rule Class_DifferenceElement
+{
+	from
+		s: KM3!Class
+		(
+			s.name = 'DifferenceElement'
+		)
+	to
+		t: KM3!Class
+		(
+			name  <- s.name	+'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr'
+		)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

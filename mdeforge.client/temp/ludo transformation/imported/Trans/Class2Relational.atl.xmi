@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-112:2" name="Class2Relational">
+    <libraries location="4:1-4:14" name="strings">
+      <commentsAfter>-- if there is a configuration problem with the library string,</commentsAfter>
+      <commentsAfter>-- delete the two firstToLower() operations and you no longer need the library &quot;strings&quot;</commentsAfter>
+      <commentsAfter>-- the transfomarion will execute </commentsAfter>
+      <commentsAfter>-- inheritance not supported yet</commentsAfter>
+      <commentsAfter>-- issue: choose an object-id Type (Integer, String?).</commentsAfter>
+      <commentsAfter>-- We choose Integer here, assuming this type is defined in the source model.</commentsAfter>
+      <commentsAfter>-- global variable</commentsAfter>
+      <commentsAfter>-- context </commentsAfter>
+    </libraries>
+    <inModels location="2:30-2:40" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:24" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="19:1-20:73">
+      <commentsBefore>-- if there is a configuration problem with the library string,</commentsBefore>
+      <commentsBefore>-- delete the two firstToLower() operations and you no longer need the library &quot;strings&quot;</commentsBefore>
+      <commentsBefore>-- the transfomarion will execute </commentsBefore>
+      <commentsBefore>-- inheritance not supported yet</commentsBefore>
+      <commentsBefore>-- issue: choose an object-id Type (Integer, String?).</commentsBefore>
+      <commentsBefore>-- We choose Integer here, assuming this type is defined in the source model.</commentsBefore>
+      <commentsBefore>-- global variable</commentsBefore>
+      <commentsBefore>-- context </commentsBefore>
+      <definition location="19:8-20:72">
+        <feature xsi:type="ocl:Attribute" location="19:13-20:72" name="objectIdType">
+          <initExpression xsi:type="ocl:CollectionOperationCallExp" location="20:2-20:72" operationName="first">
+            <source xsi:type="ocl:IteratorExp" location="20:2-20:63" name="select">
+              <source xsi:type="ocl:OperationCallExp" location="20:2-20:31" operationName="allInstances">
+                <source xsi:type="ocl:OclModelElement" location="20:2-20:16" name="DataType" model="/4"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="20:44-20:62" operationName="=">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="20:44-20:50" name="name">
+                  <source xsi:type="ocl:VariableExp" location="20:44-20:45" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:StringExp" location="20:53-20:62" stringSymbol="Integer"/>
+              </body>
+              <iterators location="20:40-20:41" varName="e" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@source/@body/@source/@source"/>
+            </source>
+          </initExpression>
+          <type xsi:type="ocl:OclModelElement" location="19:28-19:43" name="Type" model="/3"/>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="22:1-36:2" name="Class2Table">
+      <outPattern location="25:2-35:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="26:3-31:4" varName="out">
+          <type xsi:type="ocl:OclModelElement" location="26:9-26:25" name="Table" model="/6"/>
+          <bindings location="27:4-27:18" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="27:12-27:18" name="name">
+              <source xsi:type="ocl:VariableExp" location="27:12-27:13" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="29:4-29:71" propertyName="col">
+            <commentsBefore>-- Columns are generated from Attributes in another rule not explicitly called here !</commentsBefore>
+            <value xsi:type="ocl:CollectionOperationCallExp" location="29:11-29:71" operationName="union">
+              <source xsi:type="ocl:SequenceExp" location="29:11-29:25">
+                <elements xsi:type="ocl:VariableExp" location="29:21-29:24" referredVariable="/0/@elements.1/@outPattern/@elements.1"/>
+              </source>
+              <arguments xsi:type="ocl:IteratorExp" location="29:33-29:70" name="select">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="29:33-29:39" name="attr">
+                  <source xsi:type="ocl:VariableExp" location="29:33-29:34" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+                </source>
+                <body xsi:type="ocl:OperatorCallExp" location="29:52-29:69" operationName="not">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="29:56-29:69" name="multiValued">
+                    <source xsi:type="ocl:VariableExp" location="29:56-29:57" referredVariable="/0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@arguments.0/@iterators.0"/>
+                  </source>
+                </body>
+                <iterators location="29:48-29:49" varName="e" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@arguments.0/@body/@source/@source"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="30:4-30:20" propertyName="key">
+            <value xsi:type="ocl:SetExp" location="30:11-30:20">
+              <elements xsi:type="ocl:VariableExp" location="30:16-30:19" referredVariable="/0/@elements.1/@outPattern/@elements.1"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="32:3-35:4" varName="key" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@source/@elements.0 /0/@elements.1/@outPattern/@elements.0/@bindings.2/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="32:9-32:26" name="Column" model="/7"/>
+          <bindings location="33:4-33:22" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="33:12-33:22" stringSymbol="objectId"/>
+          </bindings>
+          <bindings location="34:4-34:35" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="34:12-34:35" name="objectIdType">
+              <source xsi:type="ocl:VariableExp" location="34:12-34:22" referredVariable="/8"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="23:2-24:18">
+        <elements xsi:type="atl:SimpleInPatternElement" location="24:3-24:18" varName="c" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.1/@outPattern/@elements.0/@bindings.1/@value/@arguments.0/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="24:7-24:18" name="Class" model="/5"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="38:1-45:2" name="DataType2Type">
+      <outPattern location="41:2-44:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="42:3-44:4" varName="out">
+          <type xsi:type="ocl:OclModelElement" location="42:9-42:24" name="Type" model="/10"/>
+          <bindings location="43:4-43:19" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="43:12-43:19" name="name">
+              <source xsi:type="ocl:VariableExp" location="43:12-43:14" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="39:2-40:22">
+        <elements xsi:type="atl:SimpleInPatternElement" location="40:3-40:22" varName="dt" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="40:8-40:22" name="DataType" model="/9"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="47:1-60:2" name="DataTypeAttribute2Column">
+      <outPattern location="52:2-59:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="53:3-59:4" varName="out">
+          <type xsi:type="ocl:OclModelElement" location="53:9-53:26" name="Column" model="/13"/>
+          <bindings location="54:4-54:18" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="54:12-54:18" name="name">
+              <source xsi:type="ocl:VariableExp" location="54:12-54:13" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="55:4-55:18" propertyName="type">
+            <commentsAfter>-- explicit use of implicit tracking links (first expected syntax, then present actual syntax)</commentsAfter>
+            <commentsAfter>--			owner &lt;- [Class2Type.key]a.owner</commentsAfter>
+            <commentsAfter>--			owner &lt;- thisModule.resolveTemp(a.owner, 'key')</commentsAfter>
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="55:12-55:18" name="type">
+              <commentsAfter>-- explicit use of implicit tracking links (first expected syntax, then present actual syntax)</commentsAfter>
+              <commentsAfter>--			owner &lt;- [Class2Type.key]a.owner</commentsAfter>
+              <commentsAfter>--			owner &lt;- thisModule.resolveTemp(a.owner, 'key')</commentsAfter>
+              <source xsi:type="ocl:VariableExp" location="55:12-55:13" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="48:2-51:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="49:3-49:22" varName="a" variableExp="/0/@elements.3/@inPattern/@filter/@source/@source/@source /0/@elements.3/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.3/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.3/@outPattern/@elements.0/@bindings.1/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="49:7-49:22" name="Attribute" model="/11"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="50:4-50:60" operationName="and">
+          <source xsi:type="ocl:OperationCallExp" location="50:4-50:38" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="50:4-50:10" name="type">
+              <source xsi:type="ocl:VariableExp" location="50:4-50:5" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="50:23-50:37" name="DataType" model="/12"/>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="50:43-50:60" operationName="not">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="50:47-50:60" name="multiValued">
+              <source xsi:type="ocl:VariableExp" location="50:47-50:48" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="62:1-80:2" name="MultiValuedDataTypeAttribute2Column">
+      <outPattern location="67:2-79:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="68:3-71:4" varName="out">
+          <type xsi:type="ocl:OclModelElement" location="68:9-68:25" name="Table" model="/16"/>
+          <bindings location="69:4-69:39" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="69:12-69:39" operationName="+">
+              <source xsi:type="ocl:OperatorCallExp" location="69:12-69:30" operationName="+">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="69:12-69:24" name="name">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="69:12-69:19" name="owner">
+                    <source xsi:type="ocl:VariableExp" location="69:12-69:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+                <arguments xsi:type="ocl:StringExp" location="69:27-69:30" stringSymbol="_"/>
+              </source>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="69:33-69:39" name="name">
+                <source xsi:type="ocl:VariableExp" location="69:33-69:34" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="70:4-70:31" propertyName="col">
+            <value xsi:type="ocl:SequenceExp" location="70:11-70:31">
+              <elements xsi:type="ocl:VariableExp" location="70:21-70:23" referredVariable="/0/@elements.4/@outPattern/@elements.1"/>
+              <elements xsi:type="ocl:VariableExp" location="70:25-70:30" referredVariable="/0/@elements.4/@outPattern/@elements.2"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="72:3-75:4" varName="id" variableExp="/0/@elements.4/@outPattern/@elements.0/@bindings.1/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="72:8-72:25" name="Column" model="/17"/>
+          <bindings location="73:4-73:46" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="73:12-73:46" operationName="+">
+              <source xsi:type="ocl:OperationCallExp" location="73:12-73:39" operationName="firstToLower">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="73:12-73:24" name="name">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="73:12-73:19" name="owner">
+                    <source xsi:type="ocl:VariableExp" location="73:12-73:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+              <arguments xsi:type="ocl:StringExp" location="73:42-73:46" stringSymbol="Id"/>
+            </value>
+          </bindings>
+          <bindings location="74:4-74:35" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="74:12-74:35" name="objectIdType">
+              <source xsi:type="ocl:VariableExp" location="74:12-74:22" referredVariable="/18"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="76:3-79:4" varName="value" variableExp="/0/@elements.4/@outPattern/@elements.0/@bindings.1/@value/@elements.1">
+          <type xsi:type="ocl:OclModelElement" location="76:11-76:28" name="Column" model="/19"/>
+          <bindings location="77:4-77:18" propertyName="name">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="77:12-77:18" name="name">
+              <source xsi:type="ocl:VariableExp" location="77:12-77:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="78:4-78:18" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="78:12-78:18" name="type">
+              <source xsi:type="ocl:VariableExp" location="78:12-78:13" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="63:2-66:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="64:3-64:22" varName="a" variableExp="/0/@elements.4/@inPattern/@filter/@source/@source/@source /0/@elements.4/@inPattern/@filter/@arguments.0/@source /0/@elements.4/@outPattern/@elements.0/@bindings.0/@value/@source/@source/@source/@source /0/@elements.4/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source /0/@elements.4/@outPattern/@elements.1/@bindings.0/@value/@source/@source/@source/@source /0/@elements.4/@outPattern/@elements.2/@bindings.0/@value/@source /0/@elements.4/@outPattern/@elements.2/@bindings.1/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="64:7-64:22" name="Attribute" model="/14"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="65:4-65:56" operationName="and">
+          <source xsi:type="ocl:OperationCallExp" location="65:4-65:38" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="65:4-65:10" name="type">
+              <source xsi:type="ocl:VariableExp" location="65:4-65:5" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="65:23-65:37" name="DataType" model="/15"/>
+          </source>
+          <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="65:43-65:56" name="multiValued">
+            <source xsi:type="ocl:VariableExp" location="65:43-65:44" referredVariable="/0/@elements.4/@inPattern/@elements.0"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="82:1-92:2" name="ClassAttribute2Column">
+      <outPattern location="87:2-91:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="88:3-91:4" varName="foreignKey">
+          <type xsi:type="ocl:OclModelElement" location="88:16-88:33" name="Column" model="/22"/>
+          <bindings location="89:4-89:25" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="89:12-89:25" operationName="+">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="89:12-89:18" name="name">
+                <source xsi:type="ocl:VariableExp" location="89:12-89:13" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+              </source>
+              <arguments xsi:type="ocl:StringExp" location="89:21-89:25" stringSymbol="Id"/>
+            </value>
+          </bindings>
+          <bindings location="90:4-90:35" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="90:12-90:35" name="objectIdType">
+              <source xsi:type="ocl:VariableExp" location="90:12-90:22" referredVariable="/23"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="83:2-86:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="84:3-84:22" varName="a" variableExp="/0/@elements.5/@inPattern/@filter/@source/@source/@source /0/@elements.5/@inPattern/@filter/@arguments.0/@source/@source /0/@elements.5/@outPattern/@elements.0/@bindings.0/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="84:7-84:22" name="Attribute" model="/20"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="85:4-85:57" operationName="and">
+          <source xsi:type="ocl:OperationCallExp" location="85:4-85:35" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="85:4-85:10" name="type">
+              <source xsi:type="ocl:VariableExp" location="85:4-85:5" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="85:23-85:34" name="Class" model="/21"/>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="85:40-85:57" operationName="not">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="85:44-85:57" name="multiValued">
+              <source xsi:type="ocl:VariableExp" location="85:44-85:45" referredVariable="/0/@elements.5/@inPattern/@elements.0"/>
+            </source>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="94:1-112:2" name="MultiValuedClassAttribute2Column">
+      <outPattern location="99:2-111:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="100:3-103:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="100:7-100:23" name="Table" model="/26"/>
+          <bindings location="101:4-101:39" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="101:12-101:39" operationName="+">
+              <source xsi:type="ocl:OperatorCallExp" location="101:12-101:30" operationName="+">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="101:12-101:24" name="name">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="101:12-101:19" name="owner">
+                    <source xsi:type="ocl:VariableExp" location="101:12-101:13" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+                <arguments xsi:type="ocl:StringExp" location="101:27-101:30" stringSymbol="_"/>
+              </source>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="101:33-101:39" name="name">
+                <source xsi:type="ocl:VariableExp" location="101:33-101:34" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="102:4-102:36" propertyName="col">
+            <value xsi:type="ocl:SequenceExp" location="102:11-102:36">
+              <elements xsi:type="ocl:VariableExp" location="102:21-102:23" referredVariable="/0/@elements.6/@outPattern/@elements.1"/>
+              <elements xsi:type="ocl:VariableExp" location="102:25-102:35" referredVariable="/0/@elements.6/@outPattern/@elements.2"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="104:3-107:4" varName="id" variableExp="/0/@elements.6/@outPattern/@elements.0/@bindings.1/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="104:8-104:25" name="Column" model="/27"/>
+          <bindings location="105:4-105:46" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="105:12-105:46" operationName="+">
+              <source xsi:type="ocl:OperationCallExp" location="105:12-105:39" operationName="firstToLower">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="105:12-105:24" name="name">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="105:12-105:19" name="owner">
+                    <source xsi:type="ocl:VariableExp" location="105:12-105:13" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+                  </source>
+                </source>
+              </source>
+              <arguments xsi:type="ocl:StringExp" location="105:42-105:46" stringSymbol="Id"/>
+            </value>
+          </bindings>
+          <bindings location="106:4-106:35" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="106:12-106:35" name="objectIdType">
+              <source xsi:type="ocl:VariableExp" location="106:12-106:22" referredVariable="/28"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="108:3-111:4" varName="foreignKey" variableExp="/0/@elements.6/@outPattern/@elements.0/@bindings.1/@value/@elements.1">
+          <type xsi:type="ocl:OclModelElement" location="108:16-108:33" name="Column" model="/29"/>
+          <bindings location="109:4-109:25" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="109:12-109:25" operationName="+">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="109:12-109:18" name="name">
+                <source xsi:type="ocl:VariableExp" location="109:12-109:13" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+              </source>
+              <arguments xsi:type="ocl:StringExp" location="109:21-109:25" stringSymbol="Id"/>
+            </value>
+          </bindings>
+          <bindings location="110:4-110:35" propertyName="type">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="110:12-110:35" name="objectIdType">
+              <source xsi:type="ocl:VariableExp" location="110:12-110:22" referredVariable="/30"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="95:2-98:4">
+        <elements xsi:type="atl:SimpleInPatternElement" location="96:3-96:22" varName="a" variableExp="/0/@elements.6/@inPattern/@filter/@source/@source/@source /0/@elements.6/@inPattern/@filter/@arguments.0/@source /0/@elements.6/@outPattern/@elements.0/@bindings.0/@value/@source/@source/@source/@source /0/@elements.6/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source /0/@elements.6/@outPattern/@elements.1/@bindings.0/@value/@source/@source/@source/@source /0/@elements.6/@outPattern/@elements.2/@bindings.0/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="96:7-96:22" name="Attribute" model="/24"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="97:4-97:53" operationName="and">
+          <source xsi:type="ocl:OperationCallExp" location="97:4-97:35" operationName="oclIsKindOf">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="97:4-97:10" name="type">
+              <source xsi:type="ocl:VariableExp" location="97:4-97:5" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:OclModelElement" location="97:23-97:34" name="Class" model="/25"/>
+          </source>
+          <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="97:40-97:53" name="multiValued">
+            <source xsi:type="ocl:VariableExp" location="97:40-97:41" referredVariable="/0/@elements.6/@inPattern/@elements.0"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:24" name="Relational" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:35-2:40" name="Class" model="/0/@inModels.0"/>
+  <ocl:OclModel location="19:28-19:38" name="Relational" elements="/0/@elements.0/@definition/@feature/@type"/>
+  <ocl:OclModel location="20:2-20:7" name="Class" elements="/0/@elements.0/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="24:7-24:12" name="Class" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="26:9-26:19" name="Relational" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="32:9-32:19" name="Relational" elements="/0/@elements.1/@outPattern/@elements.1/@type"/>
+  <ocl:VariableDeclaration location="34:12-34:22" varName="thisModule" variableExp="/0/@elements.1/@outPattern/@elements.1/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="40:8-40:13" name="Class" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="42:9-42:19" name="Relational" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="49:7-49:12" name="Class" elements="/0/@elements.3/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="50:23-50:28" name="Class" elements="/0/@elements.3/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="53:9-53:19" name="Relational" elements="/0/@elements.3/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="64:7-64:12" name="Class" elements="/0/@elements.4/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="65:23-65:28" name="Class" elements="/0/@elements.4/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="68:9-68:19" name="Relational" elements="/0/@elements.4/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="72:8-72:18" name="Relational" elements="/0/@elements.4/@outPattern/@elements.1/@type"/>
+  <ocl:VariableDeclaration location="74:12-74:22" varName="thisModule" variableExp="/0/@elements.4/@outPattern/@elements.1/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="76:11-76:21" name="Relational" elements="/0/@elements.4/@outPattern/@elements.2/@type"/>
+  <ocl:OclModel location="84:7-84:12" name="Class" elements="/0/@elements.5/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="85:23-85:28" name="Class" elements="/0/@elements.5/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="88:16-88:26" name="Relational" elements="/0/@elements.5/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="90:12-90:22" varName="thisModule" variableExp="/0/@elements.5/@outPattern/@elements.0/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="96:7-96:12" name="Class" elements="/0/@elements.6/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="97:23-97:28" name="Class" elements="/0/@elements.6/@inPattern/@filter/@source/@arguments.0"/>
+  <ocl:OclModel location="100:7-100:17" name="Relational" elements="/0/@elements.6/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="104:8-104:18" name="Relational" elements="/0/@elements.6/@outPattern/@elements.1/@type"/>
+  <ocl:VariableDeclaration location="106:12-106:22" varName="thisModule" variableExp="/0/@elements.6/@outPattern/@elements.1/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="108:16-108:26" name="Relational" elements="/0/@elements.6/@outPattern/@elements.2/@type"/>
+  <ocl:VariableDeclaration location="110:12-110:22" varName="thisModule" variableExp="/0/@elements.6/@outPattern/@elements.2/@bindings.1/@value/@source"/>
+</xmi:XMI>

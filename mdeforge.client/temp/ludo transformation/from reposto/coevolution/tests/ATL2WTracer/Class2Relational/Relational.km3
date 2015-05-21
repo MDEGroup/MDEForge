@@ -1,0 +1,28 @@
+package Relational {
+
+	abstract class Named {
+		attribute name : String;
+	}
+
+	class Table extends Named {
+		reference col[*] ordered container : Column oppositeOf owner;
+		reference key[*] : Column oppositeOf keyOf;
+	}
+
+	class Column extends Named {
+		reference owner : Table oppositeOf col;		-- +: opposite of col
+		reference keyOf[0-1] : Table oppositeOf key;	-- +: opposite of key
+		reference type : Type;
+	}
+
+	class Type extends Named {	-- +: "extends Named" missing in DSTC paper
+
+	}
+}
+
+package PrimitiveTypes {
+	datatype Boolean;
+	datatype Integer;
+	datatype String;
+}
+

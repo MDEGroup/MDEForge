@@ -1,0 +1,206 @@
+
+-- ******************************************************************************
+-- Copyright (c) 2009 INRIA. 
+-- All rights reserved. This program and the accompanying materials 
+-- are made available under the terms of the Eclipse Public License v1.0 
+-- which accompanies this distribution, and is available at
+-- http://www.eclipse.org/legal/epl-v10.html
+-- 
+-- Contributors: 
+-- 	INRIA - Initial implementation
+--  
+-- ******************************************************************************
+
+--@author Guillaume Doux (Guillaume . Doux <at> inria . fr)
+
+module XML2BPMN; -- Module Template
+create OUT : BPMN from  IN : XML;
+
+helper context XML!Element def: getAttrVal(name : String) : String =
+	let a : Sequence(XML!Attribute) = self.children->select(c |
+ 		c.oclIsTypeOf(XML!Attribute) and c.name = name) in
+ 	if a.isEmpty() then
+ 		''
+ 	else
+ 		a.first().value
+ 	endif;
+
+helper context XML!Element def: getSon(name : String) : Sequence(XML!Element) =
+	self.children->select(c | c.name = name);
+
+helper context XML!Element def: getName: String =
+	self.children->select(c | c.oclIsTypeOf(XML!Element) and c.name = 'name')->first().children
+		->select(d | d.oclIsTypeOf(XML!Element) and d.name = 'text')->first().children
+			->select(e | e.oclIsKindOf(XML!Text))->first().value;
+	
+helper def: getNodeType(type : String) : BPMN!NodeType =
+	if (type='MessageEvent')
+		then #MessageEvent
+		else if (type='StartEvent')
+			then #StartEvent
+			else if (type='TimerEvent')
+				then #TimerEvent
+				else if (type='XOR-Join')
+					then #XORJoin 
+					else if (type='EBXOR-Join')
+						then #EBXORJoin
+						else if (type='AND-Join')
+							then #ANDJoin
+							else if (type='AND-Split')
+								then #ANDSplit
+								else if (type='EndEvent')
+									then #EndEvent
+									else if (type='XOR-Split')
+										then #XORSplit
+										else #EBXORSplit
+									endif
+								endif
+							endif
+						endif	
+					endif
+				endif
+			endif
+		endif
+	endif;
+
+
+
+rule BPMNElement {
+	from
+		s	:	XML!Element (s.name = 'bpmn')
+	to
+				t	: 	BPMN!DocumentRoot(
+			--Undefined in source Model
+--			mixed <-
+--			xMLNSPrefixMap <-
+--			xSISchemaLocation <-
+			bpmn <- t2
+		),
+		t2	:	BPMN!Bpmn(
+			process <- s.getSon('process')->first()	
+		)
+}
+
+rule ProcessElement {
+	from
+		s	:	XML!Element (s.name = 'process')
+	to
+		t	:	BPMN!Process(
+			id <- s.getAttrVal('id'),
+			code <- s.getSon('code')->first(),
+			nodes <- s.getSon('nodes')->first(),
+			arcs <- s.getSon('arcs')->first()
+		)
+}
+
+rule Code {
+	from
+		s	:	XML!Element (s.name = 'code')
+	to
+		t	:	BPMN!Code (
+			variables <- s.getSon('variables')->first()->getSon('variable')
+		)
+}
+
+
+rule Variable {
+	from
+		s	:	XML!Element (s.name = 'variable')
+	to
+		t	:	BPMN!Variable(
+			name <- s.getAttrVal('name')	
+		)
+}
+
+rule Nodes {
+	from
+		s	:	XML!Element (s.name = 'nodes')
+	to
+		t	:	BPMN!Nodes(
+			node <- s.getSon('node')
+		)
+}
+
+rule Node {
+	from
+		s	:	XML!Element ( 	(s.name = 'node') and 
+								(not s.getSon('name').isEmpty()) and
+								(not s.getSon('type').isEmpty()) )
+	to
+		t	:	BPMN!Node(
+			id <- s.getAttrVal('id'),
+			name <- s.getAttrVal('name'),
+			type <- thisModule.getNodeType(s.getAttrVal('type'))
+		)
+}
+
+rule NodeDefType { --type undefined, it is a task
+	from
+		s	:	XML!Element ( 	(s.name = 'node') and 
+								(not s.getSon('name').isEmpty()) and
+								(s.getSon('type').isEmpty()) )
+	to
+		t	:	BPMN!Node(
+			id <- s.getAttrVal('id'),
+			name <- s.getAttrVal('name')
+		)
+}
+
+
+rule NodeUnnamed {
+	from
+		s	:	XML!Element ( 	(s.name = 'node') and 
+								(s.getSon('name').isEmpty()) and
+								(not s.getSon('type').isEmpty()) )
+	to
+		t	:	BPMN!Node(
+			id <- s.getAttrVal('id'),
+			type <- thisModule.getNodeType(s.getAttrVal('type'))
+		)
+}
+
+rule NodeUntypedUnamed {
+	from
+		s	:	XML!Element ( 	(s.name = 'node') and 
+								(s.getSon('name').isEmpty()) and
+								(s.getSon('type').isEmpty()) )
+	to
+		t	:	BPMN!Node(
+			id <- s.getAttrVal('id')
+		)
+}
+
+
+rule Arcs {
+	from
+		s	:	XML!Element (s.name = 'arcs')
+	to
+		t	:	BPMN!Arcs(
+			arc <- s.getSon('arc')
+		)
+}
+
+rule Arc {
+	from
+		s	:	XML!Element ( 	(s.name = 'arc') and 
+								(not s.getSon('guard').isEmpty()) )
+	to
+		t	:	BPMN!Arc(
+			id <- s.getAttrVal('id'),
+			guard <- s.getAttrVal('guard'),
+			source <- s.getAttrVal('source'),
+			target <- s.getAttrVal('target')
+		)
+}
+
+rule ArcGuarded {
+	from
+		s	:	XML!Element ( 	(s.name = 'arc') and 
+								(s.getSon('guard').isEmpty()) )
+	to
+		t	:	BPMN!Arc(
+			id <- s.getAttrVal('id'),
+			source <- s.getAttrVal('source'),
+			target <- s.getAttrVal('target')
+		)
+}
