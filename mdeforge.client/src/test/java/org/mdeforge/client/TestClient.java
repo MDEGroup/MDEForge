@@ -42,6 +42,7 @@ public class TestClient {
 			e.printStackTrace();
 		}
 	}
+	@Ignore
 	@Test	
 	public void testMetricEcoreMetamodel () {
 		try {

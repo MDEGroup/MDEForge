@@ -26,9 +26,11 @@
 
 
 
+
 <!-- Heading -->
 <div class="heading-buttons">
 	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
+	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
 	<div class="buttons pull-right">
 		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
 		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
@@ -56,9 +58,9 @@
 				</div>	
 			
 				<div class="span8">	
-			<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">													
+			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
 					
-					
+				<div class="widget-body">		
 					<div class="widget-body ">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
@@ -69,8 +71,17 @@
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+												<div class="span9" style="padding: 5px 0 0;">													
+													<c:choose>
+													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
+													  </c:when>
+													  <c:otherwise>
+													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}"/>
+													  </c:otherwise>
+													</c:choose>																										
+													
+													<input type="hidden" id="actual_threshold" value="${newThreshold}">
 													<div class="slider slider-primary"></div>
 												</div>
 											</div>
@@ -79,7 +90,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">EMF Match</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
 								</div>
 			
 							</form>
@@ -103,7 +114,7 @@
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
 												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="0.3 - ${fn:substringAfter(threshold, '0.')}">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
 													<div class="slider slider-primary"></div>
 												</div>
 											</div>
@@ -112,7 +123,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">EMF Containment</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
 								</div>
 			
 							</form>
@@ -131,7 +142,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min3 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -146,7 +157,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine coefficient</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
 								</div>
 			
 							</form>
@@ -164,7 +175,7 @@
 							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
+											<div class="slider-range-min4 row-fluid">
 												<div class="span3">
 													<label class="span8">Threshold:</label> 
 													<input type="text" class="amount span4" name="threshold"/>
@@ -179,7 +190,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="4">Dice distance</button>
+									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
 								</div>
 			
 							</form>
@@ -188,6 +199,29 @@
 							</div>
 							
 						</div>
+						
+						<hr>
+						
+						<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
+								<div class="span9">		
+											
+		
+								</div>
+								
+								<div class="span3" style="text-align:right;">		
+																				
+									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+					</div>
 					
 					
 					
@@ -226,8 +260,8 @@
 			
 				<div class="span6">
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
-							<span class="glyphicons adjust_alt"><i></i><span class="txt">Computation</span></span>
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Computation" data-placement="top">
+							<span class="txt">Similarity Measure</span>
 							<div class="clearfix"></div>
 							<span class="count" style="font-size:26px; line-height:28px;">								
 								<c:choose>
@@ -249,15 +283,15 @@
 					</div>
 					
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Threshold of this cluster" data-placement="top">
 							<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
-							<div class="clearfix"></div>
+							<div class="clearfix"></div>							
 							<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 						</div>
 					</div>
 					
 					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Number of clusters" data-placement="top">
 							<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${clusters.size()}</span>
@@ -270,29 +304,29 @@
 				<div class="span6">
 					
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Average number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Maximum number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${max}</span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Number of metamodels that are not found in any cluster" data-placement="top">
 							<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${noCluster}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
 					<div class="span3">
-						<div class="widget-stats widget-stats-1">
-							<span class="glyphicons buoy"><i></i><span class="txt">Effective cluster</span></span>
+						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Effective cluster" data-placement="top">
+							<span class="glyphicons certificate"><i></i><span class="txt">Effective cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${clusters.size()-noCluster}" maxFractionDigits="2" /></span>
 						</div>
@@ -587,10 +621,6 @@
 	
 	
 </div>	
-
-
-
-
 
 
 

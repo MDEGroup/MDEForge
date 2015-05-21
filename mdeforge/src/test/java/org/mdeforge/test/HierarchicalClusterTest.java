@@ -129,7 +129,7 @@ public class HierarchicalClusterTest {
 			e.printStackTrace();
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void exportSimilarityMatrix() {
 		try {

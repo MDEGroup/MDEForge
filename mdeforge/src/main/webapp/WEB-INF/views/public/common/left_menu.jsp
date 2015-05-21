@@ -8,9 +8,10 @@
 			<div class="slim-scroll" data-scroll-height="800px">
 			
 			<!-- Sidebar Profile -->
-			<span class="profile center">
-				<a href="#"><img data-src="holder.js/36x36/white" alt="Avatar" /></a>
-			</span>
+			<%-- <span class="profile center">
+				<!-- <a href="#"><img data-src="holder.js/36x36/white" alt="Avatar" /></a> -->
+				<a href="#"><img src="${pageContext.request.contextPath}/resources/theme/images/mdeforge_logo.png" alt="Avatar" /></a> 
+			</span> --%>
 			<!-- // Sidebar Profile END -->
 			
 			<!-- Regular Size Menu -->
@@ -27,8 +28,8 @@
 						<li><a href="${pageContext.request.contextPath}/public/browse/cluster" class="glyphicons vector_path_polygon"><i></i><spring:message code="mdeforge.public.back.browse.menu.cluster"/></a></li>
 					</ul>
 				</li>
-				<li><a class="glyphicons random" href=""><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
-				<li><a class="glyphicons notes" href=""><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
+				<li><a class="glyphicons random not-active" href=""><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
+				<li><a class="glyphicons notes not-active" href=""><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
 				<!-- // Blank page template menu example END -->
 												
 				

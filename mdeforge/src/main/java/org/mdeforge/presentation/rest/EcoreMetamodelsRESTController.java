@@ -1,12 +1,18 @@
 package org.mdeforge.presentation.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.ContainmentRelationService;
+import org.mdeforge.business.CosineSimilarityRelationService;
+import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
@@ -35,6 +41,14 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 @RequestMapping("/api/EcoreMetamodel")
 public class EcoreMetamodelsRESTController {
 
+	@Autowired
+	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private CosineSimilarityRelationService cosineSimilarityRelationService;
+	@Autowired
+	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	
@@ -186,5 +200,36 @@ public class EcoreMetamodelsRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+	
+	@RequestMapping(value = "/cluster/{threshold}/{computation}", method = { RequestMethod.GET })
+	public @ResponseBody HttpEntity<List<Cluster>> cluster(
+			@PathVariable("computation") int computation,
+			@PathVariable("threshold") double threshold) {
+		/*
+		 * TABLE
+		 */
+		
+		List<Cluster> clusters = new ArrayList<Cluster>();
+		switch (computation) {
+		case 1:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					similarityRelationService);
+			break;
+		case 2:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					containmentRelationService);
+			break;
+		case 3:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					cosineSimilarityRelationService);
+			break;
+		case 4:
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
+					diceSimilarityRelationService);
+			break;
+		}
+		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;
+	}
+	
 
 }

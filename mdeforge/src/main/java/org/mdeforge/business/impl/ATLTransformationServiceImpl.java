@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -34,6 +35,7 @@ import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.model.ATLTransformation;
@@ -59,27 +61,8 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
 	private MetricRepository metricRepository;
-
-//	@Override
-//	public Artifact findOneByName(String name, User user) throws BusinessException {
-//		return findOneByName(name, user, ATLTransformation.class);
-//	}
-
-	@Override
-	public List<ATLTransformation> findAllTransformations()
-			throws BusinessException {
-		return ATLTransformationRepository.find();
-	}
-//
-//
-//
-//	@Override
-//	public List<Artifact> findAllWithPublicByUser(User user)
-//			throws BusinessException {
-//		return findAllWithPublicByUser(user, ATLTransformation.class);
-//	}
-
-
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
 
 	@Override
 	public ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)
@@ -100,27 +83,6 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-	// fine Alexander
-//
-//	@Override
-//	public Artifact findOneByOwner(String idMetamodel, User idUser)
-//			throws BusinessException {
-//		Artifact mm = findOneByOwner(idMetamodel, idUser, ATLTransformation.class);
-//		try {
-//			if (!mm.getAuthor().getId().equals(idUser))
-//				throw new BusinessException();
-//		} catch (Exception e) {
-//			throw new BusinessException();
-//		}
-//		return mm;
-//
-//	}
-
-//	@Override
-//	public ATLTransformation findOne(String id) throws BusinessException {
-//		return ATLTransformationRepository.findOne(id);
-//	}
-
 
 	@Override
 	public void execute(ATLTransformation transformation) {
@@ -142,20 +104,47 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 		return null;
 	}
 	
-//	@Override
-//	public List<Artifact> findArtifactInWorkspace(String idWorkspace, User user) throws BusinessException{
-//		workspaceService.findById(idWorkspace, user);
-//		return findArtifactInWorkspace(idWorkspace, user, ATLTransformation.class);
-//	}
-//	@Override
-//	public List<Artifact> findArtifactInProject(String idProject, User user) throws BusinessException{
-//		projectService.findById(idProject, user);
-//		return findArtifactInProject(idProject, user, ATLTransformation.class);
-//	}
-
-
 	@Override
-	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException {
+	public List<Metric> calculateMetrics(Artifact AtlTransformation) throws BusinessException {
+//		ILauncher transformationLauncher = new EMFVMLauncher();
+//		ModelFactory modelFactory = new EMFModelFactory();
+//		IInjector injector = new EMFInjector();
+//		IExtractor extractor = new EMFExtractor();
+//		/*
+//		 * Load metamodels
+//		 */
+//		try {
+//			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
+//			injector.inject(outputMetamodel, basePath + "/Metric.ecore");
+//			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
+//			injector.inject(inputMetamodel, 
+//					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
+//			IModel inputModel = modelFactory.newModel(inputMetamodel);
+//			IModel outModel = modelFactory.newModel(outputMetamodel);
+//			String path = inject((ATLTransformation)AtlTransformation);
+//	    	injector.inject(inputModel, new FileInputStream(new File(path)), 
+//	    			null);
+//			transformationLauncher.initialize(new HashMap<String,Object>());
+//			transformationLauncher.addInModel(inputModel, "IN", "ATL");
+//			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
+//			transformationLauncher.launch(ILauncher.RUN_MODE, null, 
+//					new HashMap<String,Object>(), 
+//					(Object[])getModulesList(basePath + "ATLMetric.asm"));
+//			extractor.extract(outModel, "sampleCompany_Cut.xmi");
+//			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
+//			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
+//			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
+//			List<Metric> result = getMetricList(basePath
+//					+ "sampleCompany_Cut.xmi", AtlTransformation);
+//			File temp2 = new File("sampleCompany_Cut.xmi");
+//			temp2.delete();
+//			metricRepository.save(result);
+//			return result;
+//		} catch (ATLCoreException e) {
+//			throw new BusinessException();
+//		} catch (IOException e) {
+//			throw new BusinessException();
+//		}
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -165,38 +154,33 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 		 */
 		try {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, "/Users/juridirocco/Documents/workspace/MDEForgeLuna2/mdeforge/utils/Metric.ecore");
+			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			
-			injector.inject(inputMetamodel, org.eclipse.emf.ecore.EcorePackage.eNS_URI);
+			injector.inject(inputMetamodel, basePath + "ATL.ecore");
 			
 			
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-//			
-//			
+			String transfPath = inject((ATLTransformation)AtlTransformation);
+			FileInputStream fis = new FileInputStream(transfPath);
 			
-			String mm = new String (emm.getFile().getByteArray()); 
-	    		
-			File temp = File.createTempFile("tempfile", ".tmp"); 
-			FileInputStream fis = new FileInputStream(temp);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-    	    bw.write(mm);
-    	    bw.close();
 			injector.inject(inputModel, fis, null);
 			transformationLauncher.initialize(new HashMap<String,Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "ATL");
 			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
 			transformationLauncher.launch(ILauncher.RUN_MODE, null, new HashMap<String,Object>(), 
-					(Object[])getModulesList("/Users/juridirocco/Documents/workspace/MDEForgeLuna2/mdeforge/utils/ATLMetric.asm.asm"));
+					(Object[])getModulesList(basePath + "ATLMetric.asm"));
 
 			extractor.extract(outModel, "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
 			
-			List<Metric> result = getMetricList("sampleCompany_Cut.xmi", emm);
+			List<Metric> result = getMetricList("sampleCompany_Cut.xmi", AtlTransformation);
 			File temp2 = new File("sampleCompany_Cut.xmi");
+			metricRepository.save(result);
+			fis.close();
 			temp2.delete();
 			return result;
 		} catch (ATLCoreException e) {
@@ -256,7 +240,7 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	    	if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl)
 	    	{
 	    		AggregatedIntegerMetric metric2 = new AggregatedIntegerMetric();
-	    		metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getAverage());
+	    		metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getAverage());
 	    		metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMaximum());
 	    		metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMedian());
 	    		metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMinimum());
@@ -276,45 +260,63 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	    		metric = metric2;
 	    	}
 	    	metric.setArtifact(art);
-	    	metricRepository.save(metric);
+	    	//metricRepository.save(metric);
 	    	result.add(metric);
     	}
 		
 	    return result;
-//		return null;
 	}
-
-
+	
+	
 
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Metric> metricList = metricRepository
+				.findByArtifactId(new ObjectId(emm.getId()));
+		if (metricList.size() == 0)
+			metricList = calculateMetrics(emm);
+		return metricList;
 	}
-}
 
-class Injector {
+	@Override
+	public String inject(ATLTransformation atlTransformation)
+			throws BusinessException {
+		System.out.println("Start Injection");
+		String outputFilePath = basePath + atlTransformation.getName() + ".xmi";
+		AtlResourceImpl ri = new AtlResourceImpl();
+		ResourceSet rs = new ResourceSetImpl();
+		rs.getResources().add(ri);
+		try
+		{
+			ri.load(gridFileMediaService.getFileInputStream(atlTransformation), null);
+			Resource xmiRes = rs.createResource(URI.createURI(outputFilePath));
+			xmiRes.getContents().addAll(ri.getContents());
+			xmiRes.save(null);
+			return outputFilePath;
 	
-	public String inject(FileInputStream ATLFile){
+		} catch(FileNotFoundException e) {
+			throw new BusinessException();
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+	}
+	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile){
 		
 		AtlResourceImpl ri = new AtlResourceImpl();
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResources().add(ri);
 		try
 		{
-			//ri.getContents().get(0)
-			ri.load(ATLFile, null);
+			ri.load(gridFileMediaService.getFileInputStream(ATLFile), null);
 			Resource xmiRes = rs.createResource(URI.createURI("jjjj.xmi"));
 			xmiRes.getContents().addAll(ri.getContents());
-			xmiRes.save(null);
-		}catch(FileNotFoundException e)
-		{
-			e.printStackTrace();
+			return ri;
+		}catch(FileNotFoundException e)	{
+			throw new BusinessException();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BusinessException();
 		}
-		
-		return ATLFile+".xmi";
 	}
 }
+
+

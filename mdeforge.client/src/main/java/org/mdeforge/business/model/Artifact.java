@@ -36,9 +36,21 @@ public class Artifact implements java.io.Serializable{
 	private boolean open = false;
 	private String name = null;
 	private String description;
+	//private List<String> tags = null;
+	private String version = null;
+	private String extractedContents = null;
 	@JsonIgnore
 	private String _class;
+	private List<Metric> metrics;
 	
+	public List<Metric> getMetrics() {
+		return metrics;
+	}
+
+	public void setMetrics(List<Metric> metrics) {
+		this.metrics = metrics;
+	}
+
 	@JsonSerialize(using = RelationListSerializer.class)
 	private List<Relation> relations = new ArrayList<Relation>();
 
@@ -236,5 +248,21 @@ public class Artifact implements java.io.Serializable{
 	}
 	public String getHref() {
 		return this.href;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getExtractedContents() {
+		return extractedContents;
+	}
+
+	public void setExtractedContents(String extractedContents) {
+		this.extractedContents = extractedContents;
 	}
 }
