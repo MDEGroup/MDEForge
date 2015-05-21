@@ -8,6 +8,6 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 	void execute(ATLTransformation transformation);
 	List<ATLTransformation> findTransformationsBySourceMetamodels(ATLTransformation metamodel);
 	List<ATLTransformation> findTransformationsByTargetMetamodels(ATLTransformation metamodel);
-	List<ATLTransformation> findAllTransformations() throws BusinessException;
 	ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;
+	String inject(ATLTransformation atlTransformation) throws BusinessException;
 }

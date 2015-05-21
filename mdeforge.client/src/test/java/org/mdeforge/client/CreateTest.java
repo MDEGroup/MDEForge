@@ -1,10 +1,12 @@
 package org.mdeforge.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
@@ -16,7 +18,7 @@ public class CreateTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
+		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
 	@Ignore
@@ -28,18 +30,19 @@ public class CreateTest {
 		c.addWorkspace(w);
 	}
 	
-//	@Ignore
-//	@Test
-//	public void addProject() throws Exception {
-//		Project p = new Project();
-//		p.setName("Progetto di prova");
-//		p.setWorkspaces(new ArrayList<Workspace>());
-//		List<Workspace> ws = c.getWorkspaces();
-//		for (Workspace workspace : ws) {
-//			p.getWorkspaces().add(workspace);
-//		}
-//		c.addProject(p);
-//	}
+	@Ignore
+	@Test
+	public void addProject() throws Exception {
+		Project p = new Project();
+		p.setName("Progetto di prova");
+		p.setWorkspaces(new ArrayList<Workspace>());
+		List<Workspace> ws = c.getWorkspaces();
+		for (Workspace workspace : ws) {
+			p.getWorkspaces().add(workspace);
+		}
+		c.addProject(p);
+	}
+	
 	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
@@ -59,22 +62,8 @@ public class CreateTest {
 		}
 		c.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");
 		c.addEcoreMetamodel(emm2,"temp/WebAppMM.ecore");	
-//		ETLTransformation etl = new ETLTransformation();
-//		etl.setName("Android2Web.etl");
-//		etl.setOpen(false);
-//		DomainConformToRelation dct = new DomainConformToRelation();
-//		dct.setName("Source");
-//		dct.setFromArtifact(etl);
-//		dct.setToArtifact(emm);
-//		CoDomainConformToRelation cdct = new CoDomainConformToRelation();
-//		cdct.setName("Target");
-//		cdct.setToArtifact(emm2);
-//		cdct.setFromArtifact(etl);
-//		etl.getRelations().add(dct);
-//		etl.getRelations().add(cdct);
-//		c.addETLTransformation(etl, "temp/Android2Web.etl");
-		
 	}
+	
 	@Ignore
 	@Test
 	public void testAddProjectToWorkspace() {
@@ -102,5 +91,13 @@ public class CreateTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void addATLTransformation() throws Exception {
+		ATLTransformation emm = new ATLTransformation();
+		emm.setName("BibTeX2DocBook");
+		emm.setOpen(true);	
+		c.addATLTransformation(emm,"temp/BibTeX2DocBook.atl");
 	}
 }

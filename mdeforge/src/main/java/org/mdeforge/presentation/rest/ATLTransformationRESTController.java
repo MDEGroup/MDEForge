@@ -56,8 +56,7 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
 	{
 		ATLTransformation emm = ATLtransformationService.findOne(idEcoreMetamodel);
-		MetricProvider mp = (MetricProvider) ATLtransformationService;
-		List<Metric> lm = mp.calculateMetrics(emm);
+		List<Metric> lm = ATLtransformationService.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
 	}
 	
@@ -170,7 +169,6 @@ public class ATLTransformationRESTController {
 		try {
 			// SetAuthor
 			transformation.setAuthor(user);
-
 			// transformation save
 			ATLtransformationService.create(transformation);
 			return new ResponseEntity<String>("Transformation inserted.",

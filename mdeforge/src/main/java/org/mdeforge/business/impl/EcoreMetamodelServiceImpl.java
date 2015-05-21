@@ -21,6 +21,11 @@ import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.compare.Comparison;
+import org.eclipse.emf.compare.EMFCompare;
+import org.eclipse.emf.compare.Match;
+import org.eclipse.emf.compare.scope.DefaultComparisonScope;
+import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EcoreFactory;
@@ -50,7 +55,9 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
@@ -64,6 +71,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
@@ -84,6 +92,7 @@ import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
+import com.google.common.collect.Lists;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
@@ -109,9 +118,11 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact)
 			throws BusinessException {
+		if(findOneByName(artifact.getName())!=null)
+			throw new DuplicateNameException();
 		if (isValid(artifact))
 			return super.create(artifact);
-		throw new BusinessException();
+		else throw new InvalidArtifactException();
 	}
 
 	@Override
@@ -250,7 +261,7 @@ public class EcoreMetamodelServiceImpl extends
 			}
 			if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) {
 				AggregatedIntegerMetric metric2 = new AggregatedIntegerMetric();
-				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
+				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
 						.getAverage());
 				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
 						.getMaximum());
@@ -425,6 +436,78 @@ public class EcoreMetamodelServiceImpl extends
 		msr.setValue(sim_score);
 		relationService.save(msr);
 		return sim_score;
+	}
+	
+	
+	public double calculateSimilarity2(Artifact art1, Artifact art2) {
+		try {
+		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new XMIResourceFactoryImpl());
+
+		ResourceSet resourceSet1 = new ResourceSetImpl();
+		ResourceSet resourceSet2 = new ResourceSetImpl();
+
+		resourceSet1.getResource(uri1, true);
+		resourceSet2.getResource(uri2, true);
+
+		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+				resourceSet2, null);
+		Comparison comparison = EMFCompare.builder().build().compare(scope);
+
+		List<Match> matches = comparison.getMatches();
+		int total = matches.size();
+		int counter = 0;
+		for (Match match : matches) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			total += lm.size();
+			for (Match match2 : lm)
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counter++;
+			if (match.getLeft() != null && match.getRight() != null)
+				counter++;
+		}
+
+//		List<Diff> differences = comparison.getDifferences();
+//		// Let's merge every single diff
+//		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
+//		IMerger.Registry mergerRegistry = IMerger.RegistryImpl
+//				.createStandaloneInstance();
+//		IBatchMerger merger = new BatchMerger(mergerRegistry);
+//		merger.copyAllLeftToRight(differences, new BasicMonitor());
+		
+		
+		double resultValue = (counter * 1.0) / total;
+
+		
+		//Used to save Diff model
+		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		Map<String, Object> m = reg.getExtensionToFactoryMap();
+		m.put("xmi", new XMIResourceFactoryImpl());
+
+		ResourceSet resSet = new ResourceSetImpl();
+		// create a resource
+		Resource resource = resSet.createResource(URI.createURI(basePath
+				+ "/compare.xmi"));
+		resource.getContents().add(comparison);
+		try {
+			resource.save(Collections.EMPTY_MAP);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new BusinessException();
+		}
+		SimilarityRelation sr = new SimilarityRelation();
+		sr.setFromArtifact(art1);
+		sr.setToArtifact(art2);
+		sr.setValue(resultValue);
+		relationRepository.save(sr);
+		return resultValue;
+		}catch(Exception e) {
+			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
+			return 0;
+		}
 	}
 
 	@Override

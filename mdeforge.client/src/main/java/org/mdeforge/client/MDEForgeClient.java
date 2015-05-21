@@ -218,7 +218,10 @@ public class MDEForgeClient {
 	}
 	public void addETLTransformation(ETLTransformation transformation, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setContent(MDEForgeClient.readFile(file));
+		String[] temp = file.split("/");
+		String fileName = temp[temp.length -1];
+		gfm.setContent(MDEForgeClient.readFile(fileName));
+		gfm.setFileName(file);
 		transformation.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(transformation);
 		doPostRequest(connectionUrl + "api/ETLTransformation/", on);
