@@ -252,7 +252,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
 		try {
-			if(artifactRepository.findOne(artifact.getName())!=null)
+			if(artifactRepository.findByName(artifact.getName())!=null)
 				throw new DuplicateNameException();
 			// GetUser
 			if (artifact.getId() != null)
