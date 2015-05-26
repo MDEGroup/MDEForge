@@ -106,45 +106,6 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	
 	@Override
 	public List<Metric> calculateMetrics(Artifact AtlTransformation) throws BusinessException {
-//		ILauncher transformationLauncher = new EMFVMLauncher();
-//		ModelFactory modelFactory = new EMFModelFactory();
-//		IInjector injector = new EMFInjector();
-//		IExtractor extractor = new EMFExtractor();
-//		/*
-//		 * Load metamodels
-//		 */
-//		try {
-//			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-//			injector.inject(outputMetamodel, basePath + "/Metric.ecore");
-//			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
-//			injector.inject(inputMetamodel, 
-//					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
-//			IModel inputModel = modelFactory.newModel(inputMetamodel);
-//			IModel outModel = modelFactory.newModel(outputMetamodel);
-//			String path = inject((ATLTransformation)AtlTransformation);
-//	    	injector.inject(inputModel, new FileInputStream(new File(path)), 
-//	    			null);
-//			transformationLauncher.initialize(new HashMap<String,Object>());
-//			transformationLauncher.addInModel(inputModel, "IN", "ATL");
-//			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
-//			transformationLauncher.launch(ILauncher.RUN_MODE, null, 
-//					new HashMap<String,Object>(), 
-//					(Object[])getModulesList(basePath + "ATLMetric.asm"));
-//			extractor.extract(outModel, "sampleCompany_Cut.xmi");
-//			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
-//			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
-//			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-//			List<Metric> result = getMetricList(basePath
-//					+ "sampleCompany_Cut.xmi", AtlTransformation);
-//			File temp2 = new File("sampleCompany_Cut.xmi");
-//			temp2.delete();
-//			metricRepository.save(result);
-//			return result;
-//		} catch (ATLCoreException e) {
-//			throw new BusinessException();
-//		} catch (IOException e) {
-//			throw new BusinessException();
-//		}
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();

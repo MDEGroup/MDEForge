@@ -1,30 +1,29 @@
 package org.mdeforge.test;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.m2m.atl.core.ATLCoreException;
-import org.eclipse.m2m.atl.core.IExtractor;
-import org.eclipse.m2m.atl.core.emf.EMFExtractor;
-import org.eclipse.m2m.atl.core.emf.EMFInjector;
-import org.eclipse.m2m.atl.core.IInjector;
-import org.junit.Ignore;
+import org.eclipse.m2m.atl.emftvm.EmftvmFactory;
+import org.eclipse.m2m.atl.emftvm.ExecEnv;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.CoDomainConformToRelation;
+import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Property;
+import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -45,270 +44,147 @@ public class AtlImporterTest {
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 
+	private static String pathToImportTransformation = "imported/transformations/";
+
+	private static String pathToImportMetamodel = "imported/metamodels/";
+
+	private static String readFile(String path) throws IOException {
+		byte[] encoded = Files.readAllBytes(Paths.get(path));
+		return new String(Base64.encode(encoded));
+
+	}
+
 	@Test
 	public void testInjection() {
-		ATLTransformation atl = atlTransformationService.findOne("555df94945689b88d1fd6fbe");
-		atlTransformationService.getMetrics(atl);	
+		User user = userService.findOne("5514b943d4c6c379396fe8b7");
+
+		File f = new File(pathToImportTransformation);
+
+		String[] f1 = f.list();
+		for (int j = 0; j < f1.length; j++) {
+			System.out.println("Import transformation: " + f1[j]);
+			if (!f1[j].startsWith(".") && !f1[j].endsWith(".xmi"))
+				try {
+					ATLTransformation transformation = new ATLTransformation();
+					GridFileMedia gfmTransformation = new GridFileMedia();
+					gfmTransformation
+							.setContent(readFile(pathToImportTransformation
+									+ f1[j]));
+					String decodedString = new String(Base64.decode(gfmTransformation.getContent().getBytes()));
+					transformation.setFile(gfmTransformation);
+					transformation.setAuthor(user);
+					transformation.setOpen(true);
+					transformation.getShared().add(user);
+					transformation.setName(f1[j]);
+
+					List<String[]> ecoreMetamodelInTransformationString = getInputMetamodel(decodedString);
+					List<String[]> ecoreMetamodelOutTransformationString = getOutputMetamodel(decodedString);
+
+					for (String[] ecoreMetamodelName : ecoreMetamodelInTransformationString) {
+						String metamodelName = ecoreMetamodelName[1];
+						String metamodelTag = ecoreMetamodelName[0];
+						String metamodelPath = pathToImportMetamodel
+								+ metamodelName;
+						EcoreMetamodel ec = ecoreMetamodelService
+								.findOneByName(metamodelName);
+						if (ec == null) {
+							ec = new EcoreMetamodel();
+							ec.setName(metamodelName);
+							ec.setAuthor(user);
+							ec.getShared().add(user);
+							ec.setOpen(true);
+							GridFileMedia gfm = new GridFileMedia();
+							String s = readFile(metamodelPath + ".ecore");
+							gfm.setContent(s);
+							gfm.setFileName(metamodelName + ".ecore");
+							ec.setFile(gfm);
+							ecoreMetamodelService.create(ec);
+
+						}
+						DomainConformToRelation dctr = new DomainConformToRelation();
+						dctr.setFromArtifact(transformation);
+						dctr.setName(metamodelTag);
+						dctr.setReferenceModelName(metamodelName);
+						dctr.setToArtifact(ec);
+						transformation.getRelations().add(dctr);
+					}
+					for (String[] ecoreMetamodelName : ecoreMetamodelOutTransformationString) {
+						String metamodelName = ecoreMetamodelName[1];
+						String metamodelTag = ecoreMetamodelName[0];
+						String metamodelPath = pathToImportMetamodel
+								+ metamodelName;
+						EcoreMetamodel ec = ecoreMetamodelService
+								.findOneByName(metamodelName);
+						if (ec == null) {
+							ec = new EcoreMetamodel();
+							ec.setName(metamodelName);
+							ec.setAuthor(user);
+							ec.setOpen(true);
+							ec.getShared().add(user);
+							GridFileMedia gfm = new GridFileMedia();
+							String s = readFile(metamodelPath + ".ecore");
+							gfm.setContent(s);
+							gfm.setFileName(metamodelName + ".ecore");
+							ec.setFile(gfm);
+							ecoreMetamodelService.create(ec);
+						}
+						CoDomainConformToRelation cdctr = new CoDomainConformToRelation();
+						cdctr.setFromArtifact(transformation);
+						cdctr.setToArtifact(ec);
+						cdctr.setName(metamodelTag);
+						cdctr.setReferenceModelName(metamodelName);
+						transformation.getRelations().add(cdctr);
+					}
+					atlTransformationService.create(transformation);
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.err.println("Problem importing: " + f1[j]);
+					//throw new BusinessException();
+				}
+		}
+		System.out.println("FINE");
+	}
+
+	private List<String[]> getOutputMetamodel(String content) {
+				List<String[]> result = new ArrayList<String[]>();
+				int start = content.indexOf("create ");
+				
+				String sub = content.substring(start);
+				int stop = sub.indexOf(";");
+				String realContent= sub.substring(0,stop);
+				realContent = realContent.replaceAll("create", "");
+				stop =  realContent.indexOf(" from");
+				String output = realContent.substring(0,stop);
+				output = output.replace(" ", "");
+				String[] res = output.split(":");
+				for (int i = 0; i<res.length - 1; i++) {
+					String[] s = {res[i],res[i+1]};
+					result.add(s);
+				}
+				return result;
+	}
+
+	private List<String[]> getInputMetamodel(String content) {
+		// TODO Auto-generated method stub
+		List<String[]> result = new ArrayList<String[]>();
+		int start = content.indexOf("create ");
+		
+		String sub = content.substring(start);
+		int stop = sub.indexOf(";");
+		String realContent= sub.substring(0,stop);
+		realContent = realContent.replaceAll("create", "");
+		start =  realContent.indexOf(" from") + 5;
+		String output = realContent.substring(start);
+		output = output.replace(" ", "");
+		String[] res = output.split(":");
+		for (int i = 0; i<res.length - 1; i++) {
+			String[] s = {res[i],res[i+1]};
+			result.add(s);
+		}
+		return result;
 	}
 	
-//	@Test
-//	public void importAtl() {
-//		
-//
-//		int ii = 1;
-//		File d = new File("Repository/");
-//		String a[] = d.list();
-//
-//		for (int i = 0; i < a.length; i++) {
-//			// System.out.println(ii + ". " + a[i]);
-//			File f = new File("Repository/" + a[i] + "/transformations");
-//			if (f.isDirectory() && !a[i].startsWith(".")) {
-//				String[] f1 = f.list();
-//
-//				for (int j = 0; j < f1.length; j++) {
-//					if (!f1[j].startsWith("."))
-//						try {
-//
-//							File f2 = new File(f1[j]);
-//							//
-//							ATLTransformation trasformation = generateArtifact(
-//									"Repository/" + a[i] + "/transformations/"
-//											+ f2.getPath(), f2.getPath(), true);
-//							BufferedReader br;
-//							String path2 = "imported/" + "Trans/"
-//									+ f2.getPath();
-//							File trgXmi = new File(path2);
-//							br = new BufferedReader(new FileReader(trgXmi));
-//							String sCurrentLine;
-//							while ((sCurrentLine = br.readLine()) != null) {
-//								if (sCurrentLine.startsWith("create")
-//										&& !sCurrentLine.contains(";")) {
-//									boolean guard = false;
-//									String appoggio;
-//									while (((appoggio = br.readLine()) != null)
-//											&& !guard) {
-//										if (appoggio.contains(";"))
-//											guard = true;
-//										sCurrentLine += appoggio;
-//									}
-//								}
-//
-//								if (sCurrentLine.startsWith("create")
-//										&& sCurrentLine.contains(";")) {
-//									if (sCurrentLine.contains("from")) {
-//										String sources = sCurrentLine
-//												.split("from")[0];
-//										String targets = sCurrentLine
-//												.split("from")[1];
-//										sources = sources.substring(6,
-//												sources.length() - 1);
-//										String sourcesArray[] = sources
-//												.split(",");
-//										String targetArray[] = targets
-//												.split(",");
-//
-//										for (int indiceSource = 0; indiceSource < sourcesArray.length; indiceSource++) {
-//											String metamodelName = sourcesArray[indiceSource]
-//													.split(":")[1];
-//
-//											metamodelName = metamodelName
-//													.replaceAll(" ", "");
-//											metamodelName = metamodelName
-//													.replaceAll("\t", "");
-//											metamodelName += ".ecore";
-//											String metamodelPath = "Repository/"
-//													+ a[i]
-//													+ "/metamodels/"
-//													+ metamodelName;
-//											
-//											IImporter importerEcore = new EcoreArtifactManager();
-//											EcoreMetamodel metamodelTemp;
-//											try {
-//												metamodelTemp = importerEcore
-//														.generateArtifact(
-//																metamodelPath,
-//																metamodelName,
-//																true);
-//												it.univaq.disim.mdeforge.mdeforgeEMF.RelationType rT = RelationTypeManager
-//														.getInstance()
-//														.selectOne(
-//																"domainConformTo");
-//												if (rT == null) {
-//													rT = it.univaq.disim.mdeforge.mdeforgeEMF.MdeforgeEMFFactory.eINSTANCE
-//															.createRelationType();
-//													rT.setName("domainConformTo");
-//												}
-//												it.univaq.disim.mdeforge.mdeforgeEMF.Relation relation = it.univaq.disim.mdeforge.mdeforgeEMF.MdeforgeEMFFactory.eINSTANCE
-//														.createRelation();
-//												relation.setType(rT);
-//												relation.setName(trasformation
-//														.getName()
-//														+ "DomainConformTo"
-//														+ metamodelTemp
-//																.getName());
-//												relation.setArtifactLeft(metamodelTemp);
-//												relation.setArtifactRight(trasformation);
-//												trasformation
-//														.getRelationOwnerL()
-//														.add(relation);
-//												metamodelTemp
-//														.getRelationOwnerR()
-//														.add(relation);
-//												RelationManager.getInstance()
-//														.addWithArtifact(
-//																relation);
-//
-//											} catch (ATLCoreException e) {
-//												// TODO Auto-generated catch
-//												// block
-//												System.out
-//														.println("Ecore metric calcolation exception");
-//												e.printStackTrace();
-//											}
-//										}
-//
-//										for (int indiceSource = 0; indiceSource < targetArray.length; indiceSource++) {
-//											String metamodelName = targetArray[indiceSource]
-//													.split(":")[1];
-//
-//											metamodelName = metamodelName
-//													.replaceAll(" ", "");
-//											metamodelName = metamodelName
-//													.replaceAll(";", "");
-//											metamodelName = metamodelName
-//													.replaceAll("\t", "");
-//											metamodelName += ".ecore";
-//											String metamodelPath = "Repository/"
-//													+ a[i]
-//													+ "/metamodels/"
-//													+ metamodelName;
-//											IImporter importerEcore = new EcoreArtifactManager();
-//											Artifact metamodelTemp;
-//											try {
-//												metamodelTemp = importerEcore
-//														.generateArtifact(
-//																metamodelPath,
-//																metamodelName,
-//																true);
-//												it.univaq.disim.mdeforge.mdeforgeEMF.RelationType rT = RelationTypeManager
-//														.getInstance()
-//														.selectOne(
-//																"co-domainConformTo");
-//												if (rT == null) {
-//													rT = it.univaq.disim.mdeforge.mdeforgeEMF.MdeforgeEMFFactory.eINSTANCE
-//															.createRelationType();
-//													rT.setName("co-domainConformTo");
-//												}
-//												CoDomainConformToRelation relation = new CoDomainConformToRelation();
-//												relation.setType(rT);
-//												relation.setName(trasformation
-//														.getName()
-//														+ "coDomainConformTo"
-//														+ metamodelTemp
-//																.getName());
-//												relation.setToArtifact(metamodelTemp);
-//												relation.setFromArtifact(trasformation);
-//												trasformation
-//														.getRelationOwnerR()
-//														.add(relation);
-//												metamodelTemp
-//														.getRelationOwnerL()
-//														.add(relation);
-//												RelationManager.getInstance()
-//														.addWithArtifact(
-//																relation);
-//
-//											} catch (ATLCoreException e) {
-//												// TODO Auto-generated catch
-//												// block
-//												System.out
-//														.println("Ecore metric calcolation exception");
-//												e.printStackTrace();
-//											}
-//										}
-//									}
-//									if (sCurrentLine.contains("refining")) {
-//										System.out.println("");
-//
-//									}
-//								}
-//								ii++;
-//							}
-//							br.close();
-//
-//						} catch (IOException e) {
-//							e.printStackTrace();
-//						} catch (Exception e) {
-//							// TODO Auto-generated catch block
-//							System.out.println("Transformation Error");
-//							e.printStackTrace();
-//						}
-//
-//				}
-//				System.out.println("FINE");
-//			}
-//
-//		}
-//	}
-//	
-//	public ATLTransformation generateArtifact(
-//			String path, String name, boolean calculateMetric) throws IOException  {
-//		IInjector processor = new EMFInjector();
-//		IExtractor extractor = new EMFExtractor();
-//		String xmi;
-//		try {
-//			xmi = processor.injectATLTransformation(new File(path));
-//			if(calculateMetric)
-//			{
-//				String target = getPath() + path.substring(path.lastIndexOf("/"));
-//				xmi.toString();
-//				File src = new File(path);
-//				File trg = new File(target);
-//				File srcXmi = new File(xmi);
-//				File trgXmi = new File(target+".xmi");
-//				if (!trg.exists())
-//					Files.copy(src.toPath(), trg.toPath(), REPLACE_EXISTING);
-//				if(!trgXmi.exists())
-//					Files.copy(srcXmi.toPath(), trgXmi.toPath(), REPLACE_EXISTING);
-//				srcXmi.delete();
-//				
-//				ATLMetricCalculator app = new ATLMetricCalculator();
-//				
-//				Artifact artifact = MdeforgeEMFFactoryImpl.eINSTANCE.createArtifact();
-//				artifact.setName(name);
-//				artifact.setUri(target+".xmi");
-//				ArtifactType artifactType = MdeforgeEMFFactoryImpl.eINSTANCE.createArtifactType();
-//				artifactType.setName("ATL Transformation");
-//				artifact.setType(artifactType);
-//				artifact.getMetrics().addAll(app.calculateAll(artifact));
-//				
-//				
-//				return artifact;
-//			}
-//			else return generateArtifact(path, name);
-//		} catch (InjectorException e) {
-//			System.out.println("ATL Injector Exception");
-//			e.printStackTrace();
-//			return null;
-//		}
-//		
-//	}
-//	
-//	
-//	private String getPath(){
-//		try {
-//    		Properties forgeProperties = new Properties();
-//			forgeProperties.load(new FileReader("forge.properties"));
-//			return forgeProperties.getProperty("repository");
-//			
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//			return null;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//		
-//	}
-
+	private void testEMFTVM() {
+		ExecEnv env = EmftvmFactory.eINSTANCE.createExecEnv();
+	}
 }

@@ -120,9 +120,14 @@ public class EcoreMetamodelServiceImpl extends
 			throws BusinessException {
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
-		if (isValid(artifact))
+		if (isValid(artifact)) {
+			artifact.setValid(true);
 			return super.create(artifact);
-		else throw new InvalidArtifactException();
+		}
+		else {
+			artifact.setValid(false);
+			return super.create(artifact);
+		}
 	}
 
 	@Override
