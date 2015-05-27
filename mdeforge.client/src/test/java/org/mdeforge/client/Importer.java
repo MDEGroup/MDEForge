@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
@@ -28,7 +29,7 @@ public class Importer extends TestCase {
 //		System.out.println("2__" + new String(p.getFile().getByteArray()));
 //		assertNotNull(p);
 //	}
-	
+	@Ignore
 	@Test
 	public void test() {
 		

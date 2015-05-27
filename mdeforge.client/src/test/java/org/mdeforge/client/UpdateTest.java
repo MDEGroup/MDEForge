@@ -1,6 +1,7 @@
 package org.mdeforge.client;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.Workspace;
 
@@ -12,7 +13,7 @@ public class UpdateTest {
 	public static void setup() throws Exception {
 		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 	}
-	
+	@Ignore
 	@Test
 	public void updateWorkspace(){
 		Workspace w = new Workspace();

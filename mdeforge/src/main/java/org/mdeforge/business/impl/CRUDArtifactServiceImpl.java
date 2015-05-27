@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.mdeforge.business.ArtifactNotFound;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
@@ -190,8 +192,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
-						artifact.getAuthor());
+
+				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
+				// findOneById(rel.getToArtifact().getId(),
+				// artifact.getAuthor());
 				if (existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
@@ -234,6 +238,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			throw new BusinessException();
 		}
 	}
+
 	@Override
 	public void updateSimple(T artifact) {
 		try {
@@ -242,10 +247,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			throw new BusinessException();
 		}
 	}
+
 	@Override
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
 		try {
+			if(artifactRepository.findByName(artifact.getName())!=null)
+				throw new DuplicateNameException();
 			// GetUser
 			if (artifact.getId() != null)
 				throw new BusinessException();
@@ -273,19 +281,20 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
-						artifact.getAuthor());
+				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId()); 
+//						findOneById(rel.getToArtifact().getId(),
+//						artifact.getAuthor());
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel
-							.getToArtifact().getId());
-					if (temp.getRelations() == null)
-						temp.setRelations(new ArrayList<Relation>());
-					temp.getRelations().add(rel);
-					artifactRepository.save(temp);
+//					Artifact temp = artifactRepository.findOne(rel
+//							.getToArtifact().getId());
+					if (toArtifact.getRelations() == null)
+						toArtifact.setRelations(new ArrayList<Relation>());
+					toArtifact.getRelations().add(rel);
+					artifactRepository.save(toArtifact);
 				}
 			}
 			// Update bi-directional reference
@@ -375,6 +384,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c2);
 		return n.findOne(query, persistentClass);
 	}
+
 	@Override
 	public T findOnePublic(String id) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -492,10 +502,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(new Criteria().andOperator(c2, c3));
 		}
 		query.addCriteria(c3);
-		T project = operations.findOne(query, persistentClass);
-		if (project == null)
-			throw new BusinessException();
-		return project;
+		T artifact = operations.findOne(query, persistentClass);
+		// if (artifact == null)
+		// throw new ArtifactNotFound();
+		return artifact;
 	}
 
 	@Override

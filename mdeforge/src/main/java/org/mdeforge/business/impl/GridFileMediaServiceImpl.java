@@ -60,8 +60,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 			dbFile.writeTo(bout);
 			data = bout.toByteArray();
 		} catch (Exception e) {
-			// error while reading data
-			e.printStackTrace();
+			throw new BusinessException();	
 		}
 		return data;
 	}
@@ -80,7 +79,10 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 
 	@Override
 	public String getFilePath(Artifact artifact) throws BusinessException {
-		GridFileMedia grm = getGridFileMedia(artifact.getFile());
+		GridFileMedia grm = null;
+		if (artifact.getFile().getId()!=null)
+			grm = getGridFileMedia(artifact.getFile());
+		else grm = artifact.getFile();
 		FileOutputStream out;
 		try {
 			String path = basePath + artifact.getFile().getFileName();
