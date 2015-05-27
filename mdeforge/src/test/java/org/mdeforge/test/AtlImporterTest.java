@@ -44,9 +44,9 @@ public class AtlImporterTest {
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 
-	private static String pathToImportTransformation = "imported/transformations/";
+	private static String pathToImportTransformation = "caseStudy/transformations/";
 
-	private static String pathToImportMetamodel = "imported/metamodels/";
+	private static String pathToImportMetamodel = "caseStudy/metamodels/";
 
 	private static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -63,7 +63,7 @@ public class AtlImporterTest {
 		String[] f1 = f.list();
 		for (int j = 0; j < f1.length; j++) {
 			System.out.println("Import transformation: " + f1[j]);
-			if (!f1[j].startsWith(".") && !f1[j].endsWith(".xmi"))
+			if (!f1[j].startsWith(".") && !f1[j].endsWith(".xmi") && !f1[j].endsWith(".asm"))
 				try {
 					ATLTransformation transformation = new ATLTransformation();
 					GridFileMedia gfmTransformation = new GridFileMedia();
