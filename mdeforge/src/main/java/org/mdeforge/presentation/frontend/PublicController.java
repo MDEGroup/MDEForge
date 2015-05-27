@@ -60,6 +60,11 @@ public class PublicController {
 	public String about() {
 		return "public.about";
 	}
+	
+	@RequestMapping("/login")
+	public String login() {
+		return "public.login";
+	}
 
 	@RequestMapping(value = "/browse", method = { RequestMethod.GET })
 	public String dashboard(Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {

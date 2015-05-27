@@ -57,7 +57,7 @@
 	<!-- LESS.js Library -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/less.min.js"></script>
 </head>
-<body>
+<body class="<tiles:insertAttribute name="page_type" ignore="true"/>">
 	
 	<!-- Main Container Fluid -->
 	<div class="container-fluid">
