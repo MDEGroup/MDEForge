@@ -286,7 +286,7 @@
 								<!-- Table row -->
 								<tr>
 									<td class="left">${metric.getName()}</td>
-									<td class="center"><span class="badge badge-success">${metric.getValue()}</span></td>
+									<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${metric.getValue()}" maxFractionDigits="3" /></span></td>
 								</tr>
 								<!-- // Table row END -->
 							</c:forEach>
