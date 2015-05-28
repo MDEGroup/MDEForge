@@ -43,7 +43,7 @@ public class LaunchTransformationTest {
 		gfm.setContent(MDEForgeClient.readFile("temp/composed.xmi"));
 		model.setFile(gfm);
 		EcoreMetamodel eMM = new EcoreMetamodel();
-		eMM.setId("5565cc20fe322529e64a410f");
+		eMM.setId("5565a80e456809f9bc5b6a20");
 		ConformToRelation mElement = new ConformToRelation();
 		mElement.setName("Francesco");
 		mElement.setFromArtifact(model);
@@ -54,7 +54,8 @@ public class LaunchTransformationTest {
 		models.add(model);
 		
 		ArtifactList artifactList = new ArtifactList(models);
-		c.executeATLTransformation("5565cc24fe322529e64a4117", artifactList);
+		//ObjectId("5565a826456809f9bc5b6a28")
+		c.executeATLTransformation("5565a826456809f9bc5b6a28", artifactList);
 		
 	}
 	

@@ -1,10 +1,8 @@
 package org.mdeforge.business.impl;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,17 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.newExpression_return;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
 import org.eclipse.m2m.atl.common.ATLExecutionException;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
@@ -38,8 +34,17 @@ import org.eclipse.m2m.atl.core.emf.EMFInjector;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
+import org.eclipse.m2m.atl.dsls.core.EMFTCSExtractor;
 import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
+import org.eclipse.m2m.atl.emftvm.compiler.AtlToEmftvmCompiler;
+import org.eclipse.m2m.atl.emftvm.compiler.EmftvmCompilerPlugin;
+import org.eclipse.m2m.atl.emftvm.util.EMFTVMUtil;
+import org.eclipse.m2m.atl.engine.compiler.Atl2004Compiler;
+import org.eclipse.m2m.atl.engine.compiler.AtlCompiler;
+import org.eclipse.m2m.atl.engine.compiler.AtlDefaultCompiler;
+import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
+import org.eclipse.m2m.atl.engine.parser.AtlParser;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
@@ -53,7 +58,6 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
@@ -207,6 +211,11 @@ public class ATLTransformationServiceImpl extends
 		String[] moduleNames = modules_input.split(",");
 		modules = new InputStream[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
+			AtlCompiler.compile(new FileInputStream(new File(modules_input)), "TEMO.asm");
+
+			//AtlDefaultCompiler compiler = new Atl2004Compiler();
+			//compiler.compile(new FileInputStream(new File(modules_input)), "juri.asm");
+
 			String asmModulePath = new Path(moduleNames[i].trim())
 					.removeFileExtension().addFileExtension("asm").toString();
 			modules[i] = new FileInputStream(asmModulePath);
@@ -318,22 +327,22 @@ public class ATLTransformationServiceImpl extends
 		}
 	}
 
-	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile) {
-
-		AtlResourceImpl ri = new AtlResourceImpl();
-		ResourceSet rs = new ResourceSetImpl();
-		rs.getResources().add(ri);
-		try {
-			ri.load(gridFileMediaService.getFileInputStream(ATLFile), null);
-			Resource xmiRes = rs.createResource(URI.createURI("jjjj.xmi"));
-			xmiRes.getContents().addAll(ri.getContents());
-			return ri;
-		} catch (FileNotFoundException e) {
-			throw new BusinessException();
-		} catch (IOException e) {
-			throw new BusinessException();
-		}
-	}
+//	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile) {
+//
+//		AtlResourceImpl ri = new AtlResourceImpl();
+//		ResourceSet rs = new ResourceSetImpl();
+//		rs.getResources().add(ri);
+//		try {
+//			ri.load(gridFileMediaService.getFileInputStream(ATLFile), null);
+//			Resource xmiRes = rs.createResource(URI.createURI("jjjj.xmi"));
+//			xmiRes.getContents().addAll(ri.getContents());
+//			return ri;
+//		} catch (FileNotFoundException e) {
+//			throw new BusinessException();
+//		} catch (IOException e) {
+//			throw new BusinessException();
+//		}
+//	}
 
 	/*
 	 * BASCIANI
@@ -361,11 +370,13 @@ public class ATLTransformationServiceImpl extends
 			transformationLauncher.addInModel(inputModel, inRel.getName(),
 					inRel.getReferenceModelName());
 		}
+		List<IModel> outputList = new ArrayList<IModel>();
 		for (CoDomainConformToRelation outRel : outputRelation) {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, gridFileMediaService
 					.getFileInputStream(outRel.getToArtifact()), null);
 			IModel outputModel = modelFactory.newModel(outputMetamodel);
+			outputList.add(outputModel);
 			transformationLauncher.addOutModel(outputModel, outRel.getName(),
 					outRel.getReferenceModelName());
 		}
@@ -382,9 +393,9 @@ public class ATLTransformationServiceImpl extends
 		}
 
 		IExtractor extractor = new EMFExtractor();
-
-		// TODO
-		// extractor.extract(outModel, outPath);
+		for (IModel outModel : outputList) {
+			extractor.extract(outModel, basePath + "funziona.xmi");
+		}
 	}
 
 	private Artifact getModelByMetamodel(Artifact toArtifact, List<Model> models) {
