@@ -572,8 +572,7 @@
 
 
 			<!-- Widget -->
-			<div class="widget widget-heading-simple widget-body-white"
-				data-toggle="collapse-widget">
+			<div class="widget widget-heading-simple widget-body-white">
 
 				<!-- Widget Heading -->
 				<div class="widget-head">
@@ -584,15 +583,35 @@
 				<!-- // Widget Heading END -->
 
 				<div class="widget-body list">
-					<table class="table table-condensed">
+					<table class="table">
 
 						<!-- Table body -->
 						<tbody>
 
 							<c:forEach items="${ecoreMetamodel.properties}" var="property">
+							
+							<%-- 	<c:set var="arrayString" value="${fn:split(property.getValue(), ' ')}" />
+								<c:set var="maxLengthString" value=" " />
+									
+								<c:forEach items="${arrayString}" var="arrayToCheck">
+									<c:if test="${fn:length(arrayToCheck) > fn:length(maxLengthString)}">
+										<c:set var="maxLengthString" value="${arrayToCheck}" />
+									</c:if>
+								</c:forEach> --%>
+							
 								<tr>
 									<td class="left"><b>${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</b></td>
-									<td class="right">${property.getValue()}</td>
+									<td class="">										
+										 <c:choose>
+										  <c:when test="${fn:length(property.getValue()) < 40}">
+										    	<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" >${property.getValue()}</span>
+										  </c:when>										  
+										  <c:otherwise>
+										  
+											<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" style="font-size:80%;">${fn:replace(property.getValue(), '/', '/ ')}</span>										
+										  </c:otherwise>
+										</c:choose> 
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
