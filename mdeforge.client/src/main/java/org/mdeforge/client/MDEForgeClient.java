@@ -336,6 +336,13 @@ public class MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<ETLTransformation>>() {});
 	}
 	
+	//TODO
+	public void executeATLTransformation(String transformation, ArtifactList models) throws Exception {
+		ArrayNode obj = mapper.valueToTree(models);
+		String result = doPostRequest(connectionUrl + "api/ATLTransformation/execute/" + transformation, obj);
+//		return mapper.readValue(result, new TypeReference<List<ETLTransformation>>() {});
+	}
+	
 	public List<ATLTransformation> getATLTransformations() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/ATLTransformation/shared");
 		return mapper.readValue(result, new TypeReference<List<Transformation>>() {});

@@ -12,6 +12,7 @@ import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
@@ -69,7 +70,7 @@ public class ATLTransformationRESTController {
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Artifact> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
+	public @ResponseBody HttpEntity<Artifact> getATLTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
 			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user);
 			return new ResponseEntity<Artifact>(transformation, HttpStatus.OK);
@@ -77,6 +78,18 @@ public class ATLTransformationRESTController {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
+	}
+	@RequestMapping(value = "execute/{id}", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody HttpEntity<List<Model>> execute(@PathVariable("id") String id, 
+			@RequestBody List<Model> models) {
+		try {
+			ATLTransformation transformation = ATLtransformationService.findOne(id);
+			ATLtransformationService.execute(transformation, models);
+			return new ResponseEntity<List<Model>>(new ArrayList<Model>(), HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<List<Model>>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		
 	}
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")

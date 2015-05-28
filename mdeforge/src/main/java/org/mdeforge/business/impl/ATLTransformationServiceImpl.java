@@ -8,18 +8,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.newExpression_return;
+import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
+import org.eclipse.m2m.atl.common.ATLExecutionException;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
 import org.eclipse.m2m.atl.core.IInjector;
@@ -38,11 +45,18 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.CoDomainConformToRelation;
+import org.mdeforge.business.model.ConformToRelation;
+import org.mdeforge.business.model.DomainConformToRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
@@ -56,7 +70,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation> implements ATLTransformationService {
+public class ATLTransformationServiceImpl extends
+		CRUDArtifactServiceImpl<ATLTransformation> implements
+		ATLTransformationService {
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
@@ -65,19 +81,21 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	private GridFileMediaService gridFileMediaService;
 
 	@Override
-	public ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)
-			throws BusinessException {
+	public ResponseGrid<ATLTransformation> findAllPaginated(
+			RequestGrid requestGrid) throws BusinessException {
 		Page<ATLTransformation> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
-			rows = ATLTransformationRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart() / requestGrid.getiDisplayLength(),
-					requestGrid.getiDisplayLength(), Direction.ASC, requestGrid
+			rows = ATLTransformationRepository.findAll(new PageRequest(
+					requestGrid.getiDisplayStart()
+							/ requestGrid.getiDisplayLength(), requestGrid
+							.getiDisplayLength(), Direction.ASC, requestGrid
 							.getSortCol()));
 		} else {
-			rows = ATLTransformationRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart() / requestGrid.getiDisplayLength(),
-					requestGrid.getiDisplayLength(), Direction.DESC,
-					requestGrid.getSortCol()));
+			rows = ATLTransformationRepository.findAll(new PageRequest(
+					requestGrid.getiDisplayStart()
+							/ requestGrid.getiDisplayLength(), requestGrid
+							.getiDisplayLength(), Direction.DESC, requestGrid
+							.getSortCol()));
 		}
 		return new ResponseGrid<ATLTransformation>(requestGrid.getsEcho(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
@@ -85,8 +103,38 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 	}
 
 	@Override
-	public void execute(ATLTransformation transformation) {
+	public void execute(ATLTransformation transformation, List<Model> models) {
 		// TODO Auto-generated method stub
+		List<CoDomainConformToRelation> listOutput = new ArrayList<CoDomainConformToRelation>();
+		List<DomainConformToRelation> listInput = new ArrayList<DomainConformToRelation>();
+		for (Relation relation : transformation.getRelations()) {
+			if (relation instanceof CoDomainConformToRelation)
+				listOutput.add((CoDomainConformToRelation) relation);
+			if (relation instanceof DomainConformToRelation)
+				listInput.add((DomainConformToRelation) relation);
+		}
+		if (models.size() != listInput.size())
+			throw new TransformationException();
+		boolean guard = true;
+		for (Model model : models)
+			for (Relation relation : model.getRelations())
+				if (relation instanceof ConformToRelation)
+					guard = isPresent(relation.getToArtifact(), listInput);
+		if (!guard)
+			throw new TransformationException();
+		try {
+			doTransformation(transformation, listInput, listOutput, models);
+		} catch (ATLExecutionException | ATLCoreException | IOException e) {
+			throw new TransformationException();
+		}
+	}
+
+	private boolean isPresent(Artifact art,
+			List<DomainConformToRelation> listArtifact) {
+		for (DomainConformToRelation rel : listArtifact)
+			if (rel.getToArtifact().getId().equals(art.getId()))
+				return true;
+		return false;
 
 	}
 
@@ -103,9 +151,10 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
-	public List<Metric> calculateMetrics(Artifact AtlTransformation) throws BusinessException {
+	public List<Metric> calculateMetrics(Artifact AtlTransformation)
+			throws BusinessException {
 		ILauncher transformationLauncher = new EMFVMLauncher();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IInjector injector = new EMFInjector();
@@ -117,28 +166,29 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
-			
+
 			injector.inject(inputMetamodel, basePath + "ATL.ecore");
-			
-			
+
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-			String transfPath = inject((ATLTransformation)AtlTransformation);
+			String transfPath = inject((ATLTransformation) AtlTransformation);
 			FileInputStream fis = new FileInputStream(transfPath);
-			
+
 			injector.inject(inputModel, fis, null);
-			transformationLauncher.initialize(new HashMap<String,Object>());
+			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "ATL");
-			transformationLauncher.addOutModel(outModel , "OUT" , "Metric") ;
-			transformationLauncher.launch(ILauncher.RUN_MODE, null, new HashMap<String,Object>(), 
-					(Object[])getModulesList(basePath + "ATLMetric.asm"));
+			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
+			transformationLauncher.launch(ILauncher.RUN_MODE, null,
+					new HashMap<String, Object>(),
+					(Object[]) getModulesList(basePath + "ATLMetric.asm"));
 
 			extractor.extract(outModel, "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-			
-			List<Metric> result = getMetricList("sampleCompany_Cut.xmi", AtlTransformation);
+
+			List<Metric> result = getMetricList("sampleCompany_Cut.xmi",
+					AtlTransformation);
 			File temp2 = new File("sampleCompany_Cut.xmi");
 			metricRepository.save(result);
 			fis.close();
@@ -150,85 +200,91 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 			throw new BusinessException();
 		}
 	}
-	private InputStream[] getModulesList(String modules_input) throws IOException {
+
+	private InputStream[] getModulesList(String modules_input)
+			throws IOException {
 		InputStream[] modules = null;
 		String[] moduleNames = modules_input.split(",");
 		modules = new InputStream[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
-			String asmModulePath = new Path(moduleNames[i].trim()).removeFileExtension().addFileExtension("asm").toString();			
+			String asmModulePath = new Path(moduleNames[i].trim())
+					.removeFileExtension().addFileExtension("asm").toString();
 			modules[i] = new FileInputStream(asmModulePath);
 		}
 		return modules;
 	}
-	
+
 	private List<Metric> getMetricList(String path, Artifact art) {
-		
+
 		MetricPackage.eINSTANCE.eClass();
-	    // Retrieve the default factory singleton
+		// Retrieve the default factory singleton
 		@SuppressWarnings("unused")
 		MetricFactory factory = MetricFactory.eINSTANCE;
-	    Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-	    Map<String, Object> m = reg.getExtensionToFactoryMap();
-	    m.put("xmi", new XMIResourceFactoryImpl());
-	    // Obtain a new resource set
-	    ResourceSet resSet = new ResourceSetImpl();
-	    // Create a resource
-	    
-	    Resource resource = resSet.createResource(URI
-	        .createURI(path));
-	    try {
+		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		Map<String, Object> m = reg.getExtensionToFactoryMap();
+		m.put("xmi", new XMIResourceFactoryImpl());
+		// Obtain a new resource set
+		ResourceSet resSet = new ResourceSetImpl();
+		// Create a resource
+
+		Resource resource = resSet.createResource(URI.createURI(path));
+		try {
 			resource.load(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-	    Container myForge = (Container) resource.getContents().get(0);
-	    List<Metric> result = new ArrayList<Metric>();
-	    @SuppressWarnings("rawtypes")
-		Iterator it = myForge.getMetrics().iterator();	    
-	    while (it.hasNext())
-	    {
-	    	org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric)it.next();
-	    	Metric metric = null;
-	    	if (at2 instanceof org.mdeforge.emf.metric.impl.SimpleMetricImpl)
-	    	{
-	    		SimpleMetric metric2 = new SimpleMetric();
-	    		metric2.setName(at2.getName());
-	    		metric2.setDescription(at2.getDescription());
-	    		metric2.setValue(((org.mdeforge.emf.metric.impl.SimpleMetricImpl) at2).getValue());
-	    		metric = metric2;
-	    	}
-	    	if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl)
-	    	{
-	    		AggregatedIntegerMetric metric2 = new AggregatedIntegerMetric();
-	    		metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getAverage());
-	    		metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMaximum());
-	    		metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMedian());
-	    		metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2).getMinimum());
-	    		metric2.setName(at2.getName());
-	    		metric2.setDescription(at2.getDescription());
-	    		metric = metric2;
-	    	}
-	    	if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl)
-	    	{
-	    		AggregatedRealMetric metric2 = new AggregatedRealMetric();
-	    		metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getAverage());
-	    		metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMaximum());
-	    		metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMedian());
-	    		metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2).getMinimum());
-	    		metric2.setName(at2.getName());
-	    		metric2.setDescription(at2.getDescription());
-	    		metric = metric2;
-	    	}
-	    	metric.setArtifact(art);
-	    	//metricRepository.save(metric);
-	    	result.add(metric);
-    	}
-		
-	    return result;
+		Container myForge = (Container) resource.getContents().get(0);
+		List<Metric> result = new ArrayList<Metric>();
+		@SuppressWarnings("rawtypes")
+		Iterator it = myForge.getMetrics().iterator();
+		while (it.hasNext()) {
+			org.mdeforge.emf.metric.Metric at2 = (org.mdeforge.emf.metric.Metric) it
+					.next();
+			Metric metric = null;
+			if (at2 instanceof org.mdeforge.emf.metric.impl.SimpleMetricImpl) {
+				SimpleMetric metric2 = new SimpleMetric();
+				metric2.setName(at2.getName());
+				metric2.setDescription(at2.getDescription());
+				metric2.setValue(((org.mdeforge.emf.metric.impl.SimpleMetricImpl) at2)
+						.getValue());
+				metric = metric2;
+			}
+			if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) {
+				AggregatedIntegerMetric metric2 = new AggregatedIntegerMetric();
+				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
+						.getAverage());
+				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
+						.getMaximum());
+				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
+						.getMedian());
+				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl) at2)
+						.getMinimum());
+				metric2.setName(at2.getName());
+				metric2.setDescription(at2.getDescription());
+				metric = metric2;
+			}
+			if (at2 instanceof org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) {
+				AggregatedRealMetric metric2 = new AggregatedRealMetric();
+				metric2.setAverage(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
+						.getAverage());
+				metric2.setMaximum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
+						.getMaximum());
+				metric2.setMedian(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
+						.getMedian());
+				metric2.setMinimum(((org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl) at2)
+						.getMinimum());
+				metric2.setName(at2.getName());
+				metric2.setDescription(at2.getDescription());
+				metric = metric2;
+			}
+			metric.setArtifact(art);
+			// metricRepository.save(metric);
+			result.add(metric);
+		}
+
+		return result;
 	}
-	
-	
 
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
@@ -247,37 +303,143 @@ public class ATLTransformationServiceImpl extends CRUDArtifactServiceImpl<ATLTra
 		AtlResourceImpl ri = new AtlResourceImpl();
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResources().add(ri);
-		try
-		{
-			ri.load(gridFileMediaService.getFileInputStream(atlTransformation), null);
+		try {
+			ri.load(gridFileMediaService.getFileInputStream(atlTransformation),
+					null);
 			Resource xmiRes = rs.createResource(URI.createURI(outputFilePath));
 			xmiRes.getContents().addAll(ri.getContents());
 			xmiRes.save(null);
 			return outputFilePath;
-	
-		} catch(FileNotFoundException e) {
+
+		} catch (FileNotFoundException e) {
 			throw new BusinessException();
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
 	}
-	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile){
-		
+
+	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile) {
+
 		AtlResourceImpl ri = new AtlResourceImpl();
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResources().add(ri);
-		try
-		{
+		try {
 			ri.load(gridFileMediaService.getFileInputStream(ATLFile), null);
 			Resource xmiRes = rs.createResource(URI.createURI("jjjj.xmi"));
 			xmiRes.getContents().addAll(ri.getContents());
 			return ri;
-		}catch(FileNotFoundException e)	{
+		} catch (FileNotFoundException e) {
 			throw new BusinessException();
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
 	}
+
+	/*
+	 * BASCIANI
+	 */
+
+	private void doTransformation(ATLTransformation transformation,
+			List<DomainConformToRelation> inputRelation,
+			List<CoDomainConformToRelation> outputRelation, List<Model> models)
+			throws ATLCoreException, IOException, ATLExecutionException {
+		IInjector injector = new EMFInjector();
+		ModelFactory modelFactory = new EMFModelFactory();
+		ILauncher transformationLauncher = new EMFVMLauncher();
+		List<InputStream> inputStreamsToClose = new ArrayList<InputStream>();
+		Map<String, Object> launcherOptions = getOptions();
+		transformationLauncher.initialize(launcherOptions);
+		for (DomainConformToRelation inRel : inputRelation) {
+			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
+			injector.inject(inputMetamodel, gridFileMediaService
+					.getFileInputStream(inRel.getToArtifact()), null);
+			IModel inputModel = modelFactory.newModel(inputMetamodel);
+			injector.inject(
+					inputModel,
+					gridFileMediaService.getFilePath(getModelByMetamodel(
+							inRel.getToArtifact(), models)));
+			transformationLauncher.addInModel(inputModel, inRel.getName(),
+					inRel.getReferenceModelName());
+		}
+		for (CoDomainConformToRelation outRel : outputRelation) {
+			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
+			injector.inject(outputMetamodel, gridFileMediaService
+					.getFileInputStream(outRel.getToArtifact()), null);
+			IModel outputModel = modelFactory.newModel(outputMetamodel);
+			transformationLauncher.addOutModel(outputModel, outRel.getName(),
+					outRel.getReferenceModelName());
+		}
+
+		InputStream[] modulesStreams = getModulesList(gridFileMediaService
+				.getFilePath(transformation));
+		inputStreamsToClose.addAll(Arrays.asList(modulesStreams));
+		@SuppressWarnings("unused")
+		Object result = transformationLauncher.launch("run",
+				new NullProgressMonitor(), launcherOptions,
+				(Object[]) modulesStreams);
+		for (InputStream inputStream : inputStreamsToClose) {
+			inputStream.close();
+		}
+
+		IExtractor extractor = new EMFExtractor();
+
+		// TODO
+		// extractor.extract(outModel, outPath);
+	}
+
+	private Artifact getModelByMetamodel(Artifact toArtifact, List<Model> models) {
+		for (Model model : models) {
+			for (Relation rel : model.getRelations()) {
+				if (rel instanceof ConformToRelation) {
+					if (rel.getToArtifact().getId().equals(toArtifact.getId()))
+						return model;
+				}
+			}
+		}
+		throw new TransformationException();
+	}
+
+	/**
+	 * Semplice funzione di get che ritorna le opzioni settate dal costruttore
+	 * all'atto di definizione della classe
+	 * 
+	 * @return Map<String, Object> options
+	 */
+	private Map<String, Object> getOptions() {
+
+		Map<String, Object> options;
+		options = new HashMap<String, Object>();
+		options.put("supportUML2Stereotypes", "false");
+		options.put("printExecutionTime", "true");
+		options.put("OPTION_CONTENT_TYPE", "false");
+		options.put("allowInterModelReferences", "false");
+		options.put("step", "false");
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new EcoreResourceFactoryImpl());
+
+		return options;
+	}
+
+	/**
+	 * La funzione ritorna i moduli che sono presenti nel file della
+	 * trasformazione. Ogni file di trasformazione (.atl) può contenere più
+	 * moduli al suo interno (ognuno dei ha al suo interno il mapping che
+	 * effettua la trasformazione). Ognuno di questi moduli al suo interno avrà
+	 * una variabile di IN ed una di OUT per es. Ognuno di questi moduli viene
+	 * poi salvato separatamente in un file .asm.
+	 * 
+	 * @return InputStream[]
+	 * @throws IOException
+	 */
+	// private InputStream getModulesList(String transformationPath) throws
+	// IOException {
+	// InputStream modules = null;
+	//
+	// String asmModulePath = new
+	// Path(transformationPath.trim()).removeFileExtension().addFileExtension("asm").toString();
+	// modules = new FileInputStream(asmModulePath);
+	//
+	// return modules;
+	// }
+
 }
-
-
