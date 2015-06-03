@@ -16,7 +16,6 @@ import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -34,17 +33,9 @@ import org.eclipse.m2m.atl.core.emf.EMFInjector;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
-import org.eclipse.m2m.atl.dsls.core.EMFTCSExtractor;
 import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
-import org.eclipse.m2m.atl.emftvm.compiler.AtlToEmftvmCompiler;
-import org.eclipse.m2m.atl.emftvm.compiler.EmftvmCompilerPlugin;
-import org.eclipse.m2m.atl.emftvm.util.EMFTVMUtil;
-import org.eclipse.m2m.atl.engine.compiler.Atl2004Compiler;
-import org.eclipse.m2m.atl.engine.compiler.AtlCompiler;
-import org.eclipse.m2m.atl.engine.compiler.AtlDefaultCompiler;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
-import org.eclipse.m2m.atl.engine.parser.AtlParser;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
@@ -211,13 +202,13 @@ public class ATLTransformationServiceImpl extends
 		String[] moduleNames = modules_input.split(",");
 		modules = new InputStream[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
-			AtlCompiler.compile(new FileInputStream(new File(modules_input)), "TEMO.asm");
-
-			//AtlDefaultCompiler compiler = new Atl2004Compiler();
-			//compiler.compile(new FileInputStream(new File(modules_input)), "juri.asm");
-
+			//AtlCompiler.compile(new FileInputStream(new File(modules_input)), "TEMO.asm");
 			String asmModulePath = new Path(moduleNames[i].trim())
 					.removeFileExtension().addFileExtension("asm").toString();
+			Atl2006Compiler compiler = new Atl2006Compiler();
+			compiler.compile(new FileInputStream(new File(modules_input)), asmModulePath);
+
+			
 			modules[i] = new FileInputStream(asmModulePath);
 		}
 		return modules;
@@ -396,6 +387,7 @@ public class ATLTransformationServiceImpl extends
 		for (IModel outModel : outputList) {
 			extractor.extract(outModel, basePath + "funziona.xmi");
 		}
+		//TODO Salvere modelli prodotti!
 	}
 
 	private Artifact getModelByMetamodel(Artifact toArtifact, List<Model> models) {

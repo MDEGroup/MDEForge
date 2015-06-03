@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.m2m.atl.emftvm.EmftvmFactory;
 import org.eclipse.m2m.atl.emftvm.ExecEnv;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.ATLTransformationService;
@@ -53,7 +54,7 @@ public class AtlImporterTest {
 		return new String(Base64.encode(encoded));
 
 	}
-
+	@Ignore
 	@Test
 	public void testInjection() {
 		User user = userService.findOne("5514b943d4c6c379396fe8b7");
