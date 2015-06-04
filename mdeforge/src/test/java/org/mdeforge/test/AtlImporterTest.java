@@ -45,16 +45,16 @@ public class AtlImporterTest {
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 
-	private static String pathToImportTransformation = "caseStudy/transformations/";
+	private static String pathToImportTransformation = "Families2Persons/transformations/";
 
-	private static String pathToImportMetamodel = "caseStudy/metamodels/";
+	private static String pathToImportMetamodel = "Families2Persons/metamodels/";
 
 	private static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(Base64.encode(encoded));
 
 	}
-	@Ignore
+	
 	@Test
 	public void testInjection() {
 		User user = userService.findOne("5514b943d4c6c379396fe8b7");

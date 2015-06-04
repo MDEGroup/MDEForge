@@ -31,7 +31,7 @@ public class LaunchTransformationTest {
 		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
-	
+	@Ignore
 	@Test
 	public void getModelsTest() throws Exception {
 		
@@ -63,6 +63,40 @@ public class LaunchTransformationTest {
 		ArtifactList artifactList = new ArtifactList(models);
 		//ObjectId("5565a826456809f9bc5b6a28")
 		List<Model> modelli = c.executeATLTransformation("5565a826456809f9bc5b6a28", artifactList);
+		for (Model model2 : modelli) {
+			System.out.println(model2.getName());
+		}
+	}
+	@Test
+	public void getModelsTest2() throws Exception {
+			
+		ArrayList<Model> models = new ArrayList<Model>();
+		
+		Model model = new Model();
+		model.setName("sample-Families");
+		
+		GridFileMedia gfm = new GridFileMedia();
+		gfm.setFileName("sample-Families.xmi");
+		gfm.setContent(MDEForgeClient.readFile("temp/sample-Families.xmi"));
+		model.setFile(gfm);
+		
+		EcoreMetamodel eMM = new EcoreMetamodel();
+		eMM.setId("557057524568f71adcb1701c");
+		
+		
+		ConformToRelation mElement = new ConformToRelation();
+		
+		mElement.setName("Francesco");
+		mElement.setFromArtifact(model);
+		mElement.setToArtifact(eMM);
+		
+		model.getRelations().add(mElement);
+		
+		models.add(model);
+		
+		ArtifactList artifactList = new ArtifactList(models);
+		//ObjectId("5565a826456809f9bc5b6a28")
+		List<Model> modelli = c.executeATLTransformation("557057524568f71adcb17024", artifactList);
 		for (Model model2 : modelli) {
 			System.out.println(model2.getName());
 		}

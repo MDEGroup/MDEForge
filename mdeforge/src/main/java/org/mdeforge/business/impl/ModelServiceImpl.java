@@ -49,9 +49,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		}
 		if (emm == null)
 			throw new BusinessException();
-		if(isValid(artifact))
-			return super.create(artifact);
-		throw new BusinessException();
+		artifact.setValid(isValid(artifact));
+		return super.create(artifact);
 	}
 	@Override
 	public boolean isValid(Artifact art)throws BusinessException {
