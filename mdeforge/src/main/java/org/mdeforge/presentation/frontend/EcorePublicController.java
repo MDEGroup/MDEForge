@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/public")
-public class PublicController {
+public class EcorePublicController {
 	
 	final double thresholdSimilarityRelation = 		0.15;
 	final double thresholdContainmentRelation = 		0.4;

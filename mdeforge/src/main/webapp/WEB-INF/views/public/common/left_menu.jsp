@@ -28,7 +28,7 @@
 						<li><a href="${pageContext.request.contextPath}/public/browse/cluster" class="glyphicons vector_path_polygon"><i></i><spring:message code="mdeforge.public.back.browse.menu.cluster"/></a></li>
 					</ul>
 				</li>
-				<li><a class="glyphicons random not-active" href=""><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
+				<li><a class="glyphicons random" href="${pageContext.request.contextPath}/public/browse/transformations_list"><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
 				<li><a class="glyphicons notes not-active" href=""><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
 				<!-- // Blank page template menu example END -->
 												
