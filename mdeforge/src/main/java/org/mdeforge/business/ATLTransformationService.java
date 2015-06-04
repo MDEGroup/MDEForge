@@ -4,9 +4,10 @@ import java.util.List;
 
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.User;
 
 public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider{	
-	void execute(ATLTransformation transformation, List<Model> models);
+	List<Model> execute(ATLTransformation transformation, List<Model> models, User user);
 	List<ATLTransformation> findTransformationsBySourceMetamodels(ATLTransformation metamodel);
 	List<ATLTransformation> findTransformationsByTargetMetamodels(ATLTransformation metamodel);
 	ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;

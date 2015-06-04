@@ -260,7 +260,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName(artifact.getFile().getFileName());
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
+			if (artifact.getFile().getByteArray()!=null)
+				fileMedia.setByteArray(artifact.getFile().getByteArray());
+			else fileMedia.setByteArray(Base64.decode(artifact.getFile()
 					.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
@@ -278,19 +280,18 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.getShared().add(user);
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
+					
+			
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
 				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId()); 
-//						findOneById(rel.getToArtifact().getId(),
-//						artifact.getAuthor());
+
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-//					Artifact temp = artifactRepository.findOne(rel
-//							.getToArtifact().getId());
 					if (toArtifact.getRelations() == null)
 						toArtifact.setRelations(new ArrayList<Relation>());
 					toArtifact.getRelations().add(rel);

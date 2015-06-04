@@ -337,10 +337,10 @@ public class MDEForgeClient {
 	}
 	
 	//TODO
-	public void executeATLTransformation(String transformation, ArtifactList models) throws Exception {
+	public List<Model> executeATLTransformation(String transformation, ArtifactList models) throws Exception {
 		ArrayNode obj = mapper.valueToTree(models);
 		String result = doPostRequest(connectionUrl + "api/ATLTransformation/execute/" + transformation, obj);
-//		return mapper.readValue(result, new TypeReference<List<ETLTransformation>>() {});
+		return mapper.readValue(result, new TypeReference<List<Model>>() {});
 	}
 	
 	public List<ATLTransformation> getATLTransformations() throws Exception {

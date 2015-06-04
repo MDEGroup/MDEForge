@@ -5,12 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -39,6 +44,7 @@ import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.TransformationException;
@@ -49,10 +55,12 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
+import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.User;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -70,6 +78,8 @@ public class ATLTransformationServiceImpl extends
 		ATLTransformationService {
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
+	@Autowired
+	private ModelService modelService;
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
@@ -98,8 +108,8 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public void execute(ATLTransformation transformation, List<Model> models) {
-		// TODO Auto-generated method stub
+	public List<Model> execute(ATLTransformation transformation, List<Model> models, User user) {
+		user = userService.findOne(user.getId());
 		List<CoDomainConformToRelation> listOutput = new ArrayList<CoDomainConformToRelation>();
 		List<DomainConformToRelation> listInput = new ArrayList<DomainConformToRelation>();
 		for (Relation relation : transformation.getRelations()) {
@@ -113,12 +123,18 @@ public class ATLTransformationServiceImpl extends
 		boolean guard = true;
 		for (Model model : models)
 			for (Relation relation : model.getRelations())
-				if (relation instanceof ConformToRelation)
+				if (relation instanceof ConformToRelation) {
 					guard = isPresent(relation.getToArtifact(), listInput);
+					if(guard) {
+						model.setAuthor(user);
+						model.getShared().add(user);
+						modelService.create(model);
+					}
+				}
 		if (!guard)
 			throw new TransformationException();
 		try {
-			doTransformation(transformation, listInput, listOutput, models);
+			return doTransformation(transformation, listInput, listOutput, models, user);
 		} catch (ATLExecutionException | ATLCoreException | IOException e) {
 			throw new TransformationException();
 		}
@@ -339,10 +355,11 @@ public class ATLTransformationServiceImpl extends
 	 * BASCIANI
 	 */
 
-	private void doTransformation(ATLTransformation transformation,
+	private List<Model> doTransformation(ATLTransformation transformation,
 			List<DomainConformToRelation> inputRelation,
-			List<CoDomainConformToRelation> outputRelation, List<Model> models)
+			List<CoDomainConformToRelation> outputRelation, List<Model> models, User user)
 			throws ATLCoreException, IOException, ATLExecutionException {
+		user = userService.findOne(user.getId());
 		IInjector injector = new EMFInjector();
 		ModelFactory modelFactory = new EMFModelFactory();
 		ILauncher transformationLauncher = new EMFVMLauncher();
@@ -361,13 +378,13 @@ public class ATLTransformationServiceImpl extends
 			transformationLauncher.addInModel(inputModel, inRel.getName(),
 					inRel.getReferenceModelName());
 		}
-		List<IModel> outputList = new ArrayList<IModel>();
+		Map<IModel, CoDomainConformToRelation> outputList = new HashMap<IModel, CoDomainConformToRelation>();
 		for (CoDomainConformToRelation outRel : outputRelation) {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, gridFileMediaService
 					.getFileInputStream(outRel.getToArtifact()), null);
 			IModel outputModel = modelFactory.newModel(outputMetamodel);
-			outputList.add(outputModel);
+			outputList.put(outputModel,outRel);
 			transformationLauncher.addOutModel(outputModel, outRel.getName(),
 					outRel.getReferenceModelName());
 		}
@@ -384,9 +401,42 @@ public class ATLTransformationServiceImpl extends
 		}
 
 		IExtractor extractor = new EMFExtractor();
-		for (IModel outModel : outputList) {
-			extractor.extract(outModel, basePath + "funziona.xmi");
+		List<Model> modelsResult = new ArrayList<Model>();
+		Iterator<Entry<IModel, CoDomainConformToRelation>> i = outputList.entrySet().iterator();
+		while(i.hasNext()){
+			Map.Entry<IModel, CoDomainConformToRelation> item = i.next();
+			
+			Date  ss1 = new Date();
+			SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
+			String formats1 = formatter5.format(ss1);
+			
+			String tempModelPath = basePath + "generatedBy" + formats1 + ".xmi";
+			String fileName = "generatedBy" + formats1 + ".xmi";
+			extractor.extract(item.getKey(), tempModelPath);
+			
+			Model model = new Model();
+			model.setName(fileName);
+			model.setAuthor(user);
+			ConformToRelation cfr = new ConformToRelation();
+			cfr.setFromArtifact(model);
+			cfr.setToArtifact(item.getValue().getToArtifact());
+			
+			model.setCreated(new Date());
+			model.getRelations().add(cfr);
+			
+			GridFileMedia gfr = new GridFileMedia();
+			gfr.setFileName(fileName);
+			java.nio.file.Path path = Paths.get(tempModelPath);
+			byte[] data = Files.readAllBytes(path);
+			gfr.setByteArray(data);
+			
+			model.setFile(gfr);
+			modelService.create(model);
+			
+			modelsResult.add(model);
+			
 		}
+		return modelsResult;
 		//TODO Salvere modelli prodotti!
 	}
 

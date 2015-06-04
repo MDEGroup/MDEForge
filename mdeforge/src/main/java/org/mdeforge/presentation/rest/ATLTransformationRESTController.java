@@ -80,14 +80,15 @@ public class ATLTransformationRESTController {
 
 	}
 	@RequestMapping(value = "execute/{id}", method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody HttpEntity<List<Model>> execute(@PathVariable("id") String id, 
+	public @ResponseBody HttpEntity<ArtifactList> execute(@PathVariable("id") String id, 
 			@RequestBody List<Model> models) {
 		try {
 			ATLTransformation transformation = ATLtransformationService.findOne(id);
-			ATLtransformationService.execute(transformation, models);
-			return new ResponseEntity<List<Model>>(new ArrayList<Model>(), HttpStatus.OK);
+			
+			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, models, user));
+			return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 		} catch (BusinessException e) {
-			return new ResponseEntity<List<Model>>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 		
 	}

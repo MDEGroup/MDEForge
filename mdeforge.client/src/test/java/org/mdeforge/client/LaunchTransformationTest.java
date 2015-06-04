@@ -35,16 +35,23 @@ public class LaunchTransformationTest {
 	@Test
 	public void getModelsTest() throws Exception {
 		
+		
 		ArrayList<Model> models = new ArrayList<Model>();
+		
 		Model model = new Model();
-		model.setName("Composed");
+		model.setName("ComposedModel");
+		
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setFileName("composed.xmi");
 		gfm.setContent(MDEForgeClient.readFile("temp/composed.xmi"));
 		model.setFile(gfm);
+		
 		EcoreMetamodel eMM = new EcoreMetamodel();
 		eMM.setId("5565a80e456809f9bc5b6a20");
+		
+		
 		ConformToRelation mElement = new ConformToRelation();
+		
 		mElement.setName("Francesco");
 		mElement.setFromArtifact(model);
 		mElement.setToArtifact(eMM);
@@ -55,8 +62,10 @@ public class LaunchTransformationTest {
 		
 		ArtifactList artifactList = new ArtifactList(models);
 		//ObjectId("5565a826456809f9bc5b6a28")
-		c.executeATLTransformation("5565a826456809f9bc5b6a28", artifactList);
-		
+		List<Model> modelli = c.executeATLTransformation("5565a826456809f9bc5b6a28", artifactList);
+		for (Model model2 : modelli) {
+			System.out.println(model2.getName());
+		}
 	}
 	
 }
