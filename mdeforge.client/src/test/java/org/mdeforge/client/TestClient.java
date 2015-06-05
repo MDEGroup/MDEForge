@@ -1,13 +1,9 @@
 package org.mdeforge.client;
 
-
-import org.junit.Ignore;
-import org.junit.Test;
-
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.Artifact;
@@ -21,6 +17,10 @@ public class TestClient {
 
 	private MDEForgeClient c;
 
+//	@BeforeClass
+//	public static void setup() throws Exception {
+//		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
+//	}
 
 	@Ignore
 	@Test
@@ -48,7 +48,6 @@ public class TestClient {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
@@ -71,6 +70,7 @@ public class TestClient {
 	}
 
 
+	@Ignore
 	@Test
 	public void testAddModel(){
 		try {

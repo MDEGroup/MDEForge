@@ -45,9 +45,9 @@ public class Artifact implements java.io.Serializable{
 	private String description = null;
 	private String authors = null;
 	private List<String> tags = null;
-	private String extractedContents = null;
-
 	private String version = null;
+	private String extractedContents = null;
+	private String nsuri;
 
 	public String getVersion() {
 		return version;
@@ -259,5 +259,13 @@ public class Artifact implements java.io.Serializable{
 
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
+	}
+
+	public String getNsuri() {
+		return nsuri;
+	}
+
+	public void setNsuri(String nsuri) {
+		this.nsuri = nsuri;
 	}
 }
