@@ -509,7 +509,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		return operations.find(query, Metric.class);
 
 	}
-	//TODO Da eliminare Assolutamente
+	//TODO Antonio Da eliminare Assolutamente
 	@Override
 	public void createIndex(){
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
