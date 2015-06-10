@@ -11,6 +11,7 @@ import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -40,19 +41,23 @@ public class Artifact implements java.io.Serializable{
 	private Date modified = null;
 	private GridFileMedia file = null;
 	private boolean open = false;
+	
 	private String name = null;
-
+	
 	private String description = null;
 	//private List<String> tags = null;
+	
 	private String version = null;
+	
 	private String extractedContents = null;
-//	public List<String> getTags() {
-//		return tags;
-//	}
-//
-//	public void setTags(List<String> tags) {
-//		this.tags = tags;
-//	}
+	private List<String> tags;
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
 
 	public String getVersion() {
 		return version;

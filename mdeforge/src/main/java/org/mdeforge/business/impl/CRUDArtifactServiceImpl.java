@@ -27,11 +27,14 @@ import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
@@ -61,6 +64,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected String basePath;
 
 	protected Class<T> persistentClass;
+
+	@Override
+	public List<Artifact> search(String searchString) throws BusinessException {
+		TextCriteria criteria = TextCriteria.forLanguage("en").matching(searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore().with(new PageRequest(0, 5));
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		List<Artifact> result = operations.find(query, Artifact.class);
+		return result;
+	}
 
 	@SuppressWarnings("unchecked")
 	public CRUDArtifactServiceImpl() {

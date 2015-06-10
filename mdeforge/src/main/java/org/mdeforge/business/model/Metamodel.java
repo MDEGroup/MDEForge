@@ -3,6 +3,8 @@ package org.mdeforge.business.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.index.TextIndexed;
+
 
 /**
  * A representation of the model object '<em><b>Metamodel</b></em>'. <!--
@@ -17,7 +19,6 @@ public class Metamodel extends Artifact {
 	 */
 	private static final long serialVersionUID = -8514238418981408258L;
 
-	
 	private List<String> uri = new ArrayList<String>();
 	/**
 	 * A toString method which prints the values of all EAttributes of this

@@ -107,7 +107,7 @@
 				</a>
 			</div>			
 			<div class="span4">
-				<a href="#">
+				<a href="${pageContext.request.contextPath}/public/search">		
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top search glyphicon-primary">
