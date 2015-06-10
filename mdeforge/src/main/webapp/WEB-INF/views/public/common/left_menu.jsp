@@ -16,9 +16,7 @@
 			
 			<!-- Regular Size Menu -->
 			<ul>
-			
-												
-								<!-- Blank page template menu example -->
+				<!-- Blank page template menu example -->
 				<!-- Menu Regular Item (add class active to LI for an active menu item) -->
 				
 				<li class="active dropdown dd-1">

@@ -328,8 +328,7 @@
 
 											<!-- Table body -->
 											<tbody>
-												<c:forEach items="${ecoreMetamodel.relations}"
-													var="relation">
+												<c:forEach items="${ecoreMetamodel.relations}" var="relation">
 													<!-- Table row -->
 													<tr>
 														<c:choose>

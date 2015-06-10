@@ -15,7 +15,7 @@
 						<%-- <li class="hidden-phone"><a href="#" class="glyphicons shield"><i></i><spring:message code="public.menu.info" /></a></li> --%>
 						<li class="glyphs hidden-phone">
 							<ul>
-								<li><a href="#" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
+								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
 								<%-- <li><a href="${pageContext.request.contextPath}/public/register_start.htm" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li> --%>
 								<li><a href="#" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /> (Not available for now)</a></li>
 							</ul>

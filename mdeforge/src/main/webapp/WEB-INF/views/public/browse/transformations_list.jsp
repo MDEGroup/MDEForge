@@ -45,7 +45,7 @@
 					<c:forEach items="${transformationsList}" var="transformation">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td>${transformation.getName()}</td>
+						<td><a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${transformation.getId()}">${transformation.getName()}</a></td>
 						<td>
 							<c:forEach items="${transformation.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -57,7 +57,8 @@
 						<td class="center">${transformation.getCreated()}</td>
 						<td class="center">${transformation.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/transformation_details?metamodel_id=${transformation.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${transformation.getId()}" class="btn-action glyphicons eye_open btn-default" title="Transformation Details"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/private/use/execute_transformation?transformation_id=${transformation.getId()}" class="btn-action glyphicons play btn-success" title="Execute Transformation"><i></i></a>																	
 						</td>
 					</tr>
 					<!-- // Table row END -->
