@@ -45,9 +45,9 @@ public class AtlImporterTest {
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 
-	private static String pathToImportTransformation = "Families2Persons/transformations/";
+	private static String pathToImportTransformation = "imported/transformations/";
 
-	private static String pathToImportMetamodel = "Families2Persons/metamodels/";
+	private static String pathToImportMetamodel = "imported/metamodels/";
 
 	private static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -184,8 +184,8 @@ public class AtlImporterTest {
 		}
 		return result;
 	}
-	
-	private void testEMFTVM() {
-		ExecEnv env = EmftvmFactory.eINSTANCE.createExecEnv();
-	}
+//	
+//	private void testEMFTVM() {
+//		ExecEnv env = EmftvmFactory.eINSTANCE.createExecEnv();
+//	}
 }

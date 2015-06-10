@@ -44,7 +44,7 @@ public class ATLPublicController {
 	@RequestMapping(value = "/browse/transformation_details", method = { RequestMethod.GET })
 	public String transformationDetails(Model model, @RequestParam String transformation_id) {
 
-		ATLTransformation atlTransformation = aTLTransformationService.findOne(transformation_id);
+		ATLTransformation atlTransformation = aTLTransformationService.findOnePublic(transformation_id);
 		
 		model.addAttribute("atlTransformation", atlTransformation);
 		

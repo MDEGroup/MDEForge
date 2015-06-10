@@ -161,8 +161,15 @@
 											<div class="row-fluid">
 												<div class="span4">
 													<h5 class="strong">Transformation File</h5>
-													<a href="#modal-simple" class="btn btn-primary btn-small btn-block" data-toggle="modal"><i class="icon-eye-open icon-fixed-width"></i> Visualize Transformation</a> 													
-													<a href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}" class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download Transformation</a>
+													<a href="#modal-simple"
+														class="btn btn-primary btn-small btn-block"
+														data-toggle="modal"><i
+														class="icon-eye-open icon-fixed-width"></i> Visualize
+														Transformation</a> <a
+														href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
+														class="btn btn-success btn-small btn-block"><i
+														class="icon-download-alt icon-fixed-width"></i> Download
+														Transformation</a>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -200,126 +207,186 @@
 
 
 			<hr>
-			
-				
-		<div class="widget widget-heading-simple widget-body-white">
-		
-			<!-- Widget Heading -->
-			<div class="widget-head">
-				<h3 class="heading glyphicons show_thumbnails"><i></i>Execute the Transformation</h3>
-			</div>
-			<!-- // Widget Heading END -->
-			
-			<div class="widget-body">
-				<div class="row-fluid">
-				<div class="span4">
-					<table class="table table-bordered table-striped table-white">
-							<thead>
-								<tr>
-									<th class="center">Input Metamodels</th>									
-								</tr>
-							</thead>
-							<tbody>
-									<c:forEach items="${atlTransformation.relations}" var="relation">
-													<!-- Table row -->
-													<tr>
-														<c:choose>
-															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
-																<td class="center"><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
-															</c:when>
-														</c:choose>
-													</tr>
-													<!-- // Table row END -->
-									</c:forEach>
-									
-						</table>
-					
-					
-			</div>
-			<div class="span4">
-				<table class="table table-bordered table-striped table-white">
-							<tbody>
+
+
+			<div class="widget widget-heading-simple widget-body-white">
+
+				<!-- Widget Heading -->
+				<div class="widget-head">
+					<h3 class="heading glyphicons show_thumbnails">
+						<i></i>Execute the Transformation
+					</h3>
+				</div>
+				<!-- // Widget Heading END -->
+
+				<div class="widget-body">
+					<div class="row-fluid">
+						<div class="span4">
+							<table class="table table-bordered table-striped table-white">
+								<thead>
 									<tr>
-										<td class="center">${atlTransformation.getName()}</td>										
+										<th class="center">Input Metamodels</th>
 									</tr>
-						</table>
-						<a href="${pageContext.request.contextPath}/private/use/execute_transformation?transformation_id=${atlTransformation.getId()}" class="btn btn-success btn-small btn-block"><i class="icon-play icon-fixed-width"></i> Execute Transformation</a>
-			</div>
-			<div class="span4">
-			
-					<table class="table table-bordered table-striped table-white">
-							<thead>
-								<tr>
-									<th class="center">Output Metamodels</th>									
-								</tr>
-							</thead>
-							<tbody>
-									<c:forEach items="${atlTransformation.relations}" var="relation">
-													<!-- Table row -->
-													<tr>
-														<c:choose>
-															<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
-																<td class="center"><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
-															</c:when>
-														</c:choose>
-													</tr>
-													<!-- // Table row END -->
+								</thead>
+								<tbody>
+									<c:forEach items="${atlTransformation.relations}"
+										var="relation">
+										<!-- Table row -->
+										<tr>
+											<c:choose>
+												<c:when
+													test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
+													<td class="center"><a
+														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+												</c:when>
+											</c:choose>
+										</tr>
+										<!-- // Table row END -->
 									</c:forEach>
-						</table>
-					
-			</div>
-			</div>
-		</div>
-	</div>
+							</table>
 
 
-<hr>
+						</div>
+						<div class="span4">
+							<table class="table table-bordered table-striped table-white">
+								<tbody>
+									<tr>
+										<td class="center">${atlTransformation.getName()}</td>
+									</tr>
+							</table>
+							<a
+								href="${pageContext.request.contextPath}/private/use/execute_transformation?transformation_id=${atlTransformation.getId()}"
+								class="btn btn-success btn-small btn-block"><i
+								class="icon-play icon-fixed-width"></i> Execute Transformation</a>
+						</div>
+						<div class="span4">
+
+							<table class="table table-bordered table-striped table-white">
+								<thead>
+									<tr>
+										<th class="center">Output Metamodels</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${atlTransformation.relations}"
+										var="relation">
+										<!-- Table row -->
+										<tr>
+											<c:choose>
+												<c:when
+													test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
+													<td class="center"><a
+														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+												</c:when>
+											</c:choose>
+										</tr>
+										<!-- // Table row END -->
+									</c:forEach>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<hr>
 
 			<div class="">
 				<div class="">
 					<h4>Metrics</h4>
 
-						<table class="table table-bordered table-striped table-white">
-	
-							<!-- Table heading -->
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th class="center">Value</th>
-								</tr>
-	
-							</thead>
-							<!-- // Table heading END -->
-	
-							<!-- Table body -->
+					<table class="table table-bordered table-striped table-white">
+
+						<!-- Table heading -->
+						<!-- 							<thead> -->
+						<!-- 								<tr> -->
+						<!-- 									<th>Name</th> -->
+						<!-- 									<th class="center">Value</th> -->
+						<!-- 								</tr> -->
+
+						<!-- 							</thead> -->
+
+						<thead>
+							<tr>
+								<th rowspan="2">Name</th>
+								<th rowspan="2">Description</th>
+								<th class="center" colspan="5">Value</th>
+							</tr>
+							<tr>
+								<th>Max</th>
+								<th>Min</th>
+								<th>Avg</th>
+								<th>Median</th>
+								<th>Standard Deviation</th>
+							</tr>
+						</thead>
+						<!-- // Table heading END -->
+
+						<!-- Table body -->
+<!-- 						<tbody> -->
+<%-- 							<c:forEach items="${atlTransformation.getMetrics()}" var="metric"> --%>
+<!-- 								Table row -->
+<!-- 								<tr> -->
+<%-- 									<td class="left">${metric.getName()}</td> --%>
+<%-- 									<td class="center"><span class="badge badge-success"><fmt:formatNumber --%>
+<%-- 												value="${metric.getValue()}" maxFractionDigits="3" /></span></td> --%>
+<!-- 								</tr> -->
+<!-- 								// Table row END -->
+<%-- 							</c:forEach> --%>
+<!-- 						</tbody> -->
 							<tbody>
-								<c:forEach items="${atlTransformation.getMetrics()}" var="metric">
-									<!-- Table row -->
-									<tr>
-										<td class="left">${metric.getName()}</td>
-										<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${metric.getValue()}" maxFractionDigits="3" /></span></td>
-									</tr>
-									<!-- // Table row END -->
-								</c:forEach>
-						</table>
+						<c:forEach items="${atlTransformation.getMetrics()}" var="metric">
+							<!-- Table row -->
+							<tr>
+								
+								<td class="left">${metric.getName()}</td>
+								<td>${metric.getDescription()}</td>
+								
+								<c:choose>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+								    <td colspan="5" class="center">${metric.getValue()}</td>
+								  </c:when>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:when>
+								  <c:otherwise>
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:otherwise>
+								</c:choose>														
+								
+							</tr>
+							<!-- // Table row END -->
+						</c:forEach>						
+				</table> 
+						<!-- End body -->
+					</table>
 				</div>
 
 
 
 			</div>
-			
-		
-		
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
+
+
+
+
+
+
+
+
+
+
+
+
+
 		</div>
 
 
@@ -346,17 +413,19 @@
 							<c:forEach items="${atlTransformation.properties}" var="property">
 								<tr>
 									<td class="left"><b>${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</b></td>
-									<td class="">										
-										 <c:choose>
-										  <c:when test="${fn:length(property.getValue()) < 40}">
-										    	<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" >${property.getValue()}</span>
-										  </c:when>										  
-										  <c:otherwise>
-										  
-											<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" style="font-size:80%;">${fn:replace(property.getValue(), '/', '/ ')}</span>										
-										  </c:otherwise>
-										</c:choose> 
-									</td>
+									<td class=""><c:choose>
+											<c:when test="${fn:length(property.getValue()) < 40}">
+												<span data-toggle="tooltip"
+													data-original-title="${property.getValue()}"
+													data-placement="left">${property.getValue()}</span>
+											</c:when>
+											<c:otherwise>
+
+												<span data-toggle="tooltip"
+													data-original-title="${property.getValue()}"
+													data-placement="left" style="font-size: 80%;">${fn:replace(property.getValue(), '/', '/ ')}</span>
+											</c:otherwise>
+										</c:choose></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -369,7 +438,7 @@
 		</div>
 
 
-		
+
 
 
 	</div>
@@ -399,7 +468,8 @@
 
 
 
-<c:import var="fileToVisualize" url="file:///${atlTransformationFile.getAbsolutePath()}" />
+<c:import var="fileToVisualize"
+	url="file:///${atlTransformationFile.getAbsolutePath()}" />
 
 
 <!-- Modal -->

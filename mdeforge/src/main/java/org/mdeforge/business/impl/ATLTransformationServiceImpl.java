@@ -43,6 +43,7 @@ import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
@@ -55,6 +56,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -79,12 +81,21 @@ public class ATLTransformationServiceImpl extends
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
+	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
 	private ModelService modelService;
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-
+	
+	@Override
+	public ATLTransformation findOnePublic(String id) {
+		ATLTransformation a = super.findOnePublic(id);
+		a.setMetrics(getMetrics(a));
+		return a;
+	}
+	
 	@Override
 	public ResponseGrid<ATLTransformation> findAllPaginated(
 			RequestGrid requestGrid) throws BusinessException {
@@ -174,17 +185,20 @@ public class ATLTransformationServiceImpl extends
 		 * Load metamodels
 		 */
 		try {
+			EcoreMetamodel atlMetamodel = (EcoreMetamodel) artifactRepository.findOne("552bbd09d4c659da8e19eca5");
+			//ecoreMetamodelService.registerMetamodel(atlMetamodel);
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 
-			injector.inject(inputMetamodel, basePath + "ATL.ecore");
+			injector.inject(inputMetamodel, gridFileMediaService.getFilePath(atlMetamodel));
 
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
 			String transfPath = inject((ATLTransformation) AtlTransformation);
 			FileInputStream fis = new FileInputStream(transfPath);
-
+			
+			
 			injector.inject(inputModel, fis, null);
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "ATL");
@@ -314,7 +328,6 @@ public class ATLTransformationServiceImpl extends
 	@Override
 	public String inject(ATLTransformation atlTransformation)
 			throws BusinessException {
-		System.out.println("Start Injection");
 		String outputFilePath = basePath + atlTransformation.getName() + ".xmi";
 		AtlResourceImpl ri = new AtlResourceImpl();
 		ResourceSet rs = new ResourceSetImpl();

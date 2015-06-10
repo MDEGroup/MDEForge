@@ -3,8 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-
-
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -14,7 +12,6 @@
 	height: 200px;
 }
 </style>
-
 
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
@@ -29,11 +26,6 @@
 			code="mdeforge.public.back.browse.metamodel_details.detail" /></li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-
-
-
 <!-- Heading -->
 <div class="heading-buttons">
 	<h3>${ecoreMetamodel.getName()}
@@ -55,23 +47,11 @@
 </div>
 <div class="separator bottom"></div>
 <!-- // Heading END -->
-
-
-
-
-
 <div class="innerLR">
-
-
-
 	<div class="row-fluid">
 		<div class="span9 tablet-column-reset">
-
 			<div
 				class="widget widget-heading-simple widget-body-white widget-employees">
-
-
-
 				<div class="widget-body padding-none">
 
 					<div class="row-fluid row-merge">
@@ -113,9 +93,7 @@
 												<li><i class="icon-envelope icon-li icon-fixed-width"></i>
 													${ecoreMetamodel.getAuthor().getEmail()}</li>
 											</ul>
-
 											<div class="separator bottom"></div>
-
 											<h5 class="strong">General</h5>
 											<!-- Profile Photo -->
 											<div class="center">
@@ -144,8 +122,6 @@
 
 												</table>
 											</div>
-
-
 										</div>
 										<div class="span8">
 											<h5 class="strong">Description</h5>
@@ -155,7 +131,6 @@
 													<c:if test="${property.getName() == 'Description '}">
 															${property.getValue()}
 														</c:if>
-
 												</c:forEach>
 											</p>
 											<div class="row-fluid">
@@ -208,94 +183,10 @@
 
 				</div>
 			</div>
-
-
 			<hr>
-
-			<div class="row-fluid">
-				<div class="span6">
-					<h4>Metrics</h4>
-
-					<%-- <table class="table table-bordered table-striped table-white">
-	
-					<!-- Table heading -->
-					<thead>
-						<tr>						
-							<th rowspan="2">Name</th>
-							<th rowspan="2">Description</th>
-							<th class="center" colspan="5">Value</th>	
-						</tr>					
-						<tr>					
-							<th>Max</th>						
-							<th>Min</th>						
-							<th>Avg</th>						
-							<th>Median</th>						
-							<th>Standard Deviation</th>						
-						</tr>
-					</thead>
-					<!-- // Table heading END -->
-	
-					<!-- Table body -->
-					<tbody>
-						<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
-							<!-- Table row -->
-							<tr>
-								
-								<td class="left">${metric.getName()}</td>
-								<td>${metric.getDescription()}</td>
-								
-								<c:choose>
-								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
-								    <td colspan="5" class="center">${metric.getValue()}</td>
-								  </c:when>
-								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
-								    <td>${metric.getMaximum()}</td>
-								    <td>${metric.getMinimum()}</td>
-								    <td>${metric.getAverage()}</td>
-								    <td>${metric.getMedian()}</td>
-								    <td>${metric.getStandardDeviation()}</td>
-								  </c:when>
-								  <c:otherwise>
-								    <td>${metric.getMaximum()}</td>
-								    <td>${metric.getMinimum()}</td>
-								    <td>${metric.getAverage()}</td>
-								    <td>${metric.getMedian()}</td>
-								    <td>${metric.getStandardDeviation()}</td>
-								  </c:otherwise>
-								</c:choose>														
-								
-							</tr>
-							<!-- // Table row END -->
-						</c:forEach>						
-				</table> --%>
-					<table class="table table-bordered table-striped table-white">
-
-						<!-- Table heading -->
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th class="center">Value</th>
-							</tr>
-
-						</thead>
-						<!-- // Table heading END -->
-
-						<!-- Table body -->
-						<tbody>
-							<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
-								<!-- Table row -->
-								<tr>
-									<td class="left">${metric.getName()}</td>
-									<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${metric.getValue()}" maxFractionDigits="3" /></span></td>
-								</tr>
-								<!-- // Table row END -->
-							</c:forEach>
-					</table>
-
-				</div>
-
-				<div class="span6">
-					<h4>&nbsp;</h4>
+			<div class="row-fluid">			
+				<div class="span12">
+					<h4>Relation</h4>
 					<div class="relativeWrap">
 						<div class="widget widget-tabs">
 
@@ -306,13 +197,13 @@
 									<li><a href="#mio_tab_2" data-toggle="tab"><i></i>Containment</a></li>
 									<li><a href="#mio_tab_3" data-toggle="tab"><i></i>Cosine</a></li>
 									<li><a href="#mio_tab_4" data-toggle="tab"><i></i>Dice</a></li>
+									<li><a href="#mio_tab_5" data-toggle="tab"><i></i>Transformation From</a></li>
+									<li><a href="#mio_tab_6" data-toggle="tab"><i></i>Transformation To</a></li>
 								</ul>
 							</div>
 							<!-- // Tabs Heading END -->
-
 							<div class="widget-body">
 								<div class="tab-content">
-
 									<!-- Tab content -->
 									<div class="tab-pane active" id="mio_tab_1">
 										<table class="table table-bordered table-striped table-white">
@@ -362,7 +253,6 @@
 
 									</div>
 									<!-- // Tab content END -->
-
 									<!-- Tab content -->
 									<div class="tab-pane" id="mio_tab_2">
 
@@ -505,27 +395,178 @@
 
 									</div>
 									<!-- // Tab content END -->
+									<!-- Tab content -->
+									<div class="tab-pane" id="mio_tab_5">
+
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th class="center"><spring:message	code="mdeforge.relation.domainconformto" /></th>
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}"
+													var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when
+																test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
+																<c:choose>
+																	<c:when
+																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																		<td><a
+																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																	</c:when>
+																	<c:otherwise>
+																		<td><a
+																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																	</c:otherwise>
+																</c:choose>
+															</c:when>
+														</c:choose>
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+
+									</div>
+									<!-- // Tab content END -->
+									<!-- Tab content -->
+									<div class="tab-pane" id="mio_tab_6">
+
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th class="center"><spring:message	code="mdeforge.relation.codomainconformto"></spring:message></th>
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${ecoreMetamodel.relations}"
+													var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when
+																test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
+																<c:choose>
+																	<c:when
+																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																		<td><a
+																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																	</c:when>
+																	<c:otherwise>
+																		<td><a
+																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																	</c:otherwise>
+																</c:choose>
+															</c:when>
+														</c:choose>
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+
+									</div>
+									<!-- // Tab content END -->
 								</div>
 							</div>
 						</div>
 					</div>
-
-
-
-
-
-
 				</div>
-
-
-
 			</div>
+			<div class="row-flid"><div class="span6">
+					<h4>Metrics</h4>
 
+					<%-- <table class="table table-bordered table-striped table-white">
+	
+					<!-- Table heading -->
+					<thead>
+						<tr>						
+							<th rowspan="2">Name</th>
+							<th rowspan="2">Description</th>
+							<th class="center" colspan="5">Value</th>	
+						</tr>					
+						<tr>					
+							<th>Max</th>						
+							<th>Min</th>						
+							<th>Avg</th>						
+							<th>Median</th>						
+							<th>Standard Deviation</th>						
+						</tr>
+					</thead>
+					<!-- // Table heading END -->
+	
+					<!-- Table body -->
+					<tbody>
+						<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
+							<!-- Table row -->
+							<tr>
+								
+								<td class="left">${metric.getName()}</td>
+								<td>${metric.getDescription()}</td>
+								
+								<c:choose>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+								    <td colspan="5" class="center">${metric.getValue()}</td>
+								  </c:when>
+								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:when>
+								  <c:otherwise>
+								    <td>${metric.getMaximum()}</td>
+								    <td>${metric.getMinimum()}</td>
+								    <td>${metric.getAverage()}</td>
+								    <td>${metric.getMedian()}</td>
+								    <td>${metric.getStandardDeviation()}</td>
+								  </c:otherwise>
+								</c:choose>														
+								
+							</tr>
+							<!-- // Table row END -->
+						</c:forEach>						
+				</table> --%>
+					<table class="table table-bordered table-striped table-white">
+
+						<!-- Table heading -->
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th class="center">Value</th>
+							</tr>
+
+						</thead>
+						<!-- // Table heading END -->
+
+						<!-- Table body -->
+						<tbody>
+							<c:forEach items="${ecoreMetamodel.getMetrics()}" var="metric">
+								<!-- Table row -->
+								<tr>
+									<td class="left">${metric.getName()}</td>
+									<td class="center"><span class="badge badge-success"><fmt:formatNumber value="${metric.getValue()}" maxFractionDigits="3" /></span></td>
+								</tr>
+								<!-- // Table row END -->
+							</c:forEach>
+					</table>
+
+				</div></div>
 
 		</div>
-
-
-
 		<div class="span3 tablet-column-reset">
 			<!-- Latest Orders/List Widget -->
 			<div class="widget widget-heading-simple widget-body-gray"
@@ -713,59 +754,23 @@
 
 		</div>
 
-
-
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <c:import var="fileToVisualize"
 	url="file:///${ecoreMetamodelFile.getAbsolutePath()}" />
-
-
 <!-- Modal -->
 <div class="modal hide fade" id="modal-simple"
 	style="width: 800px; left: 42%">
-
 	<pre class="prettyprint">
 ${fn:escapeXml(fileToVisualize)}
 </pre>
-
 	<!-- Modal footer -->
 	<div class="modal-footer">
 		<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
 	</div>
 	<!-- // Modal footer END -->
-
 </div>
 <!-- // Modal END -->
-
-
-
 
 <script>
 	var res = '${ecoreMetamodel.getExtractedContents()}'.trim();

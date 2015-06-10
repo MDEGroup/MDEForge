@@ -114,8 +114,7 @@ public class EcoreMetamodelServiceImpl extends
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	@Value("#{cfgproperties[basePath2]}")
-	protected String basePath2;
+
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact)
@@ -136,7 +135,8 @@ public class EcoreMetamodelServiceImpl extends
 	public EcoreMetamodel findOnePublic(String id) {
 		EcoreMetamodel a = super.findOnePublic(id);
 		a.setMetrics(getMetrics(a));
-		a.setExtractedContents(serializeContent(a));
+		if (a.getExtractedContents()==null)
+			a.setExtractedContents(serializeContent(a));
 		a.getRelations().addAll(
 				similarityRelationService.findTopProximity(a, 5));
 		a.getRelations().addAll(
@@ -189,7 +189,7 @@ public class EcoreMetamodelServiceImpl extends
 		 */
 		try {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, basePath2 + "Metric.ecore");
+			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(inputMetamodel,
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
@@ -204,13 +204,13 @@ public class EcoreMetamodelServiceImpl extends
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
 					(Object[]) getModulesList(basePath + "EcoreMetric.asm"));
-			extractor.extract(outModel, basePath2 + "sampleCompany_Cut.xmi");
+			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-			List<Metric> result = getMetricList(basePath2
+			List<Metric> result = getMetricList(basePath
 					+ "sampleCompany_Cut.xmi", emm);
-			File temp2 = new File(basePath2 + "sampleCompany_Cut.xmi");
+			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
 			temp2.delete();
 			metricRepository.save(result);
 			return result;
@@ -337,7 +337,6 @@ public class EcoreMetamodelServiceImpl extends
 		List<String> result = new ArrayList<String>();
 		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
 				.getId());
-		ecoreMetamodel.getFile();
 		ecoreMetamodel.setFile(gridFileMediaService
 				.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
@@ -420,7 +419,7 @@ public class EcoreMetamodelServiceImpl extends
 				.getExtensionToFactoryMap()
 				.put("*", new XMIResourceFactoryImpl());
 		Resource load_resource = load_resourceSet.getResource(
-				URI.createURI("file:///" + gridFileMediaService.getFilePath(emm)), true);
+				URI.createURI(gridFileMediaService.getFilePath(emm)), true);
 		String test = ResourceSerializer.serialize(load_resource);
 		return test;
 	}
