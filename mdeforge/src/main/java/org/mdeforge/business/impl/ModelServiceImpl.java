@@ -2,9 +2,11 @@ package org.mdeforge.business.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
@@ -13,8 +15,10 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ValuedRelationService;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ConformToRelation;
+import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
@@ -22,6 +26,10 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.integration.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 
@@ -35,8 +43,19 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private ModelRepository modelRepository;
 	@Override
 	public List<Model> findModelsByMetamodel(Metamodel metamodel) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Model> result = new ArrayList<Model>();
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(metamodel.getId()));
+		
+		Criteria c1 = Criteria.where("_class").is(ConformToRelation.class.getCanonicalName());
+		query.addCriteria(new Criteria().andOperator(c1, c2));
+		List<ConformToRelation> dcts =  n.find(query, ConformToRelation.class);
+		for (ConformToRelation domainConformToRelation : dcts) {
+			if(domainConformToRelation.getFromArtifact() instanceof Model)
+			result.add((Model)domainConformToRelation.getFromArtifact());
+		}
+		return result;
 	}
 	@Override
 	public Model create(Model artifact) throws BusinessException {
@@ -92,5 +111,14 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			throws BusinessException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
+		List<Model> result = new ArrayList<Model>();
+		for (Relation rel : atlTransformation.getRelations()) {
+			if(rel instanceof DomainConformToRelation)
+				result.addAll(findModelsByMetamodel((EcoreMetamodel)rel.getToArtifact()));
+		}
+		return result;
 	}
 }

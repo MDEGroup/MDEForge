@@ -136,7 +136,10 @@ public class ATLTransformationServiceImpl extends
 			for (Relation relation : model.getRelations())
 				if (relation instanceof ConformToRelation) {
 					guard = isPresent(relation.getToArtifact(), listInput);
-					if(guard) {
+					if(model.getId()!=null)	{
+						model = modelService.findOne(model.getId());
+					}
+					else if(guard) {
 						model.setAuthor(user);
 						model.getShared().add(user);
 						modelService.create(model);
