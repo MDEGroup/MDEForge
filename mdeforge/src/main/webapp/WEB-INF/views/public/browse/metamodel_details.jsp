@@ -485,7 +485,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="row-flid"><div class="span6">
+			<div class="row-flid">
+				<div class="span6">
 					<h4>Metrics</h4>
 
 					<%-- <table class="table table-bordered table-striped table-white">
@@ -564,7 +565,8 @@
 							</c:forEach>
 					</table>
 
-				</div></div>
+				</div>
+			</div>
 
 		</div>
 		<div class="span3 tablet-column-reset">

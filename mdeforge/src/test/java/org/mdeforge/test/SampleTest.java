@@ -1,16 +1,19 @@
 package org.mdeforge.test;
 
-
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.apache.lucene.analysis.StopAnalyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetamodelService;
-import org.mdeforge.business.CRUDRelationService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
@@ -20,11 +23,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.tartarus.snowball.ext.PorterStemmer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-								   "file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml"})
-
+@ContextConfiguration(locations = {
+		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
+		"file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml" })
 public class SampleTest {
 
 	@Autowired
@@ -37,13 +41,15 @@ public class SampleTest {
 	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	
+
 	@Ignore
 	@Test
 	public void getListSimilarity() {
 		try {
-			List<SimilarityRelation> similarityRelationList = similarityRelationService.findAll(1);
-			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/include2.txt");
+			List<SimilarityRelation> similarityRelationList = similarityRelationService
+					.findAll(1);
+			PrintWriter p = new PrintWriter(
+					"/Users/juridirocco/Desktop/include2.txt");
 			for (SimilarityRelation similarityRelation : similarityRelationList) {
 				p.println(similarityRelation.getValue());
 			}
@@ -53,42 +59,34 @@ public class SampleTest {
 			e.printStackTrace();
 		}
 	}
-	final static double[] testArray = {0.1,
-						  0.125,
-						  0.15,
-						  0.175,
-						  0.2,
-						  0.225,
-						  0.25,
-						  0.275,
-						  0.3,
-						  0.325,
-						  0.35,
-						  0.375,
-						  0.4,
-						  0.425,
-						  0.45,
-						  0.475,
-						  0.5};
+
+	final static double[] testArray = { 0.1, 0.125, 0.15, 0.175, 0.2, 0.225,
+			0.25, 0.275, 0.3, 0.325, 0.35, 0.375, 0.4, 0.425, 0.45, 0.475, 0.5 };
+
 	@Ignore
 	@Test
 	public void getSimilarityResults() {
 		try {
-			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/result2.txt");
+			PrintWriter p = new PrintWriter(
+					"/Users/juridirocco/Desktop/result2.txt");
 			for (double d : testArray) {
-				List<Cluster> clusters = ecoreMetamodelService.getSimilarityClusters(d, similarityRelationService);
+				List<Cluster> clusters = ecoreMetamodelService
+						.getSimilarityClusters(d, similarityRelationService);
 				int maxCluster = 0;
 				double average = 0;
 				int count = 0;
 				int noCluster = 0;
 				for (Cluster cluster : clusters) {
-					maxCluster = (maxCluster < cluster.getArtifacts().size())?cluster.getArtifacts().size():maxCluster;
+					maxCluster = (maxCluster < cluster.getArtifacts().size()) ? cluster
+							.getArtifacts().size() : maxCluster;
 					count += cluster.getArtifacts().size();
-					if(cluster.getArtifacts().size()==1)
+					if (cluster.getArtifacts().size() == 1)
 						noCluster++;
 				}
-				average =  (count*1.0)/(clusters.size()*1.0);
-				String s = d + ";" + clusters.size() + ";" + average + ";" + maxCluster + ";" + noCluster + ";" + (clusters.size() - noCluster);
+				average = (count * 1.0) / (clusters.size() * 1.0);
+				String s = d + ";" + clusters.size() + ";" + average + ";"
+						+ maxCluster + ";" + noCluster + ";"
+						+ (clusters.size() - noCluster);
 				p.println(s);
 			}
 			p.close();
@@ -97,33 +95,52 @@ public class SampleTest {
 			e.printStackTrace();
 		}
 	}
+
 	@Ignore
 	@Test
 	public void getFileNode() {
 		try {
-			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/juri.txt");
+			PrintWriter p = new PrintWriter(
+					"/Users/juridirocco/Desktop/juri.txt");
 			List<SimilarityRelation> srl = similarityRelationService.findAll();
 			for (SimilarityRelation similarityRelation : srl) {
-				p.println(similarityRelation.getToArtifact().getName() + ";" + 
-						similarityRelation.getFromArtifact().getName() + ";" + similarityRelation.getValue());
+				p.println(similarityRelation.getToArtifact().getName() + ";"
+						+ similarityRelation.getFromArtifact().getName() + ";"
+						+ similarityRelation.getValue());
 			}
 			p.close();
+		} catch (Exception e) {
 		}
-		catch (Exception e) {}
-		
+
 	}
+
 	@Ignore
 	@Test
 	public void getStringTest() {
 		try {
-			PrintWriter p = new PrintWriter("/Users/juridirocco/Desktop/listaMetamodelli.txt");
+			PrintWriter p = new PrintWriter(
+					"/Users/juridirocco/Desktop/listaMetamodelli.txt");
 			List<EcoreMetamodel> srl = ecoreMetamodelService.findAllPublic();
 			for (EcoreMetamodel similarityRelation : srl) {
 				p.println(similarityRelation.getName());
 			}
 			p.close();
+		} catch (Exception e) {
 		}
-		catch (Exception e) {}
-		
+
+	}
+
+	@Test
+	public void luceneTest(){
+//		String s = "The dog is on the table";
+//		PorterStemmer stemmer = new PorterStemmer();
+//		//stemmer.setCurrent(s);
+//		InputStream reader = new ByteArrayInputStream( s.getBytes( ) );
+//		 TokenStream ts = new StandardTokenizer(reader);
+//         ts = new StandardFilter(ts);
+//         ts = new LowerCaseFilter(ts);
+//
+//	    StopAnalyzer
+//		System.out.println(stemmer.stem());
 	}
 }
