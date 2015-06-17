@@ -134,6 +134,7 @@ public class EcoreMetamodelServiceImpl extends
 		EcoreMetamodel result = super.create(artifact);
 		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
 		artifact.setExtractedContents( EmfjsonMongo.getInstance().serializeAndSaveMetamodel(path, jsonMongoUriBase + artifact.getId()));
+		artifactRepository.save(artifact);
 		return result;
 	}
 

@@ -96,7 +96,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			}
 		if (!relationFound)
 			throw new BusinessException();
-		
+		artifactRepository.save(artifact);
 		return result;
 	}
 	@Override
