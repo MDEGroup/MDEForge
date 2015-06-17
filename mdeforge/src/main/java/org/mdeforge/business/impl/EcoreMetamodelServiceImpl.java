@@ -69,6 +69,7 @@ import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
@@ -76,6 +77,7 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
+import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -93,11 +95,14 @@ import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
+import com.mongodb.Mongo;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
 		CRUDArtifactServiceImpl<EcoreMetamodel> implements
 		EcoreMetamodelService {
+	@Autowired
+	private Mongo mongo;
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
@@ -114,21 +119,22 @@ public class EcoreMetamodelServiceImpl extends
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
 
 
 	@Override
-	public EcoreMetamodel create(EcoreMetamodel artifact)
-			throws BusinessException {
+	public EcoreMetamodel create(EcoreMetamodel artifact) throws BusinessException {
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
-		if (isValid(artifact)) {
-			artifact.setValid(true);
-			return super.create(artifact);
-		}
-		else {
-			artifact.setValid(false);
-			return super.create(artifact);
-		}
+		artifact.setValid(isValid(artifact));
+		String path = gridFileMediaService.getFilePath(artifact);
+		EcoreMetamodel result = super.create(artifact);
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+		artifact.setExtractedContents( EmfjsonMongo.getInstance().serializeAndSaveMetamodel(path, jsonMongoUriBase + artifact.getId()));
+		return result;
 	}
 
 	@Override
@@ -219,6 +225,8 @@ public class EcoreMetamodelServiceImpl extends
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
+//		List<Metric> a = new ArrayList();
+//		return a;
 	}
 
 	private InputStream[] getModulesList(String modules_input)

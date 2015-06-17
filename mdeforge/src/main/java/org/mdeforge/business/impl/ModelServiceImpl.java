@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.uml2.uml.internal.operations.TypeOperations;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
@@ -23,24 +24,36 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.integration.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.Mongo;
+
 
 @Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
-	
 
+	@Autowired
+	private Mongo mongo;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private ModelRepository modelRepository;
+	@Value("#{cfgproperties[basePath]}")
+	protected String basePath;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
+	
 	@Override
 	public List<Model> findModelsByMetamodel(Metamodel metamodel) {
 		List<Model> result = new ArrayList<Model>();
@@ -69,7 +82,22 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));
-		return super.create(artifact);
+		String path = gridFileMediaService.getFilePath(artifact);
+		Model result = super.create(artifact);
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+		
+		List<Relation> relations = artifact.getRelations();
+		Boolean relationFound = false;
+		for (Relation relation : relations)
+			if (relation instanceof ConformToRelation){
+				relationFound = true;
+				String mmID = ((ConformToRelation) relation).getToArtifact().getId();
+				artifact.setExtractedContents( EmfjsonMongo.getInstance().saveModel(jsonMongoUriBase+mmID, path, jsonMongoUriBase+artifact.getId()));
+			}
+		if (!relationFound)
+			throw new BusinessException();
+		
+		return result;
 	}
 	@Override
 	public boolean isValid(Artifact art)throws BusinessException {

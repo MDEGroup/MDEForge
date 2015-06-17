@@ -36,7 +36,8 @@ public class Artifact implements java.io.Serializable{
 	private boolean open = false;
 	private String name = null;
 	private String description;
-	//private List<String> tags = null;
+	private List<String> tags = null;
+	private String authors = null;
 	private String version = null;
 	private String extractedContents = null;
 	@JsonIgnore
@@ -264,5 +265,21 @@ public class Artifact implements java.io.Serializable{
 
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
+	}
+
+	public String getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(String authors) {
+		this.authors = authors;
 	}
 }

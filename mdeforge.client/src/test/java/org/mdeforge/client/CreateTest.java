@@ -1,6 +1,7 @@
 package org.mdeforge.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -18,7 +19,7 @@ public class CreateTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
+		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
 	}
 	
 	@Ignore
@@ -43,25 +44,20 @@ public class CreateTest {
 		c.addProject(p);
 	}
 	
-	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
 		emm.setName("AndroidAppMM.ecore");
+		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
+		emm.setTags(tags);
+		emm.setDescription("Describes the basic structure of a general Relational DB");
+		emm.setAuthors("Metamodels Authors");
 		emm.setOpen(false);	
 		List<Workspace> worspaces = c.getWorkspaces();
 		for (Workspace project : worspaces) {
 			emm.getWorkspaces().add(project);
 		}
-		
-		EcoreMetamodel emm2 = new EcoreMetamodel();
-		emm2.setName("WebAppMM.ecore");
-		emm2.setOpen(false);	
-		for (Workspace project : worspaces) {
-			emm2.getWorkspaces().add(project);
-		}
-		c.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");
-		c.addEcoreMetamodel(emm2,"temp/WebAppMM.ecore");	
+		c.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");	
 	}
 	
 	@Ignore
@@ -92,7 +88,8 @@ public class CreateTest {
 			e.printStackTrace();
 		}
 	}
-	
+
+	@Ignore
 	@Test
 	public void addATLTransformation() throws Exception {
 		ATLTransformation emm = new ATLTransformation();
