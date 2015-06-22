@@ -1,10 +1,13 @@
 package org.mdeforge.business.impl;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.ArtifactNotFound;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
@@ -20,6 +23,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -37,11 +41,17 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
 
+import com.mongodb.Mongo;
+
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
 	@Autowired
+	private Mongo mongo;
+	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
+	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
 	@Autowired
 	protected RelationRepository relationRepository;
 	@Autowired
@@ -62,6 +72,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
 
 	protected Class<T> persistentClass;
 
@@ -529,5 +543,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		query.addCriteria(c1);
 		return operations.find(query, Metric.class);
 
+	}
+	
+	@Override
+	public Resource loadArtifacrt(String id)throws BusinessException{
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+
+		try {
+			resource.load(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+		
+		return resource;
 	}
 }

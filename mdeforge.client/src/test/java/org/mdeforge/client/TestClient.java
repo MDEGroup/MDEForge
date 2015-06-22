@@ -106,6 +106,7 @@ public class TestClient {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
@@ -126,8 +127,6 @@ public class TestClient {
 		}
 	}
 
-
-	@Ignore
 	@Test
 	public void testAddModel(){
 		try {

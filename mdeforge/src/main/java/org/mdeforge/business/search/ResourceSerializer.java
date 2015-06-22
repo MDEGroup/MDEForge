@@ -20,10 +20,12 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.emfjson.common.EObjects;
+import org.mdeforge.business.BusinessException;
 
 
 public class ResourceSerializer {
-	public static String serialize(Resource resource){
+	
+	public static String serialize(Resource resource)throws BusinessException{
 		String contentsString = "";
 		
 		final EList<EObject> contents = resource.getContents();
@@ -32,14 +34,14 @@ public class ResourceSerializer {
 			try {
 				contentsString = serialize(contentsString, contents.get(0));
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new BusinessException();
 			}
 		} else {
 			for (final EObject current: contents) {
 				try {
 					contentsString = serialize(contentsString, current);
 				} catch (IOException e) {
-					e.printStackTrace();
+					throw new BusinessException();
 				}
 			}
 		}

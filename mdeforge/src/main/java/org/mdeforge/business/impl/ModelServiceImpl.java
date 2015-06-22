@@ -2,14 +2,22 @@ package org.mdeforge.business.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.eclipse.uml2.uml.internal.operations.TypeOperations;
 import org.mdeforge.business.BusinessException;
@@ -24,7 +32,9 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,6 +53,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 
 	@Autowired
 	private Mongo mongo;
+	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
@@ -71,7 +83,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		return result;
 	}
 	@Override
-	public Model create(Model artifact) throws BusinessException {
+	public Model create(Model artifact) {
 		EcoreMetamodel emm = null;
 		for (Relation rel : artifact.getRelations()) {
 			if (rel instanceof ConformToRelation) {
@@ -86,19 +98,46 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		Model result = super.create(artifact);
 		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
 		
-		List<Relation> relations = artifact.getRelations();
-		Boolean relationFound = false;
-		for (Relation relation : relations)
-			if (relation instanceof ConformToRelation){
-				relationFound = true;
-				String mmID = ((ConformToRelation) relation).getToArtifact().getId();
-				artifact.setExtractedContents( EmfjsonMongo.getInstance().saveModel(jsonMongoUriBase+mmID, path, jsonMongoUriBase+artifact.getId()));
-			}
-		if (!relationFound)
-			throw new BusinessException();
+		artifact.setExtractedContents(EmfjsonMongo.getInstance().saveModel(emm.getId(), path, jsonMongoUriBase+artifact.getId()));
+		
 		artifactRepository.save(artifact);
 		return result;
 	}
+	
+	public String saveModel(String mmID, String sourceURI, String mongoURI){
+		Resource mm = ecoreMetamodelService.loadArtifacrt(mmID);
+		EPackage mmePackage = null;
+		
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+		
+		for (EObject eObject : mm.getContents()) {
+			if (eObject instanceof EPackage){
+				mmePackage = (EPackage) eObject;
+				load_resourceSet.getPackageRegistry().put(mmePackage.getNsURI(), mmePackage);
+			}
+        }
+		
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
+
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+		
+		EList<EObject> cs = load_resource.getContents();
+
+		res.getContents().addAll(cs);
+		
+		String contents = ResourceSerializer.serialize(res);
+
+		try {
+			res.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new BusinessException();
+		}
+		
+		return contents;
+	}
+	
 	@Override
 	public boolean isValid(Artifact art)throws BusinessException {
 		EcoreMetamodel emm = null;
