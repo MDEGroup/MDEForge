@@ -152,18 +152,18 @@ public class TestClient {
 		}
 	}
 
-//	@Ignore
-//	@Test
-//	public void testCreateIndex(){
-//		try {
-//			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-//			String result = c.createIndex();
-//			System.out.println(result);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	@Ignore
+	@Test
+	public void testCreateIndex(){
+		try {
+			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
+			String result = c.createIndex();
+			System.out.println(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 //
 //	@Ignore
 //	@Test

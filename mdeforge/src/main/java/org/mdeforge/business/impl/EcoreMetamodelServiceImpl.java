@@ -134,11 +134,11 @@ public class EcoreMetamodelServiceImpl extends
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
 		artifact.setValid(isValid(artifact));
-		String path = gridFileMediaService.getFilePath(artifact);
+//		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-		artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
-		artifactRepository.save(artifact);
+//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+//		artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
+//		artifactRepository.save(artifact);
 		return result;
 	}
 	

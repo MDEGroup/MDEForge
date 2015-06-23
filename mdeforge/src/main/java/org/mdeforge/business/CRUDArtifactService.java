@@ -33,4 +33,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void updateSimple(T artifact);
 	List<Artifact> search(String searchString) throws BusinessException;
 	Resource loadArtifacrt(String id);
+	void createIndex();
+	List<Artifact> orederedSearch(String text);
 }

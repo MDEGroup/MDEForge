@@ -351,4 +351,9 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster/" + threshold + "/" + computation);
 		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
+	
+	public String createIndex() throws Exception{
+		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
+		return result;
+	}
 }

@@ -94,13 +94,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));
-		String path = gridFileMediaService.getFilePath(artifact);
+//		String path = gridFileMediaService.getFilePath(artifact);
 		Model result = super.create(artifact);
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-		
-		artifact.setExtractedContents(EmfjsonMongo.getInstance().saveModel(emm.getId(), path, jsonMongoUriBase+artifact.getId()));
-		
-		artifactRepository.save(artifact);
+//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+//		
+//		artifact.setExtractedContents(EmfjsonMongo.getInstance().saveModel(emm.getId(), path, jsonMongoUriBase+artifact.getId()));
+//		
+//		artifactRepository.save(artifact);
 		return result;
 	}
 	

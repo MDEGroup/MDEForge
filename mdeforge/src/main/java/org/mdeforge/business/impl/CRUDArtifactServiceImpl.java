@@ -35,6 +35,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
@@ -80,12 +82,43 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected Class<T> persistentClass;
 
 	@Override
+	public void createIndex(){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+			.onField("name", 20F)
+			.onField("description", 10F)
+			.onField("authors", 5F)
+			.onField("tags", 7F)
+			.onField("extractedContents")
+			.named("ArtifactIndex")
+			.build();
+
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
+
+	@Override
 	public List<Artifact> search(String searchString) throws BusinessException {
 		TextCriteria criteria = TextCriteria.forLanguage("en").matching(searchString);
 		Query query = TextQuery.queryText(criteria).sortByScore().with(new PageRequest(0, 5));
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		List<Artifact> result = operations.find(query, Artifact.class);
 		return result;
+	}
+	
+	@Override
+	public List<Artifact> orederedSearch(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+
+		TextQuery query = new TextQuery(criteria);
+		query.setScoreFieldName("score");
+		query.sortByScore();
+
+		List<Artifact> artifacts = operations.find(query, Artifact.class);
+		
+		return artifacts;
 	}
 
 	@SuppressWarnings("unchecked")
