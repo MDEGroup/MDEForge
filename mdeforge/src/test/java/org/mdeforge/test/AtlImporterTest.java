@@ -54,7 +54,7 @@ public class AtlImporterTest {
 		return new String(Base64.encode(encoded));
 
 	}
-	
+	@Ignore
 	@Test
 	public void testInjection() {
 		User user = userService.findOne("5514b943d4c6c379396fe8b7");

@@ -1,14 +1,13 @@
 package org.mdeforge.test;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.apache.lucene.analysis.StopAnalyzer;
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.util.Version;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.tartarus.snowball.ext.PorterStemmer;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
@@ -129,18 +128,18 @@ public class SampleTest {
 		}
 
 	}
-
+	@Ignore
 	@Test
-	public void luceneTest(){
-//		String s = "The dog is on the table";
+	public void luceneTest() throws ParseException{
+//		String s = "played";
 //		PorterStemmer stemmer = new PorterStemmer();
-//		//stemmer.setCurrent(s);
-//		InputStream reader = new ByteArrayInputStream( s.getBytes( ) );
-//		 TokenStream ts = new StandardTokenizer(reader);
-//         ts = new StandardFilter(ts);
-//         ts = new LowerCaseFilter(ts);
-//
-//	    StopAnalyzer
-//		System.out.println(stemmer.stem());
+//		stemmer.setCurrent(s);
+//		stemmer.stem();
+//		System.out.println(stemmer.getCurrent());
+		EnglishAnalyzer en_an = new EnglishAnalyzer(Version.LUCENE_34);
+		QueryParser parser = new QueryParser(Version.LUCENE_34, "your_field", en_an);
+		String str = "goes";
+		System.out.println("result: " + parser.parse(str)); //amenit
+
 	}
 }
