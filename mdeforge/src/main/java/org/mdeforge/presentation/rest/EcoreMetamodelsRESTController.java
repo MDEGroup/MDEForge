@@ -150,6 +150,7 @@ public class EcoreMetamodelsRESTController {
 			// Response success
 			return new ResponseEntity<Artifact>(s, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

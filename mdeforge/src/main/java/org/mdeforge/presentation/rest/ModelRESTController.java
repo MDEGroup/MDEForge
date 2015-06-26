@@ -132,6 +132,7 @@ public class ModelRESTController {
 			// Response success
 			return new ResponseEntity<Model>(s, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<Model>( HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

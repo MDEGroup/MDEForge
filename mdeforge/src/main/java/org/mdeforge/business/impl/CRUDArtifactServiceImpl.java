@@ -1,10 +1,13 @@
 package org.mdeforge.business.impl;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.ArtifactNotFound;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
@@ -20,6 +23,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -31,17 +35,25 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
 
+import com.mongodb.Mongo;
+
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
 	@Autowired
+	private Mongo mongo;
+	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
+	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
 	@Autowired
 	protected RelationRepository relationRepository;
 	@Autowired
@@ -62,8 +74,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
 
 	protected Class<T> persistentClass;
+
+	@Override
+	public void createIndex(){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+			.onField("name", 20F)
+			.onField("description", 10F)
+			.onField("authors", 5F)
+			.onField("tags", 7F)
+			.onField("extractedContents")
+			.named("ArtifactIndex")
+			.build();
+
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
 
 	@Override
 	public List<Artifact> search(String searchString) throws BusinessException {
@@ -72,6 +104,21 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		List<Artifact> result = operations.find(query, Artifact.class);
 		return result;
+	}
+	
+	@Override
+	public List<Artifact> orederedSearch(String text){
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+
+		TextQuery query = new TextQuery(criteria);
+		query.setScoreFieldName("score");
+		query.sortByScore();
+
+		List<Artifact> artifacts = operations.find(query, Artifact.class);
+		
+		return artifacts;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -529,5 +576,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		query.addCriteria(c1);
 		return operations.find(query, Metric.class);
 
+	}
+	
+	@Override
+	public Resource loadArtifacrt(String id)throws BusinessException{
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+
+		try {
+			resource.load(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+		
+		return resource;
 	}
 }

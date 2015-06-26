@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.EMFCompare;
@@ -78,6 +79,7 @@ import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
 import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -104,6 +106,8 @@ public class EcoreMetamodelServiceImpl extends
 	@Autowired
 	private Mongo mongo;
 	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
+	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
@@ -126,16 +130,36 @@ public class EcoreMetamodelServiceImpl extends
 
 
 	@Override
-	public EcoreMetamodel create(EcoreMetamodel artifact) throws BusinessException {
+	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
 		artifact.setValid(isValid(artifact));
-		String path = gridFileMediaService.getFilePath(artifact);
+//		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-		artifact.setExtractedContents( EmfjsonMongo.getInstance().serializeAndSaveMetamodel(path, jsonMongoUriBase + artifact.getId()));
-		artifactRepository.save(artifact);
+//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+//		artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
+//		artifactRepository.save(artifact);
 		return result;
+	}
+	
+	public String saveJsonMetamodel(String sourceURI, String mongoURI) throws BusinessException {
+		String contentsString = "";
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
+		
+		EList<EObject> contents = load_resource.getContents();
+		ResourceSerializer.serialize(load_resource);
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+
+		res.getContents().addAll(contents);
+
+		try {
+			res.save(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+		return contentsString;
 	}
 
 	@Override
@@ -314,22 +338,17 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public void registerMetamodel(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException {
-		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
-				.getId());
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
 		ecoreMetamodel.getFile();
-		ecoreMetamodel.setFile(gridFileMediaService
-				.getGridFileMedia(ecoreMetamodel.getFile()));
+		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-				"ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
-				rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
-				extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		for (EObject eObject2 : eObject) {
