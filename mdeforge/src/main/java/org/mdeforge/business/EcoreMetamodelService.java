@@ -2,6 +2,7 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,
@@ -13,5 +14,6 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	String serializeContent(EcoreMetamodel emm) throws BusinessException;
 	List<String> getNSUris(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException;
+	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample) throws BusinessException;
 	
 }

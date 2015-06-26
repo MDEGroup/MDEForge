@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -35,6 +38,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.Diagnostician;
+import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -478,20 +482,15 @@ public class EcoreMetamodelServiceImpl extends
 		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
-
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
 				"ecore", new XMIResourceFactoryImpl());
-
 		ResourceSet resourceSet1 = new ResourceSetImpl();
 		ResourceSet resourceSet2 = new ResourceSetImpl();
-
 		resourceSet1.getResource(uri1, true);
 		resourceSet2.getResource(uri2, true);
-
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
 		Comparison comparison = EMFCompare.builder().build().compare(scope);
-
 		List<Match> matches = comparison.getMatches();
 		int total = matches.size();
 		int counter = 0;
@@ -504,7 +503,6 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-
 //		List<Diff> differences = comparison.getDifferences();
 //		// Let's merge every single diff
 //		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
@@ -512,16 +510,11 @@ public class EcoreMetamodelServiceImpl extends
 //				.createStandaloneInstance();
 //		IBatchMerger merger = new BatchMerger(mergerRegistry);
 //		merger.copyAllLeftToRight(differences, new BasicMonitor());
-		
-		
 		double resultValue = (counter * 1.0) / total;
-
-		
 		//Used to save Diff model
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
 		m.put("xmi", new XMIResourceFactoryImpl());
-
 		ResourceSet resSet = new ResourceSetImpl();
 		// create a resource
 		Resource resource = resSet.createResource(URI.createURI(basePath
@@ -544,7 +537,7 @@ public class EcoreMetamodelServiceImpl extends
 			return 0;
 		}
 	}
-
+	//region Cluster
 	@Override
 	public String getSimilarityGraph(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -595,7 +588,7 @@ public class EcoreMetamodelServiceImpl extends
 			throw new BusinessException();
 		}
 	}
-
+	
 	@Override
 	public List<Cluster> getSimilarityClusters(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -916,7 +909,7 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		return result;
 	}
-
+	//endregion
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
 		List<Metric> metricList = metricRepository
@@ -924,5 +917,63 @@ public class EcoreMetamodelServiceImpl extends
 		if (metricList.size() == 0)
 			metricList = calculateMetrics(emm);
 		return metricList;
+	}
+
+	@Override
+	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample)
+			throws BusinessException {
+		List<EcoreMetamodel> repository = findAll();
+		TreeMap<String, EcoreMetamodel> list = new TreeMap<String, EcoreMetamodel>();
+		
+		for (EcoreMetamodel ecoreMetamodel : repository) {
+			calculateContainment(ecoreMetamodel, searchSample);
+		}
+		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
+		int i = 0;
+		for(Entry<String, EcoreMetamodel> entry : list.entrySet()) {
+			  EcoreMetamodel value = entry.getValue();
+			  result.add(value);
+			  if(i++ > 10)
+				  break;
+			}
+		return result;
+	}
+	
+	private double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
+		try {
+		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new XMIResourceFactoryImpl());
+		ResourceSet resourceSet1 = new ResourceSetImpl();
+		ResourceSet resourceSet2 = new ResourceSetImpl();
+		resourceSet1.getResource(uri1, true);
+		resourceSet2.getResource(uri2, true);
+		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+				resourceSet2, null);
+		Comparison comparison = EMFCompare.builder().build().compare(scope);
+		List<Match> matches = comparison.getMatches();
+		int counter = 0;
+		int counterLeft = 0;
+		int counterRight = 0;
+		for (Match match : matches) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			for (Match match2 : lm) {
+				if(match2.getLeft()!=null)
+					counterLeft++;
+				if(match2.getRight()!=null)
+					counterRight++;
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counter++;
+			}
+				
+			if (match.getLeft() != null && match.getRight() != null)
+				counter++;
+		}
+		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+		return resultValue;
+		}catch(Exception e) {
+			return 0;
+		}
 	}
 }
