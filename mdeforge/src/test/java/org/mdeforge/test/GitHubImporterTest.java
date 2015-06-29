@@ -3,7 +3,6 @@ package org.mdeforge.test;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryContents;
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -18,6 +17,8 @@ import org.mdeforge.business.importer.SearchCodeResult;
 import org.mdeforge.integration.RepositoryContentsRepository;
 import org.mdeforge.integration.RepositoryRepository;
 import org.mdeforge.integration.SearchCodeResultRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,15 +31,12 @@ public class GitHubImporterTest {
 	@Autowired
 	private EcoreMetamodelImporterSevice ecoreMetamodelImporterService;
 	@Autowired
-	private GitHubClient gitHubClient;
-	@Autowired
 	private SearchCodeResultRepository searchCodeResultRepository;
 	@Autowired
 	private RepositoryContentsRepository repositoryContentsRepository;
 	@Autowired
 	private RepositoryRepository repositoryRepository;
-	private static final Logger logger = Logger
-			.getLogger(GitHubImporterTest.class);
+	Logger logger = LoggerFactory.getLogger(GitHubImporterTest.class);
 
 	@Ignore
 	@Test
@@ -64,7 +62,6 @@ public class GitHubImporterTest {
 	@Ignore
 	@Test
 	public void testImport() throws IOException, InterruptedException {
-		gitHubClient.setOAuth2Token("80df915b3a81d9a22a36738e91dcbe0309cce947");
 		try {
 			ecoreMetamodelImporterService
 					.findEcoreMetamodelsInGithubSinceRepositoryId(32283515);
@@ -90,7 +87,6 @@ public class GitHubImporterTest {
 	@Test
 	public void testRepositoryContents() throws IOException,
 			InterruptedException {
-		gitHubClient.setOAuth2Token("80df915b3a81d9a22a36738e91dcbe0309cce947");
 		List<SearchCodeResult> list = searchCodeResultRepository.findAll();
 		int i = 1;
 		for (SearchCodeResult searchCodeResult : list) {
@@ -126,21 +122,17 @@ public class GitHubImporterTest {
 	@Ignore
 	@Test
 	public void testByWebSearch() throws InterruptedException, IOException {
-		gitHubClient.setOAuth2Token("80df915b3a81d9a22a36738e91dcbe0309cce947");
 		ecoreMetamodelImporterService.importEcoreMetamodelBySearchWebSite();
 	}
 
 	@Ignore
 	@Test
 	public void testImportAllMethods() throws IOException, InterruptedException {
-		gitHubClient.setOAuth2Token("80df915b3a81d9a22a36738e91dcbe0309cce947");
 		ecoreMetamodelImporterService.findEcoreMetamodelsInGithub();
 	}
-
-	@Ignore
+	
 	@Test
 	public void testGitRate() throws IOException, InterruptedException {
-		gitHubClient.setOAuth2Token("80df915b3a81d9a22a36738e91dcbe0309cce947");
 		GitHubRate gr = ecoreMetamodelImporterService.waitApiRate();
 		logger.info("REMAINING: "
 				+ gr.getResources().getSearch().getRemaining());

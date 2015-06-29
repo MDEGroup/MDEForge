@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -38,7 +37,6 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.util.EcoreAdapterFactory;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -62,7 +60,6 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
@@ -74,7 +71,6 @@ import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
-import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
@@ -82,7 +78,6 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
-import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
@@ -922,16 +917,29 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample)
 			throws BusinessException {
-		List<EcoreMetamodel> repository = findAll();
-		TreeMap<String, EcoreMetamodel> list = new TreeMap<String, EcoreMetamodel>();
+		Comparator<Double> c = new Comparator<Double>() {
+			public int compare(Double a, Double b) {
+		        if (a >= b) {
+		            return -1;
+		        } else {
+		            return 1;
+		        } // returning 0 would merge keys
+		    }
+		};
 		
+		List<EcoreMetamodel> repository = findAll();
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(c);
 		for (EcoreMetamodel ecoreMetamodel : repository) {
-			calculateContainment(ecoreMetamodel, searchSample);
+			double d = calculateContainment(ecoreMetamodel, searchSample);
+			list.put(d, ecoreMetamodel);
 		}
+		System.out.println(list.size());
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
 		int i = 0;
-		for(Entry<String, EcoreMetamodel> entry : list.entrySet()) {
+		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
 			  EcoreMetamodel value = entry.getValue();
+			  System.out.println("score: " + entry.getKey());
+			  System.out.println("metamodel" + entry.getValue().getName());
 			  result.add(value);
 			  if(i++ > 10)
 				  break;

@@ -31,7 +31,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<Metric> findMetricForArtifact(Artifact a);
 	T findOnePublic(String id) throws BusinessException;
 	void updateSimple(T artifact);
-	List<Artifact> search(String searchString) throws BusinessException;
+	List<T> search(String searchString) throws BusinessException;
 	Resource loadArtifacrt(String id);
 	void createIndex();
 	List<Artifact> orederedSearch(String text);

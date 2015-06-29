@@ -7,19 +7,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryContents;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.client.GitHubRequest;
 import org.eclipse.egit.github.core.client.PageIterator;
 import org.eclipse.egit.github.core.service.ContentsService;
-import org.eclipse.egit.github.core.service.GitHubService;
 import org.eclipse.egit.github.core.service.RepositoryService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.importer.Content;
 import org.mdeforge.business.importer.EcoreMetamodelImporterSevice;
 import org.mdeforge.business.importer.GitHubRate;
@@ -27,24 +26,34 @@ import org.mdeforge.business.importer.SearchCodeResult;
 import org.mdeforge.integration.RepositoryContentsRepository;
 import org.mdeforge.integration.RepositoryRepository;
 import org.mdeforge.integration.SearchCodeResultRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EcoreMetamodelImporterServiceImpl extends GitHubService implements
+public class EcoreMetamodelImporterServiceImpl implements
 		EcoreMetamodelImporterSevice {
 
 	@Autowired
 	private RepositoryContentsRepository repositoryContentsRepository;
+	
 	@Autowired
 	private RepositoryRepository repositoryRepository;
+	
 	@Autowired
 	private SearchCodeResultRepository searchCodeResultRepository;
+	
 	String SEGMENT_CODE_SEARCH = "/code"; //$NON-NLS-1$
 	String SEGMENT_RATE = "/rate_limit"; //$NON-NLS-1$
-	private RepositoryService repositoryService = new RepositoryService(client);
-	private ContentsService contentService = new ContentsService(client);
-	private static final Logger logger = Logger.getLogger(EcoreMetamodelImporterServiceImpl.class);
+	private GitHubClient client;
+	
+	private RepositoryService repositoryService;
+	private ContentsService contentService;
+	
+	Logger logger = LoggerFactory.getLogger(EcoreMetamodelImporterServiceImpl.class);
+	
 	private final String QUERY_API = "q=extension:ecore+project";
 	private final String QUERY_WEB = "&q=extension%3Aecore+project&ref=searchresults&type=Code";
 
@@ -72,12 +81,14 @@ public class EcoreMetamodelImporterServiceImpl extends GitHubService implements
 	// private final String QUERY_API = "q=extension:ecore+uml";
 	// private final String QUERY_WEB =
 	// "&q=extension%3Aecore+uml&ref=searchresults&type=Code";
-	public EcoreMetamodelImporterServiceImpl() {
+	
+	@Autowired
+	public EcoreMetamodelImporterServiceImpl(@Value("#{cfgproperties[github_token]}")String github_token) {
 		super();
-	}
-
-	public EcoreMetamodelImporterServiceImpl(GitHubClient client) {
-		super(client);
+		client = new GitHubClient();
+		client.setOAuth2Token(github_token);
+		repositoryService = new RepositoryService(client);
+		contentService = new ContentsService(client);
 	}
 
 	public SearchCodeResult findContentsInRepository(final String query,
@@ -170,37 +181,44 @@ public class EcoreMetamodelImporterServiceImpl extends GitHubService implements
 	}
 
 	@Override
-	public GitHubRate waitApiRate() throws IOException, InterruptedException {
+	public GitHubRate waitApiRate() throws BusinessException {
 		StringBuilder uri = new StringBuilder(SEGMENT_RATE);
 		GitHubRequest gitHubRequest = new GitHubRequest();
 		gitHubRequest.setUri(uri);
 		gitHubRequest.setType(GitHubRate.class);
-		GitHubRate ghr = (GitHubRate) client.get(gitHubRequest).getBody();
-
-		Long remainingSearch = Long.parseLong(ghr.getResources().getSearch()
-				.getRemaining());
-		Long resetSearch = Long.parseLong(ghr.getResources().getSearch()
-				.getReset());
-		Date resetSearchDate = new Date(resetSearch * 1000);
-		long waitSearchTime = resetSearchDate.getTime() - new Date().getTime();
-		if (remainingSearch <= 0) {
-			logger.info("API rate limit successed! Wait: " + waitSearchTime
-					+ "ms");
-			Thread.sleep(waitSearchTime);
+		try {
+			GitHubRate ghr = (GitHubRate) client.get(gitHubRequest).getBody();
+	
+			Long remainingSearch = Long.parseLong(ghr.getResources().getSearch()
+					.getRemaining());
+			Long resetSearch = Long.parseLong(ghr.getResources().getSearch()
+					.getReset());
+			Date resetSearchDate = new Date(resetSearch * 1000);
+			long waitSearchTime = resetSearchDate.getTime() - new Date().getTime();
+			if (remainingSearch <= 0) {
+				logger.info("API rate limit successed! Wait: " + waitSearchTime
+						+ "ms");
+				Thread.sleep(waitSearchTime);
+			}
+	
+			Long remainingAPI = Long.parseLong(ghr.getResources().getCore()
+					.getRemaining());
+			Long resetAPI = Long.parseLong(ghr.getResources().getCore().getReset());
+			Date resetAPIDate = new Date(resetAPI * 1000);
+			long waitAPITime = resetAPIDate.getTime() - new Date().getTime();
+			if (remainingAPI <= 0) {
+				logger.info("API rate limit successed! Wait: " + waitSearchTime
+						+ "ms");
+				Thread.sleep(waitAPITime);
+			}
+	
+			return (GitHubRate) client.get(gitHubRequest).getBody();
+		} catch (IOException e) {
+			throw new BusinessException();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			throw new BusinessException();
 		}
-
-		Long remainingAPI = Long.parseLong(ghr.getResources().getCore()
-				.getRemaining());
-		Long resetAPI = Long.parseLong(ghr.getResources().getCore().getReset());
-		Date resetAPIDate = new Date(resetAPI * 1000);
-		long waitAPITime = resetAPIDate.getTime() - new Date().getTime();
-		if (remainingAPI <= 0) {
-			logger.info("API rate limit successed! Wait: " + waitSearchTime
-					+ "ms");
-			Thread.sleep(waitAPITime);
-		}
-
-		return (GitHubRate) client.get(gitHubRequest).getBody();
 	}
 
 	@Override

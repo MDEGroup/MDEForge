@@ -25,8 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
-		"file:src/main/webapp/WEB-INF/spring/root-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml" })
+		"file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class MetricTest {
 
 	@Autowired
@@ -39,7 +38,7 @@ public class MetricTest {
 	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	@Ignore
+	
 	@Test
 	public void calculateAllMetrics() {
 		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService
@@ -53,7 +52,6 @@ public class MetricTest {
 								.calculateMetrics(ecoreMetamodel).size());
 			} catch (Exception e) {
 				System.err.println(ecoreMetamodel.getName());
-
 			}
 		}
 	}
@@ -63,18 +61,15 @@ public class MetricTest {
 		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService
 				.findAllPublic();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodelList) {
-
 			try {
 				System.out.print(ecoreMetamodel.getName());
 				List<String> ls = ecoreMetamodelService.getNSUris(ecoreMetamodel);
-				for (String string : ls) 
-					System.out.print(ls);
+				System.out.print(ls);
 				System.out.println();
 				ecoreMetamodel.getUri().addAll(ls);
 				ecoreMetamodelService.updateSimple(ecoreMetamodel);
 			} catch (Exception e) {
 				System.err.println(ecoreMetamodel.getName());
-
 			}
 		}
 	}
@@ -108,7 +103,7 @@ public class MetricTest {
 		return new String(Base64.encode(encoded));
 
 	}
-	
+	@Ignore
 	@Test
 	public void addATLTransformation() {
 		User user = userService.findOne("5514b943d4c6c379396fe8b7");

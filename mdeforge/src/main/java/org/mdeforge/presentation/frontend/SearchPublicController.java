@@ -22,6 +22,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/public")
@@ -65,5 +67,20 @@ public class SearchPublicController {
 	public String search() {
 		return "public.search";
 	}
+	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
+	public String searchEcoreMetamodelResultByExample(
+			Model model,
+			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
+		EcoreMetamodel m = new EcoreMetamodel();
+		byte[] bytes = file.getBytes();
+		GridFileMedia gfm = new GridFileMedia();
+		gfm.setByteArray(bytes);
+		gfm.setFileName("searchFragment.ecore");
+		m.setFile(gfm);
+		m.setName("searchFragment");        
+		model.addAttribute("artifactList",ecoreMetamodelService.searchByExample(m));
+		return "public.search.result";
+	}
+	
 
 }

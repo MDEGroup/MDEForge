@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.mdeforge.business.ArtifactNotFound;
+import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.DuplicateNameException;
@@ -98,11 +98,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public List<Artifact> search(String searchString) throws BusinessException {
+	public List<T> search(String searchString) throws BusinessException {
 		TextCriteria criteria = TextCriteria.forLanguage("en").matching(searchString);
 		Query query = TextQuery.queryText(criteria).sortByScore().with(new PageRequest(0, 5));
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		List<Artifact> result = operations.find(query, Artifact.class);
+		List<T> result = operations.find(query, persistentClass);
 		return result;
 	}
 	
@@ -325,13 +325,16 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
-			for (Workspace ws : artifact.getWorkspaces())
+			for (Workspace ws : artifact.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
+			}
 			// check project Auth
-			for (Project p : artifact.getProjects())
+			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
-			if (artifact.getFile() != null)
+			}
+			if (artifact.getFile() != null) {
 				gridFileMediaService.store(artifact.getFile());
+			}
 			artifact.setCreated(new Date());
 			artifact.setModified(new Date());
 			User user = userRepository.findOne(artifact.getAuthor().getId());

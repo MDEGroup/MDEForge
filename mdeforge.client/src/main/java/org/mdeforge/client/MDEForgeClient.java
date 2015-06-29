@@ -356,4 +356,10 @@ public class MDEForgeClient {
 		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
 		return result;
 	}
+
+	public List<EcoreMetamodel> searchEcoreMetamodelByExample(EcoreMetamodel emm) throws Exception {
+		ObjectNode on = mapper.valueToTree(emm);
+		String result = doPostRequest(connectionUrl + "api/EcoreMetamodel/search_by_example", on);
+		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
+	}
 }

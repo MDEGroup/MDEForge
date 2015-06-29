@@ -23,10 +23,12 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -231,6 +233,18 @@ public class EcoreMetamodelsRESTController {
 		}
 		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;
 	}
-	
+	@RequestMapping(value = "/search", method = { RequestMethod.GET })
+	public HttpEntity<List<EcoreMetamodel>> searchResult(
+			@PathVariable(value = "search_string") String searchString) {
+		return new ResponseEntity<List<EcoreMetamodel>> (ecoreMetamodelService.search(searchString),
+				HttpStatus.OK);
+	}
+	@RequestMapping(value = "/search_by_example", method = { RequestMethod.POST })
+	public HttpEntity<ArtifactList> searchByExampleResult(
+			@RequestBody EcoreMetamodel ecoreMetamodel) {
+		ArtifactList al = new ArtifactList(ecoreMetamodelService.searchByExample(ecoreMetamodel));
+		return new ResponseEntity<ArtifactList> (al,
+				HttpStatus.OK);
+	}
 
 }
