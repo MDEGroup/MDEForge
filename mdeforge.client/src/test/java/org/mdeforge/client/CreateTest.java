@@ -92,7 +92,7 @@ public class CreateTest {
 			e.printStackTrace();
 		}
 	}
-	
+	@Ignore
 	@Test
 	public void addATLTransformation() throws Exception {
 		ATLTransformation emm = new ATLTransformation();

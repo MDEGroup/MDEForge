@@ -67,6 +67,7 @@ public class LaunchTransformationTest {
 			System.out.println(model2.getName());
 		}
 	}
+	@Ignore
 	@Test
 	public void getModelsTest2() throws Exception {
 			
