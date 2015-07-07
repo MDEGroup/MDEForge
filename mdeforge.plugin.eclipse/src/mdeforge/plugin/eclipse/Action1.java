@@ -15,7 +15,7 @@ public class Action1 implements IObjectActionDelegate {
 
 	private static MDEForgeClient mdefc;
 	private final String url;
-	private final String localurl = "http://127.0.0.1:8080/mdeforge";
+	private final String localurl = "http://localhost:8080/mdeforge/";
 	private final String serverurl = "http://www.mdeforge.org/";
 	private final String username = "Admin";
 	private final String passwd = "test123";
@@ -26,7 +26,7 @@ public class Action1 implements IObjectActionDelegate {
 	 */
 	public Action1() {
 		super();
-		url = serverurl;
+		url = localurl;
 	}
 	
 	
@@ -42,7 +42,7 @@ public class Action1 implements IObjectActionDelegate {
 	 */
 	public void run(IAction action) {
 		try {
-			mdefc = new MDEForgeClient(url,username,passwd);
+			mdefc = new MDEForgeClient(localurl,username,passwd);
 		
 			List<EcoreMetamodel> mm = mdefc.getEcoreMetamodels();
 			String outmm = "";
