@@ -43,6 +43,18 @@ public class Artifact implements java.io.Serializable{
 	@JsonIgnore
 	private String _class;
 	private List<Metric> metrics;
+	@JsonSerialize(using = RelationListSerializer.class)
+	private List<Relation> relations = new ArrayList<Relation>();
+	@JsonSerialize(using = ProjectListSerializer.class)
+	private List<Project> projects = new ArrayList<Project>();
+	@JsonSerialize(using = UserListSerializer.class)
+	private List<User> shared = new ArrayList<User>();
+	@JsonSerialize(using = WorkspaceListSerializer.class)
+	private List<Workspace> workspaces = new ArrayList<Workspace>();
+	@JsonSerialize(using = UserSerializer.class)
+	private User author = new User();
+	private List<Property> properties = new ArrayList<Property>();
+	@JsonIgnore private String href;
 	
 	public List<Metric> getMetrics() {
 		return metrics;
@@ -52,24 +64,7 @@ public class Artifact implements java.io.Serializable{
 		this.metrics = metrics;
 	}
 
-	@JsonSerialize(using = RelationListSerializer.class)
-	private List<Relation> relations = new ArrayList<Relation>();
-
-
-	@JsonSerialize(using = ProjectListSerializer.class)
-	private List<Project> projects = new ArrayList<Project>();
 	
-	@JsonSerialize(using = UserListSerializer.class)
-	//@JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-	private List<User> shared = new ArrayList<User>();
-	
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
-	
-	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();
-	private List<Property> properties = new ArrayList<Property>();
-	@JsonIgnore private String href;
 //	
 	//	@DBRef(lazy=true)
 //	@JsonBackReference

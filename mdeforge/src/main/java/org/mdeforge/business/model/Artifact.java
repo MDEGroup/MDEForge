@@ -41,16 +41,29 @@ public class Artifact implements java.io.Serializable{
 	private Date modified = null;
 	private GridFileMedia file = null;
 	private boolean open = false;
-	
 	private String name = null;
-	
 	private String description = null;
 	private List<String> tags = null;
 	private String authors = null;
 	private String version = null;
-	
 	private String extractedContents = null;
-	
+	@DBRef(lazy = true)
+	@JsonSerialize(using = RelationListSerializer.class)
+	//@CascadeSave
+	private List<Relation> relations = new ArrayList<Relation>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = ProjectListSerializer.class)
+	private List<Project> projects = new ArrayList<Project>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserListSerializer.class)
+	private List<User> shared = new ArrayList<User>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = WorkspaceListSerializer.class)
+	private List<Workspace> workspaces = new ArrayList<Workspace>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserSerializer.class)
+	private User author = new User();	
+	private List<Property> properties = new ArrayList<Property>();
 	public List<String> getTags() {
 		return tags;
 	}
@@ -86,45 +99,9 @@ public class Artifact implements java.io.Serializable{
 		this.metrics = metrics;
 	}
 
-	@DBRef(lazy = true)
-	@JsonSerialize(using = RelationListSerializer.class)
-	//@CascadeSave
-	private List<Relation> relations = new ArrayList<Relation>();
 
+	
 
-	@DBRef(lazy = true)
-	@JsonSerialize(using = ProjectListSerializer.class)
-	private List<Project> projects = new ArrayList<Project>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserListSerializer.class)
-	private List<User> shared = new ArrayList<User>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
-	
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();	
-	private List<Property> properties = new ArrayList<Property>();
-	
-//	
-	//	@DBRef(lazy=true)
-//	@JsonBackReference
-//	private Set<Tag> tags = new HashSet<Tag>();	
-
-//	public Set<Tag> getTags() {
-//		return tags;
-//	}
-//
-//	
-//	public void setTags(Set<Tag> newTags) {
-//		tags = newTags;
-//	}
-//
-//	
-//
 	public List<Relation> getRelations() {
 		return relations;
 	}

@@ -233,7 +233,7 @@ public class EcoreMetamodelsRESTController {
 		}
 		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;
 	}
-	@RequestMapping(value = "/search", method = { RequestMethod.GET })
+	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
 		return new ResponseEntity<List<EcoreMetamodel>> (ecoreMetamodelService.search(searchString),
