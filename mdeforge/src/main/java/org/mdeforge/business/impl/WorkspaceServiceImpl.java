@@ -213,6 +213,12 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		else throw new BusinessException();
 		
 	}
+
+	@Override
+	public List<Project> findProjectInWorkspace(String id, User user) {
+		Workspace w = findById(id, user);
+		return w.getProjects();
+	}
 	
 //	@Override
 //	public void save(Workspace workspace) throws BusinessException {

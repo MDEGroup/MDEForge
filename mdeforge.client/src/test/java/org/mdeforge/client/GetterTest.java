@@ -14,6 +14,7 @@ import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ValuedRelation;
 
@@ -23,7 +24,7 @@ public class GetterTest {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://www.mdeforge.org/", "Admin", "test123");
+		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
 	@Ignore
@@ -139,6 +140,20 @@ public class GetterTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	@Ignore
+	@Test
+	public void getProjectInAWorkspace() {
+		try {
+			List<Project> resutl = c.getProjectsInWorkspace("5514aa53d4c67eee3e2c1b12");
+			for (Project project : resutl) {
+				System.out.println(project.getName());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

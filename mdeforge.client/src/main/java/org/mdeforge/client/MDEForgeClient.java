@@ -83,6 +83,11 @@ public class MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<Project>>() {
 		});
 	}
+	public List<Project> getProjectsInWorkspace(String idWorkspace) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/project/shared");
+		return mapper.readValue(result, new TypeReference<List<Project>>() {
+		});
+	}
 	
 	public List<Workspace> getWorkspaces() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/workspace/");
