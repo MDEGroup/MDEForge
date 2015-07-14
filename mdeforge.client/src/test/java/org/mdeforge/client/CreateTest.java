@@ -15,11 +15,18 @@ import org.mdeforge.business.model.Workspace;
 
 public class CreateTest {
 
-	private static MDEForgeClient c;
-
+	private static ATLTransformationService atlTransformationService; 
+	private static ETLTransformationService etlTransformationService; 
+	private static EcoreMetamodelService ecoreMetamodelService; 
+	private static ProjectService projectService; 
+	private static WorkspaceService workspaceService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		projectService = new ProjectService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "maja", "majacdg");
 	}
 	
 	@Ignore
@@ -28,7 +35,7 @@ public class CreateTest {
 		Workspace w = new Workspace();
 		w.setName("Francesco WorkSpace");
 		w.setDescription("Test Project");
-		c.addWorkspace(w);
+		workspaceService.addWorkspace(w);
 	}
 	
 	@Ignore
@@ -37,11 +44,11 @@ public class CreateTest {
 		Project p = new Project();
 		p.setName("Progetto di prova");
 		p.setWorkspaces(new ArrayList<Workspace>());
-		List<Workspace> ws = c.getWorkspaces();
+		List<Workspace> ws = workspaceService.getWorkspaces();
 		for (Workspace workspace : ws) {
 			p.getWorkspaces().add(workspace);
 		}
-		c.addProject(p);
+		projectService.addProject(p);
 	}
 	
 	@Test
@@ -53,22 +60,22 @@ public class CreateTest {
 		emm.setDescription("Describes the basic structure of a general Relational DB");
 		emm.setAuthors("Metamodels Authors");
 		emm.setOpen(false);	
-		List<Workspace> worspaces = c.getWorkspaces();
+		List<Workspace> worspaces = workspaceService.getWorkspaces();
 		for (Workspace project : worspaces) {
 			emm.getWorkspaces().add(project);
 		}
-		c.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");	
+		ecoreMetamodelService.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");	
 	}
 	
 	@Ignore
 	@Test
 	public void testAddProjectToWorkspace() {
 		try {
-			Workspace w = c.getWorkspace("5514aa53d4c67eee3e2c1b12");
+			Workspace w = workspaceService.getWorkspace("5514aa53d4c67eee3e2c1b12");
 			Project p = new Project();
 			p.setName("Test bascio");
 			p.getWorkspaces().add(w);
-			c.addProject(p);
+			projectService.addProject(p);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -78,11 +85,11 @@ public class CreateTest {
 	@Test
 	public void testArtifactToWorkspace() {
 		try {
-			Workspace w = c.getWorkspace("5514aa53d4c67eee3e2c1b12");
+			Workspace w = workspaceService.getWorkspace("5514aa53d4c67eee3e2c1b12");
 			ETLTransformation p = new ETLTransformation();
 			p.setName("Android2Web");
 			p.getWorkspaces().add(w);
-			c.addETLTransformation(p, "temp/Android2Web.etl");
+			etlTransformationService.addETLTransformation(p, "temp/Android2Web.etl");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,6 +102,6 @@ public class CreateTest {
 		ATLTransformation emm = new ATLTransformation();
 		emm.setName("BibTeX2DocBook");
 		emm.setOpen(true);	
-		c.addATLTransformation(emm,"temp/BibTeX2DocBook.atl");
+		atlTransformationService.addATLTransformation(emm,"temp/BibTeX2DocBook.atl");
 	}
 }

@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -21,14 +22,15 @@ import org.mdeforge.business.model.Property;
 
 public class Importer extends TestCase {
 
-//	@Test
-//	public void testEcoreMetamodel() throws Exception {
-//		MDEForgeClient c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
-//		EcoreMetamodel p = c.getEcoreMetamodel("54b3fe567d8444a8001e736d");
-//		System.out.println("1" + p.getFile().getContent());
-//		System.out.println("2__" + new String(p.getFile().getByteArray()));
-//		assertNotNull(p);
-//	}
+
+	private static EcoreMetamodelService ecoreMetamodelService; 
+ 
+	@BeforeClass
+	public static void setup() throws Exception {
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+	}
+	
+	
 	@Ignore
 	@Test
 	public void test() {
@@ -87,8 +89,7 @@ public class Importer extends TestCase {
 				if(complete) {
 					try {
 						complete = false;
-						MDEForgeClient c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
-						c.addEcoreMetamodel(emm);
+						ecoreMetamodelService.addEcoreMetamodel(emm);
 					} catch (Exception e1) {
 						System.err.println(emm.getName());
 					}

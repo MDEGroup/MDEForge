@@ -16,8 +16,18 @@ import org.mdeforge.business.model.Workspace;
 
 public class TestClient {
 
-	private static MDEForgeClient c;
+	private static ModelService modelService;
 
+	private static EcoreMetamodelService ecoreMetamodelService; 
+	private static ProjectService projectService; 
+	private static WorkspaceService workspaceService; 
+	@BeforeClass
+	public static void setup() throws Exception {
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		projectService = new ProjectService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+	}
 //	@Test
 //	public void testAddEcoreMetamodel () {
 //		try {
@@ -37,7 +47,6 @@ public class TestClient {
 //			model.getProjects().add(p);
 //			c.addModel(model, "temp/android.model");
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
@@ -48,7 +57,6 @@ public class TestClient {
 //			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 //			System.out.println(c.getEcoreMetamodelSimilarity("552657f44568f64e28214b2d", "552657f44568f64e28214b31"));
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
@@ -59,7 +67,6 @@ public class TestClient {
 //			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 //			System.out.println(c.getEcoreMetamodelMetrics("552bbd07d4c659da8e19ec99"));
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
@@ -70,38 +77,32 @@ public class TestClient {
 //			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "test123", "test123");
 //			System.out.println(c.validateModels("551d16574568e6d8551fc5af"));
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}
 	
-	@BeforeClass
-	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-	}
+	
 
 	@Ignore
 	@Test
 	public void createWorkspaceAndProject () {
 		try {
-			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-
+			
 			Project p = new Project();
 			p.setName("Salvi project Test");
 			Workspace w = new Workspace();
 			w.setName("Salvi workspace Test");
 			
-			c.addWorkspace(w);
-			List<Workspace> ws = c.getWorkspaces();
+			workspaceService.addWorkspace(w);
+			List<Workspace> ws = workspaceService.getWorkspaces();
 			
 			w = ws.get(0);
 			p.getWorkspaces().add(w);
 			w.getProjects().add(p);
-			c.addProject(p);
+			projectService.addProject(p);
 			System.out.println("project created");
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -110,7 +111,7 @@ public class TestClient {
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
-			Project p = c.getProjects().get(0);
+			Project p = projectService.getProjects().get(0);
 			EcoreMetamodel emm = new EcoreMetamodel();
 			emm.setName("Prova Salvi");
 			List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
@@ -118,11 +119,10 @@ public class TestClient {
 			emm.setDescription("Describes the basic structure of a general Relational DB");
 			emm.setAuthors("Metamodels Authors");
 			emm.getProjects().add(p);
-			c.addEcoreMetamodel(emm, "temp/Database.ecore");
+			ecoreMetamodelService.addEcoreMetamodel(emm, "temp/Database.ecore");
 			System.out.println("Metamodel Saved!!!");
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -130,8 +130,7 @@ public class TestClient {
 	@Test
 	public void testAddModel(){
 		try {
-			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-			Project p = c.getProjects().get(0);
+			Project p = projectService.getProjects().get(0);
 			Artifact mm = p.getArtifacts().get(0);
 			Model m = new Model();
 			m.setName("ModelSalvi");
@@ -144,10 +143,9 @@ public class TestClient {
 			rel.setToArtifact(mm);
 			m.getRelations().add(rel);
 			m.getProjects().add(p);
-			c.addModel(m, "temp/My.database");
+			modelService.addModel(m, "temp/My.database");
 			System.out.println("Model Saved!!!");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -156,11 +154,9 @@ public class TestClient {
 	@Test
 	public void testCreateIndex(){
 		try {
-			c = new MDEForgeClient("http://localhost:8080/mdeforge/", "maja", "majacdg");
-			String result = c.createIndex();
+			String result = ecoreMetamodelService.createIndex();
 			System.out.println(result);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -173,7 +169,6 @@ public class TestClient {
 //			List<Artifact> artifacts = c.orderedSearch("data");
 //			printArtifacts(artifacts);
 //		} catch (Exception e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //	}

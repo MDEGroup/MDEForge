@@ -11,11 +11,13 @@ import org.mdeforge.business.model.GridFileMedia;
 
 public class SearchTest {
 
-	private static MDEForgeClient c;
 
+	private static EcoreMetamodelService ecoreMetamodelService; 
+; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		c = new MDEForgeClient("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+
 	}
 	
 	@Test
@@ -32,7 +34,7 @@ public class SearchTest {
 		gfm.setFileName("Example.ecore");
 		gfm.setContent(MDEForgeClient.readFile("temp/Example.ecore"));
 		emm.setFile(gfm);
-		List<EcoreMetamodel> reuslt = c.searchEcoreMetamodelByExample(emm);
+		List<EcoreMetamodel> reuslt = ecoreMetamodelService.searchEcoreMetamodelByExample(emm);
 		for (EcoreMetamodel ecoreMetamodel : reuslt) {
 			System.out.println(ecoreMetamodel.getName());
 		}
