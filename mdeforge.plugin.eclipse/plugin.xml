@@ -5,25 +5,109 @@
    <extension
          point="org.eclipse.ui.popupMenus">
       <objectContribution
-            objectClass="org.eclipse.core.resources.IFile"
-            id="mdeforge.plugin.eclipse.contribution1">
+            id="mdeforge.plugin.eclipse.contribution1"
+            objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="mdeforge.plugin.eclipse.Action1"
+               class="mdeforge.plugin.eclipse.actions.ActionAddArtifactMM"
                enablesFor="1"
-               icon="icons/sample.gif"
+               icon="icons/logo-small.gif"
                id="mdeforge.plugin.eclipse.action1"
-               label="Add Artifact"
-               menubarPath="mdeforge.plugin.eclipse.menu2/group2">
+               label="Add Artifact to Forge"
+               menubarPath="mdeforge.plugin.eclipse.menu2/filemanagement">
+            <enablement>
+               <or>
+                  <and>
+                     <objectClass
+                           name="org.eclipse.core.resources.IFile">
+                     </objectClass>
+                     <objectState
+                           name="extension"
+                           value="ecore">
+                     </objectState>
+                  </and>
+                  <and>
+                     <objectClass
+                           name="org.eclipse.core.resources.IFile">
+                     </objectClass>
+                     <objectState
+                           name="extension"
+                           value="xmi">
+                     </objectState>
+                  </and>
+               </or>
+            </enablement>
          </action>
          <menu
+               icon="icons/logo-small.gif"
                id="mdeforge.plugin.eclipse.menu2"
-               label="Workspace Management"
+               label="MDEForge"
                path="additions">
             <separator
-                  name="group2">
+                  name="filemanagement">
             </separator>
          </menu>
       </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="mdeforge.plugin.eclipse.objectContribution1"
+            objectClass="org.eclipse.core.resources.IFile">
+         <menu
+               icon="icons/logo-small.gif"
+               id="mdeforge.plugin.eclipse.menu1"
+               label="MDEForge Services"
+               path="additions">
+            <separator
+                  name="services">
+            </separator>
+         </menu>
+         <action
+               class="mdeforge.plugin.eclipse.actions.services.ActionEcoreSimilarity"
+               enablesFor="2"
+               id="mdeforge.plugin.eclipse.action1"
+               label="Ecore Similarity"
+               menubarPath="mdeforge.plugin.eclipse.menu1/services">
+            <enablement>
+               <and>
+                  <objectClass
+                        name="org.eclipse.core.resources.IFile">
+                  </objectClass>
+                  <objectState
+                        name="extension"
+                        value="ecore">
+                  </objectState>
+               </and>
+            </enablement>
+         </action>
+      </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="mdeforge.plugin.eclipse.preferences.CredentialInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="mdeforge.plugin.eclipse.preferences.WorkbenchPreferencePage"
+            id="mdeforge.plugin.eclipse.page1"
+            name="MDEForge">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="mdeforge.plugin.eclipse.category1"
+            name="MDEForge Views">
+      </category>
+      <view
+            category="mdeforge.plugin.eclipse.category1"
+            class="mdeforge.plugin.eclipse.views.MDEForgePreferencesView"
+            icon="icons/logo-small.gif"
+            id="mdeforge.plugin.eclipse.view1"
+            name="MDEForge Preferences"
+            restorable="true">
+      </view>
    </extension>
 
 </plugin>
