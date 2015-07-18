@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 		implements IWorkbenchPreferencePage {
-
+	
 	public WorkbenchPreferencePage() {
 		super(GRID);
 	}
@@ -35,7 +35,6 @@ public class WorkbenchPreferencePage extends FieldEditorPreferencePage
 	public void init(IWorkbench workbench) {
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 	    setDescription("MDEForge settings");
-
 	}
 
 	@Override

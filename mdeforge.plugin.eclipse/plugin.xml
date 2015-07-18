@@ -8,11 +8,11 @@
             id="mdeforge.plugin.eclipse.contribution1"
             objectClass="org.eclipse.core.resources.IFile">
          <action
-               class="mdeforge.plugin.eclipse.actions.ActionAddArtifactMM"
+               class="mdeforge.plugin.eclipse.actions.ActionAddEcoreMM"
                enablesFor="1"
                icon="icons/logo-small.gif"
                id="mdeforge.plugin.eclipse.action1"
-               label="Add Artifact to Forge"
+               label="Add EcoreMM to Forge"
                menubarPath="mdeforge.plugin.eclipse.menu2/filemanagement">
             <enablement>
                <or>
@@ -46,6 +46,19 @@
                   name="filemanagement">
             </separator>
          </menu>
+         <action
+               class="mdeforge.plugin.eclipse.actions.ActionAddModel"
+               enablesFor="1"
+               icon="icons/logo-small.gif"
+               id="mdeforge.plugin.eclipse.action1"
+               label="Add Model to Forge"
+               menubarPath="mdeforge.plugin.eclipse.menu2/filemanagement">
+            <enablement>
+               <objectClass
+                     name="org.eclipse.core.resources.IFile">
+               </objectClass>
+            </enablement>
+         </action>
       </objectContribution>
       <objectContribution
             adaptable="false"
@@ -108,6 +121,140 @@
             name="MDEForge Preferences"
             restorable="true">
       </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="mdeforge.plugin.eclipse.addRemoveMDEForgeNature"
+               label="Disable MDEForge builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="mdeforge.plugin.eclipse.mdeforgeNature">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="mdeforge.plugin.eclipse.addRemoveMDEForgeNature"
+               label="Enable MDEForge builder"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="mdeforge.plugin.eclipse.mdeforgeNature">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         id="mdeforgeBuilder"
+         name="MDEForge Project Builder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true">
+         <run
+               class="mdeforge.plugin.eclipse.builder.MDEForgeBuilder">
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="mdeforgeNature"
+         name="MDEForge Project Nature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="mdeforge.plugin.eclipse.builder.MDEForgeNature">
+         </run>
+      </runtime>
+      <builder
+            id="mdeforge.plugin.eclipse.mdeforgeBuilder">
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="mdeforge.plugin.eclipse.mdeforgeNature.category"
+            name="MDEForge Project Nature commands">
+      </category>
+      <command
+            categoryId="mdeforge.plugin.eclipse.mdeforgeNature.category"
+            defaultHandler="mdeforge.plugin.eclipse.builder.AddRemoveMDEForgeNatureHandler"
+            id="mdeforge.plugin.eclipse.addRemoveMDEForgeNature"
+            name="Add/RemoveMDEForge Project Nature">
+      </command>
+   </extension>
+   <extension
+         id="xmlProblem"
+         name="XML Problem"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            icon="icons/logo-decorator.gif"
+            id="mdeforge.plugin.eclipse.decorator1"
+            label="MDEForge Nature"
+            lightweight="true"
+            location="BOTTOM_RIGHT"
+            state="true">
+         <description>
+            Decorates MDEForge (nature) Projects
+         </description>
+         <enablement>
+            <objectState
+                  name="nature"
+                  value="mdeforge.plugin.eclipse.builder.mdeforgeNature">
+            </objectState>
+         </enablement>
+      </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+         <image
+             icon="icons/logo-decorator.gif"
+             id="mdeforge.plugin.eclipse.mdeforgeNature"
+             natureId="mdeforge.plugin.eclipse.mdeforgeNature">
+          <description>
+             Decorates MDEForge (nature) Projects.
+          </description>
+       </image>
    </extension>
 
 </plugin>
