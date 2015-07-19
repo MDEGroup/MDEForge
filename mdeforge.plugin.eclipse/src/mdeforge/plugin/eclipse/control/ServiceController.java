@@ -2,14 +2,20 @@ package mdeforge.plugin.eclipse.control;
 
 import java.util.List;
 
+import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.client.EcoreMetamodelService;
+import org.mdeforge.client.ModelService;
 import org.mdeforge.client.ProjectService;
 
-public class Controller {
+public class ServiceController {
 
 	private static EcoreMetamodelService emms;
+	private static ModelService ms;
+	private static Model m;
 	private static ProjectService ps;
 	private static EcoreMetamodel emm;
 	private static Project p;
@@ -26,6 +32,24 @@ public class Controller {
 				emm.addToProjects(p);
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+	
+	public static boolean addModelToForge(boolean pub, String file, String id_metamodel){
+		try{
+			connections();
+			m = new Model();
+			m.setOpen(pub);
+			ConformToRelation r = new ConformToRelation();
+			emm = emms.getEcoreMetamodel(id_metamodel);
+			r.setToArtifact(emm);
+			ms.addModel(m, file);
+			//r.setFromArtifact(ms.get);
+			
+		} catch (Exception e){
 			e.printStackTrace();
 			return false;
 		}
@@ -49,21 +73,13 @@ public class Controller {
 		return l;
 	}
 	
-	public static List<EcoreMetamodel> getEcoreMetamodel(){
-		List<EcoreMetamodel> l = null;
-		try{
-			connections();
-			l = emms.getEcoreMetamodels();
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		return l;
-	}
 
-	public static void connections() throws Exception {
+	private static void connections() throws Exception {
 		emms = new EcoreMetamodelService("http://localhost:8080/mdeforge/",
 				"Admin", "test123");
 		ps = new ProjectService("http://localhost:8080/mdeforge/", "Admin",
+				"test123");
+		ms = new ModelService("http://localhost:8080/mdeforge/", "Admin",
 				"test123");
 	}
 }

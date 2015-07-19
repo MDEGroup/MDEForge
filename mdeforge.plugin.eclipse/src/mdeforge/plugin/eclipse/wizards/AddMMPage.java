@@ -1,11 +1,8 @@
 package mdeforge.plugin.eclipse.wizards;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import mdeforge.plugin.eclipse.control.Controller;
+import mdeforge.plugin.eclipse.control.ViewController;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -16,25 +13,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Project;
 
 public class AddMMPage extends WizardPage {
 
 	private Text text1;
-	private Button check;
 	private Table table;
 	private Composite container;
-	private List<EcoreMetamodel> metamodels;
 	private Button search_button;
+	private String[][] items;
 
+	/*constructor*/
 	public AddMMPage() {
 		super("Select Metamodel");
 		setTitle("Select Metamodel");
@@ -75,7 +67,7 @@ public class AddMMPage extends WizardPage {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				System.out.println("string searched: " + text1.getText());
-				searchMetamodels(text1.getText());
+				searchMetamodels(text1.getText().toLowerCase());
 			}
 
 		});
@@ -111,16 +103,25 @@ public class AddMMPage extends WizardPage {
 					}
 			
 		});
-
-		metamodels = Controller.getEcoreMetamodel();
-		for(EcoreMetamodel p : metamodels){
-			TableItem item = new TableItem(table, SWT.NONE);
-			item.setText(0, p.getName());
-			item.setText(1,"");
+		
+		TableColumn column3 = new TableColumn(table,SWT.NONE);
+		column3.setWidth(0);
+		table.getColumn(2).pack();
+		column3.setWidth(0);
+		
+		items = ViewController.getEcoreMetamodel();
+		for(int i = 0; i < items.length; i++){
+			TableItem item = new TableItem(table,SWT.NONE);
+			item.setText(0, items[i][0]);
+			item.setText(1, ""/*items[i][1]*/);
+			item.setText(2,items[i][2]);
+			i++;
 		}
 
 		table.getColumn(0).pack();
 		table.getColumn(1).pack();
+		table.getColumn(2).pack();
+		column3.setWidth(0);
 
 		container.pack();
 
@@ -135,25 +136,37 @@ public class AddMMPage extends WizardPage {
 		table.removeAll();
 		
 		if (!search.equals("")) {
-			for (EcoreMetamodel i : metamodels) {
-				if(i.getName().indexOf(search) > -1){
+			for(int i=0;i< items.length;i++){
+				if(items[i][0].toLowerCase().indexOf(search) > -1){
 					TableItem item = new TableItem(table, SWT.NONE);
-					item.setText(0, i.getName());
-					item.setText(1, "");
+					item.setText(0, items[i][0]);
+					item.setText(1, ""/*items[i][1]*/);
+					item.setText(2,items[i][2]);
 				}
-					
-					
 			}
 		}
 		else {
-			for(EcoreMetamodel p : metamodels){
-				TableItem item = new TableItem(table, SWT.NONE);
-				item.setText(0, p.getName());
-				item.setText(1,"");
-			}
+			for(int i=0;i< items.length;i++){
+					TableItem item = new TableItem(table, SWT.NONE);
+					item.setText(0, items[i][0]);
+					item.setText(1, ""/*items[i][1]*/);
+					item.setText(2,items[i][2]);
+				}
 		}
 		table.getColumn(0).pack();
 		table.getColumn(1).pack();
+		table.getColumn(2).pack();
+		table.getColumn(2).setWidth(0);
 	}
 
+	/*Access the selected metamodel*/
+	public String getSelectedMM(){
+		String name = table.getSelection()[0].getText(0);
+		String id = table.getSelection()[0].getText(2);
+		return table.getSelection()[0].getText(2);
+	}
+	
+	public boolean getPublic(){
+		return true;
+	}
 }

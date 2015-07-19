@@ -1,6 +1,7 @@
 package mdeforge.plugin.eclipse.wizards;
 
-import mdeforge.plugin.eclipse.control.Controller;
+import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.control.ViewController;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,14 +43,13 @@ public class AddMWizard extends Wizard {
 	public boolean performFinish(){
 		/*ALTRA FUNZIONE DA RICHIAMARE*/
 		
-		/*boolean b = Controller.AddEcoretoForge(ap.getPublic(),
-				ap.getFile(),
-				ap.getProject());
+		boolean b = ServiceController.addModelToForge(amm.getPublic(), file.getFullPath().toString(),
+				amm.getSelectedMM());
 		if(!b){
 			MessageDialog.openError(shell, "Operation failure", "The task failed to execute.\n"
 					+ "Check the settings on\n"
 					+ "Window -> Preferences -> MDEForge");
-		}*/
+		}
 		return true;
 		
 	}

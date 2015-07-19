@@ -3,7 +3,7 @@ package mdeforge.plugin.eclipse.wizards;
 import java.util.ArrayList;
 import java.util.List;
 
-import mdeforge.plugin.eclipse.control.Controller;
+import mdeforge.plugin.eclipse.control.ServiceController;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
@@ -123,7 +123,7 @@ public class AddProgectsPage extends WizardPage {
 		/* Code to retrieve project informations */
 		/* Now just some example code */
 		
-		List<Project> projects = Controller.getProjects();
+		List<Project> projects = ServiceController.getProjects();
 		/*
 		projects = new ArrayList<String>();
 		for (int i = 0; i <= 20; i++) {

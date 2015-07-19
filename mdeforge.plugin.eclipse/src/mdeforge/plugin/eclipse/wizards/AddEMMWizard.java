@@ -1,6 +1,6 @@
 package mdeforge.plugin.eclipse.wizards;
 
-import mdeforge.plugin.eclipse.control.Controller;
+import mdeforge.plugin.eclipse.control.ServiceController;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -39,7 +39,7 @@ public class AddEMMWizard extends Wizard {
 	}
 	@Override
 	public boolean performFinish(){
-		boolean b = Controller.AddEcoretoForge(ap.getPublic(),
+		boolean b = ServiceController.AddEcoretoForge(ap.getPublic(),
 				ap.getFile(),
 				ap.getProject());
 		if(!b){
