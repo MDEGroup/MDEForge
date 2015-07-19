@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.mdeforge.business.model.Project;
 
-public class AddProgectsPage extends WizardPage {
+public class SearchProgectsPage extends WizardPage {
 
 	private Text text1;
 	private Button check;
@@ -33,7 +33,7 @@ public class AddProgectsPage extends WizardPage {
 	private List<String> projects;
 	private Button search_button;
 
-	public AddProgectsPage(IFile file) {
+	public SearchProgectsPage(IFile file) {
 		super("Select Remote Projects");
 		setTitle("Select Remote Projects");
 		setDescription("Choose where to put the Artifact on the Forge");

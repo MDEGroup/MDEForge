@@ -13,12 +13,14 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-public class AddMMPage extends WizardPage {
+public class SearchMMPage extends WizardPage {
 
 	private Text text1;
 	private Table table;
@@ -27,7 +29,7 @@ public class AddMMPage extends WizardPage {
 	private String[][] items;
 
 	/*constructor*/
-	public AddMMPage() {
+	public SearchMMPage() {
 		super("Select Metamodel");
 		setTitle("Select Metamodel");
 		setDescription("Select the Metamodel to which the Artifact Conforms To");
@@ -75,34 +77,42 @@ public class AddMMPage extends WizardPage {
 
 		/* Table listing all the metamodels where to put the artifact */
 		table = new Table(container, SWT.SINGLE | SWT.BORDER
-				| SWT.FULL_SELECTION);
+				| SWT.FULL_SELECTION | SWT.CHECK);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		GridData data = new GridData(SWT.FILL, SWT.FILL, true, true);
 		data.heightHint = 200;
 		table.setLayoutData(data);
+		table.addListener(SWT.Selection, new Listener() {
 
-		TableColumn column = new TableColumn(table, SWT.NONE);
-		column.setText("Metamodel");
+			@Override
+			public void handleEvent(Event event) {
+				if (event.detail == SWT.CHECK) {
+					TableItem item = (TableItem) event.item;
+					boolean checked = item.getChecked();
+					item.setChecked(checked);
+					checked = false;
+					for (TableItem i : table.getItems()) {
+						if (i.getChecked()) {
+							checked = true;
+							break;
+						}
+					}
+					if (checked) {
+						setPageComplete(true);
+					} else{
+						setPageComplete(false);
+					}
+				}
+			}
+		});
+
+		TableColumn column1 = new TableColumn(table, SWT.NONE);
+		column1.setText("Metamodel");
 		table.getColumn(0).pack();
 		TableColumn column2 = new TableColumn(table, SWT.NONE);
 		column2.setText("Description");
 		table.getColumn(1).pack();
-		table.addSelectionListener(
-				new SelectionListener(){
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						setPageComplete(true);
-					}
-
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-						// TODO Auto-generated method stub
-						
-					}
-			
-		});
 		
 		TableColumn column3 = new TableColumn(table,SWT.NONE);
 		column3.setWidth(0);
@@ -133,24 +143,58 @@ public class AddMMPage extends WizardPage {
 
 	/* utility method to search inside the table metamodel lists */
 	public void searchMetamodels(String search) {		
+		String [] mmids = new String[table.getItems().length];
+		int i = 0;
+		for(TableItem ti : table.getItems()){
+			if(ti.getChecked()){
+				mmids[i] = ti.getText(2);
+			}
+		}
+		
 		table.removeAll();
 		
 		if (!search.equals("")) {
-			for(int i=0;i< items.length;i++){
+			for(i=0;i< items.length;i++){
 				if(items[i][0].toLowerCase().indexOf(search) > -1){
 					TableItem item = new TableItem(table, SWT.NONE);
 					item.setText(0, items[i][0]);
 					item.setText(1, ""/*items[i][1]*/);
 					item.setText(2,items[i][2]);
+					for(String s : mmids){
+						if(items[i][2].equals(s)){
+							item.setChecked(true);
+							break;
+						}
+						else{
+							item.setChecked(false);
+						}
+					}
+				}else{
+					for(String s : mmids){
+						if(items[i][2].equals(s)){
+							TableItem item = new TableItem(table, SWT.NONE);
+							item.setText(0, items[i][0]);
+							item.setText(1, ""/*items[i][1]*/);
+							item.setText(2,items[i][2]);
+							item.setChecked(true);
+						}
+					}
 				}
 			}
 		}
 		else {
-			for(int i=0;i< items.length;i++){
+			for(i=0;i< items.length;i++){
 					TableItem item = new TableItem(table, SWT.NONE);
 					item.setText(0, items[i][0]);
 					item.setText(1, ""/*items[i][1]*/);
 					item.setText(2,items[i][2]);
+					for(String s : mmids){
+						if(items[i][2].equals(s)){
+							item.setChecked(true);
+						}else{
+							item.setChecked(false);
+						}
+					}
 				}
 		}
 		table.getColumn(0).pack();
@@ -160,10 +204,14 @@ public class AddMMPage extends WizardPage {
 	}
 
 	/*Access the selected metamodel*/
-	public String getSelectedMM(){
-		String name = table.getSelection()[0].getText(0);
-		String id = table.getSelection()[0].getText(2);
-		return table.getSelection()[0].getText(2);
+	public String[] getSelectedMM(){
+		String [] s = new String[table.getItems().length];
+		for(int i = 0; i <= table.getItems().length; i++){
+			if(table.getItem(i).getChecked()){
+				s[i] = table.getItem(i).getText(2);
+			}
+		}
+		return s;
 	}
 	
 	public boolean getPublic(){

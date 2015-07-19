@@ -14,7 +14,7 @@ public class ViewController {
 	private static EcoreMetamodel emm;
 	private static Project p;
 
-	
+	/*returns for each metamodel the name->0, description->1, id->2*/
 	public static String[][] getEcoreMetamodel(){
 		List<EcoreMetamodel> l = null;
 		String[][] ecoremetamodels;
@@ -36,6 +36,7 @@ public class ViewController {
 		return ecoremetamodels;
 	}
 	
+	/*returns for each project the name->0, shared->1, id->2*/
 	public static String[][] getProjects(){
 		List<Project> l = null;
 		String[][] projects;
@@ -59,6 +60,11 @@ public class ViewController {
 			return null;
 		}
 		return projects;
+	}
+	
+	/*returns for each ATLtransformation the name->0, domainconformto->1, codomainconformto->2, id->3*/
+	public static String[][] getATLTransformations(){
+		return null;
 	}
 	
 	private static void connections() throws Exception {

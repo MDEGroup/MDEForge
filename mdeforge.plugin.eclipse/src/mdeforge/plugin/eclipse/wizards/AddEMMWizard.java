@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class AddEMMWizard extends Wizard {
 
-	protected AddProgectsPage ap;
+	protected SearchProgectsPage ap;
 	private IFile file;
 	private Shell shell;
 	
@@ -30,7 +30,7 @@ public class AddEMMWizard extends Wizard {
 	@Override
 	public void addPages(){
 		
-		ap = new AddProgectsPage(file);
+		ap = new SearchProgectsPage(file);
 		
 		if(file.getFileExtension().equals("ecore")){
 			addPage(ap);

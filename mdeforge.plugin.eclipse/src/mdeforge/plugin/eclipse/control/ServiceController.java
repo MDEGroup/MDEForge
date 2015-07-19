@@ -6,7 +6,6 @@ import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Relation;
 import org.mdeforge.client.EcoreMetamodelService;
 import org.mdeforge.client.ModelService;
 import org.mdeforge.client.ProjectService;
@@ -20,6 +19,7 @@ public class ServiceController {
 	private static EcoreMetamodel emm;
 	private static Project p;
 
+	/**/
 	public static boolean AddEcoretoForge(boolean pub, String file, List<String> id_projects) {
 		try {
 			connections();
@@ -38,6 +38,7 @@ public class ServiceController {
 		return true;
 	}
 	
+	/*in attesa di ConformToService*/
 	public static boolean addModelToForge(boolean pub, String file, String id_metamodel){
 		try{
 			connections();
@@ -55,7 +56,26 @@ public class ServiceController {
 		}
 		return true;
 	}
+	/*da rivedere*/
+	public static boolean addATLTransformationToForge(boolean pub, String file, String id_domain_mm, String co_domain_mm){
+		return true;
+	}
 	
+	/*Download of the Metamodel artifacts*/
+	public static boolean downloadMetamodels(String[] ids){
+		return true;
+	}
+	
+	/*Download of ATL artifact, DomainConformTo (from and to Artifacts),CodomainConformto (From and To Artifacts)
+	 * in the current_path*/
+	public static boolean downloadATLTransformations(String[] ids, String current_path){
+		return true;
+	}
+	
+	/*Download of all the artifacts in a project and store it in a new Project with the same name*/
+	public static boolean downloadProject(String id){
+		return true;
+	}
 	public static List<Project> getProjects(){
 		List<Project> l = null;
 		try {
