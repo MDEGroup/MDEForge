@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ETLTransformationService extends MDEForgeClient {
+public class ETLTransformationService extends ArtifactService {
 
 	public ETLTransformationService(String connectionUrl, String username,
 			String password) throws Exception {

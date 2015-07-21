@@ -10,7 +10,7 @@ import org.mdeforge.business.model.Metamodel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class EcoreMetamodelService extends MDEForgeClient {
+public class EcoreMetamodelService extends ArtifactService {
 
 	public EcoreMetamodelService(String connectionUrl, String username,
 			String password) throws Exception {

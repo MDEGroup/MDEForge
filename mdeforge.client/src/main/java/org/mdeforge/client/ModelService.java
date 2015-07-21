@@ -8,7 +8,7 @@ import org.mdeforge.business.model.Model;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ModelService extends MDEForgeClient {
+public class ModelService extends ArtifactService {
 
 	public ModelService(String connectionUrl, String username, String password)
 			throws Exception {

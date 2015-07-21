@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
 import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
@@ -421,17 +422,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public T findOneByOwner(String idArtifact, User user)
 			throws BusinessException {
-		// TODO change method
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c2 = Criteria.where("author.$id").is(user.getId());
-		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
-			query.addCriteria(c2.andOperator(c1));
-		}
-		query.addCriteria(c2);
-		return n.findOne(query, persistentClass);
+		T result = findOne(idArtifact);
+		if (result == null)
+			throw new BusinessException();
+		if(result.getAuthor().getId().equals(user.getId()))
+			return result;
+		else
+			throw new BusinessException();
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ATLTransformationService extends MDEForgeClient {
+public class ATLTransformationService extends ArtifactService {
 
 	public ATLTransformationService(String connectionUrl, String username,
 			String password) throws Exception {
