@@ -27,7 +27,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 
 @Controller
 @RestController
-@RequestMapping("/api/artifact")
+@RequestMapping("/api/Artifact")
 public class ArtifactRESTController {
 
 	@Autowired
@@ -79,7 +79,6 @@ public class ArtifactRESTController {
 
 	}
 
-	// get single artifact
 	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Artifact> getArtifact(@PathVariable("id_artifact") String idArtifact) {
 		try {
@@ -103,18 +102,4 @@ public class ArtifactRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
-//	@RequestMapping(value = "/{artifact}", method = RequestMethod.DELETE)
-//	public @ResponseBody HttpEntity<String> delete(
-//			@RequestBody Artifact artifact) {
-//		try {
-//			artifactService.delete(artifact, user);
-//			return new ResponseEntity<String>("EcoreMetamodel deleted",
-//					HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<String>("EcoreMetamodel not deleted",
-//					HttpStatus.UNPROCESSABLE_ENTITY);
-//		}
-//	}
-	
 }

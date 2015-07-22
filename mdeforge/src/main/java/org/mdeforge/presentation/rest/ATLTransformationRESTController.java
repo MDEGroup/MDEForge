@@ -69,16 +69,7 @@ public class ATLTransformationRESTController {
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Artifact> getATLTransformation(@PathVariable("id_transformation") String idtransformation) {
-		try {
-			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user);
-			return new ResponseEntity<Artifact>(transformation, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-
-	}
+	
 	@RequestMapping(value = "execute/{id}", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> execute(@PathVariable("id") String id, 
 			@RequestBody List<Model> models) {
@@ -226,5 +217,16 @@ public class ATLTransformationRESTController {
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+	}
+	
+	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ATLTransformation> getATLTransformation(@PathVariable("id_artifact") String idArtifact) {
+		try {
+			ATLTransformation artifact = ATLtransformationService.findOneById(idArtifact, user);
+			return new ResponseEntity<ATLTransformation>(artifact, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ATLTransformation>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+
 	}
 }

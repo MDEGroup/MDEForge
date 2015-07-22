@@ -23,14 +23,16 @@ public class GetterTest {
 	private static ATLTransformationService atlTransformationService; 
 	private static ETLTransformationService etlTransformationService; 
 	private static EcoreMetamodelService ecoreMetamodelService; 
-	private static WorkspaceService workspaceService; 
+	private static WorkspaceService workspaceService;
+	private static ArtifactService artifactService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		modelService = new ModelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		artifactService = new ArtifactService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
 	@Ignore
@@ -161,5 +163,31 @@ public class GetterTest {
 		}
 		
 	}
+	@Test
+	public void getArtifact() throws Exception {
+		Artifact t = artifactService.getArtifact("557837c6d4c6571542e8aa8c");
+		System.out.println(t.getClass().getCanonicalName());
+	}
+	@Test
+	public void getETL() throws Exception {
+		Artifact t = etlTransformationService.getArtifact("557837c6d4c6571542e8aa8c");
+		System.out.println("ETL: " + t.getClass().getCanonicalName());
+	}
+	@Test
+	public void getATL() throws Exception {
+		Artifact t = atlTransformationService.getArtifact("5565a826456809f9bc5b6a28");
+		System.out.println("ATL: " + t.getClass().getCanonicalName());
+	}
+	@Test
+	public void getEcore() throws Exception {
+		Artifact t = ecoreMetamodelService.getArtifact("557837c6d4c6571542e8aa8c");
+		System.out.println("Ecore: " + t.getClass().getCanonicalName());
+	}
+	@Test
+	public void getModel() throws Exception {
+		Artifact t = modelService.getArtifact("557018084568bbd2c59f9145");
+		System.out.println("Model: " + t.getClass().getCanonicalName());
+	}
+	
 	
 }

@@ -3,6 +3,7 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.ETLTransformation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -44,5 +45,11 @@ public class ETLTransformationService extends ArtifactService {
 		ArrayNode on = mapper.valueToTree(new ArtifactList(models));
 		doPostRequest(connectionUrl + "/api/ETLTransformation/execute/" + id, on);
 	}
+	
+	public ETLTransformation getETLTransformation(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ETLTransformation/" + id);
+		return mapper.readValue(result, ETLTransformation.class);
+	}
+	
 
 }

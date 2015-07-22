@@ -1,7 +1,9 @@
 package org.mdeforge.client;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 
 public class DeleteTest {
@@ -23,7 +25,7 @@ public class DeleteTest {
 		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 		artifactService = new ArtifactService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
-	
+	@Ignore
 	@Test
 	public void testDelete() throws Exception{
 		artifactService.deleteArtifact("557837cbd4c6571542e8aad8");

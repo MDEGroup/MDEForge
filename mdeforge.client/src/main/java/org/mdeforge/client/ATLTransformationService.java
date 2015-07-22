@@ -3,6 +3,7 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -42,5 +43,9 @@ public class ATLTransformationService extends ArtifactService {
 		return mapper.readValue(result, new TypeReference<List<Model>>() {});
 	}
 	
+	public ATLTransformation getATLTransformation(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ATLTransformation/" + id);
+		return mapper.readValue(result, ATLTransformation.class);
+	}
 	
 }

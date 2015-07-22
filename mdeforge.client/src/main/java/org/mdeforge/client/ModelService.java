@@ -2,6 +2,7 @@ package org.mdeforge.client;
 
 import java.util.List;
 
+import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 
@@ -38,6 +39,11 @@ public class ModelService extends ArtifactService {
 		return mapper.readValue(result, new TypeReference<List<Model>>() {});
 	}
 	
+
+	public Model getETLTransformation(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/" + id);
+		return mapper.readValue(result, Model.class);
+	}
 	
 	public String validateModels(String idMetamodel) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/Model/validate/" + idMetamodel);
