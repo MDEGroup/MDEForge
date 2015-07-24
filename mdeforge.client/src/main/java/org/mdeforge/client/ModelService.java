@@ -2,13 +2,14 @@ package org.mdeforge.client;
 
 import java.util.List;
 
+import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class ModelService extends MDEForgeClient {
+public class ModelService extends ArtifactService {
 
 	public ModelService(String connectionUrl, String username, String password)
 			throws Exception {
@@ -38,6 +39,11 @@ public class ModelService extends MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<Model>>() {});
 	}
 	
+
+	public Model getETLTransformation(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/" + id);
+		return mapper.readValue(result, Model.class);
+	}
 	
 	public String validateModels(String idMetamodel) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/Model/validate/" + idMetamodel);

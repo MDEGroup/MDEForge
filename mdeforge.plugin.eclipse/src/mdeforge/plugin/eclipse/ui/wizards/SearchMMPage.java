@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.wizards;
+package mdeforge.plugin.eclipse.ui.wizards;
 
 
 import mdeforge.plugin.eclipse.control.ViewController;
@@ -7,8 +7,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -191,6 +189,7 @@ public class SearchMMPage extends WizardPage {
 					for(String s : mmids){
 						if(items[i][2].equals(s)){
 							item.setChecked(true);
+							break;
 						}else{
 							item.setChecked(false);
 						}
@@ -206,15 +205,11 @@ public class SearchMMPage extends WizardPage {
 	/*Access the selected metamodel*/
 	public String[] getSelectedMM(){
 		String [] s = new String[table.getItems().length];
-		for(int i = 0; i <= table.getItems().length; i++){
+		for(int i = 0; i < table.getItems().length; i++){
 			if(table.getItem(i).getChecked()){
 				s[i] = table.getItem(i).getText(2);
 			}
 		}
 		return s;
-	}
-	
-	public boolean getPublic(){
-		return true;
 	}
 }

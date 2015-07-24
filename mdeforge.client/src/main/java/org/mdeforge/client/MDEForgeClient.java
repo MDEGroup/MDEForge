@@ -98,6 +98,38 @@ public abstract class MDEForgeClient {
 		return sb.toString();
 	}
 	
+	protected String doDeleteRequest(String urlString) throws Exception {
+		urlString += auth;
+		URL url = new URL(urlString);
+		
+		/*
+		 * 
+		URL url = new URL("http://www.example.com/resource");
+		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+		httpCon.setDoOutput(true);
+		httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
+		httpCon.setRequestMethod("DELETE");
+		httpCon.connect();
+		*
+		*/
+		
+		
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("DELETE");
+		conn.setDoOutput(true);
+		conn.connect();
+		if (conn.getResponseCode() != 201 && conn.getResponseCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuffer sb = new StringBuffer();
+		String output;
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+		conn.disconnect();
+		return sb.toString();
+	}
 	
 	
 	public static String readFile(String path) throws IOException {

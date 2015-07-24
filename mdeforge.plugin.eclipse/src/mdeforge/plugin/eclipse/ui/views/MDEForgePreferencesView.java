@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.views;
+package mdeforge.plugin.eclipse.ui.views;
 
 
 

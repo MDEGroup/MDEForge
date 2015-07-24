@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.actions.services;
+package mdeforge.plugin.eclipse.ui.actions.services;
 
 import mdeforge.plugin.eclipse.Activator;
 

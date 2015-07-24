@@ -10,7 +10,7 @@ import org.mdeforge.business.model.Metamodel;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class EcoreMetamodelService extends MDEForgeClient {
+public class EcoreMetamodelService extends ArtifactService {
 
 	public EcoreMetamodelService(String connectionUrl, String username,
 			String password) throws Exception {
@@ -73,4 +73,6 @@ public class EcoreMetamodelService extends MDEForgeClient {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster/" + threshold + "/" + computation);
 		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
+	
+	
 }

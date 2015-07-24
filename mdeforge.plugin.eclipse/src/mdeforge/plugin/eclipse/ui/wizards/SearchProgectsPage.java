@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.wizards;
+package mdeforge.plugin.eclipse.ui.wizards;
 
 import java.util.ArrayList;
 import java.util.List;

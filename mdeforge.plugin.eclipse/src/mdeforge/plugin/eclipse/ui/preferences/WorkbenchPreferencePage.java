@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.preferences;
+package mdeforge.plugin.eclipse.ui.preferences;
 
 import mdeforge.plugin.eclipse.Activator;
 

@@ -1,8 +1,9 @@
-package mdeforge.plugin.eclipse.wizards;
+package mdeforge.plugin.eclipse.ui.wizards;
 
 import mdeforge.plugin.eclipse.control.ServiceController;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
@@ -11,6 +12,7 @@ public class AddMWizard extends Wizard {
 
 	protected SearchProgectsPage ap;
 	protected SearchMMPage amm;
+	protected DetailsPage dp;
 	private IFile file;
 	private Shell shell;
 	
@@ -32,18 +34,27 @@ public class AddMWizard extends Wizard {
 	public void addPages(){
 		
 		//ap = new AddProgectsPage(file);
+		dp = new DetailsPage();
 		amm = new SearchMMPage();
 		
+		
 		addPage(amm);
+		addPage(dp);
 		//addPage(ap);
 		
 	}
 	@Override
 	public boolean performFinish(){
-		/*ALTRA FUNZIONE DA RICHIAMARE*/
-		
-		boolean b = ServiceController.addModelToForge(amm.getPublic(), file.getFullPath().toString(),
-				amm.getSelectedMM()[0]);
+		String ws_path = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString();
+		String id = "";
+		for(String s : amm.getSelectedMM()){
+			if(s != null){
+				id = s;
+				break;
+			}
+		}
+		boolean b = true;//ServiceController.addModelToForge(dp.getPublic(),dp.getName(),dp.getDescription(), ws_path + file.getFullPath().toString(),
+				//id);
 		if(!b){
 			MessageDialog.openError(shell, "Operation failure", "The task failed to execute.\n"
 					+ "Check the settings on\n"

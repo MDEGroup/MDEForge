@@ -1,11 +1,13 @@
 package mdeforge.plugin.eclipse.control;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.client.EcoreMetamodelService;
 import org.mdeforge.client.ModelService;
 import org.mdeforge.client.ProjectService;
@@ -47,6 +49,10 @@ public class ServiceController {
 			ConformToRelation r = new ConformToRelation();
 			emm = emms.getEcoreMetamodel(id_metamodel);
 			r.setToArtifact(emm);
+			r.setName("pippo");
+			List<Relation> newRelations = new ArrayList<Relation>();
+			newRelations.add(r);
+			m.setRelations(newRelations);
 			ms.addModel(m, file);
 			//r.setFromArtifact(ms.get);
 			

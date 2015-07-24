@@ -1,10 +1,13 @@
 package mdeforge.plugin.eclipse.builder;
 
-import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 public class MDEForgeNature implements IProjectNature {
 
@@ -21,22 +24,24 @@ public class MDEForgeNature implements IProjectNature {
 	 * @see org.eclipse.core.resources.IProjectNature#configure()
 	 */
 	public void configure() throws CoreException {
-		IProjectDescription desc = project.getDescription();
-		ICommand[] commands = desc.getBuildSpec();
-
-		for (int i = 0; i < commands.length; ++i) {
-			if (commands[i].getBuilderName().equals(MDEForgeBuilder.BUILDER_ID)) {
-				return;
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		if (window != null) {
+			IStructuredSelection selection = (IStructuredSelection) window
+					.getSelectionService().getSelection();
+			Object firstElement = selection.getFirstElement();
+			if(firstElement instanceof IAdaptable){
+				IProject project = (IProject)((IAdaptable) firstElement).getAdapter(IProject.class);
+				IProjectDescription description = project.getDescription();
+				String[] natures = description.getNatureIds();
+			    String[] newNatures = new String[natures.length + 1];
+			    System.arraycopy(natures, 0, newNatures, 0, natures.length);
+			    newNatures[natures.length] = "mdeforge.plugin.eclipse.builder.mdeforgeNature";
+			    description.setNatureIds(newNatures);
+			    project.setDescription(description, null);
 			}
 		}
-
-		ICommand[] newCommands = new ICommand[commands.length + 1];
-		System.arraycopy(commands, 0, newCommands, 0, commands.length);
-		ICommand command = desc.newCommand();
-		command.setBuilderName(MDEForgeBuilder.BUILDER_ID);
-		newCommands[newCommands.length - 1] = command;
-		desc.setBuildSpec(newCommands);
-		project.setDescription(desc, null);
+		
 	}
 
 	/*
@@ -45,17 +50,20 @@ public class MDEForgeNature implements IProjectNature {
 	 * @see org.eclipse.core.resources.IProjectNature#deconfigure()
 	 */
 	public void deconfigure() throws CoreException {
-		IProjectDescription description = getProject().getDescription();
-		ICommand[] commands = description.getBuildSpec();
-		for (int i = 0; i < commands.length; ++i) {
-			if (commands[i].getBuilderName().equals(MDEForgeBuilder.BUILDER_ID)) {
-				ICommand[] newCommands = new ICommand[commands.length - 1];
-				System.arraycopy(commands, 0, newCommands, 0, i);
-				System.arraycopy(commands, i + 1, newCommands, i,
-						commands.length - i - 1);
-				description.setBuildSpec(newCommands);
-				project.setDescription(description, null);			
-				return;
+		IWorkbenchWindow window = PlatformUI.getWorkbench()
+				.getActiveWorkbenchWindow();
+		if (window != null) {
+			IStructuredSelection selection = (IStructuredSelection) window
+					.getSelectionService().getSelection();
+			Object firstElement = selection.getFirstElement();
+			if(firstElement instanceof IAdaptable){
+				IProject project = (IProject)((IAdaptable) firstElement).getAdapter(IProject.class);
+				IProjectDescription description = project.getDescription();
+				String[] natures = description.getNatureIds();
+			    String[] newNatures = new String[natures.length - 1];
+			    System.arraycopy(natures, 0, newNatures, 0, natures.length-1);//non va bene!
+			    description.setNatureIds(newNatures);
+			    project.setDescription(description, null);
 			}
 		}
 	}

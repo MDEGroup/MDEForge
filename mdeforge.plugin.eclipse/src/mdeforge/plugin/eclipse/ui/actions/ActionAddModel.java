@@ -1,7 +1,6 @@
-package mdeforge.plugin.eclipse.actions;
+package mdeforge.plugin.eclipse.ui.actions;
 
-
-import mdeforge.plugin.eclipse.wizards.AddEMMWizard;
+import mdeforge.plugin.eclipse.ui.wizards.AddMWizard;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
@@ -17,14 +16,14 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-public class ActionAddEcoreMM implements IObjectActionDelegate {
+public class ActionAddModel implements IObjectActionDelegate {
 
 	private Shell shell;
-
-	public ActionAddEcoreMM() {
+	
+	public ActionAddModel(){
 		super();
 	}
-
+	
 	@Override
 	public void run(IAction action) {
 		/* retrieve selected file information */
@@ -39,7 +38,7 @@ public class ActionAddEcoreMM implements IObjectActionDelegate {
 						.getAdapter(IFile.class);
 				/* start the AddArtifactWizard */
 				WizardDialog wizardDialog = new WizardDialog(shell,
-						new AddEMMWizard(file,shell));
+						new AddMWizard(file,shell));
 				if (wizardDialog.open() == Window.OK) {
 					MessageDialog.openInformation(shell, "Add Artifact",
 							"The request has been sent!");
@@ -48,19 +47,20 @@ public class ActionAddEcoreMM implements IObjectActionDelegate {
 				}
 			}
 		}
-
+		
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		shell = targetPart.getSite().getShell();
-
+		// TODO Auto-generated method stub
+		
 	}
+
 
 }

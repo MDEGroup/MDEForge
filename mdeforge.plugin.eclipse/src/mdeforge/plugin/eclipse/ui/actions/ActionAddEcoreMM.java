@@ -1,8 +1,9 @@
-package mdeforge.plugin.eclipse.actions;
+package mdeforge.plugin.eclipse.ui.actions;
 
-import mdeforge.plugin.eclipse.wizards.GetEMMWizard;
 
-import org.eclipse.core.resources.IProject;
+import mdeforge.plugin.eclipse.ui.wizards.AddEMMWizard;
+
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -16,11 +17,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-public class GetEcoreMM implements IObjectActionDelegate {
+public class ActionAddEcoreMM implements IObjectActionDelegate {
 
 	private Shell shell;
-	
-	public GetEcoreMM() {
+
+	public ActionAddEcoreMM() {
 		super();
 	}
 
@@ -34,9 +35,11 @@ public class GetEcoreMM implements IObjectActionDelegate {
 					.getSelectionService().getSelection();
 			Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof IAdaptable) {
-				IProject project = (IProject)((IAdaptable)firstElement);
+				IFile file = (IFile) ((IAdaptable) firstElement)
+						.getAdapter(IFile.class);
+				/* start the AddArtifactWizard */
 				WizardDialog wizardDialog = new WizardDialog(shell,
-						new GetEMMWizard(project.getFullPath().toString(),shell));
+						new AddEMMWizard(file,shell));
 				if (wizardDialog.open() == Window.OK) {
 					MessageDialog.openInformation(shell, "Add Artifact",
 							"The request has been sent!");
@@ -56,7 +59,7 @@ public class GetEcoreMM implements IObjectActionDelegate {
 
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
+		shell = targetPart.getSite().getShell();
 
 	}
 

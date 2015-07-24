@@ -1,45 +1,54 @@
-package mdeforge.plugin.eclipse.wizards;
+package mdeforge.plugin.eclipse.ui.wizards;
 
 import mdeforge.plugin.eclipse.control.ServiceController;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 
-public class GetEMMWizard extends Wizard {
+public class AddEMMWizard extends Wizard {
 
-	private String project;
+	protected SearchProgectsPage ap;
+	private IFile file;
 	private Shell shell;
-	private SearchMMPage smm;
 	
-	public GetEMMWizard(String project, Shell shell){
+	
+	public AddEMMWizard(IFile file, Shell shell){
 		super();
 		setNeedsProgressMonitor(true);
-		this.project = project;
+		this.file = file;
 		this.shell = shell;
 	}
 	
+	
 	@Override
 	public String getWindowTitle(){
-		return "Download Remote EcoreMetamodels";
+		return "Upload Local Artifact";
 	}
 	
 	@Override
 	public void addPages(){
-		smm = new SearchMMPage();
-		addPage(smm);
+		
+		ap = new SearchProgectsPage(file);
+		
+		if(file.getFileExtension().equals("ecore")){
+			addPage(ap);
+		}
 		
 	}
-	
 	@Override
-	public boolean performFinish() {
-		boolean b = ServiceController.downloadMetamodels(smm.getSelectedMM());
+	public boolean performFinish(){
+		boolean b = ServiceController.AddEcoretoForge(ap.getPublic(),
+				ap.getFile(),
+				ap.getProject());
 		if(!b){
 			MessageDialog.openError(shell, "Operation failure", "The task failed to execute.\n"
 					+ "Check the settings on\n"
 					+ "Window -> Preferences -> MDEForge");
 		}
 		return true;
+		
 	}
 
 }
