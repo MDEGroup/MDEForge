@@ -11,7 +11,6 @@ import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

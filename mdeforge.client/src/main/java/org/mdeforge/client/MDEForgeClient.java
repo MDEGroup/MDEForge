@@ -97,23 +97,34 @@ public abstract class MDEForgeClient {
 		conn.disconnect();
 		return sb.toString();
 	}
+	protected String doPutRequest(String urlString, JsonNode json) throws Exception {
+		urlString += auth;
+		URL url = new URL(urlString);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("PUT");
+		conn.setRequestProperty("Content-Type", "application/json");
+		conn.setDoOutput(true);
+		OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+		wr.write(json.toString());
+		wr.flush();
+		wr.close();
+		conn.connect();
+		if (conn.getResponseCode() != 201 && conn.getResponseCode() != 200) {
+			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+		}
+		BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		StringBuffer sb = new StringBuffer();
+		String output;
+		while ((output = br.readLine()) != null) {
+			sb.append(output);
+		}
+		conn.disconnect();
+		return sb.toString();
+	}
 	
 	protected String doDeleteRequest(String urlString) throws Exception {
 		urlString += auth;
 		URL url = new URL(urlString);
-		
-		/*
-		 * 
-		URL url = new URL("http://www.example.com/resource");
-		HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-		httpCon.setDoOutput(true);
-		httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
-		httpCon.setRequestMethod("DELETE");
-		httpCon.connect();
-		*
-		*/
-		
-		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("DELETE");
 		conn.setDoOutput(true);
@@ -131,15 +142,11 @@ public abstract class MDEForgeClient {
 		return sb.toString();
 	}
 	
-	
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(Base64.encodeBase64(encoded));
 		
 	}
-	
-
-	
 	public String createIndex() throws Exception{
 		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
 		return result;

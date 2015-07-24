@@ -66,8 +66,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	}
 
 	@Override
-	public void delete(String idGridFileMedia) throws BusinessException {
-		GridFileMedia file = gridFileMediaRepository.findOne(idGridFileMedia);
+	public void delete(GridFileMedia file) throws BusinessException {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("id").is(file.getIdFile()));
 		operations.delete(q);

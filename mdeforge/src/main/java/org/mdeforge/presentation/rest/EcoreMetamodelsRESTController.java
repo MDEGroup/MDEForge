@@ -155,7 +155,6 @@ public class EcoreMetamodelsRESTController {
 		}
 	}
 
-	// update metamodel
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody HttpEntity<String> updateArtifact(
 			@RequestBody EcoreMetamodel ecoreMetamodel) {
@@ -163,7 +162,7 @@ public class EcoreMetamodelsRESTController {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
-			ecoreMetamodel.getShared().add(user);
+			//ecoreMetamodel.getShared().add(user);
 			// metamodel save
 			ecoreMetamodelService.update(ecoreMetamodel);
 			return new ResponseEntity<String>("EcoreMetamodel updated.",

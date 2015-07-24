@@ -8,8 +8,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.throwStatement_return;
-import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.DuplicateNameException;
@@ -83,42 +81,41 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected Class<T> persistentClass;
 
 	@Override
-	public void createIndex(){
+	public void createIndex() {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
+
 		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-			.onField("name", 20F)
-			.onField("description", 10F)
-			.onField("authors", 5F)
-			.onField("tags", 7F)
-			.onField("extractedContents")
-			.named("ArtifactIndex")
-			.build();
+				.onField("name", 20F).onField("description", 10F)
+				.onField("authors", 5F).onField("tags", 7F)
+				.onField("extractedContents").named("ArtifactIndex").build();
 
 		operations.indexOps(Artifact.class).ensureIndex(textIndex);
 	}
 
 	@Override
 	public List<T> search(String searchString) throws BusinessException {
-		TextCriteria criteria = TextCriteria.forLanguage("en").matching(searchString);
-		Query query = TextQuery.queryText(criteria).sortByScore().with(new PageRequest(0, 5));
+		TextCriteria criteria = TextCriteria.forLanguage("en").matching(
+				searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore()
+				.with(new PageRequest(0, 5));
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		List<T> result = operations.find(query, persistentClass);
 		return result;
 	}
-	
+
 	@Override
-	public List<Artifact> orederedSearch(String text){
+	public List<Artifact> orederedSearch(String text) {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
+
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(
+				text);
 
 		TextQuery query = new TextQuery(criteria);
 		query.setScoreFieldName("score");
 		query.sortByScore();
 
 		List<Artifact> artifacts = operations.find(query, Artifact.class);
-		
+
 		return artifacts;
 	}
 
@@ -186,7 +183,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					userRepository.save(user);
 				}
 		// TODO delete Relation
-		gridFileMediaService.delete(artifact.getFile().getId());
+		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
 	}
@@ -214,7 +211,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					userRepository.save(user);
 				}
 		// TODO delete Relation
-		gridFileMediaService.delete(artifact.getFile().getId());
+		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
 	}
@@ -225,15 +222,22 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			if (artifact.getId() == null)
 				throw new BusinessException();
 			// verify metamodel owner
-			findOneByOwner(artifact.getId(), artifact.getAuthor());
-
+			User user = userRepository.findOne(artifact.getAuthor().getId());
+			artifact.setAuthor(user);
+			T original = findOneByOwner(artifact.getId(), artifact.getAuthor());
 			// UploadFile
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName("");
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
-			artifact.setFile(fileMedia);
-
+			if (artifact.getFile() != null && artifact.getFile().getByteArray() != null) {
+				GridFileMedia fileMedia = new GridFileMedia();
+				fileMedia.setFileName("");
+				fileMedia.setByteArray(Base64.decode(artifact.getFile()
+						.getContent().getBytes()));
+				gridFileMediaService.delete(original.getFile());
+				gridFileMediaService.store(artifact.getFile());
+				artifact.setFile(fileMedia);
+			}
+			else
+				artifact.setFile(original.getFile());
+			
 			for (Workspace ws : artifact.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
 			}
@@ -241,19 +245,26 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
 			}
-			Artifact transTemp = artifactRepository.findOne(artifact.getId());
-			gridFileMediaService.delete(transTemp.getFile().getId());
-			if (artifact.getFile() != null) {
-				gridFileMediaService.store(artifact.getFile());
-			}
+			
 
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
+			
 			artifactRepository.save(artifact);
 			// check relation
+			for (User us : artifact.getShared()) {
+				User u = userService.findOne(us.getId());
+				if (u == null)
+					throw new BusinessException();
+				if (!isArtifactInUser(u, artifact.getId())) {
+					u.getSharedArtifact().add(artifact);
+					userRepository.save(u);
+				}
+			}
 			for (Relation rel : relationTemp) {
 
-				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
+				Artifact toArtifact = artifactRepository.findOne(rel
+						.getToArtifact().getId());
 				// findOneById(rel.getToArtifact().getId(),
 				// artifact.getAuthor());
 				if (existRelation(toArtifact.getId(), artifact.getId())) {
@@ -285,15 +296,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					projectRepository.save(p);
 				}
 			}
-			for (User us : artifact.getShared()) {
-				User u = userService.findOne(us.getId());
-				if (u == null)
-					throw new BusinessException();
-				if (!isArtifactInUser(u, artifact.getId())) {
-					u.getSharedArtifact().add(artifact);
-					userRepository.save(u);
-				}
-			}
+			
 		} catch (Exception e) {
 			throw new BusinessException();
 		}
@@ -312,7 +315,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
 		try {
-			if(artifactRepository.findByName(artifact.getName())!=null)
+			if (artifactRepository.findByName(artifact.getName()) != null)
 				throw new DuplicateNameException();
 			// GetUser
 			if (artifact.getId() != null)
@@ -320,10 +323,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName(artifact.getFile().getFileName());
-			if (artifact.getFile().getByteArray()!=null)
+			if (artifact.getFile().getByteArray() != null)
 				fileMedia.setByteArray(artifact.getFile().getByteArray());
-			else fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
+			else
+				fileMedia.setByteArray(Base64.decode(artifact.getFile()
+						.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
 			for (Workspace ws : artifact.getWorkspaces()) {
@@ -343,12 +347,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.getShared().add(user);
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
-					
-			
+
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId()); 
+				Artifact toArtifact = artifactRepository.findOne(rel
+						.getToArtifact().getId());
 
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
@@ -425,7 +429,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T result = findOne(idArtifact);
 		if (result == null)
 			throw new BusinessException();
-		if(result.getAuthor().getId().equals(user.getId()))
+		if (result.getAuthor().getId().equals(user.getId()))
 			return result;
 		else
 			throw new BusinessException();
@@ -577,18 +581,21 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		return operations.find(query, Metric.class);
 
 	}
-	
+
 	@Override
-	public Resource loadArtifacrt(String id)throws BusinessException{
-		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/" + id;
-		Resource resource = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+	public Resource loadArtifacrt(String id) throws BusinessException {
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
+				+ mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet()
+				.createResource(URI.createURI(mongoURI));
 
 		try {
 			resource.load(null);
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
-		
+
 		return resource;
 	}
 }

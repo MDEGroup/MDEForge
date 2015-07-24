@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
-import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.ValuedRelation;
 import org.springframework.data.domain.Sort;

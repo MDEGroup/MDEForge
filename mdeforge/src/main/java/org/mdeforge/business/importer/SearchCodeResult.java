@@ -1,6 +1,5 @@
 package org.mdeforge.business.importer;
 
-import java.util.List;
 
 public class SearchCodeResult {
 	private String incomplete_results;

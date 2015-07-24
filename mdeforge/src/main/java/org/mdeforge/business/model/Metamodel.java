@@ -3,8 +3,6 @@ package org.mdeforge.business.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.mongodb.core.index.TextIndexed;
-
 
 /**
  * A representation of the model object '<em><b>Metamodel</b></em>'. <!--

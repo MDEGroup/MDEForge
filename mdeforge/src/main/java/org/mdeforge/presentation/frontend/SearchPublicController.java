@@ -1,13 +1,6 @@
 package org.mdeforge.presentation.frontend;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ContainmentRelationService;
@@ -17,14 +10,9 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.impl.ArtifactServiceImpl;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.Cluster;
-import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
-import org.mdeforge.business.model.Metric;
-import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -44,7 +44,7 @@ public class EcoreMetamodelService extends ArtifactService {
 		
 	}
 	
-	public void addEcoreMetamodel(EcoreMetamodel metamodel, String file) throws Exception {
+	public EcoreMetamodel addEcoreMetamodel(EcoreMetamodel metamodel, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
 		String[] temp = file.split("/");
 		String fileName = temp[temp.length -1];
@@ -55,7 +55,7 @@ public class EcoreMetamodelService extends ArtifactService {
 		ObjectNode on = mapper.valueToTree(metamodel);
 		String app = doPostRequest(connectionUrl + "api/EcoreMetamodel/", on);
 		EcoreMetamodel emm = mapper.readValue(app, new TypeReference<EcoreMetamodel>() {});
-		metamodel.setId(emm.getId());
+		return emm;
 	}
 	
 	public List<EcoreMetamodel> searchEcoreMetamodelByExample(EcoreMetamodel emm) throws Exception {
@@ -74,5 +74,9 @@ public class EcoreMetamodelService extends ArtifactService {
 		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
 	
-	
+	public EcoreMetamodel updateEcoreMetamodel(EcoreMetamodel emm) throws Exception {
+		ObjectNode on = mapper.valueToTree(emm);
+		String result = doPutRequest(connectionUrl + "api/EcoreMetamodel/", on);
+		return mapper.readValue(result, new TypeReference<EcoreMetamodel>() {});
+	}
 }
