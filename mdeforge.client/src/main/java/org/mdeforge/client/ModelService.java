@@ -2,6 +2,7 @@ package org.mdeforge.client;
 
 import java.util.List;
 
+import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 

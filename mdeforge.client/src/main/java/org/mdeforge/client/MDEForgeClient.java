@@ -125,6 +125,7 @@ public abstract class MDEForgeClient {
 	protected String doDeleteRequest(String urlString) throws Exception {
 		urlString += auth;
 		URL url = new URL(urlString);
+
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("DELETE");
 		conn.setDoOutput(true);
@@ -141,6 +142,7 @@ public abstract class MDEForgeClient {
 		conn.disconnect();
 		return sb.toString();
 	}
+
 	
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));

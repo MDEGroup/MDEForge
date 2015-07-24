@@ -73,10 +73,11 @@ public class EcoreMetamodelService extends ArtifactService {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/cluster/" + threshold + "/" + computation);
 		return mapper.readValue(result, new TypeReference<List<Cluster>>() {});
 	}
-	
+
 	public EcoreMetamodel updateEcoreMetamodel(EcoreMetamodel emm) throws Exception {
 		ObjectNode on = mapper.valueToTree(emm);
 		String result = doPutRequest(connectionUrl + "api/EcoreMetamodel/", on);
 		return mapper.readValue(result, new TypeReference<EcoreMetamodel>() {});
 	}
+
 }
