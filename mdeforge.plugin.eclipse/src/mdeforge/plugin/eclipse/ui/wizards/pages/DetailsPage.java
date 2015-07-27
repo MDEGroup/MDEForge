@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.ui.wizards;
+package mdeforge.plugin.eclipse.ui.wizards.pages;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -17,11 +17,13 @@ public class DetailsPage extends WizardPage {
 	private Label l1,l2,l3;
 	private Text t1,t2;
 	private Button b;
+	private String filename;
 	
-	public DetailsPage(){
+	public DetailsPage(String filename){
 		super("Details");
 		setTitle("Details");
 		setDescription("Insert the details");
+		this.filename = filename;
 	}
 	@Override
 	public void createControl(Composite parent) {
@@ -32,7 +34,7 @@ public class DetailsPage extends WizardPage {
 		Label l1 = new Label(container, SWT.NONE);
 		l1.setText("Name");
 		t1 = new Text(container, SWT.BORDER | SWT.SINGLE);
-		t1.setText("");
+		t1.setText(filename);
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 		t1.setLayoutData(gd);
 		l2 = new Label(container, SWT.NONE);

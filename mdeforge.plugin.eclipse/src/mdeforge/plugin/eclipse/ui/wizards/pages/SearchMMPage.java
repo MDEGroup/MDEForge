@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.ui.wizards;
+package mdeforge.plugin.eclipse.ui.wizards.pages;
 
 
 import mdeforge.plugin.eclipse.control.ViewController;

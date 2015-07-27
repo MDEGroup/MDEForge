@@ -1,6 +1,9 @@
 package mdeforge.plugin.eclipse.ui.wizards;
 
 import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.ui.wizards.pages.DetailsPage;
+import mdeforge.plugin.eclipse.ui.wizards.pages.SearchMMPage;
+import mdeforge.plugin.eclipse.ui.wizards.pages.SearchProjectsPage;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -10,7 +13,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class AddMWizard extends Wizard {
 
-	protected SearchProgectsPage ap;
+	protected SearchProjectsPage ap;
 	protected SearchMMPage amm;
 	protected DetailsPage dp;
 	private IFile file;
@@ -33,14 +36,14 @@ public class AddMWizard extends Wizard {
 	@Override
 	public void addPages(){
 		
-		//ap = new AddProgectsPage(file);
-		dp = new DetailsPage();
+		dp = new DetailsPage(file.getFullPath().lastSegment());
 		amm = new SearchMMPage();
+		ap = new SearchProjectsPage();
 		
 		
 		addPage(amm);
 		addPage(dp);
-		//addPage(ap);
+		addPage(ap);
 		
 	}
 	@Override
