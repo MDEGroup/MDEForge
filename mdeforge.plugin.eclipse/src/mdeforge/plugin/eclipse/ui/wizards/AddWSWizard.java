@@ -1,6 +1,6 @@
 package mdeforge.plugin.eclipse.ui.wizards;
 
-import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeServiceController;
 import mdeforge.plugin.eclipse.ui.wizards.pages.DetailsPage;
 import mdeforge.plugin.eclipse.ui.wizards.pages.SearchMMPage;
 
@@ -31,7 +31,7 @@ public class AddWSWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
-		ServiceController.addWorkspaceToForge(dp.getName(), dp.getDescription());
+		MDEForgeServiceController.addWorkspaceToForge(dp.getName(), dp.getDescription());
 		return false;
 	}
 

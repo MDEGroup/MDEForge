@@ -1,6 +1,6 @@
 package mdeforge.plugin.eclipse.ui.wizards;
 
-import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeServiceController;
 import mdeforge.plugin.eclipse.ui.wizards.pages.DetailsPage;
 import mdeforge.plugin.eclipse.ui.wizards.pages.SearchMMPage;
 import mdeforge.plugin.eclipse.ui.wizards.pages.SearchProjectsPage;

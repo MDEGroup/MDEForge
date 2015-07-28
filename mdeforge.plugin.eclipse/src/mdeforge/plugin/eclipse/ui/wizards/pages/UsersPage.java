@@ -2,8 +2,8 @@ package mdeforge.plugin.eclipse.ui.wizards.pages;
 
 import java.util.List;
 
-import mdeforge.plugin.eclipse.control.ServiceController;
-import mdeforge.plugin.eclipse.control.ViewController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeServiceController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeViewController;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.wizard.WizardPage;
@@ -121,7 +121,7 @@ public class UsersPage extends WizardPage {
 		table.getColumn(2).pack();
 		column3.setWidth(0);
 		
-		items = ViewController.getUsers();
+		items = MDEForgeViewController.getUsers();
 		for(int i = 0; i < items.length; i++){
 			TableItem item = new TableItem(table,SWT.NONE);
 			item.setText(0, items[i][0]);

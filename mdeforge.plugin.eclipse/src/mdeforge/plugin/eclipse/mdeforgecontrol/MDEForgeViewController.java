@@ -1,4 +1,4 @@
-package mdeforge.plugin.eclipse.control;
+package mdeforge.plugin.eclipse.mdeforgecontrol;
 
 import java.util.List;
 
@@ -9,20 +9,29 @@ import org.mdeforge.client.EcoreMetamodelService;
 import org.mdeforge.client.ProjectService;
 import org.mdeforge.client.UserService;;
 
-public class ViewController {
+public class MDEForgeViewController extends MDEForgeController {
+	
 	
 	private static EcoreMetamodelService emms;
 	private static ProjectService ps;
-	private static EcoreMetamodel emm;
 	private static UserService us;
-	private static Project p;
+	
+	public MDEForgeViewController(String link, String user, String pass){
+		super(link, user, pass);
+	}
+	
+	
 
 	/*returns for each metamodel the name->0, description->1, id->2*/
-	public static String[][] getEcoreMetamodel(){
+	public static String[][] getEcoreMetamodels() throws Exception{
 		List<EcoreMetamodel> l = null;
 		String[][] ecoremetamodels;
-		try{
-			connections();
+	
+			
+			if(emms == null){
+				new EcoreMetamodelService(link,user,pass);
+			}
+			
 			l = emms.getEcoreMetamodels();
 			ecoremetamodels = new String[l.size()][3];
 			int i = 0;
@@ -32,19 +41,19 @@ public class ViewController {
 				ecoremetamodels[i][2] = p.getId();
 				i++;
 			}
-		} catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
+
 		return ecoremetamodels;
 	}
 	
 	/*returns for each metamodel the username->0, first+lastname->1, id->2*/
-	public static String[][] getUsers(){
+	/* tutti tranne te */
+	public static String[][] getUsers() throws Exception{
 		List<User> l = null;
 		String[][] users;
-		try{
-			connections();
+		if(us == null){
+			us = new UserService(link, user, pass);
+		}
+			
 			l = us.getUsers();
 			users = new String[l.size()][3];
 			int i = 0;
@@ -54,19 +63,18 @@ public class ViewController {
 				users[i][2] = p.getId();
 				i++;
 			}
-		} catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
+		
 		return users;
 	}
 	
 	/*returns for each project the name->0, shared->1, id->2*/
-	public static String[][] getProjects(){
+	public static String[][] getProjects() throws Exception{
 		List<Project> l = null;
 		String[][] projects;
-		try{
-			connections();
+		
+			if(ps == null){
+				ps = new ProjectService(link, user, pass);
+			}
 			l = ps.getProjects();
 			projects = new String[l.size()][3];
 			int i = 0;
@@ -80,10 +88,7 @@ public class ViewController {
 				projects[i][2] = p.getId();
 				i++;
 			}
-		} catch(Exception e){
-			e.printStackTrace();
-			return null;
-		}
+		
 		return projects;
 	}
 	
@@ -92,12 +97,12 @@ public class ViewController {
 		return null;
 	}
 	
-	private static void connections() throws Exception {
-		emms = new EcoreMetamodelService("http://localhost:8080/mdeforge/",
-				"Admin", "test123");
-		ps = new ProjectService("http://localhost:8080/mdeforge/", "Admin",
-				"test123");
-		us = new UserService("http://localhost:8080/mdeforge/", "Admin",
-			"test123");
-	}
+//	private static void connections() throws Exception {
+//		emms = new EcoreMetamodelService("http://localhost:8080/mdeforge/",
+//				"Admin", "test123");
+//		ps = new ProjectService("http://localhost:8080/mdeforge/", "Admin",
+//				"test123");
+//		us = new UserService("http://localhost:8080/mdeforge/", "Admin",
+//			"test123");
+//	}
 }

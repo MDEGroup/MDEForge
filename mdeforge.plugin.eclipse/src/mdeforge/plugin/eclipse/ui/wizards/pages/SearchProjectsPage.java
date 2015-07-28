@@ -1,6 +1,6 @@
 package mdeforge.plugin.eclipse.ui.wizards.pages;
 
-import mdeforge.plugin.eclipse.control.ViewController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeViewController;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -115,7 +115,7 @@ public class SearchProjectsPage extends WizardPage {
 		table.getColumn(2).pack();
 		column3.setWidth(0);
 		
-		items = ViewController.getProjects();
+		items = MDEForgeViewController.getProjects();
 		for(int i = 0; i < items.length; i++){
 			TableItem item = new TableItem(table,SWT.NONE);
 			item.setText(0, items[i][0]);
