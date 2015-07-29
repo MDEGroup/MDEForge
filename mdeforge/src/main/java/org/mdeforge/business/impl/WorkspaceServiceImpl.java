@@ -60,7 +60,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void create(Workspace workspace) throws BusinessException {
 		User user = userService.findOne(workspace.getOwner().getId());
 		workspace.setOwner(user);
-		if (!workspace.getId().isEmpty())
+		if (workspace.getId() != null &&!workspace.getId().isEmpty())
 			throw new BusinessException();
 		workspace.setId(null);
 		List<Project> ps = workspace.getProjects();
