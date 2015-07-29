@@ -1,6 +1,11 @@
 package org.mdeforge.client;
 
+import java.util.List;
+
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
+
+import com.fasterxml.jackson.core.type.TypeReference;
 
 
 public class ArtifactService extends MDEForgeClient {
@@ -20,6 +25,11 @@ public class ArtifactService extends MDEForgeClient {
 	public Artifact getArtifact(String id) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/Artifact/" + id);
 		return mapper.readValue(result, Artifact.class);
+	}
+	
+	public List<Artifact> searchArtifacts(String terms) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Artifact/search/" + terms);
+		return mapper.readValue(result, new TypeReference<List<Artifact>>(){});
 	}
 	
 }

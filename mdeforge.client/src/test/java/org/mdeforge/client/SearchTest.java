@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 
@@ -16,10 +18,10 @@ public class SearchTest {
 ; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
 
 	}
-	
+	@Ignore
 	@Test
 	public void getEcoreMetamodelsTest() throws Exception {
 		System.out.println("START AT: " + new Date());
@@ -41,4 +43,11 @@ public class SearchTest {
 		System.out.println("END AT: " + new Date());
 	}
 	
+	@Test
+	public void searchByText() throws Exception {
+		List<Artifact> art = ecoreMetamodelService.searchArtifacts("rules");
+		for (Artifact artifact : art) {
+			System.out.println(artifact.getName());
+		}
+	}
 }

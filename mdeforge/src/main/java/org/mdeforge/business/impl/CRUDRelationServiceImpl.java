@@ -2,13 +2,17 @@ package org.mdeforge.business.impl;
 
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDRelationService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.User;
 import org.mdeforge.integration.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -18,7 +22,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRUDRelationService<T> {
-
 	@Autowired
 	private RelationRepository relationRepository;
 	@Autowired
@@ -34,6 +37,28 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 		relationRepository.save(r);
 	}
 	
+	@Override
+	public Set<T> findByUser(User user) throws BusinessException {
+		Set<T> result = new HashSet<T>();
+		for (Artifact artifact : user.getSharedArtifact()) {
+			result.addAll(findRelationsByArtifact(artifact));
+		}
+		return result;
+	}
+	@Override
+	public List<T> findRelationsByArtifact(Artifact artifact) throws BusinessException {
+		List<T> result = new ArrayList<T>();
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		if(persistentClass!=Relation.class) {
+			Query query = new Query();
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			return n.find(query, persistentClass);
+		}
+		else 
+			return n.findAll(persistentClass);
+	}
 	@Override
 	public List<T> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);

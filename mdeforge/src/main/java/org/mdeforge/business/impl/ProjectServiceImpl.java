@@ -200,7 +200,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<Project> findByIdUser(User idUser) throws BusinessException {
+	public List<Project> findByUser(User idUser) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		query.addCriteria(Criteria.where("users").in(idUser.getId()));

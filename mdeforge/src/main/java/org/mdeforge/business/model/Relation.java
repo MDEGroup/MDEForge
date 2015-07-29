@@ -21,6 +21,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 public abstract class Relation implements java.io.Serializable{
 
+	@Override
+	public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Relation)) {
+            return false;
+        }
+        Relation other = (Relation) obj;
+        return this.id.equals(other.id);
+    }
+	@Override
+	public int hashCode() {
+        return id.hashCode();
+    }
 	
 	/**
 	 * 

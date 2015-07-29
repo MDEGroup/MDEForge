@@ -30,7 +30,7 @@ public class CreateTest {
 		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
 		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
-	
+	@Ignore
 	@Test
 	public void addWorkspace() throws Exception {
 		Workspace w = new Workspace();
@@ -51,11 +51,11 @@ public class CreateTest {
 		}
 		projectService.addProject(p);
 	}
-	@Ignore
+
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
-		emm.setName("AndroidAppMM.ecore");
+		emm.setName("AndroidAppMM2.ecore");
 		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
 		emm.setTags(tags);
 		emm.setDescription("Describes the basic structure of a general Relational DB");

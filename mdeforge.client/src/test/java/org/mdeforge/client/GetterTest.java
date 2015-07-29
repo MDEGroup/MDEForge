@@ -163,26 +163,34 @@ public class GetterTest {
 		}
 		
 	}
+	@Ignore
 	@Test
 	public void getArtifact() throws Exception {
 		Artifact t = artifactService.getArtifact("557837c6d4c6571542e8aa8c");
 		System.out.println(t.getClass().getCanonicalName());
 	}
+	@Ignore
 	@Test
 	public void getETL() throws Exception {
 		Artifact t = etlTransformationService.getArtifact("557837c6d4c6571542e8aa8c");
 		System.out.println("ETL: " + t.getClass().getCanonicalName());
 	}
+	@Ignore
 	@Test
 	public void getATL() throws Exception {
 		Artifact t = atlTransformationService.getArtifact("5565a826456809f9bc5b6a28");
 		System.out.println("ATL: " + t.getClass().getCanonicalName());
 	}
+
 	@Test
 	public void getEcore() throws Exception {
-		Artifact t = ecoreMetamodelService.getArtifact("557837c6d4c6571542e8aa8c");
-		System.out.println("Ecore: " + t.getClass().getCanonicalName());
+		List<EcoreMetamodel> t = ecoreMetamodelService.getEcoreMetamodels();
+		for (EcoreMetamodel ecoreMetamodel : t) {
+			System.out.println("Ecore: " + ecoreMetamodel.getName());
+		}
+		
 	}
+	@Ignore
 	@Test
 	public void getModel() throws Exception {
 		Artifact t = modelService.getArtifact("557018084568bbd2c59f9145");

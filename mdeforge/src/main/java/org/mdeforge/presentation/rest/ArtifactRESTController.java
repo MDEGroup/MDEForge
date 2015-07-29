@@ -6,13 +6,16 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -100,5 +103,13 @@ public class ArtifactRESTController {
 			return new ResponseEntity<String>("false",
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+	}
+	
+	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
+	public HttpEntity<ArtifactList> searchResult(
+			@PathVariable(value = "search_string") String searchString) {
+		ArtifactList artifacts = new ArtifactList(artifactService.search(searchString));
+		return new ResponseEntity<ArtifactList> (artifacts,
+				HttpStatus.OK);
 	}
 }

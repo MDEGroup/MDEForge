@@ -20,12 +20,12 @@ public class EcoreMetamodelService extends ArtifactService {
 	
 	public List<EcoreMetamodel> getEcoreMetamodels() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/shared");
-		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
 	}
 	
 	public List<EcoreMetamodel> getEcoreMetamodelsPublic() throws Exception {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/public");
-		return mapper.readValue(result, new TypeReference<List<Metamodel>>() {});
+		return mapper.readValue(result, new TypeReference<List<EcoreMetamodel>>() {});
 	}
 	
 	public String validateEcoreMetamodels(String idMetamodel) throws Exception {
