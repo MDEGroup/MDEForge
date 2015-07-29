@@ -8,6 +8,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.CoDomainConformToRelation;
+import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ETLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
@@ -22,18 +24,17 @@ public class CreateTest {
 	private static WorkspaceService workspaceService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		projectService = new ProjectService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	
-	@Ignore
 	@Test
 	public void addWorkspace() throws Exception {
 		Workspace w = new Workspace();
-		w.setName("Francesco WorkSpace");
+		w.setName("Test WorkSpace");
 		w.setDescription("Test Project");
 		workspaceService.addWorkspace(w);
 	}
@@ -50,7 +51,7 @@ public class CreateTest {
 		}
 		projectService.addProject(p);
 	}
-	
+	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
@@ -99,9 +100,21 @@ public class CreateTest {
 	@Ignore
 	@Test
 	public void addATLTransformation() throws Exception {
-		ATLTransformation emm = new ATLTransformation();
-		emm.setName("BibTeX2DocBook");
-		emm.setOpen(true);	
-		atlTransformationService.addATLTransformation(emm,"temp/BibTeX2DocBook.atl");
+		ATLTransformation atlTransformation = new ATLTransformation();
+		atlTransformation.setName("BibTeX2DocBook");
+		atlTransformation.setOpen(true);
+		EcoreMetamodel emm = new EcoreMetamodel();
+		emm.setId("552bbd1cd4c659da8e19ed65");
+		EcoreMetamodel emm2 = new EcoreMetamodel();
+		emm2.setId("552bbd36d4c659da8e19ee59");
+		DomainConformToRelation dcr = new DomainConformToRelation();
+		dcr.setToArtifact(emm);
+		dcr.setFromArtifact(atlTransformation);
+		atlTransformation.getRelations().add(dcr);
+		CoDomainConformToRelation cdcr = new CoDomainConformToRelation();
+		cdcr.setToArtifact(emm);
+		cdcr.setFromArtifact(atlTransformation);
+		atlTransformation.getRelations().add(cdcr);
+		atlTransformationService.addATLTransformation(atlTransformation,"temp/BibTeX2DocBook.atl");
 	}
 }
