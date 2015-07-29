@@ -183,7 +183,7 @@ public class GetterTest {
 	}
 
 	@Test
-	public void getEcore() throws Exception {
+	public void getEcores() throws Exception {
 		List<EcoreMetamodel> t = ecoreMetamodelService.getEcoreMetamodels();
 		for (EcoreMetamodel ecoreMetamodel : t) {
 			System.out.println("Ecore: " + ecoreMetamodel.getName());
@@ -194,6 +194,11 @@ public class GetterTest {
 	@Test
 	public void getModel() throws Exception {
 		Artifact t = modelService.getArtifact("557018084568bbd2c59f9145");
+		System.out.println("Model: " + t.getClass().getCanonicalName());
+	}
+	@Test
+	public void getEcore() throws Exception {
+		Artifact t = artifactService.getArtifact("552bbd16d4c659da8e19ed25");
 		System.out.println("Model: " + t.getClass().getCanonicalName());
 	}
 	

@@ -23,7 +23,7 @@ import org.mdeforge.client.ProjectService;
 
 public class testMDEForgeController {
 	
-
+@Ignore
 @Test
 public void testAddProject() throws Exception{
 	ProjectService ps = new ProjectService("http://localhost:8080/mdeforge/", "Admin",
@@ -52,8 +52,7 @@ public void testAddProject() throws Exception{
 	 MDEForgeViewController m = new MDEForgeViewController("http://localhost:8080/mdeforge/", "Admin",
 				"test123");
 	 
-	 List<FileOutputStream> list = m.getFilesInProject("55b8df64250fca2f3952a9c2");
-	 
+	 List<FileOutputStream> list = m.getFilesInProject("5514b9a6d4c6c379396fe8b9");
 	 System.out.println(list);
 	 
  }

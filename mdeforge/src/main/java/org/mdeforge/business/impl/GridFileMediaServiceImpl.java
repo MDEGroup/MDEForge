@@ -106,7 +106,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	public byte[] getFileByte(Artifact artifact) throws BusinessException {
 		GridFileMedia grm = getGridFileMedia(artifact.getFile());
 		GridFS fileStore = new GridFS(mongoDbFactory.getDb());
-		GridFSDBFile found = fileStore.findOne(grm.getIdFile());
+		GridFSDBFile found = fileStore.findOne(grm.getFileName());
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			found.writeTo(baos);

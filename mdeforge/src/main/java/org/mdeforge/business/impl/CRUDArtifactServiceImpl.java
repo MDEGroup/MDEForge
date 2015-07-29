@@ -142,6 +142,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
 			throw new BusinessException();
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
+		
 		return artifact;
 	}
 
