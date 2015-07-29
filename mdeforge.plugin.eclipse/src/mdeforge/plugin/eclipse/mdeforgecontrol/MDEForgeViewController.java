@@ -5,6 +5,11 @@ import java.io.FileOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
@@ -26,7 +31,7 @@ public class MDEForgeViewController extends MDEForgeController {
 		super(link, user, pass);
 	}
 	
-	public List<FileOutputStream> getFilesInProject(String id) throws Exception{
+	public List<FileOutputStream> getFilesInProject(String id, String path) throws Exception{
 		
 		if(ps==null){
 			ps = new ProjectService(link, user, pass);
@@ -37,6 +42,26 @@ public class MDEForgeViewController extends MDEForgeController {
 		}
 		
 		Project p = ps.getProject(id);
+		
+		
+		Path projectLocation = new Path(path); 
+		
+		
+		String projectName = p.getName(); 
+		// Get the project handle (no project created yet). 
+		IProject project = 
+		ResourcesPlugin.getWorkspace().getRoot().getProject(projectName); 
+
+		// Get a new project description and set the appropriate location. 
+		IProjectDescription description = 
+		ResourcesPlugin.getWorkspace().newProjectDescription(project.getName()); 
+		description.setLocation(projectLocation); 
+
+		// Create and open the project. 
+		project.create(description, null); 
+		project.open(null); 
+		
+		
 		List<Artifact> list = p.getArtifacts();
 		List<FileOutputStream> result = new LinkedList<FileOutputStream>();
 		
@@ -47,11 +72,15 @@ public class MDEForgeViewController extends MDEForgeController {
 			temp = as.getArtifact(a.getId());
 			
 			byte dataToWrite[] = temp.getFile().getByteArray();
-			FileOutputStream out = new FileOutputStream("the-file-name");
+			String name = temp.getFile().getFileName();
+			FileOutputStream out = new FileOutputStream(path+File.separator+name);
 			out.write(dataToWrite);
 			out.close();
 			result.add(out);
 		}
+		
+	
+				
 		
 		return result;
 		

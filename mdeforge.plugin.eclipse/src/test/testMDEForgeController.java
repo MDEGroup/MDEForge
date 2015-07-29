@@ -52,8 +52,10 @@ public void testAddProject() throws Exception{
 	 MDEForgeViewController m = new MDEForgeViewController("http://localhost:8080/mdeforge/", "Admin",
 				"test123");
 	 
-	 List<FileOutputStream> list = m.getFilesInProject("5514b9a6d4c6c379396fe8b9");
-	 System.out.println(list);
+	 List<FileOutputStream> list = m.getFilesInProject("55b8df64250fca2f3952a9c2","");
+	 for(FileOutputStream o : list){
+		 System.out.println(o);
+	 }
 	 
  }
 
