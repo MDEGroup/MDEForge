@@ -19,19 +19,17 @@ public class MDEForgeServiceController extends MDEForgeController {
 	private static EcoreMetamodelService emms;
 	private static ModelService ms;
 	private static WorkspaceService wss;
-	private static Model m;
 	private static ProjectService ps;
 	private static EcoreMetamodel emm;
-	private static Project p;
 	
-	protected MDEForgeServiceController(String link, String user, String pass){
+	public MDEForgeServiceController(String link, String user, String pass){
 		super(link, user, pass);
 	}
 
 	/**/
-	public static boolean AddEcoretoForge(boolean pub, String file,
+	public boolean AddEcoretoForge(boolean pub, String file,
 			List<String> id_projects) throws Exception {
-		
+			Project p;
 			
 			emm = new EcoreMetamodel();
 			emm.setOpen(pub);
@@ -46,7 +44,7 @@ public class MDEForgeServiceController extends MDEForgeController {
 	}
 
 	/* in attesa di ConformToService */
-	public static boolean addModelToForge(boolean pub, String file,
+	public boolean addModelToForge(boolean pub, String file,
 			String id_metamodel) throws Exception {
 		
 			if(ms == null){
@@ -57,7 +55,7 @@ public class MDEForgeServiceController extends MDEForgeController {
 				new EcoreMetamodelService(link, user, pass);
 			}
 			
-			m = new Model();
+			Model m = new Model();
 			m.setOpen(pub);
 			ConformToRelation r = new ConformToRelation();
 			emm = emms.getEcoreMetamodel(id_metamodel);
@@ -73,13 +71,13 @@ public class MDEForgeServiceController extends MDEForgeController {
 	}
 
 	/* da rivedere */
-	public static boolean addATLTransformationToForge(boolean pub, String file,
+	public boolean addATLTransformationToForge(boolean pub, String file,
 			String id_domain_mm, String co_domain_mm) {
 		return true;
 	}
 
 	/* Download of the Metamodel artifacts */
-	public static boolean downloadMetamodels(String path, String[] ids) throws Exception {
+	public boolean downloadMetamodels(String path, String[] ids) throws Exception {
 		if(emms == null){
 			new EcoreMetamodelService(link, user, pass);
 		}
@@ -97,7 +95,7 @@ public class MDEForgeServiceController extends MDEForgeController {
 	 * Download of ATL artifact, DomainConformTo (from and to
 	 * Artifacts),CodomainConformto (From and To Artifacts) in the current_path
 	 */
-	public static boolean downloadATLTransformations(String[] ids,
+	public boolean downloadATLTransformations(String[] ids,
 			String current_path) {
 		return true;
 	}
@@ -106,11 +104,11 @@ public class MDEForgeServiceController extends MDEForgeController {
 	 * Download of all the artifacts in a project and store it in a new Project
 	 * with the same name
 	 */
-	public static boolean downloadProject(String id) {
+	public boolean downloadProject(String id) {
 		return true;
 	}
 
-	public static boolean addWorkspaceToForge(String name, String desc) throws Exception {
+	public boolean addWorkspaceToForge(String name, String desc) throws Exception {
 		
 		if(wss==null){
 			new WorkspaceService(link, user, pass);

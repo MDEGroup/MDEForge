@@ -1,10 +1,15 @@
 package mdeforge.plugin.eclipse.mdeforgecontrol;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
+import org.mdeforge.client.ArtifactService;
 import org.mdeforge.client.EcoreMetamodelService;
 import org.mdeforge.client.ProjectService;
 import org.mdeforge.client.UserService;;
@@ -15,15 +20,47 @@ public class MDEForgeViewController extends MDEForgeController {
 	private static EcoreMetamodelService emms;
 	private static ProjectService ps;
 	private static UserService us;
+	private static ArtifactService as;
 	
 	public MDEForgeViewController(String link, String user, String pass){
 		super(link, user, pass);
 	}
 	
+	public List<FileOutputStream> getFilesInProject(String id) throws Exception{
+		
+		if(ps==null){
+			ps = new ProjectService(link, user, pass);
+			}
+		
+		if(as==null){
+			as = new ArtifactService(link, user, pass);
+		}
+		
+		Project p = ps.getProject(id);
+		List<Artifact> list = p.getArtifacts();
+		List<FileOutputStream> result = new LinkedList<FileOutputStream>();
+		
+		Artifact temp = null;
+		File file = null;
+		
+		for(Artifact a : list){
+			temp = as.getArtifact(a.getId());
+			
+			byte dataToWrite[] = temp.getFile().getByteArray();
+			FileOutputStream out = new FileOutputStream("the-file-name");
+			out.write(dataToWrite);
+			out.close();
+			result.add(out);
+		}
+		
+		return result;
+		
+		}
+	
 	
 
 	/*returns for each metamodel the name->0, description->1, id->2*/
-	public static String[][] getEcoreMetamodels() throws Exception{
+	public String[][] getEcoreMetamodels() throws Exception{
 		List<EcoreMetamodel> l = null;
 		String[][] ecoremetamodels;
 	
@@ -46,8 +83,8 @@ public class MDEForgeViewController extends MDEForgeController {
 	}
 	
 	/*returns for each metamodel the username->0, first+lastname->1, id->2*/
-	/* tutti tranne te */
-	public static String[][] getUsers() throws Exception{
+	
+	public String[][] getUsers() throws Exception{
 		List<User> l = null;
 		String[][] users;
 		if(us == null){
@@ -55,6 +92,19 @@ public class MDEForgeViewController extends MDEForgeController {
 		}
 			
 			l = us.getUsers();
+			
+			User myself = null;
+			
+			for(User u : l){
+				if(u.getUsername().equals(user)){
+					myself = u;
+				}
+			}
+			
+			if(myself != null){
+			l.remove(myself);
+			}
+			
 			users = new String[l.size()][3];
 			int i = 0;
 			for(User p : l){
@@ -68,7 +118,7 @@ public class MDEForgeViewController extends MDEForgeController {
 	}
 	
 	/*returns for each project the name->0, shared->1, id->2*/
-	public static String[][] getProjects() throws Exception{
+	public String[][] getProjects() throws Exception{
 		List<Project> l = null;
 		String[][] projects;
 		
@@ -93,7 +143,7 @@ public class MDEForgeViewController extends MDEForgeController {
 	}
 	
 	/*returns for each ATLtransformation the name->0, domainconformto->1, codomainconformto->2, id->3*/
-	public static String[][] getATLTransformations(){
+	public String[][] getATLTransformations(){
 		return null;
 	}
 	
