@@ -1,7 +1,6 @@
-package mdeforge.plugin.eclipse.ui.wizards;
+package mdeforge.plugin.eclipse.ui.wizards.pages;
 
-
-import mdeforge.plugin.eclipse.control.ViewController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeViewController;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -18,7 +17,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-public class SearchMMPage extends WizardPage {
+public class SearchProjectsPage extends WizardPage {
 
 	private Text text1;
 	private Table table;
@@ -26,11 +25,10 @@ public class SearchMMPage extends WizardPage {
 	private Button search_button;
 	private String[][] items;
 
-	/*constructor*/
-	public SearchMMPage() {
-		super("Select Metamodel");
-		setTitle("Select Metamodel");
-		setDescription("Select the Metamodel to which the Artifact Conforms To");
+	public SearchProjectsPage() {
+		super("Select Remote Projects");
+		setTitle("Select Remote Projects");
+		setDescription("Choose where to put the Artifact on the Forge");
 	}
 
 	@Override
@@ -106,7 +104,7 @@ public class SearchMMPage extends WizardPage {
 		});
 
 		TableColumn column1 = new TableColumn(table, SWT.NONE);
-		column1.setText("Metamodel");
+		column1.setText("Project");
 		table.getColumn(0).pack();
 		TableColumn column2 = new TableColumn(table, SWT.NONE);
 		column2.setText("Description");
@@ -117,7 +115,7 @@ public class SearchMMPage extends WizardPage {
 		table.getColumn(2).pack();
 		column3.setWidth(0);
 		
-		items = ViewController.getEcoreMetamodel();
+		items = MDEForgeViewController.getProjects();
 		for(int i = 0; i < items.length; i++){
 			TableItem item = new TableItem(table,SWT.NONE);
 			item.setText(0, items[i][0]);
@@ -141,11 +139,11 @@ public class SearchMMPage extends WizardPage {
 
 	/* utility method to search inside the table metamodel lists */
 	public void searchMetamodels(String search) {		
-		String [] mmids = new String[table.getItems().length];
+		String [] projids = new String[table.getItems().length];
 		int i = 0;
 		for(TableItem ti : table.getItems()){
 			if(ti.getChecked()){
-				mmids[i] = ti.getText(2);
+				projids[i] = ti.getText(2);
 			}
 		}
 		
@@ -158,7 +156,7 @@ public class SearchMMPage extends WizardPage {
 					item.setText(0, items[i][0]);
 					item.setText(1, ""/*items[i][1]*/);
 					item.setText(2,items[i][2]);
-					for(String s : mmids){
+					for(String s : projids){
 						if(items[i][2].equals(s)){
 							item.setChecked(true);
 							break;
@@ -168,7 +166,7 @@ public class SearchMMPage extends WizardPage {
 						}
 					}
 				}else{
-					for(String s : mmids){
+					for(String s : projids){
 						if(items[i][2].equals(s)){
 							TableItem item = new TableItem(table, SWT.NONE);
 							item.setText(0, items[i][0]);
@@ -186,7 +184,7 @@ public class SearchMMPage extends WizardPage {
 					item.setText(0, items[i][0]);
 					item.setText(1, ""/*items[i][1]*/);
 					item.setText(2,items[i][2]);
-					for(String s : mmids){
+					for(String s : projids){
 						if(items[i][2].equals(s)){
 							item.setChecked(true);
 							break;
@@ -202,8 +200,8 @@ public class SearchMMPage extends WizardPage {
 		table.getColumn(2).setWidth(0);
 	}
 
-	/*Access the selected metamodel*/
-	public String[] getSelectedMM(){
+
+	public String[] getSelectedProjects() {
 		String [] s = new String[table.getItems().length];
 		for(int i = 0; i < table.getItems().length; i++){
 			if(table.getItem(i).getChecked()){
@@ -212,4 +210,6 @@ public class SearchMMPage extends WizardPage {
 		}
 		return s;
 	}
+	
+
 }

@@ -1,7 +1,9 @@
 package mdeforge.plugin.eclipse.ui.actions;
 
-import mdeforge.plugin.eclipse.ui.wizards.GetEMMWizard;
+import mdeforge.plugin.eclipse.ui.wizards.AddMWizard;
+import mdeforge.plugin.eclipse.ui.wizards.AddProjectWizard;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IAction;
@@ -16,11 +18,11 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-public class GetEcoreMM implements IObjectActionDelegate {
+public class ActionAddProject implements IObjectActionDelegate {
 
 	private Shell shell;
 	
-	public GetEcoreMM() {
+	public ActionAddProject() {
 		super();
 	}
 
@@ -34,9 +36,11 @@ public class GetEcoreMM implements IObjectActionDelegate {
 					.getSelectionService().getSelection();
 			Object firstElement = selection.getFirstElement();
 			if (firstElement instanceof IAdaptable) {
-				IProject project = (IProject)((IAdaptable)firstElement);
+				IProject project = (IProject) ((IAdaptable) firstElement)
+						.getAdapter(IProject.class);
+				/* start the AddArtifactWizard */
 				WizardDialog wizardDialog = new WizardDialog(shell,
-						new GetEMMWizard(project.getFullPath().toString(),shell));
+						new AddProjectWizard(project, shell));
 				if (wizardDialog.open() == Window.OK) {
 					MessageDialog.openInformation(shell, "Add Artifact",
 							"The request has been sent!");
@@ -45,7 +49,6 @@ public class GetEcoreMM implements IObjectActionDelegate {
 				}
 			}
 		}
-
 	}
 
 	@Override

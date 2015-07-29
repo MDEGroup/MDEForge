@@ -19,6 +19,16 @@ public class UserService extends MDEForgeClient {
 		return mapper.readValue(result, new TypeReference<List<User>>() {
 		});
 	}
+	
+	public User getUser() throws Exception{
+		List<User> list = this.getUsers();
+		for(User u : list){
+			if(u.getUsername().equals(username)){
+				return u;
+			}
+		}
+		throw new Exception();
+	}
 
 	public User getUser(String string) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/user/" + string);

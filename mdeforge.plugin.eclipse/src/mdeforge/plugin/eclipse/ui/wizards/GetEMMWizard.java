@@ -1,21 +1,23 @@
 package mdeforge.plugin.eclipse.ui.wizards;
 
-import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeServiceController;
+import mdeforge.plugin.eclipse.ui.wizards.pages.SearchMMPage;
 
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Shell;
 
 public class GetEMMWizard extends Wizard {
 
-	private String project;
 	private Shell shell;
 	private SearchMMPage smm;
+	private IPath path;
 	
-	public GetEMMWizard(String project, Shell shell){
+	public GetEMMWizard(IPath path, Shell shell){
 		super();
 		setNeedsProgressMonitor(true);
-		this.project = project;
+		this.path = path;
 		this.shell = shell;
 	}
 	
@@ -33,7 +35,7 @@ public class GetEMMWizard extends Wizard {
 	
 	@Override
 	public boolean performFinish() {
-		boolean b = ServiceController.downloadMetamodels(smm.getSelectedMM());
+		boolean b = MDEForgeServiceController.downloadMetamodels(path.toString(), smm.getSelectedMM());
 		if(!b){
 			MessageDialog.openError(shell, "Operation failure", "The task failed to execute.\n"
 					+ "Check the settings on\n"

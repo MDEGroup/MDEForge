@@ -1,6 +1,8 @@
 package mdeforge.plugin.eclipse.ui.wizards;
 
-import mdeforge.plugin.eclipse.control.ServiceController;
+import mdeforge.plugin.eclipse.mdeforgecontrol.MDEForgeServiceController;
+import mdeforge.plugin.eclipse.ui.wizards.pages.DetailsPage;
+import mdeforge.plugin.eclipse.ui.wizards.pages.SearchProjectsPage;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -9,7 +11,8 @@ import org.eclipse.swt.widgets.Shell;
 
 public class AddEMMWizard extends Wizard {
 
-	protected SearchProgectsPage ap;
+	protected SearchProjectsPage ap;
+	protected DetailsPage dp;
 	private IFile file;
 	private Shell shell;
 	
@@ -30,18 +33,21 @@ public class AddEMMWizard extends Wizard {
 	@Override
 	public void addPages(){
 		
-		ap = new SearchProgectsPage(file);
-		
+		dp = new DetailsPage(file.getFullPath().lastSegment());
+		ap = new SearchProjectsPage();
+		/*
 		if(file.getFileExtension().equals("ecore")){
 			addPage(ap);
-		}
+		}*/
+		addPage(dp);
+		addPage(ap);
 		
 	}
 	@Override
 	public boolean performFinish(){
-		boolean b = ServiceController.AddEcoretoForge(ap.getPublic(),
-				ap.getFile(),
-				ap.getProject());
+		boolean b = true;//ServiceController.AddEcoretoForge(ap.getPublic(),
+				//ap.getFile(),
+				//ap.getProject());
 		if(!b){
 			MessageDialog.openError(shell, "Operation failure", "The task failed to execute.\n"
 					+ "Check the settings on\n"
