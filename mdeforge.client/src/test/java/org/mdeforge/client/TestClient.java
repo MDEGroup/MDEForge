@@ -78,31 +78,7 @@ public class TestClient {
 	}
 	
 	
-
-	@Ignore
 	@Test
-	public void createWorkspaceAndProject () {
-		try {
-			
-			Project p = new Project();
-			p.setName("Salvi project Test");
-			Workspace w = new Workspace();
-			w.setName("Salvi workspace Test");
-			
-			workspaceService.addWorkspace(w);
-			List<Workspace> ws = workspaceService.getWorkspaces();
-			
-			w = ws.get(0);
-			p.getWorkspaces().add(w);
-			w.getProjects().add(p);
-			projectService.addProject(p);
-			System.out.println("project created");
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public void testAddEcoreMetamodel () {
 		try {
 			Project p = projectService.getProjects().get(0);
@@ -121,6 +97,8 @@ public class TestClient {
 		}
 	}
 
+
+	@Ignore
 	@Test
 	public void testAddModel(){
 		try {

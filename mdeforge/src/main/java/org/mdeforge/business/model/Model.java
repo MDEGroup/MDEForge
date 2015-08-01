@@ -15,9 +15,10 @@ public class Model extends Artifact {
 	 * 
 	 */
 	private static final long serialVersionUID = -2527216408130316002L;
-	private String nsuri;
 	
 	private boolean valid;
+
+	private String nsuri;
 	/**
 	 * A toString method which prints the values of all EAttributes of this
 	 * instance. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -44,6 +45,7 @@ public class Model extends Artifact {
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
+
 	
 	
 }

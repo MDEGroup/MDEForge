@@ -583,7 +583,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	}
 
-
+	//TODO Antonio Da eliminare Assolutamente
 	@Override
 	public Resource loadArtifacrt(String id) throws BusinessException {
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"

@@ -29,6 +29,7 @@ public class Artifact implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
+	
 	private String id = null;
 	private Date created = null;
 	private Date modified = null;
@@ -37,14 +38,13 @@ public class Artifact implements java.io.Serializable{
 	private String name = null;
 
 	private String description;
-	private List<String> tags = null;
+	private List<Metric> metrics;
 	private String authors = null;
+	private List<String> tags = null;
 	private String version = null;
 	private String extractedContents = null;
 	@JsonIgnore
 	private String _class;
-	private List<Metric> metrics;
-
 	private String nsuri;
 
 	@JsonSerialize(using = RelationListSerializer.class)

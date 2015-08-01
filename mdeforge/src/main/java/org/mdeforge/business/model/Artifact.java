@@ -47,6 +47,15 @@ public class Artifact implements java.io.Serializable{
 	private String authors = null;
 	private String version = null;
 	private String extractedContents = null;
+
+//	private @TextIndexed(weight=20) String name = null;
+//	private @TextIndexed(weight=10) String description = null;
+//	private @TextIndexed(weight=5) String authors = null;
+//	private @TextIndexed(weight=7) List<String> tags = null;
+//	private String version = null;
+//	private @TextIndexed(weight=1) String extractedContents = null;
+//	private @TextScore Float score;
+
 	@DBRef(lazy = true)
 	@JsonSerialize(using = RelationListSerializer.class)
 	private List<Relation> relations = new ArrayList<Relation>();
@@ -258,4 +267,6 @@ public class Artifact implements java.io.Serializable{
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
 	}
+
+
 }
