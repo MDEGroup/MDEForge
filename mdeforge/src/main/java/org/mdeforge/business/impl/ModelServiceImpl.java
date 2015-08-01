@@ -36,7 +36,6 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.search.ResourceSerializer;
-import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.EcoreMetamodelRepository;

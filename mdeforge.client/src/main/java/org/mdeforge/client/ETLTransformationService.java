@@ -3,7 +3,6 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.ETLTransformation;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;

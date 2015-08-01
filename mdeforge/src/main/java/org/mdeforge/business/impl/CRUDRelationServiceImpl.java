@@ -2,7 +2,6 @@ package org.mdeforge.business.impl;
 
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,11 +46,11 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 	}
 	@Override
 	public List<T> findRelationsByArtifact(Artifact artifact) throws BusinessException {
-		List<T> result = new ArrayList<T>();
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		if(persistentClass!=Relation.class) {
 			Query query = new Query();
 			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			//TODDO
 			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			return n.find(query, persistentClass);

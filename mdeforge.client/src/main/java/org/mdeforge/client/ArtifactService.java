@@ -3,7 +3,6 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.EcoreMetamodel;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 

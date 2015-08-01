@@ -2,7 +2,6 @@ package org.mdeforge.client;
 
 import java.util.List;
 
-import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 
 import com.fasterxml.jackson.core.type.TypeReference;

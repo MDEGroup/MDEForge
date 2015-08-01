@@ -43,4 +43,12 @@ public class Model extends Artifact {
 	public void setValid(boolean valid) {
 		this.valid = valid;
 	}
+
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 }
