@@ -7,6 +7,7 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -116,7 +117,17 @@ public class WorkspaceRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+	@RequestMapping(value = "/{id}/Project/", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<List<Project>> findProjectInWorkspace(
+			@PathVariable("id") String id) {
+		try {
+			List<Project> project = workspaceService.findProjectInWorkspace(id, user);
+			return new ResponseEntity<List<Project>>(project, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<List<Project>>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	@RequestMapping(value = "/{id}/ETLTransformation/", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> findETLTransformationInWorkspace(
 			@PathVariable("id") String id) {

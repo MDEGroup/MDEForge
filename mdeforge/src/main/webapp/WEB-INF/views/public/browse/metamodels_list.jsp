@@ -45,7 +45,7 @@
 					<c:forEach items="${ecoreMetamodelsList}" var="ecoreMetamodel">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td>${ecoreMetamodel.getName()}</td>
+						<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a></td>
 						<td>
 							<c:forEach items="${ecoreMetamodel.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -57,7 +57,8 @@
 						<td class="center">${ecoreMetamodel.getCreated()}</td>
 						<td class="center">${ecoreMetamodel.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
 						</td>
 					</tr>
 					<!-- // Table row END -->

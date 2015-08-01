@@ -43,11 +43,26 @@ public class Artifact implements java.io.Serializable{
 	@Transient
 	private List<Metric> metrics;
 	private String description = null;
-	private String authors = null;
 	private List<String> tags = null;
-	private String extractedContents = null;
-
+	private String authors = null;
 	private String version = null;
+	private String extractedContents = null;
+	@DBRef(lazy = true)
+	@JsonSerialize(using = RelationListSerializer.class)
+	private List<Relation> relations = new ArrayList<Relation>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = ProjectListSerializer.class)
+	private List<Project> projects = new ArrayList<Project>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserListSerializer.class)
+	private List<User> shared = new ArrayList<User>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = WorkspaceListSerializer.class)
+	private List<Workspace> workspaces = new ArrayList<Workspace>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserSerializer.class)
+	private User author = new User();	
+	private List<Property> properties = new ArrayList<Property>();
 
 	public String getVersion() {
 		return version;
@@ -63,24 +78,7 @@ public class Artifact implements java.io.Serializable{
 //	private String version = null;
 //	private @TextIndexed(weight=1) String extractedContents = null;
 //	private @TextScore Float score;
-
-	@DBRef(lazy = true)
-	@JsonSerialize(using = RelationListSerializer.class)
-	//@CascadeSave
-	private List<Relation> relations = new ArrayList<Relation>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = ProjectListSerializer.class)
-	private List<Project> projects = new ArrayList<Project>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserListSerializer.class)
-	private List<User> shared = new ArrayList<User>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();	
-	private List<Property> properties = new ArrayList<Property>();
+	
 	public List<Metric> getMetrics() {
 		return metrics;
 	}

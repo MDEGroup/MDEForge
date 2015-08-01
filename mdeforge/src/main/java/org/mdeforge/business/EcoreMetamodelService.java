@@ -5,7 +5,7 @@ import java.util.List;
 import org.mdeforge.business.model.EcoreMetamodel;
 
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,
-		MetricProvider, SearchProvider, SimilarityService, ValidateService, ClusterService {
+		MetricProvider, SimilarityService, ValidateService, ClusterService {
 	
 	List<EcoreMetamodel> findEcoreMetamodelByURI(String URI);
 	ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)  throws BusinessException;
@@ -13,5 +13,6 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	String serializeContent(EcoreMetamodel emm) throws BusinessException;
 	List<String> getNSUris(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException;
+	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample) throws BusinessException;
 	
 }

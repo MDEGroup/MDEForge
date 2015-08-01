@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
@@ -20,6 +22,7 @@ import javax.imageio.ImageIO;
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.EMFCompare;
@@ -57,13 +60,10 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
-import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
-import org.mdeforge.business.UserService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -80,24 +80,18 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
-import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
-import org.mdeforge.integration.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
@@ -121,6 +115,8 @@ public class EcoreMetamodelServiceImpl extends
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
+	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
@@ -136,10 +132,7 @@ public class EcoreMetamodelServiceImpl extends
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	@Autowired
-	private UserService userService;
-	@Autowired
-	private GridFileMediaService gridFileMediaService;
+
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
@@ -147,28 +140,45 @@ public class EcoreMetamodelServiceImpl extends
 
 
 	@Override
-	public EcoreMetamodel create(EcoreMetamodel artifact)
-			throws BusinessException {
+	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		if(findOneByName(artifact.getName())!=null)
 			throw new DuplicateNameException();
-		if (isValid(artifact)) {
-			EcoreMetamodel result = super.create(artifact);
-			String jsonMongoUriBase = mongoPrefix +
-					mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName()
-					+ "/" + jsonArtifactCollection + "/";
-			artifact.setExtractedContents( EmfjsonMongo.getInstance()
-					.serializeAndSaveMetamodel(artifact.getNsuri(), 
-							jsonMongoUriBase + artifact.getId()));
-			return result;
 
+		artifact.setValid(isValid(artifact));
+//		String path = gridFileMediaService.getFilePath(artifact);
+		EcoreMetamodel result = super.create(artifact);
+//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+//		artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
+//		artifactRepository.save(artifact);
+		return result;
+	}
+	
+	public String saveJsonMetamodel(String sourceURI, String mongoURI) throws BusinessException {
+		String contentsString = "";
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
+		
+		EList<EObject> contents = load_resource.getContents();
+		ResourceSerializer.serialize(load_resource);
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+
+		res.getContents().addAll(contents);
+
+		try {
+			res.save(null);
+		} catch (IOException e) {
+			throw new BusinessException();
 		}
-		else throw new InvalidArtifactException();
+		return contentsString;
 	}
 
 	@Override
 	public EcoreMetamodel findOnePublic(String id) {
 		EcoreMetamodel a = super.findOnePublic(id);
 		a.setMetrics(getMetrics(a));
+		if (a.getExtractedContents()==null)
+			a.setExtractedContents(serializeContent(a));
 		a.getRelations().addAll(
 				similarityRelationService.findTopProximity(a, 5));
 		a.getRelations().addAll(
@@ -251,6 +261,8 @@ public class EcoreMetamodelServiceImpl extends
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
+//		List<Metric> a = new ArrayList();
+//		return a;
 	}
 
 	private InputStream[] getModulesList(String modules_input)
@@ -337,22 +349,17 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public void registerMetamodel(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException {
-		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
-				.getId());
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
 		ecoreMetamodel.getFile();
-		ecoreMetamodel.setFile(gridFileMediaService
-				.getGridFileMedia(ecoreMetamodel.getFile()));
+		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-				"ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
-				rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
-				extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		for (EObject eObject2 : eObject) {
@@ -369,7 +376,6 @@ public class EcoreMetamodelServiceImpl extends
 		List<String> result = new ArrayList<String>();
 		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
 				.getId());
-		ecoreMetamodel.getFile();
 		ecoreMetamodel.setFile(gridFileMediaService
 				.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
@@ -483,20 +489,15 @@ public class EcoreMetamodelServiceImpl extends
 		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
-
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
 				"ecore", new XMIResourceFactoryImpl());
-
 		ResourceSet resourceSet1 = new ResourceSetImpl();
 		ResourceSet resourceSet2 = new ResourceSetImpl();
-
 		resourceSet1.getResource(uri1, true);
 		resourceSet2.getResource(uri2, true);
-
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
 		Comparison comparison = EMFCompare.builder().build().compare(scope);
-
 		List<Match> matches = comparison.getMatches();
 		int total = matches.size();
 		int counter = 0;
@@ -509,7 +510,6 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-
 //		List<Diff> differences = comparison.getDifferences();
 //		// Let's merge every single diff
 //		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
@@ -517,16 +517,11 @@ public class EcoreMetamodelServiceImpl extends
 //				.createStandaloneInstance();
 //		IBatchMerger merger = new BatchMerger(mergerRegistry);
 //		merger.copyAllLeftToRight(differences, new BasicMonitor());
-		
-		
 		double resultValue = (counter * 1.0) / total;
-
-		
 		//Used to save Diff model
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
 		m.put("xmi", new XMIResourceFactoryImpl());
-
 		ResourceSet resSet = new ResourceSetImpl();
 		// create a resource
 		Resource resource = resSet.createResource(URI.createURI(basePath
@@ -549,7 +544,7 @@ public class EcoreMetamodelServiceImpl extends
 			return 0;
 		}
 	}
-
+	//region Cluster
 	@Override
 	public String getSimilarityGraph(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -600,7 +595,7 @@ public class EcoreMetamodelServiceImpl extends
 			throw new BusinessException();
 		}
 	}
-
+	
 	@Override
 	public List<Cluster> getSimilarityClusters(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -921,7 +916,7 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		return result;
 	}
-
+	//endregion
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
 		List<Metric> metricList = metricRepository
@@ -930,30 +925,75 @@ public class EcoreMetamodelServiceImpl extends
 			metricList = calculateMetrics(emm);
 		return metricList;
 	}
-	//TODO Antonio: classe intermedia
+
 	@Override
-	public List<Artifact> search(String text){
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample)
+			throws BusinessException {
+		Comparator<Double> c = new Comparator<Double>() {
+			public int compare(Double a, Double b) {
+		        if (a >= b) {
+		            return -1;
+		        } else {
+		            return 1;
+		        } // returning 0 would merge keys
+		    }
+		};
 		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
-		List<Artifact> artifacts = operations.find(Query.query(criteria), Artifact.class);
-		
-		return artifacts;
+		List<EcoreMetamodel> repository = findAll();
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(c);
+		for (EcoreMetamodel ecoreMetamodel : repository) {
+			double d = calculateContainment(ecoreMetamodel, searchSample);
+			list.put(d, ecoreMetamodel);
+		}
+		System.out.println(list.size());
+		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
+		int i = 0;
+		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
+			  EcoreMetamodel value = entry.getValue();
+			  System.out.println("score: " + entry.getKey());
+			  System.out.println("metamodel" + entry.getValue().getName());
+			  result.add(value);
+			  if(i++ > 10)
+				  break;
+			}
+		return result;
 	}
 	
-	@Override
-	public List<Artifact> orederedSearch(String text){
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
-
-		TextQuery query = new TextQuery(criteria);
-		query.setScoreFieldName("score");
-		query.sortByScore();
-
-		List<Artifact> artifacts = operations.find(query, Artifact.class);
-		
-		return artifacts;
+	private double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
+		try {
+		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new XMIResourceFactoryImpl());
+		ResourceSet resourceSet1 = new ResourceSetImpl();
+		ResourceSet resourceSet2 = new ResourceSetImpl();
+		resourceSet1.getResource(uri1, true);
+		resourceSet2.getResource(uri2, true);
+		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+				resourceSet2, null);
+		Comparison comparison = EMFCompare.builder().build().compare(scope);
+		List<Match> matches = comparison.getMatches();
+		int counter = 0;
+		int counterLeft = 0;
+		int counterRight = 0;
+		for (Match match : matches) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			for (Match match2 : lm) {
+				if(match2.getLeft()!=null)
+					counterLeft++;
+				if(match2.getRight()!=null)
+					counterRight++;
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counter++;
+			}
+				
+			if (match.getLeft() != null && match.getRight() != null)
+				counter++;
+		}
+		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+		return resultValue;
+		}catch(Exception e) {
+			return 0;
+		}
 	}
-
 }

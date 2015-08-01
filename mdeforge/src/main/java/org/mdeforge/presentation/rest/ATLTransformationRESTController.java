@@ -6,12 +6,11 @@ import java.util.List;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
@@ -68,15 +67,19 @@ public class ATLTransformationRESTController {
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Artifact> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
+	
+	@RequestMapping(value = "execute/{id}", method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody HttpEntity<ArtifactList> execute(@PathVariable("id") String id, 
+			@RequestBody List<Model> models) {
 		try {
-			Artifact transformation = ATLtransformationService.findOneById(idtransformation, user);
-			return new ResponseEntity<Artifact>(transformation, HttpStatus.OK);
+			ATLTransformation transformation = ATLtransformationService.findOne(id);
+			
+			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, models, user));
+			return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 		} catch (BusinessException e) {
-			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-
+		
 	}
 	
 	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
@@ -212,5 +215,16 @@ public class ATLTransformationRESTController {
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+	}
+	
+	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ATLTransformation> getATLTransformation(@PathVariable("id_artifact") String idArtifact) {
+		try {
+			ATLTransformation artifact = ATLtransformationService.findOneById(idArtifact, user);
+			return new ResponseEntity<ATLTransformation>(artifact, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ATLTransformation>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+
 	}
 }

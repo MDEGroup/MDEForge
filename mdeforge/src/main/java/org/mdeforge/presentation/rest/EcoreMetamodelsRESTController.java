@@ -150,11 +150,11 @@ public class EcoreMetamodelsRESTController {
 			// Response success
 			return new ResponseEntity<Artifact>(s, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
-	// update metamodel
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
 	public @ResponseBody HttpEntity<String> updateArtifact(
 			@RequestBody EcoreMetamodel ecoreMetamodel) {
@@ -162,7 +162,7 @@ public class EcoreMetamodelsRESTController {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
-			ecoreMetamodel.getShared().add(user);
+			//ecoreMetamodel.getShared().add(user);
 			// metamodel save
 			ecoreMetamodelService.update(ecoreMetamodel);
 			return new ResponseEntity<String>("EcoreMetamodel updated.",
@@ -230,6 +230,18 @@ public class EcoreMetamodelsRESTController {
 		}
 		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;
 	}
-	
+	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
+	public HttpEntity<List<EcoreMetamodel>> searchResult(
+			@PathVariable(value = "search_string") String searchString) {
+		return new ResponseEntity<List<EcoreMetamodel>> (ecoreMetamodelService.search(searchString),
+				HttpStatus.OK);
+	}
+	@RequestMapping(value = "/search_by_example", method = { RequestMethod.POST })
+	public HttpEntity<ArtifactList> searchByExampleResult(
+			@RequestBody EcoreMetamodel ecoreMetamodel) {
+		ArtifactList al = new ArtifactList(ecoreMetamodelService.searchByExample(ecoreMetamodel));
+		return new ResponseEntity<ArtifactList> (al,
+				HttpStatus.OK);
+	}
 
 }

@@ -1,7 +1,5 @@
 package org.mdeforge.presentation.backend;
 
-import java.io.IOException;
-
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
@@ -13,19 +11,15 @@ import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
-import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/project")

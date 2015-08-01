@@ -55,7 +55,7 @@ public class RoleRESTController {
 		try
 		{
 			Role role = roleService.findById(id);
-			return new ResponseEntity<>(role, HttpStatus.OK);
+			return new ResponseEntity<Role>(role, HttpStatus.OK);
 		}
 		catch (BusinessException e)
 		{

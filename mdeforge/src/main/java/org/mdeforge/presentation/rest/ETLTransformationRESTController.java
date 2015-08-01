@@ -15,7 +15,6 @@ import org.mdeforge.business.model.Transformation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,12 +57,12 @@ public class ETLTransformationRESTController {
 	}
 
 	@RequestMapping(value = "/{id_transformation}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Transformation> getTransformation(@PathVariable("id_transformation") String idtransformation) {
+	public @ResponseBody HttpEntity<ETLTransformation> getETLTransformation(@PathVariable("id_transformation") String idtransformation) {
 		try {
-			Transformation metamodel = ETLTransformationService.findOneBySharedUser(idtransformation, user);
-			return new ResponseEntity<Transformation>(metamodel, HttpStatus.OK);
+			ETLTransformation metamodel = ETLTransformationService.findOneById(idtransformation, user);
+			return new ResponseEntity<ETLTransformation>(metamodel, HttpStatus.OK);
 		} catch (BusinessException e) {
-			return new ResponseEntity<Transformation>(HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<ETLTransformation>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 	}

@@ -2,6 +2,7 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 
@@ -19,4 +20,5 @@ public interface WorkspaceService {
 	Workspace findOneWithUser(String id, String idUser) throws BusinessException;
 	public ResponseGrid<Workspace> findAllPaginatedByOwner(RequestGrid requestGrid, User user)
 			throws BusinessException;
+	List<Project> findProjectInWorkspace(String id, User user);
 }

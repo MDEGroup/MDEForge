@@ -443,7 +443,7 @@
 			  var node = data.nodes[node_id-1];
 			  if(node['label']){
 				 /*  location.href = "/mdeforge/public/browse/metamodel_name_from_graph?name="+node['label']; */
-				  window.open("/public/browse/metamodel_name_from_graph?name="+node['label'], '_blank');
+				  window.open("${pageContext.request.contextPath}/public/browse/metamodel_name_from_graph?name="+node['label'], '_blank');
 			  }
 			  /* alert(node['label']); */
     

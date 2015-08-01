@@ -60,15 +60,13 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 			dbFile.writeTo(bout);
 			data = bout.toByteArray();
 		} catch (Exception e) {
-			// error while reading data
-			e.printStackTrace();
+			throw new BusinessException();	
 		}
 		return data;
 	}
 
 	@Override
-	public void delete(String idGridFileMedia) throws BusinessException {
-		GridFileMedia file = gridFileMediaRepository.findOne(idGridFileMedia);
+	public void delete(GridFileMedia file) throws BusinessException {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("id").is(file.getIdFile()));
 		operations.delete(q);
@@ -80,7 +78,10 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 
 	@Override
 	public String getFilePath(Artifact artifact) throws BusinessException {
-		GridFileMedia grm = getGridFileMedia(artifact.getFile());
+		GridFileMedia grm = null;
+		if (artifact.getFile().getId()!=null)
+			grm = getGridFileMedia(artifact.getFile());
+		else grm = artifact.getFile();
 		FileOutputStream out;
 		try {
 			String path = basePath + artifact.getFile().getFileName();
@@ -105,7 +106,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	public byte[] getFileByte(Artifact artifact) throws BusinessException {
 		GridFileMedia grm = getGridFileMedia(artifact.getFile());
 		GridFS fileStore = new GridFS(mongoDbFactory.getDb());
-		GridFSDBFile found = fileStore.findOne(grm.getIdFile());
+		GridFSDBFile found = fileStore.findOne(grm.getFileName());
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			found.writeTo(baos);

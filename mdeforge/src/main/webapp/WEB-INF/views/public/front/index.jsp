@@ -1,19 +1,43 @@
 <div id="landing_2">
 	
 	
-	<!-- <div class="mosaic-line mosaic-line-2">
+<!-- 	<div class="mosaic-line mosaic-line-2">
 		<div class="container-960 center">
 			<h2 class="margin-none"><strong class="text-primary">MDE Forge</strong> <span class="hidden-phone"> an extensible Web-based modeling platform</span></h2>
 		</div>
 	</div> -->
 	
 	
-	<div class="">
+	<div class="widget widget-heading-simple widget-body-gray"  style="background: #e5e5e5;">
+	<div class="container-960 innerTB">
+		<div class="row-fluid">
+			<div class="span4 center">
+				<div class="separator bottom"></div>
+					<img src="${pageContext.request.contextPath}/resources/theme/images/MDEForge_logo.gif">
+				
+			</div>
+			<div class="span8" style="font-size:16px;">
+				<div class="separator bottom"></div>
+					<p>
+						MDE Forge is a project by The Model-Driven Engineering Group at the University of L'Aquila.
+						It promotes the development of a software-as-a-service modeling platform: storing, sharing, 
+						analysing and execute modeling artifacts by harnessing third-party components and tools.
+					</p>
+					<p>	
+						Current supported standards Ecore, ATL, ETL. More to come.
+					</p>
+				
+			</div>
+		</div>
+	</div>
+	</div>
+	
+	<!-- <div class="">
 			<div class="">
 				
 							<div class="carousel carousel-1 slide" id="myCarousel">
 								<div class="carousel-inner">
-																		<!-- Item -->
+																		Item
 									<div class="item active">
 										<div class="row-fluid">
 											<div class="span12 relativeWrap">
@@ -24,8 +48,8 @@
 											
 										</div>
 									</div>
-									<!-- // Item END -->
-																		<!-- Item -->
+									// Item END
+																		Item
 									<div class="item">
 										<div class="row-fluid">
 											<div class="span12 relativeWrap">
@@ -36,8 +60,8 @@
 											
 										</div>
 									</div>
-									<!-- // Item END -->
-																		<!-- Item -->
+									// Item END
+																		Item
 									<div class="item">
 										<div class="row-fluid">
 											<div class="span12 relativeWrap">
@@ -48,7 +72,7 @@
 											
 										</div>
 									</div>
-									<!-- // Item END -->
+									// Item END
 																	</div>
 								<ol class="carousel-indicators hidden">
 									<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -57,7 +81,7 @@
 								</ol>
 							</div>
 						</div>
-		</div>
+		</div> -->
 	
 	
 	<div class="container-960 innerT">
@@ -83,7 +107,7 @@
 				</a>
 			</div>			
 			<div class="span4">
-				<a href="#">
+				<a href="${pageContext.request.contextPath}/public/search">		
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top search glyphicon-primary">

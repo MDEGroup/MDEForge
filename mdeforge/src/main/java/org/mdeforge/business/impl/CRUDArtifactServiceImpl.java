@@ -1,12 +1,16 @@
 package org.mdeforge.business.impl;
 
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
@@ -18,6 +22,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -25,6 +30,7 @@ import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -32,13 +38,21 @@ import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
+
+import com.mongodb.Mongo;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
 	@Autowired
+	private Mongo mongo;
+	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
+	@Autowired
+	private JsonMongoResourceSet jsonMongoResourceSet;
 	@Autowired
 	protected RelationRepository relationRepository;
 	@Autowired
@@ -59,8 +73,50 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Value("#{cfgproperties[mongoPrefix]}")
+	private String mongoPrefix;
+	@Value("#{cfgproperties[jsonArtifactCollection]}")
+	private String jsonArtifactCollection;
 
 	protected Class<T> persistentClass;
+
+	public void createIndex() {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+
+		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
+				.onField("name", 20F).onField("description", 10F)
+				.onField("authors", 5F).onField("tags", 7F)
+				.onField("extractedContents").named("ArtifactIndex").build();
+
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
+
+	@Override
+	public List<T> search(String searchString) throws BusinessException {
+		TextCriteria criteria = TextCriteria.forLanguage("en").matching(
+				searchString);
+		Query query = TextQuery.queryText(criteria).sortByScore()
+				.with(new PageRequest(0, 5));
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		List<T> result = operations.find(query, persistentClass);
+		return result;
+	}
+
+	@Override
+	public List<Artifact> orederedSearch(String text) {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+
+		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(
+				text);
+
+		TextQuery query = new TextQuery(criteria);
+		query.setScoreFieldName("score");
+		query.sortByScore();
+
+		List<Artifact> artifacts = operations.find(query, Artifact.class);
+
+		return artifacts;
+	}
 
 	@SuppressWarnings("unchecked")
 	public CRUDArtifactServiceImpl() {
@@ -72,7 +128,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("users").in(user.getId());
+		Criteria c1 = Criteria.where("shared").in(user.getId());
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
 		Criteria c4 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
@@ -85,6 +141,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
 			throw new BusinessException();
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
+		
 		return artifact;
 	}
 
@@ -126,7 +184,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					userRepository.save(user);
 				}
 		// TODO delete Relation
-		gridFileMediaService.delete(artifact.getFile().getId());
+		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
 	}
@@ -154,7 +212,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					userRepository.save(user);
 				}
 		// TODO delete Relation
-		gridFileMediaService.delete(artifact.getFile().getId());
+		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
 	}
@@ -165,15 +223,22 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			if (artifact.getId() == null)
 				throw new BusinessException();
 			// verify metamodel owner
-			findOneByOwner(artifact.getId(), artifact.getAuthor());
-
+			User user = userRepository.findOne(artifact.getAuthor().getId());
+			artifact.setAuthor(user);
+			T original = findOneByOwner(artifact.getId(), artifact.getAuthor());
 			// UploadFile
-			GridFileMedia fileMedia = new GridFileMedia();
-			fileMedia.setFileName("");
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
-			artifact.setFile(fileMedia);
-
+			if (artifact.getFile() != null && artifact.getFile().getByteArray() != null) {
+				GridFileMedia fileMedia = new GridFileMedia();
+				fileMedia.setFileName("");
+				fileMedia.setByteArray(Base64.decode(artifact.getFile()
+						.getContent().getBytes()));
+				gridFileMediaService.delete(original.getFile());
+				gridFileMediaService.store(artifact.getFile());
+				artifact.setFile(fileMedia);
+			}
+			else
+				artifact.setFile(original.getFile());
+			
 			for (Workspace ws : artifact.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
 			}
@@ -181,19 +246,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
 			}
-			Artifact transTemp = artifactRepository.findOne(artifact.getId());
-			gridFileMediaService.delete(transTemp.getFile().getId());
-			if (artifact.getFile() != null) {
-				gridFileMediaService.store(artifact.getFile());
-			}
+			
 
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
+			
 			artifactRepository.save(artifact);
 			// check relation
+			for (User us : artifact.getShared()) {
+				User u = userService.findOne(us.getId());
+				if (u == null)
+					throw new BusinessException();
+				if (!isArtifactInUser(u, artifact.getId())) {
+					u.getSharedArtifact().add(artifact);
+					userRepository.save(u);
+				}
+			}
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
-						artifact.getAuthor());
+
+				Artifact toArtifact = artifactRepository.findOne(rel
+						.getToArtifact().getId());
+				// findOneById(rel.getToArtifact().getId(),
+				// artifact.getAuthor());
 				if (existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
@@ -223,19 +297,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					projectRepository.save(p);
 				}
 			}
-			for (User us : artifact.getShared()) {
-				User u = userService.findOne(us.getId());
-				if (u == null)
-					throw new BusinessException();
-				if (!isArtifactInUser(u, artifact.getId())) {
-					u.getSharedArtifact().add(artifact);
-					userRepository.save(u);
-				}
-			}
+			
 		} catch (Exception e) {
 			throw new BusinessException();
 		}
 	}
+
 	@Override
 	public void updateSimple(T artifact) {
 		try {
@@ -244,27 +311,36 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			throw new BusinessException();
 		}
 	}
+
 	@Override
 	public T create(T artifact) throws BusinessException {
 		// check workspace Auth
 		try {
+			if (artifactRepository.findByName(artifact.getName()) != null)
+				throw new DuplicateNameException();
 			// GetUser
 			if (artifact.getId() != null)
 				throw new BusinessException();
 			// File handler
 			GridFileMedia fileMedia = new GridFileMedia();
 			fileMedia.setFileName(artifact.getFile().getFileName());
-			fileMedia.setByteArray(Base64.decode(artifact.getFile()
-					.getContent().getBytes()));
+			if (artifact.getFile().getByteArray() != null)
+				fileMedia.setByteArray(artifact.getFile().getByteArray());
+			else
+				fileMedia.setByteArray(Base64.decode(artifact.getFile()
+						.getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
-			for (Workspace ws : artifact.getWorkspaces())
+			for (Workspace ws : artifact.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
+			}
 			// check project Auth
-			for (Project p : artifact.getProjects())
+			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
-			if (artifact.getFile() != null)
+			}
+			if (artifact.getFile() != null) {
 				gridFileMediaService.store(artifact.getFile());
+			}
 			artifact.setCreated(new Date());
 			artifact.setModified(new Date());
 			User user = userRepository.findOne(artifact.getAuthor().getId());
@@ -272,22 +348,22 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.getShared().add(user);
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
+
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = findOneById(rel.getToArtifact().getId(),
-						artifact.getAuthor());
+				Artifact toArtifact = artifactRepository.findOne(rel
+						.getToArtifact().getId());
+
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel
-							.getToArtifact().getId());
-					if (temp.getRelations() == null)
-						temp.setRelations(new ArrayList<Relation>());
-					temp.getRelations().add(rel);
-					artifactRepository.save(temp);
+					if (toArtifact.getRelations() == null)
+						toArtifact.setRelations(new ArrayList<Relation>());
+					toArtifact.getRelations().add(rel);
+					artifactRepository.save(toArtifact);
 				}
 			}
 			// Update bi-directional reference
@@ -351,17 +427,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public T findOneByOwner(String idArtifact, User user)
 			throws BusinessException {
-		// TODO change method
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c2 = Criteria.where("author.$id").is(user.getId());
-		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
-			query.addCriteria(c2.andOperator(c1));
-		}
-		query.addCriteria(c2);
-		return n.findOne(query, persistentClass);
+		T result = findOne(idArtifact);
+		if (result == null)
+			throw new BusinessException();
+		if (result.getAuthor().getId().equals(user.getId()))
+			return result;
+		else
+			throw new BusinessException();
 	}
 
 	@Override
@@ -377,6 +449,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c2);
 		return n.findOne(query, persistentClass);
 	}
+
 	@Override
 	public T findOnePublic(String id) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -494,10 +567,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(new Criteria().andOperator(c2, c3));
 		}
 		query.addCriteria(c3);
-		T project = operations.findOne(query, persistentClass);
-		if (project == null)
-			throw new BusinessException();
-		return project;
+		T artifact = operations.findOne(query, persistentClass);
+		// if (artifact == null)
+		// throw new ArtifactNotFound();
+		return artifact;
 	}
 
 	@Override
@@ -509,20 +582,22 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		return operations.find(query, Metric.class);
 
 	}
-	//TODO Da eliminare Assolutamente
-	@Override
-	public void createIndex(){
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
-		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-			.onField("name", 20F)
-			.onField("description", 10F)
-			.onField("authors", 5F)
-			.onField("tags", 7F)
-			.onField("extractedContents")
-			.named("ArtifactIndex")
-			.build();
 
-		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+
+	@Override
+	public Resource loadArtifacrt(String id) throws BusinessException {
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
+				+ mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet()
+				.createResource(URI.createURI(mongoURI));
+
+		try {
+			resource.load(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+
+		return resource;
 	}
 }

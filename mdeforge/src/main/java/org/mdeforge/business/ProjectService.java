@@ -23,7 +23,7 @@ public interface ProjectService {
 
 	void update(Project project, User idUser) throws BusinessException;
 
-	List<Project> findByIdUser(User idUser) throws BusinessException;
+	List<Project> findByUser(User idUser) throws BusinessException;
 
 	List<Project> findAll() throws BusinessException;
 	

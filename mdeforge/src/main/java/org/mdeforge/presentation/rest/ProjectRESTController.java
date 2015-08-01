@@ -13,7 +13,6 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,12 +47,6 @@ public class ProjectRESTController {
 	@Autowired
 	private TransformationService transformationService;
 	
-	@RequestMapping(value = "/workspaces/{id_workspace}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<List<Project>> getProjectsByWorkspace(
-			@PathVariable("id_workspace") String idWorkspace) {
-		List<Project> list = projectService.findByIdWorkspace(idWorkspace, user);
-		return new ResponseEntity<List<Project>>(list, HttpStatus.OK);
-	}
 
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
@@ -69,9 +62,11 @@ public class ProjectRESTController {
 	
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Project>> getProjectsByUsername() {
-		List<Project> list = projectService.findByIdUser(user);
+		List<Project> list = projectService.findByUser(user);
 		return new ResponseEntity<List<Project>>(list, HttpStatus.OK);
 	}
+	
+	
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Project> getProject(@PathVariable("id") String id) {
@@ -136,19 +131,19 @@ public class ProjectRESTController {
 		}
 	}
 	
-	// dovrebbe sparire
-	@RequestMapping(value = "findAll", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<List<Project>> getProjects() {
-		List<Project> list = projectService.findAll();
-		return new ResponseEntity<List<Project>>(list, HttpStatus.OK);
-	}
-
 	@RequestMapping( method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Project>> getProjectsByUser() {
-		List<Project> list = projectService.findByIdUser(user);
+		List<Project> list = projectService.findByUser(user);
 		return new ResponseEntity<List<Project>>(list, HttpStatus.OK);
 	}
-
+	
+	@RequestMapping(value = "/workspaces/{id_workspace}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<List<Project>> getProjectsByWorkspace(
+			@PathVariable("id_workspace") String idWorkspace) {
+		List<Project> list = projectService.findByIdWorkspace(idWorkspace, user);
+		return new ResponseEntity<List<Project>>(list, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, consumes="application/json")
 	public @ResponseBody HttpEntity<String> create(
 			@RequestBody Project project) {

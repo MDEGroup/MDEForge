@@ -7,15 +7,16 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,7 +30,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 
 @Controller
 @RestController
-@RequestMapping("/api/artifact")
+@RequestMapping("/api/Artifact")
 public class ArtifactRESTController {
 
 	@Autowired
@@ -43,11 +44,6 @@ public class ArtifactRESTController {
 	// Get specified artifact
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Artifact>> getArtifacts() {
-		// Authentication auth =
-		// SecurityContextHolder.getContext().getAuthentication();
-		// String name = auth.getName(); //get logged in username
-		// User user = userService.findOneByUsername(name);
-
 		List<Artifact> result = artifactService.findAllWithPublicByUser(user);
 		return new ResponseEntity<List<Artifact>>(result, HttpStatus.OK);
 	}
@@ -84,7 +80,6 @@ public class ArtifactRESTController {
 		return new ResponseEntity<List<Artifact>>(list, HttpStatus.OK);
 	}
 
-	// get single artifact
 	@RequestMapping(value = "/{id_artifact}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<Artifact> getArtifact(@PathVariable("id_artifact") String idArtifact) {
 		try {
@@ -94,6 +89,7 @@ public class ArtifactRESTController {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+
 
 	//create artifact index
 	@RequestMapping(value = "/createIndex", method = RequestMethod.GET)
@@ -120,4 +116,25 @@ public class ArtifactRESTController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	public @ResponseBody HttpEntity<String> delete(
+			@PathVariable("id") String idArtifact) {
+		try {
+			artifactService.delete(idArtifact, user);
+			return new ResponseEntity<String>("true",
+					HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("false",
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	
+	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
+	public HttpEntity<ArtifactList> searchResult(
+			@PathVariable(value = "search_string") String searchString) {
+		ArtifactList artifacts = new ArtifactList(artifactService.search(searchString));
+		return new ResponseEntity<ArtifactList> (artifacts,
+				HttpStatus.OK);
+	}
 }

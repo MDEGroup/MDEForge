@@ -32,8 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.apporiented.algorithm.clustering.Cluster;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml",
-		"file:src/main/webapp/WEB-INF/spring/rest-dispatcher-servlet-security.xml" })
+@ContextConfiguration(locations = { "file:src/main/webapp/WEB-INF/spring/root-context.xml"})
 public class HierarchicalClusterTest {
 
 	@Autowired

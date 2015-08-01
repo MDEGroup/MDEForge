@@ -56,7 +56,7 @@ public class MetamodelsRESTController {
 		// User user = userService.findOneByUsername(name);
 
 		ArtifactList result = new ArtifactList(metamodelService.findAllWithPublicByUser(user));
-		return new ResponseEntity<>(result, HttpStatus.OK);
+		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)

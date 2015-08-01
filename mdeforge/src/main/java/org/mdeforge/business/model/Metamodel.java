@@ -17,7 +17,6 @@ public class Metamodel extends Artifact {
 	 */
 	private static final long serialVersionUID = -8514238418981408258L;
 
-	
 	private List<String> uri = new ArrayList<String>();
 
 	private String nsuri;

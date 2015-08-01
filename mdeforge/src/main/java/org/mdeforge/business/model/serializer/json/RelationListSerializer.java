@@ -24,11 +24,11 @@ public class RelationListSerializer extends JsonSerializer<List<Relation>> {
 						jgen.writeStringField("id", relation.getId());
 						jgen.writeObjectFieldStart("fromArtifact");
 							jgen.writeStringField("_class", relation.getFromArtifact().getClass().getCanonicalName() );
-							jgen.writeStringField("id", relation.getFromArtifact().getId());		
+							jgen.writeStringField("id", relation.getFromArtifact().getId());
 						jgen.writeEndObject();
 						jgen.writeObjectFieldStart("toArtifact");
 							jgen.writeStringField("_class", relation.getToArtifact().getClass().getCanonicalName() );
-							jgen.writeStringField("id", relation.getToArtifact().getId());			
+							jgen.writeStringField("id", relation.getToArtifact().getId());
 						jgen.writeEndObject();
 	//					.w
 	//					jgen.writeStringField("fromArtifact", relation.getToArtifact().getId());
