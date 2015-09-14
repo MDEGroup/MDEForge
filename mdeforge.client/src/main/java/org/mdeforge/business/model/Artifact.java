@@ -10,7 +10,6 @@ import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -22,30 +21,30 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @JsonTypeInfo (use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS,
 property = "_class")
-public class Artifact implements java.io.Serializable{
 
+public class Artifact implements java.io.Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
-	
 	private String id = null;
 	private Date created = null;
 	private Date modified = null;
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
-
-	private String description;
 	private List<Metric> metrics;
-	private String authors = null;
+	private String description = null;
 	private List<String> tags = null;
+	private String authors = null;
 	private String version = null;
 	private String extractedContents = null;
-	@JsonIgnore
-	private String _class;
-	private String nsuri;
+
+//	private @TextIndexed(weight=5) String authors = null;
+//	private @TextIndexed(weight=7) List<String> tags = null;
+//	private @TextIndexed(weight=1) String extractedContents = null;
+//	private @TextScore Float score;
 
 	@JsonSerialize(using = RelationListSerializer.class)
 	private List<Relation> relations = new ArrayList<Relation>();
@@ -56,9 +55,23 @@ public class Artifact implements java.io.Serializable{
 	@JsonSerialize(using = WorkspaceListSerializer.class)
 	private List<Workspace> workspaces = new ArrayList<Workspace>();
 	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();
+	private User author = new User();	
 	private List<Property> properties = new ArrayList<Property>();
-	@JsonIgnore private String href;
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+//	private @TextIndexed(weight=20) String name = null;
+//	private @TextIndexed(weight=10) String description = null;
+//	private @TextIndexed(weight=5) String authors = null;
+//	private @TextIndexed(weight=7) List<String> tags = null;
+//	private String version = null;
+//	private @TextIndexed(weight=1) String extractedContents = null;
+//	private @TextScore Float score;
 	
 	public List<Metric> getMetrics() {
 		return metrics;
@@ -68,23 +81,6 @@ public class Artifact implements java.io.Serializable{
 		this.metrics = metrics;
 	}
 
-	
-//	
-	//	@DBRef(lazy=true)
-//	@JsonBackReference
-//	private Set<Tag> tags = new HashSet<Tag>();	
-
-//	public Set<Tag> getTags() {
-//		return tags;
-//	}
-//
-//	
-//	public void setTags(Set<Tag> newTags) {
-//		tags = newTags;
-//	}
-//
-//	
-//
 	public List<Relation> getRelations() {
 		return relations;
 	}
@@ -92,8 +88,7 @@ public class Artifact implements java.io.Serializable{
 	public void setRelations(List<Relation> newRelations) {
 		relations = newRelations;
 	}
-//
-//	
+
 	public List<Property> getProperties() {
 		return properties;
 	}
@@ -102,12 +97,10 @@ public class Artifact implements java.io.Serializable{
 		properties = newProperties;
 	}
 
-	
 	public List<Project> getProjects() {
 		return projects;
 	}
 
-	
 	public boolean addToProjects(Project projectsValue) {
 		if (!projects.contains(projectsValue)) {
 			boolean result = projects.add(projectsValue);
@@ -116,7 +109,6 @@ public class Artifact implements java.io.Serializable{
 		return false;
 	}
 
-	
 	public boolean removeFromProjects(Project projectsValue) {
 		if (projects.contains(projectsValue)) {
 			boolean result = projects.remove(projectsValue);
@@ -230,7 +222,7 @@ public class Artifact implements java.io.Serializable{
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -242,36 +234,16 @@ public class Artifact implements java.io.Serializable{
 	public void setAuthors(String authors) {
 		this.authors = authors;
 	}
-
-	public String get_class() {
-		return _class;
-	}
-
-	public void set_class(String _class) {
-		this._class = _class;
-	}
-
-	public void setHref(String string) {
-		this.href = string;
-	}
-	public String getHref() {
-	 	return this.href;
-	}
+	
 	public List<String> getTags() {
 		return tags;
 	}
+	
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-	
 
-	public String getVersion() {
-		return version;
-	}
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
 
 	public String getExtractedContents() {
 		return extractedContents;
@@ -281,11 +253,5 @@ public class Artifact implements java.io.Serializable{
 		this.extractedContents = extractedContents;
 	}
 
-	public String getNsuri() {
-		return nsuri;
-	}
 
-	public void setNsuri(String nsuri) {
-		this.nsuri = nsuri;
-	}
 }

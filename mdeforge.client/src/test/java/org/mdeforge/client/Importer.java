@@ -25,19 +25,12 @@ public class Importer extends TestCase {
 
 	private static EcoreMetamodelService ecoreMetamodelService; 
  
-	@BeforeClass
-	public static void setup() throws Exception {
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-	}
-	
-	
-	@Ignore
 	@Test
 	public void test() {
-		
 		Document doc;
 		String projectUrl = "http://www.emn.fr/z-info/atlanmod/index.php/Ecore";
 		try {
+			ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin	", "test123");
 			doc = Jsoup.connect(projectUrl).timeout(10000).get();
 			Element e = doc.getElementById("content");
 			Elements es = e.getAllElements();
@@ -99,9 +92,11 @@ public class Importer extends TestCase {
 			System.out.println("count: " + count);
 			
 		} catch (IOException e1) {
-			System.out.println("azz");
 			// TODO Auto-generated catch block
-			System.out.println("Unable to connect at " + projectUrl + "Importer exception:" + e1.getMessage());
+			System.err.println("Unable to connect at " + projectUrl + "Importer exception:" + e1.getMessage());
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
 		}
 		
 		
