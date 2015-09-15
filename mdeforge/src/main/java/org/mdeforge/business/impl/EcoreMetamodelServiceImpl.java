@@ -66,6 +66,7 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -88,6 +89,8 @@ import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -136,7 +139,7 @@ public class EcoreMetamodelServiceImpl extends
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-
+	Logger logger = LoggerFactory.getLogger(EcoreMetamodelImporterServiceImpl.class);
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
@@ -149,32 +152,33 @@ public class EcoreMetamodelServiceImpl extends
 			throw new DuplicateNameException();
 
 		artifact.setValid(isValid(artifact));
-//		String path = gridFileMediaService.getFilePath(artifact);
+		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
-//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-//		artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
-//		artifactRepository.save(artifact);
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+		try {
+			artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
+		} catch (Exception e) {
+			logger.error("Some errors when try to extract content string from metamodel");
+		}
+		artifactRepository.save(artifact);
 		return result;
 	}
 	
 	public String saveJsonMetamodel(String sourceURI, String mongoURI) throws BusinessException {
-		String contentsString = "";
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
 		
 		EList<EObject> contents = load_resource.getContents();
-		ResourceSerializer.serialize(load_resource);
+		String result = ResourceSerializer.serialize(load_resource);
 		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
-
 		res.getContents().addAll(contents);
-
 		try {
 			res.save(null);
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
-		return contentsString;
+		return result;
 	}
 
 	@Override
@@ -463,8 +467,8 @@ public class EcoreMetamodelServiceImpl extends
 				.put("*", new XMIResourceFactoryImpl());
 		Resource load_resource = load_resourceSet.getResource(
 				URI.createURI(gridFileMediaService.getFilePath(emm)), true);
-		String test = ResourceSerializer.serialize(load_resource);
-		return test;
+		String result = ResourceSerializer.serialize(load_resource);
+		return result;
 	}
 	
 	@Override

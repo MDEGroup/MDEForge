@@ -1,6 +1,5 @@
 package org.mdeforge.importer;
 
-import java.io.File;
 import java.util.List;
 
 import org.mdeforge.business.EcoreMetamodelService;
@@ -10,13 +9,11 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CreareEcoreSimilarityRelation {
 	public static void main(String[] args) {
-		File f = new File("src/main/webapp/WEB-INF/spring/root-context.xml");
-		System.out.println(f.exists());
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
-		System.out.println("asd");
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
-		
+//		ecoreMetamodelService.createIndex();
+				
 		System.out.println("###START");
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		EcoreMetamodel [] ecoreMMArray = ecoreMMlist.toArray(new EcoreMetamodel[ecoreMMlist.size()]);
