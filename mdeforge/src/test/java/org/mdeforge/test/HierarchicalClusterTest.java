@@ -96,9 +96,9 @@ public class HierarchicalClusterTest {
 		double sim_score = cs.cosineSimilarityScore(test, test2);
 		System.out.println("Vediamo: "+ sim_score );
 	}
-	@Ignore
+	
 	@Test
-	public void similaritt() {
+	public void loadSimilarityRelations() {
 		 
 		System.out.println("###START");
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
@@ -124,8 +124,7 @@ public class HierarchicalClusterTest {
 			}
 			pw.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("error");
 		}
 	}
 	@Ignore

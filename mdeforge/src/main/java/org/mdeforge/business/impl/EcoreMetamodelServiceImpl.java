@@ -70,7 +70,9 @@ import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
+import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
@@ -93,6 +95,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.stereotype.Service;
+
+import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
@@ -463,8 +467,7 @@ public class EcoreMetamodelServiceImpl extends
 		return test;
 	}
 
-	@Override
-	public double calculateSimilarity(Artifact art1, Artifact art2) {
+	public double calculateSimilarity2(Artifact art1, Artifact art2) {
 		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
 		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
 
@@ -472,20 +475,26 @@ public class EcoreMetamodelServiceImpl extends
 		String test2 = serializeContent(emm2);
 		System.out.println(test);
 		System.out.println(test2);
-		double sim_score = new SimilarityMethods().cosineSimilarityScore(test,
+		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test,
 				test2);
-		// double sim_score = SimilarityMethods.diceCoefficient(test, test2);
-		System.out.println("Vediamo: " + sim_score);
-		CosineSimilarityRelation msr = new CosineSimilarityRelation();
-		msr.setFromArtifact(art1);
-		msr.setToArtifact(art2);
-		msr.setValue(sim_score);
-		relationService.save(msr);
-		return sim_score;
+		DiceSimilarity ds = new DiceSimilarity();
+		double diceSimScore = ds.getSimilarity(test, test2);
+		CosineSimilarityRelation csr = new CosineSimilarityRelation();
+		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+		csr.setFromArtifact(art1);
+		csr.setToArtifact(art2);
+		csr.setValue(cosineSimScore);
+		dsr.setFromArtifact(art1);
+		dsr.setToArtifact(art2);
+		dsr.setValue(diceSimScore);
+		relationService.save(csr);
+		relationService.save(dsr);
+		return cosineSimScore;
 	}
 	
 	
-	public double calculateSimilarity2(Artifact art1, Artifact art2) {
+	@Override
+	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
@@ -501,15 +510,23 @@ public class EcoreMetamodelServiceImpl extends
 		List<Match> matches = comparison.getMatches();
 		int total = matches.size();
 		int counter = 0;
+		int counterLeft = 0;
+		int counterRight = 0;
 		for (Match match : matches) {
 			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
 			total += lm.size();
-			for (Match match2 : lm)
+			for (Match match2 : lm){
+				if(match2.getLeft()!=null)
+					counterLeft++;
+				if(match2.getRight()!=null)
+					counterRight++;
 				if (match2.getLeft() != null && match2.getRight() != null)
 					counter++;
+			}
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
+		//to save diff file
 //		List<Diff> differences = comparison.getDifferences();
 //		// Let's merge every single diff
 //		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
@@ -517,7 +534,8 @@ public class EcoreMetamodelServiceImpl extends
 //				.createStandaloneInstance();
 //		IBatchMerger merger = new BatchMerger(mergerRegistry);
 //		merger.copyAllLeftToRight(differences, new BasicMonitor());
-		double resultValue = (counter * 1.0) / total;
+		double containmentValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+		double simValue = (counter * 1.0) / total;
 		//Used to save Diff model
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
@@ -536,9 +554,36 @@ public class EcoreMetamodelServiceImpl extends
 		SimilarityRelation sr = new SimilarityRelation();
 		sr.setFromArtifact(art1);
 		sr.setToArtifact(art2);
-		sr.setValue(resultValue);
+		sr.setValue(simValue);
 		relationRepository.save(sr);
-		return resultValue;
+		ContainmentRelation cr = new ContainmentRelation();
+		cr.setFromArtifact(art1);
+		cr.setToArtifact(art2);
+		cr.setValue(containmentValue);
+		relationRepository.save(cr);
+		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
+		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+
+		String test = serializeContent(emm1);
+		String test2 = serializeContent(emm2);
+
+		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test,
+				test2);
+		CosineSimilarityRelation csr = new CosineSimilarityRelation();
+		csr.setFromArtifact(art1);
+		csr.setToArtifact(art2);
+		csr.setValue(cosineSimScore);
+		relationService.save(csr);
+		
+		DiceSimilarity ds = new DiceSimilarity();
+		double diceSimScore = ds.getSimilarity(test, test2);
+		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+		dsr.setFromArtifact(art1);
+		dsr.setToArtifact(art2);
+		dsr.setValue(diceSimScore);
+		relationService.save(dsr);
+		
+		return simValue;
 		}catch(Exception e) {
 			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
 			return 0;
