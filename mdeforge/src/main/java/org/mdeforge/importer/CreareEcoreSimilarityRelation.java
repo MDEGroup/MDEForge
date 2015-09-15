@@ -1,4 +1,4 @@
-package org.mdeforge.importer.main;
+package org.mdeforge.importer;
 
 import java.io.File;
 import java.util.List;
@@ -7,9 +7,8 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.stereotype.Component;
-@Component
-public class ImporterMain {
+
+public class CreareEcoreSimilarityRelation {
 	public static void main(String[] args) {
 		File f = new File("src/main/webapp/WEB-INF/spring/root-context.xml");
 		System.out.println(f.exists());

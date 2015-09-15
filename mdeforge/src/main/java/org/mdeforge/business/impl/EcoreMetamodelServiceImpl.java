@@ -466,36 +466,10 @@ public class EcoreMetamodelServiceImpl extends
 		String test = ResourceSerializer.serialize(load_resource);
 		return test;
 	}
-
-	public double calculateSimilarity2(Artifact art1, Artifact art2) {
-		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
-
-		String test = serializeContent(emm1);
-		String test2 = serializeContent(emm2);
-		System.out.println(test);
-		System.out.println(test2);
-		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test,
-				test2);
-		DiceSimilarity ds = new DiceSimilarity();
-		double diceSimScore = ds.getSimilarity(test, test2);
-		CosineSimilarityRelation csr = new CosineSimilarityRelation();
-		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-		csr.setFromArtifact(art1);
-		csr.setToArtifact(art2);
-		csr.setValue(cosineSimScore);
-		dsr.setFromArtifact(art1);
-		dsr.setToArtifact(art2);
-		dsr.setValue(diceSimScore);
-		relationService.save(csr);
-		relationService.save(dsr);
-		return cosineSimScore;
-	}
-	
 	
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
-		try {
+//		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
@@ -545,12 +519,12 @@ public class EcoreMetamodelServiceImpl extends
 		Resource resource = resSet.createResource(URI.createURI(basePath
 				+ "/compare.xmi"));
 		resource.getContents().add(comparison);
-		try {
-			resource.save(Collections.EMPTY_MAP);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new BusinessException();
-		}
+//		try {
+//			resource.save(Collections.EMPTY_MAP);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new BusinessException();
+//		}
 		SimilarityRelation sr = new SimilarityRelation();
 		sr.setFromArtifact(art1);
 		sr.setToArtifact(art2);
@@ -584,10 +558,10 @@ public class EcoreMetamodelServiceImpl extends
 		relationService.save(dsr);
 		
 		return simValue;
-		}catch(Exception e) {
-			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
-			return 0;
-		}
+//		}catch(Exception e) {
+//			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
+//			return 0;
+//		}
 	}
 	//region Cluster
 	@Override
