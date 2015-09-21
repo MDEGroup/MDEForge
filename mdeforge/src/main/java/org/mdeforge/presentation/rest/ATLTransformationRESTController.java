@@ -227,4 +227,14 @@ public class ATLTransformationRESTController {
 		}
 
 	}
+	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ATLTransformation> getATLTransformationByName(@PathVariable("name") String idArtifact) {
+		try {
+			ATLTransformation artifact = ATLtransformationService.findOneByName(idArtifact, user);
+			return new ResponseEntity<ATLTransformation>(artifact, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ATLTransformation>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+		
+	}
 }

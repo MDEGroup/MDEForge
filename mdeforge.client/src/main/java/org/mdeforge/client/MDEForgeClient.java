@@ -9,7 +9,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import org.apache.commons.codec.binary.Base64;
+import org.mdeforge.business.model.GridFileMedia;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -147,6 +150,14 @@ public abstract class MDEForgeClient {
 	public static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(Base64.encodeBase64(encoded));
+		
+	}
+	public static GridFileMedia setGridFileMedia(String path) throws IOException {
+		GridFileMedia gfm = new GridFileMedia();
+		int i =(path.lastIndexOf("/")==-1)?0:path.lastIndexOf("/");
+		gfm.setFileName(path.substring(i));
+		gfm.setContent(readFile(path));
+		return gfm;
 		
 	}
 	public String createIndex() throws Exception{

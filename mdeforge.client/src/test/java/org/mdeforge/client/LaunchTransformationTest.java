@@ -15,11 +15,30 @@ import org.mdeforge.business.model.wrapper.json.ArtifactList;
 public class LaunchTransformationTest {
 
 	private static ATLTransformationService atlTransformationService; 
+	private static EcoreMetamodelService ecoreMetamodelService; 
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
+	
+	@Test
+	public void addMetamodel () throws Exception {
+//		EcoreMetamodel emm = new EcoreMetamodel();
+//		emm.setName("Families");
+//		emm.setDescription("Test planned");
+//		emm.setOpen(true);
+//		ecoreMetamodelService.addEcoreMetamodel(emm, "temp/Families.ecore");
+		EcoreMetamodel emm2 = new EcoreMetamodel();
+		emm2.setName("Person");
+		emm2.setDescription("Test planned");
+		emm2.setOpen(true);
+		emm2 = ecoreMetamodelService.addEcoreMetamodel(emm2, "temp/Persons.ecore");
+		System.out.println("JURI " + emm2.getId());
+		
+	}
+	
 	
 	@Ignore
 	@Test

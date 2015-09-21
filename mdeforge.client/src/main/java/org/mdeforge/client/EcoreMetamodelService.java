@@ -45,6 +45,10 @@ public class EcoreMetamodelService extends ArtifactService {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/" + id);
 		return mapper.readValue(result, EcoreMetamodel.class);
 	}
+	public EcoreMetamodel getEcoreMetamodelByName(String name) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/byname/" + name);
+		return mapper.readValue(result, EcoreMetamodel.class);
+	}
 
 	public void addEcoreMetamodel(EcoreMetamodel metamodel) throws Exception {
 		ObjectNode on = mapper.valueToTree(metamodel);

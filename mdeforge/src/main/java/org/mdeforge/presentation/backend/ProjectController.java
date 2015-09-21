@@ -51,9 +51,10 @@ public class ProjectController {
 	@RequestMapping(value = "/create", method = { RequestMethod.GET })
 	public String create_start(@RequestParam("workspacename") String workspacename, org.springframework.ui.Model model) {
 		Project project = new Project();
-		//project.getWorkspaces().add(workspaceService.findByName(workspacename));
+		project.getWorkspaces().add(workspaceService.findByName(workspacename));
 		model.addAttribute("project", project);
-		return "project.create";
+		
+		return "private.use.project";
 	}
 
 	@RequestMapping(value = "/create", method = { RequestMethod.POST })

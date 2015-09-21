@@ -39,8 +39,12 @@ public class ModelService extends ArtifactService {
 	}
 	
 
-	public Model getETLTransformation(String id) throws Exception {
+	public Model getModel(String id) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/Model/" + id);
+		return mapper.readValue(result, Model.class);
+	}
+	public Model getModelByName(String name) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Model/byname/" + name);
 		return mapper.readValue(result, Model.class);
 	}
 	

@@ -134,7 +134,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c3.andOperator(c2.orOperator(c1, c4)));
+			query.addCriteria(c3.orOperator(c2,c1, c4));
 		} else
 			query.addCriteria(c3.orOperator(c1, c4));
 
@@ -146,6 +146,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		return artifact;
 	}
 
+	@Override
+	public T findOneByName(String name, User user) throws BusinessException {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("shared").in(user.getId());
+		Criteria c3 = Criteria.where("name").is(name);
+		Criteria c4 = Criteria.where("open").is(true);
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c3.andOperator(c2.orOperator(c1, c4)));
+		} else
+			query.addCriteria(c3.orOperator(c1, c4));
+
+		T artifact = operations.findOne(query, persistentClass);
+		if (artifact == null)
+			throw new BusinessException();
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
+		
+		return artifact;
+	}
+	
 	@Override
 	public List<T> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);

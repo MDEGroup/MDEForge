@@ -3,6 +3,7 @@ package org.mdeforge.business.model;
 
 import org.mdeforge.business.model.serializer.json.ArtifactSerializer;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -23,9 +24,11 @@ public abstract class Relation implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = -2298710946943068240L;
 
-	@JsonSerialize(using = ArtifactSerializer.class)
+	@JsonIgnoreProperties({"name", "description", "relations", "projects", "workspaces"
+		, "shared", "metrics", "author", "" })
 	private Artifact toArtifact;
-	@JsonSerialize(using = ArtifactSerializer.class)
+	@JsonIgnoreProperties({"name", "description", "relations", "projects", "workspaces"
+		, "shared", "metrics", "author", "" })
 	private Artifact fromArtifact;
 	public Artifact getToArtifact() {
 		return toArtifact;

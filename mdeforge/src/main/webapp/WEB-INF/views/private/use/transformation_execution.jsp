@@ -56,7 +56,7 @@
 													    	<c:choose>
 													    		<c:when 
 													    			test="${relation.getToArtifact().getId() == conformance.getToArtifact().getId()}">
-													    			<option value="${model.id}">${conformance.getToArtifact().getName()}</option>
+													    			<option value="${model.id}">${conformance.getFromArtifact().getName()}</option>
 													    		</c:when>
 													    	</c:choose>
 												        </c:forEach>

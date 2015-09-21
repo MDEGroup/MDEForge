@@ -19,6 +19,8 @@ public class Model extends Artifact {
 	private boolean valid;
 
 	private String nsuri;
+
+	private String uri;
 	/**
 	 * A toString method which prints the values of all EAttributes of this
 	 * instance. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -46,6 +48,12 @@ public class Model extends Artifact {
 		this.valid = valid;
 	}
 
-	
+	public String getUri() {
+		return uri;
+	}
+
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 	
 }

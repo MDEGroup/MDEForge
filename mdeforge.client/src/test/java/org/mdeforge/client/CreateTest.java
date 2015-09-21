@@ -39,11 +39,11 @@ public class CreateTest {
 		workspaceService.addWorkspace(w);
 	}
 	
-	@Ignore
+	
 	@Test
 	public void addProject() throws Exception {
 		Project p = new Project();
-		p.setName("Progetto di prova");
+		p.setName("Progetto di prova 3");
 		p.setWorkspaces(new ArrayList<Workspace>());
 		List<Workspace> ws = workspaceService.getWorkspaces();
 		for (Workspace workspace : ws) {
@@ -51,7 +51,7 @@ public class CreateTest {
 		}
 		projectService.addProject(p);
 	}
-
+	@Ignore
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();

@@ -9,4 +9,7 @@ public class ArtifactList extends ArrayList<Artifact> {
 	public ArtifactList(List<? extends Artifact> list) {
 		super(list); // may need a cast
 	}
+	public ArtifactList() {
+		super(new ArrayList<Artifact>()); // may need a cast
+	}
 }

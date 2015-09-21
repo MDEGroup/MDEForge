@@ -46,5 +46,9 @@ public class ATLTransformationService extends ArtifactService {
 		String result = doGetRequest(connectionUrl + "api/ATLTransformation/" + id);
 		return mapper.readValue(result, ATLTransformation.class);
 	}
+	public ATLTransformation getATLTransformationByName(String name) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ATLTransformation/byname/" + name);
+		return mapper.readValue(result, ATLTransformation.class);
+	}
 	
 }

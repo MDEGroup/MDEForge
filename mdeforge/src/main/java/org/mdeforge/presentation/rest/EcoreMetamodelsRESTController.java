@@ -187,6 +187,20 @@ public class EcoreMetamodelsRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+	// get single metamodel
+	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodelByName(
+			@PathVariable("name") String idEcoreMetamodel) {
+		try {
+			EcoreMetamodel ecoreMetamodel = (EcoreMetamodel) ecoreMetamodelService
+					.findOneByName(idEcoreMetamodel, user);
+			return new ResponseEntity<EcoreMetamodel>(ecoreMetamodel,
+					HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<EcoreMetamodel>(
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 
 	@RequestMapping(value = "/{id_ecoreMetamodel}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(

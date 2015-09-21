@@ -23,7 +23,7 @@ public class SearchTest {
 	}
 	@Ignore
 	@Test
-	public void getEcoreMetamodelsTest() throws Exception {
+	public void searchEcoreMetamodelsTest() throws Exception {
 		System.out.println("START AT: " + new Date());
 		EcoreMetamodel emm = new EcoreMetamodel();
 		emm.setName("Example.ecore");

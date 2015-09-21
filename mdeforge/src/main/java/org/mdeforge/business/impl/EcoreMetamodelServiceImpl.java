@@ -160,6 +160,11 @@ public class EcoreMetamodelServiceImpl extends
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
 		}
+		try {
+			artifact.setMetrics(getMetrics(artifact));
+		} catch (Exception e) {
+			logger.error("Some errors when try to calculate metric for metamodel");
+		}
 		artifactRepository.save(artifact);
 		return result;
 	}
@@ -361,6 +366,26 @@ public class EcoreMetamodelServiceImpl extends
 		ecoreMetamodel.getFile();
 		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
+		File fileName = new File(path);
+		URI uri = URI.createFileURI(fileName.getAbsolutePath());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		ResourceSet rs = new ResourceSetImpl();
+		// enable extended metadata
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		Resource r = rs.getResource(uri, true);
+		List<EObject> eObject = r.getContents();
+		for (EObject eObject2 : eObject) {
+			if (eObject2 instanceof EPackage) {
+				EPackage p = (EPackage) eObject2;
+				registerSubPackage(p);
+			}
+		}
+	}
+	@Override
+	public void registerMetamodel(String ecoreMetamodel)
+			throws BusinessException {
+		String path = ecoreMetamodel;
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
@@ -874,8 +899,7 @@ public class EcoreMetamodelServiceImpl extends
 		Graphics2D g = bi.createGraphics();
 		dp.paint(g);
 		dp.print(g);
-		File outputfile = new File(
-				"/Users/juridirocco/Desktop/tempForge/JJJJ.jpg");
+		File outputfile = new File(basePath + "/hcluster.jpg");
 		try {
 			ImageIO.write(bi, "jpg", outputfile);
 		} catch (IOException e) {

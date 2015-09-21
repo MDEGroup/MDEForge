@@ -9,6 +9,7 @@ import org.mdeforge.business.model.serializer.json.RelationListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
+import org.mdeforge.business.model.wrapper.json.RelationList;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -46,8 +47,7 @@ public class Artifact implements java.io.Serializable{
 //	private @TextIndexed(weight=1) String extractedContents = null;
 //	private @TextScore Float score;
 
-	@JsonSerialize(using = RelationListSerializer.class)
-	private List<Relation> relations = new ArrayList<Relation>();
+	private RelationList relations = new RelationList(new ArrayList<Relation>());
 	@JsonSerialize(using = ProjectListSerializer.class)
 	private List<Project> projects = new ArrayList<Project>();
 	@JsonSerialize(using = UserListSerializer.class)
@@ -81,11 +81,11 @@ public class Artifact implements java.io.Serializable{
 		this.metrics = metrics;
 	}
 
-	public List<Relation> getRelations() {
+	public RelationList getRelations() {
 		return relations;
 	}
 	
-	public void setRelations(List<Relation> newRelations) {
+	public void setRelations(RelationList newRelations) {
 		relations = newRelations;
 	}
 

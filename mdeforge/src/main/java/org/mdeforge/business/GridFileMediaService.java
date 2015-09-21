@@ -1,5 +1,6 @@
 package org.mdeforge.business;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.mdeforge.business.model.Artifact;
@@ -17,5 +18,7 @@ public interface GridFileMediaService {
 	byte[] getFileByte(Artifact artifact) throws BusinessException;
 
 	InputStream getFileInputStream(Artifact artifact) throws BusinessException;
+
+	GridFileMedia createObjectFromFile(String fileName) throws IOException;
 	
 }

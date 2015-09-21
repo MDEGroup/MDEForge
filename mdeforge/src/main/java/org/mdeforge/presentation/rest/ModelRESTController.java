@@ -163,6 +163,15 @@ public class ModelRESTController {
 			return new ResponseEntity<Model>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<Model> getModelByName(@PathVariable("name") String idModel) {
+		try {
+			Model model = (Model) modelService.findOneById(idModel, user);
+			return new ResponseEntity<Model>(model, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<Model>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 
 	@RequestMapping(value = "/{id_model}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteModel(@PathVariable("id_model") String idModel) {

@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.GridFileMediaService;
@@ -51,6 +53,16 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		id.setByteArray(readData(dbFile));
 		return id;
 	}
+	
+	@Override 
+	public GridFileMedia createObjectFromFile (String tempFilePath) throws IOException {
+		GridFileMedia gfr = new GridFileMedia();
+		gfr.setFileName(tempFilePath);
+		java.nio.file.Path path = Paths.get(tempFilePath);
+		byte[] data = Files.readAllBytes(path);
+		gfr.setByteArray(data);
+		return gfr;
+	}
 
 	private static byte[] readData(GridFSDBFile dbFile) {
 		byte[] data = new byte[0];
@@ -95,9 +107,11 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 			out.close();
 			return path;
 		} catch (FileNotFoundException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
 
 	}

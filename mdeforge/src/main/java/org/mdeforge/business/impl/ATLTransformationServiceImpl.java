@@ -27,6 +27,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.m2m.atl.common.ATLExecutionException;
+import org.eclipse.m2m.atl.common.ATLResourceProvider;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
 import org.eclipse.m2m.atl.core.IInjector;
@@ -38,9 +39,11 @@ import org.eclipse.m2m.atl.core.emf.EMFInjector;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
+import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceFactoryImpl;
 import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
+import org.eclipse.xsd.ecore.EcoreSchemaBuilder;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -68,6 +71,8 @@ import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.ATLTransformationRepository;
 import org.mdeforge.integration.MetricRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,11 +93,15 @@ public class ATLTransformationServiceImpl extends
 	private MetricRepository metricRepository;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-	
+	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
 	@Override
 	public ATLTransformation findOnePublic(String id) {
 		ATLTransformation a = super.findOnePublic(id);
-		a.setMetrics(getMetrics(a));
+		try {
+			a.setMetrics(getMetrics(a));
+		} catch (BusinessException e) {
+			logger.error(e.getMessage());
+		}
 		return a;
 	}
 	
@@ -188,21 +197,21 @@ public class ATLTransformationServiceImpl extends
 		 * Load metamodels
 		 */
 		try {
-			EcoreMetamodel atlMetamodel = (EcoreMetamodel) artifactRepository.findOne("552bbd09d4c659da8e19eca5");
-			//ecoreMetamodelService.registerMetamodel(atlMetamodel);
+			
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 
-			injector.inject(inputMetamodel, gridFileMediaService.getFilePath(atlMetamodel));
+			injector.inject(inputMetamodel, basePath + "ATL.ecore");
 
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
 			String transfPath = inject((ATLTransformation) AtlTransformation);
 			FileInputStream fis = new FileInputStream(transfPath);
-			
-			
+
 			injector.inject(inputModel, fis, null);
+			
+			
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "ATL");
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
@@ -219,13 +228,14 @@ public class ATLTransformationServiceImpl extends
 					AtlTransformation);
 			File temp2 = new File("sampleCompany_Cut.xmi");
 			metricRepository.save(result);
-			fis.close();
 			temp2.delete();
 			return result;
 		} catch (ATLCoreException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
 	}
 
@@ -321,11 +331,16 @@ public class ATLTransformationServiceImpl extends
 
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
-		List<Metric> metricList = metricRepository
-				.findByArtifactId(new ObjectId(emm.getId()));
-		if (metricList.size() == 0)
-			metricList = calculateMetrics(emm);
-		return metricList;
+		try{
+			List<Metric> metricList = metricRepository
+			
+					.findByArtifactId(new ObjectId(emm.getId()));
+			if (metricList.size() == 0)
+				metricList = calculateMetrics(emm);
+			return metricList;
+		} catch (NullPointerException e) {
+			throw new BusinessException("No artifact found");
+		}
 	}
 
 	@Override
@@ -350,26 +365,6 @@ public class ATLTransformationServiceImpl extends
 		}
 	}
 
-//	private AtlResourceImpl getATLModelObject(ATLTransformation ATLFile) {
-//
-//		AtlResourceImpl ri = new AtlResourceImpl();
-//		ResourceSet rs = new ResourceSetImpl();
-//		rs.getResources().add(ri);
-//		try {
-//			ri.load(gridFileMediaService.getFileInputStream(ATLFile), null);
-//			Resource xmiRes = rs.createResource(URI.createURI("jjjj.xmi"));
-//			xmiRes.getContents().addAll(ri.getContents());
-//			return ri;
-//		} catch (FileNotFoundException e) {
-//			throw new BusinessException();
-//		} catch (IOException e) {
-//			throw new BusinessException();
-//		}
-//	}
-
-	/*
-	 * BASCIANI
-	 */
 
 	private List<Model> doTransformation(ATLTransformation transformation,
 			List<DomainConformToRelation> inputRelation,
@@ -440,11 +435,7 @@ public class ATLTransformationServiceImpl extends
 			model.setCreated(new Date());
 			model.getRelations().add(cfr);
 			
-			GridFileMedia gfr = new GridFileMedia();
-			gfr.setFileName(fileName);
-			java.nio.file.Path path = Paths.get(tempModelPath);
-			byte[] data = Files.readAllBytes(path);
-			gfr.setByteArray(data);
+			GridFileMedia gfr = gridFileMediaService.createObjectFromFile(tempModelPath);
 			
 			model.setFile(gfr);
 			modelService.create(model);
