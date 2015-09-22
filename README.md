@@ -1,5 +1,5 @@
 # MDEForge
-MDEForge is anextensible Web-based modeling platform specifically conceived to foster a community-based modeling repository, which underpins the development, analysis and reuse of modeling artifacts. Moreover, it enables the adoption of model management tools as software-as-a-service that can be remotely used without overwhelming the users with intricate and error-prone installation and configuration procedures.
+MDEForge is an extensible Web-based modeling platform specifically conceived to foster a community-based modeling repository, which underpins the development, analysis and reuse of modeling artifacts. Moreover, it enables the adoption of model management tools as software-as-a-service that can be remotely used without overwhelming the users with intricate and error-prone installation and configuration procedures.
 
 # MDEForge Platform
 MDEForge platform consists of a number of services that can be used by means of both a Web access and programmatic interfaces (API) that enable their adoption as software as a service. In particular, core services are provided to enable the management of modeling artifacts, namely transformations, models, metamodels, and editors. Atop of such core services, extensions can be developed to add new functionalities.
