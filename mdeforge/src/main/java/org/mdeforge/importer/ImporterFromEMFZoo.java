@@ -1,11 +1,9 @@
 package org.mdeforge.importer;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -14,7 +12,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Property;
@@ -88,7 +85,9 @@ public class ImporterFromEMFZoo {
 					try {
 						complete = false;
 						emm.setAuthor(usr);
-						ecoreMetamodelService.create(emm);
+						
+						if((!emm.getName().equals("Measure 2.0")) && (!emm.getName().equals("Requirement 1.0")))
+							ecoreMetamodelService.create(emm);
 					} catch (Exception e1) {
 						System.err.println(emm.getName());
 					}

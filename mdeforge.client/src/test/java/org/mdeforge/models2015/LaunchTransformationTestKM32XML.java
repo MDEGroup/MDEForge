@@ -76,6 +76,7 @@ public class LaunchTransformationTestKM32XML {
 		dct.setName("IN");
 		transformation.getRelations().add(cdct);
 		transformation.getRelations().add(dct);
+		transformation.setOpen(true);
 		atlTransformationService.addATLTransformation(transformation, "temp/models2015/KM32XML/KM32XML.atl");
 		
 	}

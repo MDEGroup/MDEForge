@@ -124,7 +124,7 @@
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery-slimScroll/jquery.slimscroll.min.js"></script>
 	
 	<!-- Common Demo Script -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/common.js?1373029331"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/common.js"></script>
 	
 	<!-- Holder Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/holder/holder.js"></script>

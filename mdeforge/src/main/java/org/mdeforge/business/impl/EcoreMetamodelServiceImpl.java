@@ -176,13 +176,15 @@ public class EcoreMetamodelServiceImpl extends
 		
 		EList<EObject> contents = load_resource.getContents();
 		String result = ResourceSerializer.serialize(load_resource);
-		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
-		res.getContents().addAll(contents);
-		try {
-			res.save(null);
-		} catch (IOException e) {
-			throw new BusinessException();
-		}
+		//TODO handle connection
+//		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+//		res.getContents().addAll(contents);
+//		try {
+//			res.save(null);
+//			
+//		} catch (IOException e) {
+//			throw new BusinessException();
+//		}
 		return result;
 	}
 
@@ -587,10 +589,6 @@ public class EcoreMetamodelServiceImpl extends
 		relationService.save(dsr);
 		
 		return simValue;
-//		}catch(Exception e) {
-//			System.out.println("ERROR from" + art1.getName() + "_" + art1.getId() + " to " + art2.getName() + "_" + art2.getId());
-//			return 0;
-//		}
 	}
 	//region Cluster
 	@Override
@@ -992,13 +990,13 @@ public class EcoreMetamodelServiceImpl extends
 			double d = calculateContainment(ecoreMetamodel, searchSample);
 			list.put(d, ecoreMetamodel);
 		}
-		System.out.println(list.size());
+		logger.info(list.size() + "");
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
 		int i = 0;
 		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
 			  EcoreMetamodel value = entry.getValue();
-			  System.out.println("score: " + entry.getKey());
-			  System.out.println("metamodel" + entry.getValue().getName());
+			  logger.info("score: " + entry.getKey());
+			  logger.info("metamodel" + entry.getValue().getName());
 			  result.add(value);
 			  if(i++ > 10)
 				  break;

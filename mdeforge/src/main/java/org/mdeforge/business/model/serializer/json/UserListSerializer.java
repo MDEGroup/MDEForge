@@ -19,6 +19,9 @@ public class UserListSerializer extends JsonSerializer<List<User>> {
 		for (User user : arg0) {
 			jgen.writeStartObject();
 	        jgen.writeStringField("id", user.getId());
+	        jgen.writeStringField("firstname", user.getUsername() );
+	        jgen.writeStringField("lastname", user.getUsername() );
+	        jgen.writeStringField("email", user.getUsername() );
 	        jgen.writeStringField("username", user.getUsername() );
 	        jgen.writeEndObject();
 		}

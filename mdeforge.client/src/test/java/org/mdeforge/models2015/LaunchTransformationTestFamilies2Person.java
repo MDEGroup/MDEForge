@@ -1,6 +1,5 @@
 package org.mdeforge.models2015;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
@@ -65,6 +64,7 @@ public class LaunchTransformationTestFamilies2Person {
 		dct.setName("IN");
 		transformation.getRelations().add(cdct);
 		transformation.getRelations().add(dct);
+		transformation.setOpen(true);
 		atlTransformationService.addATLTransformation(transformation, "temp/models2015/Families2Persons/Families2Persons.atl");
 
 	}

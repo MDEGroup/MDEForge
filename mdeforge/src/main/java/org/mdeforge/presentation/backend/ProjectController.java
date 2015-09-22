@@ -14,15 +14,17 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/project")
+@RequestMapping("/private/project")
 public class ProjectController {
 	
 	@Autowired
@@ -115,10 +117,12 @@ public class ProjectController {
 	
 	
 	
-	@RequestMapping("/detail")
-	public String artifactlist(org.springframework.ui.Model model, @RequestParam("projectname") String projectname) {
-		model.addAttribute("projectname",projectname);
-		return "project.detail";
+	@RequestMapping(value = "/{id}", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public Project artifactlist(@PathVariable("id") String id) {
+		Project p = projectService.findById(id, user);
+		return p;
 	}
 	
 	

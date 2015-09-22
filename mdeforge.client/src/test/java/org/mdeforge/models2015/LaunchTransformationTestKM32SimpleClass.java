@@ -32,7 +32,7 @@ public class LaunchTransformationTestKM32SimpleClass {
 	/*
 	 * Load metamodel and transformations
 	 */
-	@Ignore
+	
 	@Test
 	public void loadDataATLTransformationSimpleClass2SimpleRDBMS () throws Exception {
 		
@@ -62,7 +62,7 @@ public class LaunchTransformationTestKM32SimpleClass {
 		
 	}
 	
-	
+	@Ignore
 	@Test
 	public void executeMySimpleClass2SimpleRDBMS() throws Exception {
 		

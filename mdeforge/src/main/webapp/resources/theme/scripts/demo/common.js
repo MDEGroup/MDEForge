@@ -335,14 +335,42 @@ $(function()
 			$(this).find('select').select2();
 		
 		equalHeight($(this).find('.row-merge > [class*="span"]'));
+		
 		$(this).on('click', '.listWrapper li:not(.active)', function()
 		{
 			var p = $(this).parents('.widget-employees:first');
 			p.find('.listWrapper li').removeClass('active');
 			$(this).addClass('active');
-			p.find('.ajax-loading').stop().fadeIn(1000, function(){
-				setTimeout(function(){ p.find('.ajax-loading').fadeOut(); }, 1000);
-			});
+			var id = $(this).attr('id');
+			$.ajax({
+				
+				url : "/mdeforge/private/project/" + id,
+				success : function(data) {
+					console.log(data);
+					$('#users').empty();
+					console.log(data.artifacts)
+					if (data.users.length > 1)
+						$('#sharedNumber').text(data.users.length + " users");
+					else
+						$('#sharedNumber').text(data.users.length + " user");
+					if (data.artifacts.length > 1)
+						$('#artifactsNumber').text(data.artifacts.length + " artifacts");
+					else
+						$('#artifactsNumber').text(data.artifacts.length + " artifact");
+					$.each(data.users, function(i, user) {
+						console.log('Juri');
+						$('#users').append('<li><span class="crt">1</span><span class="strong">' +
+								           user.firstname + '  ' + user.lastname + '</span>' + 
+								           '<span class="muted"><a href="mailto:'+ user.email +
+								           '">'+ user.username +' <i class="icon-envelope"></i></a></span></li>');
+					})		
+					$('#projectName').text(data.name);
+				},
+				error : function error(data) {
+					$('#projectName').text(data);
+					alert("error")
+				}
+			})
 		});
 	});
 	

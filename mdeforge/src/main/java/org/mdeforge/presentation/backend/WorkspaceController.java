@@ -54,6 +54,15 @@ public class WorkspaceController {
 		model.addAttribute("workspace", workspace);
 		return "private.use.workspace_details";
 	}
+	@RequestMapping("/project")
+	public String workspaceProjectsDetails(Model model, @RequestParam String id, @RequestParam String idProject) {
+		
+		Workspace workspace = workspaceService.findById(id, user);
+		Project project = projectService.findById(idProject, user);
+		model.addAttribute("workspace", workspace);
+		model.addAttribute("project", project);
+		return "private.use.workspace_details";
+	}
 
 	@RequestMapping("/list")
 	public String elenco(Model model) {

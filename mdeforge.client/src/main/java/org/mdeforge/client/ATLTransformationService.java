@@ -20,6 +20,10 @@ public class ATLTransformationService extends ArtifactService {
 	public void addATLTransformation(ATLTransformation transformation, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setContent(MDEForgeClient.readFile(file));
+		if (file.lastIndexOf("/") == -1)
+			gfm.setFileName(file);
+		else
+			gfm.setFileName(file.substring(file.lastIndexOf("/")));
 		transformation.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(transformation);
 		doPostRequest(connectionUrl + "api/ATLTransformation/", on);
