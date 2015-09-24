@@ -338,12 +338,13 @@ $(function()
 			url : "/mdeforge/private/workspace/" + idWorkspace + "/remove/" + idProject,
 			success : function(data) {
 				$('#' + idProject).remove();
-				console.log(nameProject);
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
+				$('#workspaceDetailsDiv').hidde();
 			},
 			error : function error(data) {
 				$('#' + idProject).remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
+				$('#workspaceDetailsDiv').hidde();
 			}
 			
 		});
@@ -397,7 +398,7 @@ $(function()
 				
 			},
 			error : function error(data) {
-				console.log('error: '+ data);
+				console.log('error');
 			}
 			
 		});
@@ -518,7 +519,6 @@ $(function()
 				success : function(data) {
 					$.each(data, function(i, model){
 						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
-						console.log(model);
 					});
 				},
 				error : function error(data) {
@@ -529,6 +529,26 @@ $(function()
 		}
 		else {
 			$('#modelToAdd').hide();
+		}
+	});
+	$(document).on('click','#showUserList',function(event){
+		$('#userSelect').empty();
+		if ($('#userList').css('display') == 'none') {
+			$.ajax({
+				url : "/mdeforge/private/user/list",
+				success : function(data) {
+					$.each(data, function(i, model){
+						$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
+					});
+				},
+				error : function error(data) {
+					console.log('error');
+				}
+			});
+			$('#userList').show();
+		}
+		else {
+			$('#userList').hide();
 		}
 	});
 	
@@ -558,6 +578,28 @@ $(function()
 		});
 	});
 	
+	$(document).on('click','#addUser', function(event){
+		var idUser = $('#userSelect').val();
+		var nameModel = $("#userSelect option:selected").text();
+		var idProject = $("#projectId").data('id');
+		$.ajax({
+			url : "/mdeforge/private/project/" + idProject + "/addUser/" + idUser,
+			success : function(data) {
+				$('#users').append('<li data-id="' + data.id + '" class="sharedUser"><span class="crt"></span><span class="strong">' +
+						data.firstname + '  ' + data.lastname + '</span>' + 
+				           '<span class="muted"><a href="mailto:'+ data.email +
+				           '">'+ data.username +' <i class="icon-envelope"></i></a>' +
+				           '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + data.id + '" ></span>' +
+				           '</span></li>');
+				$("#userSelect option[value='" + idUser + "']").remove();
+				$('#userList').hide();
+			},
+			error : function error(data) {
+				console.log('error')
+			}
+		});
+	});
+	
 	
 	$(document).on('click', '.removeArtifact', function(event){
 		var idArtifact = $(this).data('id');
@@ -565,11 +607,9 @@ $(function()
 		$.ajax({
 			url : "/mdeforge/private/project/" + idProject + "/remove/" + idArtifact,
 			success : function(data) {
-				console.log($('#' + idArtifact));
 				$('#' + idArtifact).remove();
 			},
 			error : function error(data) {
-				console.log($('#' + idArtifact));
 				$('#' + idArtifact).remove();
 			}
 			
@@ -614,12 +654,11 @@ $(function()
 		$.ajax({
 			url : "/mdeforge/private/project/" + idProject + "/removeUser/" + idUser,
 			success : function(data) {
-				console.log('ok');
 				$('.sharedUser[data-id="'+ idUser +'"]').remove();
 				
 			},
 			error : function error(data) {
-				console.log('ko');
+				console.log('error');
 				$('.sharedUser[data-id="'+ idUser +'"]').remove();
 				
 			}

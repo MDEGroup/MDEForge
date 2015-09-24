@@ -36,4 +36,6 @@ public interface ProjectService {
 
 	void removeUserFromProject(String idUser, String idProject, User user) throws BusinessException;
 
+	User addUserInProject(String idUser, String idProject, User user);
+
 }

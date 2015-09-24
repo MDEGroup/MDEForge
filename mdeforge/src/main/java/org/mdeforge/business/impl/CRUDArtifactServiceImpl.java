@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.BusinessException;
@@ -421,7 +422,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public List<T> findAllWithPublicByUser(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.id").is(user.getId());
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
 		Criteria c2 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
 			Criteria c3 = Criteria.where("_class").is(

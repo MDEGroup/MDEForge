@@ -11,7 +11,6 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
@@ -276,6 +275,17 @@ public class ProjectServiceImpl implements ProjectService {
 		proj.getArtifacts().add(emm);
 		projectRepository.save(proj);
 		artifactRepository.save(emm);
+	}
+
+	@Override
+	public User addUserInProject(String idUser, String idProject, User user) {
+		Project proj = findById(idProject, user);
+		User us = userService.findOne(idUser);
+		us.getSharedProject().add(proj);
+		proj.getUsers().add(us);
+		userRepository.save(us);
+		projectRepository.save(proj);
+		return us;
 	}
 
 }

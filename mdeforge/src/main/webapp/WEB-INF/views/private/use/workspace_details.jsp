@@ -153,9 +153,17 @@
 									</ul>
 								</div>
 								<div class="span8" id="userDiv" style="display: none;">
-									<h5 class="text-uppercase strong text-primary"><i class="icon-group text-regular icon-fixed-width"></i> Shared with <span class="text-lowercase padding-none" id="sharedNumber">(2 people)</span></h5>
+									<h5 class="text-uppercase strong text-primary"><i class="icon-group text-regular icon-fixed-width"></i> 
+										Shared with <span class="text-lowercase padding-none" id="sharedNumber">(2 people)</span>
+										<i class="icon-expand-alt" id="showUserList"></i>
+									</h5>
 									<ul class="team" id="users">
 									</ul>
+									<div id="userList" class="row-fluid" style="display: none">
+										<select id="userSelect">
+										</select>
+										<div><span class="btn btn-block btn-primary span4" id="addUser">Add</span></div>
+									</div>
 								</div>
 							</div>
 						</div>

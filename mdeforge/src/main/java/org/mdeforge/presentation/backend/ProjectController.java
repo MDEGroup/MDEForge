@@ -79,6 +79,16 @@ public class ProjectController {
 			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+	
+	@RequestMapping(value = "/{idProject}/addUser/{idUser}", method=RequestMethod.GET)
+	public @ResponseBody HttpEntity<User> addUserInProject(@PathVariable("idUser") String idUser, @PathVariable("idProject") String idProject) {
+		try {
+			User u = projectService.addUserInProject(idUser, idProject, user);
+			return  new ResponseEntity<User>(u, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<User>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 		
 	@RequestMapping("/list")
 	public String elenco(org.springframework.ui.Model model, @RequestParam("workspacename") String workspacename) {
