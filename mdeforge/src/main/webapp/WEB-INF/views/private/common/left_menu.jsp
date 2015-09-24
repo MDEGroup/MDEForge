@@ -13,15 +13,16 @@
 			
 			<!-- Regular Size Menu -->
 			<ul>
-				<li><a class="glyphicons share_alt" href="${pageContext.request.contextPath}/private/use/"><i></i>Shared project</a></li>
-				<li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/use/"><i></i>Shared artifact</a></li>
-<!-- 				<li> -->
-<%-- 					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.workspace"/> <span class="icon-chevron-right"></span></a> --%>
-<!-- 					<ul class="dropdown-menu pull-left">	 -->
-
-<!-- 					</ul> -->
-<!-- 				</li> -->
 				<li class="active dropdown dd-1">
+					<a href="" data-toggle="dropdown" class="glyphicons share_alt"><i></i>Shared <span class="icon-chevron-right"></span></a>
+					<ul class="dropdown-menu pull-left">											
+						<li><a class="glyphicons file" href="${pageContext.request.contextPath}/private/shared_projects/"><i></i>Projects</a></li>
+						<li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/shared_artifacts/"><i></i>Artifacts</a></li>						
+					</ul>
+				</li>
+				
+ 				<li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li>
+				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.workspace"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<c:forEach items="${workspaces_list}" var="workspace">

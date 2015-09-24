@@ -36,16 +36,38 @@ public class ATLPrivateController {
 	private UserService userService;
 
 	
-	@RequestMapping(value = "/list", method=RequestMethod.GET, 
-            produces= MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/list", method=RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
 	public @ResponseBody List<ATLTransformation> getEcoreMetamodel () {
 		List<ATLTransformation> list = aTLTransformationService.findAllWithPublicByUser(user);
 		return list;
 	}
 	
-
-	@RequestMapping(value = "/use/execute_transformation", method = { RequestMethod.GET })
+	@RequestMapping(value = "/transformation_details", method = { RequestMethod.GET })
 	public String transformationDetails(Model model, @RequestParam String transformation_id) {
+
+		ATLTransformation atlTransformation = aTLTransformationService.findOnePublic(transformation_id);
+		
+		model.addAttribute("atlTransformation", atlTransformation);
+		
+		String pathToDownload = gridFileMediaService.getFilePath(atlTransformation);
+		File atlTransformationFile = new File(pathToDownload);
+		model.addAttribute("atlTransformationFile", atlTransformationFile);
+
+		return "private.use.transformation_details";
+	}
+	
+	@RequestMapping(value = "/transformation_list", method = { RequestMethod.GET })
+	public String transformationsList(Model model) {
+
+		//TODO al momento prende tutte le trasfrmazioni ma devo prendere SOLO quelle dell'utente loggato
+		List<ATLTransformation> transformationsList = aTLTransformationService.findAll();
+		model.addAttribute("transformationsList", transformationsList);
+
+		return "private.use.transformation_list";
+	}
+	
+	@RequestMapping(value = "/execute_transformation", method = { RequestMethod.GET })
+	public String transformationExecution(Model model, @RequestParam String transformation_id) {
 		
 		//TODO ancora da implementare!
 
@@ -57,9 +79,10 @@ public class ATLPrivateController {
 		List<org.mdeforge.business.model.Model> models = modelService.findByTransformation(atlTransformation);
 		model.addAttribute("atlTransformationFile", atlTransformationFile);
 		model.addAttribute("models", models);
+		
 		return "private.use.transformation_execution";
 	}
-	@RequestMapping(value = "/use/result_transformation", method = { RequestMethod.POST })
+	@RequestMapping(value = "/result_transformation", method = { RequestMethod.POST })
 	public String transformationResult(Model model, @RequestParam String transformation_id, @RequestParam List<String> models_in) {
 		List<org.mdeforge.business.model.Model> models = new ArrayList<org.mdeforge.business.model.Model>();
 		for (String modelId : models_in) {
