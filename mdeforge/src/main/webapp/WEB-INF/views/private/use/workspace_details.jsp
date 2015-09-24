@@ -1,123 +1,6 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<meta charset="UTF-8" />
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE" />
 
-<!-- Bootstrap -->
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/css/bootstrap.css"
-	rel="stylesheet" type="text/css" />
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/css/responsive.css"
-	rel="stylesheet" type="text/css" />
-<!-- Glyphicons Font Icons -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/fonts/glyphicons/css/glyphicons.css"
-	rel="stylesheet" />
-
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/theme/fonts/font-awesome/css/font-awesome.min.css">
-<!--[if IE 7]><link rel="stylesheet" href="${pageContext.request.contextPath}/resources/theme/fonts/font-awesome/css/font-awesome-ie7.min.css"><![endif]-->
-
-<!-- Uniform Pretty Checkboxes -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/pixelmatrix-uniform/css/uniform.default.css"
-	rel="stylesheet" />
-
-<!-- PrettyPhoto -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css"
-	rel="stylesheet" />
-
-<!-- JQuery -->
-<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
-<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-<!--[if lt IE 9]>
-      <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/html5shiv.js"></script>
-    <![endif]-->
-
-<!-- Bootstrap Extended -->
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/css/fileupload.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-wysihtml5/css/bootstrap-wysihtml5-0.0.2.css"
-	rel="stylesheet">
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-select/bootstrap-select.css"
-	rel="stylesheet" />
-<link
-	href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"
-	rel="stylesheet" />
-
-<!-- DateTimePicker Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/bootstrap-datetimepicker/css/datetimepicker.css"
-	rel="stylesheet" />
-
-<!-- JQueryUI -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.min.css"
-	rel="stylesheet" />
-
-<!-- MiniColors ColorPicker Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/color/jquery-miniColors/jquery.miniColors.css"
-	rel="stylesheet" />
-
-<!-- Notyfy Notifications Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/notyfy/jquery.notyfy.css"
-	rel="stylesheet" />
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/notyfy/themes/default.css"
-	rel="stylesheet" />
-
-<!-- Gritter Notifications Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/css/jquery.gritter.css"
-	rel="stylesheet" />
-
-<!-- Easy-pie Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.css"
-	rel="stylesheet" />
-
-<!-- Google Code Prettify Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css"
-	rel="stylesheet" />
-
-<!-- Select2 Plugin -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/select2/select2.css"
-	rel="stylesheet" />
-
-<!-- Pageguide Guided Tour Plugin -->
-<!--[if gt IE 8]><!-->
-<link media="screen"
-	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/pageguide/css/pageguide.css"
-	rel="stylesheet" />
-<!--<![endif]-->
-
-<!-- Main Theme Stylesheet :: CSS -->
-<link
-	href="${pageContext.request.contextPath}/resources/theme/css/style-default.css?1373029313"
-	rel="stylesheet" type="text/css" />
-
-
-<!-- FireBug Lite -->
-<!-- <script src="https://getfirebug.com/firebug-lite-debug.js"></script> -->
-
-<!-- LESS.js Library -->
-<script
-	src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/less.min.js"></script>
 
 
 <!-- Breadcrumb START -->
@@ -133,7 +16,7 @@
 </ul>
 <!-- Breadcrumb END -->
 
-
+<div id="workspaceId" data-id="${workspace.getId()}"></div>
 <h3>
 	${workspace.getName() }
 </h3>
@@ -153,12 +36,32 @@
 			<div class="row-fluid row-merge">
 				<div class="span4 listWrapper">
 					<span class="results">${workspace.getProjects().size() } Project <i class="icon-circle-arrow-down"></i></span>
-					<ul class="list unstyled">
+					<div>
+						<span class="btn btn-block btn-primary span6" id="showProjectList">Add Project</span>
+						<span class="btn btn-block btn-primary" id="showProjectAdd">Create new Project</span>
+					</div>
+					<div id="projectsToAdd" class="row-fluid" style="display: none">
+						<div class="span6">
+							<select id="projectSelect">
+								<c:forEach items="${projects}" var="proj">
+									<option value="${proj.getId() }">${proj.getName()}</option>
+								</c:forEach>
+							</select>
+						</div>
+						<div class="span3"></div>
+						<div class="span3"><span class="btn btn-block btn-primary" id="addProject">Add</span></div>
+					</div>
+					<div id="createProject" class="row-fluid" style="display: none">
+						<div class="span6"><input type="text" placeholder="Project name" id="createProjectName"></div>
+						<div class="span3"></div>
+						<div class="span3"><span class="btn btn-block btn-primary" id="addNewProject">Create</span></div>
+					</div>
+					
+					<ul class="list unstyled autoscroll" id="projectList">
 						<c:forEach items="${workspace.projects}" var="proj">
-									<li id="${proj.getId() }">
-								
+							<li id="${proj.getId() }">
 								<div class="media innerAll">
-									<div class="media-object pull-left thumb"><img data-src="holder.js/51x51/dark" alt="Image" /></div>
+									<div class="pull-right glyphicons icon-remove remove-project" data-id="${proj.getId() }" data-name="${proj.getName() }"></div>
 									<div class="media-body">
 										<span class="strong">${proj.getName()}</span>
 										<span class="muted">Owner:</span>
@@ -175,11 +78,11 @@
 					<div class="ajax-loading hide">
 						<i class="icon-spinner icon-spin icon-4x"></i>
 					</div>
-					<div class="innerAll">
+					<div class="innerAll" id="workspaceDetailsDiv" style="display: none;">
 						<div class="title">
 							<div class="row-fluid">
-								<div class="span8">
-									<h3 class="text-primary" id="projectName">Adrian Demian</h3>
+								<div class="span8" id="projectId">
+									<h3 class="text-primary" id="projectName"></h3>
 								</div>
 								<div class="span4 text-right">
 									<p class="muted" id="artifactsNumber">4 projects</p>
@@ -190,25 +93,66 @@
 						<div class="body">
 							<div class="row-fluid">
 								<div class="span4">
-									<h5 class="strong">Ecore Metamodels</h5>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-									
+									<h5 class="strong">Ecore Metamodels  <i class="icon-expand-alt" id="showEcoreList"></i></h5>
+
+									<div id="ecoreToAdd" style="display: none">
+										<select class="span12" id="ecoreSelect">
+											<option value="pippo">pippo</option>
+										</select>
+										<div><span class="btn btn-block btn-primary" id="addEcore">Add</span></div>
+									</div>
+
+									<table class="table table-condensed" id="ecoreMMTable">
+									    <tbody>
+									        <tr>
+									            <td>Lorem ipsum dolor</td>
+									        </tr>
+									    </tbody>
+									</table>
+								</div>
+								<div class="span4">
+									<h5 class="strong">ATL Transformations  <i class="icon-expand-alt" id="showATLList"></i></h5>
+									<div id="ATLToAdd" style="display: none">
+										<select class="span12" id="ATLSelect">
+										</select>
+										<div><span class="btn btn-block btn-primary" id="addATL">Add</span></div>
+									</div>
+									<table class="table table-condensed" id="atlTable">
+									    <tbody>
+									        <tr>
+									            <td>Lorem ipsum dolor</td>
+									        </tr>
+									    </tbody>
+									</table>
 									
 								</div>
 								<div class="span4">
-									<h5 class="strong">Transformations</h5>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-									
+									<h5 class="strong">Models  <i class="icon-expand-alt" id="showModelList"></i></h5>
+									<div id="modelToAdd" style="display: none">
+										<select class="span12" id="modelSelect">
+										</select>
+										<div><span class="btn btn-block btn-primary" id="addModel">Add</span></div>
+									</div>
+									<table class="table table-condensed" id="modelTable">
+									    <tbody>
+									        <tr>
+									            <td>Lorem ipsum dolor</td>
+									        </tr>
+									    </tbody>
+									</table>
 									
 								</div>
+							</div>
+							<div class="row-fluid">
 								<div class="span4">
-									<h5 class="strong">Models</h5>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-									
-									
+									<h5 class="text-uppercase strong text-primary"><i class="icon-male text-regular icon-fixed-width"></i>Owner</h5>
+									<ul class="icons-ul">
+										<li id="ownerEmail"><i class="icon-envelope icon-li icon-fixed-width"></i></li>
+										<li id="ownerName"><i class="icon-phone icon-li icon-fixed-width"></i></li>
+										<li id="ownerUsername"><i class="icon-skype icon-li icon-fixed-width"></i></li>
+									</ul>
 								</div>
-								<div class="span4"></div>
-								<div class="span8">
+								<div class="span8" id="userDiv" style="display: none;">
 									<h5 class="text-uppercase strong text-primary"><i class="icon-group text-regular icon-fixed-width"></i> Shared with <span class="text-lowercase padding-none" id="sharedNumber">(2 people)</span></h5>
 									<ul class="team" id="users">
 									</ul>
@@ -222,6 +166,8 @@
 		</div>
 	</div>
 	<!-- // Widget END -->
+	</div>
+	
 
 
 

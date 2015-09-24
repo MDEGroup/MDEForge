@@ -12,11 +12,14 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class UserSerializer extends JsonSerializer<User> {
 
 	@Override
-	public void serialize(User arg0, JsonGenerator jgen, SerializerProvider arg2)
+	public void serialize(User user, JsonGenerator jgen, SerializerProvider arg2)
 			throws IOException, JsonProcessingException {
 		jgen.writeStartObject();
-        jgen.writeStringField("id", arg0.getId());
-        jgen.writeStringField("username", arg0.getUsername() );
+        jgen.writeStringField("id", user.getId());
+        jgen.writeStringField("firstname", user.getFirstname() );
+        jgen.writeStringField("lastname", user.getLastname() );
+        jgen.writeStringField("email", user.getEmail() );
+        jgen.writeStringField("username", user.getUsername() );
         jgen.writeEndObject();
 		
 	}

@@ -4,16 +4,19 @@ import java.util.List;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.integration.ArtifactRepository;
+import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
@@ -35,7 +38,12 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Autowired
+	private EcoreMetamodelRepository ecoreMetamodelRepository;
+	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
+	
+	@Autowired
+	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -216,6 +224,38 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public Project findOne(String id) throws BusinessException {
 		return projectRepository.findOne(id);
+	}
+
+	@Override
+	public void removeArtifactFromProject(String idArtifact, String idProject,
+			User user) throws BusinessException {
+		Project proj = findById(idProject, user);
+		Artifact art = null;
+		for (Artifact project : proj.getArtifacts()) {
+			if (project.getId().equals(idArtifact))
+				art = project;
+		}
+		
+		Project projTemp = null;
+		for (Project project : art.getProjects()) {
+			if (project.getId().equals(idProject))
+				projTemp = project;
+		}
+		proj.getArtifacts().remove(art);
+		art.getProjects().remove(projTemp);
+		artifactRepository.save(art);
+		projectRepository.save(proj);
+	}
+
+	@Override
+	public void addArtifactInProject(String idArtifact, String idProject,
+			User user) throws BusinessException {
+		Project proj = findById(idProject, user);
+		Artifact emm = artifactService.findOneById(idArtifact, user);
+		emm.getProjects().add(proj);
+		proj.getArtifacts().add(emm);
+		projectRepository.save(proj);
+		artifactRepository.save(emm);
 	}
 
 }

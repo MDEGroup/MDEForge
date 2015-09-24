@@ -9,16 +9,19 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/private")
+@RequestMapping("/private/ATLTransformation")
 public class ATLPrivateController {
 
 	@Autowired
@@ -32,6 +35,13 @@ public class ATLPrivateController {
 	@Autowired
 	private UserService userService;
 
+	
+	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<ATLTransformation> getEcoreMetamodel () {
+		List<ATLTransformation> list = aTLTransformationService.findAllWithPublicByUser(user);
+		return list;
+	}
 	
 
 	@RequestMapping(value = "/use/execute_transformation", method = { RequestMethod.GET })

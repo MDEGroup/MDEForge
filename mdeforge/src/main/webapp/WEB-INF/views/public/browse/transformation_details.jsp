@@ -255,7 +255,7 @@
 									</tr>
 							</table>
 							<a
-								href="${pageContext.request.contextPath}/private/use/execute_transformation?transformation_id=${atlTransformation.getId()}"
+								href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${atlTransformation.getId()}"
 								class="btn btn-success btn-small btn-block"><i
 								class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 						</div>

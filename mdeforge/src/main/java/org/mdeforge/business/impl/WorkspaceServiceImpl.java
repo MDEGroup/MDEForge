@@ -193,7 +193,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	}
 
 	@Override
-	public List<Workspace> findAllByUsernamme(User user)
+	public List<Workspace> findAllByUsername(User user)
 			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
@@ -204,12 +204,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 	@Override
 	public Workspace findOne(String id) {
-		// TODO Auto-generated method stub
 		return workspaceRepository.findOne(id);
 	}
 	@Override
 	public Workspace findOneWithUser(String id, String idUser) throws BusinessException{
-		// TODO Auto-generated method stub
 		Workspace workspace = workspaceRepository.findOne(id);
 		if (workspace.getOwner().getId().equals(idUser))
 			return workspace;
@@ -221,6 +219,53 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public List<Project> findProjectInWorkspace(String id, User user) {
 		Workspace w = findById(id, user);
 		return w.getProjects();
+	}
+
+	@Override
+	public void removeProjectFromWorkspace(String idProject, String idWorkspace, User user) {
+		Workspace w = findById(idWorkspace, user);
+		Project p = null;
+		for (Project project : w.getProjects()) {
+			if (project.getId().equals(idProject))
+				p = project;
+		}
+		w.getProjects().remove(p);
+		Workspace w1 = null;
+		for (Workspace workspace : p.getWorkspaces()) {
+			if (workspace.getId().equals(idWorkspace))
+				w1 = workspace;
+		}
+		p.getWorkspaces().remove(w1);
+		projectRepository.save(p);
+		workspaceRepository.save(w);
+	}
+
+	@Override
+	public Project addProjectInWorkspace(String idProject, String idWorkspace,
+			User user) throws BusinessException {
+		Workspace w = findById(idWorkspace, user);
+		Project p = projectSerivce.findById(idProject, user);
+		p.getWorkspaces().add(w);
+		w.getProjects().add(p);
+		projectRepository.save(p);
+		workspaceRepository.save(w);
+		return p;
+	}
+
+	@Override
+	public Project addNewProjectInWorkspace(String projectName,
+			String idWorkspace, User user) throws BusinessException {
+		user = userService.findOne(user.getId());
+		Workspace w = findById(idWorkspace, user);
+		Project p = new Project();
+		p.setName(projectName);
+		p.getWorkspaces().add(w);
+		p.setOwner(user);
+		p.getUsers().add(user);
+		projectRepository.save(p);
+		w.getProjects().add(p);
+		workspaceRepository.save(w);
+		return p;
 	}
 	
 //	@Override

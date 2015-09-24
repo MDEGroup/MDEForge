@@ -1,6 +1,8 @@
 package org.mdeforge.presentation.backend;
 
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ModelService;
@@ -14,7 +16,10 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +34,8 @@ public class ProjectController {
 	
 	@Autowired
 	private WorkspaceService workspaceService;
+	@Autowired
+	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Autowired
 	private ProjectService projectService;
@@ -43,7 +50,27 @@ public class ProjectController {
 	@Autowired
 	private EditorService editorService;
 	
+	@RequestMapping(value = "/{idProject}/remove/{idArtifact}", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
 	
+	public @ResponseBody HttpEntity<String> removeArtifactFromProject(@PathVariable("idProject") String idWorkspace, @PathVariable("idArtifact") String idProject) {
+		try {
+			projectService.removeArtifactFromProject(idProject, idWorkspace, user);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/{idProject}/add/{idArtifact}", method=RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> addArtifactInProject(@PathVariable("idArtifact") String idArtifact, @PathVariable("idProject") String idProject) {
+		try {
+			projectService.addArtifactInProject(idArtifact, idProject, user);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+		
 	@RequestMapping("/list")
 	public String elenco(org.springframework.ui.Model model, @RequestParam("workspacename") String workspacename) {
 		model.addAttribute("workspacename",workspacename);

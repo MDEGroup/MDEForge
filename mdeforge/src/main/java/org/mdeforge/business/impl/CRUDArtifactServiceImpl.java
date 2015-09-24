@@ -426,9 +426,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c3 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2, c3));
+			query.addCriteria(c3.orOperator(c2, c1));
 		} else
-			query.addCriteria(c1.andOperator(c2));
+			query.addCriteria(c1.orOperator(c2));
 		return n.find(query, persistentClass);
 	}
 

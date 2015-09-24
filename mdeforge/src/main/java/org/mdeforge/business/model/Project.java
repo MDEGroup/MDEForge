@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mdeforge.business.model.serializer.json.ArtifactListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
+import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -27,7 +28,8 @@ public class Project implements java.io.Serializable{
 	@DBRef(lazy = true)
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
-	@JsonIgnore
+	@DBRef
+	@JsonSerialize(using = UserSerializer.class)
 	private User owner;
 	@DBRef
 	@JsonSerialize(using = UserListSerializer.class)
@@ -35,7 +37,7 @@ public class Project implements java.io.Serializable{
 
 	@DBRef
 	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces;
+	private List<Workspace> workspaces = new ArrayList<Workspace>();;
 
 	private String name = null;
 

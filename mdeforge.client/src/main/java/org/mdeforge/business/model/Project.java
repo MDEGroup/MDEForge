@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mdeforge.business.model.serializer.json.ArtifactListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
+import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,6 +24,9 @@ public class Project implements java.io.Serializable{
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
 
+	@JsonSerialize(using = UserSerializer.class)
+	private User owner;
+	
 	@JsonSerialize(using = UserListSerializer.class)
 	private List<User> users = new ArrayList<User>();
 
@@ -77,5 +81,13 @@ public class Project implements java.io.Serializable{
 	public String toString() {
 		return "Project " + " [name: " + getName() + "]" + " [id: " + getId()
 				+ "]";
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 }

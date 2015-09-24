@@ -8,22 +8,31 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.presentation.validators.WorkspaceValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 @Controller
 // TODO cambiare il mapping
@@ -39,6 +48,40 @@ public class WorkspaceController {
 	@Autowired
 	private WorkspaceValidator workspaceValidator;
 
+	@RequestMapping(value = "/{idWorkspace}/remove/{idProject}", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	
+	public @ResponseBody HttpEntity<String> removeProjectFromWorkspace(@PathVariable("idWorkspace") String idWorkspace, @PathVariable("idProject") String idProject) {
+		try {
+			workspaceService.removeProjectFromWorkspace(idProject, idWorkspace, user);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	
+	@RequestMapping(value = "/{idWorkspace}/add/{idProject}", method=RequestMethod.GET, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+		public @ResponseBody HttpEntity<Project> addProjectInWorkspace(@PathVariable("idWorkspace") String idWorkspace, @PathVariable("idProject") String idProject) {
+		try {
+			Project p = workspaceService.addProjectInWorkspace(idProject, idWorkspace, user);
+			return  new ResponseEntity<Project>(p, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<Project>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/{idWorkspace}/addNew/{projectName}", method=RequestMethod.GET, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+	
+	public @ResponseBody HttpEntity<Project> addNewProjectInWorkspace(@PathVariable("idWorkspace") String idWorkspace, @PathVariable("projectName") String projectName) {
+		try {
+			Project p = workspaceService.addNewProjectInWorkspace(projectName, idWorkspace, user);
+			return  new ResponseEntity<Project>(p, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<Project>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model, @RequestParam String id) {
 
@@ -51,7 +94,11 @@ public class WorkspaceController {
 	public String details(Model model, @RequestParam String id) {
 
 		Workspace workspace = workspaceService.findById(id, user);
+		List<Project> pl = projectService.findByUser(user);
+		
 		model.addAttribute("workspace", workspace);
+		model.addAttribute("projects", pl);
+		
 		return "private.use.workspace_details";
 	}
 	@RequestMapping("/project")
@@ -67,7 +114,7 @@ public class WorkspaceController {
 	@RequestMapping("/list")
 	public String elenco(Model model) {
 		List<Workspace> workspaces_list = workspaceService
-				.findAllByUsernamme(user);
+				.findAllByUsername(user);
 		model.addAttribute("workspaces_list", workspaces_list);
 		return "private.use.workspace_list";
 	}

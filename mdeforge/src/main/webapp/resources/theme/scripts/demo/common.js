@@ -329,6 +329,244 @@ $(function()
 	// carousels
 	$('.carousel').carousel();
 	
+	$(document).on('click', '.remove-project', function(event){
+		event.stopPropagation();
+		var idProject = $(this).data('id');
+		var nameProject = $(this).data('name');
+		var idWorkspace = $("#workspaceId").data('id');
+		$.ajax({
+			url : "/mdeforge/private/workspace/" + idWorkspace + "/remove/" + idProject,
+			success : function(data) {
+				$('#' + idProject).remove();
+				console.log(nameProject);
+				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
+			},
+			error : function error(data) {
+				$('#' + idProject).remove();
+				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
+			}
+			
+		});
+	});
+	$('#showProjectList').click(function(event){
+		if ($('#projectsToAdd').css('display') == 'none') {
+			$('#projectsToAdd').show();
+			$('#showProjectList').text("Close");
+		}
+		else {
+			$('#projectsToAdd').hide();
+			$('#showProjectList').text("Add project");
+		}
+	});
+	$('#showProjectAdd').click(function(event){
+		if ($('#createProject').css('display') == 'none') {
+			$('#createProject').show();
+			$('#showProjectAdd').text("Cancel");
+		}
+		else {
+			$('#createProject').hide();
+			$('#showProjectAdd').text("Create new project");
+		}
+	});
+	
+	$(document).on('click', '#addNewProject', function(event){
+		event.stopPropagation();
+		var idProject = $('#createProjectName').val();
+		var nameProject = $(this).data('name');
+		var idWorkspace = $("#workspaceId").data('id');
+		$.ajax({
+			url : "/mdeforge/private/workspace/" + idWorkspace + "/addNew/" + idProject,
+			success : function(data) {
+				$('#projectList').append('<li id="'+ data.id + '">'+
+						'<div class="media innerAll">' +
+							'<div class="pull-right glyphicons icon-remove remove-project" data-id="' + data.id + 
+								'" data-name="' + data.name + '"></div>' +
+							'<div class="media-body">' +
+								'<span class="strong">' + data.name + '</span>' +
+								'<span class="muted">Owner:</span>' +
+								'<span class="muted">' + data.owner.username +
+									'<a href="mailto:' + data.owner.email + '"><i class="icon-envelope"></i></a>' +
+								'</span>' +
+							'</div>' +
+						'</div>' +
+						'</li>' +
+								'');
+			},
+			error : function error(data) {
+				console.log('error: '+ data);
+			}
+			
+		});
+	});
+	
+	$('#showEcoreList').click(function(event){
+		if ($('#ecoreToAdd').css('display') == 'none') {
+			$('#ecoreSelect').empty();
+			$.ajax({
+				url : "/mdeforge/private/EcoreMetamodel/list",
+				success : function(data) {
+					$.each(data, function(i, ecore){
+						$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
+					});
+				},
+				error : function error(data) {
+					console.log('error');
+				}
+			});
+			$('#ecoreToAdd').show();
+		}
+		else {
+			$('#ecoreToAdd').hide();
+		}
+	});
+	
+	$(document).on('click','#addEcore', function(event){
+		var idEcore = $('#ecoreSelect').val();
+		var nameEcore = $("#ecoreSelect option:selected").text();
+		var idProject = $("#projectId").data('id');
+		
+		$.ajax({
+			
+			url : "/mdeforge/private/project/" + idProject + "/add/" + idEcore,
+			success : function(data) {
+				
+				$('#ecoreMMTable').append('<tr id="'+ idEcore +'">' + 
+						'<td>'  +
+						'<i class="icon-remove-circle removeArtifact" data-id="' + idEcore + '"></i></td>' +
+						'<td>' 
+						+ '<a href="/mdeforge/private/EcoreMetamodel/metamodel_details?metamodel_id='+ idEcore + '">'
+						+ nameEcore + 
+						'</a></td></tr>');
+				$("#ecoreSelect option[value='" + idEcore + "']").remove();
+			},
+			error : function error(data) {
+				$('#ecoreMMTable').append('<tr id="'+ idEcore +'">' + 
+						'<td>'  +
+						'<i class="icon-remove-circle removeArtifact" data-id="' + idEcore + '"></i></td>' +
+						'<td>' 
+						+ '<a href="/mdeforge/private/EcoreMetamodel/metamodel_details?metamodel_id='+ idEcore + '">'
+						+ nameEcore + 
+						'</a></td></tr>');
+				$("#ecoreSelect option[value='" + idEcore + "']").remove();
+				console.log('error');
+				
+			}
+			
+		});
+	});
+	
+	
+	
+	$('#showATLList').click(function(event){
+		if ($('#ATLToAdd').css('display') == 'none') {
+			$('#ATLSelect').empty();
+			$.ajax({
+				url : "/mdeforge/private/ATLTransformation/list",
+				success : function(data) {
+					$.each(data, function(i, ecore){
+						$('#ATLSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
+					});
+					
+				},
+				error : function error(data) {
+					console.log('error');
+				}
+				
+			});
+			$('#ATLToAdd').show();
+		}
+		else {
+			$('#ATLToAdd').hide();
+		}
+	});
+	
+	$(document).on('click','#addATL', function(event){
+		var idATL = $('#ATLSelect').val();
+		var nameATL = $("#ATLSelect option:selected").text();
+		var idProject = $("#projectId").data('id');
+		
+		$.ajax({
+			
+			url : "/mdeforge/private/project/" + idProject + "/add/" + idATL,
+			success : function(data) {
+				
+				$('#atlTable').append('<tr id="'+ idATL +'">' + 
+						'<td>'  +
+						'<i class="icon-remove-circle removeArtifact" data-id="' + idATL + '"></i></td>' +
+						'<td>' 
+						+ '<a href="/mdeforge/private/Transformation/transformation_details?atl_id='+ idATL + '">'
+						+ nameATL + 
+						'</a></td></tr>');
+				$("#ATLSelect option[value='" + idATL + "']").remove();
+			},
+			error : function error(data) {
+						console.log('error')
+			}
+			
+		});
+	});
+	
+	
+	
+	$('#showModelList').click(function(event){
+		if ($('#modelToAdd').css('display') == 'none') {
+			$('#modelToAdd').show();
+		}
+		else {
+			$('#modelToAdd').hide();
+		}
+	});
+	$(document).on('click', '.removeArtifact', function(event){
+		var idArtifact = $(this).data('id');
+		var idProject = $("#projectId").data('id');
+		$.ajax({
+			url : "/mdeforge/private/project/" + idProject + "/remove/" + idArtifact,
+			success : function(data) {
+				console.log($('#' + idArtifact));
+				$('#' + idArtifact).remove();
+			},
+			error : function error(data) {
+				console.log($('#' + idArtifact));
+				$('#' + idArtifact).remove();
+			}
+			
+		});
+	});
+	
+	$(document).on('click','#addProject', function(event){
+		var idProject = $('#projectSelect').val();
+		var idWorkspace = $("#workspaceId").data('id');
+		
+		$.ajax({
+			
+			url : "/mdeforge/private/workspace/" + idWorkspace + "/add/" + idProject,
+			success : function(data) {
+				$('#projectList').append('<li id="'+ data.id + '">'+
+				'<div class="media innerAll">' +
+					'<div class="pull-right glyphicons icon-remove remove-project" data-id="' + data.id + 
+						'" data-name="' + data.name + '"></div>' +
+					'<div class="media-body">' +
+						'<span class="strong">' + data.name + '</span>' +
+						'<span class="muted">Owner:</span>' +
+						'<span class="muted">' + data.owner.username +
+							'<a href="mailto:' + data.owner.email + '"><i class="icon-envelope"></i></a>' +
+						'</span>' +
+					'</div>' +
+				'</div>' +
+				'</li>' +
+						'');
+				$("#projectSelect option[value='" + idProject + "']").remove();
+			},
+			error : function error(data) {
+				console.log('error');
+				
+			}
+			
+		});
+	});
+	
+	
+	
 	// employees widget
 	$('.widget-employees').each(function(){
 		if (typeof $.fn.select2 != 'undefined') 
@@ -346,9 +584,9 @@ $(function()
 				
 				url : "/mdeforge/private/project/" + id,
 				success : function(data) {
-					console.log(data);
+					$('#projectId').attr('data-id',data.id)
+					$("#workspaceDetailsDiv").show();
 					$('#users').empty();
-					console.log(data.artifacts)
 					if (data.users.length > 1)
 						$('#sharedNumber').text(data.users.length + " users");
 					else
@@ -357,18 +595,54 @@ $(function()
 						$('#artifactsNumber').text(data.artifacts.length + " artifacts");
 					else
 						$('#artifactsNumber').text(data.artifacts.length + " artifact");
+					$('#userDiv').show();
 					$.each(data.users, function(i, user) {
-						console.log('Juri');
-						$('#users').append('<li><span class="crt">1</span><span class="strong">' +
+						$('#users').append('<li><span class="crt">' + (i + 1) + '</span><span class="strong">' +
 								           user.firstname + '  ' + user.lastname + '</span>' + 
 								           '<span class="muted"><a href="mailto:'+ user.email +
 								           '">'+ user.username +' <i class="icon-envelope"></i></a></span></li>');
-					})		
+					});
+					$('#ecoreMMTable').empty();
+					$('#atlTable').empty();
+					$('#modelTable').empty();
+					$.each(data.artifacts, function(i, artifact) {
+						if(artifact._class == "org.mdeforge.business.model.EcoreMetamodel") {
+							$('#ecoreMMTable').append('<tr id="'+ artifact.id +'">' + 
+									'<td>'  +
+									'<i class="icon-remove-circle removeArtifact" data-id="' + artifact.id + '"></i></td>' +
+									'<td>' 
+									+ '<a href="/mdeforge/private/EcoreMetamodel/metamodel_details?metamodel_id='+ artifact.id + '">'
+									+ artifact.name + 
+									'</a></td></tr>');
+						}
+						if(artifact._class == "org.mdeforge.business.model.ATLTransformation") {
+							$('#atlTable').append('<tr id="'+ artifact.id +'">' +
+									'<td>'  +
+									'<i class="icon-remove-circle removeArtifact" data-id="' + artifact.id + '"></i></td>' +
+									'<td>' 
+									+ '<a href="'+ artifact.id + '">'
+									+ artifact.name + 
+									'</a></td></tr>');
+						}
+						if(artifact._class == "org.mdeforge.business.model.Model") {
+							$('#modelTable').append('<tr id="'+ artifact.id +'">' +
+									'<td>'  +
+									'<i class="icon-remove-circle removeArtifact" data-id="' + artifact.id + '"></i></td>' +
+									'<td>'
+									+ '<a href="'+ artifact.id + '">'
+									+ artifact.name + 
+									'</a></td></tr>');
+						}
+					});
 					$('#projectName').text(data.name);
+					//$('#ownerEmail').html('<i class="icon-envelope icon-li icon-fixed-width">'+ data.owner.email + '</i>');
+
+					$('#ownerEmail').text(data.owner.email);
+					$('#ownerName').text(data.owner.firstname + ' ' + data.owner.lastname);
+					$('#ownerUsername').text(data.owner.username);
 				},
 				error : function error(data) {
 					$('#projectName').text(data);
-					alert("error")
 				}
 			})
 		});

@@ -58,7 +58,7 @@
 						<td class="center">${transformation.getModified()}</td>
 						<td class="center actions">
 								<a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${transformation.getId()}" class="btn-action glyphicons eye_open btn-default" title="Transformation Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/private/use/execute_transformation?transformation_id=${transformation.getId()}" class="btn-action glyphicons play btn-success" title="Execute Transformation"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${transformation.getId()}" class="btn-action glyphicons play btn-success" title="Execute Transformation"><i></i></a>																	
 						</td>
 					</tr>
 					<!-- // Table row END -->
