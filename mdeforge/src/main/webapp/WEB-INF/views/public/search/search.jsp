@@ -138,7 +138,29 @@
 															<h5 class="strong text-uppercase">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
 															</h5>
-															<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+															<p>
+															<c:set var="existDescription" value="false"/>
+															<c:set var="description" value=""/>
+															<c:forEach items="${artifact.properties}" var="property">
+																
+																<c:if test="${property.getName() == 'Description '}">
+																		<c:set var="existDescription" value="true"/>
+																		<c:set var="description" value="${property.getValue()}"/>
+																		
+																</c:if>
+															</c:forEach>
+															
+																<c:choose>
+																  <c:when test="${existDescription == 'true'}">
+																    	<c:out value="${description}" />
+																  </c:when>
+																  <c:otherwise>
+																    	<i>No description</i>
+																  </c:otherwise>
+																</c:choose>
+															
+															
+															</p>
 															<p class="label label-inverse"><fmt:formatDate type="date" value="${artifact.getModified()}" /></p>
 															<p class="margin-none strong">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" title="Metamodel Download" class="glyphicons single download_alt"><i></i>Download</a>
@@ -230,7 +252,29 @@
 															<h5 class="strong text-uppercase">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
 															</h5>
-															<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+															<p>
+															<c:set var="existDescription" value="false"/>
+															<c:set var="description" value=""/>
+															<c:forEach items="${artifact.properties}" var="property">
+																
+																<c:if test="${property.getName() == 'Description '}">
+																		<c:set var="existDescription" value="true"/>
+																		<c:set var="description" value="${property.getValue()}"/>
+																		
+																</c:if>
+															</c:forEach>
+															
+																<c:choose>
+																  <c:when test="${existDescription == 'true'}">
+																    	<c:out value="${description}" />
+																  </c:when>
+																  <c:otherwise>
+																    	<i>No description</i>
+																  </c:otherwise>
+																</c:choose>
+															
+															
+															</p>
 															<p class="margin-none strong">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" title="Metamodel Download" class="glyphicons single download_alt"><i></i>Download</a>
 															</p>
