@@ -34,4 +34,6 @@ public interface ProjectService {
 
 	void addArtifactInProject(String idArtifact, String idProject, User user) throws BusinessException;
 
+	void removeUserFromProject(String idUser, String idProject, User user) throws BusinessException;
+
 }

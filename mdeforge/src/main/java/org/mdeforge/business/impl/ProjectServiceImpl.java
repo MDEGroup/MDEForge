@@ -248,6 +248,26 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	public void removeUserFromProject(String idUser, String idProject, User user)
+			throws BusinessException {
+		Project proj = findById(idProject, user);
+		User us = null;
+		for (User u : proj.getUsers()) {
+			if (u.getId().equals(idUser))
+				us = u;
+		}
+		Project projTemp = null;
+		for (Project project : us.getSharedProject()) {
+			if (project.getId().equals(idProject))
+				projTemp = project;
+		}
+		proj.getUsers().remove(us);
+		us.getSharedProject().remove(projTemp);
+		userRepository.save(us);
+		projectRepository.save(proj);
+	}
+
+	@Override
 	public void addArtifactInProject(String idArtifact, String idProject,
 			User user) throws BusinessException {
 		Project proj = findById(idProject, user);
