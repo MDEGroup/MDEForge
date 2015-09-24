@@ -48,7 +48,8 @@
 	
 	<!-- Main Theme Stylesheet :: CSS -->
 	<link href="${pageContext.request.contextPath}/resources/theme/css/style-default.css?1373029331" rel="stylesheet" type="text/css" />
-	<link href="${pageContext.request.contextPath}/resources/theme/skins/css/android-green.css" rel="stylesheet" type="text/css" />
+	<%-- <link href="${pageContext.request.contextPath}/resources/theme/skins/css/android-green.css" rel="stylesheet" type="text/css" /> --%>
+	<link href="${pageContext.request.contextPath}/resources/theme/skins/css/bascio_template.css" rel="stylesheet" type="text/css" />
 	
 	
 	<!-- FireBug Lite -->

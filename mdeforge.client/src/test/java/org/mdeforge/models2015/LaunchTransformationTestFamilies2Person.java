@@ -31,7 +31,7 @@ public class LaunchTransformationTestFamilies2Person {
 	/*
 	 * Load metamodel and transformations
 	 */
-	@Ignore
+//	@Ignore
 	@Test
 	public void loadDataATLTransformationFamilies2Person () throws Exception {
 		
@@ -69,7 +69,7 @@ public class LaunchTransformationTestFamilies2Person {
 
 	}
 	
-	
+	@Ignore
 	@Test
 	public void executeFamilies2Persons() throws Exception {
 		
