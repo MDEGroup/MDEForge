@@ -56,15 +56,6 @@ public class ATLPrivateController {
 		return "private.use.transformation_details";
 	}
 	
-	@RequestMapping(value = "/transformation_list", method = { RequestMethod.GET })
-	public String transformationsList(Model model) {
-
-		//TODO al momento prende tutte le trasfrmazioni ma devo prendere SOLO quelle dell'utente loggato
-		List<ATLTransformation> transformationsList = aTLTransformationService.findAll();
-		model.addAttribute("transformationsList", transformationsList);
-
-		return "private.use.transformation_list";
-	}
 	
 	@RequestMapping(value = "/execute_transformation", method = { RequestMethod.GET })
 	public String transformationExecution(Model model, @RequestParam String transformation_id) {
@@ -82,6 +73,7 @@ public class ATLPrivateController {
 		
 		return "private.use.transformation_execution";
 	}
+	
 	@RequestMapping(value = "/result_transformation", method = { RequestMethod.POST })
 	public String transformationResult(Model model, @RequestParam String transformation_id, @RequestParam List<String> models_in) {
 		List<org.mdeforge.business.model.Model> models = new ArrayList<org.mdeforge.business.model.Model>();

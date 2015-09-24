@@ -21,7 +21,9 @@
 					</ul>
 				</li>
 				
- 				<li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li>
+				<li><a class="glyphicons list" href="${pageContext.request.contextPath}/private/my_artifacts/"><i></i>My Artifacts</a></li>				
+				
+ 				<%-- <li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li> --%>
 				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.workspace"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											

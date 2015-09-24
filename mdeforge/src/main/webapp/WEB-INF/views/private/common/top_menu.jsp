@@ -1,5 +1,9 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+
+
 <div class="navbar main">
 			
 			<!-- Menu Toggle Button -->
@@ -8,12 +12,33 @@
 			</button>
 			<!-- // Menu Toggle Button END -->
 			
-						
-			<%-- <ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/use/" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
-			</ul> --%>
+			
 			
 			<ul class="topnav pull-left">
+				<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard"><i></i> Dashboard</a></li>	
+				
+					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
+					
+					<li class="glyphs hidden-tablet hidden-phone">
+					<ul>
+						<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons folder_open" data-toggle="tooltip" data-title="Browse the repository" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+						<li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search" data-toggle="tooltip" data-title="Search Artifacts" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+					</ul>
+				</li>
+				<li class="search open">
+					<form action="${pageContext.request.contextPath}/public/search" method="get" class="dropdown dd-1">
+						<input type="text" value="" placeholder="Search Artifacts.." name="search_string" data-toggle="typeahead" />
+						<button type="button" class="glyphicons search"><i></i></button>
+					</form>
+				</li> 
+				
+			</ul>
+			
+			
+			
+			
+			<%-- <ul class="topnav pull-left">
 				<li><a href="${pageContext.request.contextPath}/private/execute_transformation.htm" class="glyphicons play"><i></i> Execute Transformation</a></li> 
 				<li><a href="${pageContext.request.contextPath}/private/transformation_chain.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
 				
@@ -21,9 +46,9 @@
 					<a href="" data-toggle="dropdown" class="glyphicons cloud-upload"><i></i>Upload<span class="caret"></span></a>
 					<ul class="dropdown-menu pull-left">
 					
-				<%-- 	<security:authorize access="hasRole('admin')">
+					<security:authorize access="hasRole('admin')">
 						<li><a href="${pageContext.request.contextPath}/private/upload.htm" class="glyphicons cloud-upload"><i></i> Generico</a></li>	
-					</security:authorize>	 --%>
+					</security:authorize>	
 						
 						<li><a href="${pageContext.request.contextPath}/private/metamodelInsertion.htm" class="glyphicons cloud-upload"><i></i>Metamodel</a></li>						
 						<li><a href="${pageContext.request.contextPath}/private/transformationInsertion.htm" class="glyphicons cloud-upload"><i></i>Transformation</a></li>
@@ -31,7 +56,7 @@
 					
 					</ul>
 				</li>
-			</ul>
+			</ul> --%>
 						
 						<!-- Top Menu Right -->
 			 <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								

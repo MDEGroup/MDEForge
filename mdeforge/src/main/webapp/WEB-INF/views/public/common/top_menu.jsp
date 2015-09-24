@@ -9,9 +9,9 @@
 			<!-- // Menu Toggle Button END -->
 			
 						
-			<ul class="topnav pull-left">
+			<%-- <ul class="topnav pull-left">
 				<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons dashboard"><i></i> Dashboard</a></li>					
-				<%-- <li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
+				<li><a href="${pageContext.request.contextPath}/private/transformation.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
 				
 					
 				
@@ -32,15 +32,36 @@
 					</ul>
 				</li>
 				
-				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li> --%>
+				<li><a href="${pageContext.request.contextPath}/private/forge.htm" class="glyphicons claw_hammer"><i></i>Forge</a></li>
 				
 									
+				
+			</ul> --%>
+			
+			<ul class="topnav pull-left">
+				<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons dashboard"><i></i> Dashboard</a></li>	
+				
+					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
+					
+					<li class="glyphs hidden-tablet hidden-phone">
+					<ul>
+						<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons folder_open" data-toggle="tooltip" data-title="Browse the repository" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+						<li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search" data-toggle="tooltip" data-title="Search Artifacts" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+					</ul>
+				</li>
+				<li class="search open">
+					<form action="${pageContext.request.contextPath}/public/search" method="get" class="dropdown dd-1">
+						<input type="text" value="" placeholder="Search Artifacts.." name="search_string" data-toggle="typeahead" />
+						<button type="button" class="glyphicons search"><i></i></button>
+					</form>
+				</li> 
 				
 			</ul>
 						
 						<!-- Top Menu Right -->
-			<%-- <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
-								
+			 <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
+			<%--					
 				<!-- Language menu -->
 				<li class="hidden-tablet hidden-phone hidden-desktop-1 dropdown dd-1 dd-flags" id="lang_nav">
 					<a href="#" data-toggle="dropdown"><img src="${pageContext.request.contextPath}/resources/theme/images/lang/it.png" alt="en" /></a>
@@ -83,8 +104,8 @@
 					</ul>
 									</li>
 				<!-- // Profile / Logout menu END -->
-				
-			</ul> --%>
+				--%>
+			</ul> 
 			<!-- // Top Menu Right END -->
 						<div class="clearfix"></div>
 			
