@@ -262,16 +262,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		p.getWorkspaces().add(w);
 		p.setOwner(user);
 		p.getUsers().add(user);
+		user.getSharedProject().add(p);
 		projectRepository.save(p);
 		w.getProjects().add(p);
 		workspaceRepository.save(w);
 		return p;
 	}
-	
-//	@Override
-//	public void save(Workspace workspace) throws BusinessException {
-//		workspaceRepository.save(workspace);
-//		
-//	}
-
 }

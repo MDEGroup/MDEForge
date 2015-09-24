@@ -52,10 +52,19 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/{idProject}/remove/{idArtifact}", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
-	
-	public @ResponseBody HttpEntity<String> removeArtifactFromProject(@PathVariable("idProject") String idWorkspace, @PathVariable("idArtifact") String idProject) {
+	public @ResponseBody HttpEntity<String> removeArtifactFromProject(@PathVariable("idProject") String idProject, @PathVariable("idArtifact") String idArtifact) {
 		try {
-			projectService.removeArtifactFromProject(idProject, idWorkspace, user);
+			projectService.removeArtifactFromProject(idArtifact, idProject, user);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/{idProject}/removeUser/{idArtifact}", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody HttpEntity<String> removeUserFromProject(@PathVariable("idProject") String idProject, @PathVariable("idArtifact") String idUser) {
+		try {
+			projectService.removeUserFromProject(idUser, idProject, user);
 			return  new ResponseEntity<String>("ok", HttpStatus.OK);
 		} catch (BusinessException e) {
 			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);

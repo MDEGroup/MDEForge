@@ -35,7 +35,7 @@
 			
 			<div class="row-fluid row-merge">
 				<div class="span4 listWrapper">
-					<span class="results">${workspace.getProjects().size() } Project <i class="icon-circle-arrow-down"></i></span>
+					<!--  <span class="results">${workspace.getProjects().size() } Project <i class="icon-circle-arrow-down"></i></span>-->
 					<div>
 						<span class="btn btn-block btn-primary span6" id="showProjectList">Add Project</span>
 						<span class="btn btn-block btn-primary" id="showProjectAdd">Create new Project</span>

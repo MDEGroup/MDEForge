@@ -391,6 +391,10 @@ $(function()
 						'</div>' +
 						'</li>' +
 								'');
+				$('#createNewProject').text('createProjectName');
+				$('#createProject').hide();
+				
+				
 			},
 			error : function error(data) {
 				console.log('error: '+ data);
@@ -482,7 +486,7 @@ $(function()
 	
 	$(document).on('click','#addATL', function(event){
 		var idATL = $('#ATLSelect').val();
-		var nameATL = $("#ATLSelect option:selected").text();
+		var nameModel = $("#ATLSelect option:selected").text();
 		var idProject = $("#projectId").data('id');
 		
 		$.ajax({
@@ -495,7 +499,7 @@ $(function()
 						'<i class="icon-remove-circle removeArtifact" data-id="' + idATL + '"></i></td>' +
 						'<td>' 
 						+ '<a href="/mdeforge/private/Transformation/transformation_details?atl_id='+ idATL + '">'
-						+ nameATL + 
+						+ nameModel + 
 						'</a></td></tr>');
 				$("#ATLSelect option[value='" + idATL + "']").remove();
 			},
@@ -507,15 +511,54 @@ $(function()
 	});
 	
 	
-	
 	$('#showModelList').click(function(event){
 		if ($('#modelToAdd').css('display') == 'none') {
+			$.ajax({
+				url : "/mdeforge/private/Model/list",
+				success : function(data) {
+					$.each(data, function(i, model){
+						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
+						console.log(model);
+					});
+				},
+				error : function error(data) {
+					console.log('error');
+				}
+			});
 			$('#modelToAdd').show();
 		}
 		else {
 			$('#modelToAdd').hide();
 		}
 	});
+	
+	$(document).on('click','#addModel', function(event){
+		var idModel = $('#modelSelect').val();
+		var nameModel = $("#modelSelect option:selected").text();
+		var idProject = $("#projectId").data('id');
+		
+		$.ajax({
+			
+			url : "/mdeforge/private/project/" + idProject + "/add/" + idModel,
+			success : function(data) {
+				
+				$('#modelTable').append('<tr id="'+ idModel +'">' + 
+						'<td>'  +
+						'<i class="icon-remove-circle removeArtifact" data-id="' + idModel + '"></i></td>' +
+						'<td>' 
+						+ '<a href="/mdeforge/private/Transformation/transformation_details?atl_id='+ idModel + '">'
+						+ nameModel + 
+						'</a></td></tr>');
+				$("#modelSelect option[value='" + idModel + "']").remove();
+			},
+			error : function error(data) {
+						console.log('error')
+			}
+			
+		});
+	});
+	
+	
 	$(document).on('click', '.removeArtifact', function(event){
 		var idArtifact = $(this).data('id');
 		var idProject = $("#projectId").data('id');
@@ -565,7 +608,25 @@ $(function()
 		});
 	});
 	
-	
+	$(document).on('click','.removeSharedUser', function(event){
+		var idProject = $("#projectId").data('id');
+		var idUser = $(this).data('id');
+		$.ajax({
+			url : "/mdeforge/private/project/" + idProject + "/removeUser/" + idUser,
+			success : function(data) {
+				console.log('ok');
+				$('.sharedUser[data-id="'+ idUser +'"]').remove();
+				
+			},
+			error : function error(data) {
+				console.log('ko');
+				$('.sharedUser[data-id="'+ idUser +'"]').remove();
+				
+			}
+			
+		});
+
+	});
 	
 	// employees widget
 	$('.widget-employees').each(function(){
@@ -597,10 +658,13 @@ $(function()
 						$('#artifactsNumber').text(data.artifacts.length + " artifact");
 					$('#userDiv').show();
 					$.each(data.users, function(i, user) {
-						$('#users').append('<li><span class="crt">' + (i + 1) + '</span><span class="strong">' +
+						$('#users').append('<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
 								           user.firstname + '  ' + user.lastname + '</span>' + 
 								           '<span class="muted"><a href="mailto:'+ user.email +
-								           '">'+ user.username +' <i class="icon-envelope"></i></a></span></li>');
+								           '">'+ user.username +' <i class="icon-envelope"></i></a>' +
+								           '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>' +
+								           '</span></li>');
+						
 					});
 					$('#ecoreMMTable').empty();
 					$('#atlTable').empty();
