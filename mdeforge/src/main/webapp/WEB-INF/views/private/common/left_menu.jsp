@@ -33,7 +33,13 @@
 							<li><a href="${pageContext.request.contextPath}/private/workspace/create" class="glyphicons icon-expand-alt"><i></i>Create new workspace</a></li>
 					</ul>
 				</li>
-				<li><a class="glyphicons notes not-active" href=""><i></i><spring:message code="mdeforge.menu.services"/></a></li>				
+				
+				<li class="dropdown dd-1">
+					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.services"/> <span class="icon-chevron-right"></span></a>
+					<ul class="dropdown-menu pull-left">											
+						<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="glyphicons magic"><i></i>Metamodel Comparison</a></li>
+					</ul>
+				</li>			
 			</ul>
 			
 		
