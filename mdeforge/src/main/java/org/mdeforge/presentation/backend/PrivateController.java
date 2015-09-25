@@ -7,6 +7,7 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +23,8 @@ public class PrivateController {
 	
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
-	
+	@Autowired
+	private User user;
 	
 
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
@@ -34,11 +36,8 @@ public class PrivateController {
 	@RequestMapping(value = "/shared_artifacts", method = { RequestMethod.GET })
 	public String sharedArtifacts(Model model) throws IOException {
 		
-		//TODO togliere la findAll e sostituirla solo con gli artefatti SHARED
-		List<Artifact> sharedArtifactList = artifactService.findAll();
-		
+		List<Artifact> sharedArtifactList = artifactService.findSharedNoProject(user);
 		model.addAttribute("sharedArtifactList",sharedArtifactList);
-		
 		return "private.use.shared_artifacts";
 	}
 
@@ -46,8 +45,7 @@ public class PrivateController {
 	public String sharedProjects(Model model) throws IOException {
 		
 		//TODO togliere la findAll e sostituirla solo con i progetti SHARED
-		List<Project> sharedProjectList = projectService.findAll();
-		
+		List<Project> sharedProjectList = projectService.findSharedNoWorkspace(user);
 		model.addAttribute("sharedProjectList",sharedProjectList);
 		
 		return "private.use.shared_projects";

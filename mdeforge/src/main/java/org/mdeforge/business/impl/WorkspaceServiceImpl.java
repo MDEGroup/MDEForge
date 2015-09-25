@@ -193,7 +193,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	}
 
 	@Override
-	public List<Workspace> findAllByUsername(User user)
+	public List<Workspace> findByUser(User user)
 			throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

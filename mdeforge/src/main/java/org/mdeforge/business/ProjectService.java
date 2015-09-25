@@ -38,4 +38,6 @@ public interface ProjectService {
 
 	User addUserInProject(String idUser, String idProject, User user);
 
+	List<Project> findSharedNoWorkspace(User user) throws BusinessException;
+
 }

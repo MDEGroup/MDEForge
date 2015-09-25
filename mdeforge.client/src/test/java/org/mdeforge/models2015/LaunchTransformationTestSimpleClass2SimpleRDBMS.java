@@ -32,15 +32,15 @@ public class LaunchTransformationTestSimpleClass2SimpleRDBMS {
 	/*
 	 * Load metamodel and transformations
 	 */
-	@Ignore
+	
 	@Test
 	public void loadDataATLTransformationSimpleClass2SimpleRDBMS () throws Exception {
 		
-		EcoreMetamodel simpleClassMetamoden = new EcoreMetamodel();
-		simpleClassMetamoden.setDescription("Metamodel used as a workbench in the case study for the Workshop Model Transformations in Practice.");
-		simpleClassMetamoden.setName("SimpleClass");
-		simpleClassMetamoden.setOpen(true);
-		simpleClassMetamoden = ecoreMetamodelService.addEcoreMetamodel(simpleClassMetamoden, "temp/models2015/SimpleClass2SimpleRDBMS/SimpleClass.ecore");
+		EcoreMetamodel simpleClassMetamodel = new EcoreMetamodel();
+		simpleClassMetamodel.setDescription("Metamodel used as a workbench in the case study for the Workshop Model Transformations in Practice.");
+		simpleClassMetamodel.setName("SimpleClass");
+		simpleClassMetamodel.setOpen(true);
+		simpleClassMetamodel = ecoreMetamodelService.addEcoreMetamodel(simpleClassMetamodel, "temp/models2015/SimpleClass2SimpleRDBMS/SimpleClass.ecore");
 		
 		EcoreMetamodel simpleRDBMS = new EcoreMetamodel();
 		simpleRDBMS.setName("SimpleRDBMS");
@@ -48,10 +48,23 @@ public class LaunchTransformationTestSimpleClass2SimpleRDBMS {
 		simpleRDBMS.setOpen(true);
 		simpleRDBMS = ecoreMetamodelService.addEcoreMetamodel(simpleRDBMS, "temp/models2015/SimpleClass2SimpleRDBMS/SimpleRDBMS.ecore");
 		
+		Model simpleMySQLModel = new Model();
+		simpleMySQLModel.setName("euro2004-MySQL");
+		simpleMySQLModel.setOpen(true);
+		simpleMySQLModel.setDescription("For use in models tool demostration 2015");
+		simpleMySQLModel.setFile(ModelService.setGridFileMedia("temp/models2015/SimpleClass2SimpleRDBMS/Sample-SimpleClass.ecore"));
+		
+		ConformToRelation ctr = new ConformToRelation();
+		ctr.setFromArtifact(simpleMySQLModel);
+		ctr.setToArtifact(simpleRDBMS );
+		simpleMySQLModel.getRelations().add(ctr);
+		
+		modelService.addModel(simpleMySQLModel);
+		
 		ATLTransformation transformation = new ATLTransformation();
 		transformation.setName("SimpleClass2SimpleRDBMS");
 		transformation.setOpen(true);
-		
+		transformation.setDescription("A simple Class into RDBMS");
 		CoDomainConformToRelation cdct = new CoDomainConformToRelation();
 		cdct.setFromArtifact(transformation);
 		cdct.setToArtifact(simpleRDBMS);
@@ -60,7 +73,7 @@ public class LaunchTransformationTestSimpleClass2SimpleRDBMS {
 		
 		DomainConformToRelation dct = new DomainConformToRelation();
 		dct.setFromArtifact(transformation);
-		dct.setToArtifact(simpleClassMetamoden);
+		dct.setToArtifact(simpleClassMetamodel);
 		dct.setReferenceModelName("SimpleClass");
 		dct.setName("IN");
 		transformation.getRelations().add(cdct);
@@ -70,7 +83,7 @@ public class LaunchTransformationTestSimpleClass2SimpleRDBMS {
 		
 	}
 	
-	
+	@Ignore
 	@Test
 	public void executeMySimpleClass2SimpleRDBMS() throws Exception {
 		

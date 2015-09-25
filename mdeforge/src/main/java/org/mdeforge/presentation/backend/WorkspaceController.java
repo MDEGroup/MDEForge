@@ -110,7 +110,7 @@ public class WorkspaceController {
 	@RequestMapping("/list")
 	public String elenco(Model model) {
 		List<Workspace> workspaces_list = workspaceService
-				.findAllByUsername(user);
+				.findByUser(user);
 		model.addAttribute("workspaces_list", workspaces_list);
 		return "private.use.workspace_list";
 	}

@@ -1,7 +1,9 @@
 package org.mdeforge.business.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -288,4 +290,38 @@ public class ProjectServiceImpl implements ProjectService {
 		return us;
 	}
 
+	@Override
+	public List<Project> findSharedNoWorkspace(User user) throws BusinessException {
+		List<Workspace> workList = workspaceService.findByUser(user);
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("users.$id").is(new ObjectId(user.getId()));
+
+		
+		query.addCriteria(c1);
+		List<Project> projList = operations.find(query, Project.class);
+		List<Project> toRemove = new ArrayList<Project>();
+		for (Project projectTo : projList) {
+			for (Workspace workspaceTo : projectTo.getWorkspaces()) {
+				for(Workspace w : workList) {
+					if (w.getId().equals(workspaceTo.getId()))
+						toRemove.add(projectTo);
+				}
+			}
+		}
+		for (Workspace workspaceTo : workList) {
+			for (Project projectTo : workspaceTo.getProjects()) {
+				for (Project p : projList) {
+					if (projectTo.getId().equals(p.getId())) {
+						toRemove.add(projectTo);
+					}
+				}
+			}
+		}
+		for (Project toRem : toRemove) {
+			projList.remove(toRem);
+		}
+		return projList;
+	}
+	
 }

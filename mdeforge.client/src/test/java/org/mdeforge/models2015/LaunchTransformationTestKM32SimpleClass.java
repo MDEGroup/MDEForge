@@ -34,11 +34,24 @@ public class LaunchTransformationTestKM32SimpleClass {
 	 */
 	
 	@Test
-	public void loadDataATLTransformationSimpleClass2SimpleRDBMS () throws Exception {
+	public void loadDataATLTransformationKM32SimpleClass () throws Exception {
 		
 		EcoreMetamodel simpleKM3Metamoden = ecoreMetamodelService.getEcoreMetamodelByName("KM3");
 		
 		EcoreMetamodel simpleClassMetamodel = ecoreMetamodelService.getEcoreMetamodelByName("SimpleClass");
+		
+		Model simpleKM3Model = new Model();
+		simpleKM3Model.setName("simpleKM3");
+		simpleKM3Model.setOpen(true);
+		simpleKM3Model.setDescription("For use in models tool demostration 2015");
+		simpleKM3Model.setFile(ModelService.setGridFileMedia("temp/models2015/SimpleClass2SimpleRDBMS/Sample-KM3.ecore"));
+		
+		ConformToRelation ctr = new ConformToRelation();
+		ctr.setFromArtifact(simpleKM3Model);
+		ctr.setToArtifact(simpleKM3Metamoden );
+		simpleKM3Model.getRelations().add(ctr);
+		
+		modelService.addModel(simpleKM3Model);
 		
 		ATLTransformation transformation = new ATLTransformation();
 		transformation.setName("KM32SimpleClass");
