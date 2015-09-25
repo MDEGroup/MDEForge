@@ -34,11 +34,7 @@
 					<abbr title="Work email">e-mail:</abbr> <a href="mailto:#">${user.getEmail()}</a><br> 
 					<abbr title="Work Phone">phone:</abbr> (+39) 0779 0987652<br>
 					<div class="separator line"></div>
-					<p class="margin-none">
-						<strong>Other informations:</strong>
-						<br>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique rutrum libero, vel bibendum nunc consectetur sed.
-					</p>
+					
 				</address>
 			</div>
 		
@@ -59,7 +55,7 @@
 					<div class="widget-head">
 						<h4 class="heading glyphicons file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
 					</div>
-					<div class="widget-body" style="max-height: 400px; overflow: scroll;margin-bottom: 20px;">
+					<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
 			
 								<!-- Table heading -->
@@ -124,8 +120,7 @@
 					<div class="widget-head">
 						<h4 class="heading glyphicons edit"><i></i>Recent Projects (${myProjectList.size()})</h4>
 					</div>
-					<div class="widget-body">
-								<div class="widget-body" style="max-height: 400px; overflow: scroll;margin-bottom: 20px;">
+								<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
 			
 								<!-- Table heading -->
@@ -154,7 +149,6 @@
 								
 							</table>
 					</div>
-					</div>
 			</div>
 		
 		</div>
@@ -165,7 +159,7 @@
 							<div class="widget-head">
 								<h4 class="heading glyphicons stats"><i></i>Statistics</h4>
 							</div>
-							<div class="widget-body">
+							<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								
 								
 								<div class="widget-body list collapse in">
