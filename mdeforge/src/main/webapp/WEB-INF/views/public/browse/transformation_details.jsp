@@ -90,11 +90,7 @@
 												Used in ${atlTransformation.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
 											</p>
-											<div
-												class="margin-bottom-none progress progress-small count-outside">
-												<div class="count">30%</div>
-												<div class="bar" style="width: 30%;"></div>
-											</div>
+											
 										</div>
 									</div>
 								</div>
@@ -310,7 +306,7 @@
 						<thead>
 							<tr>
 								<th rowspan="2">Name</th>
-								<th rowspan="2">Description</th>
+<!-- 								<th rowspan="2">Description</th> -->
 								<th class="center" colspan="5">Value</th>
 							</tr>
 							<tr>
@@ -341,7 +337,7 @@
 							<tr>
 								
 								<td class="left">${metric.getName()}</td>
-								<td>${metric.getDescription()}</td>
+<%-- 								<td>${metric.getDescription()}</td> --%>
 								
 								<c:choose>
 								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
