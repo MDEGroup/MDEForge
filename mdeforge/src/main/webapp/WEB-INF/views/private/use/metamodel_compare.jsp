@@ -321,19 +321,19 @@
 							<div class="span4">
 									
 										<h5 class="strong">Similarity Relation</h5>
-										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count">${similarityRelation.getValue()}</div><div class="bar" style="width: 100%;"></div><div class="add">100%</div></div>
+										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count"><fmt:formatNumber type="number" maxFractionDigits="3" value="${similarityRelation.getValue()}" /></div><div class="bar" style="width: 100%;"></div><div class="add">100%</div></div>
 										<div class="separator bottom"></div>
 										
 										<h5 class="strong">Cosine Similarity</h5>
-										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count">${cosineSimilarityRelation.getValue()}</div><div class="bar" style="width: 90%;"></div><div class="add">90%</div></div>
+										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count"><fmt:formatNumber type="number" maxFractionDigits="3" value="${cosineSimilarityRelation.getValue()}" /></div><div class="bar" style="width: 90%;"></div><div class="add">90%</div></div>
 										<div class="separator bottom"></div>
 										
 										<h5 class="strong">Dice Similarity</h5>
-										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count">${diceSimilarityRelation.getValue()}</div><div class="bar" style="width: 93%;"></div><div class="add">93%</div></div>
+										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count"><fmt:formatNumber type="number" maxFractionDigits="3" value="${diceSimilarityRelation.getValue()}" /></div><div class="bar" style="width: 93%;"></div><div class="add">93%</div></div>
 										<div class="separator bottom"></div>
 										
 										<h5 class="strong">Containment Similarity</h5>
-										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count">${containmentRelation.getValue()}</div><div class="bar" style="width: 79%;"></div><div class="add">79%</div></div>
+										<div class="progress progress-mini progress-primary count-outside add-outside"><div class="count"><fmt:formatNumber type="number" maxFractionDigits="3" value="${containmentRelation.getValue()}" /></div><div class="bar" style="width: 79%;"></div><div class="add">79%</div></div>
 										<div class="separator bottom"></div>
 							
 							
