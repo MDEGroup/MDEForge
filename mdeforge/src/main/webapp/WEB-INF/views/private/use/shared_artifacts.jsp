@@ -35,6 +35,7 @@
 					<tr>						
 						<th>Name</th>
 						<th>Description</th>
+						<th>Artifact Type</th>
 						<th>Open</th>
 						<th>Created</th>
 						<th>Modified</th>
@@ -48,7 +49,19 @@
 					<c:forEach items="${sharedArtifactList}" var="artifact">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a></td>
+						<td>
+							<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#">${artifact.getName()}</a>
+								</c:when>
+							</c:choose>
+						</td>
 						<td>
 							<c:forEach items="${artifact.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -56,11 +69,34 @@
 								</c:if>
 							</c:forEach>
 						</td>
+						<td class="center">
+							<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">ATL Transformation</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">Ecore Metamodel</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#">Model</a>
+								</c:when>
+							</c:choose>
+						</td>
 						<td class="center">${artifact.getOpen()}</td>
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
+								<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+							</c:choose>
 								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
 						</td>
 					</tr>

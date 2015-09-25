@@ -131,12 +131,20 @@
 												
 												<c:forEach items="${artifactList}" var="artifact">
 													<div class="row-fluid">	
-														<div class="span2 center">
-															<a href="" class="thumb"><img data-src="holder.js/150x100" alt="150x100" src="data:image/png;base64,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" style="width: 150px; height: 100px;"></a>
-														</div>
-														<div class="span10">
+														
+														<div class="span12">
 															<h5 class="strong text-uppercase">
-																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																<c:choose>
+																	<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+																			<a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+																	</c:when>
+																	<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+																			<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																	</c:when>
+																	<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+																			<a href="#">${artifact.getName()}</a>
+																	</c:when>
+																</c:choose>
 															</h5>
 															<p>
 															<c:set var="existDescription" value="false"/>
@@ -163,6 +171,21 @@
 															</p>
 															<p class="label label-inverse"><fmt:formatDate type="date" value="${artifact.getModified()}" /></p>
 															<p class="label label-inverse">${artifact.getScore()}</p>
+															
+															<c:choose>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+																		<span class="badge badge-important">ATL Transformation</span>
+																</c:when>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+																		<span class="badge badge-warning">Ecore Metamodel</span>
+																</c:when>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+																		<span class="badge badge-info">Model</span>
+																</c:when>
+															</c:choose>
+															<span class="badge badge-success">Last update: <fmt:formatDate type="date" value="${artifact.getModified()}" /></span>
+															
+
 															<p class="margin-none strong">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" title="Metamodel Download" class="glyphicons single download_alt"><i></i>Download</a>
 															</p>
