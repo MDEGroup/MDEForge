@@ -146,6 +146,7 @@
 																	</c:when>
 																</c:choose>
 															</h5>
+															<span class="badge badge-success">Score: <fmt:formatNumber type="number" maxFractionDigits="3" value="${artifact.getScore()}" /></span>
 															<p>
 															<c:set var="existDescription" value="false"/>
 															<c:set var="description" value=""/>
@@ -169,8 +170,7 @@
 															
 															
 															</p>
-															<p class="label label-inverse"><fmt:formatDate type="date" value="${artifact.getModified()}" /></p>
-															<p class="label label-inverse">${artifact.getScore()}</p>
+															
 															
 															<c:choose>
 																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
@@ -183,7 +183,7 @@
 																		<span class="badge badge-info">Model</span>
 																</c:when>
 															</c:choose>
-															<span class="badge badge-success">Last update: <fmt:formatDate type="date" value="${artifact.getModified()}" /></span>
+															<span class="label">Last update: <fmt:formatDate type="date" value="${artifact.getModified()}" /></span>
 															
 
 															<p class="margin-none strong">

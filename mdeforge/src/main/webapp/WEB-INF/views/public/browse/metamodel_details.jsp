@@ -758,6 +758,8 @@
 
 	</div>
 </div>
+
+
 <c:import var="fileToVisualize"
 	url="file:///${ecoreMetamodelFile.getAbsolutePath()}" />
 <!-- Modal -->
