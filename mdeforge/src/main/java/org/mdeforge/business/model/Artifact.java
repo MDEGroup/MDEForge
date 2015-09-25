@@ -10,9 +10,11 @@ import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -33,6 +35,8 @@ public class Artifact implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
+	@TextScore Float score;
+	
 	@Id
 	private String id = null;
 	private Date created = null;
@@ -48,6 +52,9 @@ public class Artifact implements java.io.Serializable{
 	private String version = null;
 	private String extractedContents = null;
 
+	public Float getScore() {
+		return score;
+	}
 //	private @TextIndexed(weight=20) String name = null;
 //	private @TextIndexed(weight=10) String description = null;
 //	private @TextIndexed(weight=5) String authors = null;

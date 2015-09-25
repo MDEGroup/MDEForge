@@ -45,7 +45,14 @@
 					<c:forEach items="${ecoreMetamodelsList}" var="ecoreMetamodel">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a></td>
+						<td>
+							<c:choose>
+  								<c:when test="${ecoreMetamodel.getOpen()}">
+									<a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
+								</c:when>
+								<c:otherwise>${ecoreMetamodel.getName()}</c:otherwise>
+							</c:choose>
+						</td>
 						<td>
 							<c:forEach items="${ecoreMetamodel.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -57,8 +64,12 @@
 						<td class="center">${ecoreMetamodel.getCreated()}</td>
 						<td class="center">${ecoreMetamodel.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
+								<c:choose>
+  								<c:when test="${ecoreMetamodel.getOpen()}">
+									<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
+								</c:when>
+							</c:choose>
 						</td>
 					</tr>
 					<!-- // Table row END -->

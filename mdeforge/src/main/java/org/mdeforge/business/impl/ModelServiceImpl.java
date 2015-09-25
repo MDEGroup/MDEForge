@@ -241,17 +241,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	}
 	
 	@Override
-	public List<Artifact> orederedSearch(String text){
+	public List<Model> orederedSearch(String text){
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
-
 		TextQuery query = new TextQuery(criteria);
 		query.setScoreFieldName("score");
 		query.sortByScore();
-
-		List<Artifact> artifacts = operations.find(query, Artifact.class);
-		
+		List<Model> artifacts = operations.find(query, Model.class);
 		return artifacts;
 	}
 	

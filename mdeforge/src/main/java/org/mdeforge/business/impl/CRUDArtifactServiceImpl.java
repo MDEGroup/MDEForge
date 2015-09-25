@@ -104,7 +104,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public List<Artifact> orederedSearch(String text) {
+	public List<T> orederedSearch(String text) {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(
@@ -113,9 +113,14 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		TextQuery query = new TextQuery(criteria);
 		query.setScoreFieldName("score");
 		query.sortByScore();
-
-		List<Artifact> artifacts = operations.find(query, Artifact.class);
-
+		
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c2);
+			
+		}
+		List<T> artifacts = operations.find(query, persistentClass);
 		return artifacts;
 	}
 

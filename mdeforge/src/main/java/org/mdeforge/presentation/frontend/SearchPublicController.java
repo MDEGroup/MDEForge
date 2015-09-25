@@ -1,14 +1,17 @@
 package org.mdeforge.presentation.frontend;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
@@ -43,6 +46,10 @@ public class SearchPublicController {
 	private UserService userService;
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
+	private ATLTransformationService aTLTransformationService;
 
 
 //	@RequestMapping(value = "/search/result", method = { RequestMethod.GET })
@@ -54,13 +61,24 @@ public class SearchPublicController {
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model, @RequestParam(value = "search_string", required = false) String searchString, 
 			@RequestParam(value = "artifactType", required = false) String artifactType) {
-		
+		List<Artifact> al = new ArrayList<Artifact>();
 		System.out.println(artifactType);
 		
 		if(searchString != null && searchString != ""){
-			model.addAttribute("artifactList", artifactService.search(searchString));
+			String[] artifactTypes = artifactType.split(",");
+			for (String string : artifactTypes) {
+				if (string.equals("models"))
+					al.addAll(modelService.orederedSearch(searchString));
+				if (string.equals("transformations"))
+					al.addAll(aTLTransformationService
+							.orederedSearch(searchString));
+				if (string.equals("metamodels"))
+					al.addAll(ecoreMetamodelService
+							.orederedSearch(searchString));
+			}
 		}
-			
+		if(searchString != null && searchString != "")
+			model.addAttribute("artifactList", al);
 		return "public.search";
 	}
 	

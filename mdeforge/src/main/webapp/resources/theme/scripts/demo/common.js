@@ -339,12 +339,12 @@ $(function()
 			success : function(data) {
 				$('#' + idProject).remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
-				$('#workspaceDetailsDiv').hidde();
+				$('#workspaceDetailsDiv').hide();
 			},
 			error : function error(data) {
 				$('#' + idProject).remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
-				$('#workspaceDetailsDiv').hidde();
+				$('#workspaceDetailsDiv').hide();
 			}
 			
 		});
@@ -443,6 +443,7 @@ $(function()
 						+ nameEcore + 
 						'</a></td></tr>');
 				$("#ecoreSelect option[value='" + idEcore + "']").remove();
+				$('#ecoreToAdd').hide();
 			},
 			error : function error(data) {
 				$('#ecoreMMTable').append('<tr id="'+ idEcore +'">' + 
@@ -499,10 +500,11 @@ $(function()
 						'<td>'  +
 						'<i class="icon-remove-circle removeArtifact" data-id="' + idATL + '"></i></td>' +
 						'<td>' 
-						+ '<a href="/mdeforge/private/Transformation/transformation_details?atl_id='+ idATL + '">'
+						+ '<a href="/mdeforge/private/ATLTransformation/transformation_details?transformation_id='+ idATL + '">'
 						+ nameModel + 
 						'</a></td></tr>');
 				$("#ATLSelect option[value='" + idATL + "']").remove();
+				$('#ATLToAdd').hide();
 			},
 			error : function error(data) {
 						console.log('error')
@@ -570,6 +572,8 @@ $(function()
 						+ nameModel + 
 						'</a></td></tr>');
 				$("#modelSelect option[value='" + idModel + "']").remove();
+				$('#modelToAdd').hide();
+				
 			},
 			error : function error(data) {
 						console.log('error')
@@ -639,6 +643,7 @@ $(function()
 				'</li>' +
 						'');
 				$("#projectSelect option[value='" + idProject + "']").remove();
+				$('#projectsToAdd').hide();
 			},
 			error : function error(data) {
 				console.log('error');
@@ -687,6 +692,10 @@ $(function()
 					$('#projectId').attr('data-id',data.id)
 					$("#workspaceDetailsDiv").show();
 					$('#users').empty();
+					$('#ATLToAdd').hide();
+					$('#modelToAdd').hide();
+					$('#ecoreToAdd').hide();
+					
 					if (data.users.length > 1)
 						$('#sharedNumber').text(data.users.length + " users");
 					else
@@ -723,7 +732,7 @@ $(function()
 									'<td>'  +
 									'<i class="icon-remove-circle removeArtifact" data-id="' + artifact.id + '"></i></td>' +
 									'<td>' 
-									+ '<a href="'+ artifact.id + '">'
+									+ '<a href="/mdeforge/private/ATLTransformation/transformation_details?transformation_id='+ artifact.id + '">'
 									+ artifact.name + 
 									'</a></td></tr>');
 						}

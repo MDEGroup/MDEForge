@@ -29,7 +29,8 @@
 					<ul class="dropdown-menu pull-left">											
 						<c:forEach items="${workspaces_list}" var="workspace">
 							<li><a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="glyphicons icon-folder-open"><i></i>${workspace.getName()}</a></li>
-						</c:forEach>									
+						</c:forEach>
+							<li><a href="${pageContext.request.contextPath}/private/workspace/create" class="glyphicons icon-expand-alt"><i></i>Create new workspace</a></li>
 					</ul>
 				</li>
 				<li><a class="glyphicons notes not-active" href=""><i></i><spring:message code="mdeforge.menu.services"/></a></li>				

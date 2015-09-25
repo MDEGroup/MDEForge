@@ -162,6 +162,7 @@
 															
 															</p>
 															<p class="label label-inverse"><fmt:formatDate type="date" value="${artifact.getModified()}" /></p>
+															<p class="label label-inverse">${artifact.getScore()}</p>
 															<p class="margin-none strong">
 																<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" title="Metamodel Download" class="glyphicons single download_alt"><i></i>Download</a>
 															</p>

@@ -35,6 +35,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> search(String searchString) throws BusinessException;
 	Resource loadArtifacrt(String id);
 	void createIndex();
-	List<Artifact> orederedSearch(String text);
+	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;
 }
