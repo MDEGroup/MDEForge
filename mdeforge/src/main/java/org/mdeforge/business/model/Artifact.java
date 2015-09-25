@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.TextScore;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -35,7 +36,7 @@ public class Artifact implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
-	@TextScore Float score;
+	@JsonIgnore @TextScore Float score;
 	
 	@Id
 	private String id = null;

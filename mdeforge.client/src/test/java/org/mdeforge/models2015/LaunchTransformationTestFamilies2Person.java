@@ -48,9 +48,27 @@ public class LaunchTransformationTestFamilies2Person {
 		person.setOpen(true);
 		person = ecoreMetamodelService.addEcoreMetamodel(person, "temp/models2015/Families2Persons/Persons.ecore");
 		
+		Model simpleFamilyModel = new Model();
+		simpleFamilyModel.setName("Simple families model");
+		simpleFamilyModel.setOpen(true);
+		simpleFamilyModel.setDescription("For use in models tool demostration 2015");
+		simpleFamilyModel.setFile(ModelService.setGridFileMedia("temp/models2015/Families2Persons/sample-Families.xmi"));
+		
+		ConformToRelation ctr = new ConformToRelation();
+		ctr.setFromArtifact(simpleFamilyModel);
+		ctr.setToArtifact(families );
+		simpleFamilyModel.getRelations().add(ctr);
+		
+		modelService.addModel(simpleFamilyModel);
+		
 		ATLTransformation transformation = new ATLTransformation();
 		transformation.setName("Families2Preson");
+		transformation.setDescription("The goal is to present a use case of a model to model transformation written in ATL." +
+										"This use case is named: Families to Persons" +
+										" Initially we have a text describing a list of families." +
+										"We want to transform this into another text describing a list of persons.);");
 		
+		transformation.setOpen(true);
 		CoDomainConformToRelation cdct = new CoDomainConformToRelation();
 		cdct.setFromArtifact(transformation);
 		cdct.setToArtifact(person);

@@ -86,10 +86,12 @@ public class ImporterFromEMFZoo {
 						complete = false;
 						emm.setAuthor(usr);
 						
-						if((!emm.getName().equals("Measure 2.0")) && (!emm.getName().equals("Requirement 1.0")))
+						if((!emm.getName().equals("Measure 2.0")) && 
+								(!emm.getName().equals("Requirement 1.0")) && 
+								(!emm.getName().equals("Multilevel Healthcare Information Modelling 2.0")))
 							ecoreMetamodelService.create(emm);
 					} catch (Exception e1) {
-						System.err.println(emm.getName());
+						System.err.println("ERROR: Some error at " + projectUrl + ". Importer exception:" + e1.getMessage());
 					}
 				}
 				
@@ -98,10 +100,9 @@ public class ImporterFromEMFZoo {
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
-			System.err.println("Unable to connect at " + projectUrl + "Importer exception:" + e1.getMessage());
+			System.err.println("ERROR: Unable to connect at " + projectUrl + "Importer exception:" + e1.getMessage());
 		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+			System.err.println("ERROR: Some error at " + projectUrl + ". Importer exception:" + e2.getMessage());
 		}
 	}
 }

@@ -35,9 +35,9 @@
 				</li>
 				
 				<li class="dropdown dd-1">
-					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.services"/> <span class="icon-chevron-right"></span></a>
+					<a href="" data-toggle="dropdown" class="glyphicons magic"><i></i><spring:message code="mdeforge.menu.services"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
-						<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="glyphicons magic"><i></i>Metamodel Comparison</a></li>
+						<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare">Metamodel Comparison</a></li>
 					</ul>
 				</li>			
 			</ul>

@@ -48,7 +48,7 @@
 						<td>
 							<c:choose>
   								<c:when test="${ecoreMetamodel.getOpen()}">
-									<a href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
+									<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
 								</c:when>
 								<c:otherwise>${ecoreMetamodel.getName()}</c:otherwise>
 							</c:choose>
@@ -67,8 +67,11 @@
 								<c:choose>
   								<c:when test="${ecoreMetamodel.getOpen()}">
 									<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
+									<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
 								</c:when>
+								<c:otherwise>
+									<span class="glyphicons icon-lock" title="Metamodel Download"><i></i></span>														
+								</c:otherwise>
 							</c:choose>
 						</td>
 					</tr>

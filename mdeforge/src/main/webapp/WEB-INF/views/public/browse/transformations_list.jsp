@@ -32,7 +32,7 @@
 					<tr>						
 						<th>Name</th>
 						<th>Description</th>
-						<th>Open</th>
+						<th>Public</th>
 						<th>Created</th>
 						<th>Modified</th>
 						<th>Action</th>
@@ -55,11 +55,7 @@
 															
 							
 						<td>
-							<c:forEach items="${transformation.properties}" var="property">
-								<c:if test="${property.getName() == 'Description '}">
-										${property.getValue()}
-								</c:if>
-							</c:forEach>
+							${transformation.getDescription() }
 						</td>
 						<td class="center">${transformation.getOpen()}</td>
 						<td class="center">${transformation.getCreated()}</td>

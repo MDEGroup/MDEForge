@@ -1,7 +1,10 @@
 package org.mdeforge.business.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -158,6 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.getUsers().clear();
 		project.getUsers().add(user);
+		project.setCreatedDate(new Date());
 		projectRepository.save(project);
 		for (Workspace ws : workspaces) {
 			Workspace w = workspaceRepository.findOne(ws.getId());
@@ -188,6 +192,7 @@ public class ProjectServiceImpl implements ProjectService {
 			artifactService.findOneById(ws.getId(), idUser);
 		
 		List<Workspace> workspaces = project.getWorkspaces();
+		project.setModifiedDate(new Date());
 		projectRepository.save(project);
 		for (Workspace ws : workspaces) {
 			Workspace w = workspaceRepository.findOne(ws.getId());
@@ -243,6 +248,7 @@ public class ProjectServiceImpl implements ProjectService {
 		proj.getArtifacts().remove(art);
 		art.getProjects().remove(projTemp);
 		artifactRepository.save(art);
+		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
 	}
 
@@ -263,6 +269,7 @@ public class ProjectServiceImpl implements ProjectService {
 		proj.getUsers().remove(us);
 		us.getSharedProject().remove(projTemp);
 		userRepository.save(us);
+		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
 	}
 
@@ -273,6 +280,7 @@ public class ProjectServiceImpl implements ProjectService {
 		Artifact emm = artifactService.findOneById(idArtifact, user);
 		emm.getProjects().add(proj);
 		proj.getArtifacts().add(emm);
+		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
 		artifactRepository.save(emm);
 	}
@@ -284,8 +292,43 @@ public class ProjectServiceImpl implements ProjectService {
 		us.getSharedProject().add(proj);
 		proj.getUsers().add(us);
 		userRepository.save(us);
+		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
 		return us;
 	}
 
+	@Override
+	public List<Project> findSharedNoWorkspace(User user) throws BusinessException {
+		List<Workspace> workList = workspaceService.findByUser(user);
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("users.$id").is(new ObjectId(user.getId()));
+
+		
+		query.addCriteria(c1);
+		List<Project> projList = operations.find(query, Project.class);
+		List<Project> toRemove = new ArrayList<Project>();
+		for (Project projectTo : projList) {
+			for (Workspace workspaceTo : projectTo.getWorkspaces()) {
+				for(Workspace w : workList) {
+					if (w.getId().equals(workspaceTo.getId()))
+						toRemove.add(projectTo);
+				}
+			}
+		}
+		for (Workspace workspaceTo : workList) {
+			for (Project projectTo : workspaceTo.getProjects()) {
+				for (Project p : projList) {
+					if (projectTo.getId().equals(p.getId())) {
+						toRemove.add(projectTo);
+					}
+				}
+			}
+		}
+		for (Project toRem : toRemove) {
+			projList.remove(toRem);
+		}
+		return projList;
+	}
+	
 }

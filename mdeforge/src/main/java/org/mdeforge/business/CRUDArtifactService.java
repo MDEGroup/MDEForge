@@ -13,6 +13,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void delete(String idArtifact, User idUser) throws BusinessException;
 	void update(T artifact) throws BusinessException;
 	List<T> findAll() throws BusinessException;
+	List<T> findSharedNoProject(User user) throws BusinessException;
 	T findOne(String id) throws BusinessException;	
 	List<T> findAllWithPublicByUser(User user) throws BusinessException;
 	List<T> findAllPublic() throws BusinessException;
@@ -37,4 +38,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void createIndex();
 	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;
+	List<T> findMyArtifacts(User user) throws BusinessException;
 }

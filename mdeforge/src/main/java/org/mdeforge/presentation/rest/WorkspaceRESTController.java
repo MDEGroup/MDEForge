@@ -65,7 +65,7 @@ public class WorkspaceRESTController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Workspace>> findAllByUsername() {
-		List<Workspace> lists = workspaceService.findAllByUsername(user);
+		List<Workspace> lists = workspaceService.findByUser(user);
 		return new ResponseEntity<List<Workspace>>(lists, HttpStatus.OK);
 	}
 

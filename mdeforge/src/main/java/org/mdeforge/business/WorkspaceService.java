@@ -15,7 +15,6 @@ public interface WorkspaceService {
 	Workspace findById(String id, User user) throws BusinessException;
 	List<Workspace> findAll() throws BusinessException;
 	void delete(String id, User user) throws BusinessException;
-	List<Workspace> findAllByUsername(User user) throws BusinessException;
 	Workspace findOne(String id);
 	Workspace findOneWithUser(String id, String idUser) throws BusinessException;
 	public ResponseGrid<Workspace> findAllPaginatedByOwner(RequestGrid requestGrid, User user)
@@ -26,4 +25,5 @@ public interface WorkspaceService {
 			User user) throws BusinessException;
 	Project addNewProjectInWorkspace(String projectName, String idWorkspace,
 			User user) throws BusinessException;
+	List<Workspace> findByUser(User user) throws BusinessException;
 }

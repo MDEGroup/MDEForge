@@ -1,5 +1,6 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
 
@@ -27,21 +28,24 @@
 		<div class="span4">
 			<div class="well margin-none">
 				<address class="margin-none">
-					<h2>John Doe</h2>
-					<strong>Business manager</strong> at 
+					<h2>${user.getLastname()} ${user.getFirstname()}</h2>
+					<strong>${user.getUsername()}</strong> at 
 					<strong><a href="#">Business</a></strong><br> 
-					<abbr title="Work email">e-mail:</abbr> <a href="mailto:#">john.doe@mybiz.com</a><br> 
-					<abbr title="Work Phone">phone:</abbr> (012) 345-678-901<br>
-					<abbr title="Work Fax">fax:</abbr> (012) 678-132-901
+					<abbr title="Work email">e-mail:</abbr> <a href="mailto:#">${user.getEmail()}</a><br> 
+					<abbr title="Work Phone">phone:</abbr> (+39) 0779 0987652<br>
 					<div class="separator line"></div>
-					<p class="margin-none"><strong>You can also find us:</strong><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique rutrum libero, vel bibendum nunc consectetur sed.</p>
+					<p class="margin-none">
+						<strong>Other informations:</strong>
+						<br>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique rutrum libero, vel bibendum nunc consectetur sed.
+					</p>
 				</address>
 			</div>
 		
 		</div>
 		
 		<div class="span8">
-		
+			
 		
 		</div>
 	</div>
@@ -53,9 +57,9 @@
 			
 			<div class="widget widget-body-white">
 					<div class="widget-head">
-						<h4 class="heading glyphicons file"><i></i>Recent Artifacts</h4>
+						<h4 class="heading glyphicons file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
 					</div>
-					<div class="widget-body">
+					<div class="widget-body" style="max-height: 400px; overflow: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
 			
 								<!-- Table heading -->
@@ -70,30 +74,40 @@
 								
 								<!-- Table body -->
 								<tbody>
-									
-									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td><span class="badge badge-warning">Ecore Metamodel</span></td>
-										<td class="center"><span class="label">1</span></td>
-									</tr>
-									<!-- // Table row END -->
-									
-									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td><span class="badge badge-important">ATL Transformation</span></td>
-										<td class="center">2</td>
-									</tr>
-									<!-- // Table row END -->
-									
-									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td><span class="badge badge-warning">Ecore Metamodel</span></td>
-										<td class="center">3</td>
-									</tr>
-									<!-- // Table row END -->
+									<c:forEach items="${myArtifactsList}" var="artifact">
+										<!-- Table row -->
+										<tr>
+											<td>
+												<c:choose>
+														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+																<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+														</c:when>
+														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+														</c:when>
+														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+																<a href="#">${artifact.getName()}</a>
+														</c:when>
+													</c:choose>
+											</td>
+											<td>
+														<c:choose>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+																		<span class="badge badge-important">ATL Transformation</span>
+																</c:when>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+																		<span class="badge badge-warning">Ecore Metamodel</span>
+																</c:when>
+																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+																		<span class="badge badge-info">Model</span>
+																</c:when>
+															</c:choose>
+			
+											</td>
+											<td class="center"><fmt:formatDate type="date" value="${artifact.getModified()}" /></td>
+										</tr>
+										<!-- // Table row END -->
+									</c:forEach>
 									
 								</tbody>
 								<!-- // Table body END -->
@@ -108,10 +122,10 @@
 
 			<div class="widget widget-body-white">
 					<div class="widget-head">
-						<h4 class="heading glyphicons edit"><i></i>Recent Projects</h4>
+						<h4 class="heading glyphicons edit"><i></i>Recent Projects (${myProjectList.size()})</h4>
 					</div>
 					<div class="widget-body">
-								<div class="widget-body">
+								<div class="widget-body" style="max-height: 400px; overflow: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
 			
 								<!-- Table heading -->
@@ -125,27 +139,15 @@
 								
 								<!-- Table body -->
 								<tbody>
-									
+									<c:forEach items="${myProjectList}" var="project">
+										<!-- Table row -->
+										<tr>
+											<td>${project.getName()}</td>
+											<td class="center">WS 1</td>
+										</tr>
+										<!-- // Table row END -->
+									</c:forEach>
 									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td class="center">WS 1</td>
-									</tr>
-									<!-- // Table row END -->
-									
-									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td class="center">WS 2</td>
-									</tr>
-									<!-- // Table row END -->
-									
-									<!-- Table row -->
-									<tr>
-										<td>Lorem ipsum dolor</td>
-										<td class="center">WS 3</td>
-									</tr>
-									<!-- // Table row END -->
 									
 								</tbody>
 								<!-- // Table body END -->
@@ -172,28 +174,28 @@
 										<!-- List item -->
 										<li>
 											<span>Total Number of Transformations</span>
-											<span class="count">56</span>
+											<span class="count">${totalNumberOfTransformations}</span>
 										</li>
 										<!-- // List item END -->
 										
 										<!-- List item -->
 										<li>
 											<span>Total Number of Metamodels</span>
-											<span class="count">78</span>
+											<span class="count">${totalNumberOfMetamodels}</span>
 										</li>
 										<!-- // List item END -->
 										
 										<!-- List item -->
 										<li>
 											<span>Total Number of Artifact</span>
-											<span class="count">357</span>
+											<span class="count">${totalNumberOfArtifacts}</span>
 										</li>
 										<!-- // List item END -->
 										
 										<!-- List item -->
 										<li>
 											<span>Total Number of Projects</span>
-											<span class="count">34</span>
+											<span class="count">${totalNumberOfProjects}</span>
 										</li>
 										<!-- // List item END -->
 										

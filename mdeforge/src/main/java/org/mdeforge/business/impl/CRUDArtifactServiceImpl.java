@@ -48,6 +48,9 @@ import com.mongodb.Mongo;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
+	
+
+	
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -196,6 +199,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(idArtifact)) {
 					project.getArtifacts().remove(art);
+					project.setModifiedDate(new Date());
 					projectRepository.save(project);
 				}
 		for (Workspace workspace : artifact.getWorkspaces())
@@ -224,6 +228,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(artifact.getId())) {
 					project.getArtifacts().remove(art);
+					project.setModifiedDate(new Date());
 					projectRepository.save(project);
 				}
 		for (Workspace workspace : artifact.getWorkspaces())
@@ -322,6 +327,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 						artifact.getAuthor());
 				if (!isArtifactInProject(p.getId(), artifact.getId())) {
 					p.getArtifacts().add(artifact);
+					p.setModifiedDate(new Date());
 					projectRepository.save(p);
 				}
 			}
@@ -408,6 +414,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				Project p = projectService.findById(ps.getId(),
 						artifact.getAuthor());
 				p.getArtifacts().add(artifact);
+				p.setModifiedDate(new Date());
+				
 				projectRepository.save(p);
 			}
 			for (User us : artifact.getShared()) {
@@ -627,5 +635,58 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 
 		return resource;
+	}
+	@Override
+	public List<T> findSharedNoProject(User user) throws BusinessException {
+
+		List<Project> projList = projectService.findByUser(user);
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		Criteria notPublic = Criteria.where("open").is(false);
+
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2,notPublic));
+		}
+		query.addCriteria(c1.andOperator(notPublic));
+		List<T> artList = operations.find(query, persistentClass);
+		List<T> toRemove = new ArrayList<T>();
+		for (T artifactTo : artList) {
+			for (Project projectTo : artifactTo.getProjects()) {
+				for(Project p : projList) {
+					if (p.getId().equals(projectTo.getId()))
+						toRemove.add(artifactTo);
+				}
+			}
+		}
+		for (Project projectTo : projList) {
+			for (Artifact artifactTo : projectTo.getArtifacts()) {
+				for (Artifact a : artList) {
+					if (artifactTo.getId().equals(a.getId())) {
+						toRemove.add((T)artifactTo);
+					}
+				}
+			}
+		}
+		for (T toRem : toRemove) {
+			artList.remove(toRem);
+		}
+		return artList;
+	}
+	@Override
+	public List<T> findMyArtifacts(User user) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Criteria userCriteria = Criteria.where("author.$id").is("ObjectId('" + user.getId() + "')");
+		Query query = new Query();
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c.andOperator(userCriteria));
+			return n.find(query, persistentClass);
+		} else {
+			query.addCriteria(userCriteria);
+			return n.find(query, persistentClass);
+		}	
 	}
 }

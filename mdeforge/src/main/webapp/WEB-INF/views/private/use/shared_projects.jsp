@@ -34,11 +34,7 @@
 				<thead>
 					<tr>						
 						<th>Name</th>
-						<th>Description</th>
-						<th>Open</th>
 						<th>Created</th>
-						<th>Modified</th>
-						<th>Action</th>
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -49,20 +45,8 @@
 					<!-- Table row -->
 					<tr class="gradeX">						
 						<td><a href="#">${project.getName()}</a></td>
-						<td>
-							<c:forEach items="${project.properties}" var="property">
-								<c:if test="${property.getName() == 'Description '}">
-										${property.getValue()}
-								</c:if>
-							</c:forEach>
-						</td>
-						<td class="center">${project.getOpen()}</td>
-						<td class="center">${project.getCreated()}</td>
-						<td class="center">${project.getModified()}</td>
-						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${project.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${project.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
-						</td>
+<%-- 						<td class="center">${project.getCreated()}</td> --%>
+						<td>${project.getCreatedDate()}</td>
 					</tr>
 					<!-- // Table row END -->
 					</c:forEach>

@@ -63,7 +63,7 @@ public class EcoreMetamodelController {
 	@RequestMapping(value = "/metamodel_details", method = { RequestMethod.GET })
 	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
 
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneById(metamodel_id, user);
 		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
 		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File ecoreMetamodelFile = new File(pathToDownload);
@@ -84,9 +84,9 @@ public class EcoreMetamodelController {
 	@RequestMapping(value = "/metamodel_compare", method = { RequestMethod.POST })
 	public String metamodelCompareExecute(Model model, @RequestParam String left_metamodel_id, @RequestParam String right_metamodel_id) {
 		
-		EcoreMetamodel leftMetamodel = ecoreMetamodelService.findOne(left_metamodel_id);
+		EcoreMetamodel leftMetamodel = ecoreMetamodelService.findOneById(left_metamodel_id, user);
 		model.addAttribute("leftMetamodel", leftMetamodel);
-		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOne(right_metamodel_id);
+		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOneById(right_metamodel_id, user);
 		model.addAttribute("rightMetamodel", rightMetamodel);
 		
 		/*

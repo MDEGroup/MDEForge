@@ -1,5 +1,6 @@
 package org.mdeforge.importer;
 
+import java.util.Date;
 import java.util.List;
 
 import org.mdeforge.business.EcoreMetamodelService;
@@ -13,15 +14,19 @@ public class CreareEcoreSimilarityRelation {
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 //		ecoreMetamodelService.createIndex();
-				
-		System.out.println("###START");
-		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
+		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAllPublic();
 		EcoreMetamodel [] ecoreMMArray = ecoreMMlist.toArray(new EcoreMetamodel[ecoreMMlist.size()]);
-		for (int i =0; i < ecoreMMArray.length-1; i++) 
+		System.out.println("start time: " + new Date());
+		for (int i =0; i < ecoreMMArray.length-1; i++) {
+			System.out.println(ecoreMMArray[i].getName() + " " + i + " of 299 start time: " + new Date());
 			for (int j = i+1; j <ecoreMMArray.length; j++) {
-				System.out.println(ecoreMMArray[i].getName() + "_" + ecoreMMArray[j].getName());
-				ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
+				try {
+					ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
+				} catch (Exception e) {
+					System.err.println("ERROR: " + ecoreMMArray[i].getName() + "_" + ecoreMMArray[j].getName());
+				}
 			}
-		System.out.println("Stop");
+		}
+		System.out.println("end time: " + new Date());
 	}
 }

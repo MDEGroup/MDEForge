@@ -41,7 +41,7 @@
 	<!-- // Widget Heading END -->
 
 	<div class="widget-body">
-		<form action="${pageContext.request.contextPath}/private/use/result_transformation"
+		<form action="${pageContext.request.contextPath}/private/ATLTransformation/result_transformation"
 			method="POST">
 			<div class="row-fluid">
 				<div class="span4">

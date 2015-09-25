@@ -27,7 +27,7 @@
 			
 		<!-- Widget Heading -->
 		<div class="widget-head">
-			<h4 class="heading glyphicons user"><i></i>Manage Workspace</h4>
+			<h4 class="heading glyphicons user"><i></i>${workspace.getDescription()}</h4>
 		</div>
 		<!-- // Widget Heading END -->
 		
