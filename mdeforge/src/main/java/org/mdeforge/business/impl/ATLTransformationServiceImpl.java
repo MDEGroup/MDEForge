@@ -384,8 +384,9 @@ public class ATLTransformationServiceImpl extends
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			injector.inject(
 					inputModel,
-					gridFileMediaService.getFilePath(getModelByMetamodel(
-							inRel.getToArtifact(), models)));
+					gridFileMediaService.getFileInputStream(
+							getModelByMetamodel(inRel.getToArtifact(), models)),null
+							);
 			transformationLauncher.addInModel(inputModel, inRel.getName(),
 					inRel.getReferenceModelName());
 		}

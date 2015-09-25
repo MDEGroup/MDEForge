@@ -677,7 +677,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public List<T> findMyArtifacts(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Criteria userCriteria = Criteria.where("author.$id").is("ObjectId('" + user.getId() + "')");
+		Criteria userCriteria = Criteria.where("author.$id").is(new ObjectId(user.getId()));
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
