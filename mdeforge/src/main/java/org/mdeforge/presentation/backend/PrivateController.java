@@ -54,12 +54,11 @@ public class PrivateController {
 	@RequestMapping(value = "/my_artifacts", method = { RequestMethod.GET })
 	public String myArtifacts(Model model) throws IOException {
 		
-		//TODO togliere la findAll e sostituirla solo con i progetti CHE POSSIEDE L'UTENTE
-		List<Artifact> myArtifactsList = artifactService.findAll();
+		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
 		
 		model.addAttribute("myArtifactsList",myArtifactsList);
 		
-		return "private.use.my_artifacts";
+		return "private.use.shared_artifacts";
 	}
 	
 	

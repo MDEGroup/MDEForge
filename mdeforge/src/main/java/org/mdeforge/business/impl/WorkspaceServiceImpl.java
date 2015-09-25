@@ -1,6 +1,7 @@
 package org.mdeforge.business.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
@@ -81,6 +82,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspaceRepository.save(workspace);
 		for (Project p : workspace.getProjects()) {
 			p.getWorkspaces().add(workspace);
+			p.setModifiedDate(new Date());
 			projectRepository.save(p);
 		}
 		for (Artifact a : workspace.getArtifacts()) {
@@ -159,6 +161,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspaceRepository.save(workspace);
 		for (Project p : workspace.getProjects()) {
 			p.getWorkspaces().add(workspace);
+			p.setModifiedDate(new Date());
 			projectRepository.save(p);
 		}
 		for (Artifact a : workspace.getArtifacts()) {
@@ -236,6 +239,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 				w1 = workspace;
 		}
 		p.getWorkspaces().remove(w1);
+		p.setModifiedDate(new Date());
 		projectRepository.save(p);
 		workspaceRepository.save(w);
 	}
@@ -247,6 +251,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		Project p = projectSerivce.findById(idProject, user);
 		p.getWorkspaces().add(w);
 		w.getProjects().add(p);
+		p.setModifiedDate(new Date());
 		projectRepository.save(p);
 		workspaceRepository.save(w);
 		return p;
@@ -263,6 +268,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		p.setOwner(user);
 		p.getUsers().add(user);
 		user.getSharedProject().add(p);
+		p.setModifiedDate(new Date());
 		projectRepository.save(p);
 		w.getProjects().add(p);
 		workspaceRepository.save(w);

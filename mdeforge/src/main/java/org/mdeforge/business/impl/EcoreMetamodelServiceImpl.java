@@ -80,6 +80,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
@@ -186,6 +187,23 @@ public class EcoreMetamodelServiceImpl extends
 //			throw new BusinessException();
 //		}
 		return result;
+	}
+	@Override
+	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
+		EcoreMetamodel a = super.findOneById(idArtifact, user);
+		a.setMetrics(getMetrics(a));
+		if (a.getExtractedContents()==null)
+			a.setExtractedContents(serializeContent(a));
+		a.getRelations().addAll(
+				similarityRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(
+				containmentRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(
+				diceSimilarityRelationService.findTopProximity(a, 5));
+		a.getRelations().addAll(
+				cosineSimilarityRelationService.findTopProximity(a, 5));
+
+		return a;
 	}
 
 	@Override

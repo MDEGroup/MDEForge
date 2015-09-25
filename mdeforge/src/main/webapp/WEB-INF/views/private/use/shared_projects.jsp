@@ -46,7 +46,7 @@
 					<tr class="gradeX">						
 						<td><a href="#">${project.getName()}</a></td>
 <%-- 						<td class="center">${project.getCreated()}</td> --%>
-						<td>da aggiungere</td>
+						<td>${project.getCreatedDate()}</td>
 					</tr>
 					<!-- // Table row END -->
 					</c:forEach>

@@ -1,6 +1,7 @@
 package org.mdeforge.business.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.mdeforge.business.model.serializer.json.ArtifactListSerializer;
@@ -24,6 +25,8 @@ public class Project implements java.io.Serializable{
 	
 	private static final long serialVersionUID = -717518242205317774L;
 
+	private Date createdDate;
+	private Date modifiedDate;
 	@DBRef(lazy = true)
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
@@ -94,5 +97,21 @@ public class Project implements java.io.Serializable{
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 }

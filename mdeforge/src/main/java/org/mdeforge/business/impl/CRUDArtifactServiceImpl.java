@@ -50,6 +50,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	
 
+	
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -198,6 +199,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(idArtifact)) {
 					project.getArtifacts().remove(art);
+					project.setModifiedDate(new Date());
 					projectRepository.save(project);
 				}
 		for (Workspace workspace : artifact.getWorkspaces())
@@ -226,6 +228,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Artifact art : project.getArtifacts())
 				if (art.getId().equals(artifact.getId())) {
 					project.getArtifacts().remove(art);
+					project.setModifiedDate(new Date());
 					projectRepository.save(project);
 				}
 		for (Workspace workspace : artifact.getWorkspaces())
@@ -324,6 +327,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 						artifact.getAuthor());
 				if (!isArtifactInProject(p.getId(), artifact.getId())) {
 					p.getArtifacts().add(artifact);
+					p.setModifiedDate(new Date());
 					projectRepository.save(p);
 				}
 			}
@@ -410,6 +414,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				Project p = projectService.findById(ps.getId(),
 						artifact.getAuthor());
 				p.getArtifacts().add(artifact);
+				p.setModifiedDate(new Date());
+				
 				projectRepository.save(p);
 			}
 			for (User us : artifact.getShared()) {
@@ -668,5 +674,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 		return artList;
 	}
-	
+	@Override
+	public List<T> findMyArtifacts(User user) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Criteria userCriteria = Criteria.where("author.$id").is("ObjectId('" + user.getId() + "')");
+		Query query = new Query();
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c.andOperator(userCriteria));
+			return n.find(query, persistentClass);
+		} else {
+			query.addCriteria(userCriteria);
+			return n.find(query, persistentClass);
+		}	
+	}
 }

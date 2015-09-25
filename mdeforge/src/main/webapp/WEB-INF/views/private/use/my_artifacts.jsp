@@ -46,10 +46,10 @@
 				
 				<!-- Table body -->
 				<tbody>
-					<c:forEach items="${sharedArtifactList}" var="artifact">
+					<c:forEach items="${myArtifactsList}" var="artifact">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td><a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a></td>
+						<td><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a></td>
 						<td>
 							<c:forEach items="${artifact.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -62,8 +62,8 @@
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
 						</td>
 					</tr>
 					<!-- // Table row END -->
