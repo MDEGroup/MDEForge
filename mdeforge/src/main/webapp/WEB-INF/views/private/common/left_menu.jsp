@@ -25,7 +25,7 @@
 				
  				<%-- <li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li> --%>
 				<li class="dropdown dd-1">
-					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.workspace"/> <span class="icon-chevron-right"></span></a>
+					<a href="" data-toggle="dropdown" class="glyphicons inbox_plus"><i></i><spring:message code="mdeforge.menu.workspace"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<c:forEach items="${workspaces_list}" var="workspace">
 							<li><a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="glyphicons icon-folder-open"><i></i>${workspace.getName()}</a></li>
