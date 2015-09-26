@@ -81,7 +81,6 @@ public class SearchPublicController {
 		Collections.sort(al, new Comparator<Artifact>(){
 			@Override
 			public int compare(Artifact o1, Artifact o2) {
-				// TODO Auto-generated method stub
 				return o1.getScore().compareTo(o2.getScore());
 			}
 		  });

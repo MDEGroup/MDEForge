@@ -11,7 +11,7 @@
 		<li class="divider"></li>
 		<li> Use</li>
 		<li class="divider"></li>
-		<li>Dashboard</li>
+		<li>Shared Artifacts</li>
 </ul>
 <!-- Breadcrumb END -->
 

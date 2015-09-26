@@ -11,7 +11,7 @@
 		<li class="divider"></li>
 		<li> Use</li>
 		<li class="divider"></li>
-		<li>Dashboard</li>
+		<li>My Artifacts</li>
 </ul>
 <!-- Breadcrumb END -->
 
@@ -86,8 +86,7 @@
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons icon-trash btn-danger" title="Delete artifact"><i></i></a><br/>
-
+								<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons remove_2 btn-danger"><i></i></a>
 								<c:choose>
 								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
 										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>

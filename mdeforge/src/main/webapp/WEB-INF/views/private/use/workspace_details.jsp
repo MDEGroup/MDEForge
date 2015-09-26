@@ -10,9 +10,9 @@
 	<li><a href="#" class="glyphicons dashboard"><i></i> <spring:message
 				code="mdeforge.public.back.browse.breadcrumbs.public_area" /></a></li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse" /></li>
+	<li>Use</li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse.list" /></li>
+	<li>Workspace details</li>
 </ul>
 <!-- Breadcrumb END -->
 <div class="row-fluid">
@@ -35,7 +35,7 @@
 
 		<!-- Widget Heading -->
 		<div class="widget-head">
-			<h4 class="heading glyphicons user">
+			<h4 class="heading">
 				<i></i>${workspace.getDescription()}</h4>
 		</div>
 		<!-- // Widget Heading END -->

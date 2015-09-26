@@ -12,9 +12,9 @@
 	<li><a href="#" class="glyphicons dashboard"><i></i> <spring:message
 				code="mdeforge.public.back.browse.breadcrumbs.public_area" /></a></li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse" /></li>
+	<li>Use</li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse.list" /></li>
+	<li>Create Workspace</li>
 </ul>
 <!-- Breadcrumb END -->
 
