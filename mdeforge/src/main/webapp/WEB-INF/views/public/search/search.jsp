@@ -173,13 +173,13 @@
 															
 															
 															<c:choose>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+																<c:when test="${artifact.getClass().name.equals('org.mdeforge.business.model.ATLTransformation')}">
 																		<span class="badge badge-important">ATL Transformation</span>
 																</c:when>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+																<c:when test="${artifact.getClass().name.equals('org.mdeforge.business.model.EcoreMetamodel')}">
 																		<span class="badge badge-warning">Ecore Metamodel</span>
 																</c:when>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+																<c:when test="${artifact.getClass().name.equals('org.mdeforge.business.model.Model')}">
 																		<span class="badge badge-info">Model</span>
 																</c:when>
 															</c:choose>

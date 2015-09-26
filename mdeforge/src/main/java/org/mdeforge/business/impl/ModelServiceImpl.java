@@ -228,28 +228,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
-	@Override
-	public List<Model> search(String text){
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
-		List<Model> artifacts = operations.find(Query.query(criteria), Model.class);
-		
-		return artifacts;
-	}
-	
-	@Override
-	public List<Model> orederedSearch(String text){
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(text);
-		TextQuery query = new TextQuery(criteria);
-		query.setScoreFieldName("score");
-		query.sortByScore();
-		List<Model> artifacts = operations.find(query, Model.class);
-		return artifacts;
-	}
 	
 	@Override
 	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
