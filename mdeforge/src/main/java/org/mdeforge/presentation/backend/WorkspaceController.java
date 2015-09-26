@@ -44,6 +44,8 @@ public class WorkspaceController {
 	@Autowired
 	private WorkspaceValidator workspaceValidator;
 
+	//@RequestParam(value = "search_string", required = false) String searchString
+	
 	@RequestMapping(value = "/{idWorkspace}/remove/{idProject}", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
 	
@@ -161,9 +163,12 @@ public class WorkspaceController {
 
 	@RequestMapping(value = "/delete", method = RequestMethod.GET)
 	public String delete_start(@RequestParam("id") String id, Model model) {
-		Workspace workspace = workspaceService.findOne(id);
-		model.addAttribute("workspace", workspace);
-		return "workspace.delete";
+		try {
+			workspaceService.delete(id, user);
+			 return "redirect:/private/dashboard";
+		} catch (BusinessException e) {
+			return "redirect:/private/workspace/list";
+		}
 	}
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
