@@ -422,7 +422,7 @@ public class ATLTransformationServiceImpl extends
 			SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
 			String formats1 = formatter5.format(ss1);
 			
-			String tempModelPath = basePath + "generatedBy" + formats1 + ".xmi";
+			String tempModelPath = basePath + "generatedBy_" + transformation.getName() + "_" + formats1 + ".xmi";
 			String fileName = "generatedBy" + formats1 + ".xmi";
 			extractor.extract(item.getKey(), tempModelPath);
 			
