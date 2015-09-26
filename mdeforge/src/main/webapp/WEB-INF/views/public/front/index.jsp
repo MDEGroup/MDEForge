@@ -135,7 +135,7 @@
 						</div>
 					</div>
 					<!-- Ribbon -->
-					<div class="ribbon-wrapper"><div class="ribbon">Soon</div></div>
+					<div class="ribbon-wrapper"><div class="ribbon success">Available</div></div>
 					
 				</div>
 				</a>

@@ -51,7 +51,7 @@ public class SearchPublicController {
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
 
-
+	private static final String[] ARTIFACT_TYPE = {"models", "transformations", "metamodels"};
 //	@RequestMapping(value = "/search/result", method = { RequestMethod.GET })
 //	public String searchResult(Model model, @RequestParam(value = "search_string", required = true) String searchString) {
 //		model.addAttribute("artifactList",artifactService.search(searchString));
@@ -63,9 +63,13 @@ public class SearchPublicController {
 			@RequestParam(value = "artifactType", required = false) String artifactType) {
 		List<Artifact> al = new ArrayList<Artifact>();
 		System.out.println(artifactType);
-		
+		String [] artifactTypes;
 		if(searchString != null && searchString != ""){
-			String[] artifactTypes = artifactType.split(",");
+			
+			if (!(artifactType == null || artifactType.equals("")))
+				artifactTypes = artifactType.split(",");
+			else
+				artifactTypes = ARTIFACT_TYPE;
 			for (String string : artifactTypes) {
 				if (string.equals("models"))
 					al.addAll(modelService.orederedSearch(searchString));

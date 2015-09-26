@@ -105,61 +105,7 @@
 				</div>
 				<!-- // Row END -->
 
-				<hr class="separator">
-
-				<!-- Row -->
-				<div class="row-fluid uniformjs">
-
-					<!-- Column -->
-					<div class="span4">
-						<h4 style="margin-bottom: 10px;">Policy &amp; Newsletter</h4>
-						<label class="checkbox" for="agree">
-							<div class="checker" id="uniform-agree">
-								<span><input type="checkbox" class="checkbox" id="agree"
-									name="agree" style="opacity: 0;"></span>
-							</div> Please agree to our policy
-						</label> <label class="checkbox" for="newsletter">
-							<div class="checker" id="uniform-newsletter">
-								<span><input type="checkbox" class="checkbox"
-									id="newsletter" name="newsletter" style="opacity: 0;"></span>
-							</div> Receive Newsletter
-						</label>
-					</div>
-					<!-- // Column END -->
-
-					<!-- Column -->
-					<div class="span8">
-						<div id="newsletter_topics" class="gray">
-							<h4>Topics</h4>
-							<p>Select at least two topics you would like to receive in
-								the newsletter.</p>
-							<label for="topic_marketflash">
-								<div class="checker" id="uniform-topic_marketflash">
-									<span><input type="checkbox" id="topic_marketflash"
-										value="marketflash" name="topic" disabled="disabled"
-										style="opacity: 0;"></span>
-								</div> Marketflash
-							</label> <label for="topic_fuzz">
-								<div class="checker" id="uniform-topic_fuzz">
-									<span><input type="checkbox" id="topic_fuzz"
-										value="fuzz" name="topic" disabled="disabled"
-										style="opacity: 0;"></span>
-								</div> Latest fuzz
-							</label> <label for="topic_digester">
-								<div class="checker" id="uniform-topic_digester">
-									<span><input type="checkbox" id="topic_digester"
-										value="digester" name="topic" disabled="disabled"
-										style="opacity: 0;"></span>
-								</div> Mailing list digester
-							</label>
-						</div>
-					</div>
-					<!-- // Column END -->
-
-				</div>
-				<!-- // Row END -->
-
-				<hr class="separator">
+				
 
 				<!-- Form actions -->
 				<div class="form-actions">
