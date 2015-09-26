@@ -224,26 +224,34 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public void delete(T artifact, User user) {
 		artifact = findOneById(artifact.getId(), user);
-		for (Project project : artifact.getProjects())
+		for (Project project : artifact.getProjects()){
+			Artifact artToRemove = new Artifact();
 			for (Artifact art : project.getArtifacts())
-				if (art.getId().equals(artifact.getId())) {
-					project.getArtifacts().remove(art);
-					project.setModifiedDate(new Date());
-					projectRepository.save(project);
-				}
-		for (Workspace workspace : artifact.getWorkspaces())
+				if (art.getId().equals(artifact.getId())) 
+					artToRemove = art;
+			project.getArtifacts().remove(artToRemove);
+			project.setModifiedDate(new Date());
+			projectRepository.save(project);
+				
+		}
+		for (Workspace workspace : artifact.getWorkspaces()){
+			Artifact artToRemove = new Artifact();
 			for (Artifact art : workspace.getArtifacts())
-				if (art.getId().equals(artifact.getId())) {
-					workspace.getArtifacts().remove(art);
-					workspaceRepository.save(workspace);
-				}
-
-		for (User us : artifact.getShared())
+				if (art.getId().equals(artifact.getId()))
+					artToRemove = art;
+			workspace.getArtifacts().remove(artToRemove);
+			workspaceRepository.save(workspace);
+				
+		}
+		for (User us : artifact.getShared()){
+			Artifact artToRemove = new Artifact();
 			for (Artifact art : us.getSharedArtifact())
-				if (art.getId().equals(artifact.getId())) {
-					us.getSharedArtifact().remove(art);
-					userRepository.save(user);
-				}
+				if (art.getId().equals(artifact.getId()))
+					artToRemove = art;
+			
+			us.getSharedArtifact().remove(artToRemove);
+			userRepository.save(us);
+		}
 		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);

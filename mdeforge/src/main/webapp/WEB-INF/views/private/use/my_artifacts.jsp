@@ -11,13 +11,13 @@
 		<li class="divider"></li>
 		<li> Use</li>
 		<li class="divider"></li>
-		<li>My Artifacts</li>
+		<li>Dashboard</li>
 </ul>
 <!-- Breadcrumb END -->
 
 
 
-<h3>My Artifacts</h3>
+<h3>${pageName }</h3>
 
 
 	
@@ -46,10 +46,22 @@
 				
 				<!-- Table body -->
 				<tbody>
-					<c:forEach items="${myArtifactsList}" var="artifact">
+					<c:forEach items="${sharedArtifactList}" var="artifact">
 					<!-- Table row -->
 					<tr class="gradeX">						
-						<td><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a></td>
+						<td>
+							<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#">${artifact.getName()}</a>
+								</c:when>
+							</c:choose>
+						</td>
 						<td>
 							<c:forEach items="${artifact.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
@@ -57,13 +69,38 @@
 								</c:if>
 							</c:forEach>
 						</td>
-						<td class="center">TYPE</td>
+						<td class="center">
+							<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">ATL Transformation</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">Ecore Metamodel</a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#">Model</a>
+								</c:when>
+							</c:choose>
+						</td>
 						<td class="center">${artifact.getOpen()}</td>
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
+								<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons icon-trash btn-danger" title="Delete artifact"><i></i></a><br/>
+
+								<c:choose>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+										<a href="#" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+								</c:when>
+							</c:choose>
+								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
+																									
 						</td>
 					</tr>
 					<!-- // Table row END -->

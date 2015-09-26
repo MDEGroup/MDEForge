@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/private")
@@ -78,7 +79,6 @@ public class PrivateController {
 	@RequestMapping(value = "/shared_projects", method = { RequestMethod.GET })
 	public String sharedProjects(Model model) throws IOException {
 		
-		//TODO togliere la findAll e sostituirla solo con i progetti SHARED
 		List<Project> sharedProjectList = projectService.findSharedNoWorkspace(user);
 		model.addAttribute("sharedProjectList",sharedProjectList);
 		
@@ -89,10 +89,16 @@ public class PrivateController {
 	public String myArtifacts(Model model) throws IOException {
 		
 		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
-		model.addAttribute("myArtifactsList",myArtifactsList);
+		model.addAttribute("sharedArtifactList",myArtifactsList);
 		model.addAttribute("pageName","My Artifacts");
 		
-		return "private.use.shared_artifacts";
+		return "private.use.my_artifacts";
+	}
+	@RequestMapping(value = "/artifact/delete", method = RequestMethod.GET)
+	public String deleteArtifact(@RequestParam("idArtifact") String idArtifact, org.springframework.ui.Model model) {
+		Artifact artifact = artifactService.findOneById(idArtifact, user);
+		artifactService.delete(artifact, user);
+		return "redirect:/private/my_artifacts";
 	}
 	
 	
