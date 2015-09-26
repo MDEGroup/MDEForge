@@ -256,18 +256,21 @@ public class ProjectServiceImpl implements ProjectService {
 	public void removeUserFromProject(String idUser, String idProject, User user)
 			throws BusinessException {
 		Project proj = findById(idProject, user);
+		User userToDelete = userRepository.findOne(idUser);
 		User us = null;
 		for (User u : proj.getUsers()) {
-			if (u.getId().equals(idUser))
-				us = u;
-		}
-		Project projTemp = null;
-		for (Project project : us.getSharedProject()) {
-			if (project.getId().equals(idProject))
-				projTemp = project;
+			if (u.equals(userToDelete))
+				us = userToDelete;
 		}
 		proj.getUsers().remove(us);
-		us.getSharedProject().remove(projTemp);
+		//TOGLIERE DAL PROGETTO IL WS
+		
+		us.getSharedProject().remove(proj);
+		for (Workspace w : us.getWorkspaces()) {
+			w.getProjects().remove(proj);
+			workspaceRepository.save(w);
+			proj.getWorkspaces().remove(w);
+		}
 		userRepository.save(us);
 		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
@@ -303,7 +306,6 @@ public class ProjectServiceImpl implements ProjectService {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users.$id").is(new ObjectId(user.getId()));
-
 		
 		query.addCriteria(c1);
 		List<Project> projList = operations.find(query, Project.class);

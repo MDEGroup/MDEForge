@@ -17,7 +17,7 @@
 
 
 
-<h3>Shared Artifacts</h3>
+<h3>${pageName }</h3>
 
 
 	

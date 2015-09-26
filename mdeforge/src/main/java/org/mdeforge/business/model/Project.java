@@ -114,4 +114,11 @@ public class Project implements java.io.Serializable{
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Project) 
+			return this.id.equals(((Project)obj).getId());
+		else return false;
+	}
 }

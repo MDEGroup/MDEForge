@@ -180,4 +180,11 @@ public class User implements java.io.Serializable{
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof User) 
+			return this.id.equals(((User)obj).getId());
+		else return false;
+	}
 }

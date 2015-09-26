@@ -71,6 +71,7 @@ public class PrivateController {
 		
 		List<Artifact> sharedArtifactList = artifactService.findSharedNoProject(user);
 		model.addAttribute("sharedArtifactList",sharedArtifactList);
+		model.addAttribute("pageName", "Shared Artifacts");
 		return "private.use.shared_artifacts";
 	}
 
@@ -89,6 +90,7 @@ public class PrivateController {
 		
 		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
 		model.addAttribute("myArtifactsList",myArtifactsList);
+		model.addAttribute("pageName","My Artifacts");
 		
 		return "private.use.shared_artifacts";
 	}
