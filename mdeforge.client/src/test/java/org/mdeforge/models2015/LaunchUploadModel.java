@@ -42,6 +42,11 @@ public class LaunchUploadModel {
 		simpleFamilyModel.setOpen(true);
 		simpleFamilyModel.setDescription("For use in models tool demostration 2015");
 		simpleFamilyModel.setFile(ModelService.setGridFileMedia("temp/models2015/Families2Persons/sample-Families.xmi"));
+		ConformToRelation ctr = new ConformToRelation();
+		ctr.setFromArtifact(simpleFamilyModel);
+		ctr.setToArtifact(families );
+		simpleFamilyModel.getRelations().add(ctr);
+		
 		modelService.addModel(simpleFamilyModel);
 	}
 }
