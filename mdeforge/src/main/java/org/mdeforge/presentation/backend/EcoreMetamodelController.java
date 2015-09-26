@@ -1,8 +1,11 @@
 package org.mdeforge.presentation.backend;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
+import org.eclipse.m2m.atl.emftvm.Isnull;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
@@ -13,6 +16,7 @@ import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/private/EcoreMetamodel")
@@ -110,6 +115,50 @@ public class EcoreMetamodelController {
 		return "private.use.metamodel_compare";
 	}
 	
+	@RequestMapping(value = "/upload", method = { RequestMethod.GET })
+	public String uploadNewMetamodelStart(Model model) throws IOException {
+		
+		return "private.use.upload_page";
+	}
 	
+	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
+	public String uploadNewMetamodel(
+			Model model,
+			@RequestParam("metamodelfile") MultipartFile file,
+			@RequestParam("metamodelDescription") String metamodelDescription,
+			@RequestParam("publicPrivate") String publicPrivate) throws IOException {
+		
+		boolean isOpen = false;
+		
+		if(publicPrivate.equals("public")){
+			isOpen = true;
+		}
+		
+		System.out.println(metamodelDescription);
+		System.out.println(isOpen);
+		
+		EcoreMetamodel m = new EcoreMetamodel();
+		byte[] bytes = file.getBytes();
+		GridFileMedia gfm = new GridFileMedia();
+		gfm.setByteArray(bytes);
+		
+		m.setName(file.getOriginalFilename());
+		m.setCreated(new Date());
+		m.setAuthor(user);
+		m.setDescription(metamodelDescription);
+		m.setOpen(isOpen);
+		m.setFile(gfm);
+		
+		EcoreMetamodel result = ecoreMetamodelService.create(m);
+		
+		boolean report = false;
+		if(result != null){
+			report = true;
+		}
+		
+		model.addAttribute("report", report);
+		
+		return "private.use.upload_page";
+	}
 
 }

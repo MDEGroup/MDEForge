@@ -54,11 +54,7 @@ public class SearchPublicController {
 	private ATLTransformationService aTLTransformationService;
 
 	private static final String[] ARTIFACT_TYPE = {"models", "transformations", "metamodels"};
-//	@RequestMapping(value = "/search/result", method = { RequestMethod.GET })
-//	public String searchResult(Model model, @RequestParam(value = "search_string", required = true) String searchString) {
-//		model.addAttribute("artifactList",artifactService.search(searchString));
-//		return "public.search.result";
-//	}
+
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model, @RequestParam(value = "search_string", required = false) String searchString, 
@@ -96,21 +92,6 @@ public class SearchPublicController {
 		return "public.search";
 	}
 	
-	
-//	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
-//	public String searchEcoreMetamodelResultByExample(
-//			Model model,
-//			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
-//		EcoreMetamodel m = new EcoreMetamodel();
-//		byte[] bytes = file.getBytes();
-//		GridFileMedia gfm = new GridFileMedia();
-//		gfm.setByteArray(bytes);
-//		gfm.setFileName("searchFragment.ecore");
-//		m.setFile(gfm);
-//		m.setName("searchFragment");        
-//		model.addAttribute("artifactList",ecoreMetamodelService.searchByExample(m));
-//		return "public.search.result";
-//	}
 	
 	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
 	public String searchEcoreMetamodelResultByExample(
