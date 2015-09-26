@@ -2,6 +2,8 @@ package org.mdeforge.presentation.frontend;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.mdeforge.business.ATLTransformationService;
@@ -62,7 +64,6 @@ public class SearchPublicController {
 	public String search(Model model, @RequestParam(value = "search_string", required = false) String searchString, 
 			@RequestParam(value = "artifactType", required = false) String artifactType) {
 		List<Artifact> al = new ArrayList<Artifact>();
-		System.out.println(artifactType);
 		String [] artifactTypes;
 		if(searchString != null && searchString != ""){
 			
@@ -81,6 +82,15 @@ public class SearchPublicController {
 							.orederedSearch(searchString));
 			}
 		}
+		Collections.sort(al, new Comparator<Artifact>(){
+			@Override
+			public int compare(Artifact o1, Artifact o2) {
+				// TODO Auto-generated method stub
+				return o1.getScore().compareTo(o2.getScore());
+			}
+		  });
+		Collections.reverse(al);
+		
 		if(searchString != null && searchString != "")
 			model.addAttribute("artifactList", al);
 		return "public.search";
