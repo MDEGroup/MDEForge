@@ -88,4 +88,12 @@ public class Workspace implements java.io.Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Workspace) 
+			return this.id.equals(((Workspace)obj).getId());
+		else return false;
+	}
+	
+	
 }
