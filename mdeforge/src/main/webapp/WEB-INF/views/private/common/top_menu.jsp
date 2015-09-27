@@ -15,7 +15,6 @@
 			
 			
 			<ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard"><i></i> Dashboard</a></li>	
 				<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel Upload</a></li>
 				
 					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
@@ -68,15 +67,21 @@
 			
 				<!-- Profile / Logout menu -->
 				<li class="account dropdown dd-1">
-										<a data-toggle="dropdown" href="#" class="glyphicons logout lock"><span class="hidden-tablet hidden-phone hidden-desktop-1">  <security:authentication property="principal.user.username"/></span><i></i></a>
+					<a data-toggle="dropdown" href="#" class="glyphicons logout lock">
+					<span class="hidden-tablet hidden-phone hidden-desktop-1">  
+					<security:authentication property="principal.user.username"/></span><i></i></a>
 					<ul class="dropdown-menu pull-right">
+						<li><a href="${pageContext.request.contextPath}/private/dashboard"
+												class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title="">Dashboard</a></li>					
+								
 						<li><a href="#" class="glyphicons cogwheel">Settings<i></i></a></li>						
 						<li class="profile">
 							<span>
 								<span class="heading">Profile <a href="#" class="pull-right">edit</a></span>
 								<span class="img"></span>
 								<span class="details">
-									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
+									<a href="#"><security:authentication property="principal.user.firstname"/> 
+									<security:authentication property="principal.user.lastname"/></a>
 									<security:authentication property="principal.user.email"/>
 								</span>
 								<span class="clearfix"></span>
@@ -88,7 +93,7 @@
 							</span>
 						</li>
 					</ul>
-									</li>
+				</li>
 				<!-- // Profile / Logout menu END -->
 				
 			</ul> 

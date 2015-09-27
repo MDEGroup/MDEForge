@@ -1,5 +1,5 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <div class="navbar main hidden-print">
 			
 			<div class="secondary">
@@ -13,13 +13,9 @@
 												
 						<%-- <li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/help.htm" class="glyphicons shield"><i></i><spring:message code="public.menu.help" /></a></li> --%>
 						<%-- <li class="hidden-phone"><a href="#" class="glyphicons shield"><i></i><spring:message code="public.menu.info" /></a></li> --%>
-						<li class="glyphs hidden-phone">
-							<ul>
-								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
-								<%-- <li><a href="${pageContext.request.contextPath}/public/register_start.htm" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li> --%>
-								<li><a href="#" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /> (Not available for now)</a></li>
-							</ul>
-						</li>
+						
+							
+						
 					</ul>					
 					<!-- TOP Menu END -->
 					
@@ -36,28 +32,54 @@
 			</button>
 			<!-- // Menu Toggle Button END -->
 			
-			<ul class="topnav pull-left">
+			<ul class="topnav pull-right">
 				
 				<li class="active"><a href="${pageContext.request.contextPath}/" class="glyphicons home"><i></i><spring:message code="common.home" /></a></li>
 				<%-- <li><a href="${pageContext.request.contextPath}/public/about.htm" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li> --%>												
 				<li><a href="${pageContext.request.contextPath}/public/about" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li>
-				
+				<security:authorize access="isAuthenticated()">		
+						<!-- Profile / Logout menu -->
+						<li class="account dropdown dd-1">
+							<a data-toggle="dropdown" href="#" class="glyphicons logout lock">
+							<span class="hidden-tablet hidden-phone hidden-desktop-1">  
+							<security:authentication property="principal.user.username"/></span><i></i></a>
+							<ul class="dropdown-menu pull-right">
+								<li><a href="#" class="glyphicons cogwheel">Settings<i></i></a></li>	
+								<li><a href="${pageContext.request.contextPath}/private/dashboard"
+												class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title="">Dashboard</a></li>					
+								<li class="profile">
+									<span>
+										<span class="heading">Profile <a href="#" class="pull-right">edit</a></span>
+										<span class="img"></span>
+										<span class="details">
+											<a href="#"><security:authentication property="principal.user.firstname"/> 
+											<security:authentication property="principal.user.lastname"/></a>
+											<security:authentication property="principal.user.email"/>
+											
+										</span>
+										<span class="clearfix"></span>
+									</span>
+								</li>
+								<li>
+									<span>
+										<a class="btn btn-default btn-mini pull-right" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message code="common.logout"/></a>
+									</span>
+								</li>
+							</ul>
+						</li>
+						</security:authorize>			
+						<security:authorize access="isAnonymous()">
+						<li class="glyphs hidden-phone">
+							<ul>
+								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
+								<li><a href="#" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /> (Not available for now)</a></li>
+							</ul>
+						</li>
+						</security:authorize>	
 			</ul>
-			
-			<!-- Top Menu Right -->
-			<%-- <ul class="topnav pull-right border-none hidden-tablet">
-				
-				<li class="search open margin-none border-none box-shadow-none">
-					<form autocomplete="off" class="dropdown dd-1">
-						<input type="text" value="" placeholder="<spring:message code="public.menu.search" />" data-toggle="typeahead" />
-						<button type="button" class="glyphicons search"><i></i></button>
-					</form>
-				</li>
-				
-			</ul> --%>
 			<div class="clearfix"></div>
 			<!-- // Top Menu Right END -->
-			
+				
 			</div>
 			
 		</div>
