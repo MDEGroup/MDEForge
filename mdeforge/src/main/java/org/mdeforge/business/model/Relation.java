@@ -26,9 +26,7 @@ public abstract class Relation implements java.io.Serializable{
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Relation)) {
-            return false;
-        }
+        
         Relation other = (Relation) obj;
         return this.id.equals(other.id);
     }

@@ -215,6 +215,18 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					us.getSharedArtifact().remove(art);
 					userRepository.save(user);
 				}
+		for (Relation us : artifact.getRelations()){
+			Relation relationToRemove = relationRepository.findOne(us.getId());
+			
+			relationToRemove.getFromArtifact().getRelations().remove(relationToRemove);
+			relationToRemove.getToArtifact().getRelations().remove(relationToRemove);
+			
+			artifactRepository.save(relationToRemove.getFromArtifact());
+			artifactRepository.save(relationToRemove.getToArtifact());
+			relationRepository.delete(relationToRemove);
+		}
+		
+			
 		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
@@ -251,6 +263,17 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			
 			us.getSharedArtifact().remove(artToRemove);
 			userRepository.save(us);
+		}
+		
+		for (Relation us : artifact.getRelations()){
+			Relation relationToRemove = relationRepository.findOne(us.getId());
+			
+			relationToRemove.getFromArtifact().getRelations().remove(relationToRemove);
+			relationToRemove.getToArtifact().getRelations().remove(relationToRemove);
+			
+			artifactRepository.save(relationToRemove.getFromArtifact());
+			artifactRepository.save(relationToRemove.getToArtifact());
+			relationRepository.delete(relationToRemove);
 		}
 		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());

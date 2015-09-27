@@ -40,4 +40,5 @@ public interface ProjectService {
 
 	List<Project> findSharedNoWorkspace(User user) throws BusinessException;
 
+	List<Project> findMostSharedProject(User user) throws BusinessException;
 }
