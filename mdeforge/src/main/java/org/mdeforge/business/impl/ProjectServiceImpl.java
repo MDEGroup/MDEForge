@@ -25,6 +25,7 @@ import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -134,6 +135,16 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	public List<Project> findRecent() throws BusinessException {
+		Query query = new Query();
+		query.limit(5);
+		query.with(new Sort(Sort.Direction.DESC, "created"));
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		return n.find(query, Project.class);
+			
+	}
+
+	@Override
 	public List<Project> findByIdWorkspace(String idWorkspace, User user)
 			throws BusinessException {
 		//
@@ -223,6 +234,10 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<Project> findAll() throws BusinessException {
 		return projectRepository.findAll();
+	}
+	@Override
+	public long countAll() throws BusinessException {
+		return projectRepository.count();
 	}
 
 	@Override

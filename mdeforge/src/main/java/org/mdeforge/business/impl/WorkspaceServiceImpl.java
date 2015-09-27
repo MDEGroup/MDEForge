@@ -280,6 +280,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		p.getUsers().add(user);
 		user.getSharedProject().add(p);
 		p.setModifiedDate(new Date());
+		p.setCreatedDate(p.getModifiedDate());
 		projectRepository.save(p);
 		w.getProjects().add(p);
 		workspaceRepository.save(w);

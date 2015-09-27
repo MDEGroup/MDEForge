@@ -6,10 +6,9 @@ import java.util.List;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,9 @@ public class PrivateController {
 	private CRUDArtifactService<Artifact> artifactService;
 	
 	@Autowired
+	private ModelService modelService;
+	
+	@Autowired
 	private User user;
 	
 	@Autowired
@@ -45,21 +47,24 @@ public class PrivateController {
 		model.addAttribute("user",user);
 		
 //		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
-		List<Artifact> myArtifactsList = artifactService.findAll();
+		List<Artifact> myArtifactsList = artifactService.findRecentArtifacts();
 		model.addAttribute("myArtifactsList",myArtifactsList);
 		
-		List<Project> myProjectList = projectService.findSharedNoWorkspace(user);
+		List<Project> myProjectList = projectService.findRecent();
 		model.addAttribute("myProjectList",myProjectList);
 		
 		
-		List<ATLTransformation> allT = aTLTransformationService.findAll();
-		model.addAttribute("totalNumberOfTransformations",allT.size());
+		long countT = aTLTransformationService.countAll();
+		model.addAttribute("totalNumberOfTransformations",countT);
 		
-		List<EcoreMetamodel> allMM = ecoreMetamodelService.findAll();
-		model.addAttribute("totalNumberOfMetamodels",allMM.size());
+		long allMM = ecoreMetamodelService.countAll();
+		model.addAttribute("totalNumberOfMetamodels",allMM);
 		
-		List<Artifact> allA = artifactService.findAll();
-		model.addAttribute("totalNumberOfArtifacts",allA.size());
+		long allM = modelService.countAll();
+		model.addAttribute("totalNumberOfModels",allM);
+		
+		long allA = artifactService.countAll();
+		model.addAttribute("totalNumberOfArtifacts",allA);
 		
 //		List<Project> myProjectList = projectService.findSharedNoWorkspace(user);
 		model.addAttribute("totalNumberOfProjects",myProjectList.size());

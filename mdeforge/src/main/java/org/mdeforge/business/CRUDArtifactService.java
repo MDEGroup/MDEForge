@@ -39,4 +39,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
+	long countAll();
+	List<T> findRecentArtifacts();
 }

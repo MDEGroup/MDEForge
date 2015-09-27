@@ -32,6 +32,7 @@ import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
@@ -189,6 +190,42 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			return n.find(query, persistentClass);
 		} else
 			return n.findAll(persistentClass);
+
+	}
+	@Override
+	public List<T> findRecentArtifacts() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		
+		Query query = new Query();
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			query.limit(5);
+			query.with(new Sort(Sort.Direction.DESC, "created"));
+			return n.find(query, persistentClass);
+		} else {
+			Query q = new Query();
+			q.limit(5);
+			q.with(new Sort(Sort.Direction.DESC, "created"));
+			return n.find(q, persistentClass);
+		}
+			
+		
+	}
+	
+	@Override
+	public long countAll() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+
+		Query query = new Query();
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			return n.count(query, persistentClass);
+		} else
+			return n.count(new Query(), persistentClass);
 
 	}
 

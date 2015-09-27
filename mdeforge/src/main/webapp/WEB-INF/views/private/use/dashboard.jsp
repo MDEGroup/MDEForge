@@ -127,7 +127,7 @@
 								<thead>
 									<tr>
 										<th>Project Name</th>
-										<th>Workspace</th>
+										<th>Created date</th>
 									</tr>
 								</thead>
 								<!-- // Table heading END -->
@@ -138,7 +138,9 @@
 										<!-- Table row -->
 										<tr>
 											<td>${project.getName()}</td>
-											<td class="center">WS 1</td>
+											<td class="center">
+												<span class="label"><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
+											</td>
 										</tr>
 										<!-- // Table row END -->
 									</c:forEach>
@@ -157,7 +159,7 @@
 
 			<div class="widget widget-body-white">
 							<div class="widget-head">
-								<h4 class="heading glyphicons stats"><i></i>Statistics</h4>
+								<h4 class="heading glyphicons stats"><i></i>Repository Statistics</h4>
 							</div>
 							<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								
@@ -180,6 +182,10 @@
 										<!-- // List item END -->
 										
 										<!-- List item -->
+										<li>
+											<span>Total Number of Models</span>
+											<span class="count">${totalNumberOfModels}</span>
+										</li>
 										<li>
 											<span>Total Number of Artifact</span>
 											<span class="count">${totalNumberOfArtifacts}</span>
