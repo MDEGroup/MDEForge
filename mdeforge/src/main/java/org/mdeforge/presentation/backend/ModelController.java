@@ -41,16 +41,17 @@ public class ModelController {
 		model.addAttribute("ecoreMM", ecoreMM);
 		return "ecore_metamodel.details";
 	}
-	@RequestMapping(value = "/metamodel_details", method = { RequestMethod.GET })
-	public String metamodelDetails(org.springframework.ui.Model model, @RequestParam String metamodel_id) {
+	@RequestMapping(value = "/model_details", method = { RequestMethod.GET })
+	public String modelDetails(org.springframework.ui.Model model, @RequestParam String model_id) {
 
-		Model ecoreMetamodel = modelService.findOnePublic(metamodel_id);
-		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
+		Model modelEMF = modelService.findOneById(model_id, user);
+		model.addAttribute("model", modelEMF);
+		
+		String pathToDownload = gridFileMediaService.getFilePath(modelEMF);
 		File ecoreMetamodelFile = new File(pathToDownload);
-		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
+		model.addAttribute("modelFile", ecoreMetamodelFile);
 
-		return "private.use.metamodel_details";
+		return "private.use.model_details";
 	}
 	
 	

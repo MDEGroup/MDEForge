@@ -19,6 +19,6 @@ public interface GridFileMediaService {
 
 	InputStream getFileInputStream(Artifact artifact) throws BusinessException;
 
-	GridFileMedia createObjectFromFile(String fileName) throws IOException;
+	GridFileMedia createObjectFromFile(String absName, String fileName) throws IOException;
 	
 }

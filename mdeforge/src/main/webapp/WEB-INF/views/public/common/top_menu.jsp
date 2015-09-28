@@ -8,7 +8,7 @@
 			</button>
 			<!-- // Menu Toggle Button END -->
 			
-						
+			<security:authorize access="isAuthenticated()">					
 			<ul class="topnav pull-right">
 			<!-- Profile / Logout menu -->
 				<li class="account dropdown dd-1">
@@ -45,7 +45,7 @@
 									
 				
 			</ul> 
-			
+			</security:authorize>
 			<ul class="topnav pull-left">
 					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
 					

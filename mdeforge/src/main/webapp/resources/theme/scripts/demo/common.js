@@ -568,7 +568,13 @@ $(function()
 						'<td>'  +
 						'<i class="icon-remove-circle removeArtifact" data-id="' + idModel + '"></i></td>' +
 						'<td>' 
-						+ '<a href="/mdeforge/private/Transformation/transformation_details?atl_id='+ idModel + '">'
+						+ '<a href="/mdeforge/private/Model/model_details?model_id='+ idModel + '">'
+						+ nameModel + 
+						'</a></td></tr>');
+				console.log('<td>'  +
+						'<i class="icon-remove-circle removeArtifact" data-id="' + idModel + '"></i></td>' +
+						'<td>' 
+						+ '<a href="/mdeforge/private/Model/model_details?model_id='+ idModel + '">'
 						+ nameModel + 
 						'</a></td></tr>');
 				$("#modelSelect option[value='" + idModel + "']").remove();
@@ -741,7 +747,7 @@ $(function()
 									'<td>'  +
 									'<i class="icon-remove-circle removeArtifact" data-id="' + artifact.id + '"></i></td>' +
 									'<td>'
-									+ '<a href="'+ artifact.id + '">'
+									+ '<a href="/mdeforge/private/Model/model_details?model_id='+ artifact.id + '">'
 									+ artifact.name + 
 									'</a></td></tr>');
 						}

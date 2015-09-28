@@ -138,15 +138,14 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared").in(user.getId());
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId( user.getId()));
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
-		Criteria c4 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c3.orOperator(c2,c1, c4));
+			query.addCriteria(c3.andOperator(c2,c1));
 		} else
-			query.addCriteria(c3.orOperator(c1, c4));
+			query.addCriteria(c3.andOperator(c1));
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)

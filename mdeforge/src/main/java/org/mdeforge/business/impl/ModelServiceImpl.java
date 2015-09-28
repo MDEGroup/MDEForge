@@ -36,6 +36,7 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.search.ResourceSerializer;
+import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.EcoreMetamodelRepository;
@@ -142,13 +143,16 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));
-//		String path = gridFileMediaService.getFilePath(artifact);
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + 
+				"/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+		
+		//TROVARE LA CONFORMANCE TO
+		String mmID = ((ConformToRelation) artifact.getRelations().get(0)).getToArtifact().getId();
 		Model result = super.create(artifact);
-//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-//		
-//		artifact.setExtractedContents(EmfjsonMongo.getInstance().saveModel(emm.getId(), path, jsonMongoUriBase+artifact.getId()));
-//		
-//		artifactRepository.save(artifact);
+		result.setExtractedContents( EmfjsonMongo.getInstance()
+				.saveModel(jsonMongoUriBase+mmID, gridFileMediaService.getFilePath(result), 
+						jsonMongoUriBase+artifact.getId()));
+		modelRepository.save(result);
 		return result;
 	}
 	
@@ -237,5 +241,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				result.addAll(findModelsByMetamodel((EcoreMetamodel)rel.getToArtifact()));
 		}
 		return result;
+	}
+	
+	@Override
+	public Model findOnePublic(String id) {
+		Model a = super.findOnePublic(id);
+		
+
+		return a;
 	}
 }

@@ -52,6 +52,14 @@ public class Model extends Artifact {
 		return uri;
 	}
 
+	public ConformToRelation getMetamodel() {
+		for (Relation rel : this.getRelations()) {
+			if (rel instanceof ConformToRelation)
+				return (ConformToRelation) rel;
+		}
+		return null;
+	}
+	
 	public void setUri(String uri) {
 		this.uri = uri;
 	}

@@ -55,9 +55,9 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	}
 	
 	@Override 
-	public GridFileMedia createObjectFromFile (String tempFilePath) throws IOException {
+	public GridFileMedia createObjectFromFile (String tempFilePath, String fileName) throws IOException {
 		GridFileMedia gfr = new GridFileMedia();
-		gfr.setFileName(tempFilePath);
+		gfr.setFileName(fileName);
 		java.nio.file.Path path = Paths.get(tempFilePath);
 		byte[] data = Files.readAllBytes(path);
 		gfr.setByteArray(data);

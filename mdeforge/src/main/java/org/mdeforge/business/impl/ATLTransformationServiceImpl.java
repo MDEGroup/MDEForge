@@ -436,7 +436,7 @@ public class ATLTransformationServiceImpl extends
 			model.setCreated(new Date());
 			model.getRelations().add(cfr);
 			
-			GridFileMedia gfr = gridFileMediaService.createObjectFromFile(tempModelPath);
+			GridFileMedia gfr = gridFileMediaService.createObjectFromFile(tempModelPath, fileName);
 			
 			model.setFile(gfr);
 			modelService.create(model);
