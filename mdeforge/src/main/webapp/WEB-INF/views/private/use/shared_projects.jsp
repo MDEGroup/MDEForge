@@ -35,6 +35,8 @@
 					<tr>						
 						<th>Name</th>
 						<th>Created</th>
+						<th>Owner</th>
+						
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -47,6 +49,7 @@
 						<td><a href="#">${project.getName()}</a></td>
 <%-- 						<td class="center">${project.getCreated()}</td> --%>
 						<td>${project.getCreatedDate()}</td>
+						<td>${project.getOwner().getUsername() }</td>
 					</tr>
 					<!-- // Table row END -->
 					</c:forEach>
