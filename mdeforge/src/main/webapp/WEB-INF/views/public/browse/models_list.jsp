@@ -15,7 +15,7 @@
 <!-- Breadcrumb END -->
 
 
-<h3><spring:message code="mdeforge.public.back.browse.list"/></h3>
+<h3><spring:message code="mdeforge.public.back.browse.model.list"/></h3>
 
 
 <div class="innerLR">
