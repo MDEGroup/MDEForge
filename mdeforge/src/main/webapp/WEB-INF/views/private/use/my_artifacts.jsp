@@ -78,7 +78,8 @@
 										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">Ecore Metamodel</a>
 								</c:when>
 								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-										<a href="#">Model</a>
+										<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${artifact.getId()}">${artifact.getName()}</a>
+										(<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getMetamodel().getToArtifact().getId()}">${artifact.getMetamodel().getToArtifact().getName()}</a>)
 								</c:when>
 							</c:choose>
 						</td>
