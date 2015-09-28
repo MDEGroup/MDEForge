@@ -2,6 +2,9 @@ package org.mdeforge.business.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * A representation of the model object '<em><b>Model</b></em>'. <!--
  * begin-user-doc --> <!-- end-user-doc -->
@@ -51,7 +54,7 @@ public class Model extends Artifact {
 	public String getUri() {
 		return uri;
 	}
-
+	@JsonIgnore
 	public ConformToRelation getMetamodel() {
 		for (Relation rel : this.getRelations()) {
 			if (rel instanceof ConformToRelation)
