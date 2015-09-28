@@ -39,6 +39,8 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
-	long countAll();
-	List<T> findRecentArtifacts();
+	long countAll() throws BusinessException;
+	List<T> findRecentArtifacts() throws BusinessException;
+	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
+	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
 }

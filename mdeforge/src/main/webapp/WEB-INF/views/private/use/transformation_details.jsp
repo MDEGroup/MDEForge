@@ -33,7 +33,7 @@
 
 <!-- Heading -->
 <div class="heading-buttons">
-	<h3>${atlTransformation.getName()}
+	<h3 id="artifactName" data-id="${atlTransformation.getId()}">${atlTransformation.getName()}
 		<span> <c:choose>
 				<c:when test="${atlTransformation.getOpen()}">		
 							Public Transformation										  												    
@@ -179,14 +179,26 @@
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${atlTransformation.getShared().size()}
 															people)</span>
+															<i class="icon-expand-alt" id="showUserList"></i>
 													</h5>
-													<ul class="team">
+													<div id="userList" class="row-fluid" style="display: none">
+														<select id="userSelect">
+														</select>
+														<div>
+															<span class="btn btn-block btn-primary span4" id="addUserArtifact">Add</span>
+														</div>
+													</div>
+													
+													<ul id="users" class="team">
 														<c:forEach items="${atlTransformation.getShared()}"
 															var="user" varStatus="count">
-															<li><span class="crt">${count.count}</span><span
+															<li class="userLi" data-id="${user.getId()}"><span class="crt">${count.count}</span><span
 																class="strong">${user.getUsername()}</span><span
 																class="muted">${user.getFirstname()}
-																	${user.getLastname()}</span></li>
+																	${user.getLastname()}</span>
+																<span class="muted"><a href="mailto:${user.getEmail() }">${user.getEmail() } <i class="icon-envelope"></i></a></span>
+																<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+															</li>
 														</c:forEach>
 													</ul>
 												</div>

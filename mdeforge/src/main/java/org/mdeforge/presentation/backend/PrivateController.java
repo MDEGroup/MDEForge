@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.mdeforge.business.ATLTransformationService;
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
@@ -12,11 +13,17 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/private")
@@ -106,5 +113,26 @@ public class PrivateController {
 		return "redirect:/private/my_artifacts";
 	}
 	
+	@RequestMapping(value = "/artifact/{idArtifact}/addUser/{idUser}", method=RequestMethod.GET)
+	public @ResponseBody HttpEntity<User> addUserInArtifact(@PathVariable("idUser") String idUser, @PathVariable("idArtifact") String idArtifact) {
+		try {
+			User u = artifactService.addUserInArtifact(idUser, idArtifact, user);
+			return  new ResponseEntity<User>(u, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<User>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	
+	@RequestMapping(value = "/artifact/{idArtifact}/removeUser/{idUser}", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	
+	public @ResponseBody HttpEntity<String> removeUserFromArtifact(@PathVariable("idUser") String idUser, @PathVariable("idArtifact") String idArtifact) {
+		try {
+//			workspaceService.removeProjectFromWorkspace(idProject, idWorkspace, user);
+			artifactService.removeUserFromArtifact(idUser, idArtifact);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 }

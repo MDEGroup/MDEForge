@@ -25,6 +25,8 @@ property = "_class")
 
 public class Artifact implements java.io.Serializable{
 
+	
+
 	/**
 	 * 
 	 */
@@ -252,6 +254,11 @@ public class Artifact implements java.io.Serializable{
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
 	}
-
+	
+	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return this.getId().equals(((Artifact)obj).getId());
+	}
 
 }

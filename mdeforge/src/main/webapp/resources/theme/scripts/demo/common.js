@@ -514,6 +514,32 @@ $(function()
 	});
 	
 	
+	//
+	$(document).on('click','#addUserArtifact', function(event){
+		var idUser = $('#userSelect').val();
+		var nameModel = $("#userSelect option:selected").text();
+		var idArtifact = $("#artifactName").data('id');
+		$.ajax({
+			url : "/mdeforge/private/artifact/" + idArtifact + "/addUser/" + idUser,
+			success : function(data) {
+				console.log($('#users'))
+				$('#users').append('<li class="userLi" data-id="' + data.id + 
+						'" class="sharedUser"><span class="crt"></span><span class="strong">' +
+						data.firstname + '  ' + data.lastname + '</span>' + 
+						'<span class="muted"><a href="mailto:'+ data.email +
+						'">'+ data.username +' <i class="icon-envelope"></i></a>' +
+						'<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="' + data.id + '" ></span>' +
+				'</span></li>');
+				$("#userSelect option[value='" + idUser + "']").remove();
+				$('#userList').hide();
+			},
+			error : function error(data) {
+				console.log('error')
+			}
+		});
+	});
+	//
+	
 	$('#showModelList').click(function(event){
 		if ($('#modelToAdd').css('display') == 'none') {
 			$.ajax({
@@ -678,6 +704,25 @@ $(function()
 
 	});
 	
+	$(document).on('click','.removeArtifactSharedUser', function(event){
+		var idArtifact = $("#artifactName").data('id');
+		var idUser = $(this).data('id');
+		$.ajax({
+			url : "/mdeforge/private/artifact/" + idArtifact + "/removeUser/" + idUser,
+			success : function(data) {
+				$('.userLi[data-id="'+ idUser +'"]').remove();
+				
+			},
+			error : function error(data) {
+				console.log($('.userLi[data-id="'+ idUser +'"]'));
+				$('.userLi[data-id="'+ idUser +'"]').remove();
+				
+			}
+			
+		});
+		
+	});
+	
 	// employees widget
 	$('.widget-employees').each(function(){
 		if (typeof $.fn.select2 != 'undefined') 
@@ -695,6 +740,7 @@ $(function()
 				
 				url : "/mdeforge/private/project/" + id,
 				success : function(data) {
+					console.log(data.id);
 					$('#projectId').attr('data-id',data.id)
 					$("#workspaceDetailsDiv").show();
 					$('#users').empty();

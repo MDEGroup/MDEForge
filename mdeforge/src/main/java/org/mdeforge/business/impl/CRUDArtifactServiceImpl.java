@@ -49,9 +49,6 @@ import com.mongodb.Mongo;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
-	
-
-	
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -117,12 +114,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		TextQuery query = new TextQuery(criteria);
 		query.setScoreFieldName("score");
 		query.sortByScore();
-		
+
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
 			query.addCriteria(c2);
-			
+
 		}
 		List<T> artifacts = operations.find(query, persistentClass);
 		return artifacts;
@@ -138,7 +135,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId( user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(
+				new ObjectId(user.getId()));
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
 		Criteria publicCriteria = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
@@ -151,8 +149,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
 			throw new BusinessException();
-		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
-		
+		artifact.getFile().setByteArray(
+				gridFileMediaService.getFileByte(artifact));
+
 		return artifact;
 	}
 
@@ -173,11 +172,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
 			throw new BusinessException();
-		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
-		
+		artifact.getFile().setByteArray(
+				gridFileMediaService.getFileByte(artifact));
+
 		return artifact;
 	}
-	
+
 	@Override
 	public List<T> findAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -192,10 +192,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			return n.findAll(persistentClass);
 
 	}
+
 	@Override
 	public List<T> findRecentArtifacts() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		
+
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
@@ -210,10 +211,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			q.with(new Sort(Sort.Direction.DESC, "created"));
 			return n.find(q, persistentClass);
 		}
-			
-		
+
 	}
-	
+
 	@Override
 	public long countAll() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -252,18 +252,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					us.getSharedArtifact().remove(art);
 					userRepository.save(user);
 				}
-		for (Relation us : artifact.getRelations()){
+		for (Relation us : artifact.getRelations()) {
 			Relation relationToRemove = relationRepository.findOne(us.getId());
-			
-			relationToRemove.getFromArtifact().getRelations().remove(relationToRemove);
-			relationToRemove.getToArtifact().getRelations().remove(relationToRemove);
-			
+
+			relationToRemove.getFromArtifact().getRelations()
+					.remove(relationToRemove);
+			relationToRemove.getToArtifact().getRelations()
+					.remove(relationToRemove);
+
 			artifactRepository.save(relationToRemove.getFromArtifact());
 			artifactRepository.save(relationToRemove.getToArtifact());
 			relationRepository.delete(relationToRemove);
 		}
-		
-			
+
 		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
@@ -273,41 +274,43 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public void delete(T artifact, User user) {
 		artifact = findOneById(artifact.getId(), user);
-		for (Project project : artifact.getProjects()){
+		for (Project project : artifact.getProjects()) {
 			Artifact artToRemove = new Artifact();
 			for (Artifact art : project.getArtifacts())
-				if (art.getId().equals(artifact.getId())) 
+				if (art.getId().equals(artifact.getId()))
 					artToRemove = art;
 			project.getArtifacts().remove(artToRemove);
 			project.setModifiedDate(new Date());
 			projectRepository.save(project);
-				
+
 		}
-		for (Workspace workspace : artifact.getWorkspaces()){
+		for (Workspace workspace : artifact.getWorkspaces()) {
 			Artifact artToRemove = new Artifact();
 			for (Artifact art : workspace.getArtifacts())
 				if (art.getId().equals(artifact.getId()))
 					artToRemove = art;
 			workspace.getArtifacts().remove(artToRemove);
 			workspaceRepository.save(workspace);
-				
+
 		}
-		for (User us : artifact.getShared()){
+		for (User us : artifact.getShared()) {
 			Artifact artToRemove = new Artifact();
 			for (Artifact art : us.getSharedArtifact())
 				if (art.getId().equals(artifact.getId()))
 					artToRemove = art;
-			
+
 			us.getSharedArtifact().remove(artToRemove);
 			userRepository.save(us);
 		}
-		
-		for (Relation us : artifact.getRelations()){
+
+		for (Relation us : artifact.getRelations()) {
 			Relation relationToRemove = relationRepository.findOne(us.getId());
-			
-			relationToRemove.getFromArtifact().getRelations().remove(relationToRemove);
-			relationToRemove.getToArtifact().getRelations().remove(relationToRemove);
-			
+
+			relationToRemove.getFromArtifact().getRelations()
+					.remove(relationToRemove);
+			relationToRemove.getToArtifact().getRelations()
+					.remove(relationToRemove);
+
 			artifactRepository.save(relationToRemove.getFromArtifact());
 			artifactRepository.save(relationToRemove.getToArtifact());
 			relationRepository.delete(relationToRemove);
@@ -328,7 +331,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.setAuthor(user);
 			T original = findOneByOwner(artifact.getId(), artifact.getAuthor());
 			// UploadFile
-			if (artifact.getFile() != null && artifact.getFile().getByteArray() != null) {
+			if (artifact.getFile() != null
+					&& artifact.getFile().getByteArray() != null) {
 				GridFileMedia fileMedia = new GridFileMedia();
 				fileMedia.setFileName("");
 				fileMedia.setByteArray(Base64.decode(artifact.getFile()
@@ -336,10 +340,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				gridFileMediaService.delete(original.getFile());
 				gridFileMediaService.store(artifact.getFile());
 				artifact.setFile(fileMedia);
-			}
-			else
+			} else
 				artifact.setFile(original.getFile());
-			
+
 			for (Workspace ws : artifact.getWorkspaces()) {
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
 			}
@@ -347,11 +350,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
 			}
-			
 
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
-			
+
 			artifactRepository.save(artifact);
 			// check relation
 			for (User us : artifact.getShared()) {
@@ -399,7 +401,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					projectRepository.save(p);
 				}
 			}
-			
+
 		} catch (Exception e) {
 			throw new BusinessException();
 		}
@@ -483,7 +485,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 						artifact.getAuthor());
 				p.getArtifacts().add(artifact);
 				p.setModifiedDate(new Date());
-				
+
 				projectRepository.save(p);
 			}
 			for (User us : artifact.getShared()) {
@@ -503,7 +505,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public List<T> findAllWithPublicByUser(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(
+				new ObjectId(user.getId()));
 		Criteria c2 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
 			Criteria c3 = Criteria.where("_class").is(
@@ -687,7 +690,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	}
 
-	//TODO Antonio Da eliminare Assolutamente
+	// TODO Antonio Da eliminare Assolutamente
 	@Override
 	public Resource loadArtifacrt(String id) throws BusinessException {
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
@@ -704,25 +707,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		return resource;
 	}
+
 	@Override
 	public List<T> findSharedNoProject(User user) throws BusinessException {
 
 		List<Project> projList = projectService.findByUser(user);
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(
+				new ObjectId(user.getId()));
 		Criteria notPublic = Criteria.where("open").is(false);
 
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2,notPublic));
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c1.andOperator(c2, notPublic));
 		}
 		query.addCriteria(c1.andOperator(notPublic));
 		List<T> artList = operations.find(query, persistentClass);
 		List<T> toRemove = new ArrayList<T>();
 		for (T artifactTo : artList) {
 			for (Project projectTo : artifactTo.getProjects()) {
-				for(Project p : projList) {
+				for (Project p : projList) {
 					if (p.getId().equals(projectTo.getId()))
 						toRemove.add(artifactTo);
 				}
@@ -732,7 +738,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			for (Artifact artifactTo : projectTo.getArtifacts()) {
 				for (Artifact a : artList) {
 					if (artifactTo.getId().equals(a.getId())) {
-						toRemove.add((T)artifactTo);
+						toRemove.add((T) artifactTo);
 					}
 				}
 			}
@@ -742,10 +748,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 		return artList;
 	}
+
 	@Override
 	public List<T> findMyArtifacts(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Criteria userCriteria = Criteria.where("author.$id").is(new ObjectId(user.getId()));
+		Criteria userCriteria = Criteria.where("author.$id").is(
+				new ObjectId(user.getId()));
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
@@ -755,6 +763,35 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		} else {
 			query.addCriteria(userCriteria);
 			return n.find(query, persistentClass);
-		}	
+		}
+	}
+
+	@Override
+	public User addUserInArtifact(String idUser, String idArtifact, User user) {
+		Artifact art = findOneById(idArtifact, user);
+		User us = userRepository.findOne(idUser);
+		art.getShared().add(us);
+		us.getSharedArtifact().add(art);
+		artifactRepository.save(art);
+		userRepository.save(us);
+		return us;
+	}
+
+	@Override
+	public void removeUserFromArtifact(String idUser, String idArtifact)
+			throws BusinessException {
+		User user = userRepository.findOne(idUser);
+		Artifact art = artifactRepository.findOne(idArtifact);
+		for (Project project : user.getSharedProject()) {
+			if (project.getArtifacts().contains(art)) {
+				project.getArtifacts().remove(art);
+				projectRepository.save(project);
+			}
+			art.removeFromProjects(project);
+		}
+		user.getSharedArtifact().remove(art);
+		art.getShared().remove(user);
+		userRepository.save(user);
+		artifactRepository.save(art);
 	}
 }

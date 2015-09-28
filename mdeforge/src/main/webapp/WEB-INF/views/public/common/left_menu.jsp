@@ -19,7 +19,7 @@
 				<!-- Blank page template menu example -->
 				<!-- Menu Regular Item (add class active to LI for an active menu item) -->
 				
-				<li class="active dropdown dd-1">
+				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.metamodels"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<li><a href="${pageContext.request.contextPath}/public/browse/metamodels_list" class="glyphicons list"><i></i><spring:message code="mdeforge.public.back.browse.menu.list"/></a></li>
