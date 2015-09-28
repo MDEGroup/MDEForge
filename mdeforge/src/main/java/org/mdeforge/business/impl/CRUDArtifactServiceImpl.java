@@ -140,12 +140,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId( user.getId()));
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
+		Criteria publicCriteria = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c3.andOperator(c2,c1));
+			query.addCriteria(c3.andOperator(c2.orOperator(c1, publicCriteria)));
 		} else
-			query.addCriteria(c3.andOperator(c1));
+			query.addCriteria(c3.orOperator(c1, publicCriteria));
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)

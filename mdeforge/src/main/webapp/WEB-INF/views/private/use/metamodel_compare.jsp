@@ -323,7 +323,7 @@
 										<h5 class="strong">Similarity Relation</h5>
 										<div class="progress progress-mini progress-primary count-outside add-outside">
 											<div class="count">
-												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 * similarityRelation.getValue()}" />
+												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 - 100 * similarityRelation.getValue()}" />%
 											</div>
 											<div class="bar" style="width: ${100 -similarityRelation.getValue() * 100}%;"></div>
 										</div>
@@ -332,7 +332,7 @@
 										<h5 class="strong">Cosine Similarity</h5>
 										<div class="progress progress-mini progress-primary count-outside add-outside">
 											<div class="count">
-												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 * cosineSimilarityRelation.getValue()}" />
+												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 - 100 * cosineSimilarityRelation.getValue()}" />%
 											</div>
 											<div class="bar" style="width: ${100 - cosineSimilarityRelation.getValue() * 100}%;"></div>
 										</div>
@@ -341,7 +341,7 @@
 										<h5 class="strong">Dice Similarity</h5>
 										<div class="progress progress-mini progress-primary count-outside add-outside">
 											<div class="count">
-												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 * diceSimilarityRelation.getValue()}" />
+												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 - 100 * diceSimilarityRelation.getValue()}" />%
 											</div>
 											<div class="bar" style="width: ${100 - diceSimilarityRelation.getValue() * 100}%;"></div>
 										</div>
@@ -350,7 +350,7 @@
 										<h5 class="strong">Containment Similarity</h5>
 										<div class="progress progress-mini progress-primary count-outside add-outside">
 											<div class="count">
-												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 * containmentRelation.getValue()}" />
+												<fmt:formatNumber type="number" maxFractionDigits="3" value="${100 - 100 * containmentRelation.getValue()}" />%
 											</div>
 											<div class="bar" style="width: ${100 - containmentRelation.getValue() * 100}%;"></div>
 											</div>
