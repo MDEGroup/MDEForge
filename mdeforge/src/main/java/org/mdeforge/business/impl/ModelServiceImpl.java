@@ -149,10 +149,15 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		//TROVARE LA CONFORMANCE TO
 		String mmID = ((ConformToRelation) artifact.getRelations().get(0)).getToArtifact().getId();
 		Model result = super.create(artifact);
-		result.setExtractedContents( EmfjsonMongo.getInstance()
-				.saveModel(jsonMongoUriBase+mmID, gridFileMediaService.getFilePath(result), 
-						jsonMongoUriBase+artifact.getId()));
-		modelRepository.save(result);
+		try{
+			result.setExtractedContents( EmfjsonMongo.getInstance()
+					.saveModel(jsonMongoUriBase+mmID, gridFileMediaService.getFilePath(result), 
+			jsonMongoUriBase+artifact.getId()));
+			modelRepository.save(result);
+		}catch (Exception e) {
+			logger.error("Some Errors when ty to exact content from model");
+		}
+
 		return result;
 	}
 	

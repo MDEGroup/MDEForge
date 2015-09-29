@@ -89,17 +89,20 @@
 						<td class="center actions">
 								<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons remove_2 btn-danger"><i></i></a>
 								<c:choose>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-										<a href="#" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-								</c:when>
-							</c:choose>
-								<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
+									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
+											<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+											<a href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Transformation Download"><i></i></a>
+									</c:when>
+									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
+											<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+											<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
+									</c:when>
+									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
+											<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+											<a href="${pageContext.request.contextPath}/public/browse/model_download?model_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
+									</c:when>
+								</c:choose>
+								
 																									
 						</td>
 					</tr>
