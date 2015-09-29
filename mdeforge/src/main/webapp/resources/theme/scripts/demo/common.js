@@ -617,7 +617,8 @@ $(function()
 	$(document).on('click','#addUser', function(event){
 		var idUser = $('#userSelect').val();
 		var nameModel = $("#userSelect option:selected").text();
-		var idProject = $("#projectId").data('id');
+		var idProject = $("#projectId").attr('data-id');
+		console.log(idProject);
 		$.ajax({
 			url : "/mdeforge/private/project/" + idProject + "/addUser/" + idUser,
 			success : function(data) {

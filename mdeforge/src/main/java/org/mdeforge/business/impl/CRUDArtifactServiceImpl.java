@@ -16,7 +16,6 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
@@ -30,8 +29,6 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -84,7 +81,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	private String jsonArtifactCollection;
 
 	protected Class<T> persistentClass;
-	Logger logger = LoggerFactory.getLogger(EcoreMetamodelImporterServiceImpl.class);
 	public void createIndex() {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 

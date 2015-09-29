@@ -155,7 +155,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			jsonMongoUriBase+artifact.getId()));
 			modelRepository.save(result);
 		}catch (Exception e) {
-			logger.error("Some Errors when ty to exact content from model");
+			System.err.println(e.getMessage());
 		}
 
 		return result;

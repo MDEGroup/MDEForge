@@ -351,6 +351,9 @@
 												<a
 													href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
 											</h5>
+											<span class="badge badge-success">Score: <fmt:formatNumber
+														type="number" maxFractionDigits="3"
+														value="${artifact.getScore()}" /></span>
 											<p>
 												<c:set var="existDescription" value="false" />
 												<c:set var="description" value="" />
@@ -386,15 +389,15 @@
 								</c:forEach>
 
 
-								<div class="pagination margin-none">
-									<ul>
-										<li class="disabled"><a href="#">&lt;</a></li>
-										<li class="active"><a href="#">1</a></li>
-										<li><a href="#">2</a></li>
-										<li><a href="#">3</a></li>
-										<li><a href="#">&gt;</a></li>
-									</ul>
-								</div>
+<!-- 								<div class="pagination margin-none"> -->
+<!-- 									<ul> -->
+<!-- 										<li class="disabled"><a href="#">&lt;</a></li> -->
+<!-- 										<li class="active"><a href="#">1</a></li> -->
+<!-- 										<li><a href="#">2</a></li> -->
+<!-- 										<li><a href="#">3</a></li> -->
+<!-- 										<li><a href="#">&gt;</a></li> -->
+<!-- 									</ul> -->
+<!-- 								</div> -->
 
 							</div>
 						</div>

@@ -70,11 +70,6 @@
 												Used in ${model.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
 											</p>
-											<div
-												class="margin-bottom-none progress progress-small count-outside">
-												<div class="count">30%</div>
-												<div class="bar" style="width: 30%;"></div>
-											</div>
 										</div>
 									</div>
 								</div>
