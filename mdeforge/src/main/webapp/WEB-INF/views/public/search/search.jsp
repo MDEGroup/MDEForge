@@ -272,7 +272,7 @@
 									e.preventDefault();
 								    e.stopPropagation();
 								    console.log(myAwesomeDropzone);
-								    myAwesomeDropzone.processQueue();
+								    this.processQueue();
 								});
 							    this.on("success", function(file) {
 							    	var v = new Object();

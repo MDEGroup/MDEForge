@@ -112,7 +112,7 @@ public class SearchPublicController {
 	}
 	
 	
-	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
+//	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
 	public String searchEcoreMetamodelResultByExampleTop5(
 			Model model,
 			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
