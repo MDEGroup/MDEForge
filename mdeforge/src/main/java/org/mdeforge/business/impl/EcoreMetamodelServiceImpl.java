@@ -1026,6 +1026,42 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		return result;
 	}
+	@Override
+	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample, double score)
+			throws BusinessException {
+		Comparator<Double> c = new Comparator<Double>() {
+			public int compare(Double a, Double b) {
+				if (a >= b) {
+					return -1;
+				} else {
+					return 1;
+				} // returning 0 would merge keys
+			}
+		};
+		
+		List<EcoreMetamodel> repository = findAll();
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(c);
+		for (EcoreMetamodel ecoreMetamodel : repository) {
+			double d = calculateContainment(ecoreMetamodel, searchSample);
+			if (d>=score)
+				list.put(d, ecoreMetamodel);
+		}
+		logger.info(list.size() + "");
+		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
+		int i = 0;
+		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
+			EcoreMetamodel value = entry.getValue();
+			logger.info("score: " + entry.getKey());
+			logger.info("metamodel" + entry.getValue().getName());
+			result.add(value);
+			try {
+				value.setScore(Float.parseFloat(entry.getKey().toString()));
+			} catch (Exception e) {
+				logger.error("fail to converter score to float");
+			}
+		}
+		return result;
+	}
 	
 	private double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
 		try {

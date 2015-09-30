@@ -35,7 +35,7 @@ public class Artifact implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
-	@JsonIgnore @TextScore Float score;
+	@Transient @TextScore Float score;
 	
 	@Id
 	private String id = null;

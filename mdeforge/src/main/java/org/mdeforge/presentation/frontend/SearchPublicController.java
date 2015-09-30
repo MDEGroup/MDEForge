@@ -25,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -93,7 +94,7 @@ public class SearchPublicController {
 	
 	
 	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
-	public String searchEcoreMetamodelResultByExample(
+	public @ResponseBody List<EcoreMetamodel> searchEcoreMetamodelResultByExample(
 			Model model,
 			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
 		EcoreMetamodel m = new EcoreMetamodel();
@@ -103,8 +104,32 @@ public class SearchPublicController {
 		gfm.setFileName("searchFragment.ecore");
 		m.setFile(gfm);
 		m.setName("searchFragment");        
-		model.addAttribute("artifactListByExample", ecoreMetamodelService.searchByExample(m));
+		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.5);
+		for (EcoreMetamodel ecoreMetamodel : el) {
+			ecoreMetamodel.setFile(null);
+		}
+		return el;
+	}
+	
+	
+	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
+	public String searchEcoreMetamodelResultByExampleTop5(
+			Model model,
+			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
+		EcoreMetamodel m = new EcoreMetamodel();
+		byte[] bytes = file.getBytes();
+		GridFileMedia gfm = new GridFileMedia();
+		gfm.setByteArray(bytes);
+		gfm.setFileName("searchFragment.ecore");
+		m.setFile(gfm);
+		m.setName("searchFragment");        
+		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.5);
+		for (EcoreMetamodel ecoreMetamodel : el) {
+			ecoreMetamodel.setFile(null);
+		}
+		model.addAttribute("artifactListByExample", el);
 		return "public.search";
+
 	}
 	
 
