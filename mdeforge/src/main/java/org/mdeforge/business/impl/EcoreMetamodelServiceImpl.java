@@ -270,9 +270,7 @@ public class EcoreMetamodelServiceImpl extends
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-			String path = gridFileMediaService.getFilePath(emm);
-			injector.inject(inputModel, new FileInputStream(new File(path)),
-					null);
+			injector.inject(inputModel, gridFileMediaService.getFileInputStream(emm),null);
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "Ecore");
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
@@ -1017,7 +1015,7 @@ public class EcoreMetamodelServiceImpl extends
 			  logger.info("metamodel" + entry.getValue().getName());
 			  result.add(value);
 			  try {
-				  value.setScore(Float.parseFloat(entry.getKey().toString()));
+				  //value.setScore(Float.parseFloat(entry.getKey().toString()));
 			  } catch (Exception e) {
 				  logger.error("fail to converter score to float");
 			  }

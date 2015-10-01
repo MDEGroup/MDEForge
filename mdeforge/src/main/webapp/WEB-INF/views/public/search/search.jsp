@@ -20,6 +20,10 @@
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/dropzone/dropzone4.js"></script>
 <!-- Mustache -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<!-- Spin.js -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
+<!-- Dropzone configuration -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/mydropzone.js"></script>
 
 
 
@@ -261,49 +265,22 @@
 					</c:otherwise>
 				</c:choose>
 
-				<script>
 				
-				Dropzone.options.myAwesomeDropzone = {
-						  paramName: "metamodelfile",
-						  autoProcessQueue : false,
-						  init: function() {
-							  	var myAwesomeDropzone = this;
-							  	$('#searchEmoreMetamodelByExampleButton').on("click", function(e){
-									e.preventDefault();
-								    e.stopPropagation();
-								    console.log(myAwesomeDropzone);
-								    this.processQueue();
-								});
-							    this.on("success", function(file) {
-							    	var v = new Object();
-							    	console.log(file)
-							    	v.response = $.parseJSON(file.xhr.response);
-							    	console.log(v);
-							    	$.get('${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/resultEcoreSearchByExampleTemplate.html', function(template) {
-							    	    var rendered = Mustache.render(template, v);
-							    	    $('#resultEcoreMetamodelList').append(rendered);
-							    	  });
-							    });
-							    
-							  }
-						};
-				</script>
 
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<h4 class="separator bottom">Drop Metamodel Upload</h4>
-							
+						
 						<form:form cssClass="dropzone form-horizontal" modelAttribute="metamodelfile"
 							action="${pageContext.request.contextPath}/public/search_metamodel_by_example/result"
 							role="form" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">
 								<div class="fallback">
 				    				<input name="file" type="file" multiple />
 				  				</div>
-				  				<div class="dropzone-previews"></div>
 				  				<button type="submit" class="btn btn-inverse" id="searchEmoreMetamodelByExampleButton">
 											<spring:message code="mdeforge.common.action.search" /></button>
 						</form:form>
-					
+						
 					
 						
 						

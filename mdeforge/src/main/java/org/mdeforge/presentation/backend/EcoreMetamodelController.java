@@ -1,5 +1,6 @@
 package org.mdeforge.presentation.backend;
 
+import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -11,22 +12,30 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityRelationService;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -48,6 +57,10 @@ public class EcoreMetamodelController {
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
+	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private UserService userService;
 	
 	@RequestMapping(value = "/list", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
@@ -117,36 +130,28 @@ public class EcoreMetamodelController {
 	
 	@RequestMapping(value = "/upload", method = { RequestMethod.GET })
 	public String uploadNewMetamodelStart(Model model) throws IOException {
-		
+		EcoreMetamodel emm = new EcoreMetamodel();
+		model.addAttribute("metamodel",emm);
+		List<Project> pl = projectService.findByUser(user);
+		model.addAttribute("projecList",pl);
+		List<User> userList = userService.findAll();
+		model.addAttribute("userList", userList);
 		return "private.use.upload_page";
 	}
 	
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String uploadNewMetamodel(
-			Model model,
-			@RequestParam("metamodelfile") MultipartFile file,
-			@RequestParam("metamodelDescription") String metamodelDescription,
-			@RequestParam("publicPrivate") String publicPrivate) throws IOException {
+			Model model,@ModelAttribute EcoreMetamodel metamodel,
+			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
 		
-		boolean isOpen = false;
 		
-		if(publicPrivate.equals("public")){
-			isOpen = true;
-		}
-		
-		System.out.println(metamodelDescription);
-		System.out.println(isOpen);
-		
-		EcoreMetamodel m = new EcoreMetamodel();
+		EcoreMetamodel m = metamodel;
 		byte[] bytes = file.getBytes();
 		GridFileMedia gfm = new GridFileMedia();
+		gfm.setFileName(file.getOriginalFilename());
 		gfm.setByteArray(bytes);
-		
-		m.setName(file.getOriginalFilename());
 		m.setCreated(new Date());
 		m.setAuthor(user);
-		m.setDescription(metamodelDescription);
-		m.setOpen(isOpen);
 		m.setFile(gfm);
 		
 		EcoreMetamodel result = ecoreMetamodelService.create(m);
@@ -158,7 +163,24 @@ public class EcoreMetamodelController {
 		
 		model.addAttribute("report", report);
 		
-		return "private.use.upload_page";
+		return "redirect:/private/my_artifacts";
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+
+	        binder.registerCustomEditor(Project.class, "projects", new PropertyEditorSupport() {
+	         @Override
+	         public void setAsText(String id) {
+	            setValue((id.equals(""))?null:projectService.findOne(id));
+	         }
+	     });
+	        binder.registerCustomEditor(User.class, "shared", new PropertyEditorSupport() {
+	        	@Override
+	        	public void setAsText(String id) {
+	        		setValue((id.equals(""))?null:userService.findOne(id));
+	        	}
+	        });
 	}
 
 }

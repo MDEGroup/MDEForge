@@ -19,8 +19,7 @@ public class Property implements java.io.Serializable{
 
 	private String value = null;
 
-	private String id = null;
-
+	
 	public String getName() {
 		return name;
 	}
@@ -47,18 +46,10 @@ public class Property implements java.io.Serializable{
 		value = newValue;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String newId) {
-		id = newId;
-	}
-
 
 	@Override
 	public String toString() {
 		return "Property " + " [name: " + getName() + "]" + " [value: "
-				+ getValue() + "]" + " [id: " + getId() + "]";
+				+ getValue() + "]";
 	}
 }

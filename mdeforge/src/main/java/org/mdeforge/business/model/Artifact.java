@@ -35,8 +35,10 @@ public class Artifact implements java.io.Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
-	@Transient @TextScore Float score;
+	@TextScore Float score;
 	
+
+
 	@Id
 	private String id = null;
 	private Date created = null;
@@ -56,9 +58,10 @@ public class Artifact implements java.io.Serializable{
 		return score;
 	}
 	
-	public void setScore(Float f) {
-		score = f;
+	public void setScore(Float score) {
+		this.score = score;
 	}
+	
 //	private @TextIndexed(weight=20) String name = null;
 //	private @TextIndexed(weight=10) String description = null;
 //	private @TextIndexed(weight=5) String authors = null;
