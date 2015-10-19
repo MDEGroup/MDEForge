@@ -1,8 +1,8 @@
 $(function() {
-	var spinner = new Spinner().spin($('#resultEcoreMetamodelList'));
+	var result = $('#resultEcoreMetamodelList');
 	Dropzone.options.myAwesomeDropzone = {
 		paramName : "metamodelfile",
-		autoProcessQueue : false,
+		
 		init : function() {
 			var myDropzone = this;
 			$('#searchEmoreMetamodelByExampleButton').on("click", function(e) {
@@ -12,13 +12,14 @@ $(function() {
 			});
 			this.on("success",
 					function(file) {
-						spinner.stop();
 						var v = new Object();
 						v.response = $.parseJSON(file.xhr.response);
 						$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/resultEcoreSearchByExampleTemplate.html',
 								function(template) {
 									var rendered = Mustache.render(template, v);
-									$('#resultEcoreMetamodelList').append(rendered);
+									console.log(result);
+									result.append(rendered);
+									console.log(result);
 								});
 					});
 		}
