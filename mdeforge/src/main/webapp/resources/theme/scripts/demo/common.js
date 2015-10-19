@@ -522,7 +522,6 @@ $(function()
 		$.ajax({
 			url : "/mdeforge/private/artifact/" + idArtifact + "/addUser/" + idUser,
 			success : function(data) {
-				console.log($('#users'))
 				$('#users').append('<li class="userLi" data-id="' + data.id + 
 						'" class="sharedUser"><span class="crt"></span><span class="strong">' +
 						data.firstname + '  ' + data.lastname + '</span>' + 
@@ -597,12 +596,6 @@ $(function()
 						+ '<a href="/mdeforge/private/Model/model_details?model_id='+ idModel + '">'
 						+ nameModel + 
 						'</a></td></tr>');
-				console.log('<td>'  +
-						'<i class="icon-remove-circle removeArtifact" data-id="' + idModel + '"></i></td>' +
-						'<td>' 
-						+ '<a href="/mdeforge/private/Model/model_details?model_id='+ idModel + '">'
-						+ nameModel + 
-						'</a></td></tr>');
 				$("#modelSelect option[value='" + idModel + "']").remove();
 				$('#modelToAdd').hide();
 				
@@ -618,7 +611,6 @@ $(function()
 		var idUser = $('#userSelect').val();
 		var nameModel = $("#userSelect option:selected").text();
 		var idProject = $("#projectId").attr('data-id');
-		console.log(idProject);
 		$.ajax({
 			url : "/mdeforge/private/project/" + idProject + "/addUser/" + idUser,
 			success : function(data) {
@@ -715,7 +707,6 @@ $(function()
 				
 			},
 			error : function error(data) {
-				console.log($('.userLi[data-id="'+ idUser +'"]'));
 				$('.userLi[data-id="'+ idUser +'"]').remove();
 				
 			}
@@ -741,7 +732,6 @@ $(function()
 				
 				url : "/mdeforge/private/project/" + id,
 				success : function(data) {
-					console.log(data.id);
 					$('#projectId').attr('data-id',data.id)
 					$("#workspaceDetailsDiv").show();
 					$('#users').empty();
@@ -758,13 +748,21 @@ $(function()
 					else
 						$('#artifactsNumber').text(data.artifacts.length + " artifact");
 					$('#userDiv').show();
+					var guard = data.owner.id == $('#loggedUserId').val();
+					if (guard)
+						$('#showUserList').show();
+					else
+						$('#showUserList').hide();
 					$.each(data.users, function(i, user) {
-						$('#users').append('<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
-								           user.firstname + '  ' + user.lastname + '</span>' + 
-								           '<span class="muted"><a href="mailto:'+ user.email +
-								           '">'+ user.username +' <i class="icon-envelope"></i></a>' +
-								           '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>' +
-								           '</span></li>');
+						var  stringHead = '<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
+				           		user.firstname + '  ' + user.lastname + '</span>' + 
+				           		'<span class="muted"><a href="mailto:'+ user.email +
+				           		'">'+ user.username +' <i class="icon-envelope"></i></a>';
+						var stringDelete = '';
+						if (guard)
+							stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>';
+						var stringTail = '</span></li>';
+						$('#users').append(stringHead + stringDelete + stringTail);
 						
 					});
 					$('#ecoreMMTable').empty();

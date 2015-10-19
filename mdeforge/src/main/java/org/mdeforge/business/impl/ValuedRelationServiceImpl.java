@@ -42,7 +42,8 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 		Criteria c2 = Criteria.where("value").gte(threshold);
 		Criteria c1 = Criteria.where("_class").is(
 				persistentClass.getCanonicalName());
-		query.addCriteria(c2.andOperator(c1));
+		query.addCriteria(c2);
+		query.addCriteria(c1);
 		return n.find(query, persistentClass);
 	}
 
@@ -80,7 +81,8 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 		Criteria c4 = Criteria.where("fromArtifact.$id").is(
 				new ObjectId(emm.getId()));
 		Criteria c5 = c2.orOperator(c4, c3);
-		query.addCriteria(c1.andOperator(c5));
+		query.addCriteria(c1);
+		query.addCriteria(c5);
 		return n.find(query, persistentClass);
 	}
 
@@ -98,7 +100,9 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 				new ObjectId(emm.getId()));
 		Criteria c5 = Criteria.where("computation").is(computation);
 		Criteria c6 = c2.orOperator(c4, c3);
-		query.addCriteria(c1.andOperator(c6, c5));
+		query.addCriteria(c1);
+		query.addCriteria(c6);
+		query.addCriteria(c5);
 		return n.find(query, persistentClass);
 	}
 }

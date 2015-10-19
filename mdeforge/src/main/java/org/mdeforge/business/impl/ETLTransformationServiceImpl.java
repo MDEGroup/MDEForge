@@ -72,10 +72,10 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 		Query query = new Query();
 		query.addCriteria(Criteria
 				.where("shared")
-				.in(username)
-				.andOperator(
-						Criteria.where("_class").is(
-								ETLTransformation.class.getCanonicalName())));
+				.in(username));
+		
+		query.addCriteria(Criteria.where("_class").is(
+								ETLTransformation.class.getCanonicalName()));
 		List<ETLTransformation> metamodels = operations.find(query,
 				ETLTransformation.class);
 		return metamodels;

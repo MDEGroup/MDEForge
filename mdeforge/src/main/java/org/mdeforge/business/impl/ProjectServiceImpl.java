@@ -151,8 +151,8 @@ public class ProjectServiceImpl implements ProjectService {
 		//
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		query.addCriteria(Criteria.where("workspaces").in(idWorkspace)
-				.andOperator(Criteria.where("users").in(user.getId())));
+		query.addCriteria(Criteria.where("workspaces").in(idWorkspace));
+		query.addCriteria(Criteria.where("users").in(user.getId()));
 		List<Project> project = operations.find(query, Project.class);
 		return project;
 	}

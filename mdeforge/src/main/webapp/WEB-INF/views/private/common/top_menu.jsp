@@ -15,11 +15,13 @@
 			
 			
 			<ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel Upload</a></li>
+				<li>
+					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel Upload</a>
+				</li>
 				
 					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
 					
-					<li class="glyphs hidden-tablet hidden-phone">
+				<li class="glyphs hidden-tablet hidden-phone">
 					<ul>
 						<li><a href="${pageContext.request.contextPath}/public/browse" class="glyphicons folder_open" data-toggle="tooltip" data-title="Browse the repository" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
 						<li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search" data-toggle="tooltip" data-title="Search Artifacts" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
@@ -83,6 +85,8 @@
 									<a href="#"><security:authentication property="principal.user.firstname"/> 
 									<security:authentication property="principal.user.lastname"/></a>
 									<security:authentication property="principal.user.email"/>
+									<security:authentication property="principal.user.id" var="userId"/>
+									<input type="hidden" value="${userId}" id="loggedUserId">
 								</span>
 								<span class="clearfix"></span>
 							</span>

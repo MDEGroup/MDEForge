@@ -19,7 +19,8 @@ public class ContainmentRelationServiceImpl extends ValuedRelationServiceImpl<Co
 		Query query = new Query();
 		Criteria c2 = Criteria.where("value").gte(threshold);
 		Criteria c1 = Criteria.where("_class").is(ContainmentRelation.class.getCanonicalName());
-		query.addCriteria(c2.andOperator(c1));
+		query.addCriteria(c2);
+		query.addCriteria(c1);
 		return n.find(query, persistentClass);
 	}
 	

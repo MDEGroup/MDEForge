@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -156,7 +156,12 @@
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${ecoreMetamodel.getShared().size()}
 															people)</span>
-															<i class="icon-expand-alt" id="showUserList"></i>
+															<security:authentication property="principal.user.id" var="userId"/>
+															
+ 															<c:if test="${userId == ecoreMetamodel.getAuthor().getId()}">
+ 																<i class="icon-expand-alt" id="showUserList"></i>
+ 															</c:if>
+															
 													</h5>
 													<div id="userList" class="row-fluid" style="display: none">
 														<select id="userSelect">
@@ -174,7 +179,9 @@
 																class="muted">${user.getFirstname()}
 																	${user.getLastname()}</span>
 																<span class="muted"><a href="mailto:${user.getEmail() }">${user.getEmail() } <i class="icon-envelope"></i></a></span>
-																<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+																<c:if test="${userId == ecoreMetamodel.getAuthor().getId()}">
+																	<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+																</c:if>
 															</li>
 														</c:forEach>
 													</ul>

@@ -79,27 +79,32 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 		Criteria c4 = Criteria.where("fromArtifact.$id").is(new ObjectId(fromArt.getId()));
 		if(persistentClass!=Relation.class){
 			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			c = new Criteria().andOperator(c1,c2,c4);
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			query.addCriteria(c4);
 		}
-		else 
-			c = new Criteria().andOperator(c2,c4);
-		query.addCriteria(c);
+		else {
+			query.addCriteria(c2);
+			query.addCriteria(c4);
+		}
 		return n.find(query, persistentClass);
 	}
 	@Override
 	public T findOneByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c;
 		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(toArt.getId()));
 		Criteria c4 = Criteria.where("fromArtifact.$id").is(new ObjectId(fromArt.getId()));
 		if(persistentClass!=Relation.class){
 			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			c = new Criteria().andOperator(c1,c2,c4);
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			query.addCriteria(c4);
 		}
-		else 
-			c = new Criteria().andOperator(c2,c4);
-		query.addCriteria(c);
+		else {
+			query.addCriteria(c2);
+			query.addCriteria(c4);			
+		}
 		return n.findOne(query, persistentClass);
 	}
 }

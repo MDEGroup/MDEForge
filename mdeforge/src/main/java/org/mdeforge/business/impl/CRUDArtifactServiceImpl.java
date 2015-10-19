@@ -525,7 +525,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c1 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
 		} else
 			query.addCriteria(c2);
 		return n.find(query, persistentClass);
@@ -551,7 +552,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c1 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c2.andOperator(c1));
+			query.addCriteria(c2);
+			query.addCriteria(c1);
 		} else
 			query.addCriteria(c2);
 		return n.findOne(query, persistentClass);
@@ -566,9 +568,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c1 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c1, c2, c3));
-		} else
-			query.addCriteria(new Criteria().andOperator(c2, c3));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			query.addCriteria(c3);
+		} else{
+			query.addCriteria(c2);
+			query.addCriteria(c3);
+		}
 		return n.findOne(query, persistentClass);
 	}
 
@@ -622,7 +628,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c1, c2));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
 		} else
 			query.addCriteria(c1);
 		return operations.find(query, persistentClass);
@@ -637,7 +644,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c1, c2));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
 		} else
 			query.addCriteria(c1);
 		return operations.find(query, persistentClass);
@@ -652,9 +660,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		if (c != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(c.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2).andOperator(c3));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			query.addCriteria(c3);
 		}
-		query.addCriteria(c1.andOperator(c3));
+		else {
+			query.addCriteria(c1);
+			query.addCriteria(c3);
+		
+		}
 		T project = operations.findOne(query, c);
 		if (project == null)
 			throw new BusinessException();
@@ -671,7 +685,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(new Criteria().andOperator(c2, c3));
+			query.addCriteria(c2);
+			query.addCriteria(c3);
 		}
 		query.addCriteria(c3);
 		T artifact = operations.findOne(query, persistentClass);
@@ -717,13 +732,20 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Criteria c1 = Criteria.where("shared.$id").is(
 				new ObjectId(user.getId()));
 		Criteria notPublic = Criteria.where("open").is(false);
-
+		Criteria notMine = Criteria.where("author.$id").ne(new ObjectId(user.getId()));
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c1.andOperator(c2, notPublic));
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			query.addCriteria(notPublic); 
+			query.addCriteria(notMine);
 		}
-		query.addCriteria(c1.andOperator(notPublic));
+		else {
+			query.addCriteria(c1);
+			query.addCriteria(notPublic);
+			query.addCriteria(notMine);
+		}
 		List<T> artList = operations.find(query, persistentClass);
 		List<T> toRemove = new ArrayList<T>();
 		for (T artifactTo : artList) {
@@ -758,7 +780,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			query.addCriteria(c.andOperator(userCriteria));
+			query.addCriteria(c);
+			query.addCriteria(userCriteria);
 			return n.find(query, persistentClass);
 		} else {
 			query.addCriteria(userCriteria);

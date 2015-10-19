@@ -36,7 +36,6 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.search.ResourceSerializer;
-import org.mdeforge.business.search.jsonMongoUtils.EmfjsonMongo;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.EcoreMetamodelRepository;
@@ -122,7 +121,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(metamodel.getId()));
 		
 		Criteria c1 = Criteria.where("_class").is(ConformToRelation.class.getCanonicalName());
-		query.addCriteria(new Criteria().andOperator(c1, c2));
+		query.addCriteria(c1);
+		query.addCriteria(c2);
 		List<ConformToRelation> dcts =  n.find(query, ConformToRelation.class);
 		for (ConformToRelation domainConformToRelation : dcts) {
 			if(domainConformToRelation.getFromArtifact() instanceof Model)
@@ -150,7 +150,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		String mmID = ((ConformToRelation) artifact.getRelations().get(0)).getToArtifact().getId();
 		Model result = super.create(artifact);
 		try{
-			result.setExtractedContents( EmfjsonMongo.getInstance()
+			result.setExtractedContents( this
 					.saveModel(jsonMongoUriBase+mmID, gridFileMediaService.getFilePath(result), 
 			jsonMongoUriBase+artifact.getId()));
 			modelRepository.save(result);
