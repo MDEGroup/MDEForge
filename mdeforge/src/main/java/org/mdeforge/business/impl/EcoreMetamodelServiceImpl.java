@@ -150,7 +150,7 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		if(findOneByName(artifact.getName())!=null)
-			throw new DuplicateNameException();
+			throw new BusinessException();
 
 		artifact.setValid(isValid(artifact));
 		String path = gridFileMediaService.getFilePath(artifact);
@@ -160,11 +160,13 @@ public class EcoreMetamodelServiceImpl extends
 			artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
+			throw new BusinessException();
 		}
 		try {
 			artifact.setMetrics(getMetrics(artifact));
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
+			throw new BusinessException();
 		}
 		artifactRepository.save(artifact);
 		return result;
@@ -178,14 +180,14 @@ public class EcoreMetamodelServiceImpl extends
 		EList<EObject> contents = load_resource.getContents();
 		String result = ResourceSerializer.serialize(load_resource);
 		//TODO handle connection
-//		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
-//		res.getContents().addAll(contents);
-//		try {
-//			res.save(null);
-//			
-//		} catch (IOException e) {
-//			throw new BusinessException();
-//		}
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+		res.getContents().addAll(contents);
+		try {
+			res.save(null);
+			
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
 		return result;
 	}
 	@Override
@@ -1046,7 +1048,6 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		logger.info(list.size() + "");
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
-		int i = 0;
 		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
 			EcoreMetamodel value = entry.getValue();
 			logger.info("score: " + entry.getKey());
@@ -1060,8 +1061,8 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		return result;
 	}
-	
-	private double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
+	@Override
+	public double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
 		try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));

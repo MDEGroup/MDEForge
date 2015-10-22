@@ -294,12 +294,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		}
 		for (User us : artifact.getShared()) {
-			Artifact artToRemove = new Artifact();
-			for (Artifact art : us.getSharedArtifact())
-				if (art.getId().equals(artifact.getId()))
-					artToRemove = art;
-
-			us.getSharedArtifact().remove(artToRemove);
+			System.out.println(us.getSharedArtifact().size());
+			us.getSharedArtifact().remove(artifact);
+			System.out.println(us.getSharedArtifact().size());
 			userRepository.save(us);
 		}
 		artifact.getAuthor().getOwner().remove(artifact);
@@ -688,7 +685,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c2);
 			query.addCriteria(c3);
 		}
-		query.addCriteria(c3);
+		else query.addCriteria(c3);
 		T artifact = operations.findOne(query, persistentClass);
 		// if (artifact == null)
 		// throw new ArtifactNotFound();

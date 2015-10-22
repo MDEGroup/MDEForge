@@ -14,6 +14,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.TextScore;
+
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -270,15 +271,20 @@ public class Artifact implements java.io.Serializable{
 		this.tags = tags;
 	}
 
-
-
 	public String getExtractedContents() {
 		return extractedContents;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		try {
+			return this.getId().equals(((Artifact)obj).getId());
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public void setExtractedContents(String extractedContents) {
 		this.extractedContents = extractedContents;
 	}
-
-
 }

@@ -17,5 +17,6 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	void registerMetamodel(String ecoreMetamodel) throws BusinessException;
 	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample,
 			double score) throws BusinessException;
+	double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2);
 	
 }
