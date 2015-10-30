@@ -24,9 +24,9 @@ public class LaunchUploadModel {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "francesco", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "francesco", "test123");
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "francesco", "test123");
 	}
 	/*
 	 * Load metamodel and transformations
@@ -35,13 +35,13 @@ public class LaunchUploadModel {
 	@Test
 	public void loadDataATLTransformationFamilies2Person () throws Exception {
 		//Metamodel name
-		EcoreMetamodel families = ecoreMetamodelService.getEcoreMetamodelByName("Families");
+		EcoreMetamodel families = ecoreMetamodelService.getEcoreMetamodelByName("KM3");
 		
 		Model simpleFamilyModel = new Model();
-		simpleFamilyModel.setName("Simple families model");
+		simpleFamilyModel.setName("euro2004KM3_3");
 		simpleFamilyModel.setOpen(true);
 		simpleFamilyModel.setDescription("For use in models tool demostration 2015");
-		simpleFamilyModel.setFile(ModelService.setGridFileMedia("temp/models2015/Families2Persons/sample-Families.xmi"));
+		simpleFamilyModel.setFile(ModelService.setGridFileMedia("temp/models2015/KM32XML/euro2004-KM3.xmi"));
 		ConformToRelation ctr = new ConformToRelation();
 		ctr.setFromArtifact(simpleFamilyModel);
 		ctr.setToArtifact(families );

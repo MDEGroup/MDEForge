@@ -90,6 +90,21 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 		return n.find(query, persistentClass);
 	}
 	@Override
+	public List<T> findRelationsByFromArtifact(Artifact fromArt) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c4 = Criteria.where("fromArtifact.$id").is(new ObjectId(fromArt.getId()));
+		if(persistentClass!=Relation.class){
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c1);
+			query.addCriteria(c4);
+		}
+		else {
+			query.addCriteria(c4);
+		}
+		return n.find(query, persistentClass);
+	}
+	@Override
 	public T findOneByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

@@ -738,7 +738,7 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		}
 
-		List<EcoreMetamodel> ecoreMetamodels = findAllPublic();
+		List<EcoreMetamodel> ecoreMetamodels = findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodels) {
 			if (tempHash.get(ecoreMetamodel.getId()) == null) {
 				Cluster c = new Cluster();

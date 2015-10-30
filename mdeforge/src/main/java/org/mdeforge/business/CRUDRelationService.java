@@ -17,6 +17,8 @@ public interface CRUDRelationService<T extends Relation> {
 	Set<T> findByUser(User user) throws BusinessException;
 	List<T> findRelationsByArtifact(Artifact artifact)
 			throws BusinessException;
+	List<T> findRelationsByFromArtifact(Artifact artifact)
+			throws BusinessException;
 	
 
 }

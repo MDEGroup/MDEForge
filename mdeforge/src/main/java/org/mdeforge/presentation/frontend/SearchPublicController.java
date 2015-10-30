@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ContainmentRelationService;
@@ -20,6 +23,16 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.social.connect.Connection;
+import org.springframework.social.connect.ConnectionFactory;
+import org.springframework.social.connect.support.ConnectionFactoryRegistry;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.PagedList;
+import org.springframework.social.facebook.api.Reference;
+import org.springframework.social.facebook.connect.FacebookConnectionFactory;
+import org.springframework.social.oauth2.AccessGrant;
+import org.springframework.social.oauth2.OAuth2Operations;
+import org.springframework.social.oauth2.OAuth2Parameters;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +67,21 @@ public class SearchPublicController {
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
 
+//	@Autowired
+//	private ConnectionFactoryRegistry facebook;
+	
+	
+	@RequestMapping(value = "/social", method = { RequestMethod.GET })
+	public @ResponseBody String getFracebookFriends(HttpServletRequest request, HttpServletResponse response) {
+//		ConnectionFactory<Facebook> cf = facebook.getConnectionFactory(Facebook.class);
+		//TODO 
+//		OAuth2Operations oa2o = cf.getOAuthOperations();
+//		Connection<Facebook> ccf = cf.createConnection(null);
+//		ccf.createData().;
+//		System.out.println(ccf.getImageUrl());
+		return null;
+	}
+	
 	private static final String[] ARTIFACT_TYPE = {"models", "transformations", "metamodels"};
 
 	

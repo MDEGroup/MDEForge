@@ -151,35 +151,53 @@
 				<div class="row-fluid">
 					<div class="row-fluid">
 						<div class="span12">
-						<h4>From Metamodels</h4>
-						<table>
-							<thead>
-								<tr>
-									<th>Metamodel</th>
-									<th>Name</th>
-									<th>Reference Model Name</th>
-									<th>Action</th>
-								</tr>
-							</thead>
-							<tbody id="conformToTable">
-							</tbody>
-						</table>
+							<h4>From Metamodels</h4>
+							<table>
+								<thead>
+									<tr>
+										<th>Metamodel</th>
+										<th>Name</th>
+										<th>Reference Model Name</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody id="domainConformToTable">
+								</tbody>
+							</table>
 						</div>			
 						<div class="span12">
-							<select id="metamodelSelect">
+							<select id="domainMetamodelSelect">
 								<c:forEach items="${metamodelList}" var="metamodel">
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
 								</c:forEach>						
 							</select>
-							<button type="button" id="addConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Add new property</button>
+							<button type="button" id="addDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
 						</div>
 					</div>				
-					<div class="span6">
-					<h4>To Metamodels:</h4>
-<%-- 						<form:select path="coDomainConformTo" multiple="true"> --%>
-<%-- 									<form:options  items="${metamodelList}" itemValue="id" itemLabel="name"></form:options> --%>
-<%-- 						</form:select> --%>
-						
+					<div class="row-fluid">
+						<div class="span12">
+							<h4>To Metamodels:</h4>
+							<table>
+								<thead>
+									<tr>
+										<th>Metamodel</th>
+										<th>Name</th>
+										<th>Reference Model Name</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody id="coDomainConformToTable">
+								</tbody>
+							</table>
+						</div>
+						<div class="span12">
+							<select id="coDomainMetamodelSelect">
+								<c:forEach items="${metamodelList}" var="metamodel">
+									<option  value="${metamodel.id }"> ${metamodel.name }</option>
+								</c:forEach>						
+							</select>
+							<button type="button" id="addCoDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
+						</div>
 					</div>				
 				</div>
 				<hr class="separator">
@@ -201,8 +219,8 @@
 
 
 
-
-
+<!-- Mustache -->
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/propertyRow.js"></script>
 	

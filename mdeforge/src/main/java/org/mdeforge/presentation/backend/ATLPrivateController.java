@@ -20,6 +20,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.ATLTransformationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -116,7 +117,7 @@ public class ATLPrivateController {
 
 	@RequestMapping(value = "/upload", method = { RequestMethod.GET })
 	public String uploadATLTransormatiomStart(Model model) throws IOException {
-		ATLTransformation transformation = new ATLTransformation();
+		ATLTransformationForm transformation = new ATLTransformationForm();
 		model.addAttribute("transformation", transformation);
 		List<Project> pl = projectService.findByUser(user);
 		model.addAttribute("projecList", pl);
@@ -125,21 +126,19 @@ public class ATLPrivateController {
 		model.addAttribute("metamodelList", el);
 		List<User> userList = userService.findAll();
 		model.addAttribute("userList", userList);
-		List<DomainConformToRelation> cfr = new ArrayList<DomainConformToRelation>();
-		model.addAttribute("domainConformToRelationList", cfr);
 		return "private.use.transformation.upload_page";
 	}
 
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String uploadNewATLTransormatiom(Model model,
-			@ModelAttribute ("transformation") ATLTransformation transformation,
+			@ModelAttribute ("transformation") ATLTransformationForm transformation,
 			//@ModelAttribute ArrayList<DomainConformToRelation> domainConformToRelationList,
 			@RequestParam("transformationfile") MultipartFile file)
 			throws IOException {
-//		for (DomainConformToRelation domainConformToRelation : domainConformToRelationList) {
-//			System.out.println(domainConformToRelation.getId());
-//		}
-		ATLTransformation m = transformation;
+
+		ATLTransformationForm m = transformation;
+		m.getRelations().addAll(transformation.getDomainConformToRelation());
+		m.getRelations().addAll(transformation.getCoDomainConformToRelation());
 		byte[] bytes = file.getBytes();
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setFileName(file.getOriginalFilename());

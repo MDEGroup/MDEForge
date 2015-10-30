@@ -8,6 +8,7 @@ public class GlobalDefaultExceptionHandler {
 
 	@ExceptionHandler(value = Exception.class)
 	public String exceptionHandeler() {
+		System.out.println("ERROR");
 		return null;
 	}
 }
