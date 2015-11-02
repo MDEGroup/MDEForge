@@ -171,6 +171,8 @@
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
 								</c:forEach>						
 							</select>
+							<input id="filterMMDomainTextBox" type="text" />
+							
 							<button type="button" id="addDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
 						</div>
 					</div>				
@@ -196,6 +198,7 @@
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
 								</c:forEach>						
 							</select>
+							<input id="filterMMCoDomainTextBox" type="text" />
 							<button type="button" id="addCoDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
 						</div>
 					</div>				

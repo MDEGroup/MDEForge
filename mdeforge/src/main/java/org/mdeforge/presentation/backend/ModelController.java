@@ -1,20 +1,24 @@
 package org.mdeforge.presentation.backend;
 
+import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.newExpression_return;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
 import org.mdeforge.business.model.form.ModelForm;
@@ -22,11 +26,14 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
@@ -88,14 +95,15 @@ public class ModelController {
 
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String uploadNewATLTransormatiom(org.springframework.ui.Model model,
-			@ModelAttribute ("transformation") ModelForm transformation,
-			//@ModelAttribute ArrayList<DomainConformToRelation> domainConformToRelationList,
+			@ModelAttribute ("transformation") ModelForm modelIn,
 			@RequestParam("modelfile") MultipartFile file)
 			throws IOException {
-
-		transformation.getRelations().add(transformation.getConformToRelation());
+		ConformToRelation ctr = new ConformToRelation();
+		ctr.setFromArtifact(modelIn);
+		ctr.setToArtifact(modelIn.getConformToRelation());
+		modelIn.getRelations().add(ctr);
 		Model m = new Model();
-		BeanUtils.copyProperties(transformation, m);
+		BeanUtils.copyProperties(modelIn, m);
 		byte[] bytes = file.getBytes();
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setFileName(file.getOriginalFilename());
@@ -103,17 +111,34 @@ public class ModelController {
 		m.setCreated(new Date());
 		m.setAuthor(user);
 		m.setFile(gfm);
-		Model result = modelService.create(m);
-
-		boolean report = false;
-		if (result != null) {
-			report = true;
-		}
-
-		model.addAttribute("report", report);
-
+		modelService.create(m);
 		return "redirect:/private/my_artifacts";
 	}
-	
-
+	@InitBinder
+	public void initBinder(WebDataBinder binder, WebRequest request) {
+		binder.registerCustomEditor(Project.class, "projects",
+				new PropertyEditorSupport() {
+					@Override
+					public void setAsText(String id) {
+						setValue((id.equals("")) ? null : projectService
+								.findOne(id));
+					}
+				});
+		binder.registerCustomEditor(User.class, "shared",
+				new PropertyEditorSupport() {
+					@Override
+					public void setAsText(String id) {
+						setValue((id.equals("")) ? null : userService
+								.findOne(id));
+					}
+				});
+		binder.registerCustomEditor(EcoreMetamodel.class, "conformToRelation",
+				new PropertyEditorSupport() {
+					@Override
+					public void setAsText(String id) {
+						setValue((id.equals("")) ? null : ecoreMetamodelService
+								.findOne(id));
+					}
+				});
+	}
 }

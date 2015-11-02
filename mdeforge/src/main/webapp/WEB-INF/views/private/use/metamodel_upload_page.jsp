@@ -120,7 +120,6 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-									
 										<th>Value</th>
 										<th>Action</th>
 									</tr>

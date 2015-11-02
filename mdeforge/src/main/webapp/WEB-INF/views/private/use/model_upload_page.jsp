@@ -155,7 +155,7 @@
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
 								</c:forEach>						
 							</select>
-							<button type="button" id="addConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
+							<input id="filterMMTextBox" type="text" />
 						</div>
 					</div>				
 				</div>

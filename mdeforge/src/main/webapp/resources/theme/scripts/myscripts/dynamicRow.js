@@ -11,19 +11,12 @@ $(function() {
 		$('.propertyRow.lastRow').removeClass('lastRow');
 		if (idRow ==null)
 			idRow = -1;
-		
-		$('#propertiesTable').append(
-				'<tr  class="propertyRow lastProperty" data-id="' + (idRow + 1) + '">' +
-					'<td>' +
-						'<input type="text" name="properties[' + (idRow + 1) + '].name"/>'	+			  			
-					'</td>' +
-					'<td>' +
-						'<input type="text" name="properties[' + (idRow + 1) + '].value"/>' +
-					'</td>' +
-					'<td>' +
-						'<button type="button" data-id="' + (idRow + 1) + '" class="deletePropertyButton btn btn-icon btn-danger glyphicons circle_ok"><i></i>Delete</button>' +
-					'</td>' +
-				'</tr>'	);
+		var result = $('#propertiesTable');
+		$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/rowProperty.html',
+				function(template) {
+					var rendered = Mustache.render(template, idRow);
+					result.append(rendered);
+				});
 	});
 	
 	$(document).on('click','.deleteDomainConformToButton', function(e) {
@@ -75,4 +68,44 @@ $(function() {
 					result.append(rendered);
 				});
 	});
+});
+
+jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
+    return this.each(function() {
+        var select = this;
+        var options = [];
+        $(select).find('option').each(function() {
+            options.push({value: $(this).val(), text: $(this).text()});
+        });
+        $(select).data('options', options);
+        $(textbox).bind('change keyup', function() {
+            var options = $(select).empty().data('options');
+            var search = $.trim($(this).val());
+            var regex = new RegExp(search,"gi");
+          
+            $.each(options, function(i) {
+                var option = options[i];
+                if(option.text.match(regex) !== null) {
+                    $(select).append(
+                       $('<option>').text(option.text).val(option.value)
+                    );
+                }
+            });
+            if (selectSingleMatch === true && $(select).children().length === 1) {
+                $(select).children().get(0).selected = true;
+            }
+        });            
+    });
+};
+
+$(function() {
+    $('#conformMetamodelSelect').filterByText($('#filterMMTextBox'), true);
+});
+
+$(function() {
+	$('#coDomainMetamodelSelect').filterByText($('#filterMMCoDomainTextBox'), true);
+});
+
+$(function() {
+	$('#domainMetamodelSelect').filterByText($('#filterMMDomainTextBox'), true);
 });

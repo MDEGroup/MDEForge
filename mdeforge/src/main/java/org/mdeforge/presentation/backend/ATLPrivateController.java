@@ -178,7 +178,5 @@ public class ATLPrivateController {
 								.findOne(id));
 					}
 				});
-		binder.registerCustomEditor(Relation.class, "relations",null);
 	}
-
 }
