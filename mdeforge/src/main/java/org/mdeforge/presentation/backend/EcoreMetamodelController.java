@@ -136,7 +136,7 @@ public class EcoreMetamodelController {
 		model.addAttribute("projecList",pl);
 		List<User> userList = userService.findAll();
 		model.addAttribute("userList", userList);
-		return "private.use.upload_page";
+		return "private.use.metamodel.upload_page";
 	}
 	
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })

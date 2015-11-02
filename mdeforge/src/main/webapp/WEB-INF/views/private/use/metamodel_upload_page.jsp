@@ -29,13 +29,13 @@
 
 <div class="innerLR">
 
-<form:form cssClass="form-horizontal" modelAttribute="transformation" 
-	action="${pageContext.request.contextPath}/private/ATLTransformation/upload" role="form" method="POST" enctype="multipart/form-data">
+<form:form cssClass="form-horizontal" modelAttribute="metamodel" 
+	action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" role="form" method="POST" enctype="multipart/form-data">
 	<div class="widget widget-heading-simple widget-body-gray">
 		
 			<!-- Widget heading -->
 			<div class="widget-head">
-				<h4 class="heading">Upload new ATL transformation</h4>
+				<h4 class="heading">Upload new Ecore Metamodel</h4>
 			</div>
 			<!-- // Widget heading END -->
 			
@@ -49,13 +49,13 @@
 					
 						<!-- Group -->
 						<div class="control-group">
-							<label class="control-label" for="firstname">ATL transformation Name</label>
+							<label class="control-label" for="firstname">Metamodel Name</label>
 							<div class="controls">
 								<input type="text" name="name"></textarea>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="firstname">ATL transformation Description</label>
+							<label class="control-label" for="firstname">Metamodel Description</label>
 							<div class="controls">
 								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
 							</div>
@@ -87,6 +87,8 @@
 							</div>
 							</div>
 							<!-- // Column END -->
+						
+							
 						</div>
 						<!-- // Row END -->
 					</div>
@@ -96,16 +98,16 @@
 				<hr class="separator">
 				<div class="row-fluid">
 					<div class="control-group span6">
-							<label class="control-label" for="email">ATL transformation File</label>
+							<label class="control-label" for="email">Metamodel File</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
 							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
 							    		<span class="fileupload-preview"></span>
 							    	</div>
 							    	<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select ATL transformation File</span>
+								    	<span class="fileupload-new">Select Metamodel File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" class="margin-none" name="transformationfile" size="40"/>
+								    	<input type="file" class="margin-none" name="metamodelfile" size="40"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
@@ -149,61 +151,6 @@
 				
 				<!-- Form actions -->
 				<div class="row-fluid">
-					<div class="row-fluid">
-						<div class="span12">
-							<h4>From Metamodels</h4>
-							<table>
-								<thead>
-									<tr>
-										<th>Metamodel</th>
-										<th>Name</th>
-										<th>Reference Model Name</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody id="domainConformToTable">
-								</tbody>
-							</table>
-						</div>			
-						<div class="span12">
-							<select id="domainMetamodelSelect">
-								<c:forEach items="${metamodelList}" var="metamodel">
-									<option  value="${metamodel.id }"> ${metamodel.name }</option>
-								</c:forEach>						
-							</select>
-							<button type="button" id="addDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
-						</div>
-					</div>				
-					<div class="row-fluid">
-						<div class="span12">
-							<h4>To Metamodels:</h4>
-							<table>
-								<thead>
-									<tr>
-										<th>Metamodel</th>
-										<th>Name</th>
-										<th>Reference Model Name</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody id="coDomainConformToTable">
-								</tbody>
-							</table>
-						</div>
-						<div class="span12">
-							<select id="coDomainMetamodelSelect">
-								<c:forEach items="${metamodelList}" var="metamodel">
-									<option  value="${metamodel.id }"> ${metamodel.name }</option>
-								</c:forEach>						
-							</select>
-							<button type="button" id="addCoDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
-						</div>
-					</div>				
-				</div>
-				<hr class="separator">
-				
-				<!-- Form actions -->
-				<div class="row-fluid">
 					
 					<div class="form-actions">
 						<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
@@ -215,12 +162,16 @@
 			</div>
 		</div>
 </form:form>
+
+
+
+	
 </div>	
 
 
 
-<!-- Mustache -->
-<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+
+
 <script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 	

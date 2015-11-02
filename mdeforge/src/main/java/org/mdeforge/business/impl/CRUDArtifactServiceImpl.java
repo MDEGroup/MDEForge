@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.CRUDRelationService;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
@@ -20,7 +21,6 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
@@ -50,6 +50,8 @@ import com.mongodb.Mongo;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T> {
 
+	@Autowired
+	private CRUDRelationService<Relation> crudRelationService;
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -301,17 +303,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 		artifact.getAuthor().getOwner().remove(artifact);
 		userRepository.save(artifact.getAuthor());
-		for (Relation us : artifact.getRelations()) {
-			Relation relationToRemove = relationRepository.findOne(us.getId());
-
-			relationToRemove.getFromArtifact().getRelations()
-					.remove(relationToRemove);
-			relationToRemove.getToArtifact().getRelations()
-					.remove(relationToRemove);
-
-			artifactRepository.save(relationToRemove.getFromArtifact());
-			artifactRepository.save(relationToRemove.getToArtifact());
-			relationRepository.delete(relationToRemove);
+		List<Relation> relations = crudRelationService.findRelationsByArtifact(artifact);
+		for (Relation us : relations) {
+			us.getFromArtifact().getRelations()
+					.remove(us);
+			us.getToArtifact().getRelations()
+					.remove(us);
+			artifactRepository.save(us.getFromArtifact());
+			artifactRepository.save(us.getToArtifact());
+			relationRepository.delete(us);
 		}
 		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());
@@ -437,6 +437,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				workspaceService.findById(ws.getId(), artifact.getAuthor());
 			}
 			// check project Auth
+			if (artifact.getProjects() == null)
+				artifact.setProjects(new ArrayList<Project>());
 			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
 			}
@@ -447,6 +449,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.setModified(new Date());
 			User user = userRepository.findOne(artifact.getAuthor().getId());
 			artifact.setAuthor(user);
+			if (artifact.getShared() == null)
+				artifact.setShared(new ArrayList<User>());
 			artifact.getShared().add(user);
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());

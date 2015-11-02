@@ -149,8 +149,11 @@ public class EcoreMetamodelServiceImpl extends
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
-		if(findOneByName(artifact.getName())!=null)
-			throw new BusinessException();
+		if(findOneByName(artifact.getName())!=null) {
+			logger.error("DuplicateName");
+			throw new DuplicateNameException();
+		}
+			
 
 		artifact.setValid(isValid(artifact));
 		String path = gridFileMediaService.getFilePath(artifact);

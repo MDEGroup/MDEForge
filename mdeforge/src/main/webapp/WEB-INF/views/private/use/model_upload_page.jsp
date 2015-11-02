@@ -29,13 +29,13 @@
 
 <div class="innerLR">
 
-<form:form cssClass="form-horizontal" modelAttribute="metamodel" 
-	action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" role="form" method="POST" enctype="multipart/form-data">
+<form:form cssClass="form-horizontal" modelAttribute="model" 
+	action="${pageContext.request.contextPath}/private/Model/upload" role="form" method="POST" enctype="multipart/form-data">
 	<div class="widget widget-heading-simple widget-body-gray">
 		
 			<!-- Widget heading -->
 			<div class="widget-head">
-				<h4 class="heading">Upload new Ecore Metamodel</h4>
+				<h4 class="heading">Upload new model</h4>
 			</div>
 			<!-- // Widget heading END -->
 			
@@ -49,13 +49,13 @@
 					
 						<!-- Group -->
 						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Name</label>
+							<label class="control-label" for="firstname">Model name</label>
 							<div class="controls">
 								<input type="text" name="name"></textarea>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Description</label>
+							<label class="control-label" for="firstname">Model description</label>
 							<div class="controls">
 								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
 							</div>
@@ -87,8 +87,6 @@
 							</div>
 							</div>
 							<!-- // Column END -->
-						
-							
 						</div>
 						<!-- // Row END -->
 					</div>
@@ -98,16 +96,16 @@
 				<hr class="separator">
 				<div class="row-fluid">
 					<div class="control-group span6">
-							<label class="control-label" for="email">Metamodel File</label>
+							<label class="control-label" for="email">Model file</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
 							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
 							    		<span class="fileupload-preview"></span>
 							    	</div>
 							    	<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select Metamodel File</span>
+								    	<span class="fileupload-new">Model file</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" class="margin-none" name="metamodelfile" size="40"/>
+								    	<input type="file" class="margin-none" name="modelfile" size="40"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
@@ -120,7 +118,6 @@
 								<thead>
 									<tr>
 										<th>Name</th>
-									
 										<th>Value</th>
 										<th>Action</th>
 									</tr>
@@ -151,6 +148,21 @@
 				
 				<!-- Form actions -->
 				<div class="row-fluid">
+					<div class="row-fluid">
+						<div class="span12">
+							<select id="conformMetamodelSelect" name="conformToRelation">
+								<c:forEach items="${metamodelList}" var="metamodel">
+									<option  value="${metamodel.id }"> ${metamodel.name }</option>
+								</c:forEach>						
+							</select>
+							<button type="button" id="addConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
+						</div>
+					</div>				
+				</div>
+				<hr class="separator">
+				
+				<!-- Form actions -->
+				<div class="row-fluid">
 					
 					<div class="form-actions">
 						<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
@@ -162,16 +174,12 @@
 			</div>
 		</div>
 </form:form>
-
-
-
-	
 </div>	
 
 
 
-
-
+<!-- Mustache -->
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
-<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/propertyRow.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 	

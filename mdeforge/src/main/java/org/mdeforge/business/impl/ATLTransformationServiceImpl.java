@@ -46,6 +46,7 @@ import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.eclipse.xsd.ecore.EcoreSchemaBuilder;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
@@ -94,6 +95,7 @@ public class ATLTransformationServiceImpl extends
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
+	
 	@Override
 	public ATLTransformation findOnePublic(String id) {
 		ATLTransformation a = super.findOnePublic(id);
@@ -103,6 +105,30 @@ public class ATLTransformationServiceImpl extends
 			logger.error(e.getMessage());
 		}
 		return a;
+	}
+	
+	@Override
+	public ATLTransformation findOneById(String idArtifact, User user) throws BusinessException {
+		ATLTransformation a = super.findOneById(idArtifact, user);
+		a.setMetrics(getMetrics(a));
+		return a;
+	}
+	
+	@Override
+	public ATLTransformation create(ATLTransformation artifact) {
+		if(findOneByName(artifact.getName())!=null) {
+			logger.error("DuplicateName");
+			throw new DuplicateNameException();
+		}
+		ATLTransformation result = super.create(artifact);
+		try {
+			artifact.setMetrics(getMetrics(artifact));
+		} catch (Exception e) {
+			logger.error("Some errors when try to calculate metric for metamodel");
+			throw new BusinessException();
+		}
+		artifactRepository.save(artifact);
+		return result;
 	}
 	
 	@Override

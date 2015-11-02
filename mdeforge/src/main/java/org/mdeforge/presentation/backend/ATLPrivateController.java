@@ -21,6 +21,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -66,7 +67,7 @@ public class ATLPrivateController {
 			@RequestParam String transformation_id) {
 
 		ATLTransformation atlTransformation = aTLTransformationService
-				.findOnePublic(transformation_id);
+				.findOneById(transformation_id, user);
 
 		model.addAttribute("atlTransformation", atlTransformation);
 
@@ -136,9 +137,10 @@ public class ATLPrivateController {
 			@RequestParam("transformationfile") MultipartFile file)
 			throws IOException {
 
-		ATLTransformationForm m = transformation;
-		m.getRelations().addAll(transformation.getDomainConformToRelation());
-		m.getRelations().addAll(transformation.getCoDomainConformToRelation());
+		transformation.getRelations().addAll(transformation.getDomainConformToRelation());
+		transformation.getRelations().addAll(transformation.getCoDomainConformToRelation());
+		ATLTransformation m = new ATLTransformation();
+		BeanUtils.copyProperties(transformation, m);
 		byte[] bytes = file.getBytes();
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setFileName(file.getOriginalFilename());
@@ -146,9 +148,6 @@ public class ATLPrivateController {
 		m.setCreated(new Date());
 		m.setAuthor(user);
 		m.setFile(gfm);
-		
-		
-
 		ATLTransformation result = aTLTransformationService.create(m);
 
 		boolean report = false;
