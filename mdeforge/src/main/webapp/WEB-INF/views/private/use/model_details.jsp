@@ -397,3 +397,5 @@ ${fn:escapeXml(fileToVisualize)}
 
 	WordCloud(document.getElementById('my_canvas'), options);
 </script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
