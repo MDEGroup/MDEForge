@@ -1,9 +1,11 @@
 package org.mdeforge.presentation;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
@@ -18,9 +20,11 @@ import org.mdeforge.business.model.SimilarityRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/test")
@@ -152,6 +156,25 @@ public class TestController {
 		model.addAttribute("cosine", cosine.getValue());
 		model.addAttribute("dice", dice.getValue());
 		return "public.browse.test.relation";
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/{type:.+}", method = RequestMethod.GET)
+	public String getPages(@PathVariable("type") String type)
+			throws Exception {
+
+		if ("error".equals(type)) {
+			// go handleCustomException
+			throw new BusinessException("E888", "This is custom message");
+		} else if ("io-error".equals(type)) {
+			// go handleAllException
+			throw new IOException();
+		} else {
+			return "error.404";
+		}
+
 	}
 
 }
