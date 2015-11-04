@@ -7,7 +7,6 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -121,7 +119,8 @@ public class ArtifactRESTController {
 	public @ResponseBody HttpEntity<String> delete(
 			@PathVariable("id") String idArtifact) {
 		try {
-			artifactService.delete(idArtifact, user);
+			Artifact art = artifactService.findOneById(idArtifact, user);
+			artifactService.delete(art, user);
 			return new ResponseEntity<String>("true",
 					HttpStatus.OK);
 		} catch (Exception e) {

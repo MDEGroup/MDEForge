@@ -62,10 +62,16 @@ public class EcoreMetamodelController {
 	@Autowired
 	private UserService userService;
 	
-	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<EcoreMetamodel> getEcoreMetamodel () {
+	public @ResponseBody List<EcoreMetamodel> getSharedAndPublicEcoreMetamodel () {
 		List<EcoreMetamodel> list = ecoreMetamodelService.findAllWithPublicByUser(user);
+		return list;
+	}
+	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<EcoreMetamodel> getSharedEcoreMetamodel () {
+		List<EcoreMetamodel> list = ecoreMetamodelService.findAllSharedByUser(user);
 		return list;
 	}
 	

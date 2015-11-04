@@ -232,48 +232,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public void delete(String idArtifact, User user) {
-		Artifact artifact = findOneByOwner(idArtifact, user);
-		for (Project project : artifact.getProjects())
-			for (Artifact art : project.getArtifacts())
-				if (art.getId().equals(idArtifact)) {
-					project.getArtifacts().remove(art);
-					project.setModifiedDate(new Date());
-					projectRepository.save(project);
-				}
-		for (Workspace workspace : artifact.getWorkspaces())
-			for (Artifact art : workspace.getArtifacts())
-				if (art.getId().equals(idArtifact)) {
-					workspace.getArtifacts().remove(art);
-					workspaceRepository.save(workspace);
-				}
-
-		for (User us : artifact.getShared())
-			for (Artifact art : us.getSharedArtifact())
-				if (art.getId().equals(idArtifact)) {
-					us.getSharedArtifact().remove(art);
-					userRepository.save(user);
-				}
-		for (Relation us : artifact.getRelations()) {
-			Relation relationToRemove = relationRepository.findOne(us.getId());
-
-			relationToRemove.getFromArtifact().getRelations()
-					.remove(relationToRemove);
-			relationToRemove.getToArtifact().getRelations()
-					.remove(relationToRemove);
-
-			artifactRepository.save(relationToRemove.getFromArtifact());
-			artifactRepository.save(relationToRemove.getToArtifact());
-			relationRepository.delete(relationToRemove);
-		}
-
-		// TODO delete Relation
-		gridFileMediaService.delete(artifact.getFile());
-		artifactRepository.delete(artifact);
-
-	}
-
-	@Override
 	public void delete(T artifact, User user) {
 		artifact = findOneById(artifact.getId(), user);
 		for (Project project : artifact.getProjects()) {
@@ -514,7 +472,23 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					persistentClass.getCanonicalName());
 			query.addCriteria(c3.orOperator(c2, c1));
 		} else
-			query.addCriteria(c1.orOperator(c2));
+			query.addCriteria(new Criteria().orOperator(c2));
+		return n.find(query, persistentClass);
+	}
+
+	@Override
+	public List<T> findAllSharedByUser(User user) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c1 = Criteria.where("shared.$id").is(
+				new ObjectId(user.getId()));
+		Criteria c2 = Criteria.where("author.$id").is(new ObjectId(user.getId()));
+		if (persistentClass != Artifact.class) {
+			Criteria c3 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c3.orOperator(c2, c1));
+		} else
+			query.addCriteria(new Criteria().orOperator(c1,c2));
 		return n.find(query, persistentClass);
 	}
 

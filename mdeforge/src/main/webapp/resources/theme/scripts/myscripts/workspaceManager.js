@@ -33,12 +33,6 @@
 				$('#ecoreToAdd').hide();
 			},
 			error : function error(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
-						function(template) {
-							var rendered = Mustache.render(template, ecoreMetamodel);
-							result.append(rendered);
-						});
-				$("#ecoreSelect option[value='" + ecoreMetamodel.id + "']").remove();
 				console.log('error');
 				
 			}
@@ -65,7 +59,7 @@
 				$('#ATLToAdd').hide();
 			},
 			error : function error(data) {
-						console.log('error')
+				console.log('error')
 			}
 			
 		});
@@ -98,7 +92,10 @@
 	});
 	
 	// SHOW ARTIFACT BY TYPE
-	$('#showModelList').click(function(event){
+	$('#showModelList').one("click", showModelList);
+	function showModelList(event){
+		var spinner = new Spinner().spin()
+		$('#showModelList').parent().append(spinner.el);
 		if ($('#modelToAdd').css('display') == 'none') {
 			$.ajax({
 				url : "/mdeforge/private/Model/list",
@@ -106,6 +103,9 @@
 					$.each(data, function(i, model){
 						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
 					});
+					spinner.stop();
+					$('#modelToAdd').show();
+					$('#showModelList').one(showATLList);
 				},
 				error : function error(data) {
 					console.log('error');
@@ -116,9 +116,12 @@
 		else {
 			$('#modelToAdd').hide();
 		}
-	});
+	}
 	
-	$('#showATLList').click(function(event){
+	$('#showATLList').one("click", showATLList);
+	function showATLList(event){
+		var spinner = new Spinner().spin()
+		$('#showATLList').parent().append(spinner.el);
 		if ($('#ATLToAdd').css('display') == 'none') {
 			$('#ATLSelect').empty();
 			$.ajax({
@@ -127,6 +130,9 @@
 					$.each(data, function(i, ecore){
 						$('#ATLSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
 					});
+					spinner.stop();
+					$('#ATLToAdd').show();
+					$('#showATLList').one(showATLList);
 				},
 				error : function error(data) {
 					console.log('error');
@@ -137,9 +143,12 @@
 		else {
 			$('#ATLToAdd').hide();
 		}
-	});
-	
-	$('#showEcoreList').click(function(event){
+	}
+	$('#showEcoreList').one("click",showEcoreList);
+	function showEcoreList(event){
+		console.log('asd');
+		var spinner = new Spinner().spin()
+		$('#showEcoreList').parent().append(spinner.el);
 		if ($('#ecoreToAdd').css('display') == 'none') {
 			$('#ecoreSelect').empty();
 			$.ajax({
@@ -148,17 +157,21 @@
 					$.each(data, function(i, ecore){
 						$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
 					});
+					spinner.stop();
+					$('#ecoreToAdd').show();
+					$('#showEcoreList').one(showEcoreList);
 				},
 				error : function error(data) {
+					spinner.stop();
 					console.log('error');
 				}
 			});
-			$('#ecoreToAdd').show();
+			
 		}
 		else {
 			$('#ecoreToAdd').hide();
 		}
-	});
+	}
 	
 	//SHARE OR UNSHARE PROJECT
 	

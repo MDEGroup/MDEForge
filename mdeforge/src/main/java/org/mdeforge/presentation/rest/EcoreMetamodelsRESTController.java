@@ -206,7 +206,8 @@ public class EcoreMetamodelsRESTController {
 	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(
 			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			ecoreMetamodelService.delete(idEcoreMetamodel, user);
+			EcoreMetamodel art = ecoreMetamodelService.findOneById(idEcoreMetamodel, user);
+			ecoreMetamodelService.delete(art, user);
 			return new ResponseEntity<String>("EcoreMetamodel deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

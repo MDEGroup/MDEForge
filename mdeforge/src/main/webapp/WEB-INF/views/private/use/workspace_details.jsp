@@ -112,10 +112,11 @@
 						<div class="body">
 							<div class="row-fluid">
 								<div class="span4">
+									<div>
 									<h5 class="strong">
 										Ecore Metamodels <i class="icon-expand-alt" id="showEcoreList"></i>
 									</h5>
-
+									</div>
 									<div id="ecoreToAdd" style="display: none">
 										<select class="span12" id="ecoreSelect">
 											<option value="pippo">pippo</option>
@@ -216,5 +217,8 @@
 	</div>
 	<!-- // Widget END -->
 </div>
+
+
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/workspaceManager.js"></script>

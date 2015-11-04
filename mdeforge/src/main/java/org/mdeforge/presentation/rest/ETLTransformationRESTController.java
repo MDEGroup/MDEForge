@@ -161,7 +161,8 @@ public class ETLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ETLTransformationService.delete(idTranformation, user);
+			ETLTransformation art = ETLTransformationService.findOneById(idTranformation, user);
+			ETLTransformationService.delete(art, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

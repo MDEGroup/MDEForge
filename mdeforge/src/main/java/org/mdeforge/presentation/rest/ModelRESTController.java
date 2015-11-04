@@ -176,7 +176,8 @@ public class ModelRESTController {
 	@RequestMapping(value = "/{id_model}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> deleteModel(@PathVariable("id_model") String idModel) {
 		try {
-			modelService.delete(idModel, user);
+			Model art = modelService.findOneById(idModel, user);
+			modelService.delete(art, user);
 			return new ResponseEntity<String>("Model deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Model not deleted", HttpStatus.UNPROCESSABLE_ENTITY);

@@ -55,10 +55,16 @@ public class ATLPrivateController {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<ATLTransformation> getATLTransformation() {
-		List<ATLTransformation> list = aTLTransformationService
-				.findAllWithPublicByUser(user);
+	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
+            produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<ATLTransformation> getSharedAndPublicEcoreMetamodel () {
+		List<ATLTransformation> list = aTLTransformationService.findAllWithPublicByUser(user);
+		return list;
+	}
+	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<ATLTransformation> getSharedEcoreMetamodel () {
+		List<ATLTransformation> list = aTLTransformationService.findAllSharedByUser(user);
 		return list;
 	}
 

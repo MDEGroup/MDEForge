@@ -208,7 +208,8 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<String> deleteTranformation(
 			@PathVariable("id_metamodel") String idTranformation) {
 		try {
-			ATLtransformationService.delete(idTranformation, user);
+			ATLTransformation art = ATLtransformationService.findOneById(idTranformation, user);
+			ATLtransformationService.delete(art, user);
 			return new ResponseEntity<String>("Transformation deleted",
 					HttpStatus.OK);
 		} catch (Exception e) {

@@ -10,7 +10,7 @@ import org.mdeforge.business.model.User;
 
 public interface CRUDArtifactService <T extends Artifact> {
 	T create(T art) throws BusinessException;
-	void delete(String idArtifact, User idUser) throws BusinessException;
+	//void delete(String idArtifact, User idUser) throws BusinessException;
 	void update(T artifact) throws BusinessException;
 	List<T> findAll() throws BusinessException;
 	List<T> findSharedNoProject(User user) throws BusinessException;
@@ -43,4 +43,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> findRecentArtifacts() throws BusinessException;
 	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
+	List<T> findAllSharedByUser(User user);
 }

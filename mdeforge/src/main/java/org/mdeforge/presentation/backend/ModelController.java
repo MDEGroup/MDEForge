@@ -52,12 +52,19 @@ public class ModelController {
 	private User user;
 	@Autowired
 	private ProjectService projectService;
-	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Model> getEcoreMetamodel () {
+	public @ResponseBody List<Model> getSharedAndPublicEcoreMetamodel () {
 		List<org.mdeforge.business.model.Model> list = modelService.findAllWithPublicByUser(user);
 		return list;
 	}
+	@RequestMapping(value = "/list", method=RequestMethod.GET, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody List<Model> getSharedEcoreMetamodel () {
+		List<org.mdeforge.business.model.Model> list = modelService.findAllSharedByUser(user);
+		return list;
+	}
+	
 	
 	@RequestMapping(method = { RequestMethod.GET })
 	public String ecoreMetamodel(org.springframework.ui.Model model, @RequestParam String id) {
