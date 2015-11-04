@@ -216,7 +216,5 @@
 	</div>
 	<!-- // Widget END -->
 </div>
-
-
-
-
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/workspaceManager.js"></script>

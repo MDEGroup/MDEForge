@@ -3,8 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-
-
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -14,7 +12,6 @@
 	height: 200px;
 }
 </style>
-
 
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
@@ -26,11 +23,6 @@
 	<li><spring:message code="mdeforge.public.back.browse.transformation_details.detail" /></li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-
-
-
 <!-- Heading -->
 <div class="heading-buttons">
 	<h3 id="artifactName" data-id="${atlTransformation.getId()}">${atlTransformation.getName()}
@@ -52,29 +44,14 @@
 </div>
 <div class="separator bottom"></div>
 <!-- // Heading END -->
-
-
-
-
-
 <div class="innerLR">
-
-
-
 	<div class="row-fluid">
 		<div class="span9 tablet-column-reset">
-
 			<div
 				class="widget widget-heading-simple widget-body-white widget-employees">
-
-
-
 				<div class="widget-body padding-none">
-
 					<div class="row-fluid row-merge">
-
 						<div class="span12 detailsWrapper">
-
 							<div class="innerAll">
 								<div class="title">
 									<div class="row-fluid">
@@ -87,7 +64,6 @@
 												Used in ${atlTransformation.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
 											</p>
-											
 										</div>
 									</div>
 								</div>
@@ -106,9 +82,7 @@
 												<li><i class="icon-envelope icon-li icon-fixed-width"></i>
 													${atlTransformation.getAuthor().getEmail()}</li>
 											</ul>
-
 											<div class="separator bottom"></div>
-
 											<h5 class="strong">General</h5>
 											<!-- Profile Photo -->
 											<div class="center">
@@ -134,11 +108,8 @@
 														<!-- // Table row END -->
 													</tbody>
 													<!-- // Table body END -->
-
 												</table>
 											</div>
-
-
 										</div>
 										<div class="span8">
 											<h5 class="strong">Description</h5>
@@ -148,7 +119,6 @@
 													<c:if test="${property.getName() == 'Description '}">
 															${property.getValue()}
 														</c:if>
-
 												</c:forEach>
 											</p>
 											<div class="row-fluid">
@@ -184,7 +154,6 @@
 															<span class="btn btn-block btn-primary span4" id="addUserArtifact">Add</span>
 														</div>
 													</div>
-													
 													<ul id="users" class="team">
 														<c:forEach items="${atlTransformation.getShared()}"
 															var="user" varStatus="count">
@@ -199,23 +168,16 @@
 													</ul>
 												</div>
 											</div>
-
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
-
-
 			<hr>
-
-
 			<div class="widget widget-heading-simple widget-body-white">
-
 				<!-- Widget Heading -->
 				<div class="widget-head">
 					<h3 class="heading glyphicons show_thumbnails">
@@ -249,8 +211,6 @@
 										<!-- // Table row END -->
 									</c:forEach>
 							</table>
-
-
 						</div>
 						<div class="span4">
 							<table class="table table-bordered table-striped table-white">
@@ -293,25 +253,11 @@
 					</div>
 				</div>
 			</div>
-
-
 			<hr>
-
 			<div class="">
 				<div class="">
 					<h4>Metrics</h4>
-
 					<table class="table table-bordered table-striped table-white">
-
-						<!-- Table heading -->
-						<!-- 							<thead> -->
-						<!-- 								<tr> -->
-						<!-- 									<th>Name</th> -->
-						<!-- 									<th class="center">Value</th> -->
-						<!-- 								</tr> -->
-
-						<!-- 							</thead> -->
-
 						<thead>
 							<tr>
 								<th rowspan="2">Name</th>
@@ -327,75 +273,43 @@
 							</tr>
 						</thead>
 						<!-- // Table heading END -->
-
-						<!-- Table body -->
-<!-- 						<tbody> -->
-<%-- 							<c:forEach items="${atlTransformation.getMetrics()}" var="metric"> --%>
-<!-- 								Table row -->
-<!-- 								<tr> -->
-<%-- 									<td class="left">${metric.getName()}</td> --%>
-<%-- 									<td class="center"><span class="badge badge-success"><fmt:formatNumber --%>
-<%-- 												value="${metric.getValue()}" maxFractionDigits="3" /></span></td> --%>
-<!-- 								</tr> -->
-<!-- 								// Table row END -->
-<%-- 							</c:forEach> --%>
-<!-- 						</tbody> -->
 							<tbody>
-						<c:forEach items="${atlTransformation.getMetrics()}" var="metric">
+							<c:forEach items="${atlTransformation.getMetrics()}" var="metric">
 							<!-- Table row -->
-							<tr>
-								
-								<td class="left">${metric.getName()}</td>
-								<td>${metric.getDescription()}</td>
-								
-								<c:choose>
-								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
-								    <td colspan="5" class="center">${metric.getValue()}</td>
-								  </c:when>
-								  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
-								    <td>${metric.getMaximum()}</td>
-								    <td>${metric.getMinimum()}</td>
-								    <td>${metric.getAverage()}</td>
-								    <td>${metric.getMedian()}</td>
-								    <td>${metric.getStandardDeviation()}</td>
-								  </c:when>
-								  <c:otherwise>
-								    <td>${metric.getMaximum()}</td>
-								    <td>${metric.getMinimum()}</td>
-								    <td>${metric.getAverage()}</td>
-								    <td>${metric.getMedian()}</td>
-								    <td>${metric.getStandardDeviation()}</td>
-								  </c:otherwise>
-								</c:choose>														
-								
-							</tr>
+								<tr>
+									
+									<td class="left">${metric.getName()}</td>
+									<td>${metric.getDescription()}</td>
+									
+									<c:choose>
+									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+									    <td colspan="5" class="center">${metric.getValue()}</td>
+									  </c:when>
+									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+									    <td>${metric.getMaximum()}</td>
+									    <td>${metric.getMinimum()}</td>
+									    <td>${metric.getAverage()}</td>
+									    <td>${metric.getMedian()}</td>
+									    <td>${metric.getStandardDeviation()}</td>
+									  </c:when>
+									  <c:otherwise>
+									    <td>${metric.getMaximum()}</td>
+									    <td>${metric.getMinimum()}</td>
+									    <td>${metric.getAverage()}</td>
+									    <td>${metric.getMedian()}</td>
+									    <td>${metric.getStandardDeviation()}</td>
+									  </c:otherwise>
+									</c:choose>														
+									
+								</tr>
 							<!-- // Table row END -->
-						</c:forEach>						
-				</table> 
+							</c:forEach>						
+						</tbody> 
 						<!-- End body -->
 					</table>
 				</div>
-
-
-
 			</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 		</div>
-
-
-
 		<div class="span3 tablet-column-reset">
 
 			<!-- Widget -->
@@ -441,37 +355,8 @@
 			</div>
 
 		</div>
-
-
-
-
-
 	</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 <c:import var="fileToVisualize"
 	url="file:///${atlTransformationFile.getAbsolutePath()}" />
@@ -493,5 +378,6 @@ ${fn:escapeXml(fileToVisualize)}
 
 </div>
 <!-- // Modal END -->
-
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
 

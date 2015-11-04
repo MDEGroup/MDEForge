@@ -484,5 +484,5 @@ ${fn:escapeXml(fileToVisualize)}
 
 </div>
 <!-- // Modal END -->
-
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
 
