@@ -1,102 +1,208 @@
-<div id="landing_2">
 	
 
 	
 	
 		<div class="container-960 innerT">
 			
-			<h3 class="glyphicons circle_info margin-none"><i></i>Members</h3>
+			<h3 class="glyphicons book margin-none"><i></i>Publications</h3>
 				<div class="separator bottom"></div>
 			
 				<div class="widget widget-heading-simple widget-body-gray">
 					<div class="widget-body">
 						<p class="lead center margin-none">
-							MDEForge is anextensible Web-based modeling platform specifically conceived to foster a community-based modeling repository, 
-							which underpins the development, analysis and reuse of modeling artifacts. 
-							Moreover, it enables the adoption of model management tools as software-as-a-service that can be remotely used without overwhelming 
-							the users with intricate and error-prone installation and configuration procedures.
+							Publications related to MDEForge
 						</p>
 					</div>
 				</div>
 				
-				<!-- Row -->
-				<div class="row-fluid">
 				
-					<!-- Thumbnails -->
-					<ul class="thumbnails">
-					
-						<!-- Column -->
-						<li class="span12">
+				
+				
+				<div class="widget widget-heading-simple widget-body-white">
+				<div class="widget-body">
+					<div class="innerL">
+						<div class="separator bottom"></div>
 						
-							<!-- Thumbnail -->
-							<div class="thumbnail widget-thumbnail">
-								<img src="${pageContext.request.contextPath}/resources/theme/images/architecture.png" alt="MDE Forge Platform" />
-								<div class="caption">
-									<h4>MDE Forge Platform</h4>
-									<p>MDEForge platform consists of a number of services that can be used by means of both a Web access and programmatic interfaces (API) that enable their adoption as software as a service. 
-										In particular, core services are provided to enable the management of modeling artifacts, namely transformations, models, metamodels, and editors. Atop of such core services, extensions can be developed to add new functionalities.
-									</p>																		
-								</div>
-							</div>
-							<!-- // Thumbnail END -->
-							
-						</li>
-						<!-- // Column END -->												
-						
-					</ul>
-					<!-- // Thumbnails END -->
-					
+						<div class="separator bottom">
+									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
+									<strong>MDEForge: an extensible Web-based modeling platform *</strong>
+									<br> 
+										<span style="text-decoration: underline;">Francesco Basciani</span>, 
+										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
+										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
+										<span style="text-decoration: underline;">Amleto Di Salle</span>, 
+										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
+										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
+									<br>
+									<span class="">
+							        	<i>CloudMDE 2014, 66</i>
+							        </span>&nbsp;
+							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
+							        <br>
+							        <strong>Abstract. </strong>
+							        Model-Driven Engineering (MDE) refers to the systematic use of models
+									as first class entities throughout the software development life cycle. Over the
+									last few years, many MDE technologies have been conceived for developing domain
+									specific modeling languages, and for supporting a wide range of model
+									management activities. However, existing modeling platforms neglect a number
+									of important features that if missed reduce the acceptance and the relevance of
+									MDE in industrial contexts, e.g., the possibility to search and reuse already developed
+									modeling artifacts, and to adopt model management tools as a service.
+									In this paper we propose MDEForge a novel extensible Web-based modeling platform
+									specifically conceived to foster a community-based modeling repository,
+									which underpins the development, analysis and reuse of modeling artifacts. Moreover,
+									it enables the adoption of model management tools as software-as-a-service
+									that can be remotely used without overwhelming the users with intricate and
+									error-prone installation and configuration procedures.
+						        </div>
+					</div>
 				</div>
-				<!-- // Row END -->
+			</div>
+			
+			
 			
 			<div class="widget widget-heading-simple widget-body-white">
-					<div class="widget-body">
-							
-							<p>MDEForge has been designed for:</p>						
-							
-							<div class="row-fluid">
-								<div class="span4">
-									<div class="innerL">
-										<div class="separator bottom"></div>
-										<div class="glyphicons glyphicon-large classic_hammer">
-											<i></i>
-											<h4>Developers of modeling artifacts</h4>
-											<p>As previously said we envision a community of users that might want to share their tools and enable their adoption and refinement by other users. To this end the platform provides the means to add new modeling artifacts to the MDEForge repository.</p>
-										</div>
-										
-									</div>
-							</div>
-							
-							<div class="span4">
-								<div class="innerL">										
-										<div class="separator bottom"></div>
-										<div class="glyphicons glyphicon-large settings">
-											<i></i>
-											<h4>Developers of MDEForge extensions</h4>
-											<p>One of the requirements we identified when we started the development of MDEForge is about the modularity and extensibility of the platform. To this end we identified a set of core services that can be used to add new functionalities by means of platform extensions. In this respect, experienced users might contribute by proposing new extensions to be included in the platform.</p>
-										</div>
-									</div>
-							</div>
-
-							<div class="span4">
-								<div class="separator bottom"></div>
-										<div class="glyphicons glyphicon-large group">
-											<i></i>
-											<h4>End-users</h4>
-											<p>A Web application enables end-users to search and use (meta)models, transformations, and editors available in the MDEForge repository. Experienced users might use the REST API to exploit the functionalities provided by the platform in a programmatic way. For instance, tool vendors might exploit the functionalities provided by their tools by exploiting some of the transformations available in the MDEForge repository.</p>
-										</div>
-							</div>
-							
-						</div>
+				<div class="widget-body">
+					<div class="innerL">
+						<div class="separator bottom"></div>
 						
-						
-						
-				
+						<div class="separator bottom">
+									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
+									<strong>Describing the correlations between metamodels and transformations aspects</strong>
+									<br> 
+										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
+										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
+										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
+										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
+									<br>
+									<span class="">
+							        	<i>ceur-ws.org</i>
+							        </span>&nbsp;
+							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
+							        <br>
+							        <strong>Abstract. </strong>
+							       Metamodels are a key concept in Model-Driven Engineering.
+									Any artifact in a modeling ecosystem has to be defined in accordance to
+									a metamodel prescribing its main qualities. One of the most important
+									artifact is model transformation that are considered to be the heart and
+									soul of MDE and as such advanced techniques and tools are needed for
+									supporting the development, quality assurance, maintenance, and evolution
+									of model transformations. Several works propose the adoption of
+									metrics to measure quality attributes of transformation without considering
+									any metamodel aspects. In this paper, we present an approach to
+									understand structural characteristics of metamodels and how the model
+									transformations depend on corresponding input and target metamodels.
+						        </div>
 					</div>
-					
 				</div>
+			</div>
+			
+			<div class="widget widget-heading-simple widget-body-white">
+				<div class="widget-body">
+					<div class="innerL">
+						<div class="separator bottom"></div>
+						
+						<div class="separator bottom">
+									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
+									<strong>Collaborative Repositories in Model-Driven Engineering</strong>
+									<br> 
+										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
+										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
+										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
+										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
+									<br>
+									<span class="">
+							        	<i>IEEE Software, vol.32, no. 3, pp. 28-34</i>
+							        </span>&nbsp;
+							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> May-June 2015</span>
+							        <br>
+							        <strong>Abstract. </strong>
+							      Recently proposed model repositories aim to support specific needs--for example, collaborative modeling, the ability to use different modeling tools in software life-cycle management, tool interoperability, increased model reuse, and the integration of heterogeneous models.
+						        </div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="widget widget-heading-simple widget-body-white">
+				<div class="widget-body">
+					<div class="innerL">
+						<div class="separator bottom"></div>
+						
+						<div class="separator bottom">
+									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
+									<strong>Qualifying chains of transformation with coverage based evaluation criteria</strong>
+									<br> 
+										<span style="text-decoration: underline;">Francesco Basciani</span>, 
+										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
+										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
+										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
+										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
+									<br>
+									<span class="">
+							        	<i>ceur-ws.org</i>
+							        </span>&nbsp;
+							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
+							        <br>
+							        <strong>Abstract. </strong>
+							     	
+							     	In Model-Driven Engineering (MDE) the development of complex
+									and large transformations can benefit from the reuse of smaller ones that can be
+									composed according to user requirements. Composing transformations is a complex
+									problem: typically smaller transformations are discovered and selected by
+									developers from different and heterogeneous sources. Then the identified transformations
+									are chained by means of manual and error-prone composition processes.
+									Based on our approach, when we propose one or more transformation
+									chains to the user, it is difficult for him to choose one path instead of another
+									without considering the semantic properties of a transformation.
+									In this paper when multiple chains are proposed to the user, according to his requirements,
+									we propose an approach to classify these suitable chains with respect
+									to the coverage of the metamodels involved in the transformation. Based on coverage
+									value, we are able to qualify the transformation chains with an evaluation
+									criteria which gives as an indication of how much information a transformation
+									chain covers over another.
+							     
+						        </div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="widget widget-heading-simple widget-body-white">
+				<div class="widget-body">
+					<div class="innerL">
+						<div class="separator bottom"></div>
+						
+						<div class="separator bottom">
+									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
+									<strong>Mining correlations of ATL model transformation and metamodel metrics</strong>
+									<br> 
+										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
+										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
+										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
+										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
+									<br>
+									<span class="">
+							        	<i>IEEE Press Piscataway, NJ, USA</i>
+							        </span>&nbsp;
+							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2015</span>
+							        <br>
+							        <strong>Abstract. </strong>
+							     	
+							     	Model transformations are considered to be the "heart" and "soul" of Model Driven Engineering, and as a such, advanced techniques and tools are needed for supporting the development, quality assurance, maintenance, and evolution of model transformations. Even though model transformation developers are gaining the availability of powerful languages and tools for developing, and testing model transformations, very few techniques are available to support the understanding of transformation characteristics. In this paper, we propose a process to analyze model transformations with the aim of identifying to what extent their characteristics depend on the corresponding input and target metamodels. The process relies on a number of transformation and metamodel metrics that are calculated and properly correlated. The paper discusses the application of the approach on a corpus consisting of more than 90 ATL transformations and 70 corresponding metamodels.
+							     
+						        </div>
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			
+			
+			
+			
+			
 			
 			</div>	
 		
-</div>
 

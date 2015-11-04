@@ -46,6 +46,8 @@
 				<li class="active"><a href="${pageContext.request.contextPath}/" class="glyphicons home"><i></i><spring:message code="common.home" /></a></li>
 				<%-- <li><a href="${pageContext.request.contextPath}/public/about.htm" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li> --%>												
 				<li><a href="${pageContext.request.contextPath}/public/about" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li>
+				<li><a href="${pageContext.request.contextPath}/public/members" class="glyphicons group"><i></i>Members</a></li>
+				<li><a href="${pageContext.request.contextPath}/public/publications" class="glyphicons book"><i></i>Publications</a></li>
 				
 			</ul>
 			
