@@ -53,9 +53,20 @@ public class EcorePublicController {
 	public String index() {
 		return "public.index";
 	}
+	
 	@RequestMapping(value = "/about", method = { RequestMethod.GET })
 	public String about() {
 		return "public.about";
+	}
+
+	@RequestMapping(value = "/members", method = { RequestMethod.GET })
+	public String members() {
+		return "public.members";
+	}
+
+	@RequestMapping(value = "/publications", method = { RequestMethod.GET })
+	public String publications() {
+		return "public.publications";
 	}
 	
 	@RequestMapping("/login")

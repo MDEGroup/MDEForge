@@ -14,7 +14,14 @@
 						<%-- <li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/help.htm" class="glyphicons shield"><i></i><spring:message code="public.menu.help" /></a></li> --%>
 						<%-- <li class="hidden-phone"><a href="#" class="glyphicons shield"><i></i><spring:message code="public.menu.info" /></a></li> --%>
 						
-							
+						<security:authorize access="isAnonymous()">
+						<li class="glyphs hidden-phone">
+							<ul>
+								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
+								<li><a href="#" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /> (Not available for now)</a></li>
+							</ul>
+						</li>
+						</security:authorize>	
 						
 					</ul>					
 					<!-- TOP Menu END -->
@@ -32,11 +39,17 @@
 			</button>
 			<!-- // Menu Toggle Button END -->
 			
-			<ul class="topnav pull-right">
+			
+			
+			<ul class="topnav pull-left">
 				
 				<li class="active"><a href="${pageContext.request.contextPath}/" class="glyphicons home"><i></i><spring:message code="common.home" /></a></li>
 				<%-- <li><a href="${pageContext.request.contextPath}/public/about.htm" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li> --%>												
 				<li><a href="${pageContext.request.contextPath}/public/about" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li>
+				
+			</ul>
+			
+			<ul class="topnav pull-right border-none hidden-tablet">
 				<security:authorize access="isAuthenticated()">		
 						<!-- Profile / Logout menu -->
 						<li class="account dropdown dd-1">
@@ -68,14 +81,7 @@
 							</ul>
 						</li>
 						</security:authorize>			
-						<security:authorize access="isAnonymous()">
-						<li class="glyphs hidden-phone">
-							<ul>
-								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
-								<li><a href="#" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /> (Not available for now)</a></li>
-							</ul>
-						</li>
-						</security:authorize>	
+					
 			</ul>
 			<div class="clearfix"></div>
 			<!-- // Top Menu Right END -->
