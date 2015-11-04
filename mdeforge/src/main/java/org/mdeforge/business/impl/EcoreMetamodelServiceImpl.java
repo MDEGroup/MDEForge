@@ -1032,7 +1032,7 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample, double score)
 			throws BusinessException {
-		Comparator<Double> c = new Comparator<Double>() {
+		Comparator<Double> coparator = new Comparator<Double>() {
 			public int compare(Double a, Double b) {
 				if (a >= b) {
 					return -1;
@@ -1043,18 +1043,15 @@ public class EcoreMetamodelServiceImpl extends
 		};
 		
 		List<EcoreMetamodel> repository = findAll();
-		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(c);
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(coparator);
 		for (EcoreMetamodel ecoreMetamodel : repository) {
 			double d = calculateContainment(ecoreMetamodel, searchSample);
 			if (d>=score)
 				list.put(d, ecoreMetamodel);
 		}
-		logger.info(list.size() + "");
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
 		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
 			EcoreMetamodel value = entry.getValue();
-			logger.info("score: " + entry.getKey());
-			logger.info("metamodel" + entry.getValue().getName());
 			result.add(value);
 			try {
 				value.setScore(Float.parseFloat(entry.getKey().toString()));
@@ -1096,7 +1093,7 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+		double resultValue = (counter * 1.0) / counterRight;
 		return resultValue;
 		}catch(Exception e) {
 			return 0;

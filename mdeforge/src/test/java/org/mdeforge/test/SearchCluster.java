@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -40,12 +41,20 @@ public class SearchCluster {
 		return new String(Base64.encode(encoded));
 
 	}
+	
 	@Test
 	public void testCluster() throws IOException, InterruptedException {
 		//TEST METAMODEL
 		System.out.println("######### CLUSTER COMPUTATION ###########");
-		Date start = new Date();
-		System.out.println("START: " + start);
+		Date startCluster = new Date();
+		
+		Double clusterThreshold = 0.3;
+		Double searchThreshold = 0.50;
+		List<Cluster> clusters = new ArrayList<Cluster>();		
+		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);	
+		Date endCluster = new Date();
+		System.out.println("######### CLUSTER COMPUTATION: TOTAL TIME ###########" + (endCluster.getTime() - startCluster.getTime()));
+		
 		EcoreMetamodel serachSample = new EcoreMetamodel();
 		serachSample.setName("Example.ecore");
 		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
@@ -57,52 +66,45 @@ public class SearchCluster {
 		gfm.setFileName("MySQL.ecore");
 		gfm.setContent(readFile("temp/MySQL.ecore"));
 		serachSample.setFile(gfm);
-		//COMPARATOR
-		Comparator<Double> c = new Comparator<Double>() {
-				public int compare(Double a, Double b) {
-					if (a >= b) {
-						return -1;
-					} else {
-						return 1;
-					} // returning 0 would merge keys
-				}
-			};
 		
-		Double threshold = 0.3;
-		List<Cluster> clusters = new ArrayList<Cluster>();
-					
-		clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);			
+		System.out.println("######### SEARCH COMPUTATION              ###########");
+		Date startSearch = new Date();
 		List <Cluster> list = new ArrayList<Cluster>();
-		for (Cluster cluster : clusters) {
-			
-			double d = ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
-			if (d>=threshold)
-				list.add(cluster);
-		}
 		List<Artifact> result = new ArrayList<Artifact>();
-		for (Cluster cluster : list) {
-			for (Artifact artifact : cluster.getArtifacts()) {
-				Double d =ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
-				if(d>threshold && !artifact.getId().equals(cluster.getMostRepresentive().getId())){
-					result.add(artifact);
-					System.out.println(artifact.getName());
-				}
-			}
-			System.out.println(cluster.getMostRepresentive().getName());
+		int count = 0;
+		for (Cluster cluster : clusters) {
+			count++;
+			double d = ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
+			if (d>=clusterThreshold)
+				list.add(cluster);
+			if (d>=searchThreshold)
+				result.add(cluster.getMostRepresentive());
 		}
+		System.out.println("# clusters: " + clusters.size());
+		for (Cluster cluster : list) {
+			if(cluster.getArtifacts().size()!=1)
+				for (Artifact artifact : cluster.getArtifacts()) {
+					if(!artifact.getId().equals(cluster.getMostRepresentive().getId()))  {
+						count ++;
+						Double d =ecoreMetamodelService.calculateContainment((EcoreMetamodel)artifact, serachSample);
+						if(d>=searchThreshold){
+							result.add(artifact);
+						} 
+					}
+			}
+		}
+		for (Artifact ecoreMetamodel : result) {
+			System.out.println(ecoreMetamodel.getName());
+		}
+		System.out.println("Operation: " + count );
 		System.out.println("ResultSize: " + result.size());
-		Date finish = new Date();
-		System.out.println("FINISH: " + finish);
-		System.out.println("Process time: " + (finish.getTime() - start.getTime()));
+		Date finishSearch = new Date();
+		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finishSearch.getTime() - startSearch.getTime()));
 	}
+	
 	@Test
 	public void testWithoutCluster() throws IOException, InterruptedException {
-		//TEST METAMODEL
-		System.out.println("######### NO CLUSTER COMPUTATION ###########");
-		Date start = new Date();
-		System.out.println("START: " + start);
 		EcoreMetamodel serachSample = new EcoreMetamodel();
-		Double threshold = 0.3;
 		serachSample.setName("Example.ecore");
 		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
 		serachSample.setTags(tags);
@@ -113,16 +115,18 @@ public class SearchCluster {
 		gfm.setFileName("MySQL.ecore");
 		gfm.setContent(readFile("temp/MySQL.ecore"));
 		serachSample.setFile(gfm);
-		//COMPARATOR
 		
+		Double threshold = 0.5;
+		
+		System.out.println("######### NO CLUSTER COMPUTATION ###########");
+		Date start = new Date();
 		List<EcoreMetamodel> list = ecoreMetamodelService.searchByExample(serachSample, threshold);
 		for (EcoreMetamodel ecoreMetamodel : list) {
 			System.out.println(ecoreMetamodel.getName());
 		}
 		System.out.println("ResultSize: " + list.size());
 		Date finish = new Date();
-		System.out.println("FINISH: " + finish);
-		System.out.println("Process time: " + (finish.getTime() - start.getTime()));
+		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finish.getTime() - start.getTime()));
 	}
 	
 	
