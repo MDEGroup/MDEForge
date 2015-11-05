@@ -27,6 +27,21 @@
 					<img src="${pageContext.request.contextPath}/resources/theme/images/members/alfonso_pierantonio.jpg" alt="Alfonso Pierantonio" style="width:152px;"/>
 					<div class="caption">
 						<h4>Alfonso Pierantonio</h4>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+									</small>
+								</div>
+							</div>
+						<hr>
 						 <p>
 							My current interests are in Model-Driven Engineering, in particular: Coupled Evolution, Bidirectionality and Web Engineering. 
 							The most recents things I have been busy with (<a href="http://www.di.univaq.it/home.php?users_username=alfonso" target="_blank">continue to my website</a>)
@@ -41,6 +56,7 @@
 							<br>
 						</p> 
 						
+						<hr>
 						<!-- Social Icons -->
 						<a href="http://www.di.univaq.it/home.php?users_username=alfonso" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
 						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
@@ -62,6 +78,21 @@
 					<img src="${pageContext.request.contextPath}/resources/theme/images/members/davide_di_ruscio.jpg" alt="Davide Di Ruscio" style="width:180px;"/>
 					<div class="caption">
 						<h4>Davide Di Ruscio</h4>
+					<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+									</small>
+								</div>
+							</div>
+						<hr>
 						 <p>
 							I'm Assistant Professor at the Department of Information Engineering Computer Science and Mathematics of the University of L'Aquila. My main research interests include Model Driven Engineering (MDE), model transformations, coupled evolution, model differencing, and generative techniques for Web development.
 							Currently, I'm working on model difference and model evolution.
@@ -80,10 +111,11 @@
 							(<a href="http://www.di.univaq.it/diruscio/" target="_blank">continue to my website</a>)
 						</p> -->
 						
+						<hr>
 						<!-- Social Icons -->
 						<a href="http://www.di.univaq.it/diruscio/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
-						<a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a>
+						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
+						<a href="" class="glyphicons standard linked_in"><i></i></a> -->
 						<div class="clearfix"></div>
 						<!-- // Social Icons END -->
 					</div>
@@ -101,6 +133,21 @@
 					<img src="${pageContext.request.contextPath}/resources/theme/images/members/juri_di_rocco.jpg" alt="Juri Di Rocco" style="width:200px;"/>
 					<div class="caption">
 						<h4>Juri Di Rocco</h4>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+									</small>
+								</div>
+							</div>
+						<hr>
 						<p>
 						I am a Ph.D. student in Computer Science at the Department of Information Engineering Computer Science and Mathematics of the University of L'Aquila.
 						My research interests include Model-Driven Engineering (MDE) techinques like: software modelling, analysis and simulation, model-to-model transformation, model weaving, model generation,coupled evolution and model differencing.
@@ -115,10 +162,11 @@
 						(<a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" target="_blank">continue to my website</a>)
 						</p> -->
 						
+						<hr>
 						<!-- Social Icons -->
 						<a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
-						<a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a>
+						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
+						<a href="" class="glyphicons standard linked_in"><i></i></a> -->
 						<div class="clearfix"></div>
 						<!-- // Social Icons END -->
 					</div>
@@ -148,6 +196,24 @@
 					<img src="${pageContext.request.contextPath}/resources/theme/images/members/ludovico_iovino.jpg" alt="Ludovico Iovino" style="width:200px;"/>
 					<div class="caption">
 						<h4>Ludovico Iovino</h4>
+						
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/gssi.jpg" alt="GSSI" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span>
+									</small>
+								</div>
+							</div>
+						
+						<!-- <span class="text-faded"><i class="icon-fixed-width icon-building"></i> <a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+						<hr>
 						 <p>
 							Ph.D. in Computer Science, research fellow at the Computer Science Department of the University of L'Aquila. 
 							Interested in Model Driven Engineering(MDE), Model Transformations, Model Evolution, generative techniques. 
@@ -164,7 +230,7 @@
 							He worked recently on J2EE and LAMP platform and has experience with .NET Windows Form and WPF.
 							(<a href="http://www.ludovicoiovino.com/" target="_blank">continue to my website</a>)
 						</p> -->
-						
+						<hr>
 						<!-- Social Icons -->
 						<a href="http://www.ludovicoiovino.com/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
 						<!-- <a href="" class="glyphicons standard twitter"><i></i></a> 
@@ -186,8 +252,28 @@
 					<img data-src="holder.js/100%x200" alt="100%x200 Image Holder" />
 					<div class="caption">
 						<h4>Amleto Di Salle</h4>
+						
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+									</small>
+								</div>
+							</div>
+						<hr>
+						<p>
+						
+						</p>
 						<!--  <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
 						 --> 
+						 <hr>
 						<!-- Social Icons -->
 						<a href="http://www.amletodisalle.it/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
 						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
@@ -209,6 +295,21 @@
 					<img src="${pageContext.request.contextPath}/resources/theme/images/members/francesco_basciani.jpg" alt="Francesco Basciani" style="width:200px;"/>
 					<div class="caption">
 						<h4>Francesco Basciani</h4>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<small class="author">
+										<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+									</small>
+								</div>
+							</div>
+						<hr>
 						 <p>
 							I am Ph.D. student at the Computer Science Department of the University of L'Aquila.
 							My research interests are in Model Driven Engineering (MDE), in particular in the Verification & Validation of Model to Model transformations.
@@ -225,6 +326,7 @@
 							(<a href="http://www.basciani.it/" target="_blank">continue to my website</a>)
 						</p> -->
 						
+						<hr>
 						<!-- Social Icons -->
 						<a href="http://www.basciani.it/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>
 						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>

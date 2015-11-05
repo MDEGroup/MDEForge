@@ -15,8 +15,17 @@
 			
 			
 			<ul class="topnav pull-left">
-				<li>
-					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel Upload</a>
+				
+				<li class="dropdown dd-1">
+					<a href="" data-toggle="dropdown" class="glyphicons cloud-upload"><i></i>Artifact Upload <span class="caret"></span></a>
+					<ul class="dropdown-menu pull-left">
+						
+						<!-- Components Submenu Regular Items -->
+						<li class=""><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel</a></li>
+						<li class=""><a href="${pageContext.request.contextPath}/private/ATLTransformation/upload" class="glyphicons cloud-upload"><i></i> ATL Transformation</a></li>
+						<li class=""><a href="${pageContext.request.contextPath}/private/Model/upload" class="glyphicons cloud-upload"><i></i> Model</a></li>
+						
+					</ul>
 				</li>
 				
 					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
