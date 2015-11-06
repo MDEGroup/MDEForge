@@ -47,8 +47,8 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 	@Override
 	public List<T> findRelationsByArtifact(Artifact artifact) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Criteria from = Criteria.where("fromArtifact.$id").is(artifact.getId());
-		Criteria to = Criteria.where("toArtifact.$id").is(artifact.getId());
+		Criteria from = Criteria.where("fromArtifact.$id").is(new ObjectId(artifact.getId()));
+		Criteria to = Criteria.where("toArtifact.$id").is(new ObjectId(artifact.getId()));
 		Query query = new Query();
 		if(persistentClass!=Relation.class) {
 			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
