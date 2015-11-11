@@ -133,6 +133,19 @@ public class ATLPrivateController {
 		model.addAttribute("metamodelList", el);
 		List<User> userList = userService.findAll();
 		model.addAttribute("userList", userList);
+		
+		
+		/**
+		 * Resources to Upload new Metamodels
+		 */
+		EcoreMetamodel emm = new EcoreMetamodel();
+		model.addAttribute("metamodel",emm);
+		List<Project> pl2 = projectService.findByUser(user);
+		model.addAttribute("projecList",pl2);
+		List<User> userList2 = userService.findAll();
+		model.addAttribute("userList", userList2);
+		
+		
 		return "private.use.transformation.upload_page";
 	}
 

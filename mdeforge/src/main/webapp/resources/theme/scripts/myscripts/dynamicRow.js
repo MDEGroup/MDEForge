@@ -18,6 +18,18 @@ $(function() {
 					result.append(rendered);
 				});
 	});
+	$(document).on('click','#addPropertyButton2', function(e) {
+		var idRow = $('.propertyRow.lastRow').data('id');
+		$('.propertyRow.lastRow').removeClass('lastRow');
+		if (idRow ==null)
+			idRow = -1;
+		var result = $('#propertiesTable2');
+		$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/rowProperty.html',
+				function(template) {
+			var rendered = Mustache.render(template, idRow);
+			result.append(rendered);
+		});
+	});
 	
 	$(document).on('click','.deleteDomainConformToButton', function(e) {
 		console.log($(this).data('id'));
