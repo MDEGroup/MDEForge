@@ -70,7 +70,7 @@ public class SampleTest {
 					"/Users/juridirocco/Desktop/result2.txt");
 			for (double d : testArray) {
 				List<Cluster> clusters = ecoreMetamodelService
-						.getSimilarityClusters(d, similarityRelationService);
+						.getSimilarityClusters(d, similarityRelationService).getClusters();
 				int maxCluster = 0;
 				double average = 0;
 				int count = 0;

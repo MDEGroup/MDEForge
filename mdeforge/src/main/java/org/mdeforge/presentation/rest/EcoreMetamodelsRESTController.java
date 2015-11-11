@@ -228,19 +228,19 @@ public class EcoreMetamodelsRESTController {
 		switch (computation) {
 		case 1:
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					similarityRelationService);
+					similarityRelationService).getClusters();
 			break;
 		case 2:
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					containmentRelationService);
+					containmentRelationService).getClusters();
 			break;
 		case 3:
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					cosineSimilarityRelationService);
+					cosineSimilarityRelationService).getClusters();
 			break;
 		case 4:
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold,
-					diceSimilarityRelationService);
+					diceSimilarityRelationService).getClusters();
 			break;
 		}
 		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;

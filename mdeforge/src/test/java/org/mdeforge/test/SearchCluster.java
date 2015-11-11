@@ -21,6 +21,7 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
@@ -58,7 +59,7 @@ public class SearchCluster {
 		Double clusterThreshold = 0.25;
 		Double searchThreshold = 0.50;
 		List<Cluster> clusters = new ArrayList<Cluster>();		
-		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);	
+		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService).getClusters();	
 		Date endCluster = new Date();
 		System.out.println("######### CLUSTER COMPUTATION: TOTAL TIME ###########" + (endCluster.getTime() - startCluster.getTime()));
 		
@@ -135,13 +136,15 @@ public class SearchCluster {
 		Date finish = new Date();
 		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finish.getTime() - start.getTime()));
 	}
+	
+	@Ignore
 	@Test
 	public void testCluster() {
 		User user = new User();
 		user.setId("5514b943d4c6c379396fe8b7");
 		Double clusterThreshold = 0.3;
 		List<Cluster> clusters = new ArrayList<Cluster>();		
-		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);
+		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService).getClusters();
 		for (Cluster cluster : clusters) {
 			if (cluster.getArtifacts().size()==1) {
 				EcoreMetamodel art = ((EcoreMetamodel)cluster.getArtifacts().toArray()[0]);
@@ -166,4 +169,72 @@ public class SearchCluster {
 			}
 		}
 	}
+
+	@Ignore
+	@Test
+	public void NullMetamodel() {
+		User user = new User();
+		user.setId("5514b943d4c6c379396fe8b7");
+		List<EcoreMetamodel> ecoreList = ecoreMetamodelService.findAll();
+		boolean guard1 = false;
+		boolean guard2 = false;
+		int count = 0;
+		for (EcoreMetamodel ecoreMetamodel : ecoreList) {
+			guard1 = false;
+			guard2 = false;
+			Metric metricMC = metricRepository.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMetamodel.getId()));			 
+			if (metricMC != null) 
+				if (((SimpleMetric) metricMC).getValue().equals("1")) {
+					guard1 = true;
+				}
+			Metric metricEStructuralFeature = metricRepository.findOneByNameAndArtifactId("Number of Total eStructuralFeature", new ObjectId(ecoreMetamodel.getId()));		 
+			if (metricEStructuralFeature != null) 
+				if (((SimpleMetric) metricEStructuralFeature).getValue().equals("0") ||
+						((SimpleMetric) metricEStructuralFeature).getValue().equals("1")) {
+					System.out.println("========");
+					System.out.println(ecoreMetamodel.getName());
+					System.out.println("OK2");
+					System.out.println(((SimpleMetric) metricMC).getValue());
+					guard2 = true;
+				}
+			if (guard1 && guard2)
+				count++;
+		}
+		System.out.println("TOTAL" + count);
+	}
+	@Test
+	public void testRecluster() {
+		Clusterizzation clusterizzation = ecoreMetamodelService.getSimilarityClusters(0.3, similarityRelationService);
+		int count = 0;
+		int singleton = 0;
+		int maxCluster = 0;
+		for (Cluster cluster : clusterizzation.getClusters()) {
+			count += cluster.getArtifacts().size();
+			if (maxCluster<cluster.getArtifacts().size())
+				maxCluster = cluster.getArtifacts().size();
+			if (cluster.getArtifacts().size()== 1)
+				singleton++;
+		}
+		System.out.println("#Singleton" + singleton);
+		System.out.println("#Cluster" + clusterizzation.getClusters().size());
+		System.out.println("#Artifact: " + count);
+		System.out.println("#Max cluster: " + maxCluster);
+		System.out.println("=================================");
+		Clusterizzation reClusterizzation = ecoreMetamodelService.recluster(clusterizzation, 0.8);
+		count = 0;
+		maxCluster = 0;
+		singleton = 0;
+		for (Cluster cluster : reClusterizzation.getClusters()) {
+			count += cluster.getArtifacts().size();
+			if (maxCluster<cluster.getArtifacts().size())
+				maxCluster = cluster.getArtifacts().size();
+			if (cluster.getArtifacts().size()== 1)
+				singleton++;
+		}
+		System.out.println("#Singleton" + singleton);
+		System.out.println("#Cluster" + clusterizzation.getClusters().size());
+		System.out.println("#Artifact: " + count);
+		System.out.println("#Max cluster: " + maxCluster);
+	}
+	
 }

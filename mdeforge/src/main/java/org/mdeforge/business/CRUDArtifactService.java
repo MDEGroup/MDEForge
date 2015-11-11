@@ -44,4 +44,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
 	List<T> findAllSharedByUser(User user);
+	Metric findMetricByNameAndArtifact(String name, Artifact artifact);
 }

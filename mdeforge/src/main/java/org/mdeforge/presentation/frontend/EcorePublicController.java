@@ -17,6 +17,7 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -92,6 +93,14 @@ public class EcorePublicController {
 	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
 
 		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
+		ecoreMetamodel.getRelations().addAll(
+				similarityRelationService.findTopProximity(ecoreMetamodel, 5));
+		ecoreMetamodel.getRelations().addAll(
+				containmentRelationService.findTopProximity(ecoreMetamodel, 5));
+		ecoreMetamodel.getRelations().addAll(
+				diceSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
+		ecoreMetamodel.getRelations().addAll(
+				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
 		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
 		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File ecoreMetamodelFile = new File(pathToDownload);
@@ -140,23 +149,22 @@ public class EcorePublicController {
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
 		case 1:	
-			
-			
-			
-			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);			
+			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;
+			Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			clusters = ecoreMetamodelService.recluster(clu, 0.7).getClusters();
+			//clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();			
 			break;
 		case 2:
 			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 			break;
 		case 3:
 			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService).getClusters();
 			break;
 		case 4:
 			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService).getClusters();
 			break;
 		}
 		
@@ -196,19 +204,21 @@ public class EcorePublicController {
 		switch (computation) {
 		case 1:			
 			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);			
+			Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			//clusters = ecoreMetamodelService.recluster(clu, 1).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();			
 			break;
 		case 2:
 			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 			break;
 		case 3:
 			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService).getClusters();
 			break;
 		case 4:
 			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService).getClusters();
 			break;
 		}
 		

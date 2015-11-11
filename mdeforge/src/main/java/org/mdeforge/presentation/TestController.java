@@ -55,9 +55,9 @@ public class TestController {
 	public String cluster(org.springframework.ui.Model model, @RequestParam Double threshold, @RequestParam int computation) {
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		if(computation == 1)
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();
 		else 
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
@@ -93,16 +93,16 @@ public class TestController {
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
 		case 1:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();
 			break;
 		case 2:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 			break;
 		case 3:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService);	
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineSimilarityRelationService).getClusters();	
 			break;		
 		case 4:
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService);
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService).getClusters();
 			break;
 		}
 		int maxCluster = 0;

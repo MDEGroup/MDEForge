@@ -12,7 +12,7 @@
 	height: 200px;
 }
 </style>
-
+<security:authentication property="principal.user.id" var="userId"/>
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 	<li><spring:message
@@ -144,6 +144,12 @@
 														class="btn btn-success btn-small btn-block"><i
 														class="icon-download-alt icon-fixed-width"></i> Download
 														Metamodel</a>
+														<c:if test="${userId == ecoreMetamodel.getAuthor().getId()}">
+															<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${ecoreMetamodel.getId()}"
+															class="btn btn-block btn-danger btn-small"><i
+															class="icon-remove-sign icon-fixed-width"></i> Delete
+															Metamodel</a>
+														</c:if>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -156,7 +162,7 @@
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${ecoreMetamodel.getShared().size()}
 															people)</span>
-															<security:authentication property="principal.user.id" var="userId"/>
+															
 															
  															<c:if test="${userId == ecoreMetamodel.getAuthor().getId()}">
  																<i class="icon-expand-alt" id="showUserList"></i>
