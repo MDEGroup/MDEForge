@@ -204,7 +204,7 @@ public class EcorePublicController {
 		switch (computation) {
 		case 1:			
 			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;			
-			Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+			//Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
 			//clusters = ecoreMetamodelService.recluster(clu, 1).getClusters();
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();			
 			break;

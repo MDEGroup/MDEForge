@@ -2,6 +2,7 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.model.EcoreMetamodel;
 
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,
@@ -18,5 +19,6 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample,
 			double score) throws BusinessException;
 	double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2);
+	Resource loadArtifacrt(String id);
 	
 }

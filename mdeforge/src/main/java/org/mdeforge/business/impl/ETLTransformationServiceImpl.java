@@ -123,7 +123,7 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 		EtlModule module = new EtlModule();
 		//TODO DANIELE DEVE ESSERE SETTATO DINAMICAMENTE E NON 
 		//STATICAMENTE
-		transformation.setTargetName("Target");
+		//transformation.setTargetName("Target");
 		Random randomGenerator = new Random();
 		String outputPath = basePath + randomGenerator.nextInt(100);
 		
@@ -137,13 +137,13 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 			for (Model model : transformation.getModels_in()) {
 				String path = gridFileMediaService.getFilePath(model);
 				//TODO DANIELE vedi commento nel data model
-				models.add(createEmfModel(transformation.getSourceName(),
+				models.add(createEmfModel("",
 					path, sourceMetamodel,
 					true, false));
 			}
 			//TODO DANIELE Anche qui dovrebbe diventare una lista di modelli in output
 			//con foreach sui modelli in output
-			models.add(loadEmptyModel(transformation.getTargetName(),
+			models.add(loadEmptyModel("",
 					targetMetamodel, outputPath));
 	
 			// to register the emf models into models repository

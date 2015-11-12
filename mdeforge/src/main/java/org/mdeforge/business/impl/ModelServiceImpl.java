@@ -25,7 +25,6 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
@@ -51,8 +50,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.Mongo;
@@ -230,14 +227,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		return 0;
 	}
 
-	@Override
-	public double[][] getProximityMatrix(
-			ValuedRelationService valuedRelationService)
-			throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
 		List<Model> result = new ArrayList<Model>();

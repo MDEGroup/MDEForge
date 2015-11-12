@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

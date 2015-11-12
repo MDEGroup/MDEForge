@@ -1,6 +1,5 @@
 package org.mdeforge.business.impl;
 
-import it.univaq.disim.mdegroup.emfcompare.extension.match.impl.SemanticMatchEngineFactoryRegistryImpl;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -29,7 +28,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.Match;
-import org.eclipse.emf.compare.match.IMatchEngine;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
@@ -200,9 +198,13 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
 		EcoreMetamodel a = super.findOneById(idArtifact, user);
+		try {
 		a.setMetrics(getMetrics(a));
 		if (a.getExtractedContents()==null)
 			a.setExtractedContents(serializeContent(a));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 		return a;
 	}
 
@@ -1095,7 +1097,7 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-		double resultValue = (counter * 1.0) / counterRight;
+		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
 		return resultValue;
 		}catch(Exception e) {
 			return 0;
@@ -1118,9 +1120,7 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public Clusterizzation joinCluster(Clusterizzation c, Cluster from, Cluster to){
 		Clusterizzation result = new Clusterizzation();
-		System.out.println(from.getMostRepresentive().getName() + from.getArtifacts().size());
 		if(to.getArtifacts().size()==1)
-			System.out.println("SEGNALAZIONE");
 		result.setAlgoritmhs(c.getAlgoritmhs());
 		result.setThreshold(c.getThreshold());
 		for (Cluster cluster: c.getClusters()) {
@@ -1164,17 +1164,31 @@ public class EcoreMetamodelServiceImpl extends
 					EcoreMetamodel to = (EcoreMetamodel)((art.getId().equals(cont.getToArtifact().getId()))?cont.getFromArtifact():cont.getToArtifact());
 					if (!guard){
 						result = joinCluster(clusterizzation, cluster, getCluster(to, clusterizzation));
-						System.out.println("INIT" + numberElementsCluster(result));
 					}	
 					else {
-						System.out.println(to.getName());
 						result = joinCluster(result, cluster, getCluster(to, result));
-						System.out.println(numberElementsCluster(result));
 					}
 					guard=true;
 				}
 			}
 		}
 		return result;
+	}
+	
+	@Override
+	public Resource loadArtifacrt(String id) throws BusinessException {
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
+				+ mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet()
+				.createResource(URI.createURI(mongoURI));
+
+		try {
+			resource.load(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+
+		return resource;
 	}
 }

@@ -1,14 +1,11 @@
 package org.mdeforge.business.impl;
 
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.CRUDRelationService;
@@ -271,7 +268,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifactRepository.save(us.getToArtifact());
 			relationRepository.delete(us);
 		}
-		// TODO delete Relation
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
@@ -680,23 +676,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	}
 
-	// TODO Antonio Da eliminare Assolutamente
-	@Override
-	public Resource loadArtifacrt(String id) throws BusinessException {
-		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
-				+ mongoDbFactory.getDb().getName() + "/"
-				+ jsonArtifactCollection + "/" + id;
-		Resource resource = jsonMongoResourceSet.getResourceSet()
-				.createResource(URI.createURI(mongoURI));
 
-		try {
-			resource.load(null);
-		} catch (IOException e) {
-			throw new BusinessException();
-		}
-
-		return resource;
-	}
 
 	@Override
 	public List<T> findSharedNoProject(User user) throws BusinessException {
@@ -722,27 +702,17 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(notMine);
 		}
 		List<T> artList = operations.find(query, persistentClass);
-		List<T> toRemove = new ArrayList<T>();
-		for (T artifactTo : artList) {
-			for (Project projectTo : artifactTo.getProjects()) {
-				for (Project p : projList) {
-					if (p.getId().equals(projectTo.getId()))
-						toRemove.add(artifactTo);
-				}
-			}
-		}
-		for (Project projectTo : projList) {
-			for (Artifact artifactTo : projectTo.getArtifacts()) {
-				for (Artifact a : artList) {
-					if (artifactTo.getId().equals(a.getId())) {
-						toRemove.add((T) artifactTo);
-					}
-				}
-			}
-		}
-		for (T toRem : toRemove) {
-			artList.remove(toRem);
-		}
+		List<Artifact> toRemove = new ArrayList<Artifact>();
+		
+		for (T artifactTo : artList) 
+			for (Project p : projList) 
+				if (artifactTo.getProjects().contains(p))
+					toRemove.add(artifactTo);
+		for (Project projectTo : projList)
+			for (Artifact a : artList)
+				if (projectTo.getArtifacts().contains(a))
+					toRemove.add(a);
+		artList.remove(toRemove);
 		return artList;
 	}
 

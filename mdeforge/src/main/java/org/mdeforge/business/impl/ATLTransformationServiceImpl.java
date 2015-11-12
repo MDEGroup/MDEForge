@@ -104,7 +104,11 @@ public class ATLTransformationServiceImpl extends
 	@Override
 	public ATLTransformation findOneById(String idArtifact, User user) throws BusinessException {
 		ATLTransformation a = super.findOneById(idArtifact, user);
-		a.setMetrics(getMetrics(a));
+		try {
+			a.setMetrics(getMetrics(a));
+		} catch (BusinessException e){
+			logger.error(e.getMessage());
+		}
 		return a;
 	}
 	
@@ -353,13 +357,12 @@ public class ATLTransformationServiceImpl extends
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
 		try{
 			List<Metric> metricList = metricRepository
-			
 					.findByArtifactId(new ObjectId(emm.getId()));
 			if (metricList.size() == 0)
 				metricList = calculateMetrics(emm);
 			return metricList;
-		} catch (NullPointerException e) {
-			throw new BusinessException("No artifact found");
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
 		}
 	}
 

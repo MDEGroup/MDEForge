@@ -49,17 +49,18 @@ public class SearchCluster {
 		return new String(Base64.encode(encoded));
 
 	}
-	@Ignore
+	
 	@Test
 	public void testClusterSearch() throws IOException, InterruptedException {
 		//TEST METAMODEL
 		System.out.println("######### CLUSTER COMPUTATION ###########");
 		Date startCluster = new Date();
 		
-		Double clusterThreshold = 0.25;
+		Double clusterThreshold = 0.3;
 		Double searchThreshold = 0.50;
-		List<Cluster> clusters = new ArrayList<Cluster>();		
-		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService).getClusters();	
+		Clusterizzation clusters = new Clusterizzation();		
+		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);	
+		clusters = ecoreMetamodelService.recluster(clusters, 0.9);
 		Date endCluster = new Date();
 		System.out.println("######### CLUSTER COMPUTATION: TOTAL TIME ###########" + (endCluster.getTime() - startCluster.getTime()));
 		
@@ -71,8 +72,8 @@ public class SearchCluster {
 		serachSample.setAuthors("Metamodels Authors");
 		serachSample.setOpen(true);	
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setFileName("MySQL.ecore");
-		gfm.setContent(readFile("temp/MySQL.ecore"));
+		gfm.setFileName("ECORE.ecore");
+		gfm.setContent(readFile("temp/ECORE.ecore"));
 		serachSample.setFile(gfm);
 		
 		System.out.println("######### SEARCH COMPUTATION              ###########");
@@ -80,7 +81,7 @@ public class SearchCluster {
 		List <Cluster> list = new ArrayList<Cluster>();
 		List<Artifact> result = new ArrayList<Artifact>();
 		int count = 0;
-		for (Cluster cluster : clusters) {
+		for (Cluster cluster : clusters.getClusters()) {
 			count++;
 			double d = ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
 			if (d>=clusterThreshold)
@@ -88,7 +89,7 @@ public class SearchCluster {
 			if (d>=searchThreshold)
 				result.add(cluster.getMostRepresentive());
 		}
-		System.out.println("# clusters: " + clusters.size());
+		System.out.println("# clusters: " + clusters.getClusters().size());
 		for (Cluster cluster : list) {
 			if(cluster.getArtifacts().size()!=1)
 				for (Artifact artifact : cluster.getArtifacts()) {
@@ -109,7 +110,7 @@ public class SearchCluster {
 		Date finishSearch = new Date();
 		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finishSearch.getTime() - startSearch.getTime()));
 	}
-	@Ignore
+	
 	@Test
 	public void testWithoutCluster() throws IOException, InterruptedException {
 		EcoreMetamodel serachSample = new EcoreMetamodel();
@@ -120,8 +121,8 @@ public class SearchCluster {
 		serachSample.setAuthors("Metamodels Authors");
 		serachSample.setOpen(true);	
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setFileName("MySQL.ecore");
-		gfm.setContent(readFile("temp/MySQL.ecore"));
+		gfm.setFileName("ECORE.ecore");
+		gfm.setContent(readFile("temp/ECORE.ecore"));
 		serachSample.setFile(gfm);
 		
 		Double threshold = 0.5;
@@ -202,6 +203,7 @@ public class SearchCluster {
 		}
 		System.out.println("TOTAL" + count);
 	}
+	@Ignore
 	@Test
 	public void testRecluster() {
 		Clusterizzation clusterizzation = ecoreMetamodelService.getSimilarityClusters(0.3, similarityRelationService);

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import org.eclipse.m2m.atl.emftvm.Isnull;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
@@ -23,7 +22,6 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
