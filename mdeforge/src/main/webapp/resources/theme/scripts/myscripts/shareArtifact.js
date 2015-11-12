@@ -3,7 +3,7 @@
 		var idArtifact = $("#artifactName").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({
-			url : "/mdeforge/private/artifact/" + idArtifact + "/removeUser/" + idUser,
+			url : ctx + "/private/artifact/" + idArtifact + "/removeUser/" + idUser,
 			success : function(data) {
 				$('.userLi[data-id="'+ idUser +'"]').remove();
 			},
@@ -19,10 +19,10 @@
 		var nameModel = $("#userSelect option:selected").text();
 		var idArtifact = $("#artifactName").data('id');
 		$.ajax({
-			url : "/mdeforge/private/artifact/" + idArtifact + "/addUser/" + idUser,
+			url : ctx + "/private/artifact/" + idArtifact + "/addUser/" + idUser,
 			success : function(data) {
 				var result = $('#users');
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/userBox.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/userBox.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
 							result.append(rendered);
@@ -40,7 +40,7 @@
 		$('#userSelect').empty();
 		if ($('#userList').css('display') == 'none') {
 			$.ajax({
-				url : "/mdeforge/private/user/list",
+				url : ctx + "/private/user/list",
 				success : function(data) {
 					$.each(data, function(i, model){
 						$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));

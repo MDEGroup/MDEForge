@@ -2,15 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
-
-
 <!-- JQRangeSlider Sliders Plugin -->
 	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/css/iThing.css" rel="stylesheet" />
-	
-	
-	
-
 <!-- PER GRAFICO DEL CLUSTER - START -->
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/plugins/vis/vis.js"></script>
@@ -24,10 +17,6 @@
 }
 </style>
 <!-- PER GRAFICO DEL CLUSTER - END -->
-
-
-
-
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 		<li>You are here</li>
@@ -40,12 +29,6 @@
 		<li>Graph View</li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-
-
-
-
 
 <!-- Heading -->
 <div class="heading-buttons">
@@ -60,22 +43,12 @@
 <div class="separator bottom"></div>
 <!-- // Heading END -->
 
-
-
-
 <div class="innerLR">
-
-
-
 	<div class="hide" id="threshold_form">
-		
 			<div class="row-fluid">
 				<div class="span2">
-				
 				</div>	
-			
 				<div class="span8">	
-				
 			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
 				<div class="widget-body">	
 					<div class="widget-body">
@@ -89,6 +62,7 @@
 													<input type="text" class="amount span4" name="threshold"/>
 												</div>
 												<div class="span9" style="padding: 5px 0 0;">
+
 													<c:choose>
 													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
 													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
@@ -103,23 +77,14 @@
 												</div>
 											</div>
 											<!-- // Slider END -->
-		
 								</div>
-								
 								<div class="span3">														
 									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
 								</div>
-			
 							</form>
-														
-								
 							</div>
-							
 						</div>
-					
-					
 					<hr>
-					
 					<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
@@ -136,24 +101,14 @@
 												</div>
 											</div>
 											<!-- // Slider END -->
-		
 								</div>
-								
 								<div class="span3">														
 									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
 								</div>
-			
 							</form>
-														
-								
 							</div>
-							
 						</div>
-						
-						
-						
 						<hr>
-					
 					<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
@@ -170,111 +125,65 @@
 												</div>
 											</div>
 											<!-- // Slider END -->
-		
 								</div>
-								
 								<div class="span3">														
 									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
 								</div>
-			
 							</form>
-														
-								
 							</div>
-							
 						</div>
-						
-						
 						<hr>
-					
 					<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
 								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min4 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-		
+									<!-- Slider -->
+									<div class="slider-range-min4 row-fluid">
+										<div class="span3">
+											<label class="span8">Threshold:</label> 
+											<input type="text" class="amount span4" name="threshold"/>
+										</div>
+										<div class="span9" style="padding: 5px 0 0;">
+											<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+											<div class="slider slider-primary"></div>
+										</div>
+									</div>
+									<!-- // Slider END -->
 								</div>
-								
 								<div class="span3">														
 									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
 								</div>
 			
 							</form>
-														
-								
 							</div>
-							
 						</div>
-						
 						<hr>
-						
 						<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
 								<div class="span9">		
-											
-		
 								</div>
-								
 								<div class="span3" style="text-align:right;">		
-																				
 									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
 								</div>
-			
 							</form>
-														
-								
 							</div>
-							
 						</div>
 					
-					
-					
 			</div>
 			</div>
-		
 		</div>
-		
 		<div class="span2">
-				
-				</div>	
+		</div>	
 		</div>
 		</div>
-		
-
-
-
-
-
-			<div class="separator bottom"></div>
-			<div class="separator bottom"></div>
-
-
-
-
-
-
-	
+		<div class="separator bottom"></div>
+		<div class="separator bottom"></div>
 	<!-- Widget -->
 	<div class="widget widget-heading-simple widget-body-simple"> 
-					
-		
 		<div class="widget-body">		
 			<!-- Row -->
 			<div class="row-fluid">
-			
-			
 				<div class="span6">
 					<div class="span4">
 						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Computation" data-placement="top">
@@ -316,10 +225,7 @@
 					</div>
 					
 				</div>
-					
-					
 				<div class="span6">
-					
 					<div class="span3">
 						<div class="widget-stats widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Average number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
@@ -358,29 +264,13 @@
 	<div class="separator bottom"></div>
 	<!-- // Stats Widgets END -->
 	
-	
-	
 	<!-- Tabs -->
 	<div class="">
 		<div class="box-generic">		
-		
 			<div id="mynetwork"></div>
-			
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- PER GRAFICO DEL CLUSTER - START -->
 <script type="text/javascript">
 	var network;
@@ -433,8 +323,6 @@
 			},
 			hideEdgesOnDrag : true
 		};
-
-		
 		network = new vis.Network(container, data, options);
 		
 		/* // add event listener*/
@@ -446,40 +334,16 @@
 				  window.open("${pageContext.request.contextPath}/public/browse/metamodel_name_from_graph?name="+node['label'], '_blank');
 			  }
 			  /* alert(node['label']); */
-    
 		  });
 	}
-	
-
-		
 	redrawAll()
 </script>
 <!-- PER GRAFICO DEL CLUSTER - END -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	<!-- JQueryUI -->
 	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/css/smoothness/jquery-ui-1.9.2.custom.min.css" rel="stylesheet" />
-
 <!-- JQueryUI -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/jquery-ui/js/jquery-ui-1.9.2.custom.min.js"></script>
-
-
 <!-- jQRangeSlider Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/sliders/jQRangeSlider/jQAllRangeSliders-withRuler-min.js"></script>
-	
 	<!-- Sliders Page Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/my_sliders.js"></script>

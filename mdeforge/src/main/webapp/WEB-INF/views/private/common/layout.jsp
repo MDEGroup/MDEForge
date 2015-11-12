@@ -54,7 +54,7 @@
 	
 	<!-- FireBug Lite -->
 	<!-- <script src="https://getfirebug.com/firebug-lite-debug.js"></script> -->
-
+	<script>var ctx = "${pageContext.request.contextPath}"</script>
 	<!-- LESS.js Library -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/less.min.js"></script>
 </head>

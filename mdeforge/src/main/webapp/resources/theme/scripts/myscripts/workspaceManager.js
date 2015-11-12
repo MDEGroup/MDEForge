@@ -2,7 +2,7 @@
 		var idArtifact = $(this).data('id');
 		var idProject = $("#projectId").data('id');
 		$.ajax({
-			url : "/mdeforge/private/project/" + idProject + "/remove/" + idArtifact,
+			url : ctx + "/private/project/" + idProject + "/remove/" + idArtifact,
 			success : function(data) {
 				$('#' + idArtifact).remove();
 			},
@@ -22,9 +22,9 @@
 		var result = $('#ecoreMMTable');
 		$.ajax({
 			
-			url : "/mdeforge/private/project/" + idProject + "/add/" + ecoreMetamodel.id,
+			url : ctx + "/private/project/" + idProject + "/add/" + ecoreMetamodel.id,
 			success : function(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 						function(template) {
 							var rendered = Mustache.render(template, ecoreMetamodel);
 							result.append(rendered);
@@ -48,9 +48,9 @@
 		var idProject = $("#projectId").data('id');
 		var result = $('#atlTable');
 		$.ajax({
-			url : "/mdeforge/private/project/" + idProject + "/add/" + ATLTransormation.id,
+			url : ctx + "/private/project/" + idProject + "/add/" + ATLTransormation.id,
 			success : function(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 						function(template) {
 							var rendered = Mustache.render(template, ATLTransormation);
 							result.append(rendered);
@@ -74,9 +74,9 @@
 		model.model = true;
 		var result = $('#modelTable');
 		$.ajax({
-			url : "/mdeforge/private/project/" + idProject + "/add/" + model.id,
+			url : ctx + "/private/project/" + idProject + "/add/" + model.id,
 			success : function(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 						function(template) {
 							var rendered = Mustache.render(template, model);
 							result.append(rendered);
@@ -98,7 +98,7 @@
 		$('#showModelList').parent().append(spinner.el);
 		if ($('#modelToAdd').css('display') == 'none') {
 			$.ajax({
-				url : "/mdeforge/private/Model/list",
+				url : ctx + "/private/Model/list",
 				success : function(data) {
 					$.each(data, function(i, model){
 						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
@@ -125,7 +125,7 @@
 		if ($('#ATLToAdd').css('display') == 'none') {
 			$('#ATLSelect').empty();
 			$.ajax({
-				url : "/mdeforge/private/ATLTransformation/list",
+				url : ctx + "/private/ATLTransformation/list",
 				success : function(data) {
 					$.each(data, function(i, ecore){
 						$('#ATLSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
@@ -152,7 +152,7 @@
 		if ($('#ecoreToAdd').css('display') == 'none') {
 			$('#ecoreSelect').empty();
 			$.ajax({
-				url : "/mdeforge/private/EcoreMetamodel/list",
+				url : ctx + "/private/EcoreMetamodel/list",
 				success : function(data) {
 					$.each(data, function(i, ecore){
 						$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
@@ -180,10 +180,10 @@
 		var nameModel = $("#userSelect option:selected").text();
 		var idProject = $("#projectId").attr('data-id');
 		$.ajax({
-			url : "/mdeforge/private/project/" + idProject + "/addUser/" + idUser,
+			url : ctx + "/private/project/" + idProject + "/addUser/" + idUser,
 			success : function(data) {
 				var result = $('#users');
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/userBox.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/userBox.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
 							result.append(rendered);
@@ -201,7 +201,7 @@
 		var idProject = $("#projectId").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({
-			url : "/mdeforge/private/project/" + idProject + "/removeUser/" + idUser,
+			url : ctx + "/private/project/" + idProject + "/removeUser/" + idUser,
 			success : function(data) {
 				$('.sharedUser[data-id="'+ idUser +'"]').remove();
 				
@@ -220,9 +220,9 @@
 		var idWorkspace = $("#workspaceId").data('id');
 		var result = $('#projectList');
 		$.ajax({
-			url : "/mdeforge/private/workspace/" + idWorkspace + "/add/" + idProject,
+			url : ctx + "/private/workspace/" + idWorkspace + "/add/" + idProject,
 			success : function(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
 							result.append(rendered);
@@ -243,7 +243,7 @@
 		var nameProject = $(this).data('name');
 		var idWorkspace = $("#workspaceId").data('id');
 		$.ajax({
-			url : "/mdeforge/private/workspace/" + idWorkspace + "/remove/" + idProject,
+			url : ctx + "/private/workspace/" + idWorkspace + "/remove/" + idProject,
 			success : function(data) {
 				$('#' + idProject).remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
@@ -278,12 +278,13 @@
 		
 		$(this).on('click', '.listWrapper li:not(.active)', function()
 		{
+			console.log(ctx);
 			var p = $(this).parents('.widget-employees:first');
 			p.find('.listWrapper li').removeClass('active');
 			$(this).addClass('active');
 			var id = $(this).attr('id');
 			$.ajax({
-				url : "/mdeforge/private/project/" + id,
+				url : ctx + "/private/project/" + id,
 				success : function(data) {
 					$('#projectId').attr('data-id',data.id)
 					$("#workspaceDetailsDiv").show();
@@ -323,7 +324,7 @@
 						if(artifact._class == "org.mdeforge.business.model.EcoreMetamodel") {
 							var result = $('#ecoreMMTable');
 							artifact.ecoreMetamdel = true;
-							$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
 										result.append(rendered);
@@ -332,7 +333,7 @@
 						if(artifact._class == "org.mdeforge.business.model.ATLTransformation") {
 							var result = $('#atlTable');
 							artifact.ecoreMetamdel = true;
-							$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
 										result.append(rendered);
@@ -341,7 +342,7 @@
 						if(artifact._class == "org.mdeforge.business.model.Model") {
 							var result = $('#modelTable');
 							artifact.model = true;
-							$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
+							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
 										result.append(rendered);
@@ -386,9 +387,9 @@
 		var idWorkspace = $("#workspaceId").data('id');
 		var result = $('#projectList');
 		$.ajax({
-			url : "/mdeforge/private/workspace/" + idWorkspace + "/addNew/" + idProject,
+			url : ctx + "/private/workspace/" + idWorkspace + "/addNew/" + idProject,
 			success : function(data) {
-				$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
 							result.append(rendered);
@@ -406,7 +407,7 @@
 		$('#userSelect').empty();
 		if ($('#userList').css('display') == 'none') {
 			$.ajax({
-				url : "/mdeforge/private/user/list",
+				url : ctx + "/private/user/list",
 				success : function(data) {
 					$.each(data, function(i, model){
 						$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
