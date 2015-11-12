@@ -14,7 +14,7 @@ $(function() {
 					function(file) {
 						var v = new Object();
 						v.response = $.parseJSON(file.xhr.response);
-						$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/resultEcoreSearchByExampleTemplate.html',
+						$.get(ctx + '/resources/theme/scripts/plugins/forms/template/resultEcoreSearchByExampleTemplate.html',
 								function(template) {
 									var rendered = Mustache.render(template, v);
 									console.log(result);

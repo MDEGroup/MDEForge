@@ -2,7 +2,6 @@ package org.mdeforge.business;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
@@ -34,7 +33,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void updateSimple(T artifact);
 
 	List<T> search(String searchString) throws BusinessException;
-	Resource loadArtifacrt(String id);
 	void createIndex();
 	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;

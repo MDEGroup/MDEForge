@@ -13,25 +13,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ETLTransformation extends Transformation {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1922378797988851573L;
 	protected String modules;
 	protected List<Model> model_in;
 	@JsonIgnore
 	protected List<Model> targetModel;
-	//TODO DANIELE: DEVE ESSERE ELIMINATO (VEDERE SE PUO ESSERE DEDOTTO)!!!! COMUNQUE DEVE DIVENTARE UNA LISTA in ipotesi n a m
-	@JsonIgnore
-	private String targetName;
-	//TODO DANIELE: DEVE ESSERE ELIMINATO (VEDERE SE PUO ESSERE DEDOTTO)!!!! COMUNQUE DEVE DIVENTARE UNA LISTA in ipotesi n a m
-	@JsonIgnore
-	private String sourceName;
 	
-	public String getSourceName() {
-		return sourceName;
-	}
-
-	public void setSourceName(String sourceName) {
-		this.sourceName = sourceName;
-	}
-
 	
 	/* GETTERS */
 	public String getModules() {
@@ -46,7 +36,6 @@ public class ETLTransformation extends Transformation {
 		return targetModel;
 	}
 
-	
 	/* SETTERS */
 
 	public void setModules(String modules) {
@@ -60,13 +49,4 @@ public class ETLTransformation extends Transformation {
 	public void setTargeModel(List<Model> outTag) {
 		this.targetModel = outTag;
 	}
-	public String getTargetName()
-	{
-		return targetName;
-	}
-	
-	public void setTargetName(String targetName) {
-		this.targetName = targetName;
-	}
-
 }

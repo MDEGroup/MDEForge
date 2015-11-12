@@ -3,7 +3,6 @@ package org.mdeforge.business.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * A representation of the model object '<em><b>Model</b></em>'. <!--

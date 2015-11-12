@@ -2,7 +2,6 @@ package org.mdeforge.business.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@SuppressWarnings("serial")
 @Document(collection = "UserSocialConnection")
 public class UserSocialConnection {
     

@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.bson.types.ObjectId;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +21,13 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.User;
+import org.mdeforge.integration.MetricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.test.context.ContextConfiguration;
@@ -35,6 +41,8 @@ public class SearchCluster {
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private MetricRepository metricRepository;
 	
 	private static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
@@ -43,15 +51,16 @@ public class SearchCluster {
 	}
 	
 	@Test
-	public void testCluster() throws IOException, InterruptedException {
+	public void testClusterSearch() throws IOException, InterruptedException {
 		//TEST METAMODEL
 		System.out.println("######### CLUSTER COMPUTATION ###########");
 		Date startCluster = new Date();
 		
 		Double clusterThreshold = 0.3;
 		Double searchThreshold = 0.50;
-		List<Cluster> clusters = new ArrayList<Cluster>();		
+		Clusterizzation clusters = new Clusterizzation();		
 		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);	
+		clusters = ecoreMetamodelService.recluster(clusters, 0.9);
 		Date endCluster = new Date();
 		System.out.println("######### CLUSTER COMPUTATION: TOTAL TIME ###########" + (endCluster.getTime() - startCluster.getTime()));
 		
@@ -63,8 +72,8 @@ public class SearchCluster {
 		serachSample.setAuthors("Metamodels Authors");
 		serachSample.setOpen(true);	
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setFileName("MySQL.ecore");
-		gfm.setContent(readFile("temp/MySQL.ecore"));
+		gfm.setFileName("ECORE.ecore");
+		gfm.setContent(readFile("temp/ECORE.ecore"));
 		serachSample.setFile(gfm);
 		
 		System.out.println("######### SEARCH COMPUTATION              ###########");
@@ -72,7 +81,7 @@ public class SearchCluster {
 		List <Cluster> list = new ArrayList<Cluster>();
 		List<Artifact> result = new ArrayList<Artifact>();
 		int count = 0;
-		for (Cluster cluster : clusters) {
+		for (Cluster cluster : clusters.getClusters()) {
 			count++;
 			double d = ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
 			if (d>=clusterThreshold)
@@ -80,7 +89,7 @@ public class SearchCluster {
 			if (d>=searchThreshold)
 				result.add(cluster.getMostRepresentive());
 		}
-		System.out.println("# clusters: " + clusters.size());
+		System.out.println("# clusters: " + clusters.getClusters().size());
 		for (Cluster cluster : list) {
 			if(cluster.getArtifacts().size()!=1)
 				for (Artifact artifact : cluster.getArtifacts()) {
@@ -112,8 +121,8 @@ public class SearchCluster {
 		serachSample.setAuthors("Metamodels Authors");
 		serachSample.setOpen(true);	
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setFileName("MySQL.ecore");
-		gfm.setContent(readFile("temp/MySQL.ecore"));
+		gfm.setFileName("ECORE.ecore");
+		gfm.setContent(readFile("temp/ECORE.ecore"));
 		serachSample.setFile(gfm);
 		
 		Double threshold = 0.5;
@@ -129,5 +138,105 @@ public class SearchCluster {
 		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finish.getTime() - start.getTime()));
 	}
 	
+	@Ignore
+	@Test
+	public void testCluster() {
+		User user = new User();
+		user.setId("5514b943d4c6c379396fe8b7");
+		Double clusterThreshold = 0.3;
+		List<Cluster> clusters = new ArrayList<Cluster>();		
+		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService).getClusters();
+		for (Cluster cluster : clusters) {
+			if (cluster.getArtifacts().size()==1) {
+				EcoreMetamodel art = ((EcoreMetamodel)cluster.getArtifacts().toArray()[0]);
+				List<Metric> metricList = metricRepository
+						.findByArtifactId(new ObjectId(art.getId()));
+				System.out.print(art.getName());
+				boolean guard = false;
+				for (Metric metric : metricList) {
+					if (metric.getName().equals("Number of MetaClass")) {
+						if (((SimpleMetric) metric).getValue().equals("1") || 
+								((SimpleMetric) metric).getValue().equals("0")) {
+							System.out.print("; " + ((SimpleMetric)metric).getValue());
+							guard = true;
+							ecoreMetamodelService.delete(art, user);
+						}
+					}
+				}
+				if (!guard) {
+					System.out.println("");
+					metricRepository.delete(metricList);
+				}
+			}
+		}
+	}
+
+	@Ignore
+	@Test
+	public void NullMetamodel() {
+		User user = new User();
+		user.setId("5514b943d4c6c379396fe8b7");
+		List<EcoreMetamodel> ecoreList = ecoreMetamodelService.findAll();
+		boolean guard1 = false;
+		boolean guard2 = false;
+		int count = 0;
+		for (EcoreMetamodel ecoreMetamodel : ecoreList) {
+			guard1 = false;
+			guard2 = false;
+			Metric metricMC = metricRepository.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMetamodel.getId()));			 
+			if (metricMC != null) 
+				if (((SimpleMetric) metricMC).getValue().equals("1")) {
+					guard1 = true;
+				}
+			Metric metricEStructuralFeature = metricRepository.findOneByNameAndArtifactId("Number of Total eStructuralFeature", new ObjectId(ecoreMetamodel.getId()));		 
+			if (metricEStructuralFeature != null) 
+				if (((SimpleMetric) metricEStructuralFeature).getValue().equals("0") ||
+						((SimpleMetric) metricEStructuralFeature).getValue().equals("1")) {
+					System.out.println("========");
+					System.out.println(ecoreMetamodel.getName());
+					System.out.println("OK2");
+					System.out.println(((SimpleMetric) metricMC).getValue());
+					guard2 = true;
+				}
+			if (guard1 && guard2)
+				count++;
+		}
+		System.out.println("TOTAL" + count);
+	}
+	@Ignore
+	@Test
+	public void testRecluster() {
+		Clusterizzation clusterizzation = ecoreMetamodelService.getSimilarityClusters(0.3, similarityRelationService);
+		int count = 0;
+		int singleton = 0;
+		int maxCluster = 0;
+		for (Cluster cluster : clusterizzation.getClusters()) {
+			count += cluster.getArtifacts().size();
+			if (maxCluster<cluster.getArtifacts().size())
+				maxCluster = cluster.getArtifacts().size();
+			if (cluster.getArtifacts().size()== 1)
+				singleton++;
+		}
+		System.out.println("#Singleton" + singleton);
+		System.out.println("#Cluster" + clusterizzation.getClusters().size());
+		System.out.println("#Artifact: " + count);
+		System.out.println("#Max cluster: " + maxCluster);
+		System.out.println("=================================");
+		Clusterizzation reClusterizzation = ecoreMetamodelService.recluster(clusterizzation, 0.8);
+		count = 0;
+		maxCluster = 0;
+		singleton = 0;
+		for (Cluster cluster : reClusterizzation.getClusters()) {
+			count += cluster.getArtifacts().size();
+			if (maxCluster<cluster.getArtifacts().size())
+				maxCluster = cluster.getArtifacts().size();
+			if (cluster.getArtifacts().size()== 1)
+				singleton++;
+		}
+		System.out.println("#Singleton" + singleton);
+		System.out.println("#Cluster" + clusterizzation.getClusters().size());
+		System.out.println("#Artifact: " + count);
+		System.out.println("#Max cluster: " + maxCluster);
+	}
 	
 }

@@ -11,4 +11,7 @@ public interface MetricRepository extends MongoRepository<Metric, String> {
 	
 	@Query("{\"artifact.$id\" : ?0}}")
 	List<Metric> findByArtifactId(ObjectId objectId);
+	@Query("{name : ?0, \"artifact.$id\" : ?1}}")
+	Metric findOneByNameAndArtifactId(String name, ObjectId objectId);
+	Metric findOneByName(String name, ObjectId objectId);
 }

@@ -1,5 +1,6 @@
 package org.mdeforge.business.impl;
 
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -71,6 +72,7 @@ import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
+import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.ContainmentRelation;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.DiceSimilarityRelation;
@@ -196,18 +198,13 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
 		EcoreMetamodel a = super.findOneById(idArtifact, user);
+		try {
 		a.setMetrics(getMetrics(a));
 		if (a.getExtractedContents()==null)
 			a.setExtractedContents(serializeContent(a));
-		a.getRelations().addAll(
-				similarityRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				containmentRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				diceSimilarityRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				cosineSimilarityRelationService.findTopProximity(a, 5));
-
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
 		return a;
 	}
 
@@ -620,7 +617,7 @@ public class EcoreMetamodelServiceImpl extends
 
 			String result = "nodes = [\n";
 			List<Cluster> clusterList = getSimilarityClusters(threshold,
-					valuedRelationService);
+					valuedRelationService).getClusters();
 			HashMap<String, Integer> hm = new HashMap<String, Integer>();
 			AtomicInteger i = new AtomicInteger();
 			AtomicInteger j = new AtomicInteger();
@@ -664,10 +661,11 @@ public class EcoreMetamodelServiceImpl extends
 	}
 	
 	@Override
-	public List<Cluster> getSimilarityClusters(double threshold,
+	public Clusterizzation getSimilarityClusters(double threshold,
 			ValuedRelationService valuedRelationService)
 			throws BusinessException {
 		List<Cluster> clusterList = new ArrayList<Cluster>();
+		Clusterizzation clusterizzation = new Clusterizzation();
 		List<ValuedRelation> similarityRelations = valuedRelationService
 				.findAll(threshold);
 		Map<String, Cluster> tempHash = new HashMap<String, Cluster>();
@@ -798,7 +796,8 @@ public class EcoreMetamodelServiceImpl extends
 	        }
 	    });
 		
-		return clusterList;
+		clusterizzation.setClusters(clusterList);
+		return clusterizzation;
 	}
 
 	private List<Relation> findInCluster(Artifact elem, Cluster cluster) {
@@ -1061,6 +1060,7 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		return result;
 	}
+	
 	@Override
 	public double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
 		try {
@@ -1074,6 +1074,10 @@ public class EcoreMetamodelServiceImpl extends
 		resourceSet2.getResource(uri2, true);
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
+
+//		IMatchEngine.Factory.Registry me = SemanticMatchEngineFactoryRegistryImpl.createStandaloneInstance();
+//		Comparison comparison = EMFCompare.builder().setMatchEngineFactoryRegistry(me).build().compare(scope);
+		
 		Comparison comparison = EMFCompare.builder().build().compare(scope);
 		List<Match> matches = comparison.getMatches();
 		int counter = 0;
@@ -1093,10 +1097,98 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-		double resultValue = (counter * 1.0) / counterRight;
+		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
 		return resultValue;
 		}catch(Exception e) {
 			return 0;
 		}
+	}
+	@Autowired
+	private ContainmentRelationService containmentRelaionService;
+	
+	///
+	@Override
+	public Cluster getCluster(EcoreMetamodel ecore, Clusterizzation clusterizzation) throws BusinessException {
+		for (Cluster cluster : clusterizzation.getClusters()) {
+			for (Artifact art : cluster.getArtifacts()) {
+				if (art.equals(ecore))
+					return cluster;
+			}
+		}
+		throw new BusinessException();
+	}
+	@Override
+	public Clusterizzation joinCluster(Clusterizzation c, Cluster from, Cluster to){
+		Clusterizzation result = new Clusterizzation();
+		if(to.getArtifacts().size()==1)
+		result.setAlgoritmhs(c.getAlgoritmhs());
+		result.setThreshold(c.getThreshold());
+		for (Cluster cluster: c.getClusters()) {
+			if (!cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
+					!cluster.getMostRepresentive().equals(to.getMostRepresentive())) {
+				result.getClusters().add(cluster);
+			}	
+			if (!cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
+					cluster.getMostRepresentive().equals(to.getMostRepresentive())){
+				cluster.getArtifacts().add(from.getMostRepresentive());
+				result.getClusters().add(cluster);
+			}
+			if (cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
+					cluster.getMostRepresentive().equals(to.getMostRepresentive())){
+				result.getClusters().add(cluster);
+			}
+		}
+		return result;
+		
+	}
+	
+	private int numberElementsCluster (Clusterizzation c) {
+		int sum = 0;
+		for (Cluster iterable_element : c.getClusters())
+			sum += iterable_element.getArtifacts().size();
+		return sum;
+	}
+	
+	@Override
+	public Clusterizzation recluster(Clusterizzation clusterizzation, double threshold) {
+		
+		Clusterizzation result = new Clusterizzation();
+		boolean guard = false;
+		for (Cluster cluster : clusterizzation.getClusters()) {
+			if (cluster.getArtifacts().size() == 1)
+			{
+				EcoreMetamodel art = (EcoreMetamodel) cluster.getArtifacts().toArray()[0];
+				ContainmentRelation cont = containmentRelaionService.findNearest(art,threshold);
+				if(cont != null)
+				{
+					EcoreMetamodel to = (EcoreMetamodel)((art.getId().equals(cont.getToArtifact().getId()))?cont.getFromArtifact():cont.getToArtifact());
+					if (!guard){
+						result = joinCluster(clusterizzation, cluster, getCluster(to, clusterizzation));
+					}	
+					else {
+						result = joinCluster(result, cluster, getCluster(to, result));
+					}
+					guard=true;
+				}
+			}
+		}
+		return result;
+	}
+	
+	@Override
+	public Resource loadArtifacrt(String id) throws BusinessException {
+		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
+				+ mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/" + id;
+		Resource resource = jsonMongoResourceSet.getResourceSet()
+				.createResource(URI.createURI(mongoURI));
+
+		try {
+			resource.load(null);
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+
+		return resource;
 	}
 }

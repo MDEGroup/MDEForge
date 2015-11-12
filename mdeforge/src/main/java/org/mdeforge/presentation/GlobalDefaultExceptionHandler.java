@@ -31,7 +31,7 @@ public class GlobalDefaultExceptionHandler {
 	
 	@ExceptionHandler(BusinessException.class)
 	public ModelAndView handleCustomException(BusinessException ex) {
-		
+		ex.printStackTrace();
 		Map<String,String> errorModel = new HashMap<String,String>();
 		String errCode = ex.getErrCode();
 		errorModel.put("errCode", errCode);
@@ -43,7 +43,7 @@ public class GlobalDefaultExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleAllException(Exception ex) {
-
+		ex.printStackTrace();
 		Map<String,String> errorModel = new HashMap<String,String>();
 		String errMsg = "this is Exception.class";
 		errorModel.put("errMsg", errMsg);

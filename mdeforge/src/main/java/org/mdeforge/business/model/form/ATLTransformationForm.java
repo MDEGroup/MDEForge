@@ -8,6 +8,10 @@ import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 
 public class ATLTransformationForm extends ATLTransformation{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8510346202886727879L;
 	private List<DomainConformToRelation> domainConformToRelation = new ArrayList<DomainConformToRelation>();
 	private List<CoDomainConformToRelation> coDomainConformToRelation = new ArrayList<CoDomainConformToRelation>();
 	public List<CoDomainConformToRelation> getCoDomainConformToRelation() {
