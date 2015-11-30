@@ -59,8 +59,9 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
-import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.ExtractContentEngineException;
+import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -82,7 +83,6 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
@@ -140,6 +140,7 @@ public class EcoreMetamodelServiceImpl extends
 	private ContainmentRelationService containmentRelationService;
 	@Autowired
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
+
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
 	Logger logger = LoggerFactory.getLogger(EcoreMetamodelImporterServiceImpl.class);
@@ -151,27 +152,22 @@ public class EcoreMetamodelServiceImpl extends
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
-		if(findOneByName(artifact.getName())!=null) {
-			logger.error("DuplicateName");
-			throw new DuplicateNameException();
-		}
-			
-
 		artifact.setValid(isValid(artifact));
 		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
 		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
+		
 		try {
 			artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
-			throw new BusinessException();
+			throw new ExtractContentEngineException(e.getMessage(),artifact.getId());
 		}
 		try {
 			artifact.setMetrics(getMetrics(artifact));
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
-			throw new BusinessException();
+			throw new MetricEngineException("Some errors when try to calculate metric for metamodel",artifact.getId());
 		}
 		artifactRepository.save(artifact);
 		return result;
@@ -195,34 +191,11 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		return result;
 	}
-	@Override
-	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
-		EcoreMetamodel a = super.findOneById(idArtifact, user);
-		try {
-		a.setMetrics(getMetrics(a));
-		if (a.getExtractedContents()==null)
-			a.setExtractedContents(serializeContent(a));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
 
 	@Override
 	public EcoreMetamodel findOnePublic(String id) {
 		EcoreMetamodel a = super.findOnePublic(id);
 		a.setMetrics(getMetrics(a));
-		if (a.getExtractedContents()==null)
-			a.setExtractedContents(serializeContent(a));
-		a.getRelations().addAll(
-				similarityRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				containmentRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				diceSimilarityRelationService.findTopProximity(a, 5));
-		a.getRelations().addAll(
-				cosineSimilarityRelationService.findTopProximity(a, 5));
-
 		return a;
 	}
 
@@ -290,9 +263,9 @@ public class EcoreMetamodelServiceImpl extends
 			metricRepository.save(result);
 			return result;
 		} catch (ATLCoreException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		}
 //		List<Metric> a = new ArrayList();
 //		return a;
@@ -666,20 +639,20 @@ public class EcoreMetamodelServiceImpl extends
 			throws BusinessException {
 		List<Cluster> clusterList = new ArrayList<Cluster>();
 		Clusterizzation clusterizzation = new Clusterizzation();
-		List<ValuedRelation> similarityRelations = valuedRelationService
+		List<ValuedRelation> valuedRelations = valuedRelationService
 				.findAll(threshold);
 		Map<String, Cluster> tempHash = new HashMap<String, Cluster>();
-		for (ValuedRelation similarityRelation : similarityRelations) {
-			String fromId = similarityRelation.getFromArtifact().getId();
-			String toId = similarityRelation.getToArtifact().getId();
+		for (ValuedRelation valuedRelation : valuedRelations) {		
+			String fromId = valuedRelation.getFromArtifact().getId();
+			String toId = valuedRelation.getToArtifact().getId();
 			if (!tempHash.containsKey(fromId) && !tempHash.containsKey(toId)) {
 				Cluster c = new Cluster();
-				c.getRelations().add(similarityRelation);
-				c.getArtifacts().add(similarityRelation.getFromArtifact());
-				c.getArtifacts().add(similarityRelation.getToArtifact());
-				List<Property> propertyList = similarityRelation
+				c.getRelations().add(valuedRelation);
+				c.getArtifacts().add(valuedRelation.getFromArtifact());
+				c.getArtifacts().add(valuedRelation.getToArtifact());
+				List<Property> propertyList = valuedRelation
 						.getFromArtifact().getProperties();
-				propertyList.addAll(similarityRelation.getToArtifact()
+				propertyList.addAll(valuedRelation.getToArtifact()
 						.getProperties());
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain")
@@ -692,11 +665,11 @@ public class EcoreMetamodelServiceImpl extends
 			}
 			if (tempHash.containsKey(fromId) && !tempHash.containsKey(toId)) {
 				Cluster c = tempHash.get(fromId);
-				c.getArtifacts().add(similarityRelation.getToArtifact());
-				c.getRelations().add(similarityRelation);
+				c.getArtifacts().add(valuedRelation.getToArtifact());
+				c.getRelations().add(valuedRelation);
 				tempHash.put(toId, c);
 				tempHash.put(fromId, c);
-				List<Property> propertyList = similarityRelation
+				List<Property> propertyList = valuedRelation
 						.getToArtifact().getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain")
@@ -705,13 +678,13 @@ public class EcoreMetamodelServiceImpl extends
 						c.getDomains().add(property.getValue());
 			}
 			if (!tempHash.containsKey(fromId) && tempHash.containsKey(toId)) {
-				Cluster c = tempHash.get(similarityRelation.getToArtifact()
+				Cluster c = tempHash.get(valuedRelation.getToArtifact()
 						.getId());
-				c.getArtifacts().add(similarityRelation.getFromArtifact());
-				c.getRelations().add(similarityRelation);
+				c.getArtifacts().add(valuedRelation.getFromArtifact());
+				c.getRelations().add(valuedRelation);
 				tempHash.put(fromId, c);
 				tempHash.put(toId, c);
-				List<Property> propertyList = similarityRelation
+				List<Property> propertyList = valuedRelation
 						.getFromArtifact().getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain")
@@ -1098,13 +1071,13 @@ public class EcoreMetamodelServiceImpl extends
 				counter++;
 		}
 		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+//		double resultValue = (counter * 1.0) / counterRight;
 		return resultValue;
 		}catch(Exception e) {
 			return 0;
 		}
 	}
-	@Autowired
-	private ContainmentRelationService containmentRelaionService;
+
 	
 	///
 	@Override
@@ -1142,15 +1115,8 @@ public class EcoreMetamodelServiceImpl extends
 		
 	}
 	
-	private int numberElementsCluster (Clusterizzation c) {
-		int sum = 0;
-		for (Cluster iterable_element : c.getClusters())
-			sum += iterable_element.getArtifacts().size();
-		return sum;
-	}
-	
 	@Override
-	public Clusterizzation recluster(Clusterizzation clusterizzation, double threshold) {
+	public Clusterizzation recluster(Clusterizzation clusterizzation, double threshold, ValuedRelationService valuedRelationService) {
 		
 		Clusterizzation result = new Clusterizzation();
 		boolean guard = false;
@@ -1158,7 +1124,7 @@ public class EcoreMetamodelServiceImpl extends
 			if (cluster.getArtifacts().size() == 1)
 			{
 				EcoreMetamodel art = (EcoreMetamodel) cluster.getArtifacts().toArray()[0];
-				ContainmentRelation cont = containmentRelaionService.findNearest(art,threshold);
+				Relation cont = valuedRelationService.findNearest(art,threshold);
 				if(cont != null)
 				{
 					EcoreMetamodel to = (EcoreMetamodel)((art.getId().equals(cont.getToArtifact().getId()))?cont.getFromArtifact():cont.getToArtifact());
@@ -1171,6 +1137,9 @@ public class EcoreMetamodelServiceImpl extends
 					guard=true;
 				}
 			}
+		}
+		for (Cluster cluster : result.getClusters()) {
+			cluster.setMostRepresentive(getMostRepresentativeElement(cluster, valuedRelationService));
 		}
 		return result;
 	}
@@ -1190,5 +1159,25 @@ public class EcoreMetamodelServiceImpl extends
 		}
 
 		return resource;
+	}
+
+	@Override
+	public Artifact getMostRepresentativeElement(Cluster c, ValuedRelationService valuedRelationService)
+			throws BusinessException {
+		double max = 0;
+		if (c.getArtifacts().size() == 1)
+			return c.getArtifacts().iterator().next();
+		Artifact result = null;
+		for (Artifact art : c.getArtifacts()) {
+			List<ValuedRelation> lr = valuedRelationService.findRelationsByArtifactInList(art, c.getArtifacts());
+			double sum = 0;
+			for (ValuedRelation relation : lr)
+				sum += relation.getValue();
+			if (sum > max) {
+				max = sum;
+				result = art;
+			}
+		}
+		return result;
 	}
 }

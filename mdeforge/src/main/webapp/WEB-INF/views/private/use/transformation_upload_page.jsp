@@ -252,23 +252,18 @@
 	
 	
 	
-	<form:form cssClass="form-horizontal" modelAttribute="metamodel" action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" role="form" method="POST" enctype="multipart/form-data">
-	
-
-	
+	<form:form id="formEcore" cssClass="form-horizontal" 
+		modelAttribute="metamodel" 
+		action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" 
+		role="form" method="POST" enctype="multipart/form-data">
 	<!-- Modal body -->
 	<div class="modal-body">
 		<div class="widget widget-heading-simple widget-body-gray">
-		
-			
 			<div class="widget-body">
-			
 				<!-- Row -->
 				<div class="row-fluid">
-				
 					<!-- Column -->
 					<div class="span12">
-					
 						<!-- Group -->
 						<div class="control-group">
 							<label class="control-label" for="firstname">Metamodel Name</label>
@@ -283,16 +278,11 @@
 							</div>
 						</div>
 						<!-- // Group END -->
-						
 					</div>
 					<!-- // Column END -->
-					
 				</div>
-				
 				<hr class="separator">
-				
 				<div class="">
-				
 							<!-- Column -->
 								<h4 style="margin-bottom: 10px;">Private or Public</h4>
 								<div class="uniformjs">
@@ -306,13 +296,11 @@
 											<form:radiobutton cssClass="" path="open" value="false"/>Private
 										</label>
 									</div>
-									
 								</div>
 					<!-- // Column END -->
 				</div>
 				<!-- // Row END -->
 				<hr class="separator">
-				
 				<div class="row-fluid">
 					<h4>Metamodel File</h4>
 					<div class="">
@@ -324,23 +312,20 @@
 							    	<span class="btn btn-default btn-file">
 								    	<span class="fileupload-new">Select Metamodel File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" class="margin-none" name="metamodelfile" size="20"/>
+								    	<input id="ecoreFile" type="file" class="margin-none" name="metamodelfile" size="20"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
 							</div>
 						</div>
 						</div>
-						
 				<hr class="separator">
-					
 					<div class="row-fluid">
 						<h4>Properties</h4>
 						<table>
 								<thead>
 									<tr>
 										<th>Name</th>
-									
 										<th>Value</th>
 										<th>Action</th>
 									</tr>
@@ -352,23 +337,18 @@
 					</div>
 									
 				<hr class="separator">
-				
 					<h4>Add to project</h4>
 						<form:select path="projects" multiple="true">
 									<form:options  items="${projecList}" itemValue="id" itemLabel="name"></form:options>
 						</form:select>
-
 				<hr class="separator">
-
 					<h4>Share with:</h4>
 						<form:select path="shared" multiple="true">
 									<form:options  items="${userList}" itemValue="id" itemLabel="username"></form:options>
 						</form:select>
 				<!-- <hr class="separator">
-				
 				Form actions
 				<div class="row-fluid">
-					
 					<div class="form-actions">
 						<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
 						<button type="button" class="btn btn-icon btn-default glyphicons circle_remove"><i></i>Cancel</button>
@@ -378,38 +358,20 @@
 				
 			</div>
 		</div>
-	
-	
 	</div>
 	<!-- // Modal body END -->
-	
 	<!-- Modal footer -->
 	<div class="modal-footer">
-		<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
+		<button id="ecoreSubmit" type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
 <!-- 		<button type="button" class="btn btn-icon btn-default glyphicons circle_remove"><i></i>Cancel</button> -->
 	</div>
 	<!-- // Modal footer END -->
-	
 </form:form>
 	
 	
 </div>
 <!-- // Modal END -->	
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Mustache -->
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
-<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 	

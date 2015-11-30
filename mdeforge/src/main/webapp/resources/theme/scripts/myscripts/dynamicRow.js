@@ -1,4 +1,23 @@
 $(function() {
+
+//	$("#formEcore").submit(function(e) {
+//		e.stopPropagation();
+//		e.preventDefault();
+//		console.log('adas');
+//		var form = new FormData();
+//		console.log($('#ecoreFile').files[0]);
+//		form.append('file',$('#ecoreFile').files[0]);
+//		console.log('asd');
+//		$.ajax({
+//			data : form,
+//			type : "POST",
+//			url : ctx + "/private/EcoreMetamodel/upload/inner",
+//			success : function(eventData) {
+//				console.log(eventData);
+//			}
+//		});
+//	});
+
 	
 	$(document).on('click','.deletePropertyButton', function(e) {
 		console.log($(this).data('id'));
@@ -12,9 +31,15 @@ $(function() {
 		if (idRow ==null)
 			idRow = -1;
 		var result = $('#propertiesTable');
+		
+		var toRender = new Object();
+		idRow = idRow + 1;
+		toRender.idRow = idRow;
+		console.log(toRender.idRow);
 		$.get(ctx + '/resources/theme/scripts/plugins/forms/template/rowProperty.html',
 				function(template) {
-					var rendered = Mustache.render(template, idRow);
+					var rendered = Mustache.render(template, toRender);
+					console.log(template);
 					result.append(rendered);
 				});
 	});
@@ -24,6 +49,7 @@ $(function() {
 		if (idRow ==null)
 			idRow = -1;
 		var result = $('#propertiesTable2');
+		toRender.idRow = idRow + 1;
 		$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/rowProperty.html',
 				function(template) {
 			var rendered = Mustache.render(template, idRow);

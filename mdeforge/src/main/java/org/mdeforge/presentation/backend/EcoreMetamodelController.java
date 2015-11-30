@@ -84,10 +84,18 @@ public class EcoreMetamodelController {
 	
 	@RequestMapping(value = "/metamodel_details", method = { RequestMethod.GET })
 	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
-
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneById(metamodel_id, user);
-		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
+		
+		EcoreMetamodel ecore = ecoreMetamodelService.findOneById(metamodel_id, user);
+		ecore.getRelations().addAll(
+				similarityRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				containmentRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				diceSimilarityRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				cosineSimilarityRelationService.findTopProximity(ecore, 5));
+		model.addAttribute("ecoreMetamodel", ecore);
+		String pathToDownload = gridFileMediaService.getFilePath(ecore);
 		File ecoreMetamodelFile = new File(pathToDownload);
 		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
 
@@ -169,6 +177,30 @@ public class EcoreMetamodelController {
 		
 		return "redirect:/private/my_artifacts";
 	}
+//	@RequestMapping(value = "/upload/inner", method = { RequestMethod.POST })
+//	public @ResponseBody EcoreMetamodel uploadNewMetamodelResturnRest(
+//			Model model,@ModelAttribute EcoreMetamodel metamodel,
+//			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
+//		
+//		
+//		EcoreMetamodel m = metamodel;
+//		byte[] bytes = file.getBytes();
+//		GridFileMedia gfm = new GridFileMedia();
+//		gfm.setFileName(file.getOriginalFilename());
+//		gfm.setByteArray(bytes);
+//		m.setCreated(new Date());
+//		m.setAuthor(user);
+//		m.setFile(gfm);
+//		
+//		EcoreMetamodel result = ecoreMetamodelService.create(m);
+//		
+//		boolean report = false;
+//		if(result != null){
+//			report = true;
+//		}
+//		model.addAttribute("report", report);
+//		return m;
+//	}
 	
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {

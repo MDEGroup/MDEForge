@@ -19,6 +19,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.integration.ClusterizzationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +38,8 @@ public class EcorePublicController {
 
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
+	private ClusterizzationRepository clusterizzationRepository;
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
 	@Autowired
@@ -150,9 +153,9 @@ public class EcorePublicController {
 		switch (computation) {
 		case 1:	
 			threshold = (threshold < thresholdSimilarityRelation) ? thresholdSimilarityRelation : threshold;
-			Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
-			clusters = ecoreMetamodelService.recluster(clu, 0.7).getClusters();
-			//clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();			
+//			Clusterizzation clu = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService);
+//			clusters = ecoreMetamodelService.recluster(clu, 0.9, cosineSimilarityRelationService).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, similarityRelationService).getClusters();			
 			break;
 		case 2:
 			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
@@ -188,6 +191,37 @@ public class EcorePublicController {
 		// Mettiamo anche le informazioni relative alla Threshold e Computation
 		model.addAttribute("threshold", threshold);
 		model.addAttribute("computation", computation);
+		model.addAttribute("numberOfMetamodels", count);
+		return "public.browse.cluster";
+	}
+	@RequestMapping(value = "/browse/cluster_from_DB", method = { RequestMethod.GET })
+	public String clusterFromDB(
+			Model model,
+			@RequestParam(value = "id") String id) {
+		
+		
+		Clusterizzation clusterizzation = clusterizzationRepository.findOne(id);
+		List<Cluster> clusters = clusterizzation.getClusters(); 
+		int maxCluster = 0;
+		double average = 0;
+		int count = 0;
+		int noCluster = 0;
+		for (Cluster cluster : clusters) {
+			maxCluster = (maxCluster < cluster.getArtifacts().size()) ? cluster
+					.getArtifacts().size() : maxCluster;
+					count += cluster.getArtifacts().size();
+					if (cluster.getArtifacts().size() == 1) {
+						noCluster++;
+					}
+		}
+		average = (count * 1.0) / (clusters.size() * 1.0);
+		model.addAttribute("clusters", clusters);
+		model.addAttribute("average", average);
+		model.addAttribute("max", maxCluster);
+		model.addAttribute("noCluster", noCluster);
+		// Mettiamo anche le informazioni relative alla Threshold e Computation
+		model.addAttribute("threshold", clusterizzation.getThreshold());
+		model.addAttribute("computation", clusterizzation.getAlgoritmhs());
 		model.addAttribute("numberOfMetamodels", count);
 		return "public.browse.cluster";
 	}
