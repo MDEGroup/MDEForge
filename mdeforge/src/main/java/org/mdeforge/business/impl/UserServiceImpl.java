@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User findOne(String id) throws BusinessException{
-		// TODO Auto-generated method stub
 		User u = userRepository.findOne(id);
 		if(u == null)
 			throw new  BusinessException();
@@ -47,7 +46,6 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public List<User> findAll() throws BusinessException {
-		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
 

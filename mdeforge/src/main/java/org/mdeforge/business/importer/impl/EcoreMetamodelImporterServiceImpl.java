@@ -214,10 +214,9 @@ public class EcoreMetamodelImporterServiceImpl implements
 	
 			return (GitHubRate) client.get(gitHubRequest).getBody();
 		} catch (IOException e) {
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		}
 	}
 

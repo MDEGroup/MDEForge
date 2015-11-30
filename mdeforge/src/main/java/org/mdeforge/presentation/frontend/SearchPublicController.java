@@ -56,24 +56,8 @@ public class SearchPublicController {
 	private ModelService modelService;
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
-
-//	@Autowired
-//	private ConnectionFactoryRegistry facebook;
-	
-	
-	@RequestMapping(value = "/social", method = { RequestMethod.GET })
-	public @ResponseBody String getFracebookFriends(HttpServletRequest request, HttpServletResponse response) {
-//		ConnectionFactory<Facebook> cf = facebook.getConnectionFactory(Facebook.class);
-		//TODO 
-//		OAuth2Operations oa2o = cf.getOAuthOperations();
-//		Connection<Facebook> ccf = cf.createConnection(null);
-//		ccf.createData().;
-//		System.out.println(ccf.getImageUrl());
-		return null;
-	}
 	
 	private static final String[] ARTIFACT_TYPE = {"models", "transformations", "metamodels"};
-
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model, @RequestParam(value = "search_string", required = false) String searchString, 

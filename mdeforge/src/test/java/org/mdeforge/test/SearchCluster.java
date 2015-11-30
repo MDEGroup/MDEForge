@@ -1,23 +1,23 @@
 package org.mdeforge.test;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import org.bson.types.ObjectId;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mdeforge.business.ContainmentRelationService;
+import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
@@ -27,6 +27,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
+import org.mdeforge.integration.ClusterizzationRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Base64;
@@ -42,6 +43,12 @@ public class SearchCluster {
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
 	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private ClusterizzationRepository clusterizzationRepository;
+	@Autowired
+	private CosineSimilarityRelationService cosineSimilarityRelationService;
+	@Autowired
 	private MetricRepository metricRepository;
 	
 	private static String readFile(String path) throws IOException {
@@ -50,33 +57,19 @@ public class SearchCluster {
 
 	}
 	
+	private final double threshold = 0.7;
+	@Ignore
 	@Test
 	public void testClusterSearch() throws IOException, InterruptedException {
 		//TEST METAMODEL
-		System.out.println("######### CLUSTER COMPUTATION ###########");
-		Date startCluster = new Date();
-		
-		Double clusterThreshold = 0.3;
-		Double searchThreshold = 0.50;
-		Clusterizzation clusters = new Clusterizzation();		
-		clusters = ecoreMetamodelService.getSimilarityClusters(clusterThreshold, similarityRelationService);	
-		clusters = ecoreMetamodelService.recluster(clusters, 0.9);
-		Date endCluster = new Date();
-		System.out.println("######### CLUSTER COMPUTATION: TOTAL TIME ###########" + (endCluster.getTime() - startCluster.getTime()));
-		
 		EcoreMetamodel serachSample = new EcoreMetamodel();
-		serachSample.setName("Example.ecore");
-		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
-		serachSample.setTags(tags);
-		serachSample.setDescription("Describes the basic structure of a general Relational DB");
-		serachSample.setAuthors("Metamodels Authors");
-		serachSample.setOpen(true);	
 		GridFileMedia gfm = new GridFileMedia();
-		gfm.setFileName("ECORE.ecore");
-		gfm.setContent(readFile("temp/ECORE.ecore"));
+		gfm.setFileName("Conference2_0.ecore");
+		gfm.setContent(readFile("temp/Conference2_0.ecore"));
 		serachSample.setFile(gfm);
-		
-		System.out.println("######### SEARCH COMPUTATION              ###########");
+		Clusterizzation clusters = new Clusterizzation();		
+		clusters = clusterizzationRepository.findOne("564df04477c8fb25bb009054");	
+		System.out.println("######### SEARCH COMPUTATION  CLUSTER  ###########");
 		Date startSearch = new Date();
 		List <Cluster> list = new ArrayList<Cluster>();
 		List<Artifact> result = new ArrayList<Artifact>();
@@ -84,55 +77,48 @@ public class SearchCluster {
 		for (Cluster cluster : clusters.getClusters()) {
 			count++;
 			double d = ecoreMetamodelService.calculateContainment((EcoreMetamodel)cluster.getMostRepresentive(), serachSample);
-			if (d>=clusterThreshold)
+			if (d>=threshold)
 				list.add(cluster);
-			if (d>=searchThreshold)
+			if (d>=threshold)
 				result.add(cluster.getMostRepresentive());
 		}
-		System.out.println("# clusters: " + clusters.getClusters().size());
 		for (Cluster cluster : list) {
 			if(cluster.getArtifacts().size()!=1)
 				for (Artifact artifact : cluster.getArtifacts()) {
 					if(!artifact.getId().equals(cluster.getMostRepresentive().getId()))  {
 						count ++;
 						Double d =ecoreMetamodelService.calculateContainment((EcoreMetamodel)artifact, serachSample);
-						if(d>=searchThreshold){
+						if(d>=threshold){
 							result.add(artifact);
 						} 
 					}
 			}
 		}
 		for (Artifact ecoreMetamodel : result) {
-			System.out.println(ecoreMetamodel.getName());
+			System.out.print(ecoreMetamodel.getName() + ", ");
 		}
+		System.out.println();
 		System.out.println("Operation: " + count );
 		System.out.println("ResultSize: " + result.size());
 		Date finishSearch = new Date();
 		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finishSearch.getTime() - startSearch.getTime()));
 	}
-	
+	@Ignore
 	@Test
 	public void testWithoutCluster() throws IOException, InterruptedException {
 		EcoreMetamodel serachSample = new EcoreMetamodel();
-		serachSample.setName("Example.ecore");
-		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
-		serachSample.setTags(tags);
-		serachSample.setDescription("Describes the basic structure of a general Relational DB");
-		serachSample.setAuthors("Metamodels Authors");
-		serachSample.setOpen(true);	
+		serachSample.setName("Conference2_0.ecore");
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setFileName("ECORE.ecore");
-		gfm.setContent(readFile("temp/ECORE.ecore"));
+		gfm.setContent(readFile("temp/Conference2_0.ecore"));
 		serachSample.setFile(gfm);
-		
-		Double threshold = 0.5;
-		
 		System.out.println("######### NO CLUSTER COMPUTATION ###########");
 		Date start = new Date();
 		List<EcoreMetamodel> list = ecoreMetamodelService.searchByExample(serachSample, threshold);
 		for (EcoreMetamodel ecoreMetamodel : list) {
-			System.out.println(ecoreMetamodel.getName());
+			System.out.print(ecoreMetamodel.getName() + ", ");
 		}
+		System.out.println();
 		System.out.println("ResultSize: " + list.size());
 		Date finish = new Date();
 		System.out.println("######### SEARCH COMPUTATION: TOTAL TIME ###########" + (finish.getTime() - start.getTime()));
@@ -205,8 +191,20 @@ public class SearchCluster {
 	}
 	@Ignore
 	@Test
-	public void testRecluster() {
-		Clusterizzation clusterizzation = ecoreMetamodelService.getSimilarityClusters(0.3, similarityRelationService);
+	public void fromZoo() {
+		List<EcoreMetamodel> al = ecoreMetamodelService.findAll();
+		for (EcoreMetamodel ecoreMetamodel : al) {
+			System.out.println(ecoreMetamodel.getName());
+		}
+		System.out.println(al.size());
+	}
+	@Ignore
+	@Test
+	public void reclusterAnalisys() {
+		final double CLUSTER_THRESHOLD = 0.27;
+		final double[] RECLUSTER_THRESHOLD = {0.7,0.75,0.8, 0.85, 0.9, 0.95};
+		
+		Clusterizzation clusterizzation = ecoreMetamodelService.getSimilarityClusters(CLUSTER_THRESHOLD, similarityRelationService);
 		int count = 0;
 		int singleton = 0;
 		int maxCluster = 0;
@@ -217,26 +215,121 @@ public class SearchCluster {
 			if (cluster.getArtifacts().size()== 1)
 				singleton++;
 		}
-		System.out.println("#Singleton" + singleton);
-		System.out.println("#Cluster" + clusterizzation.getClusters().size());
-		System.out.println("#Artifact: " + count);
-		System.out.println("#Max cluster: " + maxCluster);
-		System.out.println("=================================");
-		Clusterizzation reClusterizzation = ecoreMetamodelService.recluster(clusterizzation, 0.8);
-		count = 0;
-		maxCluster = 0;
-		singleton = 0;
-		for (Cluster cluster : reClusterizzation.getClusters()) {
-			count += cluster.getArtifacts().size();
-			if (maxCluster<cluster.getArtifacts().size())
-				maxCluster = cluster.getArtifacts().size();
-			if (cluster.getArtifacts().size()== 1)
-				singleton++;
+		clusterizzation.setAlgoritmhs("Similiarity");
+		clusterizzation.setSingleton(singleton);
+		clusterizzation.setThreshold(CLUSTER_THRESHOLD);
+		clusterizzation.setNumberOfCluster(clusterizzation.getClusters().size());
+		clusterizzationRepository.save(clusterizzation);
+		System.out.print(clusterizzation.getId() + ";");
+		System.out.print(clusterizzation.getAlgoritmhs() + ";");
+		System.out.print("NONE;");
+		System.out.print(clusterizzation.getThreshold() + ";");
+		System.out.print(clusterizzation.getThresholdRecluster() + ";");
+		System.out.print("Containment" + ";");
+		System.out.print(count + ";");
+		System.out.print(clusterizzation.getClusters().size() + ";");
+		System.out.print(singleton + ";");
+		System.out.print((clusterizzation.getClusters().size() - singleton) + ";");
+		System.out.println(maxCluster);
+		
+		
+		for (double d : RECLUSTER_THRESHOLD) {
+			Clusterizzation clusterizzation2 = ecoreMetamodelService.getSimilarityClusters(CLUSTER_THRESHOLD, similarityRelationService);
+			Clusterizzation reClusterizzation = ecoreMetamodelService.recluster(clusterizzation2, d, containmentRelationService);
+			count = 0;
+			maxCluster = 0;
+			singleton = 0;
+			for (Cluster cluster : reClusterizzation.getClusters()) {
+				count += cluster.getArtifacts().size();
+				if (maxCluster<cluster.getArtifacts().size())
+					maxCluster = cluster.getArtifacts().size();
+				if (cluster.getArtifacts().size()== 1)
+					singleton++;
+			}
+			reClusterizzation.setNumberOfCluster(reClusterizzation.getClusters().size());
+			reClusterizzation.setAlgoritmhs("Similiarity + Containment");
+			reClusterizzation.setSingleton(singleton);
+			reClusterizzation.setThreshold(CLUSTER_THRESHOLD);
+			reClusterizzation.setThresholdRecluster(d);
+			clusterizzationRepository.save(reClusterizzation);
+			System.out.print(reClusterizzation.getId() + ";");
+			System.out.print(reClusterizzation.getAlgoritmhs() + ";");
+			
+			System.out.print("YES;");
+			System.out.print(reClusterizzation.getThreshold() + ";");
+			System.out.print(reClusterizzation.getThresholdRecluster() + ";");
+			System.out.print("Cosine" + ";");
+			System.out.print(count + ";");
+			System.out.print(reClusterizzation.getClusters().size() + ";");
+			System.out.print(singleton + ";");
+			System.out.print((reClusterizzation.getClusters().size() - singleton) + ";");
+			System.out.println(maxCluster);
+			
+			
 		}
-		System.out.println("#Singleton" + singleton);
-		System.out.println("#Cluster" + clusterizzation.getClusters().size());
-		System.out.println("#Artifact: " + count);
-		System.out.println("#Max cluster: " + maxCluster);
 	}
 	
+	@Ignore
+	@Test 
+	public void MemaodelsWithoutMetric() {
+		List<EcoreMetamodel> ecoreList = ecoreMetamodelService.findAll();
+		System.out.println(ecoreList.size());
+		int cont = 0;
+		for (EcoreMetamodel ecoreMetamodel : ecoreList) {
+			try {
+				String s = ((SimpleMetric)metricRepository.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMetamodel.getId()))).getValue();
+				if(s.equals("1") || s.equals("0")) {
+					System.out.println(ecoreMetamodel.getName() + " " + s);
+					cont++;
+				}
+			} catch (Exception e) {
+				System.out.println("pippo");
+				if(ecoreMetamodel!=null)
+					System.out.println(ecoreMetamodel.getName());
+				else 
+					System.out.println("ERRORE");
+			}
+			
+		}
+		System.out.println(cont);
+	}
+	
+	
+	@Test
+	public void produceMatrix() {
+		BufferedReader br = null;
+		List<Clusterizzation> clusterizzationList = clusterizzationRepository.findAll();
+		int k = 0;
+		for (Clusterizzation c : clusterizzationList) {
+			try {
+				br = new BufferedReader(new FileReader("listArtifact"));
+				List<EcoreMetamodel> metamodelList = new ArrayList<EcoreMetamodel>();
+				String sCurrentLine;
+				while (((sCurrentLine = br.readLine()) != null)) {
+					metamodelList.add(ecoreMetamodelService.findOneByName(sCurrentLine));
+				}
+				PrintWriter pw = new PrintWriter(c.getThreshold() + "_" + c.getThresholdRecluster(), "UTF-8");
+				int[][] matrix = new int [metamodelList.size()][metamodelList.size()];
+				for (int i = 0; i < metamodelList.size(); i++) {
+					String print = "";
+					Artifact iesimo = ecoreMetamodelService.getCluster(metamodelList.get(i), c).getMostRepresentive();
+					for (int j = 0; j < metamodelList.size(); j++) {
+						Artifact jesimo = ecoreMetamodelService.getCluster(metamodelList.get(j), c).getMostRepresentive();
+						if (iesimo.equals(jesimo))
+							matrix[i][j] = 1;
+						else
+							matrix[i][j] = 0;
+						print = print+ matrix[i][j];
+						if(j!=metamodelList.size()-1)
+							print = print + ";";
+					}		
+					pw.println(print);
+				}
+				pw.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 }

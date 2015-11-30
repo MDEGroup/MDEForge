@@ -44,6 +44,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -114,18 +115,15 @@ public class ATLTransformationServiceImpl extends
 	
 	@Override
 	public ATLTransformation create(ATLTransformation artifact) {
-		if(findOneByName(artifact.getName())!=null) {
-			logger.error("DuplicateName");
-			throw new DuplicateNameException();
-		}
 		ATLTransformation result = super.create(artifact);
 		try {
 			artifact.setMetrics(getMetrics(artifact));
+			artifactRepository.save(artifact);
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
-			throw new BusinessException();
+			throw new MetricEngineException(e.getMessage(),result.getId());
 		}
-		artifactRepository.save(artifact);
+		
 		return result;
 	}
 	

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.mdeforge.business.model.serializer.json.ValuedRelationListSerializer;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -19,6 +20,10 @@ public class Cluster implements Serializable {
 	private int kMax;
 	private int kMin;
 	private double kAvg;
+	@DBRef
+	private Set<Artifact> artifacts = new HashSet<Artifact>();
+	private Set<String> domains = new HashSet<String>();
+	@DBRef
 	private Artifact mostRepresentive;
 	@JsonSerialize(using = ValuedRelationListSerializer.class)
 	private List<ValuedRelation> relations = new ArrayList<ValuedRelation>();
@@ -40,8 +45,6 @@ public class Cluster implements Serializable {
 	public void setkAvg(double kAvg) {
 		this.kAvg = kAvg;
 	}
-	private Set<Artifact> artifacts = new HashSet<Artifact>();
-	private Set<String> domains = new HashSet<String>();
 	public Set<Artifact> getArtifacts() {
 		return artifacts;
 	}

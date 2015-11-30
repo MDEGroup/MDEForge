@@ -192,7 +192,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public void delete(String id, User user) throws BusinessException {
 		Workspace workspace = workspaceRepository.findOne(id);
 		if (workspace != null && workspace.getOwner().getId().equals(user.getId())) {
-			//TODO
 			for (Project proj : workspace.getProjects()) {
 				proj.getWorkspaces().remove(workspace);
 				projectRepository.save(proj);

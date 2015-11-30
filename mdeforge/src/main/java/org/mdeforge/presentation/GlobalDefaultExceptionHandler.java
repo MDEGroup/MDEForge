@@ -1,9 +1,11 @@
+
 package org.mdeforge.presentation;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.MetricEngineException;
 import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,6 +30,19 @@ public class GlobalDefaultExceptionHandler {
 //		return model;
 //
 //	}
+	
+	@ExceptionHandler(MetricEngineException.class)
+	public ModelAndView handleMetricEngineException(MetricEngineException ex) {
+		ex.printStackTrace();
+		Map<String,String> errorModel = new HashMap<String,String>();
+		String errCode = ex.getErrCode();
+		errorModel.put("errCode", errCode);
+		String errMsg = ex.getErrMsg();
+		errorModel.put("errMsg", errMsg);
+		errorModel.put("artifatId", ex.getArtifatcId());
+		return new ModelAndView("error.custom_generic_exception", "errorModel", errorModel);
+	}
+	
 	
 	@ExceptionHandler(BusinessException.class)
 	public ModelAndView handleCustomException(BusinessException ex) {

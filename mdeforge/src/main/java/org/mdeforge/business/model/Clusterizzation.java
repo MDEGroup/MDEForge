@@ -3,12 +3,16 @@ package org.mdeforge.business.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+@Document(collection="Clusterizzation")
 public class Clusterizzation {
 	private String id;
 	private List<Cluster> clusters = new ArrayList<Cluster>();;
 	private String algoritmhs;
 	private double threshold;
+	private double thresholdRecluster;
 	private int singleton;
+	private int numberOfCluster;
 	public List<Cluster> getClusters() {
 		return clusters;
 	}
@@ -38,5 +42,17 @@ public class Clusterizzation {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public double getThresholdRecluster() {
+		return thresholdRecluster;
+	}
+	public void setThresholdRecluster(double thresholdRecluster) {
+		this.thresholdRecluster = thresholdRecluster;
+	}
+	public int getNumberOfCluster() {
+		return numberOfCluster;
+	}
+	public void setNumberOfCluster(int numberOfCluster) {
+		this.numberOfCluster = numberOfCluster;
 	}
 	}

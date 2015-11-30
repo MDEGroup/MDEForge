@@ -98,7 +98,6 @@ public class ModelRESTController {
 	        try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);

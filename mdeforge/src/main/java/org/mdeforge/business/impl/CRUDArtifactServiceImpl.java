@@ -27,6 +27,8 @@ import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
@@ -79,7 +81,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
 	private String jsonArtifactCollection;
-
+	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	protected Class<T> persistentClass;
 	public void createIndex() {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -185,10 +187,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
+			//TODO REMOVE
+			//Criteria c2 = Criteria.where("tags").is(null);
+			//query.addCriteria(c2);
+			//TODO REMOVE
 			query.addCriteria(c);
 			return n.find(query, persistentClass);
-		} else
-			return n.findAll(persistentClass);
+		} else {
+			//TODO REMOVE
+			//Criteria c2 = Criteria.where("tags").is(null);
+			//query.addCriteria(c2);
+			//TODO REMOVE
+			return n.find(query, persistentClass);
+		}
 
 	}
 
@@ -251,9 +262,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		}
 		for (User us : artifact.getShared()) {
-			System.out.println(us.getSharedArtifact().size());
 			us.getSharedArtifact().remove(artifact);
-			System.out.println(us.getSharedArtifact().size());
 			userRepository.save(us);
 		}
 		artifact.getAuthor().getOwner().remove(artifact);
@@ -370,7 +379,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	@Override
 	public T create(T artifact) throws BusinessException {
-		// check workspace Auth
+		if(findOneByName(artifact.getName())!=null) {
+			logger.error("DuplicateName");
+			throw new DuplicateNameException();
+		}
 		try {
 			if (artifactRepository.findByName(artifact.getName()) != null)
 				throw new DuplicateNameException();
