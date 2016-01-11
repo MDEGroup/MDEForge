@@ -143,12 +143,11 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + 
 				"/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
 		
-		//TROVARE LA CONFORMANCE TO
-		String mmID = ((ConformToRelation) artifact.getRelations().get(0)).getToArtifact().getId();
+		EcoreMetamodel mmID = emm;
 		Model result = super.create(artifact);
 		try{
 			result.setExtractedContents( this
-					.saveModel(jsonMongoUriBase+mmID, gridFileMediaService.getFilePath(result), 
+					.saveModel(mmID, gridFileMediaService.getFilePath(result), 
 			jsonMongoUriBase+artifact.getId()));
 			modelRepository.save(result);
 		}catch (Exception e) {
@@ -158,8 +157,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		return result;
 	}
 	
-	public String saveModel(String mmID, String sourceURI, String mongoURI){
-		Resource mm = ecoreMetamodelService.loadArtifacrt(mmID);
+	public String saveModel(EcoreMetamodel mmID, String sourceURI, String mongoURI){
+		Resource mm = ecoreMetamodelService.loadArtifact(mmID);
 		EPackage mmePackage = null;
 		
 		ResourceSet load_resourceSet = new ResourceSetImpl();

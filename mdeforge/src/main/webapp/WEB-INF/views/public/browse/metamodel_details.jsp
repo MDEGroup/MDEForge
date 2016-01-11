@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -69,6 +69,9 @@
 											<p class="muted">
 												Used in ${ecoreMetamodel.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
+												<security:authorize access="isAuthenticated()">
+																<a href="${pageContext.request.contextPath}/public/browse/metamodel_share?metamodel_id=${ecoreMetamodel.getId()}"> Share</a>
+															</security:authorize>
 											</p>
 											
 										</div>
@@ -153,10 +156,12 @@
 												<div class="span6">
 													<h5 class="text-uppercase strong text-primary">
 														<i class="icon-group text-regular icon-fixed-width"></i>
+														
 														Shared Users <span
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${ecoreMetamodel.getShared().size()}
 															people)</span>
+															
 													</h5>
 													<ul class="team">
 														<c:forEach items="${ecoreMetamodel.getShared()}"
@@ -167,6 +172,7 @@
 																	${user.getLastname()}</span></li>
 														</c:forEach>
 													</ul>
+													
 												</div>
 											</div>
 

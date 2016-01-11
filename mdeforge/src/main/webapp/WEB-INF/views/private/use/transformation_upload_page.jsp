@@ -97,7 +97,7 @@
 				<!-- // Row END -->
 				<hr class="separator">
 				<div class="row-fluid">
-					<div class="control-group span6">
+					<div class="control-group span12">
 							<label class="control-label" for="email">ATL transformation File</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
@@ -107,14 +107,18 @@
 							    	<span class="btn btn-default btn-file">
 								    	<span class="fileupload-new">Select ATL transformation File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" class="margin-none" name="transformationfile" size="40"/>
+								    	<input type="file" id="JURI" class="margin-none" name="transformationfile" size="40"/>
+								    	
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+							    	<button type="button" id="transformationModelInfo" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Parse ATL</button>
 							  	</div>
 							</div>
 						</div>
+					</div>
+					<div class="row-fluid">
 				<!-- Row -->
-					<div class="span6">
+					<div class="span12">
 						<h4>Properties</h4>
 							<table>
 								<thead>
@@ -167,7 +171,7 @@
 								</tbody>
 							</table>
 						</div>			
-						<div class="span12">
+						<div class="span12" id="defineDomainRelationTo">
 							<select id="domainMetamodelSelect">
 								<c:forEach items="${metamodelList}" var="metamodel">
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
@@ -176,7 +180,7 @@
 							<input id="filterMMDomainTextBox" type="text" />
 							
 							<button type="button" id="addDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
-							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">New metamodel</a>
+<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">New metamodel</a> -->
 						</div>
 					</div>				
 					<div class="row-fluid">
@@ -195,7 +199,7 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="span12">
+						<div class="span12" id="defineCoDomainRelationTo">
 							<select id="coDomainMetamodelSelect">
 								<c:forEach items="${metamodelList}" var="metamodel">
 									<option  value="${metamodel.id }"> ${metamodel.name }</option>
@@ -203,7 +207,7 @@
 							</select>
 							<input id="filterMMCoDomainTextBox" type="text" />
 							<button type="button" id="addCoDomainConformToMetamodel" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Select metamodel</button>
-							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">Upload New metamodel</a>
+<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">Upload New metamodel</a> -->
 						</div>
 					</div>				
 				</div>
@@ -374,4 +378,5 @@
 <!-- Mustache -->
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/transformationModelInfo.js"></script>
 	

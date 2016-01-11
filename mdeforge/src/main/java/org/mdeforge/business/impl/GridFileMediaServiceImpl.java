@@ -115,6 +115,26 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		}
 
 	}
+	
+	@Override
+	public String getFilePathFromContent(GridFileMedia gdf) throws BusinessException {
+		
+		FileOutputStream out;
+		try {
+			String path = basePath + "tempTransf.atl";
+			out = new FileOutputStream(path);
+			out.write(Base64.decode(gdf.getContent().getBytes()));
+			out.close();
+			return path;
+		} catch (FileNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (Exception e) {
+			throw new BusinessException(e.getMessage());
+		}
+
+	}
 
 	@Override
 	public byte[] getFileByte(Artifact artifact) throws BusinessException {

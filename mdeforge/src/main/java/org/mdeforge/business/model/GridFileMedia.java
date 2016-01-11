@@ -1,9 +1,11 @@
 package org.mdeforge.business.model;
 
+import java.io.Serializable;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 
-public class GridFileMedia {
+public class GridFileMedia implements Serializable {
 	@Id
 	private String id;
 	private String idFile;

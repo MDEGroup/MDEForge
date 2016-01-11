@@ -116,7 +116,7 @@ jQuery.fn.filterByText = function(textbox, selectSingleMatch) {
             options.push({value: $(this).val(), text: $(this).text()});
         });
         $(select).data('options', options);
-        $(textbox).bind('change keyup', function() {
+        $(textbox).on('change keyup', function() {
             var options = $(select).empty().data('options');
             var search = $.trim($(this).val());
             var regex = new RegExp(search,"gi");

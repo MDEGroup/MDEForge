@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -375,6 +376,33 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		}
 	}
+	
+	private List<EPackage> getEPackageList(EcoreMetamodel ecoreMetamodel)
+			throws BusinessException {
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
+		ecoreMetamodel.getFile();
+		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
+		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
+		File fileName = new File(path);
+		URI uri = URI.createFileURI(fileName.getAbsolutePath());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		ResourceSet rs = new ResourceSetImpl();
+		// enable extended metadata
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		Resource r = rs.getResource(uri, true);
+		List<EObject> eObject = r.getContents();
+		List<EPackage> pack = new ArrayList<EPackage>();
+		for (EObject eObject2 : eObject) {
+			if (eObject2 instanceof EPackage) {
+				EPackage p = (EPackage) eObject2;
+				pack.add(p);
+				registerSubPackage(p);
+			}
+		}
+		return pack;
+	}
+	
 	@Override
 	public void registerMetamodel(String ecoreMetamodel)
 			throws BusinessException {
@@ -1140,18 +1168,24 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		for (Cluster cluster : result.getClusters()) {
 			cluster.setMostRepresentive(getMostRepresentativeElement(cluster, valuedRelationService));
+			cluster.setDomains(getDescriptionFromCluster(cluster));
 		}
 		return result;
 	}
 	
+	private Set<String> getDescriptionFromCluster(Cluster cluster) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	@Override
-	public Resource loadArtifacrt(String id) throws BusinessException {
+	public Resource loadArtifact(EcoreMetamodel id) throws BusinessException {
+		
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
 				+ mongoDbFactory.getDb().getName() + "/"
-				+ jsonArtifactCollection + "/" + id;
+				+ jsonArtifactCollection + "/" + id.getId();
 		Resource resource = jsonMongoResourceSet.getResourceSet()
 				.createResource(URI.createURI(mongoURI));
-
 		try {
 			resource.load(null);
 		} catch (IOException e) {

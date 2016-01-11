@@ -11,6 +11,7 @@ import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +29,8 @@ public class ATLPublicController {
 	private GridFileMediaService gridFileMediaService;
 	@Autowired
 	private UserService userService;
-
+	@Autowired
+	private User user;
 	
 	@RequestMapping(value = "/browse/transformations_list", method = { RequestMethod.GET })
 	public String transformationsList(Model model) {
@@ -52,6 +54,19 @@ public class ATLPublicController {
 		model.addAttribute("atlTransformationFile", atlTransformationFile);
 
 		return "public.browse.transformation_details";
+	}
+	@RequestMapping(value = "/browse/transformation_share", method = { RequestMethod.GET })
+	public String transformationSharaDetails(Model model, @RequestParam String transformation_id) {
+		
+		ATLTransformation atlTransformation = aTLTransformationService.findOnePublic(transformation_id);
+		aTLTransformationService.addUserInArtifact(user.getId(), transformation_id, user);
+		model.addAttribute("atlTransformation", atlTransformation);
+		
+		String pathToDownload = gridFileMediaService.getFilePath(atlTransformation);
+		File atlTransformationFile = new File(pathToDownload);
+		model.addAttribute("atlTransformationFile", atlTransformationFile);
+		
+		return "private.use.metamodel_details";
 	}
 	
 	@RequestMapping(value = "/browse/transformation_download", method = RequestMethod.GET)

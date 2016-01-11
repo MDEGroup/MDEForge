@@ -3,9 +3,13 @@ package org.mdeforge.presentation.backend;
 import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.bson.types.ObjectId;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
@@ -19,9 +23,11 @@ import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
+import org.mdeforge.integration.MetricRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -59,6 +65,8 @@ public class EcoreMetamodelController {
 	private ProjectService projectService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private MetricRepository metricRepository;
 	
 	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
@@ -86,14 +94,16 @@ public class EcoreMetamodelController {
 	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
 		
 		EcoreMetamodel ecore = ecoreMetamodelService.findOneById(metamodel_id, user);
-		ecore.getRelations().addAll(
-				similarityRelationService.findTopProximity(ecore, 5));
-		ecore.getRelations().addAll(
-				containmentRelationService.findTopProximity(ecore, 5));
-		ecore.getRelations().addAll(
-				diceSimilarityRelationService.findTopProximity(ecore, 5));
-		ecore.getRelations().addAll(
-				cosineSimilarityRelationService.findTopProximity(ecore, 5));
+		List<Metric> metricList = metricRepository.findByArtifactId(new ObjectId(ecore.getId()));
+		ecore.getMetrics().addAll(metricList);
+//		ecore.getRelations().addAll(
+//				similarityRelationService.findTopProximity(ecore, 5));
+//		ecore.getRelations().addAll(
+//				containmentRelationService.findTopProximity(ecore, 5));
+//		ecore.getRelations().addAll(
+//				diceSimilarityRelationService.findTopProximity(ecore, 5));
+//		ecore.getRelations().addAll(
+//				cosineSimilarityRelationService.findTopProximity(ecore, 5));
 		model.addAttribute("ecoreMetamodel", ecore);
 		String pathToDownload = gridFileMediaService.getFilePath(ecore);
 		File ecoreMetamodelFile = new File(pathToDownload);
@@ -107,17 +117,21 @@ public class EcoreMetamodelController {
 		
 		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAllWithPublicByUser(user);
 		model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
-		
+				
 		return "private.use.metamodel_compare";
 	}
 
 	@RequestMapping(value = "/metamodel_compare", method = { RequestMethod.POST })
 	public String metamodelCompareExecute(Model model, @RequestParam String left_metamodel_id, @RequestParam String right_metamodel_id) {
 		
-		EcoreMetamodel leftMetamodel = ecoreMetamodelService.findOneById(left_metamodel_id, user);
+		EcoreMetamodel leftMetamodel = ecoreMetamodelService.findOne(left_metamodel_id);
 		model.addAttribute("leftMetamodel", leftMetamodel);
-		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOneById(right_metamodel_id, user);
+		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOne(right_metamodel_id);
 		model.addAttribute("rightMetamodel", rightMetamodel);
+		List<Metric> leftMetrics = metricRepository.findByArtifactId(new ObjectId(leftMetamodel.getId())); 
+		List<Metric> rightMetrics = metricRepository.findByArtifactId(new ObjectId(rightMetamodel.getId()));
+		leftMetamodel.getMetrics().addAll(leftMetrics);
+		rightMetamodel.getMetrics().addAll(rightMetrics);
 		
 		/*
 		 * Similarity Relations
@@ -217,6 +231,23 @@ public class EcoreMetamodelController {
 	        		setValue((id.equals(""))?null:userService.findOne(id));
 	        	}
 	        });
+	}
+	
+	@RequestMapping(value = "/metamodel_download", method = RequestMethod.GET)
+	public void downloadMetamodel(@RequestParam String metamodel_id,
+			HttpServletResponse response) throws IOException {
+
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService
+				.findOne(metamodel_id);
+		InputStream is = gridFileMediaService
+				.getFileInputStream(ecoreMetamodel);
+
+		response.setContentType("application/force-download");
+		response.setHeader("Content-Disposition", "attachment; filename="
+				+ ecoreMetamodel.getName() + ".ecore");
+		// copy it to response's OutputStream
+		org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+		response.flushBuffer();
 	}
 
 }

@@ -20,5 +20,7 @@ public interface GridFileMediaService {
 	InputStream getFileInputStream(Artifact artifact) throws BusinessException;
 
 	GridFileMedia createObjectFromFile(String absName, String fileName) throws IOException;
+
+	String getFilePathFromContent(GridFileMedia gdf) throws BusinessException;
 	
 }

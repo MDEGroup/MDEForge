@@ -3,9 +3,12 @@ package org.mdeforge.presentation.backend;
 import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -17,8 +20,10 @@ import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
+import org.mdeforge.business.model.wrapper.json.RelationList;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,6 +32,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,6 +87,19 @@ public class ATLPrivateController {
 		model.addAttribute("atlTransformationFile", atlTransformationFile);
 
 		return "private.use.transformation_details";
+	}
+	@RequestMapping(value = "/transformation_download", method = RequestMethod.GET)
+	public void download(@RequestParam String transformation_id,
+			HttpServletResponse response) throws IOException {
+
+		ATLTransformation atlMetamodel = aTLTransformationService.findOne(transformation_id);
+		InputStream is = gridFileMediaService.getFileInputStream(atlMetamodel);
+
+		response.setContentType("application/force-download");
+		response.setHeader("Content-Disposition", "attachment; filename=" + atlMetamodel.getName());
+		// copy it to response's OutputStream
+		org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
+		response.flushBuffer();
 	}
 
 	@RequestMapping(value = "/execute_transformation", method = { RequestMethod.GET })
@@ -174,7 +193,31 @@ public class ATLPrivateController {
 
 		model.addAttribute("report", report);
 
-		return "redirect:/private/my_artifacts";
+		return "redirect:/private/ATLTransformation/transformation_details?transformation_id=" + m.getId();
+	}
+	@RequestMapping(value = "/modelInfo", method = { RequestMethod.POST }, consumes = "application/json")
+	public @ResponseBody RelationList getModelInfo(@RequestBody GridFileMedia gfm)
+					throws IOException {
+		List<Relation> result = aTLTransformationService.getModelsInfo(gfm);
+		return new RelationList(result);
+	}
+	
+
+	@RequestMapping(value = "/anATLyzer", method = { RequestMethod.GET })
+	public String anATLyzerTrasformation(Model model,
+			@RequestParam String transformation_id) {
+
+		ATLTransformation atlTransformation = aTLTransformationService
+				.anATLyzer(transformation_id, user);
+
+		model.addAttribute("atlTransformation", atlTransformation);
+
+		String pathToDownload = gridFileMediaService
+				.getFilePath(atlTransformation);
+		File atlTransformationFile = new File(pathToDownload);
+		model.addAttribute("atlTransformationFile", atlTransformationFile);
+
+		return "private.use.transformation_details";
 	}
 
 	@InitBinder

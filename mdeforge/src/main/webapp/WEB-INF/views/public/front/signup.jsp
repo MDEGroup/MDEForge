@@ -71,7 +71,7 @@
 								<label class="strong">Confirm Password</label>
 								<input type="password" class="input-block-level" placeholder="Confirm Password"/>
 								<label class="strong">Firstname</label>
-								<input type="text" name="firsstname" class="input-block-level" placeholder="Your Firstname"/>
+								<input type="text" name="firstname" class="input-block-level" placeholder="Your Firstname"/>
 							</div>
 						</div>
 						<!-- // Column END -->

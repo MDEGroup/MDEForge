@@ -482,7 +482,13 @@
 																<c:choose>
 																	<c:when
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
-																		<td><a
+																		<td>
+																		<c:choose>
+																			<c:when test="${relation.getToArtifact().getOpen()}">
+																			</c:when>
+																		</c:choose>
+																		
+																		<a
 																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>

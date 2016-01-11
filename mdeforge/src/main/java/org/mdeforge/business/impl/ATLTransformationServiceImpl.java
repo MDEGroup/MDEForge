@@ -33,15 +33,16 @@ import org.eclipse.m2m.atl.core.IReferenceModel;
 import org.eclipse.m2m.atl.core.ModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFExtractor;
 import org.eclipse.m2m.atl.core.emf.EMFInjector;
+import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
+import org.eclipse.m2m.atl.engine.parser.AtlParser;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.MetricEngineException;
@@ -49,7 +50,10 @@ import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.TransformationException;
+import org.mdeforge.business.UNIVAQTesterService;
+import org.mdeforge.business.anatlyzer.UNIVAQUSEWitnessFinder;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ATLTransformationError;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -75,6 +79,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import transML.exceptions.transException;
+import anatlyzer.atl.analyser.AnalysisResult;
+import anatlyzer.atl.errors.Problem;
+import anatlyzer.atl.errors.ProblemStatus;
+import anatlyzer.atl.errors.atl_error.LocalProblem;
+import anatlyzer.atl.model.ATLModel;
+import anatlyzer.atl.tests.api.AnalysisLoader;
+import anatlyzer.atl.util.ATLUtils;
+import anatlyzer.atl.util.ATLUtils.ModelInfo;
+import anatlyzer.atl.util.AnalyserUtils;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
@@ -88,9 +102,11 @@ public class ATLTransformationServiceImpl extends
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
+	private UNIVAQTesterService univaqTesterService;
+	@Autowired
 	private GridFileMediaService gridFileMediaService;
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
-	
+
 	@Override
 	public ATLTransformation findOnePublic(String id) {
 		ATLTransformation a = super.findOnePublic(id);
@@ -101,18 +117,19 @@ public class ATLTransformationServiceImpl extends
 		}
 		return a;
 	}
-	
+
 	@Override
-	public ATLTransformation findOneById(String idArtifact, User user) throws BusinessException {
+	public ATLTransformation findOneById(String idArtifact, User user)
+			throws BusinessException {
 		ATLTransformation a = super.findOneById(idArtifact, user);
 		try {
 			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e){
+		} catch (BusinessException e) {
 			logger.error(e.getMessage());
 		}
 		return a;
 	}
-	
+
 	@Override
 	public ATLTransformation create(ATLTransformation artifact) {
 		ATLTransformation result = super.create(artifact);
@@ -121,12 +138,12 @@ public class ATLTransformationServiceImpl extends
 			artifactRepository.save(artifact);
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
-			throw new MetricEngineException(e.getMessage(),result.getId());
+			throw new MetricEngineException(e.getMessage(), result.getId());
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public ResponseGrid<ATLTransformation> findAllPaginated(
 			RequestGrid requestGrid) throws BusinessException {
@@ -150,7 +167,8 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public List<Model> execute(ATLTransformation transformation, List<Model> models, User user) {
+	public List<Model> execute(ATLTransformation transformation,
+			List<Model> models, User user) {
 		user = userService.findOne(user.getId());
 		List<CoDomainConformToRelation> listOutput = new ArrayList<CoDomainConformToRelation>();
 		List<DomainConformToRelation> listInput = new ArrayList<DomainConformToRelation>();
@@ -167,10 +185,9 @@ public class ATLTransformationServiceImpl extends
 			for (Relation relation : model.getRelations())
 				if (relation instanceof ConformToRelation) {
 					guard = isPresent(relation.getToArtifact(), listInput);
-					if(model.getId()!=null)	{
+					if (model.getId() != null) {
 						model = modelService.findOne(model.getId());
-					}
-					else if(guard) {
+					} else if (guard) {
 						model.setAuthor(user);
 						model.getShared().add(user);
 						modelService.create(model);
@@ -179,7 +196,8 @@ public class ATLTransformationServiceImpl extends
 		if (!guard)
 			throw new TransformationException();
 		try {
-			return doTransformation(transformation, listInput, listOutput, models, user);
+			return doTransformation(transformation, listInput, listOutput,
+					models, user);
 		} catch (ATLExecutionException | ATLCoreException | IOException e) {
 			throw new TransformationException();
 		}
@@ -219,7 +237,7 @@ public class ATLTransformationServiceImpl extends
 		 * Load metamodels
 		 */
 		try {
-			
+
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, basePath + "Metric.ecore");
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
@@ -232,8 +250,7 @@ public class ATLTransformationServiceImpl extends
 			FileInputStream fis = new FileInputStream(transfPath);
 
 			injector.inject(inputModel, fis, null);
-			
-			
+
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "ATL");
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
@@ -267,13 +284,14 @@ public class ATLTransformationServiceImpl extends
 		String[] moduleNames = modules_input.split(",");
 		modules = new InputStream[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
-			//AtlCompiler.compile(new FileInputStream(new File(modules_input)), "TEMO.asm");
+			// AtlCompiler.compile(new FileInputStream(new File(modules_input)),
+			// "TEMO.asm");
 			String asmModulePath = new Path(moduleNames[i].trim())
 					.removeFileExtension().addFileExtension("asm").toString();
 			Atl2006Compiler compiler = new Atl2006Compiler();
-			compiler.compile(new FileInputStream(new File(modules_input)), asmModulePath);
+			compiler.compile(new FileInputStream(new File(modules_input)),
+					asmModulePath);
 
-			
 			modules[i] = new FileInputStream(asmModulePath);
 		}
 		return modules;
@@ -353,7 +371,7 @@ public class ATLTransformationServiceImpl extends
 
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
-		try{
+		try {
 			List<Metric> metricList = metricRepository
 					.findByArtifactId(new ObjectId(emm.getId()));
 			if (metricList.size() == 0)
@@ -385,12 +403,37 @@ public class ATLTransformationServiceImpl extends
 			throw new BusinessException();
 		}
 	}
+	
+	
+	
+	
+	@Override
+	public EMFModel injectATLModel(ATLTransformation atlTransformation)
+			throws BusinessException {
+		ModelFactory      modelFactory = new EMFModelFactory();
+		EMFReferenceModel atlMetamodel;
+		try {
+			atlMetamodel = (EMFReferenceModel)modelFactory.getBuiltInResource("ATL.ecore");
+			AtlParser         atlParser    = new AtlParser();		
+			EMFModel          atlModel     = (EMFModel)modelFactory.newModel(atlMetamodel);
+			atlParser.inject (atlModel, gridFileMediaService.getFilePath(atlTransformation));	
+			atlModel.setIsTarget(true);
+			return atlModel;
+		} catch (ATLCoreException e) {
+			throw new BusinessException(e.getMessage());
+		}
+						
+		
 
+		
+		
+	}
 
 	private List<Model> doTransformation(ATLTransformation transformation,
 			List<DomainConformToRelation> inputRelation,
-			List<CoDomainConformToRelation> outputRelation, List<Model> models, User user)
-			throws ATLCoreException, IOException, ATLExecutionException {
+			List<CoDomainConformToRelation> outputRelation, List<Model> models,
+			User user) throws ATLCoreException, IOException,
+			ATLExecutionException {
 		user = userService.findOne(user.getId());
 		IInjector injector = new EMFInjector();
 		ModelFactory modelFactory = new EMFModelFactory();
@@ -403,11 +446,9 @@ public class ATLTransformationServiceImpl extends
 			injector.inject(inputMetamodel, gridFileMediaService
 					.getFileInputStream(inRel.getToArtifact()), null);
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
-			injector.inject(
-					inputModel,
-					gridFileMediaService.getFileInputStream(
-							getModelByMetamodel(inRel.getToArtifact(), models)),null
-							);
+			injector.inject(inputModel, gridFileMediaService
+					.getFileInputStream(getModelByMetamodel(
+							inRel.getToArtifact(), models)), null);
 			transformationLauncher.addInModel(inputModel, inRel.getName(),
 					inRel.getReferenceModelName());
 		}
@@ -417,7 +458,7 @@ public class ATLTransformationServiceImpl extends
 			injector.inject(outputMetamodel, gridFileMediaService
 					.getFileInputStream(outRel.getToArtifact()), null);
 			IModel outputModel = modelFactory.newModel(outputMetamodel);
-			outputList.put(outputModel,outRel);
+			outputList.put(outputModel, outRel);
 			transformationLauncher.addOutModel(outputModel, outRel.getName(),
 					outRel.getReferenceModelName());
 		}
@@ -435,38 +476,42 @@ public class ATLTransformationServiceImpl extends
 
 		IExtractor extractor = new EMFExtractor();
 		List<Model> modelsResult = new ArrayList<Model>();
-		Iterator<Entry<IModel, CoDomainConformToRelation>> i = outputList.entrySet().iterator();
-		while(i.hasNext()){
+		Iterator<Entry<IModel, CoDomainConformToRelation>> i = outputList
+				.entrySet().iterator();
+		while (i.hasNext()) {
 			Map.Entry<IModel, CoDomainConformToRelation> item = i.next();
-			
-			Date  ss1 = new Date();
+
+			Date ss1 = new Date();
 			SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
 			String formats1 = formatter5.format(ss1);
-			
-			String tempModelPath = basePath + "generatedBy_" + transformation.getName() + "_" + formats1 + ".xmi";
-			String fileName = "generatedBy_" + transformation.getName().replace(" ", "").replace("/.", "") + "_" + formats1 + ".xmi";
+
+			String tempModelPath = basePath + "generatedBy_"
+					+ transformation.getName() + "_" + formats1 + ".xmi";
+			String fileName = "generatedBy_"
+					+ transformation.getName().replace(" ", "")
+							.replace("/.", "") + "_" + formats1 + ".xmi";
 			extractor.extract(item.getKey(), tempModelPath);
-			
+
 			Model model = new Model();
 			model.setName(fileName);
 			model.setAuthor(user);
 			ConformToRelation cfr = new ConformToRelation();
 			cfr.setFromArtifact(model);
 			cfr.setToArtifact(item.getValue().getToArtifact());
-			
+
 			model.setCreated(new Date());
 			model.getRelations().add(cfr);
-			
-			GridFileMedia gfr = gridFileMediaService.createObjectFromFile(tempModelPath, fileName);
-			
+
+			GridFileMedia gfr = gridFileMediaService.createObjectFromFile(
+					tempModelPath, fileName);
+
 			model.setFile(gfr);
 			modelService.create(model);
-			
+
 			modelsResult.add(model);
-			
+
 		}
 		return modelsResult;
-		//TODO Salvere modelli prodotti!
 	}
 
 	private Artifact getModelByMetamodel(Artifact toArtifact, List<Model> models) {
@@ -502,17 +547,142 @@ public class ATLTransformationServiceImpl extends
 		return options;
 	}
 
-	/**
-	 * La funzione ritorna i moduli che sono presenti nel file della
-	 * trasformazione. Ogni file di trasformazione (.atl) può contenere più
-	 * moduli al suo interno (ognuno dei ha al suo interno il mapping che
-	 * effettua la trasformazione). Ognuno di questi moduli al suo interno avrà
-	 * una variabile di IN ed una di OUT per es. Ognuno di questi moduli viene
-	 * poi salvato separatamente in un file .asm.
-	 * 
-	 * @return InputStream[]
-	 * @throws IOException
-	 */
+	@Override
+	public List<Relation> getModelsInfo(GridFileMedia gfm)
+			throws BusinessException {
+		List<Relation> result = new ArrayList<Relation>();
+		AtlParser atlParser = new AtlParser();
+		ModelFactory modelFactory = new EMFModelFactory();
+		IReferenceModel atlMetamodel;
+		try {
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String filePath = gridFileMediaService.getFilePathFromContent(gfm);
+			EMFModel atlDynModel = (EMFModel) modelFactory
+					.newModel(atlMetamodel);
+			atlParser.inject(atlDynModel, filePath);
+			Resource originalTrafo = atlDynModel.getResource();
+			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+					.getURI().toFileString(), true);
+			List<ModelInfo> info = ATLUtils.getModelInfo(atlModel);
+
+			for (ModelInfo modelInfo : info) {
+				if (modelInfo.isOutput()) {
+					CoDomainConformToRelation c = new CoDomainConformToRelation();
+					c.setReferenceModelName(modelInfo.getMetamodelName());
+					c.setName(modelInfo.getModelName());
+					result.add(c);
+				} else {
+					DomainConformToRelation c = new DomainConformToRelation();
+					c.setReferenceModelName(modelInfo.getMetamodelName());
+					c.setName(modelInfo.getModelName());
+					result.add(c);
+				}
+				// TODO Automatically discorver if metamodel is in the repo!
+			}
+			return result;
+		} catch (ATLCoreException e) {
+			throw new BusinessException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void testServices(String transformation_id, User user)  {
+		ATLTransformation atl = findOneById(transformation_id, user);
+		///Testing solver
+		UNIVAQUSEWitnessFinder twf = new UNIVAQUSEWitnessFinder();
+		String atlPath = gridFileMediaService.getFilePath(atl);
+		//Tester tester;
+		try {
+//			tester = new Tester(atlPath, twf.getTempDirectory());
+//			tester.generateTestModels();
+//			// execute transformation with the generated input models
+//			tester.executeTransformation(atlPath, true);
+//			// obtain report of problematic executions
+//			Report report = tester.getReport();
+//			SortedSet<Record> output = report.getResult(atlPath);
+			univaqTesterService.generateModel(atl);
+		}  catch (transException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		///Testing solver
+	}
+
+	@Override
+	public ATLTransformation anATLyzer(String transformation_id, User user)
+			throws BusinessException {
+		ATLTransformation atl = findOneById(transformation_id, user);
+		try {
+			AtlParser atlParser = new AtlParser();
+			ModelFactory modelFactory = new EMFModelFactory();
+			IReferenceModel atlMetamodel;
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String filePath = gridFileMediaService.getFilePath(atl);
+			EMFModel atlDynModel = (EMFModel) modelFactory
+					.newModel(atlMetamodel);
+			atlParser.inject(atlDynModel, filePath);
+			Resource originalTrafo = atlDynModel.getResource();
+			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+					.getURI().toFileString(), true);
+			List<ModelInfo> info = ATLUtils.getModelInfo(atlModel);
+			int i = 0;
+			String[] files = new String[info.size()];
+			String[] names = new String[info.size()];
+			for (Relation rel : atl.getRelations()) {
+				if (rel instanceof DomainConformToRelation) {
+					names[i] = ((DomainConformToRelation) rel)
+							.getReferenceModelName();
+					files[i] = gridFileMediaService.getFilePath(rel
+							.getToArtifact());
+					i++;
+				}
+				if (rel instanceof CoDomainConformToRelation) {
+					names[i] = ((CoDomainConformToRelation) rel)
+							.getReferenceModelName();
+					files[i] = gridFileMediaService.getFilePath(rel
+							.getToArtifact());
+					i++;
+				}
+			}
+			AnalysisLoader loader = AnalysisLoader.fromATLModel(atlModel,
+					files, names);
+			AnalysisResult result = loader.analyse();
+			// atlModel.getModule;
+			for (Problem problem : result.getProblems()) {
+				ATLTransformationError forgeError = new ATLTransformationError();
+				if (problem instanceof LocalProblem) {
+					forgeError.setLocalProblem(true);
+					LocalProblem lp = (LocalProblem) problem;
+					forgeError.setElement(lp.getElement().toString());
+					forgeError.setFileLocation(lp.getFileLocation());
+					forgeError.setLocation(lp.getLocation());
+				}
+				UNIVAQUSEWitnessFinder twf = new UNIVAQUSEWitnessFinder();
+				if (problem.getStatus() == ProblemStatus.WITNESS_REQUIRED) {
+					try {
+						ProblemStatus result2 = twf.find(problem, result);
+						forgeError.setStatus(result2.getName());
+					} catch (Exception e) {
+						forgeError.setStatus(problem.getStatus().getName());
+					}
+				}
+				//TODO change problem to problem2
+				forgeError.setDescription(AnalyserUtils
+						.getProblemDescription(problem));
+				forgeError.setProblemId(AnalyserUtils.getProblemId(problem));
+				forgeError.setSeverity(AnalyserUtils
+						.getProblemSeverity(problem));
+				atl.getAtlError().add(forgeError);
+				
+			}
+			//TODO REMOVED TEST SERVICE
+			//testServices(atl.getId(), user);
+			return atl;
+		} catch (ATLCoreException e) {
+			throw new BusinessException(e.getMessage());
+		}
+	}
+
 	// private InputStream getModulesList(String transformationPath) throws
 	// IOException {
 	// InputStream modules = null;

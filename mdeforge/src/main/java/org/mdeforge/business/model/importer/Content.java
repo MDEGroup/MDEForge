@@ -1,4 +1,4 @@
-package org.mdeforge.business.importer;
+package org.mdeforge.business.model.importer;
 
 import org.eclipse.egit.github.core.Repository;
 

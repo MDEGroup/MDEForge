@@ -128,11 +128,18 @@
 														class="btn btn-primary btn-small btn-block"
 														data-toggle="modal"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize
-														Transformation</a> <a
-														href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
-														class="btn btn-success btn-small btn-block"><i
-														class="icon-download-alt icon-fixed-width"></i> Download
-														Transformation</a>
+														Transformation</a> 
+														<c:choose>
+															<c:when test="${atlTransformation.open}">
+																<a	href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
+																	class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
+															</c:when>
+															<c:otherwise>
+																<a	href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_download?transformation_id=${atlTransformation.getId()}"
+																		class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
+																
+															</c:otherwise>
+														</c:choose>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -177,6 +184,51 @@
 				</div>
 			</div>
 			<hr>
+
+			
+		<c:if test="${atlTransformation.atlError.size() != 0}">
+		<div class="widget-body">
+			<div class="widget-head">
+				<h3 class="heading glyphicons show_thumbnails">
+					<i></i>Transformation errors
+				</h3>
+			</div>
+			<div class="tab-content">
+				<!-- Tab content -->
+				<div id="tabAll" class="tab-pane active">
+					<c:forEach items="${atlTransformation.atlError}" var="error" varStatus="status">
+						<div class="accordion accordion-2" id="accordion">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle glyphicons font collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-${status.index + 1 }">
+										<i></i>Error ${status.index + 1 }
+									</a>
+							    </div>
+							    <div id="collapse-${status.index + 1 }" class="accordion-body collapse" style="height: 0px;">
+							      	<div class="accordion-inner">
+							        	<b>Local problem: </b>${error.localProblem } <br/>
+							        	<b>Element: </b>${error.element }<br/>
+							        	<b>File location: </b>${error.fileLocation }<br/>
+							        	<b>Location: </b>${error.location }<br/>
+							        	<b>Status: </b>${error.status }<br/>
+							        	<b>ProblemId: </b>${error.problemId }<br/>
+							        	<b>Description: </b>${error.description }<br/>
+							        	<b>Severity: </b>${error.severity }<br/>
+
+							      	</div>
+							    </div>
+						  	</div>
+						  	
+						</div>
+					</c:forEach>
+					
+				</div>
+			</div>
+		</div>
+		</c:if>	
+			
+			
+			
 			<div class="widget widget-heading-simple widget-body-white">
 				<!-- Widget Heading -->
 				<div class="widget-head">
@@ -203,8 +255,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
-													<td class="center"><a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+													<td class="center">
+														<c:choose>
+															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
+																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:when>
+															<c:otherwise>
+																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:otherwise>
+														</c:choose>
+													</td>
 												</c:when>
 											</c:choose>
 										</tr>
@@ -240,8 +300,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
-													<td class="center"><a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+													<td class="center">
+													<c:choose>
+														<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
+															<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+														</c:when>
+														<c:otherwise>
+															<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+														</c:otherwise>
+													</c:choose>
+													</td>
 												</c:when>
 											</c:choose>
 										</tr>

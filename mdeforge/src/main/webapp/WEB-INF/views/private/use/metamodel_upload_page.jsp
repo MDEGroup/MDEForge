@@ -113,6 +113,8 @@
 							  	</div>
 							</div>
 						</div>
+					</div>
+					<div class="row-fluid">
 				<!-- Row -->
 					<div class="span6">
 						<h4>Properties</h4>

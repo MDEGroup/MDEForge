@@ -158,17 +158,41 @@
 													<c:choose>
 														<c:when
 															test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-															<a
-																href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+															<c:choose>
+																<c:when test="${artifact.open == true}">
+																	<a	href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+																</c:when>
+																<c:otherwise>
+																	<a	href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
+															
+																</c:otherwise>																
+															</c:choose>
+															
 														</c:when>
 														<c:when
 															test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-															<a
-																href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+															<c:choose>
+																<c:when test="${artifact.open == true}">
+																	<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																</c:when>
+																<c:otherwise>
+																	<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																</c:otherwise>																
+															</c:choose>
+															
+															
 														</c:when>
 														<c:when
 															test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-															<a href="#">${artifact.getName()}</a>
+															<c:choose>
+																<c:when test="${artifact.open == true}">
+																	<a href="${pageContext.request.contextPath}/private/Model/model_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																</c:when>
+																<c:otherwise>
+																	<a href="${pageContext.request.contextPath}/private/Model/model_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+																</c:otherwise>																
+															</c:choose>
+															
 														</c:when>
 													</c:choose>
 												</h5>

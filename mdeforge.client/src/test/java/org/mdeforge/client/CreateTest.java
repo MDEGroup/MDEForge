@@ -24,11 +24,11 @@ public class CreateTest {
 	private static WorkspaceService workspaceService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
+//		atlTransformationService = new ATLTransformationService("http://www.mdeforge.org/", "Admin", "test123");
+//		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://www.mdeforge.org/", "Admin", "test123");
+//		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
+//		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
 	@Ignore
 	@Test
@@ -39,7 +39,7 @@ public class CreateTest {
 		workspaceService.addWorkspace(w);
 	}
 	
-	
+	@Ignore
 	@Test
 	public void addProject() throws Exception {
 		Project p = new Project();
@@ -117,4 +117,13 @@ public class CreateTest {
 		atlTransformation.getRelations().add(cdcr);
 		atlTransformationService.addATLTransformation(atlTransformation,"temp/BibTeX2DocBook.atl");
 	}
+	@Test
+	public void getEcoreMetamodels() throws Exception {
+		List<EcoreMetamodel> al = ecoreMetamodelService.getEcoreMetamodels();
+		for (EcoreMetamodel ecoreMetamodel : al) {
+			System.out.println(ecoreMetamodel.getName());
+		}
+		System.out.println(al.size());
+	}
+	
 }

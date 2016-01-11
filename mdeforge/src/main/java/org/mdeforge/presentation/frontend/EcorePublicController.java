@@ -19,6 +19,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ClusterizzationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,8 @@ public class EcorePublicController {
 	private GridFileMediaService gridFileMediaService;
 	@Autowired
 	private UserService userService;
+	@Autowired 
+	private User user;
 
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public String index() {
@@ -81,7 +84,7 @@ public class EcorePublicController {
 	@RequestMapping(value = "/browse", method = { RequestMethod.GET })
 	public String dashboard(Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
 		
-		response.sendRedirect(request.getContextPath()+"/public/browse/cluster_graph");
+		response.sendRedirect(request.getContextPath()+"/public/browse/metamodels_list");
 
 //		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService
 //				.findAll();
@@ -111,7 +114,27 @@ public class EcorePublicController {
 
 		return "public.browse.metamodel_details";
 	}
+	@RequestMapping(value = "/browse/metamodel_share", method = { RequestMethod.GET })
+	public String metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
+		
+		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
+		ecoreMetamodel.getRelations().addAll(
+				similarityRelationService.findTopProximity(ecoreMetamodel, 5));
+		
+		ecoreMetamodelService.addUserInArtifact(user.getId(), ecoreMetamodel.getId(), user);
+		ecoreMetamodel.getRelations().addAll(
+				containmentRelationService.findTopProximity(ecoreMetamodel, 5));
+		ecoreMetamodel.getRelations().addAll(
+				diceSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
+		ecoreMetamodel.getRelations().addAll(
+				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
+		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
+		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
+		File ecoreMetamodelFile = new File(pathToDownload);
+		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
 
+		return "private.use.metamodel_details";
+	}
 	@RequestMapping(value = "/browse/metamodel_download", method = RequestMethod.GET)
 	public void downloadMetamodel(@RequestParam String metamodel_id,
 			HttpServletResponse response) throws IOException {

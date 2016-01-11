@@ -1,4 +1,4 @@
-package org.mdeforge.business.importer;
+package org.mdeforge.business.model.importer;
 
 public class Resources
 {

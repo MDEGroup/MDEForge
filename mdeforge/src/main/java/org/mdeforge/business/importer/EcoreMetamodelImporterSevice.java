@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.egit.github.core.RepositoryContents;
+import org.mdeforge.business.model.importer.GitHubRate;
+import org.mdeforge.business.model.importer.SearchCodeResult;
 
 public interface EcoreMetamodelImporterSevice {
 

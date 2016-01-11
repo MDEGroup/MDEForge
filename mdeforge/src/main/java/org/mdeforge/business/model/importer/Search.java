@@ -1,6 +1,6 @@
-package org.mdeforge.business.importer;
+package org.mdeforge.business.model.importer;
 
-public class Rate
+public class Search
 {
     private String limit;
 

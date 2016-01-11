@@ -105,7 +105,7 @@
 					});
 					spinner.stop();
 					$('#modelToAdd').show();
-					$('#showModelList').one(showATLList);
+					$(document).on('click','#showModelList', showModelList);
 				},
 				error : function error(data) {
 					console.log('error');
@@ -132,7 +132,9 @@
 					});
 					spinner.stop();
 					$('#ATLToAdd').show();
-					$('#showATLList').one(showATLList);
+					$(document).on('click','#showATLList', showATLList);
+					
+					//$('#showATLList').one(showATLList);
 				},
 				error : function error(data) {
 					console.log('error');
@@ -159,7 +161,8 @@
 					});
 					spinner.stop();
 					$('#ecoreToAdd').show();
-					$('#showEcoreList').one(showEcoreList);
+					$(document).on('click','#showEcoreList', showEcoreList);
+					//$('#showEcoreList').one(showEcoreList);
 				},
 				error : function error(data) {
 					spinner.stop();
@@ -332,7 +335,7 @@
 						}
 						if(artifact._class == "org.mdeforge.business.model.ATLTransformation") {
 							var result = $('#atlTable');
-							artifact.ecoreMetamdel = true;
+							artifact.ATLTransformation = true;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);

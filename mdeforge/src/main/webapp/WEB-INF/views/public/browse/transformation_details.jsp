@@ -161,11 +161,20 @@
 														class="btn btn-primary btn-small btn-block"
 														data-toggle="modal"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize
-														Transformation</a> <a
-														href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
-														class="btn btn-success btn-small btn-block"><i
-														class="icon-download-alt icon-fixed-width"></i> Download
-														Transformation</a>
+														Transformation</a> 
+														<c:choose>
+															<c:when test="${atlTransformation.open}">
+																<a	href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
+																	class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
+															</c:when>
+															<c:otherwise>
+																<a	href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_download?transformation_id=${atlTransformation.getId()}"
+																		class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
+																
+															</c:otherwise>
+														</c:choose>
+
+														
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -232,8 +241,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
-													<td class="center"><a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+													<td class="center">
+														<c:choose>
+															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
+																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:when>
+															<c:otherwise>
+																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:otherwise>
+														</c:choose>
+													</td>
 												</c:when>
 											</c:choose>
 										</tr>
@@ -271,8 +288,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
-													<td class="center"><a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+													<td class="center">
+														<c:choose>
+															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
+																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:when>
+															<c:otherwise>
+																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:otherwise>
+														</c:choose>
+													</td>
 												</c:when>
 											</c:choose>
 										</tr>

@@ -46,7 +46,7 @@ public class Artifact implements java.io.Serializable{
 	private boolean open = false;
 	private String name = null;
 	@Transient
-	private List<Metric> metrics;
+	private List<Metric> metrics = new ArrayList<Metric>();
 	private String description = null;
 	private List<String> tags = null;
 	private String authors = null;

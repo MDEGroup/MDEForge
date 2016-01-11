@@ -698,19 +698,19 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c1 = Criteria.where("shared.$id").is(
 				new ObjectId(user.getId()));
-		Criteria notPublic = Criteria.where("open").is(false);
+//		Criteria notPublic = Criteria.where("open").is(false);
 		Criteria notMine = Criteria.where("author.$id").ne(new ObjectId(user.getId()));
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
-			query.addCriteria(notPublic); 
+//			query.addCriteria(notPublic); 
 			query.addCriteria(notMine);
 		}
 		else {
 			query.addCriteria(c1);
-			query.addCriteria(notPublic);
+//			query.addCriteria(notPublic);
 			query.addCriteria(notMine);
 		}
 		List<T> artList = operations.find(query, persistentClass);
