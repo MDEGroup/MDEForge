@@ -51,7 +51,7 @@ public class EcoreMetamodelsRESTController {
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-	
+
 	@Autowired
 	private ProjectService projectService;
 
@@ -66,7 +66,7 @@ public class EcoreMetamodelsRESTController {
 		EcoreMetamodel mm1 = ecoreMetamodelService.findOne(id_MM1);
 		EcoreMetamodel mm2 = ecoreMetamodelService.findOne(id_MM2);
 		double simiString = ecoreMetamodelService.calculateSimilarity(mm1, mm2);
-		return new ResponseEntity<String>(simiString+"", HttpStatus.OK);
+		return new ResponseEntity<String>(simiString + "", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/validate/{id_MM1}", method = RequestMethod.GET)
@@ -75,7 +75,8 @@ public class EcoreMetamodelsRESTController {
 
 		ValidateService va = (ValidateService) ecoreMetamodelService;
 
-		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService.findOne(id_MM1);
+		EcoreMetamodel mm1 = (EcoreMetamodel) ecoreMetamodelService
+				.findOne(id_MM1);
 
 		boolean v = va.isValid(mm1);
 		// boolean v = validationService.isValid(null);
@@ -86,7 +87,7 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(
 			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
-		EcoreMetamodel emm =  ecoreMetamodelService.findOne(idEcoreMetamodel);
+		EcoreMetamodel emm = ecoreMetamodelService.findOne(idEcoreMetamodel);
 		List<Metric> lm = ecoreMetamodelService.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
 	}
@@ -130,8 +131,7 @@ public class EcoreMetamodelsRESTController {
 	// get shared metamodel
 	@RequestMapping(value = "/shared", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> getEcoreMetamodelsByUser() {
-		ArtifactList list = new ArtifactList(
-				ecoreMetamodelService.findAll());
+		ArtifactList list = new ArtifactList(ecoreMetamodelService.findAll());
 		return new ResponseEntity<ArtifactList>(new ArtifactList(list),
 				HttpStatus.OK);
 	}
@@ -161,7 +161,7 @@ public class EcoreMetamodelsRESTController {
 			// SetAuthor
 			ecoreMetamodel.setAuthor(user);
 			// add author to shared
-			//ecoreMetamodel.getShared().add(user);
+			// ecoreMetamodel.getShared().add(user);
 			// metamodel save
 			ecoreMetamodelService.update(ecoreMetamodel);
 			return new ResponseEntity<String>("EcoreMetamodel updated.",
@@ -186,6 +186,7 @@ public class EcoreMetamodelsRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+
 	// get single metamodel
 	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<EcoreMetamodel> getEcoreMetamodelByName(
@@ -205,7 +206,8 @@ public class EcoreMetamodelsRESTController {
 	public @ResponseBody HttpEntity<String> deleteEcoreMetamodel(
 			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
 		try {
-			EcoreMetamodel art = ecoreMetamodelService.findOneById(idEcoreMetamodel, user);
+			EcoreMetamodel art = ecoreMetamodelService.findOneById(
+					idEcoreMetamodel, user);
 			ecoreMetamodelService.delete(art, user);
 			return new ResponseEntity<String>("EcoreMetamodel deleted",
 					HttpStatus.OK);
@@ -214,7 +216,7 @@ public class EcoreMetamodelsRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+
 	@RequestMapping(value = "/cluster/{threshold}/{computation}", method = { RequestMethod.GET })
 	public @ResponseBody HttpEntity<List<Cluster>> cluster(
 			@PathVariable("computation") int computation,
@@ -222,7 +224,7 @@ public class EcoreMetamodelsRESTController {
 		/*
 		 * TABLE
 		 */
-		
+
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
 		case 1:
@@ -242,20 +244,32 @@ public class EcoreMetamodelsRESTController {
 					diceSimilarityRelationService).getClusters();
 			break;
 		}
-		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK) ;
+		return new ResponseEntity<List<Cluster>>(clusters, HttpStatus.OK);
 	}
+
 	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
-		return new ResponseEntity<List<EcoreMetamodel>> (ecoreMetamodelService.search(searchString),
-				HttpStatus.OK);
+		return new ResponseEntity<List<EcoreMetamodel>>(
+				ecoreMetamodelService.search(searchString), HttpStatus.OK);
 	}
+
 	@RequestMapping(value = "/search_by_example", method = { RequestMethod.POST })
 	public HttpEntity<ArtifactList> searchByExampleResult(
 			@RequestBody EcoreMetamodel ecoreMetamodel) {
-		ArtifactList al = new ArtifactList(ecoreMetamodelService.searchByExample(ecoreMetamodel));
-		return new ResponseEntity<ArtifactList> (al,
-				HttpStatus.OK);
+		ArtifactList al = new ArtifactList(
+				ecoreMetamodelService.searchByExample(ecoreMetamodel));
+		return new ResponseEntity<ArtifactList>(al, HttpStatus.OK);
+	}
+
+	// Get json version of a specific metamodel
+	@RequestMapping(value = "/metamodelJsonFormat/{id_ecoreMetamodel}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> getMetamodelInJsonFormat(
+			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
+		EcoreMetamodel ecoreMM = ecoreMetamodelService.findOneById(idEcoreMetamodel, user);
+		String result = ecoreMetamodelService
+				.getMetamodelInJsonFormat(ecoreMM);
+		return new ResponseEntity<String>(result, HttpStatus.OK);
 	}
 
 }

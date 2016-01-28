@@ -22,12 +22,12 @@
 				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons file"><i></i><spring:message code="mdeforge.menu.metamodels"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
-						<li><a href="${pageContext.request.contextPath}/public/browse/metamodels_list" class="glyphicons list"><i></i><spring:message code="mdeforge.public.back.browse.menu.list"/></a></li>
-						<li><a href="${pageContext.request.contextPath}/public/browse/cluster" class="glyphicons vector_path_polygon"><i></i><spring:message code="mdeforge.public.back.browse.menu.cluster"/></a></li>
+						<li><a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifacts" class="glyphicons list"><i></i><spring:message code="mdeforge.public.back.browse.menu.list"/></a></li>
+						<li><a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" class="glyphicons vector_path_polygon"><i></i><spring:message code="mdeforge.public.back.browse.menu.cluster"/></a></li>
 					</ul>
 				</li>
-				<li><a class="glyphicons random" href="${pageContext.request.contextPath}/public/browse/transformations_list"><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
-				<li><a class="glyphicons notes" href="${pageContext.request.contextPath}/public/browse/models_list"><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
+				<li><a class="glyphicons random" href="${pageContext.request.contextPath}/public/ATLTransformation/artifacts"><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
+				<li><a class="glyphicons notes" href="${pageContext.request.contextPath}/public/Model/artifacts"><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
 				<!-- // Blank page template menu example END -->
 												
 				

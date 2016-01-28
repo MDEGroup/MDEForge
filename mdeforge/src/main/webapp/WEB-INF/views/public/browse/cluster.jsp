@@ -33,7 +33,7 @@
 	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
 	<div class="buttons pull-right">
 		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
-		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
+		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
 	</div>
 	<div class="clearfix"></div>
 </div>
@@ -63,7 +63,7 @@
 				<div class="widget-body">		
 					<div class="widget-body ">
 							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
 											<div class="slider-range-min row-fluid">
@@ -105,7 +105,7 @@
 					
 					<div class="widget-body">
 							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
 											<div class="slider-range-min2 row-fluid">
@@ -139,7 +139,7 @@
 					
 					<div class="widget-body">
 							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
 											<div class="slider-range-min3 row-fluid">
@@ -172,7 +172,7 @@
 					
 					<div class="widget-body">
 							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/browse/cluster" method="get">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
 								<div class="span9">		
 											<!-- Slider -->
 											<div class="slider-range-min4 row-fluid">
@@ -204,7 +204,7 @@
 						
 						<div class="widget-body">
 							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/browse/cluster_graph" method="get">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
 								<div class="span9">		
 											
 		
@@ -544,7 +544,7 @@
 																</c:choose>
 																<td class="center actions">
 																	<c:if test="${artifact.getOpen()}">
-																		<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
 																	</c:if>
 																	<c:if test="${not artifact.getOpen()}">																	
 																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>

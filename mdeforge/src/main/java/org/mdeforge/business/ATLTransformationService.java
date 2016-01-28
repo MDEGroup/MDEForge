@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
@@ -20,4 +21,7 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 	void testServices(String transfString, User user);
 	EMFModel injectATLModel(ATLTransformation atlTransformation)
 			throws BusinessException;
+	double metamodelCoverage(ATLTransformation transforation)
+			throws BusinessException;
+	List<EcoreMetamodel> getPossibleMetamodel(ATLTransformation atl) throws BusinessException;
 }

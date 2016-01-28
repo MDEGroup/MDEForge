@@ -47,7 +47,15 @@ public class Artifact implements java.io.Serializable{
 //	private @TextIndexed(weight=5) String authors = null;
 //	private @TextIndexed(weight=7) List<String> tags = null;
 //	private @TextIndexed(weight=1) String extractedContents = null;
-//	private @TextScore Float score;
+	Float score;
+
+	public Float getScore() {
+		return score;
+	}
+
+	public void setScore(Float score) {
+		this.score = score;
+	}
 
 	private RelationList relations = new RelationList(new ArrayList<Relation>());
 	@JsonSerialize(using = ProjectListSerializer.class)

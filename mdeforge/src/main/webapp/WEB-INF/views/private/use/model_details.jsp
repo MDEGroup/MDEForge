@@ -144,23 +144,7 @@
 														class="btn btn-success btn-small btn-block"><i
 														class="icon-download-alt icon-fixed-width"></i> Download
 														Model</a>
-													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
-													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
-<%-- 													<c:forEach items="${model.relations}" --%>
-<%-- 														var="relation"> --%>
-<!-- 														Table row -->
-<!-- 														<tr> -->
-<%-- 															<c:choose> --%>
-<%-- 																<c:when --%>
-<%-- 																	test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}"> --%>
-<!-- 																	<td class="center"><a -->
-<%-- 																		href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td> --%>
-<%-- 																</c:when> --%>
-<%-- 															</c:choose> --%>
-<!-- 														</tr> -->
-<!-- 														// Table row END -->
-<%-- 													</c:forEach> --%>
-<!-- 													<div class="separator bottom"></div> -->
+
 													
 												</div>
 												<div class="span1"></div>

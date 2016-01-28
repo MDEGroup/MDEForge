@@ -23,11 +23,13 @@ public class TestClient {
 	private static WorkspaceService workspaceService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		modelService = new ModelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		projectService = new ProjectService("http://localhost:8080/mdeforge/", "maja", "majacdg");
-		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "maja", "majacdg");
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
+
+	@Ignore
 	@Test
 	public void testAddModelAndroid () {
 		try {
@@ -76,34 +78,52 @@ public class TestClient {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	@Ignore
+	@Test
+	public void createWorkspaceAndProject () {
+		try {
+
+			Project p = new Project();
+			p.setName("Salvi project Test");
+			Workspace w = new Workspace();
+			w.setName("Salvi workspace Test");
+			
+			workspaceService.addWorkspace(w);
+			List<Workspace> ws = workspaceService.getWorkspaces();
+			
+			w = ws.get(0);
+			p.getWorkspaces().add(w);
+			w.getProjects().add(p);
+			projectService.addProject(p);
+			System.out.println("project created");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Ignore
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
-			Project p = projectService.getProjects().get(0);
 			EcoreMetamodel emm = new EcoreMetamodel();
-			emm.setName("Prova Salvi");
+			emm.setName("Prova Salvi 3");
 			List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
 			emm.setTags(tags);
 			emm.setDescription("Describes the basic structure of a general Relational DB");
 			emm.setAuthors("Metamodels Authors");
-			emm.getProjects().add(p);
-			ecoreMetamodelService.addEcoreMetamodel(emm, "temp/Database.ecore");
+			ecoreMetamodelService.addEcoreMetamodel(emm, "antonioTemp/Database.ecore");
 			System.out.println("Metamodel Saved!!!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-
-	@Ignore
 	@Test
 	public void testAddModel(){
 		try {
-			Project p = projectService.getProjects().get(0);
-			Artifact mm = p.getArtifacts().get(0);
+			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56aa153077c857d719eb3bdf");
 			Model m = new Model();
 			m.setName("ModelSalvi");
 			List<String> tags = Arrays.asList("DB, Data, DataBase, Data Base, Relational".split(","));
@@ -114,14 +134,23 @@ public class TestClient {
 			rel.setFromArtifact(m);
 			rel.setToArtifact(mm);
 			m.getRelations().add(rel);
-			m.getProjects().add(p);
-			modelService.addModel(m, "temp/My.database");
+			modelService.addModel(m, "antonioTemp/My.database");
 			System.out.println("Model Saved!!!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	@Ignore
+	@Test
+	public void testLoadJsonMetamodel(){
+		try {
+			String json = ecoreMetamodelService.getEcoreMetamodelJsonFormat("56aa153077c857d719eb3bdf");
+			System.out.println(json);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Ignore
 	@Test
@@ -133,6 +162,9 @@ public class TestClient {
 			e.printStackTrace();
 		}
 	}
+	
+	@Ignore
+	@Test
 	public void testCreateIndex(){
 		try {
 			String result = ecoreMetamodelService.createIndex();

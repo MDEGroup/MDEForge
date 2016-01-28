@@ -123,7 +123,12 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		try {
 			String path = basePath + "tempTransf.atl";
 			out = new FileOutputStream(path);
-			out.write(Base64.decode(gdf.getContent().getBytes()));
+			if (gdf.getContent() != null)
+				out.write(Base64.decode(gdf.getContent().getBytes()));
+			if (gdf.getByteArray() != null)
+				out.write(gdf.getByteArray());
+			if(gdf.getByteArray() == null && gdf.getContent() == null)
+				throw new BusinessException("No Content");
 			out.close();
 			return path;
 		} catch (FileNotFoundException e) {

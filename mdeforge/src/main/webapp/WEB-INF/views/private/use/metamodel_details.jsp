@@ -140,7 +140,7 @@
 														onclick="return false;"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize Tree
 														View</a> <a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}"
+														href="${pageContext.request.contextPath}/public/EcoreMetamodel/download?artifact_id=${ecoreMetamodel.getId()}"
 														class="btn btn-success btn-small btn-block"><i
 														class="icon-download-alt icon-fixed-width"></i> Download
 														Metamodel</a>
@@ -250,12 +250,12 @@
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
 
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 
@@ -300,11 +300,11 @@
 																	<c:when
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 
@@ -347,11 +347,11 @@
 																	<c:when
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 
@@ -394,11 +394,11 @@
 																	<c:when
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 
@@ -441,11 +441,11 @@
 																	<c:when
 																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/ATLTransformation/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/ATLTransformation/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 															</c:when>
@@ -489,11 +489,11 @@
 																		</c:choose>
 																		
 																		<a
-																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/ATLTransformation/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/public/ATLTransformation/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 															</c:when>

@@ -9,12 +9,15 @@ import org.eclipse.m2m.atl.core.ModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.engine.parser.AtlParser;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
+import org.mdeforge.business.model.ATLTransformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
@@ -39,6 +42,8 @@ public class AnATLyzerTest {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
+	private ATLTransformationService atlTransformationService;
+	@Autowired
 	private MetamodelService metamodelService;
 	@Autowired
 	private UserService userService;
@@ -46,7 +51,7 @@ public class AnATLyzerTest {
 	private SimilarityRelationService similarityRelationService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	
+	@Ignore
 	@Test
 	public void anATLyzerTest() throws ATLCoreException {
 		//Extract Preliminar information
@@ -74,9 +79,6 @@ public class AnATLyzerTest {
 			System.out.println(modelInfo.isInput());
 			System.out.println(modelInfo.isOutput());
 		}
-		
-		
-		
 		// submit...
 		/*
 		Resource r1 = null; // get r1 from mdeforge 
@@ -102,5 +104,11 @@ public class AnATLyzerTest {
 			System.out.println( AnalyserUtils.getProblemId(problem) );
 			System.out.println( AnalyserUtils.getProblemDescription(problem) );
 		}
+	}
+	@Test
+	public void discovery() {
+		ATLTransformation atl = atlTransformationService.findOne("5697a98d77c83fcd08105bf8");
+		atlTransformationService.getPossibleMetamodel(atl);
+	
 	}
 }

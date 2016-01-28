@@ -2,7 +2,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -22,19 +23,18 @@
 	<li class="divider"></li>
 	<li><spring:message code="mdeforge.public.back.browse" /></li>
 	<li class="divider"></li>
-	<li><spring:message
-			code="mdeforge.public.back.browse.model_details.detail" /></li>
+	<li>${artifact.getClass().getSimpleName() } details</li>
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
 <div class="heading-buttons">
-	<h3>${model.getName()}
+	<h3>${artifact.getName()}
 		<span> <c:choose>
-				<c:when test="${model.getOpen()}">		
-							Public Model										  												    
+				<c:when test="${artifact.getOpen()}">		
+							Public									  												    
 				</c:when>
 				<c:otherwise>
-							Private Model										  
+							Private										  
 				</c:otherwise>
 			</c:choose>
 		</span>
@@ -67,9 +67,13 @@
 										</div>
 										<div class="span4 text-right">
 											<p class="muted">
-												Used in ${model.getProjects().size()} projects <a
+												Used in ${artifact.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
+												<security:authorize access="isAuthenticated()">
+																<a href="${pageContext.request.contextPath}/public/browse/metamodel_share?metamodel_id=${artifact.getId()}"> Share</a>
+												</security:authorize>
 											</p>
+											
 										</div>
 									</div>
 								</div>
@@ -81,16 +85,15 @@
 											<!-- // Profile Photo END -->
 											<ul class="icons-ul">
 												<li><i class="icon-user icon-li icon-fixed-width"></i>
-													${model.getAuthor().getUsername()}</li>
+													${artifact.getAuthor().getUsername()}</li>
 												<li><i class="icon-info icon-li icon-fixed-width"></i>
-													${model.getAuthor().getFirstname()}
-													${model.getAuthor().getLastname()}</li>
+													${artifact.getAuthor().getFirstname()}
+													${artifact.getAuthor().getLastname()}</li>
 												<li><i class="icon-envelope icon-li icon-fixed-width"></i>
-													${model.getAuthor().getEmail()}</li>
+													${artifact.getAuthor().getEmail()}</li>
 											</ul>
 											<div class="separator bottom"></div>
 											<h5 class="strong">General</h5>
-											<!-- Profile Photo -->
 											<div class="center">
 												<table class="table table-condensed">
 													<!-- Table body -->
@@ -100,7 +103,7 @@
 															<td class="left">Creation Data</td>
 															<td class="right"><fmt:formatDate type="both"
 																	dateStyle="short" timeStyle="short"
-																	value="${model.getCreated()}" /></td>
+																	value="${artifact.getCreated()}" /></td>
 														</tr>
 														<!-- // Table row END -->
 
@@ -109,7 +112,7 @@
 															<td class="left">Last Modified</td>
 															<td class="right"><fmt:formatDate type="both"
 																	dateStyle="short" timeStyle="short"
-																	value="${model.getModified()}" /></td>
+																	value="${artifact.getModified()}" /></td>
 														</tr>
 														<!-- // Table row END -->
 													</tbody>
@@ -121,7 +124,7 @@
 										<div class="span8">
 											<h5 class="strong">Description</h5>
 											<p>
-												<c:forEach items="${model.properties}"
+												<c:forEach items="${artifact.properties}"
 													var="property">
 													<c:if test="${property.getName() == 'Description '}">
 															${property.getValue()}
@@ -130,62 +133,37 @@
 											</p>
 											<div class="row-fluid">
 												<div class="span4">
-													<h5 class="strong">Model File</h5>
+													<h5 class="strong">${artifact.getClass().getSimpleName() } File</h5>
 													<a href="#modal-simple"
 														class="btn btn-primary btn-small btn-block"
 														data-toggle="modal"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize
-														Model</a> <a href="#"
+														${artifact.getClass().getSimpleName() }</a> <a href="#"
 														class="btn btn-default btn-small btn-block"
 														onclick="return false;"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize Tree
 														View</a> <a
-														href="${pageContext.request.contextPath}/public/browse/model_download?model_id=${model.getId()}"
+														href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName() }/download?artifact_id=${artifact.getId()}"
 														class="btn btn-success btn-small btn-block"><i
 														class="icon-download-alt icon-fixed-width"></i> Download
-														Model</a>
+														${artifact.getClass().getSimpleName() }</a>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
-<%-- 													<c:forEach items="${model.relations}" --%>
-<%-- 														var="relation"> --%>
-<!-- 														Table row -->
-<!-- 														<tr> -->
-<%-- 															<c:choose> --%>
-<%-- 																<c:when --%>
-<%-- 																	test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}"> --%>
-<!-- 																	<td class="center"><a -->
-<%-- 																		href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td> --%>
-<%-- 																</c:when> --%>
-<%-- 															</c:choose> --%>
-<!-- 														</tr> -->
-<!-- 														// Table row END -->
-<%-- 													</c:forEach> --%>
-<!-- 													<div class="separator bottom"></div> -->
-													
+													<div class="separator bottom"></div>
 												</div>
 												<div class="span1"></div>
 												<div class="span6">
-													<div class="row-fluid">
-													<div class="span12">
 													<h5 class="text-uppercase strong text-primary">
 														<i class="icon-group text-regular icon-fixed-width"></i>
-														Conform to: <span
-															class="text-lowercase padding-none">
-																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${model.metamodel.getToArtifact().getId()}">
-																	${model.metamodel.getToArtifact().getName() }
-																</a>
-															</span></h5>
-													</div>
-													<div class="span12">
-													<h5 class="text-uppercase strong text-primary">
-														<i class="icon-group text-regular icon-fixed-width"></i>
+														
 														Shared Users <span
 															class="text-lowercase strong padding-none">Team</span> <span
-															class="text-lowercase padding-none">(${model.getShared().size()}
+															class="text-lowercase padding-none">(${artifact.getShared().size()}
 															people)</span>
+															
 													</h5>
 													<ul class="team">
-														<c:forEach items="${model.getShared()}"
+														<c:forEach items="${artifact.getShared()}"
 															var="user" varStatus="count">
 															<li><span class="crt">${count.count}</span><span
 																class="strong">${user.getUsername()}</span><span
@@ -193,8 +171,7 @@
 																	${user.getLastname()}</span></li>
 														</c:forEach>
 													</ul>
-													</div>
-													</div>
+													
 												</div>
 											</div>
 
@@ -208,136 +185,72 @@
 				</div>
 			</div>
 			<hr>
+			<tiles:insertAttribute name="central" ignore="true"/>
+			<c:if test="${artifact.getMetrics().size()!=0}">
 			
-
-		</div>
-		<div class="span3 tablet-column-reset">
-			<!-- Latest Orders/List Widget -->
-			<div class="widget widget-heading-simple widget-body-gray"
-				data-toggle="collapse-widget">
-			</div>
-			<!-- // Latest Orders/List Widget END -->
-
-
-
-
-			<!-- Widget -->
-			<div class="widget widget-heading-simple widget-body-white">
-
-				<!-- Widget Heading -->
-				<div class="widget-head">
-					<h4 class="heading glyphicons notes">
-						<i></i>Properties
-					</h4>
-				</div>
-
-				<div class="widget-body list">
-					<table class="table">
-
+			<div class="row-flid">
+				<div class="span12">
+					<h4>Metrics</h4>
+					<table class="table table-bordered table-striped table-white">
+						<!-- Table heading -->
+						<thead>
+							<tr>
+								<th rowspan="2">Name</th>
+								<th class="center" colspan="5">Value</th>
+							</tr>
+							<tr>
+								<th>Max</th>
+								<th>Min</th>
+								<th>Avg</th>
+								<th>Median</th>
+								<th>Standard Deviation</th>
+							</tr>
+						</thead>
+						<!-- // Table heading END -->
 						<!-- Table body -->
 						<tbody>
-
-							<c:forEach items="${model.properties}" var="property">
-							
-							<%-- 	<c:set var="arrayString" value="${fn:split(property.getValue(), ' ')}" />
-								<c:set var="maxLengthString" value=" " />
-									
-								<c:forEach items="${arrayString}" var="arrayToCheck">
-									<c:if test="${fn:length(arrayToCheck) > fn:length(maxLengthString)}">
-										<c:set var="maxLengthString" value="${arrayToCheck}" />
-									</c:if>
-								</c:forEach> --%>
-							
+							<c:forEach items="${artifact.getMetrics()}" var="metric">
+													<!-- Table row -->
 								<tr>
-									<td class="left"><b>${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</b></td>
-									<td class="">										
-										 <c:choose>
-										  <c:when test="${fn:length(property.getValue()) < 40}">
-										    	<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" >${property.getValue()}</span>
-										  </c:when>										  
-										  <c:otherwise>
-										  
-											<span data-toggle="tooltip" data-original-title="${property.getValue()}" data-placement="left" style="font-size:80%;">${fn:replace(property.getValue(), '/', '/ ')}</span>										
-										  </c:otherwise>
-										</c:choose> 
-									</td>
+									<td class="left">${metric.getName()}</td>
+									<c:choose>
+									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+									    <td colspan="5" class="center">${metric.getValue()}</td>
+									  </c:when>
+									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+									    <td>${metric.getMaximum()}</td>
+									    <td>${metric.getMinimum()}</td>
+									    <td>${metric.getAverage()}</td>
+									    <td>${metric.getMedian()}</td>
+									    <td>${metric.getStandardDeviation()}</td>
+									  </c:when>
+									  <c:otherwise>
+									    <td>${metric.getMaximum()}</td>
+									    <td>${metric.getMinimum()}</td>
+									    <td>${metric.getAverage()}</td>
+									    <td>${metric.getMedian()}</td>
+									    <td>${metric.getStandardDeviation()}</td>
+									  </c:otherwise>
+									</c:choose>														
+									
 								</tr>
+								<!-- // Table row END -->
 							</c:forEach>
-						</tbody>
-						<!-- // Table body END -->
-
 					</table>
+
 				</div>
 			</div>
-			<!-- Widget -->
-			<div class="widget widget-heading-simple widget-body-white">
-
-				<!-- Widget Heading -->
-				<div class="widget-head">
-					<h4 class="heading glyphicons notes">
-						<i></i>Extracted Word Context
-					</h4>
-				</div>
-				<!-- // Widget Heading END -->
-
-
-
-
-				<div class="relativeWrap">
-					<div class="widget widget-tabs">
-
-						<!-- Tabs Heading -->
-						<div class="widget-head">
-							<ul>
-								<li class="active"><a class="glyphicons cloud"
-									href="#cloud" data-toggle="tab"><i></i>Word Cloud</a></li>
-								<li><a class="glyphicons font" href="#standard"
-									data-toggle="tab"><i></i>Standard</a></li>
-							</ul>
-						</div>
-						<!-- // Tabs Heading END -->
-
-						<div class="widget-body">
-							<div class="tab-content">
-
-								<!-- Tab content -->
-								<div class="tab-pane active" id="cloud">
-
-									<canvas id="my_canvas"></canvas>
-
-								</div>
-								<!-- // Tab content END -->
-
-								<!-- Tab content -->
-								<div class="tab-pane" id="standard">
-
-									<c:set var="serializedContext_trim"
-										value="${fn:trim(model.getExtractedContents())}" />
-									<c:set var="serializedContext_splitted"
-										value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
-									${serializedContext_splitted}
-
-								</div>
-								<!-- // Tab content END -->
-
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-			</div>
-			<!-- // Widget END -->
-
-
-
-
+			</c:if>
 		</div>
+		
+		<tiles:insertAttribute name="right" ignore="true"/>
 
 	</div>
 </div>
+
+
 <c:import var="fileToVisualize"
-	url="file:///${modelFile.getAbsolutePath()}" />
+	url="file:///${artifactFile.getAbsolutePath()}" />
 <!-- Modal -->
 <div class="modal hide fade" id="modal-simple"
 	style="width: 800px; left: 42%">
@@ -353,7 +266,7 @@ ${fn:escapeXml(fileToVisualize)}
 <!-- // Modal END -->
 
 <script>
-	var res = '${model.getExtractedContents()}'.trim();
+	var res = '${artifact.getExtractedContents()}'.trim();
 	res = res.split(" ");
 
 	var wordlist = [];

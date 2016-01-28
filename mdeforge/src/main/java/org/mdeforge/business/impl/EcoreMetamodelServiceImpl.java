@@ -1,8 +1,8 @@
 package org.mdeforge.business.impl;
 
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
+import org.antlr.foruse.grammar.v3.ANTLRParser.throwsSpec_return;
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -31,8 +32,11 @@ import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.Match;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -56,6 +60,13 @@ import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFReferenceModel;
 import org.eclipse.m2m.atl.core.launch.ILauncher;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
+import org.eclipse.ocl.OCL;
+import org.eclipse.ocl.ParserException;
+import org.eclipse.ocl.Query;
+import org.eclipse.ocl.ecore.Constraint;
+import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
+import org.eclipse.ocl.expressions.OCLExpression;
+import org.eclipse.ocl.helper.OCLHelper;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
@@ -104,6 +115,9 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.stereotype.Service;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
+import anatlyzer.atl.util.ATLSerializer;
+import anatlyzer.atlext.ATL.ATLPackage;
+import anatlyzer.atlext.OCL.OclExpression;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
@@ -116,7 +130,7 @@ import com.mongodb.Mongo;
 public class EcoreMetamodelServiceImpl extends
 		CRUDArtifactServiceImpl<EcoreMetamodel> implements
 		EcoreMetamodelService {
-	
+
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -144,49 +158,60 @@ public class EcoreMetamodelServiceImpl extends
 
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	Logger logger = LoggerFactory.getLogger(EcoreMetamodelImporterServiceImpl.class);
+	Logger logger = LoggerFactory
+			.getLogger(EcoreMetamodelImporterServiceImpl.class);
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
 	private String jsonArtifactCollection;
-
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		artifact.setValid(isValid(artifact));
 		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + "/"+mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-		
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
+				+ "/" + mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/";
+
 		try {
-			artifact.setExtractedContents(this.saveJsonMetamodel(path, jsonMongoUriBase + artifact.getId()));
+			artifact.setExtractedContents(this.saveJsonMetamodel(path,
+					jsonMongoUriBase + artifact.getId()));
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
-			throw new ExtractContentEngineException(e.getMessage(),artifact.getId());
+			throw new ExtractContentEngineException(e.getMessage(),
+					artifact.getId());
 		}
 		try {
 			artifact.setMetrics(getMetrics(artifact));
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
-			throw new MetricEngineException("Some errors when try to calculate metric for metamodel",artifact.getId());
+			throw new MetricEngineException(
+					"Some errors when try to calculate metric for metamodel",
+					artifact.getId());
 		}
 		artifactRepository.save(artifact);
 		return result;
 	}
-	
-	public String saveJsonMetamodel(String sourceURI, String mongoURI) throws BusinessException {
+
+	public String saveJsonMetamodel(String sourceURI, String mongoURI)
+			throws BusinessException {
 		ResourceSet load_resourceSet = new ResourceSetImpl();
-		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
-		
+		load_resourceSet.getResourceFactoryRegistry()
+				.getExtensionToFactoryMap()
+				.put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(
+				URI.createURI(sourceURI), true);
+
 		EList<EObject> contents = load_resource.getContents();
 		String result = ResourceSerializer.serialize(load_resource);
-		//TODO handle connection
-		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
+		// TODO handle connection
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
+				URI.createURI(mongoURI));
 		res.getContents().addAll(contents);
 		try {
 			res.save(null);
-			
+
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
@@ -246,7 +271,8 @@ public class EcoreMetamodelServiceImpl extends
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
-			injector.inject(inputModel, gridFileMediaService.getFileInputStream(emm),null);
+			injector.inject(inputModel,
+					gridFileMediaService.getFileInputStream(emm), null);
 			transformationLauncher.initialize(new HashMap<String, Object>());
 			transformationLauncher.addInModel(inputModel, "IN", "Ecore");
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
@@ -268,8 +294,8 @@ public class EcoreMetamodelServiceImpl extends
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
 		}
-//		List<Metric> a = new ArrayList();
-//		return a;
+		// List<Metric> a = new ArrayList();
+		// return a;
 	}
 
 	private InputStream[] getModulesList(String modules_input)
@@ -356,17 +382,22 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public void registerMetamodel(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException {
-		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
+				.getId());
 		ecoreMetamodel.getFile();
-		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
+		ecoreMetamodel.setFile(gridFileMediaService
+				.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
+				rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
+				extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		for (EObject eObject2 : eObject) {
@@ -376,20 +407,26 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		}
 	}
-	
-	private List<EPackage> getEPackageList(EcoreMetamodel ecoreMetamodel)
+
+	@Override
+	public List<EPackage> getEPackageList(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException {
-		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel.getId());
+		ecoreMetamodel = ecoreMetamodelRepository.findOne(ecoreMetamodel
+				.getId());
 		ecoreMetamodel.getFile();
-		ecoreMetamodel.setFile(gridFileMediaService.getGridFileMedia(ecoreMetamodel.getFile()));
+		ecoreMetamodel.setFile(gridFileMediaService
+				.getGridFileMedia(ecoreMetamodel.getFile()));
 		String path = gridFileMediaService.getFilePath(ecoreMetamodel);
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
+				rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
+				extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		List<EPackage> pack = new ArrayList<EPackage>();
@@ -402,18 +439,21 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		return pack;
 	}
-	
+
 	@Override
 	public void registerMetamodel(String ecoreMetamodel)
 			throws BusinessException {
 		String path = ecoreMetamodel;
 		File fileName = new File(path);
 		URI uri = URI.createFileURI(fileName.getAbsolutePath());
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new EcoreResourceFactoryImpl());
 		ResourceSet rs = new ResourceSetImpl();
 		// enable extended metadata
-		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(rs.getPackageRegistry());
-		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetaData);
+		final ExtendedMetaData extendedMetaData = new BasicExtendedMetaData(
+				rs.getPackageRegistry());
+		rs.getLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA,
+				extendedMetaData);
 		Resource r = rs.getResource(uri, true);
 		List<EObject> eObject = r.getContents();
 		for (EObject eObject2 : eObject) {
@@ -516,10 +556,10 @@ public class EcoreMetamodelServiceImpl extends
 		String result = ResourceSerializer.serialize(load_resource);
 		return result;
 	}
-	
+
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
-//		try {
+		// try {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
@@ -539,10 +579,10 @@ public class EcoreMetamodelServiceImpl extends
 		for (Match match : matches) {
 			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
 			total += lm.size();
-			for (Match match2 : lm){
-				if(match2.getLeft()!=null)
+			for (Match match2 : lm) {
+				if (match2.getLeft() != null)
 					counterLeft++;
-				if(match2.getRight()!=null)
+				if (match2.getRight() != null)
 					counterRight++;
 				if (match2.getLeft() != null && match2.getRight() != null)
 					counter++;
@@ -550,17 +590,18 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counter++;
 		}
-		//to save diff file
-//		List<Diff> differences = comparison.getDifferences();
-//		// Let's merge every single diff
-//		// IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
-//		IMerger.Registry mergerRegistry = IMerger.RegistryImpl
-//				.createStandaloneInstance();
-//		IBatchMerger merger = new BatchMerger(mergerRegistry);
-//		merger.copyAllLeftToRight(differences, new BasicMonitor());
-		double containmentValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
+		// to save diff file
+		// List<Diff> differences = comparison.getDifferences();
+		// // Let's merge every single diff
+		// // IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
+		// IMerger.Registry mergerRegistry = IMerger.RegistryImpl
+		// .createStandaloneInstance();
+		// IBatchMerger merger = new BatchMerger(mergerRegistry);
+		// merger.copyAllLeftToRight(differences, new BasicMonitor());
+		double containmentValue = (counter * 1.0)
+				/ ((counterLeft < counterRight) ? counterLeft : counterRight);
 		double simValue = (counter * 1.0) / total;
-		//Used to save Diff model
+		// Used to save Diff model
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		Map<String, Object> m = reg.getExtensionToFactoryMap();
 		m.put("xmi", new XMIResourceFactoryImpl());
@@ -569,12 +610,12 @@ public class EcoreMetamodelServiceImpl extends
 		Resource resource = resSet.createResource(URI.createURI(basePath
 				+ "/compare.xmi"));
 		resource.getContents().add(comparison);
-//		try {
-//			resource.save(Collections.EMPTY_MAP);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			throw new BusinessException();
-//		}
+		// try {
+		// resource.save(Collections.EMPTY_MAP);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// throw new BusinessException();
+		// }
 		SimilarityRelation sr = new SimilarityRelation();
 		sr.setFromArtifact(art1);
 		sr.setToArtifact(art2);
@@ -591,14 +632,14 @@ public class EcoreMetamodelServiceImpl extends
 		String test = serializeContent(emm1);
 		String test2 = serializeContent(emm2);
 
-		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test,
-				test2);
+		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
+				test, test2);
 		CosineSimilarityRelation csr = new CosineSimilarityRelation();
 		csr.setFromArtifact(art1);
 		csr.setToArtifact(art2);
 		csr.setValue(cosineSimScore);
 		relationService.save(csr);
-		
+
 		DiceSimilarity ds = new DiceSimilarity();
 		double diceSimScore = ds.getSimilarity(test, test2);
 		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
@@ -606,10 +647,11 @@ public class EcoreMetamodelServiceImpl extends
 		dsr.setToArtifact(art2);
 		dsr.setValue(diceSimScore);
 		relationService.save(dsr);
-		
+
 		return simValue;
 	}
-	//region Cluster
+
+	// region Cluster
 	@Override
 	public String getSimilarityGraph(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -660,7 +702,7 @@ public class EcoreMetamodelServiceImpl extends
 			throw new BusinessException();
 		}
 	}
-	
+
 	@Override
 	public Clusterizzation getSimilarityClusters(double threshold,
 			ValuedRelationService valuedRelationService)
@@ -670,7 +712,7 @@ public class EcoreMetamodelServiceImpl extends
 		List<ValuedRelation> valuedRelations = valuedRelationService
 				.findAll(threshold);
 		Map<String, Cluster> tempHash = new HashMap<String, Cluster>();
-		for (ValuedRelation valuedRelation : valuedRelations) {		
+		for (ValuedRelation valuedRelation : valuedRelations) {
 			String fromId = valuedRelation.getFromArtifact().getId();
 			String toId = valuedRelation.getToArtifact().getId();
 			if (!tempHash.containsKey(fromId) && !tempHash.containsKey(toId)) {
@@ -678,8 +720,8 @@ public class EcoreMetamodelServiceImpl extends
 				c.getRelations().add(valuedRelation);
 				c.getArtifacts().add(valuedRelation.getFromArtifact());
 				c.getArtifacts().add(valuedRelation.getToArtifact());
-				List<Property> propertyList = valuedRelation
-						.getFromArtifact().getProperties();
+				List<Property> propertyList = valuedRelation.getFromArtifact()
+						.getProperties();
 				propertyList.addAll(valuedRelation.getToArtifact()
 						.getProperties());
 				for (Property property : propertyList)
@@ -697,8 +739,8 @@ public class EcoreMetamodelServiceImpl extends
 				c.getRelations().add(valuedRelation);
 				tempHash.put(toId, c);
 				tempHash.put(fromId, c);
-				List<Property> propertyList = valuedRelation
-						.getToArtifact().getProperties();
+				List<Property> propertyList = valuedRelation.getToArtifact()
+						.getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain")
 							|| property.getName().toLowerCase()
@@ -706,14 +748,14 @@ public class EcoreMetamodelServiceImpl extends
 						c.getDomains().add(property.getValue());
 			}
 			if (!tempHash.containsKey(fromId) && tempHash.containsKey(toId)) {
-				Cluster c = tempHash.get(valuedRelation.getToArtifact()
-						.getId());
+				Cluster c = tempHash
+						.get(valuedRelation.getToArtifact().getId());
 				c.getArtifacts().add(valuedRelation.getFromArtifact());
 				c.getRelations().add(valuedRelation);
 				tempHash.put(fromId, c);
 				tempHash.put(toId, c);
-				List<Property> propertyList = valuedRelation
-						.getFromArtifact().getProperties();
+				List<Property> propertyList = valuedRelation.getFromArtifact()
+						.getProperties();
 				for (Property property : propertyList)
 					if (property.getName().toLowerCase().contains("domain")
 							|| property.getName().toLowerCase()
@@ -786,17 +828,17 @@ public class EcoreMetamodelServiceImpl extends
 		}
 
 		Collections.sort(clusterList, new Comparator<Cluster>() {
-	        @Override
-	        public int compare(Cluster  cluster1, Cluster  cluster2)
-	        {
+			@Override
+			public int compare(Cluster cluster1, Cluster cluster2) {
 
-	            return  cluster1.getArtifacts().size() > cluster2.getArtifacts().size() ? 
-	            				-1 : 
-	            					cluster1.getArtifacts().size() < cluster2.getArtifacts().size() ? +1 : 0;
-	            		//cluster1.getArtifacts().size().compareTo(cluster2.getArtifacts().size());
-	        }
-	    });
-		
+				return cluster1.getArtifacts().size() > cluster2.getArtifacts()
+						.size() ? -1
+						: cluster1.getArtifacts().size() < cluster2
+								.getArtifacts().size() ? +1 : 0;
+				// cluster1.getArtifacts().size().compareTo(cluster2.getArtifacts().size());
+			}
+		});
+
 		clusterizzation.setClusters(clusterList);
 		return clusterizzation;
 	}
@@ -811,7 +853,6 @@ public class EcoreMetamodelServiceImpl extends
 		return result;
 	}
 
-	
 	@Override
 	public com.apporiented.algorithm.clustering.Cluster getHierarchicalCluster(
 			ValuedRelationService valuedRelationService)
@@ -982,7 +1023,8 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		return result;
 	}
-	//endregion
+
+	// endregion
 	@Override
 	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
 		List<Metric> metricList = metricRepository
@@ -997,16 +1039,17 @@ public class EcoreMetamodelServiceImpl extends
 			throws BusinessException {
 		Comparator<Double> c = new Comparator<Double>() {
 			public int compare(Double a, Double b) {
-		        if (a >= b) {
-		            return -1;
-		        } else {
-		            return 1;
-		        } // returning 0 would merge keys
-		    }
+				if (a >= b) {
+					return -1;
+				} else {
+					return 1;
+				} // returning 0 would merge keys
+			}
 		};
-		
+
 		List<EcoreMetamodel> repository = findAll();
-		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(c);
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(
+				c);
 		for (EcoreMetamodel ecoreMetamodel : repository) {
 			double d = calculateContainment(ecoreMetamodel, searchSample);
 			list.put(d, ecoreMetamodel);
@@ -1014,24 +1057,25 @@ public class EcoreMetamodelServiceImpl extends
 		logger.info(list.size() + "");
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
 		int i = 0;
-		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
-			  EcoreMetamodel value = entry.getValue();
-			  logger.info("score: " + entry.getKey());
-			  logger.info("metamodel" + entry.getValue().getName());
-			  result.add(value);
-			  try {
-				  //value.setScore(Float.parseFloat(entry.getKey().toString()));
-			  } catch (Exception e) {
-				  logger.error("fail to converter score to float");
-			  }
-			  if(i++ > 10)
-				  break;
+		for (Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
+			EcoreMetamodel value = entry.getValue();
+			logger.info("score: " + entry.getKey());
+			logger.info("metamodel" + entry.getValue().getName());
+			result.add(value);
+			try {
+				// value.setScore(Float.parseFloat(entry.getKey().toString()));
+			} catch (Exception e) {
+				logger.error("fail to converter score to float");
 			}
+			if (i++ > 10)
+				break;
+		}
 		return result;
 	}
+
 	@Override
-	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample, double score)
-			throws BusinessException {
+	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample,
+			double score) throws BusinessException {
 		Comparator<Double> coparator = new Comparator<Double>() {
 			public int compare(Double a, Double b) {
 				if (a >= b) {
@@ -1041,16 +1085,17 @@ public class EcoreMetamodelServiceImpl extends
 				} // returning 0 would merge keys
 			}
 		};
-		
+
 		List<EcoreMetamodel> repository = findAll();
-		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(coparator);
+		Map<Double, EcoreMetamodel> list = new TreeMap<Double, EcoreMetamodel>(
+				coparator);
 		for (EcoreMetamodel ecoreMetamodel : repository) {
 			double d = calculateContainment(ecoreMetamodel, searchSample);
-			if (d>=score)
+			if (d >= score)
 				list.put(d, ecoreMetamodel);
 		}
 		List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
-		for(Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
+		for (Entry<Double, EcoreMetamodel> entry : list.entrySet()) {
 			EcoreMetamodel value = entry.getValue();
 			result.add(value);
 			try {
@@ -1061,55 +1106,61 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		return result;
 	}
-	
+
 	@Override
 	public double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2) {
 		try {
-		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
-		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-				"ecore", new XMIResourceFactoryImpl());
-		ResourceSet resourceSet1 = new ResourceSetImpl();
-		ResourceSet resourceSet2 = new ResourceSetImpl();
-		resourceSet1.getResource(uri1, true);
-		resourceSet2.getResource(uri2, true);
-		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
-				resourceSet2, null);
+			URI uri1 = URI
+					.createFileURI(gridFileMediaService.getFilePath(art1));
+			URI uri2 = URI
+					.createFileURI(gridFileMediaService.getFilePath(art2));
+			Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+					"ecore", new XMIResourceFactoryImpl());
+			ResourceSet resourceSet1 = new ResourceSetImpl();
+			ResourceSet resourceSet2 = new ResourceSetImpl();
+			resourceSet1.getResource(uri1, true);
+			resourceSet2.getResource(uri2, true);
+			IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+					resourceSet2, null);
 
-//		IMatchEngine.Factory.Registry me = SemanticMatchEngineFactoryRegistryImpl.createStandaloneInstance();
-//		Comparison comparison = EMFCompare.builder().setMatchEngineFactoryRegistry(me).build().compare(scope);
-		
-		Comparison comparison = EMFCompare.builder().build().compare(scope);
-		List<Match> matches = comparison.getMatches();
-		int counter = 0;
-		int counterLeft = 0;
-		int counterRight = 0;
-		for (Match match : matches) {
-			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
-			for (Match match2 : lm) {
-				if(match2.getLeft()!=null)
-					counterLeft++;
-				if(match2.getRight()!=null)
-					counterRight++;
-				if (match2.getLeft() != null && match2.getRight() != null)
+			// IMatchEngine.Factory.Registry me =
+			// SemanticMatchEngineFactoryRegistryImpl.createStandaloneInstance();
+			// Comparison comparison =
+			// EMFCompare.builder().setMatchEngineFactoryRegistry(me).build().compare(scope);
+
+			Comparison comparison = EMFCompare.builder().build().compare(scope);
+			List<Match> matches = comparison.getMatches();
+			int counter = 0;
+			int counterLeft = 0;
+			int counterRight = 0;
+			for (Match match : matches) {
+				List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+				for (Match match2 : lm) {
+					if (match2.getLeft() != null)
+						counterLeft++;
+					if (match2.getRight() != null)
+						counterRight++;
+					if (match2.getLeft() != null && match2.getRight() != null)
+						counter++;
+				}
+
+				if (match.getLeft() != null && match.getRight() != null)
 					counter++;
 			}
-				
-			if (match.getLeft() != null && match.getRight() != null)
-				counter++;
-		}
-		double resultValue = (counter * 1.0) / ((counterLeft<counterRight)?counterLeft:counterRight);
-//		double resultValue = (counter * 1.0) / counterRight;
-		return resultValue;
-		}catch(Exception e) {
+			double resultValue = (counter * 1.0)
+					/ ((counterLeft < counterRight) ? counterLeft
+							: counterRight);
+			// double resultValue = (counter * 1.0) / counterRight;
+			return resultValue;
+		} catch (Exception e) {
 			return 0;
 		}
 	}
 
-	
-	///
+	// /
 	@Override
-	public Cluster getCluster(EcoreMetamodel ecore, Clusterizzation clusterizzation) throws BusinessException {
+	public Cluster getCluster(EcoreMetamodel ecore,
+			Clusterizzation clusterizzation) throws BusinessException {
 		for (Cluster cluster : clusterizzation.getClusters()) {
 			for (Artifact art : cluster.getArtifacts()) {
 				if (art.equals(ecore))
@@ -1118,61 +1169,74 @@ public class EcoreMetamodelServiceImpl extends
 		}
 		throw new BusinessException();
 	}
+
 	@Override
-	public Clusterizzation joinCluster(Clusterizzation c, Cluster from, Cluster to){
+	public Clusterizzation joinCluster(Clusterizzation c, Cluster from,
+			Cluster to) {
 		Clusterizzation result = new Clusterizzation();
-		if(to.getArtifacts().size()==1)
-		result.setAlgoritmhs(c.getAlgoritmhs());
+		if (to.getArtifacts().size() == 1)
+			result.setAlgoritmhs(c.getAlgoritmhs());
 		result.setThreshold(c.getThreshold());
-		for (Cluster cluster: c.getClusters()) {
-			if (!cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
-					!cluster.getMostRepresentive().equals(to.getMostRepresentive())) {
+		for (Cluster cluster : c.getClusters()) {
+			if (!cluster.getMostRepresentive().equals(
+					from.getMostRepresentive())
+					&& !cluster.getMostRepresentive().equals(
+							to.getMostRepresentive())) {
 				result.getClusters().add(cluster);
-			}	
-			if (!cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
-					cluster.getMostRepresentive().equals(to.getMostRepresentive())){
+			}
+			if (!cluster.getMostRepresentive().equals(
+					from.getMostRepresentive())
+					&& cluster.getMostRepresentive().equals(
+							to.getMostRepresentive())) {
 				cluster.getArtifacts().add(from.getMostRepresentive());
 				result.getClusters().add(cluster);
 			}
-			if (cluster.getMostRepresentive().equals(from.getMostRepresentive()) && 
-					cluster.getMostRepresentive().equals(to.getMostRepresentive())){
+			if (cluster.getMostRepresentive()
+					.equals(from.getMostRepresentive())
+					&& cluster.getMostRepresentive().equals(
+							to.getMostRepresentive())) {
 				result.getClusters().add(cluster);
 			}
 		}
 		return result;
-		
+
 	}
-	
+
 	@Override
-	public Clusterizzation recluster(Clusterizzation clusterizzation, double threshold, ValuedRelationService valuedRelationService) {
-		
+	public Clusterizzation recluster(Clusterizzation clusterizzation,
+			double threshold, ValuedRelationService valuedRelationService) {
+
 		Clusterizzation result = new Clusterizzation();
 		boolean guard = false;
 		for (Cluster cluster : clusterizzation.getClusters()) {
-			if (cluster.getArtifacts().size() == 1)
-			{
-				EcoreMetamodel art = (EcoreMetamodel) cluster.getArtifacts().toArray()[0];
-				Relation cont = valuedRelationService.findNearest(art,threshold);
-				if(cont != null)
-				{
-					EcoreMetamodel to = (EcoreMetamodel)((art.getId().equals(cont.getToArtifact().getId()))?cont.getFromArtifact():cont.getToArtifact());
-					if (!guard){
-						result = joinCluster(clusterizzation, cluster, getCluster(to, clusterizzation));
-					}	
-					else {
-						result = joinCluster(result, cluster, getCluster(to, result));
+			if (cluster.getArtifacts().size() == 1) {
+				EcoreMetamodel art = (EcoreMetamodel) cluster.getArtifacts()
+						.toArray()[0];
+				Relation cont = valuedRelationService.findNearest(art,
+						threshold);
+				if (cont != null) {
+					EcoreMetamodel to = (EcoreMetamodel) ((art.getId()
+							.equals(cont.getToArtifact().getId())) ? cont
+							.getFromArtifact() : cont.getToArtifact());
+					if (!guard) {
+						result = joinCluster(clusterizzation, cluster,
+								getCluster(to, clusterizzation));
+					} else {
+						result = joinCluster(result, cluster,
+								getCluster(to, result));
 					}
-					guard=true;
+					guard = true;
 				}
 			}
 		}
 		for (Cluster cluster : result.getClusters()) {
-			cluster.setMostRepresentive(getMostRepresentativeElement(cluster, valuedRelationService));
+			cluster.setMostRepresentive(getMostRepresentativeElement(cluster,
+					valuedRelationService));
 			cluster.setDomains(getDescriptionFromCluster(cluster));
 		}
 		return result;
 	}
-	
+
 	private Set<String> getDescriptionFromCluster(Cluster cluster) {
 		// TODO Auto-generated method stub
 		return null;
@@ -1180,12 +1244,14 @@ public class EcoreMetamodelServiceImpl extends
 
 	@Override
 	public Resource loadArtifact(EcoreMetamodel id) throws BusinessException {
-		
+
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
 				+ mongoDbFactory.getDb().getName() + "/"
 				+ jsonArtifactCollection + "/" + id.getId();
-		Resource resource = jsonMongoResourceSet.getResourceSet()
-				.createResource(URI.createURI(mongoURI));
+		// Resource resource = jsonMongoResourceSet.getResourceSet()
+		// .createResource(URI.createURI(mongoURI));
+		Resource resource = jsonMongoResourceSet.getResourceSet().getResource(
+				URI.createURI(mongoURI), true);
 		try {
 			resource.load(null);
 		} catch (IOException e) {
@@ -1196,14 +1262,38 @@ public class EcoreMetamodelServiceImpl extends
 	}
 
 	@Override
-	public Artifact getMostRepresentativeElement(Cluster c, ValuedRelationService valuedRelationService)
+	public String getJsonFormatFromResource(Resource metamodel)
+			throws BusinessException {
+		String json = "";
+
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			metamodel.save(os, null);
+			json = new String(os.toByteArray(), "UTF-8");
+		} catch (IOException e) {
+			throw new BusinessException();
+		}
+		return json;
+	}
+
+	@Override
+	public String getMetamodelInJsonFormat(EcoreMetamodel id)
+			throws BusinessException {
+		Resource resource = this.loadArtifact(id);
+		return this.getJsonFormatFromResource(resource);
+	}
+
+	@Override
+	public Artifact getMostRepresentativeElement(Cluster c,
+			ValuedRelationService valuedRelationService)
 			throws BusinessException {
 		double max = 0;
 		if (c.getArtifacts().size() == 1)
 			return c.getArtifacts().iterator().next();
 		Artifact result = null;
 		for (Artifact art : c.getArtifacts()) {
-			List<ValuedRelation> lr = valuedRelationService.findRelationsByArtifactInList(art, c.getArtifacts());
+			List<ValuedRelation> lr = valuedRelationService
+					.findRelationsByArtifactInList(art, c.getArtifacts());
 			double sum = 0;
 			for (ValuedRelation relation : lr)
 				sum += relation.getValue();
@@ -1213,5 +1303,51 @@ public class EcoreMetamodelServiceImpl extends
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public boolean checkConstraint(EPackage atlModel, List<OclExpression> expr)
+			throws BusinessException {
+		boolean result = true;
+		for (OclExpression oclExpression : expr) {
+			if (!checkConstraint(atlModel, oclExpression))
+				result = false;
+		}
+		return result;
+	}
+
+	@Override
+	public boolean checkConstraint(EPackage atlModel, OclExpression expr)
+			throws BusinessException {
+		try {
+			System.out.println("Check Constraint");
+			// DEFINE OCL AND HELPER
+			OCL<?, EClassifier, ?, ?, ?, EParameter, ?, ?, ?, Constraint, EClass, EObject> ocl;
+			OCLHelper<EClassifier, ?, ?, Constraint> helper;
+
+			// INSTANCIATE OCL
+			ocl = OCL.newInstance(EcoreEnvironmentFactory.INSTANCE);
+			// INSTANCIATE NEW HELPER FROM OCLEXPRESSION
+			helper = ocl.createOCLHelper();
+			// SET HELPER CONTEXT
+			helper.setContext(ATLPackage.eINSTANCE.getModule());
+
+			// CREATE OCLEXPRESSION
+			OCLExpression<EClassifier> expression;
+
+			expression = helper.createQuery("ecore::"
+					+ ATLSerializer.serialize(expr));
+
+			// CREATE QUERY FROM OCLEXPRESSION
+			Query<EClassifier, EClass, EObject> query = ocl
+					.createQuery(expression);
+
+			// EVALUATE OCL
+			boolean success = query.check(atlModel);
+			System.out.println("success " + success);
+			return success;
+		} catch (ParserException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 }

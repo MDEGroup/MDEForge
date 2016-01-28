@@ -22,7 +22,7 @@
 	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
 	<div class="buttons pull-right">
 		<a href="${pageContext.request.contextPath}/private/workspace/create" class="btn btn-primary btn-icon glyphicons stats" title="Workspace Insert">Workspace Insert</a>
-		<a href="${pageContext.request.contextPath}/public/browse/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
+		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
 	</div>
 	<div class="clearfix"></div>
 </div>

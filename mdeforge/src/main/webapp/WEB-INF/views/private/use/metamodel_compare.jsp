@@ -190,7 +190,7 @@
 																		onclick="return false;"><i
 																		class="icon-eye-open icon-fixed-width"></i> Visualize Tree View</a> 
 																	<a
-																		href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${leftMetamodel.getId()}"
+																		href="${pageContext.request.contextPath}/public/EcoreMetamodel/download?artifact_id=${leftMetamodel.getId()}"
 																		class="btn btn-success btn-small btn-block"><i
 																		class="icon-download-alt icon-fixed-width"></i> Download Metamodel</a>
 																	<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
@@ -462,7 +462,7 @@
 																		onclick="return false;"><i
 																		class="icon-eye-open icon-fixed-width"></i> Visualize Tree View</a> 
 																	<a
-																		href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${rightMetamodel.getId()}"
+																		href="${pageContext.request.contextPath}/public/EcoreMetamodel/metamodel_download?metamodel_id=${rightMetamodel.getId()}"
 																		class="btn btn-success btn-small btn-block"><i
 																		class="icon-download-alt icon-fixed-width"></i> Download
 																		Metamodel</a>

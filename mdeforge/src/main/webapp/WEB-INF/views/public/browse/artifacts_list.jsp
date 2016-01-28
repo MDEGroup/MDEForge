@@ -1,3 +1,4 @@
+
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
@@ -15,9 +16,7 @@
 <!-- Breadcrumb END -->
 
 
-<h3><spring:message code="mdeforge.public.back.browse.list"/></h3>
-
-
+<h3>${Title}</h3>
 <div class="innerLR">
 
 	
@@ -32,6 +31,8 @@
 					<tr>						
 						<th>Name</th>
 						<th>Description</th>
+						<th>Author</th>
+						<th>Type</th>
 						<th>Open</th>
 						<th>Created</th>
 						<th>Modified</th>
@@ -48,7 +49,7 @@
 						<td>
 							<c:choose>
   								<c:when test="${ecoreMetamodel.getOpen()}">
-									<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
+									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/artifact?artifact_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
 								</c:when>
 								<c:otherwise>${ecoreMetamodel.getName()}</c:otherwise>
 							</c:choose>
@@ -60,28 +61,28 @@
 								</c:if>
 							</c:forEach>
 						</td>
+						
+						<td class="center">${ecoreMetamodel.getAuthor().getUsername()}</td>
+						<td class="center">${ecoreMetamodel.getClass().getSimpleName()}</td>
 						<td class="center">${ecoreMetamodel.getOpen()}</td>
 						<td class="center">${ecoreMetamodel.getCreated()}</td>
 						<td class="center">${ecoreMetamodel.getModified()}</td>
 						<td class="center actions">
 								<c:choose>
   								<c:when test="${ecoreMetamodel.getOpen()}">
-									<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-									<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
+									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/artifact?artifact_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
+									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/download?artifact_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
 								</c:when>
 								<c:otherwise>
-									<span class="glyphicons icon-lock" title="Metamodel Download"><i></i></span>														
+									<span class="glyphicons icon-lock" title="Metamodel Lock"><i></i></span>														
 								</c:otherwise>
 							</c:choose>
 						</td>
 					</tr>
 					<!-- // Table row END -->
 					</c:forEach>
-					
-					
 				</tbody>
-				<!-- // Table body END -->
-				
+				<!-- // Table body END -->		
 			</table>
 			<!-- // Table END -->
 			

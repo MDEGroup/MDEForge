@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ContainmentRelationService;

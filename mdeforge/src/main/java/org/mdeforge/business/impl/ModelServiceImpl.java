@@ -54,9 +54,9 @@ import org.springframework.stereotype.Service;
 
 import com.mongodb.Mongo;
 
-
 @Service
-public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
+public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
+		ModelService {
 
 	@Autowired
 	private JsonMongoResourceSet jsonMongoResourceSet;
@@ -83,7 +83,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Autowired
 	private WorkspaceRepository workspaceRepository;
 	@Autowired
-	private GridFileMediaService gridFileMediaService; 
+	private GridFileMediaService gridFileMediaService;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -95,35 +95,24 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
 	private String jsonArtifactCollection;
 
-	
-//	@Override
-//	public Model create(Model model) {
-//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + 
-//				"/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-//		//TODO Ciclare sulle relazione e trovare quella di conformanceTo...
-//		// nel caso non la trovi solleva eccezione.
-//		//Se la relazione è con un artefatto diverso da un ecore metamodel o non esiste sollevare eccezione.
-//		String mmID = ((ConformToRelation) model.getRelations().get(0)).getToArtifact().getId();
-//		model.setExtractedContents( EmfjsonMongo.getInstance()
-//				.saveModel(jsonMongoUriBase+mmID, model.getNsuri(), 
-//						jsonMongoUriBase+model.getId()));
-//		return super.create(model);
-//	}
-	
+
+
 	@Override
 	public List<Model> findModelsByMetamodel(Metamodel metamodel) {
 		List<Model> result = new ArrayList<Model>();
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(metamodel.getId()));
-		
-		Criteria c1 = Criteria.where("_class").is(ConformToRelation.class.getCanonicalName());
+		Criteria c2 = Criteria.where("toArtifact.$id").is(
+				new ObjectId(metamodel.getId()));
+
+		Criteria c1 = Criteria.where("_class").is(
+				ConformToRelation.class.getCanonicalName());
 		query.addCriteria(c1);
 		query.addCriteria(c2);
-		List<ConformToRelation> dcts =  n.find(query, ConformToRelation.class);
+		List<ConformToRelation> dcts = n.find(query, ConformToRelation.class);
 		for (ConformToRelation domainConformToRelation : dcts) {
-			if(domainConformToRelation.getFromArtifact() instanceof Model)
-			result.add((Model)domainConformToRelation.getFromArtifact());
+			if (domainConformToRelation.getFromArtifact() instanceof Model)
+				result.add((Model) domainConformToRelation.getFromArtifact());
 		}
 		return result;
 	}
@@ -140,45 +129,51 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString() + 
-				"/" + mongoDbFactory.getDb().getName() + "/" + jsonArtifactCollection + "/";
-		
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
+				+ "/" + mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/";
+
 		EcoreMetamodel mmID = emm;
 		Model result = super.create(artifact);
-		try{
-			result.setExtractedContents( this
-					.saveModel(mmID, gridFileMediaService.getFilePath(result), 
-			jsonMongoUriBase+artifact.getId()));
+		try {
+			result.setExtractedContents(this.saveModel(mmID,
+					gridFileMediaService.getFilePath(result), jsonMongoUriBase
+							+ artifact.getId()));
 			modelRepository.save(result);
-		}catch (Exception e) {
-			System.err.println(e.getMessage());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
-
 		return result;
 	}
-	
-	public String saveModel(EcoreMetamodel mmID, String sourceURI, String mongoURI){
+
+	public String saveModel(EcoreMetamodel mmID, String sourceURI,
+			String mongoURI) {
 		Resource mm = ecoreMetamodelService.loadArtifact(mmID);
 		EPackage mmePackage = null;
-		
-		ResourceSet load_resourceSet = new ResourceSetImpl();
-		
-		for (EObject eObject : mm.getContents()) {
-			if (eObject instanceof EPackage){
-				mmePackage = (EPackage) eObject;
-				load_resourceSet.getPackageRegistry().put(mmePackage.getNsURI(), mmePackage);
-			}
-        }
-		
-		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource load_resource = load_resourceSet.getResource(URI.createURI(sourceURI),true);
 
-		Resource res = jsonMongoResourceSet.getResourceSet().createResource(URI.createURI(mongoURI));
-		
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+
+		for (EObject eObject : mm.getContents()) {
+			if (eObject instanceof EPackage) {
+				mmePackage = (EPackage) eObject;
+				load_resourceSet.getPackageRegistry().put(
+						mmePackage.getNsURI(), mmePackage);
+			}
+		}
+
+		load_resourceSet.getResourceFactoryRegistry()
+				.getExtensionToFactoryMap()
+				.put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(
+				URI.createURI(sourceURI), true);
+
+		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
+				URI.createURI(mongoURI));
+
 		EList<EObject> cs = load_resource.getContents();
 
 		res.getContents().addAll(cs);
-		
+
 		String contents = ResourceSerializer.serialize(res);
 
 		try {
@@ -187,12 +182,12 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			e.printStackTrace();
 			throw new BusinessException();
 		}
-		
+
 		return contents;
 	}
-	
+
 	@Override
-	public boolean isValid(Artifact art)throws BusinessException {
+	public boolean isValid(Artifact art) throws BusinessException {
 		EcoreMetamodel emm = null;
 		for (Relation rel : art.getRelations()) {
 			if (rel instanceof ConformToRelation) {
@@ -200,24 +195,27 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				emm = ecoreMetamodelService.findOne(temm.getId());
 			}
 		}
-		if (emm == null) throw new BusinessException();
-		if (art instanceof Model){
+		if (emm == null)
+			throw new BusinessException();
+		if (art instanceof Model) {
 			try {
 				ecoreMetamodelService.registerMetamodel(emm);
 				XMIResourceImpl resource = new XMIResourceImpl();
 				File temp = new File(gridFileMediaService.getFilePath(art));
-				resource.load( new FileInputStream(temp), new HashMap<Object,Object>());
-				EObject data = resource.getContents().get(0); 
+				resource.load(new FileInputStream(temp),
+						new HashMap<Object, Object>());
+				EObject data = resource.getContents().get(0);
 				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(data);
-				if (diagnostic.getSeverity() == Diagnostic.ERROR) 
+				if (diagnostic.getSeverity() == Diagnostic.ERROR)
 					return false;
-				else return true;
-				
+				else
+					return true;
+
 			} catch (Exception e) {
 				return false;
 			}
-		}
-		else return false;
+		} else
+			return false;
 	}
 
 	@Override
@@ -229,18 +227,11 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Override
 	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
 		List<Model> result = new ArrayList<Model>();
-		for (Relation rel : atlTransformation.getRelations()) {
-			if(rel instanceof DomainConformToRelation)
-				result.addAll(findModelsByMetamodel((EcoreMetamodel)rel.getToArtifact()));
-		}
+		for (DomainConformToRelation rel : atlTransformation
+				.getDomainConformToRelation())
+			result.addAll(findModelsByMetamodel((EcoreMetamodel) rel
+					.getToArtifact()));
 		return result;
 	}
-	
-	@Override
-	public Model findOnePublic(String id) {
-		Model a = super.findOnePublic(id);
-		
 
-		return a;
-	}
 }

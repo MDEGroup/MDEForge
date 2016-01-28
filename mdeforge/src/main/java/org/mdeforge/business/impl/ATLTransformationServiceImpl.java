@@ -19,6 +19,8 @@ import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -41,6 +43,7 @@ import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.eclipse.m2m.atl.engine.parser.AtlParser;
+import org.eclipse.ocl.ParserException;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -51,6 +54,7 @@ import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.UNIVAQTesterService;
+import org.mdeforge.business.anatlyzer.AnATLyzerUtils;
 import org.mdeforge.business.anatlyzer.UNIVAQUSEWitnessFinder;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
@@ -60,6 +64,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -79,6 +84,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import org.mdeforge.business.anatlyzer.CallableVisitor;
+import org.mdeforge.business.anatlyzer.OutputMetamodelVisitor;
 import transML.exceptions.transException;
 import anatlyzer.atl.analyser.AnalysisResult;
 import anatlyzer.atl.errors.Problem;
@@ -89,6 +96,8 @@ import anatlyzer.atl.tests.api.AnalysisLoader;
 import anatlyzer.atl.util.ATLUtils;
 import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
+import anatlyzer.atlext.ATL.Callable;
+import anatlyzer.atlext.OCL.OclType;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
@@ -172,12 +181,9 @@ public class ATLTransformationServiceImpl extends
 		user = userService.findOne(user.getId());
 		List<CoDomainConformToRelation> listOutput = new ArrayList<CoDomainConformToRelation>();
 		List<DomainConformToRelation> listInput = new ArrayList<DomainConformToRelation>();
-		for (Relation relation : transformation.getRelations()) {
-			if (relation instanceof CoDomainConformToRelation)
-				listOutput.add((CoDomainConformToRelation) relation);
-			if (relation instanceof DomainConformToRelation)
-				listInput.add((DomainConformToRelation) relation);
-		}
+		listInput.addAll(transformation.getDomainConformToRelation());
+		listOutput.addAll(transformation.getCoDomainConformToRelation());
+		
 		if (models.size() != listInput.size())
 			throw new TransformationException();
 		boolean guard = true;
@@ -628,21 +634,18 @@ public class ATLTransformationServiceImpl extends
 			int i = 0;
 			String[] files = new String[info.size()];
 			String[] names = new String[info.size()];
-			for (Relation rel : atl.getRelations()) {
-				if (rel instanceof DomainConformToRelation) {
-					names[i] = ((DomainConformToRelation) rel)
-							.getReferenceModelName();
+			for (DomainConformToRelation rel : atl.getDomainConformToRelation()) {
+				names[i] = rel.getReferenceModelName();
+				files[i] = gridFileMediaService.getFilePath(rel
+						.getToArtifact());
+				i++;
+			}
+			for (CoDomainConformToRelation rel : atl.getCoDomainConformToRelation()) {
+					names[i] = rel.getReferenceModelName();
 					files[i] = gridFileMediaService.getFilePath(rel
 							.getToArtifact());
 					i++;
-				}
-				if (rel instanceof CoDomainConformToRelation) {
-					names[i] = ((CoDomainConformToRelation) rel)
-							.getReferenceModelName();
-					files[i] = gridFileMediaService.getFilePath(rel
-							.getToArtifact());
-					i++;
-				}
+				
 			}
 			AnalysisLoader loader = AnalysisLoader.fromATLModel(atlModel,
 					files, names);
@@ -666,6 +669,8 @@ public class ATLTransformationServiceImpl extends
 						forgeError.setStatus(problem.getStatus().getName());
 					}
 				}
+				else forgeError.setStatus(problem.getStatus().getName());
+				problem.getSeverity();
 				//TODO change problem to problem2
 				forgeError.setDescription(AnalyserUtils
 						.getProblemDescription(problem));
@@ -678,6 +683,104 @@ public class ATLTransformationServiceImpl extends
 			//TODO REMOVED TEST SERVICE
 			//testServices(atl.getId(), user);
 			return atl;
+		} catch (ATLCoreException e) {
+			throw new BusinessException(e.getMessage());
+		}
+	}
+
+	@Override
+	public List<EcoreMetamodel> getPossibleMetamodel(ATLTransformation atl)
+			throws BusinessException {
+		try {
+			List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
+		List<EcoreMetamodel> listMetamodel = ecoreMetamodelService.findAll();
+		
+		AtlParser atlParser = new AtlParser();
+		ModelFactory modelFactory = new EMFModelFactory();
+		IReferenceModel atlMetamodel;
+		
+			atlMetamodel = modelFactory
+					.getBuiltInResource("ATL.ecore");
+		
+		EMFModel atlDynModel = (EMFModel) modelFactory.newModel(atlMetamodel);
+		atlParser.inject(atlDynModel, gridFileMediaService.getFilePath(atl));
+		Resource originalTrafo = atlDynModel.getResource();
+		ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo.getURI()
+				.toFileString(), true);
+		HashMap<Callable, OclType> callableElements = new HashMap<Callable, OclType>();
+		try {
+			List<Callable> callables = AnATLyzerUtils.getCallableElements(atlModel);
+			for (Callable callable : callables) {
+				CallableVisitor callableVisitor = new CallableVisitor();
+				callableVisitor.perform(callable);
+				callableElements.put(callableVisitor.getElement(), callableVisitor.getOclType());
+			}
+		} catch (ParserException e) {
+			System.err.println("UNABLE TO DISCOVER CALLABLE TYPE");
+		}
+		OutputMetamodelVisitor omv = new OutputMetamodelVisitor();
+		omv.perform(atlModel, callableElements);
+		for (EcoreMetamodel emm :listMetamodel) {
+			List<EPackage> ep = ecoreMetamodelService.getEPackageList(emm);
+			EPackage p = ep.get(0);
+			if(ecoreMetamodelService.checkConstraint(p, omv.getConstraint()))
+				result.add(emm);
+		}
+	    result.forEach(s -> System.out.println(s));
+		return result;
+		} catch (ATLCoreException e1) {
+			throw new BusinessException(e1.getMessage());
+		}
+	}
+
+	@Override
+	public double metamodelCoverage(ATLTransformation atl) throws BusinessException{
+		try {
+			AtlParser atlParser = new AtlParser();
+			ModelFactory modelFactory = new EMFModelFactory();
+			IReferenceModel atlMetamodel;
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String filePath = gridFileMediaService.getFilePath(atl);
+			EMFModel atlDynModel = (EMFModel) modelFactory
+					.newModel(atlMetamodel);
+			atlParser.inject(atlDynModel, filePath);
+			Resource originalTrafo = atlDynModel.getResource();
+			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+					.getURI().toFileString(), true);
+			List<ModelInfo> info = ATLUtils.getModelInfo(atlModel);
+			int i = 0;
+			String[] files = new String[info.size()];
+			String[] names = new String[info.size()];
+			for (DomainConformToRelation rel : atl.getDomainConformToRelation()) {
+				names[i] = rel.getReferenceModelName();
+				files[i] = gridFileMediaService.getFilePath(rel
+						.getToArtifact());
+				i++;
+				
+			}
+			for (CoDomainConformToRelation rel : atl.getCoDomainConformToRelation()) {
+					names[i] = rel.getReferenceModelName();
+					files[i] = gridFileMediaService.getFilePath(rel
+							.getToArtifact());
+					i++;
+				
+			}
+			AnalysisLoader loader = AnalysisLoader.fromATLModel(atlModel,
+					files, names);
+			AnalysisResult result = loader.analyse();
+			for (DomainConformToRelation rel : atl.getDomainConformToRelation()) {
+				EcoreMetamodel em = (EcoreMetamodel) rel.getToArtifact();
+				List<EPackage> packList = ecoreMetamodelService.getEPackageList(em);
+				for (EPackage ePackage : packList) {
+					for (EClassifier eCls : ePackage.getEClassifiers()) {
+						
+						
+					}
+				}
+			}
+			
+			
+			return 0;
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}

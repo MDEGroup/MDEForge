@@ -15,18 +15,21 @@
 	href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css"
 	rel="stylesheet" />
 <!-- Dropzone Plugin -->
-	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/dropzone/css/dropzone.css" rel="stylesheet" />
+<link
+	href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/dropzone/css/dropzone.css"
+	rel="stylesheet" />
 <!-- Dropzone -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/dropzone/dropzone4.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/dropzone/dropzone4.js"></script>
 <!-- Mustache -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <!-- Spin.js -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <!-- Dropzone configuration -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/mydropzone.js"></script>
-
-
-
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/mydropzone.js"></script>
 <ul class="breadcrumb">
 	<li>You are here</li>
 	<li><a
@@ -34,7 +37,6 @@
 		class="glyphicons dashboard"><i></i> Search area</a></li>
 </ul>
 <!-- Breadcrumb END -->
-
 <h3>Search Page</h3>
 <div class="innerLR">
 	<div class="row-fluid">
@@ -78,19 +80,14 @@
 								<div class="tab-pane" id="search-simple">
 							</c:otherwise>
 						</c:choose>
-
 						<div class="widget widget-heading-simple widget-body-white">
-
 							<div class="widget-body">
-
 								<div class="row-fluid">
 									<form action="${pageContext.request.contextPath}/public/search"
 										method="get" class="form-search">
 										<div class="span6 center">
 											<div
 												class="widget widget-heading-simple widget-body-simple margin-none">
-
-
 												<div class="uniformjs">
 													<label class="checkbox" style="display: inline-block;">
 														<div class="checker" id="uniform-undefined">
@@ -114,9 +111,7 @@
 													</label>
 												</div>
 											</div>
-
 										</div>
-
 										<div class="span6 center">
 											<div
 												class="widget widget-heading-simple widget-body-simple text-right">
@@ -127,21 +122,12 @@
 												<button type="submit" class="btn btn-inverse">
 													<spring:message code="mdeforge.common.action.search" />
 												</button>
-
 											</div>
 									</form>
-
-
-
-
-
 								</div>
 							</div>
 						</div>
 					</div>
-
-
-
 					<c:choose>
 						<c:when test="${artifactList.size() > 0}">
 							<div
@@ -149,51 +135,20 @@
 								<div class="widget-body">
 									<h5 class="text-uppercase strong separator bottom">${artifactList.size()}
 										Search results</h5>
-
 									<c:forEach items="${artifactList}" var="artifact">
 										<div class="row-fluid">
-
 											<div class="span12">
 												<h5 class="strong text-uppercase">
 													<c:choose>
-														<c:when
-															test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-															<c:choose>
-																<c:when test="${artifact.open == true}">
-																	<a	href="${pageContext.request.contextPath}/public/browse/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
-																</c:when>
-																<c:otherwise>
-																	<a	href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
-															
-																</c:otherwise>																
-															</c:choose>
-															
+														<c:when test="${artifact.open == true}">
+															<a
+																href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
 														</c:when>
-														<c:when
-															test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-															<c:choose>
-																<c:when test="${artifact.open == true}">
-																	<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-																</c:when>
-																<c:otherwise>
-																	<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-																</c:otherwise>																
-															</c:choose>
-															
-															
-														</c:when>
-														<c:when
-															test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-															<c:choose>
-																<c:when test="${artifact.open == true}">
-																	<a href="${pageContext.request.contextPath}/private/Model/model_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-																</c:when>
-																<c:otherwise>
-																	<a href="${pageContext.request.contextPath}/private/Model/model_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-																</c:otherwise>																
-															</c:choose>
-															
-														</c:when>
+														<c:otherwise>
+															<a
+																href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+
+														</c:otherwise>
 													</c:choose>
 												</h5>
 												<span class="badge badge-success">Score: <fmt:formatNumber
@@ -222,31 +177,14 @@
 
 
 												</p>
-
-
-												<c:choose>
-													<c:when
-														test="${artifact.getClass().name.equals('org.mdeforge.business.model.ATLTransformation')}">
-														<span class="badge badge-important">ATL
-															Transformation</span>
-													</c:when>
-													<c:when
-														test="${artifact.getClass().name.equals('org.mdeforge.business.model.EcoreMetamodel')}">
-														<span class="badge badge-warning">Ecore Metamodel</span>
-													</c:when>
-													<c:when
-														test="${artifact.getClass().name.equals('org.mdeforge.business.model.Model')}">
-														<span class="badge badge-info">Model</span>
-													</c:when>
-												</c:choose>
+												<span class="badge badge-important">${artifact.getClass().getSimpleName() }</span>
+												
 												<span class="label">Last update: <fmt:formatDate
 														type="date" value="${artifact.getModified()}" /></span>
-
-
 												<p class="margin-none strong">
 													<a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}"
-														title="Metamodel Download"
+														href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName() }/ownload?artifact_id=${artifact.getId()}"
+														title="${artifact.getClass().getSimpleName() } Download"
 														class="glyphicons single download_alt"><i></i>Download</a>
 												</p>
 											</div>
@@ -276,10 +214,7 @@
 									</div> -->
 						</c:otherwise>
 					</c:choose>
-
 				</div>
-
-
 				<c:choose>
 					<c:when test="${artifactListByExample.size() > 0}">
 						<div class="tab-pane active" id="search-by-example">
@@ -288,27 +223,23 @@
 						<div class="tab-pane" id="search-by-example">
 					</c:otherwise>
 				</c:choose>
-
-				
-
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<h4 class="separator bottom">Drop Metamodel Upload</h4>
-						
-						<form:form cssClass="dropzone form-horizontal" modelAttribute="metamodelfile"
+
+						<form:form cssClass="dropzone form-horizontal"
+							modelAttribute="metamodelfile"
 							action="${pageContext.request.contextPath}/public/search_metamodel_by_example/result"
-							role="form" method="POST" id="my-awesome-dropzone" enctype="multipart/form-data">
-								<div class="fallback">
-				    				<input name="file" type="file" multiple />
-				  				</div>
-				  				<button type="submit" class="btn btn-inverse" id="searchEmoreMetamodelByExampleButton">
-											<spring:message code="mdeforge.common.action.search" /></button>
+							role="form" method="POST" id="my-awesome-dropzone"
+							enctype="multipart/form-data">
+							<div class="fallback">
+								<input name="file" type="file" multiple />
+							</div>
+							<button type="submit" class="btn btn-inverse"
+								id="searchEmoreMetamodelByExampleButton">
+								<spring:message code="mdeforge.common.action.search" />
+							</button>
 						</form:form>
-						
-					
-						
-						
-							
 					</div>
 				</div>
 
@@ -325,8 +256,7 @@
 					<c:otherwise>
 						<div
 							class="widget widget-heading-simple widget-body-white margin-none">
-							<div class="widget-body" id="resultEcoreMetamodelList">
-							</div>
+							<div class="widget-body" id="resultEcoreMetamodelList"></div>
 						</div>
 					</c:otherwise>
 				</c:choose>

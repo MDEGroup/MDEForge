@@ -2,12 +2,8 @@ package org.mdeforge.presentation.frontend;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
@@ -15,7 +11,6 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
-import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -29,14 +24,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/public")
-public class EcorePublicController {
-	
+@RequestMapping("/public/EcoreMetamodel")
+public class EcorePublicController extends ArtifactPublicController<EcoreMetamodel> {
 	final double thresholdSimilarityRelation = 		0.15;
 	final double thresholdContainmentRelation = 		0.4;
 	final double thresholdCosineSimilarityRelation = 	0.2;
 	final double thresholdDiceSimilarityRelation = 	0.6;
-
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
@@ -51,67 +44,20 @@ public class EcorePublicController {
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-	@Autowired
-	private UserService userService;
 	@Autowired 
 	private User user;
 
-	@RequestMapping(value = "/", method = { RequestMethod.GET })
-	public String index() {
-		return "public.index";
-	}
-	
-	@RequestMapping(value = "/about", method = { RequestMethod.GET })
-	public String about() {
-		return "public.about";
-	}
+	public String details(Model model, @RequestParam String artifact_id) {
 
-	@RequestMapping(value = "/members", method = { RequestMethod.GET })
-	public String members() {
-		return "public.members";
-	}
-
-	@RequestMapping(value = "/publications", method = { RequestMethod.GET })
-	public String publications() {
-		return "public.publications";
-	}
-	
-	@RequestMapping("/login")
-	public String login() {
-		return "public.login";
-	}
-
-	@RequestMapping(value = "/browse", method = { RequestMethod.GET })
-	public String dashboard(Model model, HttpServletResponse response, HttpServletRequest request) throws IOException {
-		
-		response.sendRedirect(request.getContextPath()+"/public/browse/metamodels_list");
-
-//		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService
-//				.findAll();
-//		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
-//		List<User> users = userService.findAll();
-//		model.addAttribute("users", users);
-//		return "public.browse.dashboard";
-		return null;
-	}
-
-	@RequestMapping(value = "/browse/metamodel_details", method = { RequestMethod.GET })
-	public String metamodelDetails(Model model, @RequestParam String metamodel_id) {
-
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
-		ecoreMetamodel.getRelations().addAll(
-				similarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		ecoreMetamodel.getRelations().addAll(
-				containmentRelationService.findTopProximity(ecoreMetamodel, 5));
-		ecoreMetamodel.getRelations().addAll(
-				diceSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		ecoreMetamodel.getRelations().addAll(
-				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
-		File ecoreMetamodelFile = new File(pathToDownload);
-		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
-
+		super.details(model, artifact_id);
+//		ecoreMetamodel.getRelations().addAll(
+//				similarityRelationService.findTopProximity(ecoreMetamodel, 5));
+//		ecoreMetamodel.getRelations().addAll(
+//				containmentRelationService.findTopProximity(ecoreMetamodel, 5));
+//		ecoreMetamodel.getRelations().addAll(
+//				diceSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
+//		ecoreMetamodel.getRelations().addAll(
+//				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
 		return "public.browse.metamodel_details";
 	}
 	@RequestMapping(value = "/browse/metamodel_share", method = { RequestMethod.GET })
@@ -135,40 +81,12 @@ public class EcorePublicController {
 
 		return "private.use.metamodel_details";
 	}
-	@RequestMapping(value = "/browse/metamodel_download", method = RequestMethod.GET)
-	public void downloadMetamodel(@RequestParam String metamodel_id,
-			HttpServletResponse response) throws IOException {
 
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService
-				.findOne(metamodel_id);
-		InputStream is = gridFileMediaService
-				.getFileInputStream(ecoreMetamodel);
-
-		response.setContentType("application/force-download");
-		response.setHeader("Content-Disposition", "attachment; filename="
-				+ ecoreMetamodel.getName() + ".ecore");
-		// copy it to response's OutputStream
-		org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
-		response.flushBuffer();
-	}
-
-	@RequestMapping(value = "/browse/metamodels_list", method = { RequestMethod.GET })
-	public String metamodelsList(Model model) {
-
-		List<EcoreMetamodel> ecoreMetamodelsList = ecoreMetamodelService
-				.findAll();
-		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
-
-		return "public.browse.metamodels_list";
-	}
-
-	@RequestMapping(value = "/browse/cluster", method = { RequestMethod.GET })
+	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })
 	public String cluster(
 			Model model,
 			@RequestParam(value = "threshold", required = true, defaultValue = "0.30") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
-		
-		
 		/*
 		 * TABLE
 		 */
@@ -217,12 +135,11 @@ public class EcorePublicController {
 		model.addAttribute("numberOfMetamodels", count);
 		return "public.browse.cluster";
 	}
-	@RequestMapping(value = "/browse/cluster_from_DB", method = { RequestMethod.GET })
+	
+	@RequestMapping(value = "/cluster_from_DB", method = { RequestMethod.GET })
 	public String clusterFromDB(
 			Model model,
 			@RequestParam(value = "id") String id) {
-		
-		
 		Clusterizzation clusterizzation = clusterizzationRepository.findOne(id);
 		List<Cluster> clusters = clusterizzation.getClusters(); 
 		int maxCluster = 0;
@@ -242,21 +159,17 @@ public class EcorePublicController {
 		model.addAttribute("average", average);
 		model.addAttribute("max", maxCluster);
 		model.addAttribute("noCluster", noCluster);
-		// Mettiamo anche le informazioni relative alla Threshold e Computation
 		model.addAttribute("threshold", clusterizzation.getThreshold());
 		model.addAttribute("computation", clusterizzation.getAlgoritmhs());
 		model.addAttribute("numberOfMetamodels", count);
 		return "public.browse.cluster";
 	}
 
-	@RequestMapping(value = "/browse/cluster_graph", method = { RequestMethod.GET })
+	@RequestMapping(value = "/cluster_graph", method = { RequestMethod.GET })
 	public String clusterGraph(
 			Model model,
 			@RequestParam(value = "threshold", required = true, defaultValue = "0.30") Double threshold,
 			@RequestParam(value = "computation", required = true, defaultValue = "1") int computation) {
-
-		
-		
 		List<Cluster> clusters = new ArrayList<Cluster>();
 		switch (computation) {
 		case 1:			
@@ -278,7 +191,6 @@ public class EcorePublicController {
 			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, diceSimilarityRelationService).getClusters();
 			break;
 		}
-		
 		int maxCluster = 0;
 		double average = 0;
 		int count = 0;
@@ -300,7 +212,6 @@ public class EcorePublicController {
 		model.addAttribute("threshold", threshold);
 		model.addAttribute("computation", computation);
 		model.addAttribute("numberOfMetamodels", count);
-		
 		/*
 		 * GRAPH
 		 */
@@ -327,11 +238,8 @@ public class EcorePublicController {
 		return "public.browse.cluster.graph";
 	}
 	
-	@RequestMapping(value = "/browse/metamodel_name_from_graph", method = { RequestMethod.GET })
-	public void clusterGraphMetamodelNameFromGraph(@RequestParam String name,Model model, HttpServletResponse response, HttpServletRequest request) throws IOException{
-		
+	public String artifactFromName(@RequestParam String name,Model model) throws IOException{
 		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneByName(name);
-		
-		response.sendRedirect(request.getContextPath()+"/public/browse/metamodel_details?metamodel_id="+ecoreMetamodel.getId());
+		return "redirect:/public/EcoreMetamodel/artifacts?artifact_id="+ ecoreMetamodel.getId();
 	}
 }

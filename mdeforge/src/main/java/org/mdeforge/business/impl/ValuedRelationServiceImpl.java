@@ -8,10 +8,7 @@ import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.ContainmentRelation;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.ValuedRelation;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -53,7 +50,7 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 	}
 
 	@Override
-	public List<T> findTopProximity(EcoreMetamodel a, int i)
+	public List<T> findTopProximity(Artifact a, int i)
 			throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
@@ -105,7 +102,7 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 	// return n.find(query, persistentClass);
 	// }
 	@Override
-	public List<T> findByEcoreMetamodel(EcoreMetamodel emm, double threshold) {
+	public List<T> findByArtifact(Artifact emm, double threshold) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("_class").is(
@@ -122,7 +119,7 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 	}
 
 	@Override
-	public List<T> findByEcoreMetamodel(EcoreMetamodel emm, double threshold,
+	public List<T> findByArtifact(Artifact emm, double threshold,
 			int computation) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
@@ -141,7 +138,7 @@ public abstract class ValuedRelationServiceImpl<T extends ValuedRelation>
 		return n.find(query, persistentClass);
 	}
 	@Override
-	public T findNearest(EcoreMetamodel a, double threshold) throws BusinessException {
+	public T findNearest(Artifact a, double threshold) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		query.with(new Sort(Sort.Direction.DESC, "value"));

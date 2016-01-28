@@ -91,5 +91,9 @@ public class EcoreMetamodelService extends ArtifactService {
 		String result = doPutRequest(connectionUrl + "api/EcoreMetamodel/", on);
 		return mapper.readValue(result, new TypeReference<EcoreMetamodel>() {});
 	}
+	public String getEcoreMetamodelJsonFormat(String id) throws Exception{
+		return doGetRequest(connectionUrl + "api/EcoreMetamodel/metamodelJsonFormat/" + id);
+		//return mapper.readValue(result, String.class);
+	}
 
 }

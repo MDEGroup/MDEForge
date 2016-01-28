@@ -24,7 +24,7 @@ public class ImporterFromEMFZoo {
 	
 	public static void main(String[] args) {
 		Document doc;
-		String projectUrl = "http://www.emn.fr/z-info/atlanmod/index.php/Ecore";
+		String projectUrl = "http://web.emn.fr/x-info/atlanmod/index.php?title=Ecore";
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
 		
