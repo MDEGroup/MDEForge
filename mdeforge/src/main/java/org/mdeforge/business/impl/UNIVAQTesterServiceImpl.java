@@ -1,16 +1,15 @@
 package org.mdeforge.business.impl;
 
-import java.awt.GridBagConstraints;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -23,21 +22,24 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.eclipse.m2m.atl.engine.compiler.CompileTimeError;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
+import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.UNIVAQTesterService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ATLTransformationTestServiceError;
 import org.mdeforge.business.model.CoDomainConformToRelation;
+import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
+import org.mdeforge.business.model.ERROR_KIND;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -48,16 +50,13 @@ import transML.utils.modeling.ATLEngine;
 import transML.utils.modeling.TrafoEngine;
 import transML.utils.solver.FactorySolver;
 import transML.utils.solver.SolverWrapper;
-import anatlyzer.atl.analyser.namespaces.GlobalNamespace;
 import anatlyzer.atl.model.ATLModel;
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atlext.ATL.Module;
 import anatlyzer.evaluation.models.FullModelGenerationStrategy;
 import anatlyzer.evaluation.models.LiteModelGenerationStrategy;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
 import anatlyzer.evaluation.report.Report;
-import anatlyzer.evaluation.tester.Tester;
+
 
 @Service
 public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
@@ -69,76 +68,77 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 	private GridFileMediaService gridFileMediaService;
 	@Autowired
 	private ATLTransformationService atlTransformationService;
-
-	public boolean executeTransformation(ATLTransformation transformation,
-			boolean exhaustive) {
+	public List<ATLTransformationTestServiceError> executeTransformation(EMFModel atlModel, ATLTransformation transformation, List<Model> models,
+			boolean exhaustive) throws ATLTransformationCompilationError {
+		List<ATLTransformationTestServiceError> result = new ArrayList<ATLTransformationTestServiceError>();
+		String folderModels = basePath + "anatlyze/testmodels" + File.separator;
 		ResourceSetImpl rs = new ResourceSetImpl();
 		Report report = new Report();
-		List<DomainConformToRelation> inputMetamodels = new ArrayList<DomainConformToRelation>();
+		List<DomainConformToRelation> inputMetamodelRelations = new ArrayList<DomainConformToRelation>();
 		List<CoDomainConformToRelation> outputMetamodels = new ArrayList<CoDomainConformToRelation>();
-		EMFModel atlModel = atlTransformationService
-				.injectATLModel(transformation);
-		inputMetamodels.addAll(transformation.getDomainConformToRelation());
+		
+		inputMetamodelRelations.addAll(transformation.getDomainConformToRelation());
 		outputMetamodels.addAll(transformation.getCoDomainConformToRelation());
 
-		String folderMutants = basePath + "anatlyze/mutants" + File.separator;
-		String folderModels = basePath + "anatlyze/testmodels" + File.separator;
+		
 		String folderTemp = basePath + "anatlyze/temp" + File.separator;
 		boolean error = false;
 
 		// name of input/output metamodels of the transformation
 		// TODO: there may be several input/output metamodels
-		EcoreMetamodel immAlias = (EcoreMetamodel) inputMetamodels.get(0)
+		EcoreMetamodel immAlias = (EcoreMetamodel) inputMetamodelRelations.get(0)
 				.getToArtifact();
 		EcoreMetamodel ommAlias = (EcoreMetamodel) outputMetamodels.get(0)
 				.getToArtifact();
 		String aux = URI.createFileURI(basePath + transformation.getName())
 				.lastSegment();
-		String oFolder = aux.substring(0, aux.lastIndexOf("."));
-
+		String oFolder = "";
+		if(aux.contains("."))
+			oFolder = aux.substring(0, aux.lastIndexOf("."));
+		else
+			oFolder = aux;
+		
 		// compilation is performed when the mutant is generated, but just in
 		// case...
 		if (compileTransformation(transformation) == false)
-			return true;
+			throw new ATLTransformationCompilationError();
 
 		try {
 			// load transformation
-			String atlTransformationFile = gridFileMediaService
-					.getFilePath(transformation);
+			String atlTransformationFile = gridFileMediaService.getFilePath(transformation);
+			String transformation_asm = atlTransformationFile.replace(".atl",
+					".asm");
+			
 			String inputMetamodelString = gridFileMediaService
-					.getFilePath(inputMetamodels.get(0).getToArtifact());
+					.getFilePath(inputMetamodelRelations.get(0).getToArtifact());
 			String outputMetamodelString = gridFileMediaService
 					.getFilePath(outputMetamodels.get(0).getToArtifact());
 
-			String transformation_asm = atlTransformationFile.replace(".atl",
-					".asm");
+			
 			TrafoEngine engine = new ATLEngine();
 			engine.loadTransformation(transformation_asm);
 
 			// obtain input test models
-			File[] inputModels = new File(folderModels)
-					.listFiles(new FilenameFilter() {
-						public boolean accept(File directory, String fileName) {
-							return fileName.endsWith(".model");
-						}
-					});
+//			File[] inputModels = new File(folderModels)
+//					.listFiles(new FilenameFilter() {
+//						public boolean accept(File directory, String fileName) {
+//							return fileName.endsWith(".model");
+//						}
+//					});
 
 			// for each input test model
-			for (File inputModel : inputModels) {
+			for (Model inputModel : models) {
 
 				// load input/output model
-				String iModel = inputModel.getPath();
+				String iModel = gridFileMediaService.getFilePath(inputModel);
 				String oModel = folderTemp + oFolder + File.separator
 						+ inputModel.getName(); // generate output model in
 												// temporal folder, because it
 												// will be deleted
 
 				// TODO
-				engine.loadSourcemodel(inputMetamodelString, iModel,
-						inputMetamodels.get(0).getReferenceModelName());
-				engine.loadTargetmodel(outputMetamodelString, oModel,
-						outputMetamodels.get(0).getReferenceModelName());
-
+				engine.loadSourcemodel(inputMetamodelRelations.get(0).getReferenceModelName(), iModel, inputMetamodelString );
+				engine.loadTargetmodel(outputMetamodels.get(0).getReferenceModelName(), oModel, outputMetamodelString);
 				// execute transformation
 				try {
 					// check whether the transformation does not crash
@@ -151,19 +151,39 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 						for (EObject eObject : resource.getContents()) {
 							Diagnostic diagnostic = Diagnostician.INSTANCE
 									.validate(eObject);
-							if (diagnostic.getSeverity() != Diagnostic.OK)
+							if (diagnostic.getSeverity() != Diagnostic.OK) {
+								ATLTransformationTestServiceError errorForge = new ATLTransformationTestServiceError();
+								errorForge.setModel(inputModel);
+								errorForge.setErrorMessage(((BasicDiagnostic) diagnostic
+												.getChildren().get(0))
+												.getMessage());
+								errorForge.setErrorKind(ERROR_KIND.EXECUTION_YIELDS_ILL_TARGET);
+								result.add(errorForge);
 								error = report.setOutputError(
 										atlTransformationFile,
 										((BasicDiagnostic) diagnostic
 												.getChildren().get(0))
 												.getMessage(), inputModel
 												.getName());
+							}
 						}
-					} else
+					} else {
+						ATLTransformationTestServiceError errorForge = new ATLTransformationTestServiceError();
+						errorForge.setModel(inputModel);
+						errorForge.setErrorMessage("EXECUTION_ERROR");
+						errorForge.setErrorKind(ERROR_KIND.EXECUTION_RAISES_EXCEPTION);
+						result.add(errorForge);
 						error = report.setExecutionError(atlTransformationFile,
 								"EXECUTION_ERROR", inputModel.getName());
+					}
 				} catch (transException e) {
-					error = report.setExecutionError(
+					ATLTransformationTestServiceError errorForge = new ATLTransformationTestServiceError();
+					errorForge.setModel(inputModel);
+					errorForge.setErrorMessage(e.getDetails().length > 0 ? e.getDetails()[0] : e
+							.getMessage());
+					errorForge.setErrorKind(ERROR_KIND.EXECUTION_RAISES_EXCEPTION);
+					result.add(errorForge);
+					report.setExecutionError(
 							atlTransformationFile,
 							e.getDetails().length > 0 ? e.getDetails()[0] : e
 									.getMessage(), inputModel.getName());
@@ -179,23 +199,16 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			deleteDirectory(oFolder, true);
 		}
 
-		return error;
+		return result;
 	}
 
-	public void generateModel(ATLTransformation trafo) throws transException {
-		ResourceSetImpl rs = new ResourceSetImpl();
-		Report report = new Report();
-		EMFModel atlModel = atlTransformationService.injectATLModel(trafo);
+	public List<Model> generateModel(EMFModel atlModel, ATLTransformation trafo, ModelGenerationStrategy.STRATEGY modelGenerationStrategyBoolean) throws transException {
+		List<Model> result = new ArrayList<Model>();
 		List<DomainConformToRelation> inputMetamodels = new ArrayList<DomainConformToRelation>();
 		List<CoDomainConformToRelation> outputMetamodels = new ArrayList<CoDomainConformToRelation>();
-		for (Relation relation : trafo.getRelations()) {
-			if (relation instanceof DomainConformToRelation)
-				inputMetamodels.add((DomainConformToRelation) relation);
-			if (relation instanceof CoDomainConformToRelation)
-				outputMetamodels.add((CoDomainConformToRelation) relation);
+		inputMetamodels.addAll(trafo.getDomainConformToRelation());
+		outputMetamodels.addAll(trafo.getCoDomainConformToRelation());
 
-		}
-		String folderMutants = basePath + "anatlyze/mutants" + File.separator;
 		String folderModels = basePath + "anatlyze/testmodels" + File.separator;
 		String folderTemp = basePath + "anatlyze/temp" + File.separator;
 		EcoreMetamodel first = (EcoreMetamodel) inputMetamodels.get(0)
@@ -247,27 +260,46 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			if (s.contains("@pre"))
 				preconditions.add(s.substring(s.indexOf("@pre") + 4).trim());
 		}
-
 		// generate models
-		SolverWrapper solver = FactorySolver.getInstance()
-				.createSolverWrapper();
-		ModelGenerationStrategy modelGenerationStrategy = new LiteModelGenerationStrategy(
-				classes, references);
+		
+		SolverWrapper solver = FactorySolver.getInstance().createSolverWrapper();
+		ModelGenerationStrategy modelGenerationStrategy = 
+						modelGenerationStrategyBoolean == ModelGenerationStrategy.STRATEGY.Full?
+						new FullModelGenerationStrategy(classes, references) :
+						new LiteModelGenerationStrategy(classes, references) ;
 		for (Properties propertiesUse : modelGenerationStrategy) {
 			try {
 				saveTransMLProperties(propertiesUse, folderTemp);
 				String model = solver.find(metamodel, preconditions); // Collections.<String>emptyList());
 				System.out.println("generated model: "
 						+ (model != null ? model : "NONE"));
+				if (model != null) {
+					Model m = new Model();
+					String [] modelName = model.split("/");
+					Date ss1 = new Date();
+					SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
+					String formats1 = formatter5.format(ss1);
+
+					m.setName(formats1 + modelName[modelName.length-1]);
+					m.setFile(gridFileMediaService.createObjectFromFile(model, modelName[modelName.length-1]));
+					ConformToRelation ctr = new ConformToRelation();
+					ctr.setFromArtifact(m);
+					ctr.setToArtifact(inputMetamodels.get(0).getToArtifact());
+					m.getRelations().add(ctr);
+					result.add(m);
+				}
 			} catch (transException e) {
 				String error = e.getDetails().length > 0 ? e.getDetails()[0]
 						: e.getMessage();
 				if (error.endsWith("\n"))
 					error = error.substring(0, error.lastIndexOf("\n"));
 				System.out.println("[ERROR] " + error);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-
+		
 		// move generated models to output folder
 		try {
 			moveDirectory(folderTemp + "models", folderModels);
@@ -275,6 +307,8 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		resource.unload();
+		return result;
 	}
 
 	private void moveDirectory(String sourceDirectory, String targetDirectory)

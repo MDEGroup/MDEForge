@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
@@ -17,6 +18,8 @@ import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ATLTransformationError;
+import org.mdeforge.business.model.ATLTransformationTestServiceError;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
@@ -39,6 +42,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+
+import anatlyzer.evaluation.report.Report;
+import transML.exceptions.transException;
 
 @Controller
 @RequestMapping("/private/ATLTransformation")
@@ -207,11 +213,11 @@ public class ATLPrivateController {
 	public String anATLyzerTrasformation(Model model,
 			@RequestParam String transformation_id) {
 
-		ATLTransformation atlTransformation = aTLTransformationService
-				.anATLyzer(transformation_id, user);
-
+		ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
+		List<ATLTransformationError> errors =	aTLTransformationService
+				.anATLyzer(atlTransformation, user);
+		atlTransformation.setAtlError(errors);
 		model.addAttribute("atlTransformation", atlTransformation);
-
 		String pathToDownload = gridFileMediaService
 				.getFilePath(atlTransformation);
 		File atlTransformationFile = new File(pathToDownload);
@@ -219,7 +225,54 @@ public class ATLPrivateController {
 
 		return "private.use.transformation_details";
 	}
+	@RequestMapping(value = "/test_service", method = { RequestMethod.GET })
+	public String testService(Model model,
+			@RequestParam String transformation_id) {
+		try {
+			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
+			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id, user);
+			atlTransformation.setAtlTestError(r);
+			System.out.println(r);
+			String pathToDownload = gridFileMediaService
+					.getFilePath(atlTransformation);
+			File atlTransformationFile = new File(pathToDownload);
+			model.addAttribute("atlTransformation", atlTransformation);
+			model.addAttribute("atlTransformationFile", atlTransformationFile);
 
+		} catch (ATLTransformationCompilationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (transException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "private.use.transformation_details";
+	}
+	@RequestMapping(value = "/analysis", method = { RequestMethod.GET })
+	public String transformationAnalysis(Model model,
+			@RequestParam String transformation_id) {
+		try {
+			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
+			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id, user);
+			atlTransformation.setAtlTestError(r);
+			List<ATLTransformationError> errors =	aTLTransformationService
+					.anATLyzer(atlTransformation, user);
+			atlTransformation.setAtlError(errors);
+			String pathToDownload = gridFileMediaService
+					.getFilePath(atlTransformation);
+			File atlTransformationFile = new File(pathToDownload);
+			model.addAttribute("atlTransformation", atlTransformation);
+			model.addAttribute("atlTransformationFile", atlTransformationFile);
+			
+		} catch (ATLTransformationCompilationError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (transException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "private.use.transformation_details";
+	}
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 		binder.registerCustomEditor(Project.class, "projects",

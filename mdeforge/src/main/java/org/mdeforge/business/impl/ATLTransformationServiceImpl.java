@@ -44,6 +44,7 @@ import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.eclipse.m2m.atl.engine.parser.AtlParser;
 import org.eclipse.ocl.ParserException;
+import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -55,9 +56,12 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.UNIVAQTesterService;
 import org.mdeforge.business.anatlyzer.AnATLyzerUtils;
+import org.mdeforge.business.anatlyzer.CallableVisitor;
+import org.mdeforge.business.anatlyzer.OutputMetamodelVisitor;
 import org.mdeforge.business.anatlyzer.UNIVAQUSEWitnessFinder;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
+import org.mdeforge.business.model.ATLTransformationTestServiceError;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -84,8 +88,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
-import org.mdeforge.business.anatlyzer.CallableVisitor;
-import org.mdeforge.business.anatlyzer.OutputMetamodelVisitor;
 import transML.exceptions.transException;
 import anatlyzer.atl.analyser.AnalysisResult;
 import anatlyzer.atl.errors.Problem;
@@ -98,6 +100,7 @@ import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
 import anatlyzer.atlext.ATL.Callable;
 import anatlyzer.atlext.OCL.OclType;
+import anatlyzer.evaluation.models.ModelGenerationStrategy;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
@@ -422,17 +425,13 @@ public class ATLTransformationServiceImpl extends
 			atlMetamodel = (EMFReferenceModel)modelFactory.getBuiltInResource("ATL.ecore");
 			AtlParser         atlParser    = new AtlParser();		
 			EMFModel          atlModel     = (EMFModel)modelFactory.newModel(atlMetamodel);
-			atlParser.inject (atlModel, gridFileMediaService.getFilePath(atlTransformation));	
+			String atlPath = gridFileMediaService.getFilePath(atlTransformation);
+			atlParser.inject(atlModel, atlPath);	
 			atlModel.setIsTarget(true);
 			return atlModel;
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}
-						
-		
-
-		
-		
 	}
 
 	private List<Model> doTransformation(ATLTransformation transformation,
@@ -592,32 +591,29 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public void testServices(String transformation_id, User user)  {
+	public List<ATLTransformationTestServiceError> testServices(String transformation_id, User user) throws ATLTransformationCompilationError, transException {
 		ATLTransformation atl = findOneById(transformation_id, user);
-		///Testing solver
-		UNIVAQUSEWitnessFinder twf = new UNIVAQUSEWitnessFinder();
-		String atlPath = gridFileMediaService.getFilePath(atl);
-		//Tester tester;
-		try {
-//			tester = new Tester(atlPath, twf.getTempDirectory());
-//			tester.generateTestModels();
-//			// execute transformation with the generated input models
-//			tester.executeTransformation(atlPath, true);
-//			// obtain report of problematic executions
-//			Report report = tester.getReport();
-//			SortedSet<Record> output = report.getResult(atlPath);
-			univaqTesterService.generateModel(atl);
-		}  catch (transException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		EMFModel atlModel = injectATLModel(atl);
+		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
+		for (Model model : modelList) {
+			model.setAuthor(atl.getAuthor());
+			modelService.create(model);
 		}
-		///Testing solver
+		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
+		atl.setAtlTestError(r);
+		ATLTransformationRepository.save(atl);
+		String path = gridFileMediaService.getFilePath(atl);
+		
+		
+		return r;
+			
+		
 	}
 
 	@Override
-	public ATLTransformation anATLyzer(String transformation_id, User user)
+	public List<ATLTransformationError> anATLyzer(ATLTransformation atl, User user)
 			throws BusinessException {
-		ATLTransformation atl = findOneById(transformation_id, user);
+		List<ATLTransformationError> resultMethod = new ArrayList<ATLTransformationError>();
 		try {
 			AtlParser atlParser = new AtlParser();
 			ModelFactory modelFactory = new EMFModelFactory();
@@ -677,12 +673,12 @@ public class ATLTransformationServiceImpl extends
 				forgeError.setProblemId(AnalyserUtils.getProblemId(problem));
 				forgeError.setSeverity(AnalyserUtils
 						.getProblemSeverity(problem));
-				atl.getAtlError().add(forgeError);
+				resultMethod.add(forgeError);
 				
 			}
-			//TODO REMOVED TEST SERVICE
-			//testServices(atl.getId(), user);
-			return atl;
+			atl.setAtlError(resultMethod);
+			ATLTransformationRepository.save(atl);
+			return resultMethod;
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}

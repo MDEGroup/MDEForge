@@ -1244,7 +1244,7 @@ public class EcoreMetamodelServiceImpl extends
 
 	@Override
 	public Resource loadArtifact(EcoreMetamodel id) throws BusinessException {
-
+		
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/"
 				+ mongoDbFactory.getDb().getName() + "/"
 				+ jsonArtifactCollection + "/" + id.getId();
@@ -1253,7 +1253,8 @@ public class EcoreMetamodelServiceImpl extends
 		Resource resource = jsonMongoResourceSet.getResourceSet().getResource(
 				URI.createURI(mongoURI), true);
 		try {
-			resource.load(null);
+			if (!resource.isLoaded())
+				resource.load(null);
 		} catch (IOException e) {
 			throw new BusinessException();
 		}

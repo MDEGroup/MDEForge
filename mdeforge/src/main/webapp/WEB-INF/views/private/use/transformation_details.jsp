@@ -15,12 +15,15 @@
 
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
-	<li><spring:message code="mdeforge.public.back.browse.breadcrumbs.you_are_here" /></li>
-	<li><a href="#" class="glyphicons dashboard"><i></i> Private Area</a></li>
+	<li><spring:message
+			code="mdeforge.public.back.browse.breadcrumbs.you_are_here" /></li>
+	<li><a href="#" class="glyphicons dashboard"><i></i> Private
+			Area</a></li>
 	<li class="divider"></li>
 	<li>Use</li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse.transformation_details.detail" /></li>
+	<li><spring:message
+			code="mdeforge.public.back.browse.transformation_details.detail" /></li>
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
@@ -128,18 +131,24 @@
 														class="btn btn-primary btn-small btn-block"
 														data-toggle="modal"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize
-														Transformation</a> 
-														<c:choose>
-															<c:when test="${atlTransformation.open}">
-																<a	href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
-																	class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
-															</c:when>
-															<c:otherwise>
-																<a	href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_download?transformation_id=${atlTransformation.getId()}"
-																		class="btn btn-success btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> Download	Transformation</a>
-																
-															</c:otherwise>
-														</c:choose>
+														Transformation</a>
+													<c:choose>
+														<c:when test="${atlTransformation.open}">
+															<a
+																href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${atlTransformation.getId()}"
+																class="btn btn-success btn-small btn-block"><i
+																class="icon-download-alt icon-fixed-width"></i> Download
+																Transformation</a>
+														</c:when>
+														<c:otherwise>
+															<a
+																href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_download?transformation_id=${atlTransformation.getId()}"
+																class="btn btn-success btn-small btn-block"><i
+																class="icon-download-alt icon-fixed-width"></i> Download
+																Transformation</a>
+
+														</c:otherwise>
+													</c:choose>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -151,26 +160,28 @@
 														Shared Users <span
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${atlTransformation.getShared().size()}
-															people)</span>
-															<i class="icon-expand-alt" id="showUserList"></i>
+															people)</span> <i class="icon-expand-alt" id="showUserList"></i>
 													</h5>
 													<div id="userList" class="row-fluid" style="display: none">
 														<select id="userSelect">
 														</select>
 														<div>
-															<span class="btn btn-block btn-primary span4" id="addUserArtifact">Add</span>
+															<span class="btn btn-block btn-primary span4"
+																id="addUserArtifact">Add</span>
 														</div>
 													</div>
 													<ul id="users" class="team">
 														<c:forEach items="${atlTransformation.getShared()}"
 															var="user" varStatus="count">
-															<li class="userLi" data-id="${user.getId()}"><span class="crt">${count.count}</span><span
-																class="strong">${user.getUsername()}</span><span
+															<li class="userLi" data-id="${user.getId()}"><span
+																class="crt">${count.count}</span><span class="strong">${user.getUsername()}</span><span
 																class="muted">${user.getFirstname()}
-																	${user.getLastname()}</span>
-																<span class="muted"><a href="mailto:${user.getEmail() }">${user.getEmail() } <i class="icon-envelope"></i></a></span>
-																<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
-															</li>
+																	${user.getLastname()}</span> <span class="muted"><a
+																	href="mailto:${user.getEmail() }">${user.getEmail() }
+																		<i class="icon-envelope"></i>
+																</a></span> <span
+																class="pull-right glyphicons icon-remove removeArtifactSharedUser"
+																data-id="${user.getId()}"></span></li>
 														</c:forEach>
 													</ul>
 												</div>
@@ -185,50 +196,90 @@
 			</div>
 			<hr>
 
-			
-		<c:if test="${atlTransformation.atlError.size() != 0}">
-		<div class="widget-body">
-			<div class="widget-head">
-				<h3 class="heading glyphicons show_thumbnails">
-					<i></i>Transformation errors
-				</h3>
-			</div>
-			<div class="tab-content">
-				<!-- Tab content -->
-				<div id="tabAll" class="tab-pane active">
-					<c:forEach items="${atlTransformation.atlError}" var="error" varStatus="status">
-						<div class="accordion accordion-2" id="accordion">
-							<div class="accordion-group">
-								<div class="accordion-heading">
-									<a class="accordion-toggle glyphicons font collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse-${status.index + 1 }">
-										<i></i>Error ${status.index + 1 }
-									</a>
-							    </div>
-							    <div id="collapse-${status.index + 1 }" class="accordion-body collapse" style="height: 0px;">
-							      	<div class="accordion-inner">
-							        	<b>Local problem: </b>${error.localProblem } <br/>
-							        	<b>Element: </b>${error.element }<br/>
-							        	<b>File location: </b>${error.fileLocation }<br/>
-							        	<b>Location: </b>${error.location }<br/>
-							        	<b>Status: </b>${error.status }<br/>
-							        	<b>ProblemId: </b>${error.problemId }<br/>
-							        	<b>Description: </b>${error.description }<br/>
-							        	<b>Severity: </b>${error.severity }<br/>
 
-							      	</div>
-							    </div>
-						  	</div>
-						  	
+			<c:if test="${atlTransformation.atlError.size() != 0}">
+				<div class="widget widget-heading-simple widget-body-white">
+					<div class="widget-head">
+						<h3 class="heading glyphicons show_thumbnails">
+							<i></i>anATLyzer Transformation errors
+						</h3>
+					</div>
+					<div class="widget-body">
+						<div class="tab-content">
+							<div id="tabAll" class="tab-pane active">
+								<c:forEach items="${atlTransformation.atlError}" var="error"
+									varStatus="status">
+									<div class="accordion accordion-2" id="accordion">
+										<div class="accordion-group">
+											<div class="accordion-heading">
+												<a class="accordion-toggle glyphicons font collapsed"
+													data-toggle="collapse" data-parent="#accordion"
+													href="#collapse-${status.index + 1 }"> <i></i>Error
+													${status.index + 1 }: ${error.description }
+												</a>
+											</div>
+											<div id="collapse-${status.index + 1 }"
+												class="accordion-body collapse" style="height: 0px;">
+												<div class="accordion-inner">
+													<b>Local problem: </b>${error.localProblem } <br /> <b>Element:
+													</b>${error.element }<br /> <b>File location: </b>${error.fileLocation }<br />
+													<b>Location: </b>${error.location }<br /> <b>Status: </b>${error.status }<br />
+													<b>ProblemId: </b>${error.problemId }<br /> <b>Description:
+													</b>${error.description }<br /> <b>Severity: </b>${error.severity }<br />
+												</div>
+											</div>
+										</div>
+									</div>
+								</c:forEach>
+							</div>
 						</div>
-					</c:forEach>
-					
+					</div>
 				</div>
-			</div>
-		</div>
-		</c:if>	
-			
-			
-			
+			</c:if>
+			<c:if test="${atlTransformation.atlTestError.size() != 0}">
+
+				<div class="widget widget-heading-simple widget-body-white">
+					<div class="widget-head">
+						<h3 class="heading glyphicons show_thumbnails">
+							<i></i>Test service report
+						</h3>
+					</div>
+					<div class="widget-body">
+						<c:forEach items="${atlTransformation.atlTestError}" var="error"
+							varStatus="status">
+
+							<div class="accordion accordion-2" id="accordion">
+								<div class="accordion-group">
+									<div class="accordion-heading">
+										<a class="accordion-toggle glyphicons font collapsed"
+											data-toggle="collapse" data-parent="#accordion"
+											href="#collapse-${status.index + 1 }"> <i></i>Test
+											${status.index + 1 }: ${error.errorMessage }
+										</a>
+									</div>
+									<div id="collapse-${status.index + 1 }"
+										class="accordion-body collapse" style="height: 0px;">
+										<div class="accordion-inner">
+											executionRaisesException: ${error.executionRaisesException }<br/>
+											executionYieldsIllTarget: ${error.executionYieldsIllTarget }<br/>
+											anatlyserNotifiesError: ${error.anatlyserNotifiesError }<br/>
+											anatlyserDoesNotFinish: ${error.anatlyserDoesNotFinish }<br/>
+											errorKind: ${error.errorKind }<br/> 
+											errorMessage: ${error.errorMessage }<br/> 
+											model: <a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${error.model.id }">
+												${error.model.name }</a>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+
+						</c:forEach>
+					</div>
+				</div>
+			</c:if>
+
 			<div class="widget widget-heading-simple widget-body-white">
 				<!-- Widget Heading -->
 				<div class="widget-head">
@@ -255,16 +306,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.DomainConformToRelation'}">
-													<td class="center">
-														<c:choose>
+													<td class="center"><c:choose>
 															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
-																<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																<a
+																	href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:when>
 															<c:otherwise>
-																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																<a
+																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:otherwise>
-														</c:choose>
-													</td>
+														</c:choose></td>
 												</c:when>
 											</c:choose>
 										</tr>
@@ -300,16 +351,16 @@
 											<c:choose>
 												<c:when
 													test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
-													<td class="center">
-													<c:choose>
-														<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
-															<a href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
-														</c:when>
-														<c:otherwise>
-															<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
-														</c:otherwise>
-													</c:choose>
-													</td>
+													<td class="center"><c:choose>
+															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
+															<a
+																	href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:when>
+															<c:otherwise>
+																<a
+																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															</c:otherwise>
+														</c:choose></td>
 												</c:when>
 											</c:choose>
 										</tr>
@@ -341,38 +392,40 @@
 							</tr>
 						</thead>
 						<!-- // Table heading END -->
-							<tbody>
+						<tbody>
 							<c:forEach items="${atlTransformation.getMetrics()}" var="metric">
-							<!-- Table row -->
+								<!-- Table row -->
 								<tr>
-									
+
 									<td class="left">${metric.getName()}</td>
 									<td>${metric.getDescription()}</td>
-									
+
 									<c:choose>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
-									    <td colspan="5" class="center">${metric.getValue()}</td>
-									  </c:when>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:when>
-									  <c:otherwise>
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:otherwise>
-									</c:choose>														
-									
+										<c:when
+											test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+											<td colspan="5" class="center">${metric.getValue()}</td>
+										</c:when>
+										<c:when
+											test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+											<td>${metric.getMaximum()}</td>
+											<td>${metric.getMinimum()}</td>
+											<td>${metric.getAverage()}</td>
+											<td>${metric.getMedian()}</td>
+											<td>${metric.getStandardDeviation()}</td>
+										</c:when>
+										<c:otherwise>
+											<td>${metric.getMaximum()}</td>
+											<td>${metric.getMinimum()}</td>
+											<td>${metric.getAverage()}</td>
+											<td>${metric.getMedian()}</td>
+											<td>${metric.getStandardDeviation()}</td>
+										</c:otherwise>
+									</c:choose>
+
 								</tr>
-							<!-- // Table row END -->
-							</c:forEach>						
-						</tbody> 
+								<!-- // Table row END -->
+							</c:forEach>
+						</tbody>
 						<!-- End body -->
 					</table>
 				</div>
@@ -446,6 +499,8 @@ ${fn:escapeXml(fileToVisualize)}
 
 </div>
 <!-- // Modal END -->
-<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
-<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
 

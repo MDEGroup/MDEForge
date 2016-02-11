@@ -18,7 +18,7 @@ public class ATLTransformation extends Transformation {
 	 */
 	private static final long serialVersionUID = -3671337063518065085L;
 	private List<ATLTransformationError> atlError = new ArrayList<ATLTransformationError>();
-
+	private List<ATLTransformationTestServiceError> atlTestError; 
 	/**
 	 * A toString method which prints the values of all EAttributes of this
 	 * instance. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -47,5 +47,13 @@ public class ATLTransformation extends Transformation {
 		return getRelations().stream()
 				.filter(t -> t instanceof CoDomainConformToRelation)
 				.map(c -> (CoDomainConformToRelation) c).collect(Collectors.toList());
+	}
+
+	public List<ATLTransformationTestServiceError> getAtlTestError() {
+		return atlTestError;
+	}
+
+	public void setAtlTestError(List<ATLTransformationTestServiceError> atlTestError) {
+		this.atlTestError = atlTestError;
 	}
 }

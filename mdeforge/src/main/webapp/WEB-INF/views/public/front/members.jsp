@@ -312,7 +312,7 @@
 						<hr>
 						 <p>
 							I am Ph.D. student at the Computer Science Department of the University of L'Aquila.
-							My research interests are in Model Driven Engineering (MDE), in particular in the Verification & Validation of Model to Model transformations.
+							My research interests are in Model Driven Engineering (MDE), in particular in the Verification &amp; Validation of Model to Model transformations.
 							Experiences on technologies, tools and platforms for web development and traditional development method.
 							Currently I'm carrying out research on solving the problem of the automatic chaining of transformations (which uses a centralized repository of artifacts which, in turn, is under study and development).
 							(<a href="http://www.basciani.it/" target="_blank">continue to my website</a>)

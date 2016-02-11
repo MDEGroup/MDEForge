@@ -413,6 +413,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			}
 			artifact.setCreated(new Date());
 			artifact.setModified(new Date());
+			
 			User user = userRepository.findOne(artifact.getAuthor().getId());
 			artifact.setAuthor(user);
 			if (artifact.getShared() == null)
