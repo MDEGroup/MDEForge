@@ -27,7 +27,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	@Autowired 
 	protected User user;
 
-	@RequestMapping(value = "/artifact", method = { RequestMethod.GET })
+	@RequestMapping(value = "/artifact", method =  RequestMethod.GET )
 	public String details(Model model, @RequestParam String artifact_id) {
 		Artifact artifact = artifactService.findOnePublic(artifact_id);
 		model.addAttribute("artifact", artifact);
@@ -36,7 +36,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 		model.addAttribute("artifactFile", ecoreMetamodelFile);
 		return "public.browse.artifact_details";
 	}
-	@RequestMapping(value = "/share", method = { RequestMethod.GET })
+	@RequestMapping(value = "/share", method =  RequestMethod.GET )
 	public String metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
 		Artifact ecoreMetamodel = artifactService.findOnePublic(metamodel_id);
 		model.addAttribute("ecoreMetamodel", ecoreMetamodel);

@@ -111,7 +111,6 @@
 								    	
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-							    	<button type="button" id="transformationModelInfo" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Parse ATL</button>
 							  	</div>
 							</div>
 						</div>
@@ -151,6 +150,8 @@
 						</form:select>
 					</div>				
 				</div>
+				<hr class="separator">
+				<button type="button" id="transformationModelInfo" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Parse ATL</button>
 				<hr class="separator">
 				
 				<!-- Form actions -->

@@ -182,30 +182,28 @@ public class ATLTransformationServiceImpl extends
 	public List<Model> execute(ATLTransformation transformation,
 			List<Model> models, User user) {
 		user = userService.findOne(user.getId());
-		List<CoDomainConformToRelation> listOutput = new ArrayList<CoDomainConformToRelation>();
-		List<DomainConformToRelation> listInput = new ArrayList<DomainConformToRelation>();
-		listInput.addAll(transformation.getDomainConformToRelation());
-		listOutput.addAll(transformation.getCoDomainConformToRelation());
 		
-		if (models.size() != listInput.size())
+		
+		if (models.size() != transformation.getDomainConformToRelation().size())
 			throw new TransformationException();
 		boolean guard = true;
 		for (Model model : models)
-			for (Relation relation : model.getRelations())
-				if (relation instanceof ConformToRelation) {
-					guard = isPresent(relation.getToArtifact(), listInput);
-					if (model.getId() != null) {
-						model = modelService.findOne(model.getId());
-					} else if (guard) {
-						model.setAuthor(user);
-						model.getShared().add(user);
-						modelService.create(model);
-					}
+			if (model.getMetamodel() != null) {
+				List<Artifact> tempArt = new ArrayList<Artifact>();
+				transformation.getDomainConformToRelation().forEach(x -> tempArt.add(x.getToArtifact()));
+				guard = tempArt.contains(model.getMetamodel().getToArtifact());
+				if (model.getId() != null) {
+					model = modelService.findOne(model.getId());
+				} else if (guard) {
+					model.setAuthor(user);
+					model.getShared().add(user);
+					modelService.create(model);
 				}
+			}
 		if (!guard)
 			throw new TransformationException();
 		try {
-			return doTransformation(transformation, listInput, listOutput,
+			return doTransformation(transformation,
 					models, user);
 		} catch (ATLExecutionException | ATLCoreException | IOException e) {
 			throw new TransformationException();
@@ -434,9 +432,7 @@ public class ATLTransformationServiceImpl extends
 		}
 	}
 
-	private List<Model> doTransformation(ATLTransformation transformation,
-			List<DomainConformToRelation> inputRelation,
-			List<CoDomainConformToRelation> outputRelation, List<Model> models,
+	private List<Model> doTransformation(ATLTransformation transformation, List<Model> models,
 			User user) throws ATLCoreException, IOException,
 			ATLExecutionException {
 		user = userService.findOne(user.getId());
@@ -446,7 +442,7 @@ public class ATLTransformationServiceImpl extends
 		List<InputStream> inputStreamsToClose = new ArrayList<InputStream>();
 		Map<String, Object> launcherOptions = getOptions();
 		transformationLauncher.initialize(launcherOptions);
-		for (DomainConformToRelation inRel : inputRelation) {
+		for (DomainConformToRelation inRel : transformation.getDomainConformToRelation()) {
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(inputMetamodel, gridFileMediaService
 					.getFileInputStream(inRel.getToArtifact()), null);
@@ -458,7 +454,7 @@ public class ATLTransformationServiceImpl extends
 					inRel.getReferenceModelName());
 		}
 		Map<IModel, CoDomainConformToRelation> outputList = new HashMap<IModel, CoDomainConformToRelation>();
-		for (CoDomainConformToRelation outRel : outputRelation) {
+		for (CoDomainConformToRelation outRel : transformation.getCoDomainConformToRelation()) {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(outputMetamodel, gridFileMediaService
 					.getFileInputStream(outRel.getToArtifact()), null);
@@ -520,15 +516,15 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	private Artifact getModelByMetamodel(Artifact toArtifact, List<Model> models) {
+		Model m = null;
 		for (Model model : models) {
-			for (Relation rel : model.getRelations()) {
-				if (rel instanceof ConformToRelation) {
-					if (rel.getToArtifact().getId().equals(toArtifact.getId()))
-						return model;
-				}
-			}
+			if (model.getMetamodel().getToArtifact().getId().equals(toArtifact.getId()))
+				m = model;
 		}
-		throw new TransformationException();
+		if (m == null)
+			throw new TransformationException();
+		models.remove(m);
+		return m;
 	}
 
 	/**
