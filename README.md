@@ -18,3 +18,7 @@ MDEForge has been designed for:
 <li><i>End-users</i>: A Web application enables end-users to search and use (meta)models, transformations, and editors available in the MDEForge repository. Experienced users might use the REST API to exploit the functionalities provided by the platform in a programmatic way. For instance, tool vendors might exploit the functionalities provided by their tools by exploiting some of the transformations available in the MDEForge repository.
 
 
+# MDEForge at work
+
+A video showing MDEForge at work is available at https://www.youtube.com/watch?v=bplcJlmoJuA
+The video is about the use of services, which have been added to MDEForge for executing and analyzing ATL transformations.
