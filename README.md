@@ -16,7 +16,7 @@ MDEForge has been designed for:
 <li><i>Developers of MDEForge extensions</i>: One of the requirements we identified when we started the development of MDEForge is about the modularity and extensibility of the platform. To this end we identified a set of core services that can be used to add new functionalities by means of platform extensions. In this respect, experienced users might contribute by proposing new extensions to be included in the platform.
 
 <li><i>End-users</i>: A Web application enables end-users to search and use (meta)models, transformations, and editors available in the MDEForge repository. Experienced users might use the REST API to exploit the functionalities provided by the platform in a programmatic way. For instance, tool vendors might exploit the functionalities provided by their tools by exploiting some of the transformations available in the MDEForge repository.
-
+</ul>
 
 # MDEForge at work
 
