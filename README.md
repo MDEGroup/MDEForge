@@ -20,30 +20,30 @@ MDEForge has been designed for:
 
 # Related publications
 
-<ul>
+<ol>
 
-<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Automated Clustering of Metamodel Repositories, in: 28th International Conference on Advanced Information Systems Engineering (CAiSE'16), 2016
+<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Automated Clustering of Metamodel Repositories</b>, in: 28th International Conference on Advanced Information Systems Engineering (CAiSE'16), 2016
 
-<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, A Tool for Clustering Metamodel Repositories, in: Demonstrations and Posters at MODELS2015, Ottawa, Canada, 2015
-
-
-<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Collaborative Repositories in Model-Driven Engineering (2015), in: IEEE Software, 32:3(28-34)
-
-<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Mining Correlations of ATL Model Transformation and Metamodel Metrics, in: ICSE 2015 Workshop on Modeling in Software Engineering (MiSE 2015), Florence (Italy), 2015
+<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>A Tool for Clustering Metamodel Repositories</b>, in: Demonstrations and Posters at MODELS2015, Ottawa, Canada, 2015
 
 
-<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Model Repositories: Will they become reality ?, in: CloudMDE Workshop at MoDELS 2015, Ottawa, Canada, 2015
+<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Collaborative Repositories in Model-Driven Engineering</b> (2015), in: IEEE Software, 32:3(28-34)
+
+<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Mining Correlations of ATL Model Transformation and Metamodel Metrics</b>, in: ICSE 2015 Workshop on Modeling in Software Engineering (MiSE 2015), Florence (Italy), 2015
 
 
-<li>Francesco Basciani, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Automated Chaining of Model Transformations with Incompatible Metamodels, in: Procs. International Conference on Model Driven Engineering Languages and Systems (MODELS 2014), Valencia (Spain), pages 602-618, Springer International Publishing, 2014
+<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Model Repositories: Will they become reality ?</b>, in: CloudMDE Workshop at MoDELS 2015, Ottawa, Canada, 2015
 
 
-<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Amleto Di Salle, Ludovico Iovino and Alfonso Pierantonio, MDEForge: an extensible Web-based modeling platform, in: CloudMDE Workshop at MoDELS 2014, Valencia, Spain, http://ceur-ws.org/, 2014
+<li>Francesco Basciani, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Automated Chaining of Model Transformations with Incompatible Metamodels</b>, in: Procs. International Conference on Model Driven Engineering Languages and Systems (MODELS 2014), Valencia (Spain), pages 602-618, Springer International Publishing, 2014
 
 
-<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, Mining metrics for understanding metamodel characteristics, in: ICSE 2014 Workshop on Modeling in Software Engineering (MiSE 2014), Hyderabad, India, 2014
+<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Amleto Di Salle, Ludovico Iovino and Alfonso Pierantonio, <b>MDEForge: an extensible Web-based modeling platform</b>, in: CloudMDE Workshop at MoDELS 2014, Valencia, Spain, http://ceur-ws.org/, 2014
 
-</ul>
+
+<li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Mining metrics for understanding metamodel characteristics</b>, in: ICSE 2014 Workshop on Modeling in Software Engineering (MiSE 2014), Hyderabad, India, 2014
+
+</ol>
 
 # MDEForge at work
 
