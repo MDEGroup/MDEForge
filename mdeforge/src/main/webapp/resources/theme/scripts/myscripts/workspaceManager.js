@@ -100,6 +100,7 @@
 			$.ajax({
 				url : ctx + "/private/Model/list",
 				success : function(data) {
+					$('#modelSelect').empty();
 					$.each(data, function(i, model){
 						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
 					});
@@ -115,6 +116,7 @@
 		}
 		else {
 			$('#modelToAdd').hide();
+			spinner.stop();
 		}
 	}
 	
@@ -144,11 +146,11 @@
 		}
 		else {
 			$('#ATLToAdd').hide();
+			spinner.stop();
 		}
 	}
 	$('#showEcoreList').one("click",showEcoreList);
 	function showEcoreList(event){
-		console.log('asd');
 		var spinner = new Spinner().spin()
 		$('#showEcoreList').parent().append(spinner.el);
 		if ($('#ecoreToAdd').css('display') == 'none') {
@@ -156,6 +158,7 @@
 			$.ajax({
 				url : ctx + "/private/EcoreMetamodel/list",
 				success : function(data) {
+					$('#ecoreSelect').empty();
 					$.each(data, function(i, ecore){
 						$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
 					});
@@ -165,14 +168,15 @@
 					//$('#showEcoreList').one(showEcoreList);
 				},
 				error : function error(data) {
-					spinner.stop();
 					console.log('error');
+					spinner.stop();
 				}
 			});
 			
 		}
 		else {
 			$('#ecoreToAdd').hide();
+			spinner.stop();
 		}
 	}
 	
