@@ -413,7 +413,9 @@
 				url : ctx + "/private/user/list",
 				success : function(data) {
 					$.each(data, function(i, model){
-						$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
+						console.log("TER")
+						if($("#loggedUserId").val() != model.id)
+							$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
 					});
 				},
 				error : function error(data) {

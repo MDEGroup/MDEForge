@@ -73,7 +73,7 @@
 </div>
 <script>
 	$("#validateSubmitForm").submit(function(event) {
-		if ($("#name").val() == "" || $("description").val == "") {
+		if ($("#name").val() == "" || $("#description").val == "") {
 			$(".validate").each( function() {
 				console.log(this);
 				$(this).show();	
