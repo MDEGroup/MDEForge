@@ -98,7 +98,7 @@
 				<hr class="separator">
 				<div class="row-fluid">
 					<div class="control-group span12">
-							<label class="control-label" for="email">ATL transformation File</label>
+							<label class="control-label">ATL transformation File</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
 							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
@@ -107,8 +107,7 @@
 							    	<span class="btn btn-default btn-file">
 								    	<span class="fileupload-new">Select ATL transformation File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" id="JURI" class="margin-none" name="transformationfile" size="40"/>
-								    	
+								    	<input type="file" id="trafoName" class="margin-none" name="transformationfile" size="40"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
@@ -385,4 +384,5 @@
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/transformationModelInfo.js"></script>
+<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 	

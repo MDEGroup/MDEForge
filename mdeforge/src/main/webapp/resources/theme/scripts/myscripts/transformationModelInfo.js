@@ -3,7 +3,7 @@ $(function() {
 		var spinner = new Spinner().spin();
 		$('#transformationRelations').parent().append(spinner.el);
 		e.preventDefault();
-		var files = document.getElementById('JURI').files;
+		var files = document.getElementById('trafoName').files;
 		var file = files[0];
 	    if (files && file) {
 	    	var reader = new FileReader();
