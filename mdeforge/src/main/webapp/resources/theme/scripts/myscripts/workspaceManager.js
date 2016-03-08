@@ -97,12 +97,17 @@
 		var spinner = new Spinner().spin();
 		$('#showModelList').parent().append(spinner.el);
 		if ($('#modelToAdd').css('display') == 'none') {
+			var ids =[];
+			$('#modelTable > tbody  > tr').each(function() {
+				ids.push(this.id);
+			});
 			$.ajax({
 				url : ctx + "/private/Model/list",
 				success : function(data) {
 					$('#modelSelect').empty();
 					$.each(data, function(i, model){
-						$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
+						if($.inArray(model.id, ids) < 0)
+							$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
 					});
 					spinner.stop();
 					$('#modelToAdd').show();
@@ -125,18 +130,21 @@
 		var spinner = new Spinner().spin();
 		$('#showATLList').parent().append(spinner.el);
 		if ($('#ATLToAdd').css('display') == 'none') {
-			$('#ATLSelect').empty();
+			var ids =[];
+			$('#atlTable > tbody  > tr').each(function() {
+				ids.push(this.id);
+			});
 			$.ajax({
 				url : ctx + "/private/ATLTransformation/list",
 				success : function(data) {
-					$.each(data, function(i, ecore){
-						$('#ATLSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
+					$('#ATLSelect').empty();
+					$.each(data, function(i, atl){
+						if( $.inArray(atl.id, ids) < 0)
+							$('#ATLSelect').append($('<option></option>').attr('value',atl.id).text(atl.name));
 					});
 					spinner.stop();
 					$('#ATLToAdd').show();
 					$(document).on('click','#showATLList', showATLList);
-					
-					//$('#showATLList').one(showATLList);
 				},
 				error : function error(data) {
 					console.log('error');
@@ -154,13 +162,19 @@
 		var spinner = new Spinner().spin();
 		$('#showEcoreList').parent().append(spinner.el);
 		if ($('#ecoreToAdd').css('display') == 'none') {
-			$('#ecoreSelect').empty();
+			var ids =[];
+			$('#ecoreMMTable > tbody  > tr').each(function() {
+				ids.push(this.id);
+			});
 			$.ajax({
 				url : ctx + "/private/EcoreMetamodel/list",
 				success : function(data) {
 					$('#ecoreSelect').empty();
 					$.each(data, function(i, ecore){
-						$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
+						console.log(ids);
+						console.log(ecore.id);
+						if($.inArray(ecore.id, ids) < 0)
+							$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
 					});
 					spinner.stop();
 					$('#ecoreToAdd').show();
