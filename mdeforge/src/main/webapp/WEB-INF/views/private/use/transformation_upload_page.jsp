@@ -151,11 +151,15 @@
 					</div>				
 				</div>
 				<hr class="separator">
-				<button type="button" id="transformationModelInfo" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Parse ATL</button>
+				<div class="row-fluid">
+					<div class="span12">
+						<button type="button" id="transformationModelInfo" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Parse ATL</button>
+					</div>
+				</div>
 				<hr class="separator">
 				
 				<!-- Form actions -->
-				<div class="row-fluid">
+				<div class="row-fluid" id="transformationRelations">
 					<div class="row-fluid">
 						<div class="span12">
 							<h4>From Metamodels</h4>
@@ -378,6 +382,7 @@
 <!-- // Modal END -->	
 <!-- Mustache -->
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/transformationModelInfo.js"></script>
 	

@@ -1,5 +1,7 @@
 $(function() {
 	$(document).on('click','#transformationModelInfo', function(e) {
+		var spinner = new Spinner().spin();
+		$('#transformationRelations').parent().append(spinner.el);
 		e.preventDefault();
 		var files = document.getElementById('JURI').files;
 		var file = files[0];
@@ -87,6 +89,7 @@ $(function() {
 	            });
 	        }
 	    }
+	    spinner.stop();
 	});
 });
 

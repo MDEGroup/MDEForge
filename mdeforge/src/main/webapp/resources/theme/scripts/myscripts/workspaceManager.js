@@ -94,7 +94,7 @@
 	// SHOW ARTIFACT BY TYPE
 	$('#showModelList').one("click", showModelList);
 	function showModelList(event){
-		var spinner = new Spinner().spin()
+		var spinner = new Spinner().spin();
 		$('#showModelList').parent().append(spinner.el);
 		if ($('#modelToAdd').css('display') == 'none') {
 			$.ajax({
@@ -122,7 +122,7 @@
 	
 	$('#showATLList').one("click", showATLList);
 	function showATLList(event){
-		var spinner = new Spinner().spin()
+		var spinner = new Spinner().spin();
 		$('#showATLList').parent().append(spinner.el);
 		if ($('#ATLToAdd').css('display') == 'none') {
 			$('#ATLSelect').empty();
@@ -151,7 +151,7 @@
 	}
 	$('#showEcoreList').one("click",showEcoreList);
 	function showEcoreList(event){
-		var spinner = new Spinner().spin()
+		var spinner = new Spinner().spin();
 		$('#showEcoreList').parent().append(spinner.el);
 		if ($('#ecoreToAdd').css('display') == 'none') {
 			$('#ecoreSelect').empty();
