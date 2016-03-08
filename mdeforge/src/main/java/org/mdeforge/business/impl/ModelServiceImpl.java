@@ -119,13 +119,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 
 	@Override
 	public Model create(Model artifact) {
-		EcoreMetamodel emm = null;
-		for (Relation rel : artifact.getRelations()) {
-			if (rel instanceof ConformToRelation) {
-				Artifact temm = rel.getToArtifact();
-				emm = ecoreMetamodelService.findOne(temm.getId());
-			}
-		}
+		EcoreMetamodel emm = (EcoreMetamodel)artifact.getMetamodel().getToArtifact();
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));

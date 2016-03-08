@@ -8,6 +8,8 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ATLTransformationError;
+import org.mdeforge.business.model.ATLTransformationTestServiceError;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -39,6 +42,7 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 ;
 
 @Controller
+@RestController
 @RequestMapping("/api/ATLTransformation")
 public class ATLTransformationRESTController {
 
@@ -51,7 +55,7 @@ public class ATLTransformationRESTController {
 	@Autowired
 	private User user;
 
-@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
+	@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
 	{
 		ATLTransformation emm = ATLtransformationService.findOne(idEcoreMetamodel);
@@ -66,30 +70,25 @@ public class ATLTransformationRESTController {
 				.findAllWithPublicByUser(user));
 		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 	}
-
+	
+	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
+		List<ATLTransformation> list = ATLtransformationService.findAllPublic();
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
+	}
 	
 	@RequestMapping(value = "execute/{id}", method = RequestMethod.POST, consumes = "application/json")
 	public @ResponseBody HttpEntity<ArtifactList> execute(@PathVariable("id") String id, 
 			@RequestBody List<Model> models) {
 		try {
 			ATLTransformation transformation = ATLtransformationService.findOne(id);
-			
 			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, models, user));
 			return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-		
 	}
-	
-	@RequestMapping(value = "/public", method = RequestMethod.GET, produces = "application/json")
-	public @ResponseBody HttpEntity<ArtifactList> getPublicTransformations() {
-		List<ATLTransformation> list = ATLtransformationService.findAllPublic();
-		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
 		
-
-	}
-
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
 		ObjectMapper MAPPER = new ObjectMapper();
@@ -228,6 +227,27 @@ public class ATLTransformationRESTController {
 		}
 
 	}
+	@RequestMapping(value = "/anatlyzer/{id_artifact}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<List<ATLTransformationError>> anATLyzer(@PathVariable("id_artifact") String id) {
+		try {
+			ATLTransformation transformation = ATLtransformationService.findOneById(id, user);
+			List<ATLTransformationError> errors = ATLtransformationService.anATLyzer(transformation, user);
+			return new ResponseEntity<List<ATLTransformationError>>(errors, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<List<ATLTransformationError>>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/testerService/{id_artifact}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<List<ATLTransformationTestServiceError>> testerService(@PathVariable("id_artifact") String id
+			) {
+		try {
+			ATLTransformation transformation = ATLtransformationService.findOneById(id, user);
+			List<ATLTransformationTestServiceError> errors = ATLtransformationService.testServices(transformation, user);
+			return new ResponseEntity<List<ATLTransformationTestServiceError>>(errors, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<List<ATLTransformationTestServiceError>>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ATLTransformation> getATLTransformationByName(@PathVariable("name") String idArtifact) {
 		try {
@@ -236,6 +256,5 @@ public class ATLTransformationRESTController {
 		} catch (BusinessException e) {
 			return new ResponseEntity<ATLTransformation>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-		
 	}
 }

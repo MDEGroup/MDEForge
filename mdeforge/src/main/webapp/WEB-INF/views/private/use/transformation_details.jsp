@@ -195,8 +195,16 @@
 				</div>
 			</div>
 			<hr>
-
-
+			<c:if test="${atlTransformation.atlError.size()== 0 && atlTransformation.atlTestError.size()==0}">
+			<div class="widget widget-heading-simple widget-body-white">
+				<div class="widget-body">
+					<a
+								href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${atlTransformation.getId()}"
+								class="btn btn-success btn-small btn-block"><i
+								class="icon-play icon-fixed-width"></i> Analyze Transformation</a>
+				</div>
+			</div>
+			</c:if>
 			<c:if test="${atlTransformation.atlError.size() != 0}">
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-head">
@@ -204,6 +212,7 @@
 							<i></i>anATLyzer Transformation errors
 						</h3>
 					</div>
+					
 					<div class="widget-body">
 						<div class="tab-content">
 							<div id="tabAll" class="tab-pane active">
@@ -253,17 +262,17 @@
 									<div class="accordion-heading">
 										<a class="accordion-toggle glyphicons font collapsed"
 											data-toggle="collapse" data-parent="#accordion"
-											href="#collapse-${status.index + 1 }"> <i></i>Test
+											href="#collapse-${status.index + 2 }"> <i></i>Test
 											${status.index + 1 }: ${error.errorMessage }
 										</a>
 									</div>
-									<div id="collapse-${status.index + 1 }"
+									<div id="collapse-${status.index + 2 }"
 										class="accordion-body collapse" style="height: 0px;">
 										<div class="accordion-inner">
 											executionRaisesException: ${error.executionRaisesException }<br/>
 											executionYieldsIllTarget: ${error.executionYieldsIllTarget }<br/>
-											anatlyserNotifiesError: ${error.anatlyserNotifiesError }<br/>
-											anatlyserDoesNotFinish: ${error.anatlyserDoesNotFinish }<br/>
+<%-- 											anatlyserNotifiesError: ${error.anatlyserNotifiesError }<br/> --%>
+<%-- 											anatlyserDoesNotFinish: ${error.anatlyserDoesNotFinish }<br/> --%>
 											errorKind: ${error.errorKind }<br/> 
 											errorMessage: ${error.errorMessage }<br/> 
 											model: <a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${error.model.id }">
@@ -279,7 +288,8 @@
 					</div>
 				</div>
 			</c:if>
-
+			
+			
 			<div class="widget widget-heading-simple widget-body-white">
 				<!-- Widget Heading -->
 				<div class="widget-head">

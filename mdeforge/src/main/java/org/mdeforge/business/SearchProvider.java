@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
 
-public interface SearchProvider {
+public interface SearchProvider <T extends Artifact> {
 
-	public List<Artifact> search(String text);
-	public List<Artifact> orederedSearch(String text);
+	public List<T> search(String text);
+	public List<T> orederedSearch(String text);
 }

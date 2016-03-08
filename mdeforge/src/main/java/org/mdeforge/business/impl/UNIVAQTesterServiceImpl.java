@@ -279,7 +279,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 					Date ss1 = new Date();
 					SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
 					String formats1 = formatter5.format(ss1);
-
+					m.setOpen(true);
 					m.setName(formats1 + modelName[modelName.length-1]);
 					m.setFile(gridFileMediaService.createObjectFromFile(model, modelName[modelName.length-1]));
 					ConformToRelation ctr = new ConformToRelation();

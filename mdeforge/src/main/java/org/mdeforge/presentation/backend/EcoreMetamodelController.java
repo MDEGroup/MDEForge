@@ -96,14 +96,14 @@ public class EcoreMetamodelController {
 		EcoreMetamodel ecore = ecoreMetamodelService.findOneById(metamodel_id, user);
 		List<Metric> metricList = metricRepository.findByArtifactId(new ObjectId(ecore.getId()));
 		ecore.getMetrics().addAll(metricList);
-//		ecore.getRelations().addAll(
-//				similarityRelationService.findTopProximity(ecore, 5));
-//		ecore.getRelations().addAll(
-//				containmentRelationService.findTopProximity(ecore, 5));
-//		ecore.getRelations().addAll(
-//				diceSimilarityRelationService.findTopProximity(ecore, 5));
-//		ecore.getRelations().addAll(
-//				cosineSimilarityRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				similarityRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				containmentRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				diceSimilarityRelationService.findTopProximity(ecore, 5));
+		ecore.getRelations().addAll(
+				cosineSimilarityRelationService.findTopProximity(ecore, 5));
 		model.addAttribute("ecoreMetamodel", ecore);
 		String pathToDownload = gridFileMediaService.getFilePath(ecore);
 		File ecoreMetamodelFile = new File(pathToDownload);

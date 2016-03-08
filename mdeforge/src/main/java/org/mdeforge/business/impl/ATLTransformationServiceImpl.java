@@ -50,6 +50,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.MetricEngineException;
+import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -593,17 +594,29 @@ public class ATLTransformationServiceImpl extends
 		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
 		for (Model model : modelList) {
 			model.setAuthor(atl.getAuthor());
+			model.setOpen(true);
 			modelService.create(model);
 		}
 		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);
-		String path = gridFileMediaService.getFilePath(atl);
-		
-		
-		return r;
-			
-		
+		String path = gridFileMediaService.getFilePath(atl);	
+		return r;	
+	}
+	@Override
+	public List<ATLTransformationTestServiceError> testServices(ATLTransformation transformation_id, User user) throws ATLTransformationCompilationError, transException {
+		ATLTransformation atl = findOneById(transformation_id.getId(), user);
+		EMFModel atlModel = injectATLModel(atl);
+		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
+		for (Model model : modelList) {
+			model.setAuthor(atl.getAuthor());
+			modelService.create(model);
+		}
+		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
+		atl.setAtlTestError(r);
+		ATLTransformationRepository.save(atl);
+		String path = gridFileMediaService.getFilePath(atl);	
+		return r;	
 	}
 
 	@Override

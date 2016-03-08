@@ -16,7 +16,7 @@ import transML.exceptions.transException;
 import anatlyzer.evaluation.report.Report;
 import anatlyzer.evaluation.report.ReportConsole;
 
-public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider{	
+public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider {	
 	List<Model> execute(ATLTransformation transformation, List<Model> models, User user);
 	List<ATLTransformation> findTransformationsBySourceMetamodels(ATLTransformation metamodel);
 	List<ATLTransformation> findTransformationsByTargetMetamodels(ATLTransformation metamodel);
@@ -30,4 +30,7 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 	double metamodelCoverage(ATLTransformation transforation)
 			throws BusinessException;
 	List<EcoreMetamodel> getPossibleMetamodel(ATLTransformation atl) throws BusinessException;
+	List<ATLTransformationTestServiceError> testServices(
+			ATLTransformation transformation_id, User user)
+			throws ATLTransformationCompilationError, transException;
 }

@@ -17,97 +17,45 @@
 	<li>Create Workspace</li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-<h3>
-	<spring:message code="mdeforge.public.back.browse.list" />
-</h3>
-
-
+<h3>Create workspace</h3>
 <div class="innerLR">
-
-	 <form:form class="form-horizontal margin-none" modelAttribute="workspace" id="validateSubmitForm" method="post" 
-	 action="${pageContext.request.contextPath}/private/workspace/create" autocomplete="off">
-	 
-	
-
-
-		<!-- Widget -->
+	<form:form class="form-horizontal margin-none"
+		modelAttribute="workspace" id="validateSubmitForm" method="post"
+		action="${pageContext.request.contextPath}/private/workspace/create"
+		autocomplete="off">
 		<div class="widget widget-heading-simple widget-body-gray">
-
-			<!-- Widget heading -->
-
-			<!-- // Widget heading END -->
-
 			<div class="widget-body">
-
-				<!-- Row -->
 				<div class="row-fluid">
-
-					<!-- Column -->
 					<div class="span6">
-
-						<!-- Group -->
 						<div class="control-group">
 							<form:label path="name" class="control-label" for="name">Name</form:label>
 							<div class="controls">
-								<form:input path="name" class="span12" id="name" name="name" type="text"></form:input>	
+								<form:input path="name" class="span12" id="name" name="name"
+									type="text"></form:input>
+								<p class="validate" style="display: none;">Mandatory field</p>
 							</div>
 						</div>
-						<!-- // Group END -->
-
 						<!-- Group -->
 						<div class="control-group">
-							<form:label path="description" class="control-label" for="lastname">Description</form:label>
+							<form:label path="description" class="control-label"
+								for="lastname">Description</form:label>
 							<div class="controls">
-								<form:input path="description" class="span12" id="description" name="description"
-									type="text"></form:input>
+								<form:input path="description" class="span12" id="description"
+									name="description" type="text"></form:input>
+								<p class="validate" style="display: none;">Mandatory field</p>
 							</div>
 						</div>
-						<!-- // Group END -->
-
-
-
 					</div>
-					<!-- // Column END -->
-
-					<!-- Column -->
 					<div class="span6">
-
-						<!-- Group -->
-						<!-- 						<div class="control-group"> -->
-						<!-- 							<label class="control-label" for="password">Password</label> -->
-						<!-- 							<div class="controls"><input class="span12" id="password" name="password" type="password"></div> -->
-						<!-- 						</div> -->
 						<div class="innerAll">
 							<form:select path="projects" multiple="true">
-								<form:options  items="${projectList}" itemValue="id" itemLabel="name"></form:options>
+								<form:options items="${projectList}" itemValue="id"
+									itemLabel="name"></form:options>
 							</form:select>
 						</div>
-						<!-- // Group END -->
-
-						<!-- Group -->
-<!-- 						<div class="control-group"> -->
-<!-- 							<label class="control-label" for="confirm_password">Confirm -->
-<!-- 								password</label> -->
-<!-- 							<div class="controls"> -->
-<!-- 								<input class="span12" id="confirm_password" -->
-<!-- 									name="confirm_password" type="password"> -->
-<!-- 							</div> -->
-<!-- 						</div> -->
-						<!-- // Group END -->
-
-
-
 					</div>
-					<!-- // Column END -->
-
 				</div>
-				<!-- // Row END -->
 
-				
-
-				<!-- Form actions -->
 				<div class="form-actions">
 					<button type="submit"
 						class="btn btn-icon btn-primary glyphicons circle_ok">
@@ -118,11 +66,22 @@
 						<i></i>Cancel
 					</button>
 				</div>
-				<!-- // Form actions END -->
 
 			</div>
 		</div>
-		<!-- // Widget END -->
-
 	</form:form>
 </div>
+<script>
+	$("#validateSubmitForm").submit(function(event) {
+		if ($("#name").val() == "" || $("description").val == "") {
+			$(".validate").each( function() {
+				console.log(this);
+				$(this).show();	
+			});
+			event.preventDefault();
+		}
+		else {
+			return;
+		}
+	});
+</script>

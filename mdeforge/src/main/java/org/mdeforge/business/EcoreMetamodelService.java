@@ -2,23 +2,10 @@ package org.mdeforge.business;
 
 import java.util.List;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.ocl.OCL;
-import org.eclipse.ocl.ParserException;
-import org.eclipse.ocl.Query;
-import org.eclipse.ocl.ecore.Constraint;
-import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
-import org.eclipse.ocl.expressions.OCLExpression;
-import org.eclipse.ocl.helper.OCLHelper;
 import org.mdeforge.business.model.EcoreMetamodel;
 
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atlext.ATL.ATLPackage;
 import anatlyzer.atlext.OCL.OclExpression;
 
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,

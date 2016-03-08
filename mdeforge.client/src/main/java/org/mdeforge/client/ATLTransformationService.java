@@ -3,6 +3,8 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.ATLTransformationError;
+import org.mdeforge.business.model.ATLTransformationTestServiceError;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -45,7 +47,11 @@ public class ATLTransformationService extends ArtifactService {
 		String result = doPostRequest(connectionUrl + "api/ATLTransformation/execute/" + transformation, obj);
 		return mapper.readValue(result, new TypeReference<List<Model>>() {});
 	}
-	
+	public List<Model> executeATLTransformation(ATLTransformation transformation, ArtifactList models) throws Exception {
+		ArrayNode obj = mapper.valueToTree(models);
+		String result = doPostRequest(connectionUrl + "api/ATLTransformation/execute/" + transformation.getId(), obj);
+		return mapper.readValue(result, new TypeReference<List<Model>>() {});
+	}
 	public ATLTransformation getATLTransformation(String id) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/ATLTransformation/" + id);
 		return mapper.readValue(result, ATLTransformation.class);
@@ -54,5 +60,12 @@ public class ATLTransformationService extends ArtifactService {
 		String result = doGetRequest(connectionUrl + "api/ATLTransformation/byname/" + name);
 		return mapper.readValue(result, ATLTransformation.class);
 	}
-	
+	public List<ATLTransformationError> anATLyze(ATLTransformation trafo) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ATLTransformation/anatlyzer/" + trafo.getId());
+		return mapper.readValue(result, new TypeReference<List<ATLTransformationError>>() {});
+	}
+	public List<ATLTransformationTestServiceError> testerService(ATLTransformation name) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/ATLTransformation/testerService/" + name.getId());
+		return mapper.readValue(result,  new TypeReference<List<ATLTransformationTestServiceError>>() {});
+	}
 }

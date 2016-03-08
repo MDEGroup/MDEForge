@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.bson.types.ObjectId;
 import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -20,13 +21,19 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
 import org.mdeforge.business.model.ATLTransformationTestServiceError;
+import org.mdeforge.business.model.ContainmentRelation;
+import org.mdeforge.business.model.CosineSimilarityRelation;
+import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
 import org.mdeforge.business.model.wrapper.json.RelationList;
+import org.mdeforge.integration.MetricRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -43,6 +50,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import anatlyzer.atl.util.ATLSerializer;
 import anatlyzer.evaluation.report.Report;
 import transML.exceptions.transException;
 
@@ -64,6 +72,8 @@ public class ATLPrivateController {
 	private ProjectService projectService;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
+	private MetricRepository metricRepository;
 
 	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
             produces= MediaType.APPLICATION_JSON_VALUE)
@@ -78,6 +88,39 @@ public class ATLPrivateController {
 		return list;
 	}
 
+	@RequestMapping(value = "/transformation_compare", method = { RequestMethod.GET })
+	public String metamodelCompareStart(Model model) {
+		
+		List<ATLTransformation> transformationList = aTLTransformationService.findAllWithPublicByUser(user);
+		model.addAttribute("transformationList", transformationList);
+				
+		return "private.use.transformation_compare";
+	}
+
+	@RequestMapping(value = "/metamodel_compare", method = { RequestMethod.POST })
+	public String metamodelCompareExecute(Model model, @RequestParam String left_metamodel_id, @RequestParam String right_metamodel_id) {
+		
+		EcoreMetamodel leftMetamodel = ecoreMetamodelService.findOne(left_metamodel_id);
+		model.addAttribute("leftMetamodel", leftMetamodel);
+		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOne(right_metamodel_id);
+		model.addAttribute("rightMetamodel", rightMetamodel);
+		List<Metric> leftMetrics = metricRepository.findByArtifactId(new ObjectId(leftMetamodel.getId())); 
+		List<Metric> rightMetrics = metricRepository.findByArtifactId(new ObjectId(rightMetamodel.getId()));
+		leftMetamodel.getMetrics().addAll(leftMetrics);
+		rightMetamodel.getMetrics().addAll(rightMetrics);
+		
+		/*
+		 * Similarity Relations
+		 */
+		
+		/*
+		 * List of metamodels
+		 */
+		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAllWithPublicByUser(user);
+		model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
+		
+		return "private.use.metamodel_compare";
+	}
 	@RequestMapping(value = "/transformation_details", method = { RequestMethod.GET })
 	public String transformationDetails(Model model,
 			@RequestParam String transformation_id) {

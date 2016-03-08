@@ -85,7 +85,7 @@
 								<input type="text" name="email" class="input-block-level" placeholder="Your Email Address"/>
 								<label class="strong">Confirm Email</label>
 								<input type="text" class="input-block-level" placeholder="Confirm Your Email Address"/>
-								<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
+								<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Create</button>
 							</div>
 						</div>
 						<!-- // Column END -->
