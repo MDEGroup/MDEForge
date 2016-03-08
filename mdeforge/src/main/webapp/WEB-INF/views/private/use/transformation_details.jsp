@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
@@ -12,7 +12,7 @@
 	height: 200px;
 }
 </style>
-
+<security:authentication property="principal.user.id" var="userId"/>
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 	<li><spring:message
@@ -149,6 +149,12 @@
 
 														</c:otherwise>
 													</c:choose>
+													<c:if test="${userId == atlTransformation.getAuthor().getId()}">
+															<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${atlTransformation.getId()}"
+															class="btn btn-block btn-danger btn-small"><i
+															class="icon-remove-sign icon-fixed-width"></i> Delete
+															Metamodel</a>
+													</c:if>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
