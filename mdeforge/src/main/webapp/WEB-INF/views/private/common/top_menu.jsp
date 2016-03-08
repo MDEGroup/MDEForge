@@ -85,7 +85,6 @@
 						<li><a href="${pageContext.request.contextPath}/private/dashboard"
 												class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title="">Dashboard</a></li>					
 								
-						<li><a href="#" class="glyphicons cogwheel">Settings<i></i></a></li>						
 						<li class="profile">
 							<span>
 								<span class="heading">Profile <a href="#" class="pull-right">edit</a></span>
