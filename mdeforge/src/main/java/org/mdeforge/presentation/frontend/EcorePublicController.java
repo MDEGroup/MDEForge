@@ -1,6 +1,5 @@
 package org.mdeforge.presentation.frontend;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +46,8 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 	@Autowired 
 	private User user;
 
+	
+	
 	public String details(Model model, @RequestParam String artifact_id) {
 
 		super.details(model, artifact_id);
@@ -59,27 +60,6 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 //		ecoreMetamodel.getRelations().addAll(
 //				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
 		return "public.browse.metamodel_details";
-	}
-	@RequestMapping(value = "/browse/metamodel_share", method = { RequestMethod.GET })
-	public String metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
-		
-		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOnePublic(metamodel_id);
-		ecoreMetamodel.getRelations().addAll(
-				similarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		
-		ecoreMetamodelService.addUserInArtifact(user.getId(), ecoreMetamodel.getId(), user);
-		ecoreMetamodel.getRelations().addAll(
-				containmentRelationService.findTopProximity(ecoreMetamodel, 5));
-		ecoreMetamodel.getRelations().addAll(
-				diceSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		ecoreMetamodel.getRelations().addAll(
-				cosineSimilarityRelationService.findTopProximity(ecoreMetamodel, 5));
-		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
-		File ecoreMetamodelFile = new File(pathToDownload);
-		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
-
-		return "private.use.metamodel_details";
 	}
 
 	@RequestMapping(value = "/cluster", method = { RequestMethod.GET })

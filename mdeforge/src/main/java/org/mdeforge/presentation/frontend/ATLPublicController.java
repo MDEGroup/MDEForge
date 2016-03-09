@@ -31,12 +31,12 @@ public class ATLPublicController extends ArtifactPublicController<ATLTransformat
 		model.addAttribute("atlTransformationFile", atlTransformationFile);
 		return "private.use.metamodel_details";
 	}
-	
+	@Override
 	public String artifactList(Model model) {
 		model.addAttribute("Title", "ATL Transformations");
 		return super.artifactList(model);
 	}
-	
+	@Override
 	public String details(Model model, @RequestParam String artifact_id) {
 		super.details(model, artifact_id);
 		return "public.browse.transformation_details";

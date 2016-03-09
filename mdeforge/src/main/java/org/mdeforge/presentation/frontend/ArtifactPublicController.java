@@ -7,16 +7,20 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.ResponseBody;
 
 public abstract class ArtifactPublicController<T extends Artifact> {
 
@@ -36,14 +40,14 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 		model.addAttribute("artifactFile", ecoreMetamodelFile);
 		return "public.browse.artifact_details";
 	}
-	@RequestMapping(value = "/share", method =  RequestMethod.GET )
-	public String metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
-		Artifact ecoreMetamodel = artifactService.findOnePublic(metamodel_id);
-		model.addAttribute("ecoreMetamodel", ecoreMetamodel);
-		String pathToDownload = gridFileMediaService.getFilePath(ecoreMetamodel);
-		File ecoreMetamodelFile = new File(pathToDownload);
-		model.addAttribute("ecoreMetamodelFile", ecoreMetamodelFile);
-		return "private.use.metamodel_details";
+	@RequestMapping(value = "/share", method = { RequestMethod.GET })
+	public @ResponseBody HttpEntity<String> metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
+		try {
+			artifactService.addUserInArtifact(user.getId(), metamodel_id, user);
+			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 	}
 	
 	@RequestMapping(value = "/download", method = RequestMethod.GET)

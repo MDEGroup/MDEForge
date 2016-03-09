@@ -4,6 +4,7 @@ package org.mdeforge.presentation;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.MetricEngineException;
 import org.springframework.stereotype.Controller;
@@ -43,6 +44,17 @@ public class GlobalDefaultExceptionHandler {
 		return new ModelAndView("error.custom_generic_exception", "errorModel", errorModel);
 	}
 	
+	@ExceptionHandler(ArtifactNotFoundException.class)
+	public ModelAndView handleArtifactNotFoundException(BusinessException ex) {
+		ex.printStackTrace();
+		Map<String,String> errorModel = new HashMap<String,String>();
+		String errCode = ex.getErrCode();
+		errorModel.put("errCode", errCode);
+		String errMsg = ex.getErrMsg();
+		errorModel.put("errMsg", errMsg);
+		
+		return new ModelAndView("error.custom_generic_exception", "errorModel", errorModel);
+	}
 	
 	@ExceptionHandler(BusinessException.class)
 	public ModelAndView handleCustomException(BusinessException ex) {

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.CRUDRelationService;
@@ -149,7 +150,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
-			throw new BusinessException();
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		artifact.getFile().setByteArray(
 				gridFileMediaService.getFileByte(artifact));
 
@@ -172,7 +173,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
-			throw new BusinessException();
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		artifact.getFile().setByteArray(
 				gridFileMediaService.getFileByte(artifact));
 
@@ -187,17 +188,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (persistentClass != Artifact.class) {
 			Criteria c = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
-			//TODO REMOVE
-			//Criteria c2 = Criteria.where("tags").is(null);
-			//query.addCriteria(c2);
-			//TODO REMOVE
 			query.addCriteria(c);
 			return n.find(query, persistentClass);
 		} else {
-			//TODO REMOVE
-			//Criteria c2 = Criteria.where("tags").is(null);
-			//query.addCriteria(c2);
-			//TODO REMOVE
 			return n.find(query, persistentClass);
 		}
 
@@ -525,7 +518,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		if (result.getAuthor().getId().equals(user.getId()))
 			return result;
 		else
-			throw new BusinessException();
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 	}
 
 	@Override
@@ -540,7 +533,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c1);
 		} else
 			query.addCriteria(c2);
-		return n.findOne(query, persistentClass);
+		T art = n.findOne(query, persistentClass);
+		if (art == null)
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		return art;
 	}
 
 	@Override
@@ -559,7 +555,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c2);
 			query.addCriteria(c3);
 		}
-		return n.findOne(query, persistentClass);
+		T art = n.findOne(query, persistentClass);
+		if (art == null)
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		return art;
 	}
 
 	@Override
@@ -655,7 +654,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 		T project = operations.findOne(query, c);
 		if (project == null)
-			throw new BusinessException();
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		return project;
 	}
 
@@ -674,8 +673,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		}
 		else query.addCriteria(c3);
 		T artifact = operations.findOne(query, persistentClass);
-		// if (artifact == null)
-		// throw new ArtifactNotFound();
+		 if (artifact == null)
+			 throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		return artifact;
 	}
 
@@ -750,6 +749,16 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public User addUserInArtifact(String idUser, String idArtifact, User user) {
 		Artifact art = findOneById(idArtifact, user);
+		User us = userRepository.findOne(idUser);
+		art.getShared().add(us);
+		us.getSharedArtifact().add(art);
+		artifactRepository.save(art);
+		userRepository.save(us);
+		return us;
+	}
+	@Override
+	public User addUserInPublicArtifact(String idUser, String idArtifact, User user) {
+		Artifact art = findOnePublic(idArtifact);
 		User us = userRepository.findOne(idUser);
 		art.getShared().add(us);
 		us.getSharedArtifact().add(art);

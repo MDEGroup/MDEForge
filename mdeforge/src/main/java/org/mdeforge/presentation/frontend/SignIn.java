@@ -2,6 +2,9 @@ package org.mdeforge.presentation.frontend;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +18,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SignIn {
 	
 	@Autowired
     protected AuthenticationManager authenticationManager;
-	
+	@Autowired
+	ReCaptchaImpl reCaptcha;
 	@Autowired
 	private UserService userService;
 	
@@ -32,9 +37,20 @@ public class SignIn {
 	}
 	@RequestMapping(value = "/signin", method = { RequestMethod.POST })
 	public String signInPost(Model model, @ModelAttribute ("transformation") User user,
+			@RequestParam("recaptcha_challenge_field") String challangeField, 
+			@RequestParam("recaptcha_response_field") String responseField, 
 			HttpServletRequest request) {
-		userService.create(user);
-		authenticateUserAndSetSession(user, request);
+		String remoteAddress = "localhost";
+		ReCaptchaResponse reCaptchaResponse = this.reCaptcha.checkAnswer(remoteAddress, challangeField, responseField);
+		if(reCaptchaResponse.isValid() ){
+			userService.create(user);
+			authenticateUserAndSetSession(user, request);
+		}
+		else {
+			model.addAttribute(user);
+			model.addAttribute("captcha",true);
+			return "public.signin";
+		}
 		return "redirect:/private/dashboard";
 	}
 	

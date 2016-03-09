@@ -4,8 +4,25 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<script
-	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
+<script	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
+<script	type="text/javascript">
+function shareArtifact(){
+	
+	console.log("${artifact.id}");
+	$.ajax({
+		url : ctx + "/public/${artifact.getClass().getSimpleName() }/share/?metamodel_id=" + "${artifact.id}",
+		success : function(data) {
+			console.log("UEEEE")
+		},
+		error : function error(data) {
+			console.log('error');
+			
+		}
+	});
+}
+
+
+</script>
 
 <style type="text/css">
 #my_canvas {
@@ -70,7 +87,7 @@
 												Used in ${artifact.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
 												<security:authorize access="isAuthenticated()">
-																<a href="${pageContext.request.contextPath}/public/browse/metamodel_share?metamodel_id=${artifact.getId()}"> Share</a>
+																<a id="publicShareButton" onclick="shareArtifact()" data-id="${artifact.getId()}"> Share</a>
 												</security:authorize>
 											</p>
 											
