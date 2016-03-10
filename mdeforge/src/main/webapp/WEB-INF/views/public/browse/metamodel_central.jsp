@@ -20,10 +20,9 @@
 						<li><a href="#mio_tab_2" data-toggle="tab"><i></i>Containment</a></li>
 						<li><a href="#mio_tab_3" data-toggle="tab"><i></i>Cosine</a></li>
 						<li><a href="#mio_tab_4" data-toggle="tab"><i></i>Dice</a></li>
-						<li><a href="#mio_tab_5" data-toggle="tab"><i></i>Transformation
-								From</a></li>
-						<li><a href="#mio_tab_6" data-toggle="tab"><i></i>Transformation
-								To</a></li>
+						<li><a href="#mio_tab_5" data-toggle="tab"><i></i>Transformation From</a></li>
+						<li><a href="#mio_tab_6" data-toggle="tab"><i></i>Transformation To</a></li>
+						<li><a href="#mio_tab_7" data-toggle="tab"><i></i>Models Conform</a></li>
 					</ul>
 				</div>
 				<!-- // Tabs Heading END -->
@@ -296,6 +295,53 @@
 							</table>
 
 						</div>
+						<div class="tab-pane" id="mio_tab_7">
+
+										<table class="table table-bordered table-striped table-white">
+
+											<!-- Table heading -->
+											<thead>
+												<tr>
+													<th class="center"><spring:message	code="mdeforge.relation.codomainconformto"></spring:message></th>
+												</tr>
+											</thead>
+											<!-- // Table heading END -->
+
+											<!-- Table body -->
+											<tbody>
+												<c:forEach items="${artifact.relations}"
+													var="relation">
+													<!-- Table row -->
+													<tr>
+														<c:choose>
+															<c:when
+																test="${relation.getClass().name == 'org.mdeforge.business.model.ConformToRelation'}">
+																<c:choose>
+																	<c:when
+																		test="${relation.getToArtifact().getId() == ecoreMetamodel.getId()}">
+																		<td>
+																		<c:choose>
+																			<c:when test="${relation.getToArtifact().getOpen()}">
+																			</c:when>
+																		</c:choose>
+																		
+																		<a
+																			href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																	</c:when>
+																	<c:otherwise>
+																		<td><a
+																			href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																	</c:otherwise>
+																</c:choose>
+															</c:when>
+														</c:choose>
+													</tr>
+													<!-- // Table row END -->
+												</c:forEach>
+										</table>
+
+									</div>
+								
 						<!-- // Tab content END -->
 					</div>
 				</div>
