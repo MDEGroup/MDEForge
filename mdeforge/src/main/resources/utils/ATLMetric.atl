@@ -1,0 +1,2025 @@
+-- @path IN=/Users/juridirocco/Documents/workspace/temp/ATLMetrics/metamodel/ATL.ecore
+-- @path OUT=/Users/juridirocco/Documents/workspace/temp/ATLMetrics/metamodel/Metric.ecore
+
+
+module ATL2Metric;
+create OUT : Metric from IN : ATL;
+
+
+helper def: getAllUnits(): OrderedSet(ATL!Unit) =
+  ATL!Unit.allInstances();
+  
+helper def: getAllHelpers(): OrderedSet(ATL!Helper) =
+  ATL!Helper.allInstances();
+
+helper def: getAllRules(): OrderedSet(ATL!Rule) =
+  ATL!Rule.allInstances();
+
+helper context OclAny def: getRule(): ATL!Rule =
+  let container: OclAny = self.refImmediateComposite()
+  in	if   container.oclIsKindOf(ATL!Rule)
+		then container
+		else if   container.oclIsTypeOf(ATL!Helper)
+			 then OclUndefined
+			 else container.getRule()
+			 endif
+		endif;
+
+helper context OclAny def: getHelper(): ATL!Helper =
+  let container: OclAny = self.refImmediateComposite()
+  in	if   container.oclIsTypeOf(ATL!Helper)
+		then container
+		else if   container.oclIsKindOf(ATL!Rule)
+			 then OclUndefined
+			 else container.getHelper()
+			 endif
+		endif;
+
+helper context OclAny def: getUnit(): ATL!Unit =
+  let container : OclAny = self.refImmediateComposite()
+  in if   container.oclIsKindOf(ATL!Unit)
+  	 then container
+  	 else container.getUnit()
+  	 endif;
+
+helper context OclAny def: getTypeAsString() : String =
+  if	self.oclIsKindOf(ATL!Primitive)
+  then	self.oclType().toString()
+  else if	self.oclIsKindOf(ATL!CollectionType)
+       then	self.oclType().toString() + '(' + self.elementType.getTypeAsString() + ')'
+	   else	if	 self.oclIsTypeOf(ATL!"TupleType")
+	   		then 'tuple(' + self.attributes->collect(i | i.type.getTypeAsString()).toString() + ')'
+	   		else if	  self.oclIsTypeOf(ATL!MapType)
+				 then 'map(' + self.valueType.getTypeAsString() + ',' + self.keyType.getTypeAsString() +  ')' 
+				 else if   self.oclIsTypeOf(ATL!OclModelElement)
+				 	  then self.model.name + '!' + self.name
+					  else if   self.oclIsTypeOf(ATL!OclAnyType)
+					  	   then 'OclAny'
+						   else ('Error getTypeAsString(): unsupported type ' + self.oclType().toString()).println()
+						   endif
+					  endif
+				 endif
+			endif
+	   endif
+  endif;
+
+
+helper def: getIntSeqSum(intseq: Sequence(Integer)): Integer =
+	intseq->sum();
+--  let sortedintseq: Sequence(Integer) = intseq->sortedBy(i|i)
+--  in	if   sortedintseq->notEmpty()
+--		then sortedintseq->first()
+--		else 0
+--		endif
+
+
+helper def: getIntSeqMinimum(intseq: Sequence(Integer)): Integer =
+  let sortedintseq: Sequence(Integer) = intseq->sortedBy(i|i)
+  in	if   sortedintseq->notEmpty()
+		then sortedintseq->first()
+		else 0
+		endif;
+
+helper def: getRealSeqMinimum(realseq: Sequence(Real)): Real =
+  let sortedrealseq: Sequence(Integer) = realseq->sortedBy(i|i)
+  in	if   sortedrealseq->notEmpty()
+		then sortedrealseq->first()
+		else 'Error: invoked getRealSeqMinimum() on an empty real sequence'.println()
+		endif;
+
+helper def: getIntSeqMaximum(intseq: Sequence(Integer)): Integer =
+  let sortedintseq: Sequence(Integer) = intseq->sortedBy(i|i)
+  in	if   sortedintseq->notEmpty()
+		then sortedintseq->last()
+		else 0
+		endif;
+
+helper def: getRealSeqMaximum(realseq: Sequence(Real)): Real =
+  let sortedrealseq: Sequence(Integer) = realseq->sortedBy(i|i)
+  in	if   sortedrealseq->notEmpty()
+  		then sortedrealseq->last()
+  		else 'Error: invoked getRealSeqMaximum() on an empty real sequence'.println()
+  		endif;
+
+helper def: getIntSeqMedian(intseq: Sequence(Integer)): Integer =
+  let sortedintseq: Sequence(Integer) = intseq->sortedBy(i|i)
+  in	if   sortedintseq->notEmpty()
+		then if   sortedintseq->size() mod 2 = 0
+			 then sortedintseq->at(sortedintseq->size() div 2)
+			 else sortedintseq->at((sortedintseq->size() div 2) + 1)
+			 endif
+  		else 0
+  		endif;
+
+helper def: getRealSeqMedian(realseq: Sequence(Real)): Real =
+  let sortedrealseq: Sequence(Integer) = realseq->sortedBy(i|i)
+  in	if   sortedrealseq->notEmpty()
+		then if   sortedrealseq->size() mod 2 = 0
+			 then sortedrealseq->at(sortedrealseq->size() div 2)
+			 else sortedrealseq->at((sortedrealseq->size() div 2) + 1)
+			 endif
+		else 'Error: invoked getRealSeqMedian() on an empty real sequence'.println()
+		endif;
+
+helper def: getIntSeqAverage(intseq: Sequence(Integer)): Real =
+  if   intseq->notEmpty()
+  then intseq->sum() / intseq->size()
+  else 0
+  endif;
+
+helper def: getRealSeqAverage(realseq: Sequence(Real)): Real =
+  if   realseq->notEmpty()
+  then realseq->sum() / realseq->size()
+  else 0
+  endif;
+
+helper def: getIntSeqStdDev(intseq: Sequence(Integer)): Real =
+  let avg: Real = thisModule.getIntSeqAverage(intseq)
+  in	if   intseq->size() > 1
+  		then (intseq->collect(i | (i - avg) * (i - avg))->sum() / (intseq->size() - 1)).sqrt()
+  		else 0
+  		endif;
+
+helper def: getRealSeqStdDev(realseq: Sequence(Real)): Real =
+  let avg: Real = thisModule.getRealSeqAverage(realseq)
+  in	if   realseq->size() > 1
+  		then (realseq->collect(i | (i - avg) * (i - avg))->sum()/ (realseq->size() - 1)).sqrt() 
+  		else 0
+  		endif;
+
+helper def: getStringOccurrenceCount(names: Sequence(String)): Sequence(Integer) =
+  let uniquenames: Sequence(String) = names->asSet()		-- Remove duplicates
+  										   ->asSequence()	-- Restore ordering (needed?)
+  in uniquenames
+  			->collect(i | names
+  							->count(i)
+					 );
+
+helper def: getStringSequenceOccurrenceCount(namesequences: Sequence(Sequence(String))): Sequence(Integer) =
+  let uniquesequences: Sequence(Sequence(String)) = namesequences->asSet()		-- Remove duplicates
+  																 ->asSequence()	-- Restore ordering (needed?)
+  in uniquesequences->collect(i | namesequences
+  									->count(i)
+						 	 );
+
+helper def: builtInFunctionList: Sequence(String) =
+  Sequence{ 'allInstances', 'allInstancesFrom', '=', '<>', 'oclIsUndefined', 'oclIsKindOf', 'oclIsTypeOf', 'toString', 'oclType', 
+			'asSequence', 'asSet', 'asBag', 'output', 'debug', 'refSetValue', 'refGetValue', 'refImmediateComposite', 'refInvokeOperation', 
+			'resolveTemp', 'and', 'or', 'xor', 'not', 'implies', 'size', 'concat', 'substring', 'toInteger', 'toReal', '<', '>', '=>', '=<', 
+			'toUpper', 'toLower', 'toSequence', 'trim', 'startsWith', 'endsWith', 'indexOf', 'lastIndexOf', 'split', 'replaceAll', 
+			'regexReplaceAll', 'writeTo', 'println', '*', '+', '-', '/', 'max', 'min', 'abs', 'div', 'mod', 'floor', 'round', 'cos', 'sin', 
+			'tan', 'acos', 'asin', 'toDegrees', 'toRadians', 'exp', 'log', 'sqtr', 'includes', 'excludes', 'count', 'includesAll', 'excludesAll',
+			'isEmpty', 'notEmpty', 'sum', 'union', 'flatten', 'append', 'prepend', 'insertAt', 'subSequence', 'at', 'indexOf', 'first', 'last',
+			'including', 'excluding', 'intersection', 'symetricDifference', 'subOrderedSet', 'exists', 'forAll', 'isUnique', 'any', 'one',
+			'collect', 'select', 'reject', 'sortedBy', 'iterate', 'get', 'getKeys', 'getValues'
+		  };
+
+
+
+
+
+		  
+rule ATL2Metrics{
+  from	m_in  : ATL!Module
+	to
+  	container : Metric!Container (
+  		metrics								<- 	Sequence{thisModule.NumUnits(m_in)}
+  											->append(thisModule.NumBindings(m_in))
+											->append(thisModule.NumInPatterns(m_in))
+											->append(thisModule.NumOutPatterns(m_in))
+											->append(thisModule.NumInputModels(m_in))
+											->append(thisModule.NumOutputModels(m_in))
+  											->append(thisModule.NumTransformationRules(m_in))
+  											->append(thisModule.NumMatchedRules(m_in))
+  											->append(thisModule.NumMatchedRulesAll(m_in))
+											->append(thisModule.NumNonUniqueLazyRules(m_in))
+											->append(thisModule.NumLazyRules(m_in))
+											->append(thisModule.NumUniqueLazyRules(m_in))
+											->append(thisModule.NumCalledRules(m_in))
+											->append(thisModule.NumInPatternsWithFilter(m_in))
+											->append(thisModule.NumRulesWithDoSection(m_in))
+											->append(thisModule.NumDirectCopies(m_in))
+											->append(thisModule.NumRulesWithUsingClause(m_in))
+		  									->append(thisModule.NumAbstractRules(m_in))
+		  									->append(thisModule.NumAbstractMatchedRules(m_in))
+		  									->append(thisModule.NumAbstractLazyRules(m_in))
+		  									->append(thisModule.NumAbstractUniqueLazyRules(m_in))
+											->append(thisModule.NumRuleHierarchies(m_in))
+											->append(thisModule.NumAttributeHelpersWithContext(m_in))
+											->append(thisModule.NumAttributeHelpers(m_in))
+											->append(thisModule.NumHelpers(m_in))
+											->append(thisModule.NumHelpersWithContext(m_in))
+											->append(thisModule.NumHelpersWithoutContext(m_in))
+											->append(thisModule.NumAttributeHelpersWithoutContext(m_in))
+											->append(thisModule.NumOperationHelpers(m_in))
+											->append(thisModule.NumOperationHelpersWithContext(m_in))
+											->append(thisModule.NumOperationHelpersWithoutContext(m_in))
+											->append(thisModule.NumOperationHelpersWithParameters(m_in))
+											->append(thisModule.NumOperationHelpersWithoutParameters(m_in))
+											->append(thisModule.NumOverloadedHelpers(m_in))
+											->append(thisModule.NumHelpersWithLetClause(m_in))
+											->append(thisModule.NumCallsToResolveTemp(m_in))
+											->append(thisModule.NumInPatternsPerRule(m_in))
+											-->append(thisModule.NumOutPatternsPerRule(m_in))
+											->append(thisModule.NumRulesPerInputPattern(m_in))
+											->append(thisModule.NumParamsPerCalledRule(m_in))
+											->append(thisModule.NumUnusedParamsPerCalledRule(m_in))
+											->append(thisModule.NumVariablesPerUsingClause(m_in))
+											->append(thisModule.NumStatementsPerDoSection(m_in))
+											->append(thisModule.NumRulesPerRuleName(m_in))
+											->append(thisModule.NumChildrenPerMatchedRule(m_in))
+											->append(thisModule.MaxDepthOfRuleHierarchy(m_in))
+											->append(thisModule.MaxWidthOfRuleHierarchy(m_in))
+											->append(thisModule.NumBindingsPerRule(m_in))
+											->append(thisModule.NumHelpersperUnit(m_in))
+											->append(thisModule.NumAttributeHelpersperUnit(m_in))
+											->append(thisModule.NumOperationHelpersperUnit(m_in))
+											->append(thisModule.NumHelpersPerContext(m_in))
+											->append(thisModule.NumHelpersPerHelperName(m_in))
+											->append(thisModule.HelperCyclomaticComplexity(m_in))
+											->append(thisModule.NumOpsonCollectionsPerHelper(m_in))
+											->append(thisModule.NumVariablesPerHelper(m_in))
+											->append(thisModule.NumParametersPerOperationHelper(m_in))
+											->append(thisModule.NumUnusedParametersPerOperationHelper(m_in))
+											->append(thisModule.NumImportedModules(m_in))
+											->append(thisModule.NumTimesModuleIsImported(m_in))
+											->append(thisModule.NumCallsToLazyRules(m_in))
+											->append(thisModule.NumCallsToCalledRules(m_in))
+											->append(thisModule.NumCallsToHelpers(m_in))
+											->append(thisModule.NumCallsToAttributeHelpers(m_in))
+											->append(thisModule.NumCallsToOperationHelpers(m_in))
+											->append(thisModule.NumCallsFromHelpersToCalledRules(m_in))
+											->append(thisModule.NumCallsFromHelpersToHelpers(m_in))
+											->append(thisModule.NumCallsFromHelpersToAttributeHelpers(m_in))
+											->append(thisModule.NumCallsFromHelpersToOperationHelpers(m_in))
+											->append(thisModule.NumCallsFromRulesToHelpers(m_in))
+											->append(thisModule.NumCallsFromRulesToRules(m_in))
+											->append(thisModule.NumCallsFromRulesToCalledRules(m_in))
+											->append(thisModule.NumCallsFromRulesToLazyRules(m_in))
+											->append(thisModule.NumCallsFromHelpersInOtherUnits(m_in))
+											->append(thisModule.NumCallsToHelpersInOtherUnits(m_in))
+											->append(thisModule.NumCallsToResolveTempPerRule(m_in))
+											->append(thisModule.RuleComplexityIncrease(m_in))	
+											)
+}
+lazy rule NumUnits{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Units',
+  			value	<-  thisModule.getAllUnits()
+							->size().toString()
+  		)
+}
+
+--lazy rule NumOfBindings{
+--  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+--  to	s_out: Metric!SimpleMetric(
+--  			name	<- 'Number of Units',
+--  			value	<-  thisModule.getAllUnits()
+--							->size().toString()
+--  		)
+--}
+
+
+lazy rule NumTransformationRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Transformation Rules',
+  			value	<-  ATL!Rule.allInstances()->size().toString()
+  		)
+}
+
+lazy rule NumMatchedRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Matched Rules (Excluding Lazy Matched Rules)',
+  			value	<-  thisModule.getAllRules()
+							->select(i | i.oclIsTypeOf(ATL!MatchedRule))->size().toString()
+  		)
+}
+
+lazy rule NumMatchedRulesAll{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Matched Rules (Including Lazy Matched Rules)',
+  			value	<-  ATL!MatchedRule.allInstances()->size().toString()
+  		)
+}
+
+lazy rule NumCalledRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Called Rules',
+  			value	<-  ATL!CalledRule.allInstances()->size().toString()
+  		)
+}
+
+lazy rule NumNonUniqueLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Lazy Matched Rules (Excluding Unique)',
+  			value	<-  ATL!LazyMatchedRule.allInstances()
+							->select(j | not(j.isUnique))->size().toString()
+  		)
+}
+
+lazy rule NumLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Lazy Matched Rules (Including Unique)',
+  			value	<-  ATL!LazyMatchedRule.allInstances()->size().toString()
+  		)
+}
+
+lazy rule NumUniqueLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unique Lazy Matched Rules',
+  			value	<-  ATL!LazyMatchedRule.allInstances()
+							->select(j | j.isUnique)->size().toString()
+  		)
+}
+
+lazy rule NumAbstractRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Abstract Transformation Rules',
+  			value	<-  thisModule.getAllRules()
+							->select(i | not(i.oclIsTypeOf(ATL!CalledRule)))
+							->select(j | j.isAbstract)
+							->size().toString()
+  		)
+}
+
+lazy rule NumAbstractMatchedRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Abstract Matched Rules',
+  			value	<-  thisModule.getAllRules()
+							->select(i | i.oclIsTypeOf(ATL!MatchedRule))
+							->select(j | j.isAbstract)
+							->size().toString()
+  		)
+}
+
+lazy rule NumAbstractLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Abstract Lazy Matched Rules',
+  			value	<-  thisModule.getAllRules()
+							->select(i | i.oclIsTypeOf(ATL!LazyMatchedRule))
+							->select(j | j.isAbstract)
+							->size().toString()
+  		)
+}
+
+lazy rule NumAbstractUniqueLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Abstract Unique Lazy Matched Rules',
+  			value	<-  thisModule.getAllRules()
+							->select(i | i.oclIsTypeOf(ATL!LazyMatchedRule))
+							->select(j | j.isUnique)
+							->select(k | k.isAbstract)
+							->size().toString()
+  		)
+}
+
+lazy rule NumChildrenPerMatchedRule{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = 
+  								thisModule.getAllRules()
+										->select(i | not(i.oclIsTypeOf(ATL!CalledRule)))
+										->collect(j | j.children
+															->size()
+												 );
+		}
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Children per Matched Rule',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumUnusedLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = 
+  								ATL!OperationCallExp.allInstances()
+  										->collect(i | i.operationName);
+  		 lazyrulenames: Sequence(String) =
+  		 						ATL!LazyMatchedRule.allInstances()
+										->collect(j | j.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Lazy Matched Rules',
+  			value	<-  lazyrulenames->select(i | calledopnames->excludes(i))->size().toString()
+		)
+}
+
+lazy rule NumUnusedCalledRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = 
+  								ATL!OperationCallExp.allInstances()
+  										->collect(i | i.operationName);
+  		 calledrulenames: Sequence(String) =
+  		 						ATL!CalledRule.allInstances()
+										->collect(j | j.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Called Rules',
+  			value	<-  calledrulenames
+							->select(i | calledopnames->excludes(i))->size().toString()
+		)
+}
+
+lazy rule NumHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Helpers',
+  			value	<-  thisModule.getAllHelpers()
+							->size().toString()
+  		)
+}
+
+lazy rule NumHelpersWithContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Helpers with Context',
+  			value	<-  thisModule.getAllHelpers()
+							->select(i | not(i.definition.context_.oclIsUndefined()))
+							->size().toString()
+  		)
+}
+
+lazy rule NumHelpersperUnit{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_units: Sequence(ATL!Unit) = thisModule.getAllHelpers()
+													->collect(i | i.getUnit());
+
+		  intseq: Sequence(Integer) = thisModule.getAllUnits()
+		  											->collect(i | helper_units
+		  																->count(i)
+															 );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Helpers per Unit',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)	
+  		)
+}
+
+lazy rule NumAttributeHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Attribute Helpers',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+							->size().toString()
+  		)
+}
+
+lazy rule NumAttributeHelpersWithContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Attribute Helpers with Context',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+							->select(k | not(k.definition.context_.oclIsUndefined()))
+							->size().toString()
+  		)
+}
+
+lazy rule NumAttributeHelpersWithoutContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Attribute Helpers without Context',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+							->select(k | k.definition.context_.oclIsUndefined())
+							->size().toString()
+  		)
+}
+
+lazy rule NumAttributeHelpersperUnit{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_units: Sequence(ATL!Unit) = thisModule.getAllHelpers()
+													->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+													->collect(i | i.getUnit());
+
+		  intseq: Sequence(Integer) = thisModule.getAllUnits()
+		  											->collect(i | helper_units
+		  																->count(i)
+															 );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Attribute Helpers per Unit',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)	
+  		)
+}
+
+lazy rule NumOperationHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Operation Helpers',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+							->size().toString()
+  		)
+}
+
+lazy rule NumOperationHelpersperUnit{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_units: Sequence(ATL!Unit) = thisModule.getAllHelpers()
+													->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+													->collect(i | i.getUnit());
+
+		  intseq: Sequence(Integer) = thisModule.getAllUnits()
+		  											->collect(i | helper_units
+		  																->count(i)
+															 );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Operation Helpers per Unit',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)	
+  		)
+}
+
+lazy rule NumOperationHelpersWithContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Operation Helpers with Context',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+							->select(k | not(k.definition.context_.oclIsUndefined()))
+							->size().toString()
+  		)
+}
+
+lazy rule NumOperationHelpersWithoutContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Operation Helpers without Context',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+							->select(k | k.definition.context_.oclIsUndefined())
+							->size().toString()
+  		)
+}
+
+lazy rule NumOperationHelpersWithParameters{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Operation Helpers with Parameters',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+							->select(k | not(k.definition.feature.parameters
+												->isEmpty()
+											 )
+									)
+							->size().toString()
+  		)
+}
+
+lazy rule NumOperationHelpersWithoutParameters{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Operation Helpers without Parameters',
+  			value	<-  thisModule.getAllHelpers()
+							->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+							->select(k | k.definition.feature.parameters
+												->isEmpty()
+									)
+							->size().toString()
+  		)
+}
+
+lazy rule NumUnusedHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  														->collect(i | i.name);
+		 calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  														->collect(i | i.operationName);
+  		 helpernames: Sequence(String) = thisModule.getAllHelpers()
+														->collect(j | j.definition.feature.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Helpers',
+  			value	<-  helpernames
+							->select(i | 	 callednavorattrnames
+														->excludes(i)
+										 and calledopnames
+										 				->excludes(i)
+									)
+							->size().toString()
+		)
+}
+
+lazy rule NumUnusedAttributeHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  														->collect(i | i.name);
+  		 attrhelpernames: Sequence(String) = thisModule.getAllHelpers()
+														->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+														->collect(k | k.definition.feature.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Attribute Helpers',
+  			value	<-  attrhelpernames
+							->select(i | callednavorattrnames
+													->excludes(i)
+									)
+							->size().toString()
+		)		
+}
+
+lazy rule NumUnusedOperationHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  													->collect(i | i.operationName);
+  		 ophelpernames: Sequence(String) = thisModule.getAllHelpers()
+													->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+													->collect(k | k.definition.feature.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Operation Helpers',
+  			value	<-  ophelpernames
+							->select(i | calledopnames
+												->excludes(i)
+									)
+							->size().toString()
+		)
+}
+
+lazy rule NumUnusedHelpersWithContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  														->collect(i | i.name);
+		 calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  														->collect(i | i.operationName);
+  		 helpernames: Sequence(String) = thisModule.getAllHelpers()
+														->select(i | not(i.definition.context_.oclIsUndefined())) -- select only the helpers with context
+														->collect(j | j.definition.feature.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Helpers with Context',
+  			value	<-  helpernames
+							->select(i | 	 callednavorattrnames
+														->excludes(i)
+										 and calledopnames
+										 				->excludes(i)
+									)
+							->size().toString()
+		)
+}
+
+lazy rule NumUnusedHelpersWithoutContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  														->collect(i | i.name);
+		 calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  														->collect(i | i.operationName);
+  		 helpernames: Sequence(String) = thisModule.getAllHelpers()
+														->select(i | i.definition.context_.oclIsUndefined()) -- select only the helpers without context
+														->collect(j | j.definition.feature.name);
+  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Helpers without Context',
+  			value	<-  helpernames
+							->select(i | 	 callednavorattrnames
+														->excludes(i)
+										 and calledopnames
+										 				->excludes(i)
+									)
+							->size().toString()
+		)
+}
+
+lazy rule NumInPatternsPerRule{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  -- Note, this metric only considers matched rules since only they have input patterns
+  using {intseq: Sequence(Integer) = ATL!MatchedRule.allInstances()
+											->collect(i | i.inPattern.elements
+															->size()
+											 		 )
+											->asSequence();
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Elements per Input Pattern',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)	
+  		)
+}
+
+lazy rule NumInPatterns{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  -- Note, this metric only considers matched rules since only they have input patterns
+  using {intseq: Sequence(Integer) = ATL!MatchedRule.allInstances()
+											->collect(i | i.inPattern.elements
+															->size()
+											 		 )
+											->asSequence();
+		}
+
+  to	a_out: Metric!SimpleMetric(
+  			name	<- 'Number of Input Pattern',
+  			value	<- thisModule.getIntSeqSum(intseq).toString()
+  		)  
+}
+
+
+lazy rule NumOutPatterns{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  -- Note, this metric also considers called rules since they have output patterns
+  using {intseq: Sequence(Integer) = thisModule.getAllRules()->select(k | not k.outPattern.oclIsUndefined())->collect(i | i.outPattern.elements
+															->size()
+													 )
+											->asSequence();
+		}
+
+  to	a_out: Metric!SimpleMetric(
+  			name	<- 'Number of Output Pattern',
+  			value	<- thisModule.getIntSeqSum(intseq).toString()
+  		)
+}
+
+
+
+
+lazy rule NumOutPatternsPerRule{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  -- Note, this metric also considers called rules since they have output patterns
+  using {intseq: Sequence(Integer) = thisModule.getAllRules()
+											->collect(i | i.outPattern.elements
+															->size()
+													 )
+											->asSequence();
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Elements per Output Pattern',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)	
+  		)
+}
+
+helper context ATL!MatchedRule def: getRuleComplexityIncrease(): Real =
+	self.outPattern.elements->size() / self.inPattern.elements->size();
+
+lazy rule RuleComplexityIncrease{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  -- Note, this metric only considers matched rules since only they have input patterns
+  using {realseq: Sequence(Real) = ATL!MatchedRule.allInstances()
+										->collect(i | i.getRuleComplexityIncrease())
+										->asSequence();
+		}
+
+  to	a_out: Metric!AggregatedRealMetric(
+  			name				<- 'Rule Complexity Increase',
+			minimum				<- thisModule.getRealSeqMinimum(realseq),
+			maximum				<- thisModule.getRealSeqMaximum(realseq),
+			median				<- thisModule.getRealSeqMedian(realseq),
+			average				<- thisModule.getRealSeqAverage(realseq),
+			standardDeviation	<- thisModule.getRealSeqStdDev(realseq)
+  		)
+}
+
+lazy rule NumInPatternsWithFilter{
+  from	m_in : ATL!Module  	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Rules with a Filter Condition on the Input Pattern',
+  			value	<-  ATL!MatchedRule.allInstances()->select(j | not(j.inPattern.filter.oclIsUndefined()))->size().toString()
+  		)
+}
+
+lazy rule NumBindingsPerRule{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { rules: Sequence(ATL!Rule) = ATL!Binding.allInstances()
+											->collect(i | i.getRule());
+  		  intseq : Sequence(Integer) = thisModule.getAllRules()
+											->collect(i | rules
+															->count(i)
+										 			  );
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Bindings per Rule',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+
+
+lazy rule NumBindings{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { 
+  			rules: Integer = ATL!Binding.allInstances()->size();
+		}
+
+  to	a_out: Metric!SimpleMetric(
+  			name	<- 'Number of bindings',
+  			value	<- (rules).toString()
+  		) 
+}
+
+lazy rule NumRulesPerRuleName{
+--This metric does not make sense, since the name identifies a rule.
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = thisModule.getStringOccurrenceCount(
+				  										thisModule.getAllRules()
+																->collect(j | j.name)
+									 									 );
+  		}  
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Rules per Rule Name',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumRulesPerInputPattern{
+--TODO: Should this implementation be extended to also consider the model in which the modelelement occurs? 
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = thisModule.getStringSequenceOccurrenceCount(
+  										ATL!MatchedRule.allInstances()
+												->collect(i | i.inPattern.elements
+																	->select(j | j.type.oclIsTypeOf(ATL!OclModelElement))
+																	->collect(k | k.type.name)
+					 									  )
+								);
+  		}  
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Matched Rules per Input Pattern',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumParamsPerCalledRule{
+  from  m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  
+  using{ intseq: Sequence(Integer) = thisModule.getAllRules()
+  											->select(i | i.oclIsTypeOf(ATL!CalledRule))
+											->collect(j | j.parameters
+																->size()
+													 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Parameters per Called Rule',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumUnusedParamsPerCalledRule{
+  from  m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  
+  using{ varexp: Sequence(ATL!VariableDeclaration) = ATL!VariableExp.allInstances()
+		 													->collect(i | i.referredVariable);
+		 intseq: Sequence(Integer) = thisModule.getAllRules()
+  											->select(i | i.oclIsTypeOf(ATL!CalledRule))
+											->collect(j | j.parameters				-- Find parameters
+																->select(k | varexp
+																				->excludes(k)	-- That are not used
+																		)
+																->size()
+													 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Unused Parameters per Called Rule',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+  
+lazy rule NumOverloadedHelpers{
+  from  m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Overloaded Helpers',
+  			value	<-  thisModule.getStringOccurrenceCount(
+  							thisModule.getAllHelpers()
+								->collect(j | j.definition.feature.name)
+						)->select(k | k > 1)
+						 ->size().toString()
+  		)
+}
+
+lazy rule NumHelpersPerHelperName{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = thisModule.getStringOccurrenceCount(
+  														thisModule.getAllHelpers()
+																->collect(j | j.definition.feature.name)
+																		);
+  		}  
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Helpers per Helper Name (Overloadings)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumInputModels{
+  from  m_in : ATL!Module
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Input Models',
+  			value	<-  m_in.inModels->size().toString()
+  		)  
+}
+
+lazy rule NumOutputModels{
+  from  m_in : ATL!Module
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Output Models',
+  			value	<-  m_in.outModels->size().toString()
+  		)
+}
+
+lazy rule NumRulesWithDoSection{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Rules with a do Section',
+  			value	<-  thisModule.getAllRules()->select(i | not(i.actionBlock.oclIsUndefined()) )->size().toString()
+  		)
+}
+
+lazy rule NumStatementsPerDoSection{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = ATL!ActionBlock.allInstances()
+											->collect(i | i.statements
+																->size()
+													 );
+  		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Statements per do Section',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumRulesWithUsingClause{
+  from m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Rules with a Using Clause',
+			value	<-  	thisModule.getAllRules()
+								->select(j | j.variables
+												->size() > 0
+										)
+								->size().toString()
+  		)
+}
+
+lazy rule NumVariablesPerUsingClause{
+  from m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = thisModule.getAllRules()
+											->select(j | j.variables
+															->size() > 0	-- filter out rules without using clause
+													)
+											->collect(k | k.variables
+															->size()
+											 		 );
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Variables per Using Clause',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)		
+  		)
+}
+
+lazy rule NumHelpersWithLetClause{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {features: Sequence(ATL!OclFeature) = thisModule.getAllHelpers()
+														->collect(j | j.definition.feature);
+		}
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Helpers with a Let Clause',
+			value	<-  	features
+							->select(i | i.oclIsTypeOf(ATL!Operation))	--for operation helpers
+							->collect(j | j.body)
+							->select(k | k.oclIsTypeOf(ATL!LetExp))
+							->union(
+								features
+									->select(i | i.oclIsTypeOf(ATL!Attribute))	--for attribute helpers
+									->collect(j | j.initExpression)
+									->select(k | k.oclIsTypeOf(ATL!LetExp))
+							)->size().toString()
+  		)
+}
+
+helper context ATL!OclExpression def: getHelperNumVars(): Integer =
+  if   not(self.oclIsTypeOf(ATL!LetExp))
+  then 0
+  else 1 + self.in_.getHelperNumVars()
+  endif;
+
+lazy rule NumVariablesPerHelper{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {features: Sequence(ATL!OclFeature) = thisModule.getAllHelpers()
+													->collect(j | j.definition.feature);
+		 intseq: Sequence(Integer) = features
+										->select(i | i.oclIsTypeOf(ATL!Operation))	--for operation helpers
+										->collect(j | j.body.getHelperNumVars())
+										->union(features
+													->select(i | i.oclIsTypeOf(ATL!Attribute))	--for attribute helpers
+													->collect(j | j.initExpression.getHelperNumVars())
+												);
+		}
+  
+  to	a_out:Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Variables per Helper',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumParametersPerOperationHelper{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {intseq: Sequence(Integer) = thisModule.getAllHelpers()
+											->select(i | i.definition.feature.oclIsTypeOf(ATL!Operation))
+											->collect(j | j.definition.feature.parameters
+															->size()
+					 						 		 );
+		}
+  
+  to	a_out:Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Parameters per Operation Helper',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumUnusedParametersPerOperationHelper{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {varexp: Sequence(ATL!VariableDeclaration) = ATL!VariableExp.allInstances()
+		 													->collect(i | i.referredVariable);
+		 intseq: Sequence(Integer) = thisModule.getAllHelpers()
+											->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+											->collect(k | k.definition.feature.parameters		-- Find parameters
+																->select(l | varexp
+																				->excludes(l)	-- That are not used
+																		)
+																->size()
+													 );
+		}
+  
+  to	a_out:Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Unused Parameters per Operation Helper',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumPrintlnStmts{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Calls to println()',
+  			value	<-  ATL!OperationCallExp.allInstances()
+							->select(i | i.operationName = 'println')
+							->size().toString()
+  		)
+}
+
+lazy rule NumDebugStmts{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Calls to debug()',
+  			value	<-  ATL!OperationCallExp.allInstances()
+							->select(i | i.operationName = 'debug')
+							->size().toString()
+  		)
+}
+
+lazy rule NumCallsToResolveTemp{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Calls to resolveTemp()',
+  			value	<-  ATL!OperationCallExp.allInstances()
+							->select(i | i.operationName = 'resolveTemp')
+							->size().toString()
+  		)
+}
+
+lazy rule NumCallsToResolveTempPerRule{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { resolveTemp_Callers: Sequence(ATL!Rule) = ATL!OperationCallExp.allInstances()
+															->select(i | i.operationName = 'resolveTemp')
+															->collect(j | j.getRule());
+		  intseq: Sequence(Integer) = thisModule.getAllRules()
+		  									->collect(i | resolveTemp_Callers
+		  														->count(i)
+		  											 );
+  		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to resolveTemp() per Rule',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumUnusedInputPatternsElements{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {vardef: Sequence(ATL!VariableDeclaration) = ATL!SimpleInPatternElement.allInstances();
+  		 varexp: Sequence(ATL!VariableDeclaration) = ATL!VariableExp.allInstances()
+		 													->collect(i | i.referredVariable);
+  		}
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Input Pattern Elements',
+  			value	<-  vardef
+						->select(i | varexp->excludes(i))->size().toString()
+  		)
+}
+
+lazy rule NumUnusedVariablesinUsing{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {vardef: Sequence(ATL!VariableDeclaration) = ATL!RuleVariableDeclaration.allInstances();
+  		 varexp: Sequence(ATL!VariableDeclaration) = ATL!VariableExp.allInstances()
+		 													->collect(i | i.referredVariable);
+  		}
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Variables Defined in Using Clauses',
+  			value	<-  vardef
+						->select(i | varexp
+										->excludes(i)
+								)
+						->size().toString()
+  		)
+}
+
+lazy rule NumUnusedVariablesinLet{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {vardef: Sequence(ATL!VariableDeclaration) = ATL!VariableDeclaration.allInstances()
+										  					->select(i | i.refImmediateComposite().oclIsTypeOf(ATL!LetExp));
+  		 varexp: Sequence(ATL!VariableDeclaration) = ATL!VariableExp.allInstances()
+		 													->collect(i | i.referredVariable);
+  		}
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Variables Defined in Let Clauses',
+  			value	<-  vardef
+						->select(i | varexp
+										->excludes(i)
+								)
+						->size().toString()
+  		)
+}
+
+lazy rule NumCallsToAttributeHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  															->collect(i | i.name);
+  		 attrhelpernames: Sequence(String) = thisModule.getAllHelpers()
+															->select(j | j.definition.feature.oclIsTypeOf(ATL!Attribute))
+															->collect(k | k.definition.feature.name)
+															->asSet()			-- Remove duplicates. 
+															->asSequence();		-- Helpers with the same name are considered to be the same helper
+
+		 intseq: Sequence(Integer) = attrhelpernames
+												->collect(i | callednavorattrnames
+																->count(i)
+														  );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Attribute Helpers per Attribute Helper (Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsToOperationHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  															->collect(i | i.operationName);
+  		 ophelpernames: Sequence(String) = thisModule.getAllHelpers()
+															->select(j | j.definition.feature.oclIsTypeOf(ATL!Operation))
+															->collect(k | k.definition.feature.name)
+															->asSet()			-- Remove duplicates. 
+															->asSequence();		-- Helpers with the same name are considered to be the same helper
+
+		 intseq: Sequence(Integer) = ophelpernames
+												->collect(i | calledopnames
+																->count(i)
+														  );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Operation Helpers per Operation Helper (Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsToHelpers{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callednavorattrnames: Sequence(String) = ATL!NavigationOrAttributeCallExp.allInstances()
+  															->collect(i | i.name);
+		 calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  															->collect(i | i.operationName);
+  		 helpernames: Sequence(String) = thisModule.getAllHelpers()
+															->collect(j | j.definition.feature.name)
+															->asSet()			-- Remove duplicates. 
+															->asSequence();		-- Helpers with the same name are considered to be the same helper
+		 intseq: Sequence(Integer) = helpernames
+											->collect(i | callednavorattrnames
+															->count(i) +
+														  calledopnames
+															->count(i)
+													  );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Helpers per Helper (Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsToLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  													->collect(i | i.operationName);
+  		 lazyrulenames: Sequence(String) = ATL!LazyMatchedRule.allInstances()
+													->collect(j | j.name);
+		 intseq: Sequence(Integer) = lazyrulenames
+											->collect(i | calledopnames
+																->count(i)
+													  );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Lazy Matched Rules per Lazy Matched Rule (Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsToCalledRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {calledopnames: Sequence(String) = ATL!OperationCallExp.allInstances()
+  													->collect(i | i.operationName);
+  		 calledrulenames: Sequence(String) = ATL!CalledRule.allInstances()
+													->collect(j | j.name);
+		 intseq: Sequence(Integer) = calledrulenames
+											->collect(i | calledopnames
+																->count(i)
+													  );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Called Rules per Called Rule (Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+helper context OclAny def: getHelperCallingExpr(): ATL!Helper =
+  let container: OclAny = self.refImmediateComposite()
+  in	if   container.oclIsTypeOf(ATL!Helper)
+		then container
+		else if   container.oclIsKindOf(ATL!Rule)
+			 then OclUndefined
+			 else container.getHelperCallingExpr()
+			 endif
+		endif;
+
+lazy rule NumCallsFromHelpersToHelpers{
+--TODO: Is using the name of a helper to filter them enough?
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callinghelpers: Sequence(ATL!Helper) = 
+  								ATL!OperationCallExp.allInstances()
+										->select(i | thisModule.getAllHelpers()						-- select only the calls to helpers
+														->collect(j | j.definition.feature.name)
+														->includes(i.operationName)
+												)
+										->union(ATL!NavigationOrAttributeCallExp.allInstances()
+														->select( k | thisModule.getAllHelpers()	-- select only the calls to helpers
+																		->collect(l | l.definition.feature.name)
+																		->includes(k.name)
+																)
+												)
+  										->collect(m | m.getHelperCallingExpr())
+										->select(n | n.oclIsTypeOf(ATL!Helper));
+		  intseq: Sequence(Integer) =
+		  				thisModule.getAllHelpers()
+										->collect(i | callinghelpers
+														->count(i)
+												 );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Helpers to Helpers per Helper (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromHelpersToOperationHelpers{
+--TODO: Is using the name of a helper to filter them out enough?
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callinghelpers: Sequence(ATL!Helper) = 
+  								ATL!OperationCallExp.allInstances()
+										->select(i | thisModule.getAllHelpers()						-- select only the calls to helpers
+														->collect(j | j.definition.feature.name)
+														->includes(i.operationName)
+												)
+  										->collect(m | m.getHelperCallingExpr())
+										->select(n | n.oclIsTypeOf(ATL!Helper));
+		  intseq: Sequence(Integer) =
+		  						thisModule.getAllHelpers()
+										->collect(i | callinghelpers
+														->count(i)
+												 );
+  }
+	
+	  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Helpers to Operation Helpers per Helper (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromHelpersToAttributeHelpers{
+--TODO: Is using the name of a helper to filter them out enough?
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callinghelpers: Sequence(ATL!Helper) = 
+  								ATL!NavigationOrAttributeCallExp.allInstances()
+											->select( k | thisModule.getAllHelpers()	-- select only the calls to helpers
+															->collect(l | l.definition.feature.name)
+															->includes(k.name)
+													)
+  											->collect(m | m.getHelperCallingExpr())
+											->select(n | n.oclIsTypeOf(ATL!Helper));
+		  intseq: Sequence(Integer) =
+		  						thisModule.getAllHelpers()
+											->collect(i | callinghelpers
+															->count(i)
+													 );
+  }
+	
+	  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Helpers to Attribute Helpers per Helper (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromHelpersToCalledRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callinghelpers: Sequence(ATL!Helper) = 
+  								ATL!OperationCallExp.allInstances()
+										->select(i | ATL!CalledRule.allInstances()
+															->collect(j | j.name)
+															->includes(i.operationName)
+												)
+  										->collect(m | m.getHelperCallingExpr())
+										->select(n | n.oclIsTypeOf(ATL!Helper));
+		  intseq: Sequence(Integer) =
+		  				thisModule.getAllHelpers()
+										->collect(i | callinghelpers
+														->count(i)
+												 );
+  }
+  
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Helpers to Called Rules per Helper (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromRulesToHelpers{
+--TODO: Is using the name of a helper to filter them enough?
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callingrules: Sequence(ATL!Rule) = 
+							ATL!OperationCallExp.allInstances()
+								->select(i | thisModule.getAllHelpers()
+												->collect(j | j.definition.feature.name)
+												->includes(i.operationName)
+										)
+								->union(ATL!NavigationOrAttributeCallExp.allInstances()
+											->select( k | thisModule.getAllHelpers()
+															->collect(l | l.definition.feature.name)
+															->includes(k.name)
+													)
+										)
+  								->collect(m | m.getRule())
+								->select(n | n.oclIsKindOf(ATL!Rule));
+		  intseq: Sequence(Integer) =
+		  					thisModule.getAllRules()
+								->collect(i | callingrules
+												->count(i)
+										 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Rules to Helpers per Rule (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromRulesToRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callingrules: Sequence(ATL!Rule) = ATL!OperationCallExp.allInstances()
+													->select(i | thisModule.getAllRules()
+																	->collect(j | j.name)
+																	->includes(i.operationName)
+															)
+  													->collect(m | m.getRule())
+													->select(n | n.oclIsKindOf(ATL!Rule));
+		  intseq: Sequence(Integer) = thisModule.getAllRules()
+											->collect(i | callingrules
+															->count(i)
+										 			 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Rules to Rules per Rule (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromRulesToCalledRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callingrules: Sequence(ATL!Rule) = ATL!OperationCallExp.allInstances()
+													->select(i | ATL!CalledRule.allInstances()
+																	->collect(j | j.name)
+																	->includes(i.operationName)
+															)
+  													->collect(m | m.getRule())
+													->select(n | n.oclIsKindOf(ATL!Rule));
+		  intseq: Sequence(Integer) = thisModule.getAllRules()
+													->collect(i | callingrules
+																	->count(i)
+										 					 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Rules to Called Rules per Rule (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromRulesToLazyRules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using {callingrules: Sequence(ATL!Rule) = ATL!OperationCallExp.allInstances()
+													->select(i | ATL!LazyMatchedRule.allInstances()
+																		->collect(j | j.name)
+																		->includes(i.operationName)
+															)
+													->collect(m | m.getRule())
+													->select(n | n.oclIsKindOf(ATL!Rule));
+		  intseq: Sequence(Integer) = thisModule.getAllRules()
+													->collect(i | callingrules
+																	->count(i)
+										 					 );
+  }
+
+to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Rules to Lazy Matched Rules per Rule (Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsFromHelpersInOtherUnits{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_names_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+  		 							thisModule.getAllHelpers()
+										->collect(i | Tuple{name = i.definition.feature.name, unit = i.getUnit()});
+										-- Helpers with the same name are considered to be the same helper
+
+		  calls_to_ophelpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+		  								ATL!OperationCallExp.allInstances()
+												->select(i | thisModule.getAllHelpers()						-- select only the calls to helpers
+																->collect(j | j.definition.feature.name)
+																->includes(i.operationName)
+														)
+												->collect(k | Tuple{name = k.operationName, unit = k.getUnit()});
+
+		  calls_to_athelpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =												
+										ATL!NavigationOrAttributeCallExp.allInstances()
+												->select(i | thisModule.getAllHelpers()	-- select only the calls to helpers
+																->collect(j | j.definition.feature.name)
+																->includes(i.name)
+														)
+												->collect(i | Tuple{name = i.name, unit = i.getUnit()});
+
+		  calls_to_helpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+		  								calls_to_ophelpers_and_units
+												->union(calls_to_athelpers_and_units);
+
+		  num_calls_from_other_units: Bag(TupleType(unit: ATL!Unit, occurrence: Integer)) =	--Bag, since duplicates should be allowed
+										helper_names_and_units
+												->collect(i | Tuple{unit = i.unit,
+																	occurrence = calls_to_helpers_and_units
+																					->select(j | i.name = j.name and i.unit <> j.unit)
+																					->size()
+																   }
+														);
+		  
+										
+									
+		  intseq: Sequence(Integer) =  thisModule.getAllUnits()
+		  		  							->collect(i | if num_calls_from_other_units
+		  		  													->select(j | j.unit = i)
+																	->notEmpty()
+														  then num_calls_from_other_units
+		  		  													->select(k | k.unit = i)
+																	->collect(l | l.occurrence)
+																	->sum()
+														  else 0
+														  endif
+		  		  									 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls from Helpers in Other Units (Unit Fan-In)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumCallsToHelpersInOtherUnits{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_names_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+  		 							thisModule.getAllHelpers()
+										->collect(i | Tuple{name = i.definition.feature.name, unit = i.getUnit()});
+										-- Helpers with the same name are considered to be the same helper
+
+		  calls_to_ophelpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+		  								ATL!OperationCallExp.allInstances()
+												->select(i | thisModule.getAllHelpers()						-- select only the calls to helpers
+																->collect(j | j.definition.feature.name)
+																->includes(i.operationName)
+														)
+												->collect(k | Tuple{name = k.operationName, unit = k.getUnit()});
+
+		  calls_to_athelpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =												
+										ATL!NavigationOrAttributeCallExp.allInstances()
+												->select(i | thisModule.getAllHelpers()	-- select only the calls to helpers
+																->collect(j | j.definition.feature.name)
+																->includes(i.name)
+														)
+												->collect(i | Tuple{name = i.name, unit = i.getUnit()});
+
+		  calls_to_helpers_and_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+		  								calls_to_ophelpers_and_units
+												->union(calls_to_athelpers_and_units);
+
+		  calls_to_helpers_in_other_units: Set(TupleType(name: String, unit: ATL!Unit)) =
+											calls_to_helpers_and_units
+												->select(i | helper_names_and_units
+																->select(j | i.name = j.name and i.unit <> j.unit)
+																->notEmpty()
+														);
+
+		  intseq: Sequence(Integer) = thisModule.getAllUnits()
+		  									->collect(i | calls_to_helpers_in_other_units
+		  													->select(j | j.unit = i)
+															->size()
+		  											 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Calls to Helpers in Other Units (Unit Fan-Out)',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumImportedModules{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { libraries : OrderedSet(ATL!LibraryRef) = ATL!LibraryRef.allInstances();
+		  intseq: Sequence(Integer) = ATL!Unit.allInstances()
+												->collect(i | libraries
+																->select(j | j.getUnit() = i)
+																->size()
+										 				  );
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Imported Units',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumTimesModuleIsImported{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { libraries : Sequence(String) = ATL!LibraryRef.allInstances()
+													->collect(i | i.name);
+
+		  intseq: Sequence(Integer) = thisModule.getStringOccurrenceCount(libraries);
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Times a Unit is Imported',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumUnusedLibraries{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { calledop_namesandunits: Set(TupleType(name: String, unit: ATL!Unit)) = 
+  											ATL!OperationCallExp.allInstances()
+  													->collect(i | Tuple{name = i.operationName, unit = i.getUnit()});
+
+  		  helper_namesandunits: Set(TupleType(name: String, unit: ATL!Unit)) =
+  		 							thisModule.getAllHelpers()
+										->collect(i | Tuple{name = i.definition.feature.name, unit = i.getUnit()});
+										-- Helpers with the same name are considered to be the same helper
+									
+		  called_from_other_unit: Set(TupleType(name: String, unit: ATL!Unit)) =
+		  							helper_namesandunits
+										->select( i | calledop_namesandunits
+														->select( j | i.name = j.name and i.unit <> j.unit )
+														->notEmpty()
+												);
+		  	
+		  units_called_from_other_units: Set(ATL!Unit) =
+		  									called_from_other_unit
+													->collect(i | i.unit);
+										
+		  unused_libraries: Set(ATL!Unit) =
+		  						thisModule.getAllUnits()
+										->select(i | i.oclIsTypeOf(ATL!Library))
+										->select(j | units_called_from_other_units
+														->excludes(j)
+												);
+  		}  
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Unused Units',
+  			value	<-  unused_libraries->size().toString()
+  		)
+}
+
+lazy rule NumCallsToBuiltInFunctions{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Calls To Built-In Functions (Built-In Function Fan-In)',
+			value	<-  	ATL!OperationCallExp.allInstances()
+  										->collect(i | i.operationName)
+										->select(j | thisModule.builtInFunctionList
+														->includes(j)
+												)
+										->size().toString()
+  		)
+}
+
+--TODO: This one could be improved
+lazy rule NumDirectCopies{
+ -- Matched rules with:
+ --		- 1 element per input and output pattern
+ --		- the same source and target modelelement (from the same metamodel)
+ --		- all 'assignments' are to the same attribute or reference, e.g.: a <- in.a 
+ 
+  from	m_in : ATL!Module
+  
+  using { rules_1_element : Sequence(ATL!MatchedRule) = 
+  									m_in.elements
+										->select(i | i.oclIsKindOf(ATL!MatchedRule))
+										->select(i | 	i.inPattern.elements
+															->size() = 1
+													and i.outPattern.elements
+															->size() = 1
+												);
+
+		  rules_same_elements : Sequence(ATL!MatchedRule) =
+ 									rules_1_element
+										->select(i |	i.inPattern.elements
+															->first().type.name =
+														i.outPattern.elements
+															->first().type.name
+													and i.inPattern.elements
+															->first().type.model.name =
+														i.outPattern.elements
+															->first().type.model.name														
+												);
+
+		  rules_same_assignments : Sequence(ATL!MatchedRule) =
+		  							rules_same_elements
+										->select(i | i.outPattern.elements
+														->first().bindings
+																->collect(j | if   j.value.oclIsTypeOf(ATL!NavigationOrAttributeCallExp)  
+																			  then j.propertyName = j.value.name
+																			  else false
+																			  endif
+																		  )
+																->excludes(false)
+												);
+ 
+  		}
+
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Direct Copies',
+			value	<-  	rules_same_assignments->size().toString()
+  		)
+}
+
+lazy rule NumHelpersWithoutContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Helpers without Context',
+			value	<-  	thisModule.getAllHelpers()->select(i | i.definition.context_.oclIsUndefined())->size().toString()
+  		)
+	
+}			 
+
+lazy rule NumHelpersPerContext{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  using { helper_contexts: Sequence(String) = thisModule.getAllHelpers()
+													->select(i | not(i.definition.context_.oclIsUndefined()))
+													->collect(i | i.definition.context_.context_.getTypeAsString());
+		  intseq: Sequence(Integer) = thisModule.getStringOccurrenceCount(helper_contexts);
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Helpers per Context',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+helper context ATL!Module def: getRuleHierarchies() : TupleType(rule_: ATL!MatchedRule, children: OclAny) =
+  self.elements
+		->select(i | i.oclIsKindOf(ATL!MatchedRule))
+  		->select(j |	 j.superRule.oclIsUndefined()
+  				)	-- All rules that have no parents are roots
+		->collect(i | i.buildInheritanceTree());
+
+helper context ATL!MatchedRule def: buildInheritanceTree() : TupleType(rule_: ATL!MatchedRule, children: OclAny) =
+  Tuple{ rule_	  = self,
+	     children = self.children
+						->collect(i | if   i.children->isEmpty()
+									  then i
+									  else i.buildInheritanceTree()
+									  endif
+								 )
+  	    };
+
+lazy rule NumRuleHierarchies{
+  from	m_in : ATL!Module
+    using { hierarchies: TupleType(rule_: ATL!MatchedRule, children: OclAny) = m_in.getRuleHierarchies();
+		  }
+  
+  to	s_out: Metric!SimpleMetric(
+  			name	<- 'Number of Rule Inheritance Trees',
+			value	<-  	hierarchies
+							->size().toString()
+  		)
+}
+
+helper context OclAny def: maxDepthOfInheritanceTree() : Integer =
+  1 + if   self.children->notEmpty()
+	  then thisModule.getIntSeqMaximum(self.children
+  										->collect(i | i.maxDepthOfInheritanceTree())
+									  )
+  	  else 0
+	  endif;
+
+lazy rule MaxDepthOfRuleHierarchy{
+  from	m_in : ATL!Module
+    using { hierarchies: TupleType(rule_: ATL!MatchedRule, children: OclAny) = m_in.getRuleHierarchies();
+			intseq: Sequence(Integer) = hierarchies
+											->collect(i | i.maxDepthOfInheritanceTree());
+		  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Depth of Rule Inheritance Tree',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)	
+}
+
+helper def: MAX(x: Integer, y: Integer) : Integer =
+  if   x > y
+  then x
+  else y
+  endif;
+
+helper context OclAny def: maxWidthOfInheritanceTree() : Integer =
+-- TupleType not supported as context, therefore OclAny
+  thisModule.MAX(self.children->size(), 
+				 if   self.children->notEmpty()
+	  			 then thisModule.getIntSeqMaximum(self.children
+  													->collect(i | i.maxWidthOfInheritanceTree())
+												  )
+  	  			 else 1
+	  			 endif
+				);
+
+lazy rule MaxWidthOfRuleHierarchy{
+  from	m_in : ATL!Module
+  using { hierarchies: TupleType(rule_: ATL!MatchedRule, children: OclAny) = m_in.getRuleHierarchies();
+		  intseq: Sequence(Integer) = hierarchies
+		  									->collect(i | i.maxWidthOfInheritanceTree());
+		}
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Width of Rule Inheritance Tree',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule HelperCyclomaticComplexity{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  
+  using { ifexps : Sequence(ATL!IfExp)  = ATL!IfExp.allInstances();	-- Collect all if-statements = decision points
+		  helpers : Sequence(ATL!Helper) = ifexps
+		  									->collect(i | i.getHelper());	-- Collect al helpers in which these decisionpoint occur, duplicates are important! 
+		  intseq: Sequence(Integer) = thisModule.getAllHelpers()
+		  									->collect(i | 1 + helpers->count(i));	-- Calculate cyclomatic complexity for each helper = 1 + #decision points in the helper
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Helper Cyclomatic Complexity',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+lazy rule NumOpsonCollectionsPerHelper{
+  from	m_in : ATL!Module	-- The input pattern is not used for calculating the metric
+  
+  using { iteratorexps  : Sequence(ATL!IteratorExp) = ATL!IteratorExp.allInstances();
+		  collopcallexps: Sequence(ATL!CollectionOperationCallExp) = ATL!CollectionOperationCallExp.allInstances(); 
+		  helpers : Sequence(ATL!Helper) = iteratorexps
+		  										->collect(i | i.getHelper())
+		  										->union(collopcallexps
+		  														->collect(i | i.getHelper())
+		  											   );
+		  helpersunique : Set(ATL!Helper) = helpers
+		  										->asSet()
+												->excluding(OclUndefined);
+		  intseq: Sequence(Integer) = helpersunique
+		  										->collect(i | helpers
+		  														->count(i)
+														 );
+  }
+
+  to	a_out: Metric!AggregatedIntegerMetric(
+  			name				<- 'Number of Operations on Collections per Helper',
+			minimum				<- thisModule.getIntSeqMinimum(intseq),
+			maximum				<- thisModule.getIntSeqMaximum(intseq),
+			median				<- thisModule.getIntSeqMedian(intseq),
+			average				<- thisModule.getIntSeqAverage(intseq),
+			standardDeviation	<- thisModule.getIntSeqStdDev(intseq)
+		)
+}
+
+

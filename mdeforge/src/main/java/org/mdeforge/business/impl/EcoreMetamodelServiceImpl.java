@@ -265,7 +265,7 @@ public class EcoreMetamodelServiceImpl extends
 		 */
 		try {
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, basePath + "Metric.ecore");
+			injector.inject(outputMetamodel, getClass().getResource("/utils/Metric.ecore").getFile());
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 			injector.inject(inputMetamodel,
 					org.eclipse.emf.ecore.EcorePackage.eNS_URI);
@@ -278,7 +278,7 @@ public class EcoreMetamodelServiceImpl extends
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
-					(Object[]) getModulesList(basePath + "EcoreMetric.asm"));
+					(Object[]) getModulesList(getClass().getResource("/utils/EcoreMetric.asm").getFile()));
 			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);

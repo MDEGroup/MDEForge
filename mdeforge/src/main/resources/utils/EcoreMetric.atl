@@ -1,0 +1,537 @@
+module EcoreMetric;
+create OUT : MDEforge from IN : Ecore;
+rule ATL2Metrics{
+  from	
+  	IN_IN : Ecore!EPackage ( IN_IN.name <> 'PrimitiveTypes')
+  to
+  	container : MDEforge!MdeForge (
+  		artifacts <- Sequence{artefatti},
+		artifactTypes <- tipoArtefatto
+  		
+  	),
+	artefatti : MDEforge!Artifact(
+		name <- IN_IN.name,
+  		metrics <-  					Sequence{thisModule.NumOfMetaClass('IN')}
+  										->append(thisModule.NumOfAbstracyMetaClass('IN'))
+										--da IMPORTARE
+										->append(thisModule.NumOfConcreteMetaClass('IN'))
+										->append(thisModule.NumOfConcreteCompletelyFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfImmediateFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfAbstractImmediateFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfConcreteImmediateFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfTotalStructuralFeature('IN'))
+										->append(thisModule.NumOfTotalStructuralFeatureWithInherited('IN'))
+										->append(thisModule.NumOfCompletelyFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfAbstractCompletelyFeatureLessMetaClass('IN'))
+										->append(thisModule.NumOfTotalReference('IN'))
+										->append(thisModule.NumOfTotalReferenceOpposite('IN'))
+										->append(thisModule.NumOfTotalReferenceContainement('IN'))
+										->append(thisModule.NumOfTotalAttribute('IN'))
+										->append(thisModule.NumOfTotalAttributeWithInherited('IN'))
+										->append(thisModule.getMaxGeneralizzationHier('IN'))
+										->append(thisModule.getChainOfContainment('IN'))
+										-->append(thisModule.getMAxSibilingReference('IN'))
+										-->append(thisModule.getMinSibilingReference('IN'))
+										->append(thisModule.getAverageRelationInAClass('IN'))
+										->append(thisModule.getAverageAttributeInAClass('IN'))
+										-->append(thisModule.NumAIF('IN'))
+										-->append(thisModule.getMaxFanIn('IN'))
+										-->append(thisModule.getMinFanIn('IN'))
+										->append(thisModule.getInheritedClass('IN'))
+										->append(thisModule.getMaxHierarchySibiling('IN'))
+										-->append(thisModule.getAverageFanIn('IN'))
+										->append(thisModule.getLonelyClass('IN')),
+										
+		type <- 						tipoArtefatto
+										
+  	),
+	tipoArtefatto : MDEforge!ArtifactType (
+		name <- 'metamodello'	
+	)
+}
+	--###JURI
+helper  def: max ( coll : Sequence(Integer)) : Integer = 
+	coll->iterate(p; y : Integer = coll->first() |
+	 	if p < y
+		then
+			y
+		else
+			p
+		endif);
+
+helper  def: min ( coll : Sequence(Integer)) : Integer = 
+	coll->iterate(p; y : Integer = coll->first() |
+	 	if p > y
+		then
+			y
+		else
+			p
+		endif);
+	
+rule NumOfMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of MetaClass',
+  			value	<- thisModule.getAllMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model);
+	
+	
+rule NumOfAbstracyMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of abstract MetaClass',
+  			value	<- thisModule.getAllAbstractMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllAbstractMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.abstract = true);
+	
+	
+	
+--########################Da IMPORTARE
+
+
+
+
+rule NumOfConcreteMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of concrete MetaClass',
+  			value	<- thisModule.getAllConcreteMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllConcreteMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.abstract = false);
+	
+rule NumOfConcreteCompletelyFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of concrete Completely Featureless MetaClass',
+  			value	<- thisModule.getAllConcreteCompletelyFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllConcreteCompletelyFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eAllStructuralFeatures->size() = 0 and e.abstract = false);
+	
+	
+rule NumOfImmediateFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of immediate Featureless MetaClass',
+  			value	<- thisModule.getAllImmediateFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllImmediateFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eStructuralFeatures->size() = 0);
+	
+rule NumOfAbstractImmediateFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of abstract immediate Featureless MetaClass',
+  			value	<- thisModule.getAllAbstractImmediateFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllAbstractImmediateFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eStructuralFeatures->size() = 0 and e.abstract = true);
+
+rule NumOfConcreteImmediateFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of concrete immediate Featureless MetaClass',
+  			value	<- thisModule.getAllConcreteImmediateFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllConcreteImmediateFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eStructuralFeatures->size() = 0 and e.abstract = false);
+	
+	
+	
+rule NumOfTotalStructuralFeature(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Total eStructuralFeature',
+  			value	<- (thisModule.getAllReference(model)->size() + thisModule.getAllAttribute(model)->size()).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+--#########################Fine Da Importare
+	
+	
+rule NumOfCompletelyFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Completely Featureless MetaClass',
+  			value	<- thisModule.getAllCompletelyFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllCompletelyFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eAllStructuralFeatures->size() = 0);
+	
+	
+rule NumOfAbstractCompletelyFeatureLessMetaClass (model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of abstract Completely Featureless MetaClass',
+  			value	<- thisModule.getAllAbstractCompletelyFeatureLessMetaClass(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllAbstractCompletelyFeatureLessMetaClass(model : String): OrderedSet(Ecore!EClass) =
+  --m_in.eClassifiers->select(e| e.oclIsKindOf(Ecore!EClass));
+	Ecore!EClass.allInstancesFrom(model)->select(e | e.eAllStructuralFeatures->size() = 0 and e.abstract = true);
+
+rule NumOfTotalReference(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of TotalReference',
+  			value	<- thisModule.getAllReference(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllReference(model : String): OrderedSet(Ecore!EClass) =
+  Ecore!EReference.allInstancesFrom(model);
+
+
+rule NumOfTotalReferenceOpposite(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Opposite Reference ',
+  			value	<- thisModule.getAllReference(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllReferenceOpposite(model : String): OrderedSet(Ecore!EClass) =
+  Ecore!EReference.allInstancesFrom(model)->select(e |  e.eOpposite = OclUndefined);
+
+
+
+
+
+rule NumOfTotalReferenceContainement(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of TotalReference containment',
+  			value	<- thisModule.getAllReferenceContainement(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllReferenceContainement(model : String): OrderedSet(Ecore!EClass) =
+  Ecore!EReference.allInstancesFrom(model)->select(x | x.containment = true);
+
+
+
+
+
+rule NumOfTotalAttribute(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Total Attribute',
+  			value	<- thisModule.getAllAttribute(model)->size().toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllAttribute(model : String): OrderedSet(Ecore!EClass) =
+  Ecore!EAttribute.allInstancesFrom(model);
+
+
+rule getMaxGeneralizzationHier(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  		
+  			name	<- 'Max generalizzation hierarchical level',
+  			value	<- thisModule.getMaxLevelOfGeneralizzation(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+
+
+helper def: getMaxLevelOfGeneralizzation(model : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(model)->collect(e | e.getLevelOfGeneralizzation(0)));
+
+
+helper context Ecore!EClass def: getLevelOfGeneralizzation(cont : Integer): Integer =
+	if cont < 50
+		then
+		if self.eSuperTypes->size()=0
+			then 
+				cont
+			else
+				thisModule.max(self.eSuperTypes->collect(e | e.getLevelOfGeneralizzation(cont+1)))
+		endif
+		
+		else cont
+	endif;
+
+rule getChainOfContainment(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Max chain of containment',
+  			value	<- thisModule.getMaxLevelOfContainment(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMaxLevelOfContainment(model : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(model)->collect(e | e.getLevelOfContainment(0)));
+
+helper context Ecore!EClass def: getLevelOfContainment(cont : Integer): Integer =
+	50;
+
+rule getMAxSibilingAttribute(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Max Attribute Sibiling',
+  			value	<- thisModule.getMaxAttributeSibiling(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMaxAttributeSibiling(model : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(model)->collect(e | e.eAllAttributes->size()));
+
+
+
+rule getMaxFanIn(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Max incoming Reference class (max fan In)',
+  			value	<- thisModule.getMaxFanInH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMaxFanInH(model : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(model)->collect(e | thisModule.getFanInH(e)));
+
+
+helper def: getFanInH(class : Ecore!EClass): Integer = 
+	Ecore!EReference.allInstances()->select(e | e.eReferenceType = class)->size();
+	
+rule getMinFanIn(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Mix incoming Reference class (max fan In)',
+  			value	<- thisModule.getMinFanInH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMinFanInH(model : String): Integer =
+	thisModule.min(Ecore!EClass.allInstancesFrom(model)->collect(e | 
+								thisModule.getFanInH(e)));
+
+--########################
+rule getLonelyClass(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of lonely classes',
+  			value	<- thisModule.getLonelyClassH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+
+helper def: getLonelyClassH(model : String): Integer =
+	Ecore!EClass.allInstancesFrom(model)->select(e | thisModule.getFanInH(e)=0 and e.eAllReferences->size()=0)->size();
+
+--#######################
+
+rule getAverageFanIn(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Average incoming Reference class (max fan In)',
+  			value	<- thisModule.getAverageFanInH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getAverageFanInH(model : String): Integer =
+	Ecore!EClass.allInstancesFrom(model)->collect(e | 
+								thisModule.getFanInH(e))->sum()/Ecore!EClass.allInstancesFrom(model)->size();
+
+
+rule getInheritedClass(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of class with a super type',
+  			value	<- thisModule.getInheritedClassH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def : getInheritedClassH (modelName : String) : Integer = 
+	Ecore!EClass.allInstancesFrom(modelName)->select(e | e.eSuperTypes->size()<>0)->size();	
+--#######################
+
+rule getMaxHierarchySibiling(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Max Hierarchy Sibiling',
+  			value	<- thisModule.getMaxHierarchySibilingH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMaxHierarchySibilingH(modelName : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(modelName)->collect(e | thisModule.getHierarchySibilingH(e, modelName)));
+
+helper def: getHierarchySibilingH(subtype : Ecore!EClass, model : String): Integer = 
+	
+	if(subtype.eSuperTypes->size()=0)
+		then 0
+		else thisModule.max(subtype.eSuperTypes->collect(e | thisModule.getHierarchySibilingH2(e)))
+	endif;
+		
+helper def: getHierarchySibilingH2(superType : Ecore!EClass): Integer = 
+	(Ecore!EClass.allInstancesFrom('IN')->select(e | e.eSuperTypes->includes(superType)))->size();
+
+
+
+
+--##################################
+
+rule getMAxSibilingReference(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Max Reference Sibiling (max fan Out)',
+  			value	<- thisModule.getMaxReferenceSibiling(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMaxReferenceSibiling(model : String): Integer =
+	thisModule.max(Ecore!EClass.allInstancesFrom(model)->collect(e | e.eAllReferences->size()));
+
+
+rule getMinSibilingReference(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Mix Reference Sibiling (min fan Out)',
+  			value	<- thisModule.getMinReferenceSibilingH(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getMinReferenceSibilingH(model : String): Integer =
+	thisModule.min(Ecore!EClass.allInstancesFrom(model)->collect(e | e.eAllReferences->size()));
+
+
+
+rule getAverageRelationInAClass(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Average Reference in a (class (avg fan out)',
+  			value	<- (thisModule.getAllReference(modelName)->size()/thisModule.getAllMetaClass(modelName)->size()).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+rule getAverageAttributeInAClass(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Average Attribute in a class',
+  			value	<- (thisModule.getAllAttribute(modelName)->size()/thisModule.getAllMetaClass(modelName)->size()).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+rule NumAIF(modelName : String){
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'AIF',
+  			value	<- thisModule.getAIF(modelName).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+
+helper def: getAIF(model : String): Integer =
+	Ecore!EAttribute.allInstancesFrom(model)->size()/Ecore!EClass.allInstancesFrom(model)->collect(e | e.eAllAttributes)->flatten()->asSequence()->size();
+
+rule NumOfTotalAttributeWithInherited(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Total Attribute with inherited',
+  			value	<- thisModule.getAllAttributeWithInherited(model).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllAttributeWithInherited(model : String): Integer =
+  Ecore!EClass.allInstancesFrom(model)->collect ( e | e.eAllAttributes->size())->sum();
+  	
+rule NumOfTotalStructuralFeatureWithInherited(model : String){
+  --from	m_in : Ecore!EPackage	-- The input pattern is not used for calculating the metric
+  	to	s_out: MDEforge!SimpleMetric(
+  			name	<- 'Number of Total structural feature with inherited',
+  			value	<- thisModule.getAllStructuralFeatureWithInherited(model).toString()
+  		)
+	do {
+		s_out;
+	}
+}
+helper def: getAllStructuralFeatureWithInherited(model : String): Integer =
+  Ecore!EClass.allInstancesFrom(model)->collect ( e | e.eAllStructuralFeatures->size())->sum();
+

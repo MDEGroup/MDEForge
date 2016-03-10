@@ -247,10 +247,10 @@ public class ATLTransformationServiceImpl extends
 		try {
 
 			IReferenceModel outputMetamodel = modelFactory.newReferenceModel();
-			injector.inject(outputMetamodel, basePath + "Metric.ecore");
+			injector.inject(outputMetamodel, getClass().getResource("/utils/Metric.ecore").getFile());
 			IReferenceModel inputMetamodel = modelFactory.newReferenceModel();
 
-			injector.inject(inputMetamodel, basePath + "ATL.ecore");
+			injector.inject(inputMetamodel, getClass().getResource("/utils/ATL.ecore").getFile());
 
 			IModel inputModel = modelFactory.newModel(inputMetamodel);
 			IModel outModel = modelFactory.newModel(outputMetamodel);
@@ -264,7 +264,7 @@ public class ATLTransformationServiceImpl extends
 			transformationLauncher.addOutModel(outModel, "OUT", "Metric");
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
-					(Object[]) getModulesList(basePath + "ATLMetric.asm"));
+					(Object[]) getModulesList(getClass().getResource("/utils/ATLMetric.asm").getFile()));
 
 			extractor.extract(outModel, "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
