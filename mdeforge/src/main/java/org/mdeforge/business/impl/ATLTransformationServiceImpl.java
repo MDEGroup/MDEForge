@@ -54,6 +54,7 @@ import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.UNIVAQTesterService;
 import org.mdeforge.business.anatlyzer.AnATLyzerUtils;
@@ -87,6 +88,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
 import transML.exceptions.transException;
@@ -105,7 +107,7 @@ import anatlyzer.evaluation.models.ModelGenerationStrategy;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
-		ATLTransformationService {
+		ATLTransformationService, SearchProvider<ATLTransformation> {
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
@@ -669,7 +671,9 @@ public class ATLTransformationServiceImpl extends
 				if (problem.getStatus() == ProblemStatus.WITNESS_REQUIRED) {
 					try {
 						ProblemStatus result2 = twf.find(problem, result);
+						//result2.get
 						forgeError.setStatus(result2.getName());
+						
 					} catch (Exception e) {
 						forgeError.setStatus(problem.getStatus().getName());
 					}
@@ -789,6 +793,15 @@ public class ATLTransformationServiceImpl extends
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}
+	}
+
+	@Override
+	public String extractedContent(ATLTransformation artifact) {
+		return null;
+	}
+
+	@Override
+	public void createIndex(TextIndexDefinition textIndex) throws BusinessException {		
 	}
 
 	// private InputStream getModulesList(String transformationPath) throws

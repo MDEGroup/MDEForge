@@ -48,6 +48,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -123,28 +125,38 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		if (emm == null)
 			throw new BusinessException();
 		artifact.setValid(isValid(artifact));
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
-				+ "/" + mongoDbFactory.getDb().getName() + "/"
-				+ jsonArtifactCollection + "/";
+		
 
 		EcoreMetamodel mmID = emm;
 		Model result = super.create(artifact);
 		try {
-			result.setExtractedContents(this.saveModel(mmID,
-					gridFileMediaService.getFilePath(result), jsonMongoUriBase
-							+ artifact.getId()));
+			result.setExtractedContents(extractedContent(result));
 			modelRepository.save(result);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 		return result;
 	}
-
-	public String saveModel(EcoreMetamodel mmID, String sourceURI,
-			String mongoURI) {
+	@Override
+	public void createIndex(TextIndexDefinition textIndex) {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
+	@Override
+	public String extractedContent(Model art) {
+		//EcoreMetamodel mmID, 
+//		String sourceURI,
+		//	String mongoURI
+//		###
+//		mmID, 
+//		gridFileMediaService.getFilePath(result), 
+//		jsonMongoUriBase + artifact.getId())
+		EcoreMetamodel mmID = (EcoreMetamodel) art.getMetamodel().getToArtifact();
 		Resource mm = ecoreMetamodelService.loadArtifact(mmID);
 		EPackage mmePackage = null;
-
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
+				+ "/" + mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/";
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 
 		for (EObject eObject : mm.getContents()) {
@@ -159,10 +171,10 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 				.getExtensionToFactoryMap()
 				.put("*", new XMIResourceFactoryImpl());
 		Resource load_resource = load_resourceSet.getResource(
-				URI.createURI(sourceURI), true);
+				URI.createURI(gridFileMediaService.getFilePath(art)), true);
 
 		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
-				URI.createURI(mongoURI));
+				URI.createURI(jsonMongoUriBase + art.getId()));
 
 		EList<EObject> cs = load_resource.getContents();
 

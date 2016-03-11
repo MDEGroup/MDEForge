@@ -111,7 +111,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
 import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
@@ -170,13 +173,8 @@ public class EcoreMetamodelServiceImpl extends
 		artifact.setValid(isValid(artifact));
 		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
-				+ "/" + mongoDbFactory.getDb().getName() + "/"
-				+ jsonArtifactCollection + "/";
-
 		try {
-			artifact.setExtractedContents(this.saveJsonMetamodel(path,
-					jsonMongoUriBase + artifact.getId()));
+			artifact.setExtractedContents(extractedContent(result));
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
 			throw new ExtractContentEngineException(e.getMessage(),
@@ -193,21 +191,30 @@ public class EcoreMetamodelServiceImpl extends
 		artifactRepository.save(artifact);
 		return result;
 	}
-
-	public String saveJsonMetamodel(String sourceURI, String mongoURI)
+	@Override
+	public void createIndex(TextIndexDefinition textIndex) {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	}
+	@Override
+	public String extractedContent(EcoreMetamodel art)
 			throws BusinessException {
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 		load_resourceSet.getResourceFactoryRegistry()
 				.getExtensionToFactoryMap()
 				.put("*", new XMIResourceFactoryImpl());
 		Resource load_resource = load_resourceSet.getResource(
-				URI.createURI(sourceURI), true);
+				URI.createURI(gridFileMediaService.getFilePath(art)), true);
 
 		EList<EObject> contents = load_resource.getContents();
 		String result = ResourceSerializer.serialize(load_resource);
 		// TODO handle connection
+		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
+				+ "/" + mongoDbFactory.getDb().getName() + "/"
+				+ jsonArtifactCollection + "/";
+		
 		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
-				URI.createURI(mongoURI));
+				URI.createURI(jsonMongoUriBase + art.getId()));
 		res.getContents().addAll(contents);
 		try {
 			res.save(null);
@@ -230,29 +237,29 @@ public class EcoreMetamodelServiceImpl extends
 		return null;
 	}
 
-	@Override
-	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(
-			RequestGrid requestGrid) throws BusinessException {
-		Page<EcoreMetamodel> rows = null;
-		if (requestGrid.getSortDir().compareTo("asc") == 0) {
-			rows = ecoreMetamodelRepository.findByOpen(
-					true,
-					new PageRequest(requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.ASC, requestGrid
-							.getSortCol()));
-		} else {
-			rows = ecoreMetamodelRepository.findByOpen(
-					true,
-					new PageRequest(requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.DESC, requestGrid
-							.getSortCol()));
-		}
-		return new ResponseGrid<EcoreMetamodel>(requestGrid.getsEcho(),
-				rows.getNumberOfElements(), rows.getTotalElements(),
-				rows.getContent());
-	}
+//	@Override
+//	public ResponseGrid<EcoreMetamodel> findAllEcorePaginated(
+//			RequestGrid requestGrid) throws BusinessException {
+//		Page<EcoreMetamodel> rows = null;
+//		if (requestGrid.getSortDir().compareTo("asc") == 0) {
+//			rows = ecoreMetamodelRepository.findByOpen(
+//					true,
+//					new PageRequest(requestGrid.getiDisplayStart()
+//							/ requestGrid.getiDisplayLength(), requestGrid
+//							.getiDisplayLength(), Direction.ASC, requestGrid
+//							.getSortCol()));
+//		} else {
+//			rows = ecoreMetamodelRepository.findByOpen(
+//					true,
+//					new PageRequest(requestGrid.getiDisplayStart()
+//							/ requestGrid.getiDisplayLength(), requestGrid
+//							.getiDisplayLength(), Direction.DESC, requestGrid
+//							.getSortCol()));
+//		}
+//		return new ResponseGrid<EcoreMetamodel>(requestGrid.getsEcho(),
+//				rows.getNumberOfElements(), rows.getTotalElements(),
+//				rows.getContent());
+//	}
 
 	@Override
 	public List<Metric> calculateMetrics(Artifact emm) throws BusinessException {

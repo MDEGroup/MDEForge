@@ -35,6 +35,8 @@ public class ArtifactServiceImpl extends CRUDArtifactServiceImpl<Artifact> {
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 
+
+
 	
 	
 

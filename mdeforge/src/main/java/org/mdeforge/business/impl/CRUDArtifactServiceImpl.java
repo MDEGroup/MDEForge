@@ -48,16 +48,12 @@ import org.springframework.security.crypto.codec.Base64;
 import com.mongodb.Mongo;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
-		CRUDArtifactService<T> {
+		CRUDArtifactService<T>{
 
 	@Autowired
 	private CRUDRelationService<Relation> crudRelationService;
 	@Autowired
-	private Mongo mongo;
-	@Autowired
 	protected SimpleMongoDbFactory mongoDbFactory;
-	@Autowired
-	private JsonMongoResourceSet jsonMongoResourceSet;
 	@Autowired
 	protected RelationRepository relationRepository;
 	@Autowired
