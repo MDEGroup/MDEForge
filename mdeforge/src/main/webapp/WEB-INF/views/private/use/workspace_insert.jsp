@@ -32,7 +32,7 @@
 							<div class="controls">
 								<form:input path="name" class="span12" id="name" name="name"
 									type="text"></form:input>
-								<p class="validate" style="display: none;">Mandatory field</p>
+								<p id="nameValidator" style="display: none;">Mandatory field</p>
 							</div>
 						</div>
 						<!-- Group -->
@@ -42,7 +42,7 @@
 							<div class="controls">
 								<form:input path="description" class="span12" id="description"
 									name="description" type="text"></form:input>
-								<p class="validate" style="display: none;">Mandatory field</p>
+								<p id="descriptionValidator" style="display: none;">Mandatory field</p>
 							</div>
 						</div>
 					</div>
@@ -73,11 +73,12 @@
 </div>
 <script>
 	$("#validateSubmitForm").submit(function(event) {
-		if ($("#name").val() == "" || $("#description").val == "") {
-			$(".validate").each( function() {
-				console.log(this);
-				$(this).show();	
-			});
+		if ($("#name").val() == "" || $("#name").val == null) {
+			$("#nameValidator").show();
+			event.preventDefault();
+		}
+		if ($("#description").val() == "" || $("#description").val == null) {
+			$("#descriptionValidator").show();	
 			event.preventDefault();
 		}
 		else {
