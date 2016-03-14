@@ -3,9 +3,10 @@ package org.mdeforge.presentation.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.m2m.atl.common.ATLExecutionException;
+import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
@@ -51,8 +52,6 @@ public class ATLTransformationRESTController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
-	@Autowired
 	private User user;
 
 	@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
@@ -85,6 +84,10 @@ public class ATLTransformationRESTController {
 			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, models, user));
 			return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
+		} catch (ATLExecutionException e) {
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
+		} catch (ATLCoreException e) {
 			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

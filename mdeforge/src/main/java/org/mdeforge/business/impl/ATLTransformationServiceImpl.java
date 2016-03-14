@@ -183,7 +183,7 @@ public class ATLTransformationServiceImpl extends
 
 	@Override
 	public List<Model> execute(ATLTransformation transformation,
-			List<Model> models, User user) {
+			List<Model> models, User user) throws ATLExecutionException, ATLCoreException {
 		user = userService.findOne(user.getId());
 		
 		
@@ -208,7 +208,7 @@ public class ATLTransformationServiceImpl extends
 		try {
 			return doTransformation(transformation,
 					models, user);
-		} catch (ATLExecutionException | ATLCoreException | IOException e) {
+		} catch (IOException e) {
 			throw new TransformationException();
 		}
 	}

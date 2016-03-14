@@ -2,6 +2,8 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.eclipse.m2m.atl.common.ATLExecutionException;
+import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
@@ -17,7 +19,7 @@ import anatlyzer.evaluation.report.Report;
 import anatlyzer.evaluation.report.ReportConsole;
 
 public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider {	
-	List<Model> execute(ATLTransformation transformation, List<Model> models, User user);
+	List<Model> execute(ATLTransformation transformation, List<Model> models, User user) throws ATLExecutionException, ATLCoreException;
 	List<ATLTransformation> findTransformationsBySourceMetamodels(ATLTransformation metamodel);
 	List<ATLTransformation> findTransformationsByTargetMetamodels(ATLTransformation metamodel);
 	ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;

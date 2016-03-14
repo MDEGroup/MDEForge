@@ -11,6 +11,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.bson.types.ObjectId;
+import org.eclipse.m2m.atl.common.ATLExecutionException;
+import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -182,9 +184,17 @@ public class ATLPrivateController {
 		}
 		ATLTransformation atl = aTLTransformationService
 				.findOne(transformation_id);
-		List<org.mdeforge.business.model.Model> result = aTLTransformationService
+		try {
+			List<org.mdeforge.business.model.Model> result = aTLTransformationService
 				.execute(atl, models, user);
-		model.addAttribute("models", result);
+			model.addAttribute("models", result);
+			model.addAttribute("errors","");
+		}
+		catch (ATLCoreException  | ATLExecutionException e) {
+			model.addAttribute("models", new ArrayList<org.mdeforge.business.model.Model>());
+			model.addAttribute("errors",e.getMessage());
+		}
+		
 		return "private.use.result_transformation";
 	}
 

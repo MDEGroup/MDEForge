@@ -1,9 +1,6 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
-
-
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 	<li>You are here</li>
@@ -16,16 +13,9 @@
 </ul>
 <!-- Breadcrumb END -->
 
-
-
 <h3>Transformation Result</h3>
 
-
-
-
-
 <div class="innerLR">
-
 	<div class="widget widget-heading-simple widget-body-white">
 		<div class="row-fluid">
 			<div class="span12">
@@ -50,6 +40,11 @@
 					</tbody>
 				</table>
 			</div>
+		</div>
+		<div class="row-fluid">
+			 <textarea name="errors" rows="4" style="width:100%">
+			 ${errors }
+			</textarea> 
 		</div>
 	</div>
 

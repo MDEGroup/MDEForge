@@ -313,6 +313,7 @@
 					$('#ATLToAdd').hide();
 					$('#modelToAdd').hide();
 					$('#ecoreToAdd').hide();
+					console.log(data);
 					if (data.users.length > 1)
 						$('#sharedNumber').text(data.users.length + " users");
 					else
@@ -328,15 +329,19 @@
 					else
 						$('#showUserList').hide();
 					$.each(data.users, function(i, user) {
-						var  stringHead = '<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
-				           		user.firstname + '  ' + user.lastname + '</span>' + 
-				           		'<span class="muted"><a href="mailto:'+ user.email +
-				           		'">'+ user.username +' <i class="icon-envelope"></i></a>';
-						var stringDelete = '';
-						if (guard)
-							stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>';
-						var stringTail = '</span></li>';
-						$('#users').append(stringHead + stringDelete + stringTail);
+						if(data.owner.id != user.id) {
+							var  stringHead = '<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
+					           		user.firstname + '  ' + user.lastname + '</span>' + 
+					           		'<span class="muted"><a href="mailto:'+ user.email +
+					           		'">'+ user.username +' <i class="icon-envelope"></i></a>';
+							var stringDelete = '';
+							console.log(guard);
+							if (guard)
+								stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>';
+							var stringTail = '</span></li>';
+							console.log(stringDelete);
+							$('#users').append(stringHead + stringDelete + stringTail);
+						}
 					});
 					$('#ecoreMMTable').empty();
 					$('#atlTable').empty();
