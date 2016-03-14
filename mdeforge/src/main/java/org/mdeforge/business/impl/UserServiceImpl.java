@@ -66,4 +66,9 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
+	@Override
+	public long countUsers() throws BusinessException {
+		return userRepository.count();
+	}
+
 }

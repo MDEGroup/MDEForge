@@ -16,5 +16,7 @@ public interface UserService {
 	
 	void delete(String id) throws BusinessException;
 
-	User findOneByUsername(String name);
+	User findOneByUsername(String name) throws BusinessException;
+
+	long countUsers() throws BusinessException;
 }

@@ -31,64 +31,10 @@
 		</div>
 	</div>
 	</div>
-	
-	<!-- <div class="">
-			<div class="">
-				
-							<div class="carousel carousel-1 slide" id="myCarousel">
-								<div class="carousel-inner">
-																		Item
-									<div class="item active">
-										<div class="row-fluid">
-											<div class="span12 relativeWrap">
-												<div class="carousel-caption">												
-													<p>"Developers often must redevelop metamodels, transformations, code generators, other model management systems from scratch. This compromises model-based processes' productivity benefits"</p>
-												</div>
-											</div>
-											
-										</div>
-									</div>
-									// Item END
-																		Item
-									<div class="item">
-										<div class="row-fluid">
-											<div class="span12 relativeWrap">
-												<div class="carousel-caption">													
-													<p>"It's becoming crucial to investigate agile ways to share, reuse, integrate, and cross-link modeling artifacts"</p>
-												</div>
-											</div>
-											
-										</div>
-									</div>
-									// Item END
-																		Item
-									<div class="item">
-										<div class="row-fluid">
-											<div class="span12 relativeWrap">
-												<div class="carousel-caption">													
-													<p>"We need reward mechanisms that motivate users to share their artifacts"</p>
-												</div>
-											</div>
-											
-										</div>
-									</div>
-									// Item END
-																	</div>
-								<ol class="carousel-indicators hidden">
-									<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-									<li data-target="#myCarousel" data-slide-to="1"></li>
-									<li data-target="#myCarousel" data-slide-to="2"></li>
-								</ol>
-							</div>
-						</div>
-		</div> -->
-	
-	
 	<div class="container-960 innerT">
-	
 		<div class="row-fluid">
 			<div class="span4">		
-				<a href="${pageContext.request.contextPath}/public/browse">		
+				<a href="${pageContext.request.contextPath}/public/dashboard">		
 				<div class="widget widget-heading-simple widget-body-white">
 					<div class="widget-body">
 						<div class="glyphicons glyphicon-xlarge glyphicon-top folder_open glyphicon-primary">
