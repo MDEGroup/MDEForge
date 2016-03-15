@@ -1,5 +1,4 @@
 	$(document).on('click','.removeSharedUser', function(event){
-		console.log('juri');
 		var idArtifact = $("#artifactName").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({

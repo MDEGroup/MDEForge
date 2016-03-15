@@ -95,6 +95,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
@@ -133,6 +134,18 @@ import com.mongodb.Mongo;
 public class EcoreMetamodelServiceImpl extends
 		CRUDArtifactServiceImpl<EcoreMetamodel> implements
 		EcoreMetamodelService {
+
+	@Override
+	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
+		
+		EcoreMetamodel a = super.findOneById(idArtifact, user);
+		try {
+			a.setMetrics(getMetrics(a));
+		} catch (BusinessException e) {
+			logger.error(e.getMessage());
+		}
+		return a;
+	}
 
 	@Autowired
 	private ProjectService projectService;

@@ -155,7 +155,7 @@
 														<i class="icon-group text-regular icon-fixed-width"></i>
 														Conform to: <span
 															class="text-lowercase padding-none">
-																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${model.metamodel.getToArtifact().getId()}">
+																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${model.metamodel.getToArtifact().getId()}">
 																	${model.metamodel.getToArtifact().getName() }
 																</a>
 															</span></h5>

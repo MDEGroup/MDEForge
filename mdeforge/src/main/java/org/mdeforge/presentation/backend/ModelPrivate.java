@@ -1,15 +1,12 @@
 package org.mdeforge.presentation.backend;
 
 import java.beans.PropertyEditorSupport;
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
-import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -20,7 +17,6 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ModelForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -28,13 +24,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/private/Model")
-public class ModelController {
+public class ModelPrivate extends ArtifactPrivateController<Model> {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 
@@ -43,74 +38,30 @@ public class ModelController {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private GridFileMediaService gridFileMediaService;
-	@Autowired
 	private User user;
-	@Autowired
-	private ProjectService projectService;
-	@RequestMapping(value = "/list/shared_and_public", method=RequestMethod.GET, 
-            produces= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Model> getSharedAndPublicEcoreMetamodel () {
-		List<org.mdeforge.business.model.Model> list = modelService.findAllWithPublicByUser(user);
-		return list;
-	}
-	@RequestMapping(value = "/list", method=RequestMethod.GET, 
-			produces= MediaType.APPLICATION_JSON_VALUE)
-	public @ResponseBody List<Model> getSharedEcoreMetamodel () {
-		List<org.mdeforge.business.model.Model> list = modelService.findAllSharedByUser(user);
-		return list;
-	}
 	
-	
-	@RequestMapping(method = { RequestMethod.GET })
-	public String ecoreMetamodel(org.springframework.ui.Model model, @RequestParam String id) {
-		
-		Model ecoreMM = modelService.findOneById(id, user);		
-		
-		model.addAttribute("ecoreMM", ecoreMM);
-		return "ecore_metamodel.details";
-	}
-	@RequestMapping(value = "/model_details", method = { RequestMethod.GET })
-	public String modelDetails(org.springframework.ui.Model model, @RequestParam String model_id) {
-
-		Model modelEMF = modelService.findOneById(model_id, user);
-		model.addAttribute("model", modelEMF);
-		
-		String pathToDownload = gridFileMediaService.getFilePath(modelEMF);
-		File ecoreMetamodelFile = new File(pathToDownload);
-		model.addAttribute("modelFile", ecoreMetamodelFile);
-
+	public String details(org.springframework.ui.Model model, @RequestParam String artifact_id) {
+		super.details(model, artifact_id);
 		return "private.use.model_details";
 	}
-	@RequestMapping(value = "/upload", method = { RequestMethod.GET })
-	public String uploadATLTransormatiomStart(org.springframework.ui.Model model) throws IOException {
-		ModelForm modelIn = new ModelForm();
-		model.addAttribute("model", modelIn);
-		List<Project> pl = projectService.findByUser(user);
-		model.addAttribute("projecList", pl);
+	
+	@RequestMapping(value = "/artifact_project", method =  RequestMethod.GET )
+	public String detailsByProject(org.springframework.ui.Model model, @RequestParam String project_id, @RequestParam String artifact_id) {
+		super.detailsByProject(model, project_id, artifact_id);
+		return "private.use.model_details";
+	}
+
+	public String uploadNewArtifactStart(org.springframework.ui.Model model) {
+		super.uploadNewArtifactStart(model);
 		List<EcoreMetamodel> el = ecoreMetamodelService
 				.findAllWithPublicByUser(user);
 		model.addAttribute("metamodelList", el);
-		List<User> userList = userService.findAll();
-		model.addAttribute("userList", userList);
-		
-		/**
-		 * Resources to Upload new Metamodels
-		 */
-		EcoreMetamodel emm = new EcoreMetamodel();
-		model.addAttribute("metamodel",emm);
-		List<Project> pl2 = projectService.findByUser(user);
-		model.addAttribute("projecList",pl2);
-		List<User> userList2 = userService.findAll();
-		model.addAttribute("userList", userList2);
-		
-		return "private.use.model.upload_page";
+		return "private.use.model_upload";
 	}
-
 	@RequestMapping(value = "/upload", method = { RequestMethod.POST })
 	public String uploadNewATLTransormatiom(org.springframework.ui.Model model,
-			@ModelAttribute ("transformation") ModelForm modelIn,
-			@RequestParam("modelfile") MultipartFile file)
+			@ModelAttribute ("artifact") ModelForm modelIn,
+			@RequestParam("artifactfile") MultipartFile file)
 			throws IOException {
 		ConformToRelation ctr = new ConformToRelation();
 		ctr.setFromArtifact(modelIn);

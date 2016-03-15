@@ -2,7 +2,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 
 	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/css/fileupload.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-wysihtml5/css/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet">
@@ -30,12 +30,12 @@
 <div class="innerLR">
 
 <form:form cssClass="form-horizontal" modelAttribute="artifact" 
-	action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" role="form" method="POST" enctype="multipart/form-data">
+	action="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/upload" role="form" method="POST" enctype="multipart/form-data">
 	<div class="widget widget-heading-simple widget-body-gray">
 		
 			<!-- Widget heading -->
 			<div class="widget-head">
-				<h4 class="heading">Upload new Ecore Metamodel</h4>
+				<h4 class="heading">Upload new ${artifact.getClass().getSimpleName()}</h4>
 			</div>
 			<!-- // Widget heading END -->
 			
@@ -46,16 +46,15 @@
 				
 					<!-- Column -->
 					<div class="span6">
-					
 						<!-- Group -->
 						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Name</label>
+							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Name</label>
 							<div class="controls">
-								<input type="text" name="name"></textarea>
+								<input type="text" name="name"/>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Description</label>
+							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Description</label>
 							<div class="controls">
 								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
 							</div>
@@ -87,8 +86,6 @@
 							</div>
 							</div>
 							<!-- // Column END -->
-						
-							
 						</div>
 						<!-- // Row END -->
 					</div>
@@ -97,17 +94,17 @@
 				<!-- // Row END -->
 				<hr class="separator">
 				<div class="row-fluid">
-					<div class="control-group span6">
-							<label class="control-label" for="email">Metamodel File</label>
+					<div class="control-group span12">
+							<label class="control-label">${artifact.getClass().getSimpleName()} File</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
 							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
 							    		<span class="fileupload-preview"></span>
 							    	</div>
 							    	<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select Metamodel File</span>
+								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" class="margin-none" name="metamodelfile" size="40"/>
+								    	<input type="file" id="artifactName" class="margin-none" name="artifactfile" size="40"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
@@ -116,12 +113,13 @@
 					</div>
 					<div class="row-fluid">
 				<!-- Row -->
-					<div class="span6">
+					<div class="span12">
 						<h4>Properties</h4>
 							<table>
 								<thead>
 									<tr>
 										<th>Name</th>
+									
 										<th>Value</th>
 										<th>Action</th>
 									</tr>
@@ -148,9 +146,7 @@
 						</form:select>
 					</div>				
 				</div>
-				<hr class="separator">
-				
-				<!-- Form actions -->
+				<tiles:insertAttribute name="central" ignore="true"/>
 				<div class="row-fluid">
 					
 					<div class="form-actions">
@@ -163,17 +159,9 @@
 			</div>
 		</div>
 </form:form>
-
-
-
-	
 </div>	
-
-
-
-
-
-<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
+<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
 	

@@ -4,25 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<script	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
-<script	type="text/javascript">
-function shareArtifact(){
-	
-	console.log("${artifact.id}");
-	$.ajax({
-		url : ctx + "/public/${artifact.getClass().getSimpleName() }/share/?metamodel_id=" + "${artifact.id}",
-		success : function(data) {
-			console.log("UEEEE")
-		},
-		error : function error(data) {
-			console.log('error');
-			
-		}
-	});
-}
-
-
-</script>
+<script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 
 <style type="text/css">
 #my_canvas {
@@ -30,7 +13,7 @@ function shareArtifact(){
 	height: 200px;
 }
 </style>
-
+<security:authentication property="principal.user.id" var="userId"/>
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 	<li><spring:message
@@ -40,18 +23,19 @@ function shareArtifact(){
 	<li class="divider"></li>
 	<li><spring:message code="mdeforge.public.back.browse" /></li>
 	<li class="divider"></li>
-	<li>${artifact.getClass().getSimpleName() } details</li>
+	<li><spring:message
+			code="mdeforge.public.back.browse.metamodel_details.detail" /></li>
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
 <div class="heading-buttons">
-	<h3>${artifact.getName()}
+	<h3 id="artifactName" data-id="${artifact.getId()}">${artifact.getName()}
 		<span> <c:choose>
 				<c:when test="${artifact.getOpen()}">		
-							Public									  												    
+							Public Metamodel										  												    
 				</c:when>
 				<c:otherwise>
-							Private										  
+							Private Metamodel										  
 				</c:otherwise>
 			</c:choose>
 		</span>
@@ -86,11 +70,7 @@ function shareArtifact(){
 											<p class="muted">
 												Used in ${artifact.getProjects().size()} projects <a
 													href=""><i class="icon-circle-arrow-right"></i></a>
-												<security:authorize access="isAuthenticated()">
-																<a id="publicShareButton" onclick="shareArtifact()" data-id="${artifact.getId()}"> Share</a>
-												</security:authorize>
 											</p>
-											
 										</div>
 									</div>
 								</div>
@@ -111,6 +91,7 @@ function shareArtifact(){
 											</ul>
 											<div class="separator bottom"></div>
 											<h5 class="strong">General</h5>
+											<!-- Profile Photo -->
 											<div class="center">
 												<table class="table table-condensed">
 													<!-- Table body -->
@@ -150,20 +131,26 @@ function shareArtifact(){
 											</p>
 											<div class="row-fluid">
 												<div class="span4">
-													<h5 class="strong">${artifact.getClass().getSimpleName() } File</h5>
+													<h5 class="strong">Metamodel File</h5>
 													<a href="#modal-simple"
 														class="btn btn-primary btn-small btn-block"
 														data-toggle="modal"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize
-														${artifact.getClass().getSimpleName() }</a> <a href="#"
+														Metamodel</a> <a href="#"
 														class="btn btn-default btn-small btn-block"
 														onclick="return false;"><i
 														class="icon-eye-open icon-fixed-width"></i> Visualize Tree
 														View</a> <a
-														href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName() }/download?artifact_id=${artifact.getId()}"
+														href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/download?artifact_id=${artifact.getId()}"
 														class="btn btn-success btn-small btn-block"><i
 														class="icon-download-alt icon-fixed-width"></i> Download
-														${artifact.getClass().getSimpleName() }</a>
+														Metamodel</a>
+														<c:if test="${userId == artifact.getAuthor().getId()}">
+															<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}"
+															class="btn btn-block btn-danger btn-small"><i
+															class="icon-remove-sign icon-fixed-width"></i> Delete
+															Metamodel</a>
+														</c:if>
 													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
 													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
 													<div class="separator bottom"></div>
@@ -172,23 +159,39 @@ function shareArtifact(){
 												<div class="span6">
 													<h5 class="text-uppercase strong text-primary">
 														<i class="icon-group text-regular icon-fixed-width"></i>
-														
 														Shared Users <span
 															class="text-lowercase strong padding-none">Team</span> <span
 															class="text-lowercase padding-none">(${artifact.getShared().size()}
 															people)</span>
 															
+															
+ 															<c:if test="${userId == artifact.getAuthor().getId()}">
+ 																<i class="icon-expand-alt" id="showUserList"></i>
+ 															</c:if>
+															
 													</h5>
-													<ul class="team">
+													<div id="userList" class="row-fluid" style="display: none">
+														<select id="userSelect">
+														</select>
+														<div>
+															<span class="btn btn-block btn-primary span4" id="addUserArtifact">Add</span>
+														</div>
+													</div>
+													
+													<ul id="users" class="team">
 														<c:forEach items="${artifact.getShared()}"
 															var="user" varStatus="count">
-															<li><span class="crt">${count.count}</span><span
+															<li class="userLi" data-id="${user.getId()}"><span class="crt">${count.count}</span><span
 																class="strong">${user.getUsername()}</span><span
 																class="muted">${user.getFirstname()}
-																	${user.getLastname()}</span></li>
+																	${user.getLastname()}</span>
+																<span class="muted"><a href="mailto:${user.getEmail() }">${user.getEmail() } <i class="icon-envelope"></i></a></span>
+																<c:if test="${userId == artifact.getAuthor().getId()}">
+																	<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+																</c:if>
+															</li>
 														</c:forEach>
 													</ul>
-													
 												</div>
 											</div>
 
@@ -203,16 +206,15 @@ function shareArtifact(){
 			</div>
 			<hr>
 			<tiles:insertAttribute name="central" ignore="true"/>
-			<c:if test="${artifact.getMetrics().size()!=0}">
-			
 			<div class="row-flid">
 				<div class="span12">
 					<h4>Metrics</h4>
+
 					<table class="table table-bordered table-striped table-white">
-						<!-- Table heading -->
 						<thead>
 							<tr>
 								<th rowspan="2">Name</th>
+								<th rowspan="2">Description</th>
 								<th class="center" colspan="5">Value</th>
 							</tr>
 							<tr>
@@ -224,45 +226,50 @@ function shareArtifact(){
 							</tr>
 						</thead>
 						<!-- // Table heading END -->
-						<!-- Table body -->
 						<tbody>
 							<c:forEach items="${artifact.getMetrics()}" var="metric">
-													<!-- Table row -->
+								<!-- Table row -->
 								<tr>
+
 									<td class="left">${metric.getName()}</td>
+									<td>${metric.getDescription()}</td>
+
 									<c:choose>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
-									    <td colspan="5" class="center">${metric.getValue()}</td>
-									  </c:when>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:when>
-									  <c:otherwise>
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:otherwise>
-									</c:choose>														
-									
+										<c:when
+											test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+											<td colspan="5" class="center">${metric.getValue()}</td>
+										</c:when>
+										<c:when
+											test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+											<td>${metric.getMaximum()}</td>
+											<td>${metric.getMinimum()}</td>
+											<td>${metric.getAverage()}</td>
+											<td>${metric.getMedian()}</td>
+											<td>${metric.getStandardDeviation()}</td>
+										</c:when>
+										<c:otherwise>
+											<td>${metric.getMaximum()}</td>
+											<td>${metric.getMinimum()}</td>
+											<td>${metric.getAverage()}</td>
+											<td>${metric.getMedian()}</td>
+											<td>${metric.getStandardDeviation()}</td>
+										</c:otherwise>
+									</c:choose>
+
 								</tr>
 								<!-- // Table row END -->
 							</c:forEach>
+						</tbody>
+						<!-- End body -->
 					</table>
-
+				
 				</div>
 			</div>
-			</c:if>
+
 		</div>
 		<tiles:insertAttribute name="right" ignore="true"/>
 	</div>
 </div>
-
 
 <c:import var="fileToVisualize"
 	url="file:///${artifactFile.getAbsolutePath()}" />
@@ -280,36 +287,6 @@ ${fn:escapeXml(fileToVisualize)}
 </div>
 <!-- // Modal END -->
 
-<script>
-	var res = '${artifact.getExtractedContents()}'.trim();
-	res = res.split(" ");
 
-	var wordlist = [];
-
-	for (var i = 0; i < res.length; ++i) {
-		var numOccurrences = 1;
-		for (var j = 0; j < res.length; ++j) {
-			if (res[j].toUpperCase() === res[i].toUpperCase()) {
-				numOccurrences++;
-				/*Elimino l'elemento ripetuto dall'array*/
-				res.splice(j, 1);
-			}
-		}
-		wordlist.push([ res[i], numOccurrences ]);
-	}
-
-	var options = {
-		list : wordlist,
-		gridSize : Math
-				.round(1 * document.getElementById('my_canvas').offsetWidth / 1024),
-		weightFactor : function(size) {
-			return Math.pow(size, 4.9)
-					* document.getElementById('my_canvas').offsetWidth / 1024;
-		},
-		fontFamily : 'Open Sans, sans-serif',
-		rotateRatio : 0.5
-
-	}
-
-	WordCloud(document.getElementById('my_canvas'), options);
-</script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>

@@ -29,13 +29,13 @@
 
 <div class="innerLR">
 
-<form:form cssClass="form-horizontal" modelAttribute="transformation" 
-	action="${pageContext.request.contextPath}/private/ATLTransformation/upload" role="form" method="POST" enctype="multipart/form-data">
+<form:form cssClass="form-horizontal" modelAttribute="artifact" 
+	action="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/upload" role="form" method="POST" enctype="multipart/form-data">
 	<div class="widget widget-heading-simple widget-body-gray">
 		
 			<!-- Widget heading -->
 			<div class="widget-head">
-				<h4 class="heading">Upload new ATL transformation</h4>
+				<h4 class="heading">Upload new ${artifact.getClass().getSimpleName()}</h4>
 			</div>
 			<!-- // Widget heading END -->
 			
@@ -51,13 +51,13 @@
 					
 						<!-- Group -->
 						<div class="control-group">
-							<label class="control-label" for="firstname">ATL transformation Name</label>
+							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Name</label>
 							<div class="controls">
 								<input type="text" name="name"></textarea>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="firstname">ATL transformation Description</label>
+							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Description</label>
 							<div class="controls">
 								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
 							</div>
@@ -98,16 +98,16 @@
 				<hr class="separator">
 				<div class="row-fluid">
 					<div class="control-group span12">
-							<label class="control-label">ATL transformation File</label>
+							<label class="control-label">${artifact.getClass().getSimpleName()} File</label>
 							<div class="fileupload fileupload-new controls" data-provides="fileupload">
 							  	<div class="input-append">
 							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
 							    		<span class="fileupload-preview"></span>
 							    	</div>
 							    	<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select ATL transformation File</span>
+								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
 								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" id="trafoName" class="margin-none" name="transformationfile" size="40"/>
+								    	<input type="file" id="artifactName" class="margin-none" name="artifactfile" size="40"/>
 							    	</span>
 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
 							  	</div>
@@ -231,155 +231,6 @@
 		</div>
 </form:form>
 </div>	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- Modal -->
-<div class="modal hide fade" id="new_metamodel_popup">
-	
-	<!-- Modal heading -->
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		<h3>Upload new Ecore Metamodel</h3>
-	</div>
-	<!-- // Modal heading END -->
-	
-	
-	
-	
-	
-	<form:form id="formEcore" cssClass="form-horizontal" 
-		modelAttribute="metamodel" 
-		action="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" 
-		role="form" method="POST" enctype="multipart/form-data">
-	<!-- Modal body -->
-	<div class="modal-body">
-		<div class="widget widget-heading-simple widget-body-gray">
-			<div class="widget-body">
-				<!-- Row -->
-				<div class="row-fluid">
-					<!-- Column -->
-					<div class="span12">
-						<!-- Group -->
-						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Name</label>
-							<div class="controls">
-								<input type="text" name="name"></textarea>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="firstname">Metamodel Description</label>
-							<div class="controls">
-								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
-							</div>
-						</div>
-						<!-- // Group END -->
-					</div>
-					<!-- // Column END -->
-				</div>
-				<hr class="separator">
-				<div class="">
-							<!-- Column -->
-								<h4 style="margin-bottom: 10px;">Private or Public</h4>
-								<div class="uniformjs">
-									<div class="radio" id="uniform-undefined">
-										<label class="radio">
-											<span>
-											<form:radiobutton cssClass="" path="open" value="true"/>Public
-											</span>
-										</label>
-										<label class="radio">
-											<form:radiobutton cssClass="" path="open" value="false"/>Private
-										</label>
-									</div>
-								</div>
-					<!-- // Column END -->
-				</div>
-				<!-- // Row END -->
-				<hr class="separator">
-				<div class="row-fluid">
-					<h4>Metamodel File</h4>
-					<div class="">
-							<div class="fileupload fileupload-new" data-provides="fileupload">
-							  	<div class="input-append">
-							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
-							    		<span class="fileupload-preview"></span>
-							    	</div>
-							    	<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select Metamodel File</span>
-								    	<span class="fileupload-exists">Change</span>
-								    	<input id="ecoreFile" type="file" class="margin-none" name="metamodelfile" size="20"/>
-							    	</span>
-							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-							  	</div>
-							</div>
-						</div>
-						</div>
-				<hr class="separator">
-					<div class="row-fluid">
-						<h4>Properties</h4>
-						<table>
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Value</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody id="propertiesTable2">
-								</tbody>
-							</table>
-							<button type="button" id="addPropertyButton2" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Add new property</button>
-					</div>
-									
-				<hr class="separator">
-					<h4>Add to project</h4>
-						<form:select path="projects" multiple="true">
-									<form:options  items="${projecList}" itemValue="id" itemLabel="name"></form:options>
-						</form:select>
-				<hr class="separator">
-					<h4>Share with:</h4>
-						<form:select path="shared" multiple="true">
-									<form:options  items="${userList}" itemValue="id" itemLabel="username"></form:options>
-						</form:select>
-				<!-- <hr class="separator">
-				Form actions
-				<div class="row-fluid">
-					<div class="form-actions">
-						<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
-						<button type="button" class="btn btn-icon btn-default glyphicons circle_remove"><i></i>Cancel</button>
-					</div>
-				</div>
-				// Form actions END -->
-				
-			</div>
-		</div>
-	</div>
-	<!-- // Modal body END -->
-	<!-- Modal footer -->
-	<div class="modal-footer">
-		<button id="ecoreSubmit" type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
-<!-- 		<button type="button" class="btn btn-icon btn-default glyphicons circle_remove"><i></i>Cancel</button> -->
-	</div>
-	<!-- // Modal footer END -->
-</form:form>
-	
-	
-</div>
-<!-- // Modal END -->	
-<!-- Mustache -->
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>

@@ -20,17 +20,7 @@ public class ATLPublicController extends ArtifactPublicController<ATLTransformat
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
 	
-	@RequestMapping(value = "/browse/transformation_share", method = { RequestMethod.GET })
-	public String transformationSharaDetails(Model model, @RequestParam String transformation_id) {
-		
-		ATLTransformation atlTransformation = aTLTransformationService.findOnePublic(transformation_id);
-		aTLTransformationService.addUserInArtifact(user.getId(), transformation_id, user);
-		model.addAttribute("atlTransformation", atlTransformation);
-		String pathToDownload = gridFileMediaService.getFilePath(atlTransformation);
-		File atlTransformationFile = new File(pathToDownload);
-		model.addAttribute("atlTransformationFile", atlTransformationFile);
-		return "private.use.metamodel_details";
-	}
+	
 	@Override
 	public String artifactList(Model model) {
 		model.addAttribute("Title", "ATL Transformations");

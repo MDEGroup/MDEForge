@@ -40,6 +40,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 		model.addAttribute("artifactFile", ecoreMetamodelFile);
 		return "public.browse.artifact_details";
 	}
+	
 	@RequestMapping(value = "/share", method = { RequestMethod.GET })
 	public @ResponseBody HttpEntity<String> metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
 		try {
@@ -59,7 +60,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 				.getFileInputStream(ecoreMetamodel);
 		response.setContentType("application/force-download");
 		response.setHeader("Content-Disposition", "attachment; filename="
-				+ ecoreMetamodel.getName() + ".ecore");
+				+ ecoreMetamodel.getFile().getFileName());
 		org.apache.commons.io.IOUtils.copy(is, response.getOutputStream());
 		response.flushBuffer();
 	}
@@ -70,7 +71,6 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
 		return "public.browse.artifacts_list";
 	}
-
 		
 	@RequestMapping(value = "/artifact_name", method = { RequestMethod.GET })
 	public String artifactFromName(@RequestParam String name,Model model) throws IOException{

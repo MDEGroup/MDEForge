@@ -154,6 +154,32 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
+	public T findOneInProject(String project_id, String artifact_id, User user) throws BusinessException {
+		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c3 = Criteria.where("_id").is(artifact_id);
+		Criteria publicCriteria = Criteria.where("open").is(true);
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(
+					persistentClass.getCanonicalName());
+			query.addCriteria(c3);
+			query.addCriteria(c2);
+		} else
+			query.addCriteria(c3);
+		T artifact = operations.findOne(query, persistentClass);
+		if (artifact == null)
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		artifact.getFile().setByteArray(
+				gridFileMediaService.getFileByte(artifact));
+		Project proj = projectRepository.findOne(project_id);
+		if(proj == null)
+			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		if(artifact.getProjects().contains(proj))
+			return artifact;
+		else throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+	}
+	
+	@Override
 	public T findOneByName(String name, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

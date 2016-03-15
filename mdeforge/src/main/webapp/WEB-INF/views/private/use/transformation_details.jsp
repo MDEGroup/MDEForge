@@ -325,11 +325,11 @@
 													<td class="center"><c:choose>
 															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
 																<a
-																	href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																	href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:when>
 															<c:otherwise>
 																<a
-																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:otherwise>
 														</c:choose></td>
 												</c:when>
@@ -370,11 +370,11 @@
 													<td class="center"><c:choose>
 															<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
 															<a
-																	href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																	href="${pageContext.request.contextPath}/public/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:when>
 															<c:otherwise>
 																<a
-																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																	href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 															</c:otherwise>
 														</c:choose></td>
 												</c:when>

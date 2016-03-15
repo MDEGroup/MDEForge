@@ -43,4 +43,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
 	List<T> findAllSharedByUser(User user);
 	User addUserInPublicArtifact(String idUser, String idArtifact, User user) throws BusinessException;
+	T findOneInProject(String project_id, String artifact_id, User user) throws BusinessException;
 }

@@ -3,7 +3,7 @@ $(function() {
 		var spinner = new Spinner().spin();
 		$('#transformationRelations').parent().append(spinner.el);
 		e.preventDefault();
-		var files = document.getElementById('trafoName').files;
+		var files = document.getElementById('artifactName').files;
 		var file = files[0];
 	    if (files && file) {
 	    	var reader = new FileReader();
@@ -83,7 +83,6 @@ $(function() {
 	            		$('#defineDomainRelationTo').hide();
 	    			},
 	    			error : function error(data) {
-	    				console.log(data);
 	    				console.log('error');
 	    			}
 	            });

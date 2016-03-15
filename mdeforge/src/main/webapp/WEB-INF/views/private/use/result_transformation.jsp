@@ -33,7 +33,7 @@
 									<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${model.getId()}">${model.getName()}</a>
 								</td>
 								<td>
-									<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${model.metamodel.getToArtifact().getId()}">${model.getMetamodel().getToArtifact().getName() }</a>
+									<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${model.metamodel.getToArtifact().getId()}">${model.getMetamodel().getToArtifact().getName() }</a>
 								</td>
 							</tr>
 						</c:forEach>

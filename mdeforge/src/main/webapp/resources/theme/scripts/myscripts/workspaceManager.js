@@ -171,8 +171,6 @@
 				success : function(data) {
 					$('#ecoreSelect').empty();
 					$.each(data, function(i, ecore){
-						console.log(ids);
-						console.log(ecore.id);
 						if($.inArray(ecore.id, ids) < 0)
 							$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
 					});
@@ -236,7 +234,6 @@
 	
 	// WORKSPACE MANAGEMENT
 	$(document).on('click','#addProject', function(event){
-		console.log('asr');
 		var idProject = $('#projectSelect').val();
 		var idWorkspace = $("#workspaceId").data('id');
 		var result = $('#projectList');
@@ -299,7 +296,6 @@
 		
 		$(this).on('click', '.listWrapper li:not(.active)', function()
 		{
-			console.log(ctx);
 			var p = $(this).parents('.widget-employees:first');
 			p.find('.listWrapper li').removeClass('active');
 			$(this).addClass('active');
@@ -313,7 +309,6 @@
 					$('#ATLToAdd').hide();
 					$('#modelToAdd').hide();
 					$('#ecoreToAdd').hide();
-					console.log(data);
 					if (data.users.length > 1)
 						$('#sharedNumber').text(data.users.length + " users");
 					else
@@ -335,11 +330,9 @@
 					           		'<span class="muted"><a href="mailto:'+ user.email +
 					           		'">'+ user.username +' <i class="icon-envelope"></i></a>';
 							var stringDelete = '';
-							console.log(guard);
 							if (guard)
 								stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>';
 							var stringTail = '</span></li>';
-							console.log(stringDelete);
 							$('#users').append(stringHead + stringDelete + stringTail);
 						}
 					});
@@ -388,7 +381,6 @@
 	});
 	
 	$('#showProjectAdd').click(function(event){
-		console.log('s');
 		if ($('#createProject').css('display') == 'none') {
 			$('#createProject').show();
 			$('#showProjectAdd').text("Cancel");
@@ -436,7 +428,6 @@
 				url : ctx + "/private/user/list",
 				success : function(data) {
 					$.each(data, function(i, model){
-						console.log("TER")
 						if($("#loggedUserId").val() != model.id)
 							$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
 					});

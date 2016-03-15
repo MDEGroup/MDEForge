@@ -74,31 +74,11 @@
 										<!-- Table row -->
 										<tr>
 											<td>
-												<c:choose>
-														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-																<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
-														</c:when>
-														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-																<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-														</c:when>
-														<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-																<a href="#">${artifact.getName()}</a>
-														</c:when>
-													</c:choose>
+												<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+												
 											</td>
 											<td>
-														<c:choose>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-																		<span class="badge badge-important">ATL Transformation</span>
-																</c:when>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-																		<span class="badge badge-warning">Ecore Metamodel</span>
-																</c:when>
-																<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-																		<span class="badge badge-info">Model</span>
-																</c:when>
-															</c:choose>
-			
+												<span class="badge badge-important">${artifact.getClass().getSimpleName() }</span>
 											</td>
 											<td class="center"><fmt:formatDate type="date" value="${artifact.getModified()}" /></td>
 										</tr>
@@ -111,9 +91,7 @@
 							</table>
 					</div>
 			</div>
-		
 		</div>
-		
 		<div class="span4">
 
 			<div class="widget widget-body-white">
@@ -145,25 +123,18 @@
 										<!-- // Table row END -->
 									</c:forEach>
 									<!-- Table row -->
-									
 								</tbody>
 								<!-- // Table body END -->
-								
 							</table>
 					</div>
 			</div>
-		
 		</div>
-
 		<div class="span4">
-
 			<div class="widget widget-body-white">
 							<div class="widget-head">
 								<h4 class="heading glyphicons stats"><i></i>Repository Statistics</h4>
 							</div>
 							<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								
-								
 								<div class="widget-body list collapse in">
 									<ul>
 									

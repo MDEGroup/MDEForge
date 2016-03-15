@@ -181,7 +181,7 @@
 															<div class="row-fluid">
 																<div class="span4">
 																	<h5 class="strong">Metamodel File</h5>
-																	<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${leftMetamodel.getId()}"
+																	<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${leftMetamodel.getId()}"
 																		class="btn btn-primary btn-small btn-block"
 																		data-toggle="modal"><i
 																		class="icon-eye-open icon-fixed-width"></i> Visualize Metamodel</a> 

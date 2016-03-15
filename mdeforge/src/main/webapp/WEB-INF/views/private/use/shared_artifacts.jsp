@@ -50,17 +50,8 @@
 					<!-- Table row -->
 					<tr class="gradeX">						
 						<td>
-							<c:choose>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">${artifact.getName()}</a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-										<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${artifact.getId()}">${artifact.getName()}</a>
-								</c:when>
-							</c:choose>
+							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+							
 						</td>
 						<td>
 							<c:forEach items="${artifact.properties}" var="property">
@@ -70,37 +61,15 @@
 							</c:forEach>
 						</td>
 						<td class="center">
-							<c:choose>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-										<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}">ATL Transformation</a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}">Ecore Metamodel</a>
-								</c:when>
-								<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-										<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${artifact.getId()}">Model</a>
-										(<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/model_details?model_id=${artifact.getMetamodel().getToArtifact().getId()}">${artifact.getMetamodel().getToArtifact().getName()})</a>
-								</c:when>
-							</c:choose>
+							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}">${artifact.getClass().getSimpleName() }</a>
 						</td>
 						<td class="center">${artifact.getOpen()}</td>
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-							<c:choose>
-									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.ATLTransformation'}">
-											<a href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_details?transformation_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-											<a href="${pageContext.request.contextPath}/public/browse/transformation_download?transformation_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Transformation Download"><i></i></a>
-									</c:when>
-									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.EcoreMetamodel'}">
-											<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-											<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
-									</c:when>
-									<c:when test="${artifact.getClass().name == 'org.mdeforge.business.model.Model'}">
-											<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/model_details?model_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-											<a href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
-									</c:when>
-								</c:choose>																	
+							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
+							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact_download?artifact_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>
+																							
 						</td>
 					</tr>
 					<!-- // Table row END -->

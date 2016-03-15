@@ -35,11 +35,9 @@ $(function() {
 		var toRender = new Object();
 		idRow = idRow + 1;
 		toRender.idRow = idRow;
-		console.log(toRender.idRow);
 		$.get(ctx + '/resources/theme/scripts/plugins/forms/template/rowProperty.html',
 				function(template) {
 					var rendered = Mustache.render(template, toRender);
-					console.log(template);
 					result.append(rendered);
 				});
 	});
@@ -58,7 +56,6 @@ $(function() {
 	});
 	
 	$(document).on('click','.deleteDomainConformToButton', function(e) {
-		console.log($(this).data('id'));
 		$('.domainConformToRow[data-id="' + $(this).data('id') + '"]').remove();
 		
 		
@@ -83,7 +80,6 @@ $(function() {
 	});
 	
 	$(document).on('click','.deleteCoDomainConformToButton', function(e) {
-		console.log($(this).data('id'));
 		$('.coDomainConformToRow[data-id="' + $(this).data('id') + '"]').remove();
 	});
 	
@@ -97,7 +93,6 @@ $(function() {
 		var nameMetamodel = $('#coDomainMetamodelSelect option:selected').text();
 		var toRender = new Object();
 		toRender.idRow = idRow + 1;
-		console.log(idMetamodel);
 		toRender.toArtifactID = idMetamodel;
 		toRender.toArtifactName = nameMetamodel;
 		$.get(ctx + '/resources/theme/scripts/plugins/forms/template/rowCoDomainConformToRelation.html',
