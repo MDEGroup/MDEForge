@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("/private/Model")
-public class ModelPrivate extends ArtifactPrivateController<Model> {
+public class ModelPrivateController extends ArtifactPrivateController<Model> {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 

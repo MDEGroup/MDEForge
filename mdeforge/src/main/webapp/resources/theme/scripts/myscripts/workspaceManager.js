@@ -19,6 +19,8 @@
 		ecoreMetamodel.name = $("#ecoreSelect option:selected").text();
 		ecoreMetamodel.ecoreMetamdel = true;
 		var idProject = $("#projectId").data('id');
+		console.log("1 _ " + idProject);
+		ecoreMetamodel.projectId = idProject;
 		var result = $('#ecoreMMTable');
 		$.ajax({
 			
@@ -46,6 +48,8 @@
 		ATLTransormation.name = $("#ATLSelect option:selected").text();
 		ATLTransormation.ATLTransformation = true;
 		var idProject = $("#projectId").data('id');
+		console.log("2 _ " + idProject);
+		ATLTransormation.projectId = idProject;
 		var result = $('#atlTable');
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/add/" + ATLTransormation.id,
@@ -72,6 +76,9 @@
 		model.id = $('#modelSelect').val();
 		model.name = $("#modelSelect option:selected").text();
 		model.model = true;
+		var idProject = $("#projectId").data('id');
+		console.log("3 _ " + idProject);
+		model.projectId = idProject;
 		var result = $('#modelTable');
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/add/" + model.id,
@@ -343,6 +350,9 @@
 						if(artifact._class == "org.mdeforge.business.model.EcoreMetamodel") {
 							var result = $('#ecoreMMTable');
 							artifact.ecoreMetamdel = true;
+							var idProject = $("#projectId").data('id');
+							console.log("4 _ " + idProject);
+							artifact.projectId = idProject;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
@@ -352,6 +362,9 @@
 						if(artifact._class == "org.mdeforge.business.model.ATLTransformation") {
 							var result = $('#atlTable');
 							artifact.ATLTransformation = true;
+							var idProject = $("#projectId").data('id');
+							console.log("5 _ " + idProject);
+							artifact.projectId = idProject;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
@@ -361,6 +374,9 @@
 						if(artifact._class == "org.mdeforge.business.model.Model") {
 							var result = $('#modelTable');
 							artifact.model = true;
+							var idProject = $("#projectId").data('id');
+							console.log("6 _ " + idProject);
+							artifact.projectId = idProject;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
