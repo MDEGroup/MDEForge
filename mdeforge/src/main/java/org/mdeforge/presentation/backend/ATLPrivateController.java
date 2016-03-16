@@ -151,7 +151,7 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			report = true;
 		}
 		model.addAttribute("report", report);
-		return "redirect:/private/ATLTransformation/artifact_details?artifact_id=" + m.getId();
+		return "redirect:/private/ATLTransformation/artifact?artifact_id=" + m.getId();
 	}
 
 	@RequestMapping(value = "/modelInfo", method = { RequestMethod.POST }, consumes = "application/json")
