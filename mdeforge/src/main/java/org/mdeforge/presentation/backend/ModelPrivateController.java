@@ -27,8 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
-@RequestMapping("/private/Model")
+//@Controller
+//@RequestMapping("/private/Model")
 public class ModelPrivateController extends ArtifactPrivateController<Model> {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
