@@ -1,11 +1,8 @@
 package org.mdeforge.business.model;
 
 
-import org.mdeforge.business.model.serializer.json.ArtifactSerializer;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * A representation of the model object '<em><b>Relation</b></em>'. <!--

@@ -108,13 +108,15 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 		for(Relation rel : transformation.getRelations()) {
 			if (rel instanceof DomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
-					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
+					ecoreMetamodelService.loadArtifact((EcoreMetamodel) rel.getToArtifact());
+					//ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
 					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
 					sourceMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}
 			if (rel instanceof CoDomainConformToRelation)
 				if(rel.getToArtifact() instanceof EcoreMetamodel) {
-					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
+					ecoreMetamodelService.loadArtifact((EcoreMetamodel) rel.getToArtifact());
+//					ecoreMetamodelService.registerMetamodel((EcoreMetamodel) rel.getToArtifact());
 					rel.setToArtifact(ecoreMetamodelService.findOne(rel.getToArtifact().getId()));
 					targetMetamodel.add(gridFileMediaService.getFilePath(rel.getToArtifact()));
 				}		

@@ -127,8 +127,10 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 				out.write(Base64.decode(gdf.getContent().getBytes()));
 			if (gdf.getByteArray() != null)
 				out.write(gdf.getByteArray());
-			if(gdf.getByteArray() == null && gdf.getContent() == null)
+			if(gdf.getByteArray() == null && gdf.getContent() == null) {
+				out.close();
 				throw new BusinessException("No Content");
+			}
 			out.close();
 			return path;
 		} catch (FileNotFoundException e) {

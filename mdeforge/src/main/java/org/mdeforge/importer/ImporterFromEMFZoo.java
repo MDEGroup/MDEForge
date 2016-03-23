@@ -17,6 +17,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.User;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 @Component
@@ -104,5 +105,6 @@ public class ImporterFromEMFZoo {
 		} catch (Exception e2) {
 			System.err.println("ERROR: Some error at " + projectUrl + ". Importer exception:" + e2.getMessage());
 		}
+		((ConfigurableApplicationContext)context).close();
 	}
 }

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.ParameterizedType;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,25 +13,19 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.form.ATLTransformationForm;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 public abstract class ArtifactPrivateController<T extends Artifact> {
 

@@ -7,6 +7,7 @@ import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ATLTransformationRepository;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class AnalizeTransformation {
@@ -32,5 +33,6 @@ public class AnalizeTransformation {
 				System.err.println(atlTransformation.getName());
 			}
 		}
+		((ConfigurableApplicationContext)context).close();
 	}
 }

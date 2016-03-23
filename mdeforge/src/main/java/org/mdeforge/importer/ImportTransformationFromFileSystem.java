@@ -17,9 +17,8 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ATLTransformationRepository;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import anatlyzer.atl.util.ATLSerializer;
 
 public class ImportTransformationFromFileSystem {
 	public static void main(String[] args) {
@@ -125,5 +124,6 @@ public class ImportTransformationFromFileSystem {
 				}
 			}
 		}
+		((ConfigurableApplicationContext)context).close();
 	}
 }

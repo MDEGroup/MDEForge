@@ -1,22 +1,15 @@
 package org.mdeforge.business.anatlyzer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EcoreFactory;
 
 import anatlyzer.atlext.ATL.Callable;
 import anatlyzer.atlext.ATL.ContextHelper;
 import anatlyzer.atlext.ATL.LazyRule;
 import anatlyzer.atlext.ATL.OutPatternElement;
-import anatlyzer.atlext.ATL.SimpleOutPatternElement;
 import anatlyzer.atlext.ATL.StaticHelper;
 import anatlyzer.atlext.OCL.Attribute;
-import anatlyzer.atlext.OCL.BagType;
 import anatlyzer.atlext.OCL.OCLFactory;
-import anatlyzer.atlext.OCL.OCLPackage;
 import anatlyzer.atlext.OCL.OclFeature;
 import anatlyzer.atlext.OCL.OclModelElement;
 import anatlyzer.atlext.OCL.OclType;

@@ -5,20 +5,18 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Property;
+
+import junit.framework.TestCase;
 
 public class Importer extends TestCase {
 

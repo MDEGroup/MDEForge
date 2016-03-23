@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
-import org.antlr.foruse.grammar.v3.ANTLRParser.throwsSpec_return;
 import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -75,8 +74,6 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.RequestGrid;
-import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.WorkspaceService;
@@ -109,19 +106,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
-
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atlext.ATL.ATLPackage;
-import anatlyzer.atlext.OCL.OclExpression;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
@@ -129,6 +118,11 @@ import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;
+
+import anatlyzer.atl.util.ATLSerializer;
+import anatlyzer.atlext.ATL.ATLPackage;
+import anatlyzer.atlext.OCL.OclExpression;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
@@ -147,10 +141,6 @@ public class EcoreMetamodelServiceImpl extends
 		return a;
 	}
 
-	@Autowired
-	private ProjectService projectService;
-	@Autowired
-	private WorkspaceService workspaceService;
 	@Autowired
 	private Mongo mongo;
 	@Autowired

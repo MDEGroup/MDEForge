@@ -205,7 +205,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			throw new BusinessException();
 		if (art instanceof Model) {
 			try {
-				ecoreMetamodelService.registerMetamodel(emm);
+				ecoreMetamodelService.loadArtifact(emm);
+//				ecoreMetamodelService.registerMetamodel(emm);
 				XMIResourceImpl resource = new XMIResourceImpl();
 				File temp = new File(gridFileMediaService.getFilePath(art));
 				resource.load(new FileInputStream(temp),

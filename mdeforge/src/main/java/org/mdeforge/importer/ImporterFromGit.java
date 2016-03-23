@@ -10,6 +10,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.RepositoryContentsRepository;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 @Component
@@ -48,5 +49,6 @@ public class ImporterFromGit {
 			}
 			
 		}
+		((ConfigurableApplicationContext)context).close();
 	}
 }

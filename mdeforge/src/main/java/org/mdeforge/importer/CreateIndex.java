@@ -2,6 +2,7 @@ package org.mdeforge.importer;
 
 import org.mdeforge.business.EcoreMetamodelService;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CreateIndex {
@@ -11,5 +12,6 @@ public class CreateIndex {
 		EcoreMetamodelService ec = context
 				.getBean(EcoreMetamodelService.class);
 		ec.createIndex();
+		((ConfigurableApplicationContext)context).close();
 	}
 }

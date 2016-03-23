@@ -15,8 +15,6 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 
 import transML.exceptions.transException;
-import anatlyzer.evaluation.report.Report;
-import anatlyzer.evaluation.report.ReportConsole;
 
 public interface ATLTransformationService extends CRUDArtifactService<ATLTransformation>, MetricProvider {	
 	List<Model> execute(ATLTransformation transformation, List<Model> models, User user) throws ATLExecutionException, ATLCoreException;

@@ -1,17 +1,10 @@
 package org.mdeforge.models2015;
 
-import java.util.List;
-
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mdeforge.business.model.ATLTransformation;
-import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.ConformToRelation;
-import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.client.ATLTransformationService;
 import org.mdeforge.client.EcoreMetamodelService;
 import org.mdeforge.client.ModelService;

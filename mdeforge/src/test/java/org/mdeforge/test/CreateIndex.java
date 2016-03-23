@@ -1,20 +1,12 @@
 package org.mdeforge.test;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.eclipse.egit.github.core.Repository;
-import org.eclipse.egit.github.core.RepositoryContents;
-import org.eclipse.egit.github.core.service.ContentsService;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.importer.EcoreMetamodelImporterSevice;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.importer.Content;
-import org.mdeforge.business.model.importer.GitHubRate;
-import org.mdeforge.business.model.importer.SearchCodeResult;
 import org.mdeforge.integration.RepositoryContentsRepository;
 import org.mdeforge.integration.RepositoryRepository;
 import org.mdeforge.integration.SearchCodeResultRepository;

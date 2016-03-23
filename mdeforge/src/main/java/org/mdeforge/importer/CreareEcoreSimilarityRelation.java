@@ -6,6 +6,7 @@ import java.util.List;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class CreareEcoreSimilarityRelation {
@@ -31,5 +32,6 @@ public class CreareEcoreSimilarityRelation {
 			}
 		}
 		System.out.println("end time: " + new Date());
+		((ConfigurableApplicationContext)context).close();
 	}
 }

@@ -1,17 +1,10 @@
 package org.mdeforge.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mdeforge.business.model.ATLTransformation;
-import org.mdeforge.business.model.ETLTransformation;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Workspace;
 
 public class ProjectTest {
 
