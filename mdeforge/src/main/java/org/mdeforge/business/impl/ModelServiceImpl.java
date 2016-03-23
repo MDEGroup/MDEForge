@@ -34,7 +34,9 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.search.ResourceSerializer;
+import org.mdeforge.business.search.Tokenizer;
+import org.mdeforge.business.search.WeightedContents;
+import org.mdeforge.business.search.WeightedResourceSerializer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.EcoreMetamodelRepository;
@@ -49,7 +51,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -130,7 +131,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		EcoreMetamodel mmID = emm;
 		Model result = super.create(artifact);
 		try {
-			result.setExtractedContents(extractedContent(result));
+			this.extractedContent(result);
 			modelRepository.save(result);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -143,7 +144,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		operations.indexOps(Artifact.class).ensureIndex(textIndex);
 	}
 	@Override
-	public String extractedContent(Model art) {
+	public void extractedContent(Model art) {
 		//EcoreMetamodel mmID, 
 //		String sourceURI,
 		//	String mongoURI
@@ -180,7 +181,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 
 		res.getContents().addAll(cs);
 
-		String contents = ResourceSerializer.serialize(res);
+		WeightedContents ws = WeightedResourceSerializer.serialize(load_resource);
+		art.setNameForIndex(Tokenizer.tokenizeString(art.getName()));
+		art.setDescriptionForIndex(Tokenizer.tokenizeString(art.getDescription()));
+		art.setWeightedContentsThree(ws.getWeightedContentsThree());
+		art.setWeightedContentsTwo(ws.getWeightedContentsTwo());
+		art.setWeightedContentsOne(ws.getWeightedContentsOne());
+		art.setDefaultWeightedContents(ws.getDefaultContents());
 
 		try {
 			res.save(null);
@@ -188,8 +195,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			e.printStackTrace();
 			throw new BusinessException();
 		}
-
-		return contents;
 	}
 
 	@Override

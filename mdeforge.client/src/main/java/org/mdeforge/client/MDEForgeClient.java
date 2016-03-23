@@ -161,7 +161,7 @@ public abstract class MDEForgeClient {
 		
 	}
 	public String createIndex() throws Exception{
-		String result = doGetRequest(connectionUrl+"api/artifact/createIndex");
+		String result = doGetRequest(connectionUrl+"api/Artifact/createIndex");
 		return result;
 	}
 }

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emfjson.common.EObjects;
 import org.mdeforge.business.BusinessException;
 
@@ -31,30 +32,6 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 
 public class ResourceSerializer {
-
-	private static String tokenizeString(String string) {
-		String result = "";
-		ArrayList<String> arrayString = new ArrayList<String>(
-				Arrays.asList(string.split("\\s+")));
-		ArrayList<String> tokenizedArrayString = new ArrayList<String>(
-				Arrays.asList(Iterables.toArray(
-						Splitter.on(CharMatcher.anyOf(";,._- "))
-								.trimResults()
-								.omitEmptyStrings()
-								.split(CaseFormat.UPPER_CAMEL.to(
-										CaseFormat.LOWER_UNDERSCORE,
-										string.replaceAll("\\P{Alpha}", ""))),
-						String.class)));
-		arrayString.addAll(tokenizedArrayString);
-
-		String[] finalArrayString = new HashSet<String>(arrayString)
-				.toArray(new String[0]);
-		for (String s : finalArrayString) {
-			result += s + " ";
-		}
-
-		return result.trim();
-	}
 
 	public static String serialize(Resource resource) throws BusinessException {
 		String contentsString = "";
@@ -77,13 +54,13 @@ public class ResourceSerializer {
 			}
 		}
 
-		//return contentsString;
-		return tokenizeString(contentsString);
+		return Tokenizer.tokenizeString(contentsString);
 	}
 
 	public static String serialize(String contentsString, EObject object)
 			throws IOException {
 		final EClass eClass = object.eClass();
+		
 		final List<EAttribute> attributes = eClass.getEAllAttributes();
 		final List<EReference> references = eClass.getEAllReferences();
 
@@ -96,7 +73,7 @@ public class ResourceSerializer {
 					contentsString = serializeFeatureMap(contentsString,
 							attribute, object);
 				} else {
-					contentsString = Values.serialize(contentsString, key,
+					contentsString = serializeValues(contentsString, key,
 							attribute, value);
 				}
 			}
@@ -130,17 +107,14 @@ public class ResourceSerializer {
 			Collection<Map.Entry<String, String>> entries = (Collection<Entry<String, String>>) value;
 
 			for (Map.Entry<String, String> entry : entries) {
-				contentsString = Values.addContent(contentsString,
-						entry.getKey());
-				contentsString = Values.addContent(contentsString,
-						entry.getValue());
+				contentsString += entry.getKey() + " ";
+				contentsString += entry.getValue() + " ";
 			}
 		} else {
 			@SuppressWarnings("unchecked")
 			Map.Entry<String, String> entry = (Entry<String, String>) value;
-			contentsString = Values.addContent(contentsString, entry.getKey());
-			contentsString = Values
-					.addContent(contentsString, entry.getValue());
+			contentsString += entry.getKey() + " ";
+			contentsString += entry.getValue() + " ";
 		}
 
 		return contentsString;
@@ -156,7 +130,7 @@ public class ResourceSerializer {
 			final String key = feature.getName();
 
 			if (feature instanceof EAttribute) {
-				contentsString = Values.serialize(contentsString, key,
+				contentsString = serializeValues(contentsString, key,
 						(EAttribute) feature, value);
 			} else {
 				final EReference reference = (EReference) feature;
@@ -234,5 +208,70 @@ public class ResourceSerializer {
 			}
 			System.out.println();
 		}
+	}
+	
+	// ==========================================================================
+	public static String serializeValues(String contentsString, String key, EAttribute attribute, Object value) {
+		final EDataType type = attribute.getEAttributeType();
+
+		if (attribute.isMany()) {
+			contentsString = serializeMany(contentsString, key, type, (Collection<?>) value);
+		} else {
+			contentsString = serializeValue(contentsString, key, type, value);
+		}
+		
+		return contentsString;
+	}
+
+	public static String serializeMany(String contentsString, String key, EDataType type, Collection<?> values) {
+		try {
+			for (Object value: values) {
+				contentsString = writeValue(contentsString, type, value);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return contentsString;
+	}
+
+	public static String serializeValue(String contentsString, String key, EDataType type, Object value) {
+		try {
+			contentsString = writeValue(contentsString, type, value);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return contentsString;
+	}
+
+	private static String writeValue(String contentsString, EDataType type, Object value) throws IOException {
+
+		if (value instanceof String) {
+			contentsString += " " + value;
+		}
+		else if (value instanceof Integer) {
+			
+		}
+		else if (value instanceof Boolean) {
+			
+		}
+		else if (value instanceof Double) {
+			
+		}
+		else if (value instanceof Long) {
+			
+		}
+		else if (value instanceof Short) {
+			
+		}
+		else if (value instanceof Float) {
+			
+		}
+		else {
+			//contentsString = addContent(contentsString, convertToString(type, value));
+		}
+		
+		return contentsString;
 	}
 }

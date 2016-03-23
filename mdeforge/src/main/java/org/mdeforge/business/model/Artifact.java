@@ -51,7 +51,60 @@ public class Artifact implements java.io.Serializable{
 	private List<String> tags = null;
 	private String authors = null;
 	private String version = null;
-	private String extractedContents = null;
+	private String nameForIndex = null;
+	private String descriptionForIndex = null;
+	private String weightedContentsThree = null;
+	private String weightedContentsTwo = null;
+	private String weightedContentsOne = null;
+	private String defaultWeightedContents = null;
+
+	public String getNameForIndex() {
+		return nameForIndex;
+	}
+
+	public void setNameForIndex(String nameForIndex) {
+		this.nameForIndex = nameForIndex;
+	}
+
+	public String getDescriptionForIndex() {
+		return descriptionForIndex;
+	}
+
+	public void setDescriptionForIndex(String descriptionForIndex) {
+		this.descriptionForIndex = descriptionForIndex;
+	}
+
+	public String getWeightedContentsThree() {
+		return weightedContentsThree;
+	}
+
+	public void setWeightedContentsThree(String weightedContentsThree) {
+		this.weightedContentsThree = weightedContentsThree;
+	}
+
+	public String getWeightedContentsTwo() {
+		return weightedContentsTwo;
+	}
+
+	public void setWeightedContentsTwo(String weightedContentsTwo) {
+		this.weightedContentsTwo = weightedContentsTwo;
+	}
+
+	public String getWeightedContentsOne() {
+		return weightedContentsOne;
+	}
+
+	public void setWeightedContentsOne(String weightedContentsOne) {
+		this.weightedContentsOne = weightedContentsOne;
+	}
+
+	public String getDefaultWeightedContents() {
+		return defaultWeightedContents;
+	}
+
+	public void setDefaultWeightedContents(String defaultWeightedContents) {
+		this.defaultWeightedContents = defaultWeightedContents;
+	}
 
 	public Float getScore() {
 		return score;
@@ -271,10 +324,6 @@ public class Artifact implements java.io.Serializable{
 		this.tags = tags;
 	}
 
-	public String getExtractedContents() {
-		return extractedContents;
-	}
-
 	@Override
 	public boolean equals(Object obj) {
 		try {
@@ -282,9 +331,5 @@ public class Artifact implements java.io.Serializable{
 		} catch (Exception e) {
 			return false;
 		}
-	}
-
-	public void setExtractedContents(String extractedContents) {
-		this.extractedContents = extractedContents;
 	}
 }

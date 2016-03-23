@@ -106,7 +106,7 @@ public class ArtifactRESTController {
 	public @ResponseBody HttpEntity<ArtifactList> orderedSearch(@PathVariable("text") String text) {
 		try {
 			SearchProvider searchProvider = (SearchProvider) artifactService;
-			ArtifactList list = new ArtifactList(searchProvider.orederedSearch(text));
+			ArtifactList list = new ArtifactList(searchProvider.search(text));
 			
 			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 		} catch (BusinessException e) {

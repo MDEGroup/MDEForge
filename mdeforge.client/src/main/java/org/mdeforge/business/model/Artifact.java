@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.mdeforge.business.model.serializer.json.ProjectListSerializer;
-import org.mdeforge.business.model.serializer.json.RelationListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
@@ -42,7 +41,12 @@ public class Artifact implements java.io.Serializable{
 	private List<String> tags = null;
 	private String authors = null;
 	private String version = null;
-	private String extractedContents = null;
+	private String nameForIndex = null;
+	private String descriptionForIndex = null;
+	private String weightedContentsThree = null;
+	private String weightedContentsTwo = null;
+	private String weightedContentsOne = null;
+	private String defaultWeightedContents = null;
 
 //	private @TextIndexed(weight=5) String authors = null;
 //	private @TextIndexed(weight=7) List<String> tags = null;
@@ -252,17 +256,55 @@ public class Artifact implements java.io.Serializable{
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-
-
-
-	public String getExtractedContents() {
-		return extractedContents;
-	}
-
-	public void setExtractedContents(String extractedContents) {
-		this.extractedContents = extractedContents;
-	}
 	
+	public String getNameForIndex() {
+		return nameForIndex;
+	}
+
+	public void setNameForIndex(String nameForIndex) {
+		this.nameForIndex = nameForIndex;
+	}
+
+	public String getDescriptionForIndex() {
+		return descriptionForIndex;
+	}
+
+	public void setDescriptionForIndex(String descriptionForIndex) {
+		this.descriptionForIndex = descriptionForIndex;
+	}
+
+	public String getWeightedContentsThree() {
+		return weightedContentsThree;
+	}
+
+	public void setWeightedContentsThree(String weightedContentsThree) {
+		this.weightedContentsThree = weightedContentsThree;
+	}
+
+	public String getWeightedContentsTwo() {
+		return weightedContentsTwo;
+	}
+
+	public void setWeightedContentsTwo(String weightedContentsTwo) {
+		this.weightedContentsTwo = weightedContentsTwo;
+	}
+
+	public String getWeightedContentsOne() {
+		return weightedContentsOne;
+	}
+
+	public void setWeightedContentsOne(String weightedContentsOne) {
+		this.weightedContentsOne = weightedContentsOne;
+	}
+
+	public String getDefaultWeightedContents() {
+		return defaultWeightedContents;
+	}
+
+	public void setDefaultWeightedContents(String defaultWeightedContents) {
+		this.defaultWeightedContents = defaultWeightedContents;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub

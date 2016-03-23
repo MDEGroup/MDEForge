@@ -796,8 +796,8 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public String extractedContent(ATLTransformation artifact) {
-		return null;
+	public void extractedContent(ATLTransformation artifact) {
+		
 	}
 
 	@Override

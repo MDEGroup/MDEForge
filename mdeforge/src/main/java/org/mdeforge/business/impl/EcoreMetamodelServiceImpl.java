@@ -73,10 +73,8 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.MetricEngineException;
-import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
-import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
@@ -96,6 +94,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.SimilarityMethods;
+import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
@@ -112,17 +111,17 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
+import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
+import anatlyzer.atl.util.ATLSerializer;
+import anatlyzer.atlext.ATL.ATLPackage;
+import anatlyzer.atlext.OCL.OclExpression;
+
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;
-
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atlext.ATL.ATLPackage;
-import anatlyzer.atlext.OCL.OclExpression;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
@@ -174,10 +173,10 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		artifact.setValid(isValid(artifact));
-		String path = gridFileMediaService.getFilePath(artifact);
 		EcoreMetamodel result = super.create(artifact);
+		
 		try {
-			artifact.setExtractedContents(extractedContent(result));
+			this.extractedContent(result);
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
 			throw new ExtractContentEngineException(e.getMessage(),
@@ -200,8 +199,12 @@ public class EcoreMetamodelServiceImpl extends
 		operations.indexOps(Artifact.class).ensureIndex(textIndex);
 	}
 	@Override
-	public String extractedContent(EcoreMetamodel art)
+	public void extractedContent(EcoreMetamodel art)
 			throws BusinessException {
+
+		art.setNameForIndex(Tokenizer.tokenizeString(art.getName()));
+		art.setDescriptionForIndex(Tokenizer.tokenizeString(art.getDescription()));
+		
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 		load_resourceSet.getResourceFactoryRegistry()
 				.getExtensionToFactoryMap()
@@ -210,7 +213,7 @@ public class EcoreMetamodelServiceImpl extends
 				URI.createURI(gridFileMediaService.getFilePath(art)), true);
 
 		EList<EObject> contents = load_resource.getContents();
-		String result = ResourceSerializer.serialize(load_resource);
+		art.setDefaultWeightedContents(ResourceSerializer.serialize(load_resource));
 		// TODO handle connection
 		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
 				+ "/" + mongoDbFactory.getDb().getName() + "/"
@@ -225,7 +228,6 @@ public class EcoreMetamodelServiceImpl extends
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
-		return result;
 	}
 
 	@Override

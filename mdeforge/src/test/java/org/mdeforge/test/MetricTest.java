@@ -93,7 +93,7 @@ public class MetricTest {
 				.findAllPublic();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodelList) {
 			String serializedContext = ecoreMetamodelService.serializeContent(ecoreMetamodel);		
-			ecoreMetamodel.setExtractedContents(serializedContext);
+			ecoreMetamodel.setDefaultWeightedContents(serializedContext);
 			ecoreMetamodelService.updateSimple(ecoreMetamodel);
 			System.out.println(ecoreMetamodel.getName());
 		}

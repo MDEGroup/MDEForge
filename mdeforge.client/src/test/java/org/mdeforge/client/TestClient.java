@@ -13,6 +13,8 @@ import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Workspace;
 
+import java.io.File;
+
 public class TestClient {
 
 	private static ModelService modelService;
@@ -103,39 +105,72 @@ public class TestClient {
 			e.printStackTrace();
 		}
 	}
-	@Ignore
+
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
 			EcoreMetamodel emm = new EcoreMetamodel();
-			emm.setName("Prova Salvi 3");
-			List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
-			emm.setTags(tags);
-			emm.setDescription("Describes the basic structure of a general Relational DB");
-			emm.setAuthors("Metamodels Authors");
-			ecoreMetamodelService.addEcoreMetamodel(emm, "antonioTemp/Database.ecore");
+			emm.setName("BookStore2");
+//			List<String> tags = Arrays.asList("DB, DataBase, Relational".split(","));
+//			emm.setTags(tags);
+			emm.setDescription("Describes the basic structure of a book store");
+			emm.setAuthors("Antonio Salvi");
+			ecoreMetamodelService.addEcoreMetamodel(emm, "temp/trashTemp/bookStore.ecore");
 			System.out.println("Metamodel Saved!!!");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
+	@Ignore
 	@Test
 	public void testAddModel(){
 		try {
-			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56aa153077c857d719eb3bdf");
+			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56e40913e4b044537d4d50bd");
 			Model m = new Model();
-			m.setName("ModelSalvi");
-			List<String> tags = Arrays.asList("DB, Data, DataBase, Data Base, Relational".split(","));
-			m.setTags(tags);
-			m.setDescription("Rapresent a model of a general Relational DB");
-			m.setAuthors("Models Authors");
+			m.setName("FirstLibrary");
+//			List<String> tags = Arrays.asList("DB, Data, DataBase, Data Base, Relational".split(","));
+//			m.setTags(tags);
+//			m.setDescription("Rapresent a model of a general Relational DB");
+			m.setAuthors("Antonio Salvi");
 			ConformToRelation rel = new ConformToRelation();
 			rel.setFromArtifact(m);
 			rel.setToArtifact(mm);
 			m.getRelations().add(rel);
-			modelService.addModel(m, "antonioTemp/My.database");
+			modelService.addModel(m, "temp/trashTemp/bookStore.xml");
 			System.out.println("Model Saved!!!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testAddModels(){
+		try {
+			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56e404f3e4b044537d4d4f76");
+			
+			File modelsDirectory = new File("/home/majacdg/git/MDEForge/mdeforge.client/temp/ReVO");
+			if (modelsDirectory.isDirectory())
+				for (File file : modelsDirectory.listFiles()){
+					String fileName = file.getName();
+					String[] array1 = fileName.split("_");
+					String name1 = array1[2];
+					String[] array2 = name1.split("\\$");
+					String name = array2[0];
+
+					Model m = new Model();
+					m.setName(name);
+					m.setAuthors("Fabiano Izzo");
+					ConformToRelation rel = new ConformToRelation();
+					rel.setFromArtifact(m);
+					rel.setToArtifact(mm);
+					m.getRelations().add(rel);
+					modelService.addModel(m, file.getAbsolutePath());
+					System.out.println(name + " Saved!!!");
+				}
+			System.out.println("THE END");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -145,24 +180,27 @@ public class TestClient {
 	@Test
 	public void testLoadJsonMetamodel(){
 		try {
-			String json = ecoreMetamodelService.getEcoreMetamodelJsonFormat("56aa153077c857d719eb3bdf");
+			String json = ecoreMetamodelService.getEcoreMetamodelJsonFormat("56b98728e4b0a5cd5984305b");
 			System.out.println(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Ignore
 	@Test
 	public void testSearch(){
 		try {
-			List<Artifact> artifacts = ecoreMetamodelService.orderedSearch("data");
-			printArtifacts(artifacts);
+			List<Artifact> artifacts = ecoreMetamodelService.orderedSearch("context");
+			if (artifacts.size()>0)
+				printArtifacts(artifacts);
+			else
+				System.out.println("No Results");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Ignore
 	@Test
 	public void testCreateIndex(){
