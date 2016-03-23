@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-102:2" name="SoftwareQualityControl2Bugzilla">
+    <inModels location="2:28-2:55" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:22" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="9:1-25:8">
+      <commentsBefore>-- This helper permits to convert the status value of a bug </commentsBefore>
+      <commentsBefore>-- in a right Bugzilla status type value. </commentsBefore>
+      <commentsBefore>-- CONTEXT: n/a</commentsBefore>
+      <commentsBefore>-- RETURN: Bugzilla!StatusType</commentsBefore>
+      <commentsAfter>-- Rule 'BugTracking2BugzillaRoot'</commentsAfter>
+      <commentsAfter>-- This rule generates the root of the Bugzilla output model</commentsAfter>
+      <commentsAfter>-- if a BugTracking element exists in the input model</commentsAfter>
+      <definition location="9:8-25:7">
+        <feature xsi:type="ocl:Operation" location="9:13-25:7" name="convertStatus">
+          <parameters location="9:27-9:68" varName="bs" variableExp="/0/@elements.0/@definition/@feature/@body/@condition/@source /0/@elements.0/@definition/@feature/@body/@elseExpression/@condition/@source /0/@elements.0/@definition/@feature/@body/@elseExpression/@elseExpression/@condition/@source">
+            <type xsi:type="ocl:OclModelElement" location="9:32-9:68" name="BugStatusType" model="/3"/>
+          </parameters>
+          <returnType xsi:type="ocl:OclModelElement" location="9:73-9:92" name="StatusType" model="/4"/>
+          <body xsi:type="ocl:IfExp" location="10:2-25:7">
+            <thenExpression xsi:type="ocl:EnumLiteralExp" location="12:3-12:10" name="st_new"/>
+            <condition xsi:type="ocl:OperatorCallExp" location="10:5-10:19" operationName="=">
+              <source xsi:type="ocl:VariableExp" location="10:5-10:7" referredVariable="/0/@elements.0/@definition/@feature/@parameters.0"/>
+              <arguments xsi:type="ocl:EnumLiteralExp" location="10:10-10:19" name="bst_open"/>
+            </condition>
+            <elseExpression xsi:type="ocl:IfExp" location="14:3-24:8">
+              <thenExpression xsi:type="ocl:EnumLiteralExp" location="16:4-16:14" name="st_closed"/>
+              <condition xsi:type="ocl:OperatorCallExp" location="14:6-14:22" operationName="=">
+                <source xsi:type="ocl:VariableExp" location="14:6-14:8" referredVariable="/0/@elements.0/@definition/@feature/@parameters.0"/>
+                <arguments xsi:type="ocl:EnumLiteralExp" location="14:11-14:22" name="bst_closed"/>
+              </condition>
+              <elseExpression xsi:type="ocl:IfExp" location="18:4-23:9">
+                <thenExpression xsi:type="ocl:EnumLiteralExp" location="20:5-20:20" name="st_unconfirmed"/>
+                <condition xsi:type="ocl:OperatorCallExp" location="18:7-18:24" operationName="=">
+                  <source xsi:type="ocl:VariableExp" location="18:7-18:9" referredVariable="/0/@elements.0/@definition/@feature/@parameters.0"/>
+                  <arguments xsi:type="ocl:EnumLiteralExp" location="18:12-18:24" name="bst_skipped"/>
+                </condition>
+                <elseExpression xsi:type="ocl:EnumLiteralExp" location="22:5-22:12" name="st_new"/>
+              </elseExpression>
+            </elseExpression>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="32:1-44:2" name="BugTracking2BugzillaRoot">
+      <commentsBefore>-- Rule 'BugTracking2BugzillaRoot'</commentsBefore>
+      <commentsBefore>-- This rule generates the root of the Bugzilla output model</commentsBefore>
+      <commentsBefore>-- if a BugTracking element exists in the input model</commentsBefore>
+      <commentsAfter>-- Rule 'Bug2Bug'</commentsAfter>
+      <commentsAfter>-- This rule generates a bug in Bugzilla for each</commentsAfter>
+      <commentsAfter>-- bug reported in the BugTracking element.</commentsAfter>
+      <outPattern location="36:2-43:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="37:3-43:4" varName="br">
+          <type xsi:type="ocl:OclModelElement" location="37:8-37:29" name="BugzillaRoot" model="/6"/>
+          <bindings location="38:4-38:17" propertyName="version">
+            <value xsi:type="ocl:StringExp" location="38:15-38:17" stringSymbol=""/>
+          </bindings>
+          <bindings location="39:4-39:17" propertyName="urlbase">
+            <value xsi:type="ocl:StringExp" location="39:15-39:17" stringSymbol=""/>
+          </bindings>
+          <bindings location="40:4-40:20" propertyName="maintainer">
+            <value xsi:type="ocl:StringExp" location="40:18-40:20" stringSymbol=""/>
+          </bindings>
+          <bindings location="42:4-42:65" propertyName="bugs">
+            <commentsBefore>--exporter &lt;- '',</commentsBefore>
+            <value xsi:type="ocl:IteratorExp" location="42:12-42:65" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="42:12-42:19" name="bugs">
+                <source xsi:type="ocl:VariableExp" location="42:12-42:14" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="42:33-42:64" operationName="resolveTemp">
+                <source xsi:type="ocl:VariableExp" location="42:33-42:43" referredVariable="/7"/>
+                <arguments xsi:type="ocl:VariableExp" location="42:56-42:57" referredVariable="/0/@elements.1/@outPattern/@elements.0/@bindings.3/@value/@iterators.0"/>
+                <arguments xsi:type="ocl:StringExp" location="42:59-42:63" stringSymbol="bb"/>
+              </body>
+              <iterators location="42:29-42:30" varName="e" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.3/@value/@body/@arguments.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="33:2-34:42">
+        <elements xsi:type="atl:SimpleInPatternElement" location="34:3-34:42" varName="bt" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.3/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="34:8-34:42" name="BugTracking" model="/5"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="50:1-102:2" name="Bug2Bug">
+      <commentsBefore>-- Rule 'Bug2Bug'</commentsBefore>
+      <commentsBefore>-- This rule generates a bug in Bugzilla for each</commentsBefore>
+      <commentsBefore>-- bug reported in the BugTracking element.</commentsBefore>
+      <outPattern location="54:2-101:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="55:3-92:4" varName="bb">
+          <type xsi:type="ocl:OclModelElement" location="55:8-55:20" name="Bug" model="/9"/>
+          <bindings location="57:4-57:35" propertyName="bug_id">
+            <commentsBefore>--error &lt;- Bugzilla!ErrorType,</commentsBefore>
+            <value xsi:type="ocl:OperationCallExp" location="57:14-57:35" operationName="toString">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="57:14-57:24" name="number">
+                <source xsi:type="ocl:VariableExp" location="57:14-57:17" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="58:4-58:18" propertyName="exporter">
+            <value xsi:type="ocl:StringExp" location="58:16-58:18" stringSymbol=""/>
+          </bindings>
+          <bindings location="59:4-59:17" propertyName="urlbase">
+            <value xsi:type="ocl:StringExp" location="59:15-59:17" stringSymbol=""/>
+          </bindings>
+          <bindings location="60:4-60:54" propertyName="bug_status">
+            <value xsi:type="ocl:OperationCallExp" location="60:18-60:54" operationName="convertStatus">
+              <source xsi:type="ocl:VariableExp" location="60:18-60:28" referredVariable="/10"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="60:43-60:53" name="status">
+                <source xsi:type="ocl:VariableExp" location="60:43-60:46" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="62:4-62:17" propertyName="product">
+            <commentsBefore>--resolution &lt;- Bugzilla!ResolutionType,</commentsBefore>
+            <value xsi:type="ocl:StringExp" location="62:15-62:17" stringSymbol=""/>
+          </bindings>
+          <bindings location="63:4-63:22" propertyName="priority">
+            <value xsi:type="ocl:EnumLiteralExp" location="63:16-63:22" name="pt_P1"/>
+          </bindings>
+          <bindings location="64:4-64:35" propertyName="version">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="64:15-64:35" name="componentVersion">
+              <source xsi:type="ocl:VariableExp" location="64:15-64:18" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="65:4-65:28" propertyName="rep_platform">
+            <value xsi:type="ocl:EnumLiteralExp" location="65:20-65:28" name="rpt_all"/>
+          </bindings>
+          <bindings location="66:4-70:13" propertyName="assigned_to">
+            <value xsi:type="ocl:LetExp" location="66:19-70:13">
+              <variable location="66:23-66:51" varName="v" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@in_/@condition/@source /0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@in_/@elseExpression">
+                <type xsi:type="ocl:StringType" location="66:27-66:33"/>
+                <initExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="66:36-66:51" name="responsible">
+                  <source xsi:type="ocl:VariableExp" location="66:36-66:39" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:IfExp" location="67:8-70:13">
+                <thenExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="68:13-68:53" name="responsible">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="68:13-68:41" name="ct_control">
+                    <source xsi:type="ocl:NavigationOrAttributeCallExp" location="68:13-68:30" name="b_bugTracking">
+                      <source xsi:type="ocl:VariableExp" location="68:13-68:16" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                    </source>
+                  </source>
+                </thenExpression>
+                <condition xsi:type="ocl:OperationCallExp" location="67:11-67:29" operationName="oclIsUndefined">
+                  <source xsi:type="ocl:VariableExp" location="67:11-67:12" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@variable"/>
+                </condition>
+                <elseExpression xsi:type="ocl:VariableExp" location="69:13-69:14" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@variable"/>
+              </in_>
+            </value>
+          </bindings>
+          <bindings location="71:4-75:13" propertyName="delta_ts">
+            <value xsi:type="ocl:LetExp" location="71:16-75:13">
+              <variable location="71:20-71:46" varName="v" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.9/@value/@in_/@condition/@source /0/@elements.2/@outPattern/@elements.0/@bindings.9/@value/@in_/@elseExpression">
+                <type xsi:type="ocl:StringType" location="71:24-71:30"/>
+                <initExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="71:33-71:46" name="closeDate">
+                  <source xsi:type="ocl:VariableExp" location="71:33-71:36" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:IfExp" location="72:8-75:13">
+                <thenExpression xsi:type="ocl:StringExp" location="73:13-73:15" stringSymbol=""/>
+                <condition xsi:type="ocl:OperationCallExp" location="72:11-72:29" operationName="oclIsUndefined">
+                  <source xsi:type="ocl:VariableExp" location="72:11-72:12" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.9/@value/@variable"/>
+                </condition>
+                <elseExpression xsi:type="ocl:VariableExp" location="74:13-74:14" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.9/@value/@variable"/>
+              </in_>
+            </value>
+          </bindings>
+          <bindings location="76:4-76:54" propertyName="component">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="76:16-76:54" name="component">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="76:16-76:44" name="ct_control">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="76:16-76:33" name="b_bugTracking">
+                  <source xsi:type="ocl:VariableExp" location="76:16-76:19" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="77:4-77:30" propertyName="reporter">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="77:16-77:30" name="originator">
+              <source xsi:type="ocl:VariableExp" location="77:16-77:19" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="78:4-78:30" propertyName="target_milestone">
+            <value xsi:type="ocl:StringType" location="78:24-78:30"/>
+          </bindings>
+          <bindings location="79:4-79:30" propertyName="bug_severity">
+            <value xsi:type="ocl:EnumLiteralExp" location="79:20-79:30" name="st_normal"/>
+          </bindings>
+          <bindings location="80:4-80:31" propertyName="creation_ts">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="80:19-80:31" name="openDate">
+              <source xsi:type="ocl:VariableExp" location="80:19-80:22" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="81:4-81:58" propertyName="qa_contact">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="81:18-81:58" name="responsible">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="81:18-81:46" name="ct_control">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="81:18-81:35" name="b_bugTracking">
+                  <source xsi:type="ocl:VariableExp" location="81:18-81:21" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                </source>
+              </source>
+            </value>
+          </bindings>
+          <bindings location="83:4-83:22" propertyName="op_sys">
+            <commentsBefore>--status_whiteboard &lt;- '',</commentsBefore>
+            <value xsi:type="ocl:EnumLiteralExp" location="83:14-83:22" name="ost_all"/>
+          </bindings>
+          <bindings location="84:4-84:26" propertyName="bug_file_loc">
+            <commentsBefore>-- #&quot;ost_Windows XP&quot;</commentsBefore>
+            <value xsi:type="ocl:StringType" location="84:20-84:26"/>
+          </bindings>
+          <bindings location="85:4-85:33" propertyName="short_desc">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="85:18-85:33" name="description">
+              <source xsi:type="ocl:VariableExp" location="85:18-85:21" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="86:4-86:26" propertyName="keywords">
+            <value xsi:type="ocl:SequenceExp" location="86:16-86:26"/>
+          </bindings>
+          <bindings location="87:4-87:27" propertyName="dependson">
+            <value xsi:type="ocl:SequenceExp" location="87:17-87:27"/>
+          </bindings>
+          <bindings location="88:4-88:24" propertyName="blocks">
+            <value xsi:type="ocl:SequenceExp" location="88:14-88:24"/>
+          </bindings>
+          <bindings location="89:4-89:20" propertyName="cc">
+            <value xsi:type="ocl:SequenceExp" location="89:10-89:20"/>
+          </bindings>
+          <bindings location="90:4-90:35" propertyName="long_desc">
+            <value xsi:type="ocl:VariableExp" location="90:17-90:35" referredVariable="/0/@elements.2/@outPattern/@elements.1"/>
+          </bindings>
+          <bindings location="91:4-91:28" propertyName="attachment">
+            <value xsi:type="ocl:SequenceExp" location="91:18-91:28"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="93:3-101:4" varName="commentsAndAnswers" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.23/@value">
+          <type xsi:type="ocl:OclModelElement" location="93:24-93:41" name="LongDesc" model="/11"/>
+          <bindings location="94:4-94:25" propertyName="who">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="94:11-94:25" name="originator">
+              <source xsi:type="ocl:VariableExp" location="94:11-94:14" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="95:4-95:28" propertyName="bug_when">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="95:16-95:28" name="openDate">
+              <source xsi:type="ocl:VariableExp" location="95:16-95:19" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="96:4-100:12" propertyName="thetext">
+            <value xsi:type="ocl:LetExp" location="96:15-100:12">
+              <variable location="96:19-96:51" varName="v" variableExp="/0/@elements.2/@outPattern/@elements.1/@bindings.2/@value/@in_/@condition/@source /0/@elements.2/@outPattern/@elements.1/@bindings.2/@value/@in_/@elseExpression">
+                <type xsi:type="ocl:StringType" location="96:23-96:29"/>
+                <initExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="96:32-96:51" name="commentsAnswers">
+                  <source xsi:type="ocl:VariableExp" location="96:32-96:35" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:IfExp" location="97:7-100:12">
+                <thenExpression xsi:type="ocl:StringExp" location="98:12-98:14" stringSymbol=""/>
+                <condition xsi:type="ocl:OperationCallExp" location="97:10-97:28" operationName="oclIsUndefined">
+                  <source xsi:type="ocl:VariableExp" location="97:10-97:11" referredVariable="/0/@elements.2/@outPattern/@elements.1/@bindings.2/@value/@variable"/>
+                </condition>
+                <elseExpression xsi:type="ocl:VariableExp" location="99:12-99:13" referredVariable="/0/@elements.2/@outPattern/@elements.1/@bindings.2/@value/@variable"/>
+              </in_>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="51:2-52:35">
+        <elements xsi:type="atl:SimpleInPatternElement" location="52:3-52:35" varName="bbt" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source/@source /0/@elements.2/@outPattern/@elements.0/@bindings.3/@value/@arguments.0/@source /0/@elements.2/@outPattern/@elements.0/@bindings.6/@value/@source /0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@variable/@initExpression/@source /0/@elements.2/@outPattern/@elements.0/@bindings.8/@value/@in_/@thenExpression/@source/@source/@source /0/@elements.2/@outPattern/@elements.0/@bindings.9/@value/@variable/@initExpression/@source /0/@elements.2/@outPattern/@elements.0/@bindings.10/@value/@source/@source/@source /0/@elements.2/@outPattern/@elements.0/@bindings.11/@value/@source /0/@elements.2/@outPattern/@elements.0/@bindings.14/@value/@source /0/@elements.2/@outPattern/@elements.0/@bindings.15/@value/@source/@source/@source /0/@elements.2/@outPattern/@elements.0/@bindings.18/@value/@source /0/@elements.2/@outPattern/@elements.1/@bindings.0/@value/@source /0/@elements.2/@outPattern/@elements.1/@bindings.1/@value/@source /0/@elements.2/@outPattern/@elements.1/@bindings.2/@value/@variable/@initExpression/@source">
+          <type xsi:type="ocl:OclModelElement" location="52:9-52:35" name="Bug" model="/8"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:22" name="Bugzilla" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:33-2:55" name="SoftwareQualityControl" model="/0/@inModels.0"/>
+  <ocl:OclModel location="9:32-9:54" name="SoftwareQualityControl" elements="/0/@elements.0/@definition/@feature/@parameters.0/@type"/>
+  <ocl:OclModel location="9:73-9:81" name="Bugzilla" elements="/0/@elements.0/@definition/@feature/@returnType"/>
+  <ocl:OclModel location="34:8-34:30" name="SoftwareQualityControl" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="37:8-37:16" name="Bugzilla" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="42:33-42:43" varName="thisModule" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.3/@value/@body/@source"/>
+  <ocl:OclModel location="52:9-52:31" name="SoftwareQualityControl" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="55:8-55:16" name="Bugzilla" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="60:18-60:28" varName="thisModule" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.3/@value/@source"/>
+  <ocl:OclModel location="93:24-93:32" name="Bugzilla" elements="/0/@elements.2/@outPattern/@elements.1/@type"/>
+</xmi:XMI>

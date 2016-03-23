@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="uwe"
+    nsURI="http://www.pst.ifi.lmu.de/projekte/uwe" nsPrefix="uwe">
+  <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="java.lang.Boolean"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.lang.Integer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UWEModel" abstract="true" eSuperTypes="//UML/Model"/>
+  <eSubpackages name="UML">
+    <eClassifiers xsi:type="ecore:EClass" name="Class">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+          eType="//UML/Property"
+          containment="true" eOpposite="//UML/Property/class"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Association"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Property">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="//UML/Class"
+          eOpposite="//UML/Class/ownedAttribute"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Model"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Actor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UseCase"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Activity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CallAction" abstract="true"/>
+  </eSubpackages>
+  <eSubpackages name="Core"/>
+  <eSubpackages name="Adaptivity"/>
+  <eSubpackages name="Content" nsURI="http://www.pst.ifi.lmu.de/projekte/uwe/content"
+      nsPrefix="uwe.content">
+    <eClassifiers xsi:type="ecore:EClass" name="ContentModel" eSuperTypes="//UWEModel"/>
+  </eSubpackages>
+  <eSubpackages name="Navigation" nsURI="http://www.pst.ifi.lmu.de/projekte/uwe/navigation"
+      nsPrefix="uwe.navigation">
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationClass" eSuperTypes="//Navigation/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigationProperty" upperBound="-1"
+          eType="//Navigation/NavigationProperty"
+          eOpposite="//Navigation/NavigationProperty/navigationClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="menus" upperBound="-1"
+          eType="//Navigation/Menu"
+          eOpposite="//Navigation/Menu/navigationClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contentClass" eType="//UML/Class"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="//UML/Class">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outLinks" upperBound="-1"
+          eType="//Navigation/Link"
+          eOpposite="//Navigation/Link/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inLinks" upperBound="-1"
+          eType="//Navigation/Link"
+          eOpposite="//Navigation/Link/target"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLandmark" lowerBound="1"
+          eType="ecore:DataType//Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHome" lowerBound="1"
+          eType="ecore:DataType//Boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Link" abstract="true" eSuperTypes="//UML/Association">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="//Navigation/Node"
+          eOpposite="//Navigation/Node/outLinks"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          upperBound="-1" eType="//Navigation/Node"
+          eOpposite="//Navigation/Node/inLinks"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAutomatic" lowerBound="1"
+          eType="ecore:DataType//Boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationProperty" eSuperTypes="//UML/Property">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigationClass" lowerBound="1"
+          eType="//Navigation/NavigationClass"
+          eOpposite="//Navigation/NavigationClass/navigationProperty"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contentProperty" eType="//UML/Property"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="selectionExpression"
+          eType="ecore:DataType//String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationLink" eSuperTypes="//Navigation/Link"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Menu" eSuperTypes="//Navigation/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigationClass" eType="//Navigation/NavigationClass"
+          eOpposite="//Navigation/NavigationClass/menus"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AccessPrimitive" abstract="true" eSuperTypes="//Navigation/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessedAttributes" upperBound="-1"
+          eType="//Navigation/NavigationProperty"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="//Navigation/AccessPrimitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="//Navigation/AccessPrimitive">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterExpression" eType="ecore:DataType//String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GuidedTour" eSuperTypes="//Navigation/AccessPrimitive">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sortExpression" eType="ecore:DataType//String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationModel" eSuperTypes="//UWEModel"/>
+  </eSubpackages>
+  <eSubpackages name="Presentation" nsURI="http://www.pst.ifi.lmu.de/projekte/uwe/presentation"
+      nsPrefix="uwe.presentation">
+    <eClassifiers xsi:type="ecore:EClass" name="PresentationElement" abstract="true"
+        eSuperTypes="//UML/Class"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UIElement" abstract="true" eSuperTypes="//Presentation/PresentationElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uiContainer" eType="//Presentation/UIContainer"
+          eOpposite="//Presentation/UIContainer/elements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PresentationClass" eSuperTypes="//Presentation/PresentationElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="//Navigation/Node"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="presentationProperty"
+          upperBound="-1" eType="//Presentation/PresentationProperty"
+          eOpposite="//Presentation/PresentationProperty/presentationClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="//Presentation/PresentationClass"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PresentationGroup" eSuperTypes="//Presentation/PresentationClass">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="//Presentation/PresentationProperty"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PresentationProperty" eSuperTypes="//UML/Property">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="presentationClass" lowerBound="1"
+          eType="//Presentation/PresentationClass"
+          eOpposite="//Presentation/PresentationClass/presentationProperty"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigationProperty" eType="//Navigation/NavigationProperty"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="presentationElement"
+          lowerBound="1" eType="//Presentation/PresentationElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UIContainer" abstract="true" eSuperTypes="//Presentation/UIElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="//Presentation/UIElement"
+          eOpposite="//Presentation/UIElement/uiContainer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Anchor" eSuperTypes="//Presentation/UIElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="anchoredcollection" lowerBound="1"
+          eType="//Presentation/AnchoredCollection"
+          eOpposite="//Presentation/AnchoredCollection/anchors"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="link" eType="//Navigation/Link"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="//Presentation/UIElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="//Presentation/UIElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiple" lowerBound="1"
+          eType="ecore:DataType//Boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Form" eSuperTypes="//Presentation/UIContainer"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AnchoredCollection" eSuperTypes="//Presentation/UIContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="anchors" lowerBound="1"
+          upperBound="-1" eType="//Presentation/Anchor"
+          eOpposite="//Presentation/Anchor/anchoredcollection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Button" eSuperTypes="//Presentation/UIElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TextInput" eSuperTypes="//Presentation/UIElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Image" eSuperTypes="//Presentation/UIElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PresentationModel" eSuperTypes="//UWEModel"/>
+  </eSubpackages>
+  <eSubpackages name="Process" nsURI="http://www.pst.ifi.lmu.de/projekte/uwe/process"
+      nsPrefix="uwe.process">
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessClass" eSuperTypes="//Navigation/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processProperty" upperBound="-1"
+          eType="//Process/ProcessProperty"
+          eOpposite="//Process/ProcessProperty/processClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processActivity" eType="//UML/Activity"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessLink" eSuperTypes="//Navigation/Link">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processClass" lowerBound="1"
+          upperBound="-1" eType="//Process/ProcessClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessProperty" eSuperTypes="//Navigation/NavigationProperty">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rangeExpression" eType="ecore:DataType//String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processClass" lowerBound="1"
+          eType="//Process/ProcessClass"
+          eOpposite="//Process/ProcessClass/processProperty"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessModel" eSuperTypes="//UWEModel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UserAction" eSuperTypes="//UML/CallAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processClass" lowerBound="1"
+          eType="//Process/ProcessClass"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Requirements" nsURI="http://www.pst.ifi.lmu.de/projekte/uwe/requirements"
+      nsPrefix="uwe.requirements">
+    <eClassifiers xsi:type="ecore:EClass" name="WebUser" eSuperTypes="//UML/Actor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRegistered" lowerBound="1"
+          eType="ecore:DataType//Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigations" upperBound="-1"
+          eType="//Requirements/Navigation"
+          eOpposite="//Requirements/Navigation/webUsers"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Navigation" eSuperTypes="//UML/UseCase">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="webUsers" lowerBound="1"
+          upperBound="-1" eType="//Requirements/WebUser"
+          eOpposite="//Requirements/WebUser/navigations"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="browses" upperBound="-1"
+          eType="//Requirements/Browse"
+          eOpposite="//Requirements/Browse/navigations"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WebProcess" eSuperTypes="//Requirements/Navigation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="userTransactions" lowerBound="1"
+          upperBound="-1" eType="//Requirements/UserTransaction"
+          eOpposite="//Requirements/UserTransaction/webProcesses"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Browse" eSuperTypes="//UML/Action">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="navigations" upperBound="-1"
+          eType="//Requirements/Navigation"
+          eOpposite="//Requirements/Navigation/browses"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="//Requirements/Node"
+          eOpposite="//Requirements/Node/outgoingBrowses"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="//Requirements/Node"
+          eOpposite="//Requirements/Node/incomingBrowses"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="//UML/Class">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingBrowses" upperBound="-1"
+          eType="//Requirements/Browse"
+          eOpposite="//Requirements/Browse/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="incomingBrowses" upperBound="-1"
+          eType="//Requirements/Browse"
+          eOpposite="//Requirements/Browse/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+          eType="//Requirements/Content"
+          eOpposite="//Requirements/Content/locations"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pages" lowerBound="1"
+          upperBound="-1" eType="//Requirements/WebUI"
+          eOpposite="//Requirements/WebUI/nodes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Search" eSuperTypes="//Requirements/Browse">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" lowerBound="1"
+          upperBound="-1" eType="//Requirements/Content"
+          eOpposite="//Requirements/Content/searches"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Content" eSuperTypes="//UML/Class">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="locations" upperBound="-1"
+          eType="//Requirements/Node"
+          eOpposite="//Requirements/Node/contents"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="searches" upperBound="-1"
+          eType="//Requirements/Search"
+          eOpposite="//Requirements/Search/parameters"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="userTransactions" upperBound="-1"
+          eType="//Requirements/UserTransaction"
+          eOpposite="//Requirements/UserTransaction/contents"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UserTransaction" eSuperTypes="//UML/Action">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="webProcesses" lowerBound="1"
+          upperBound="-1" eType="//Requirements/WebProcess"
+          eOpposite="//Requirements/WebProcess/userTransactions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contents" lowerBound="1"
+          upperBound="-1" eType="//Requirements/Content"
+          eOpposite="//Requirements/Content/userTransactions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WebUI" eSuperTypes="//UML/Class">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1"
+          upperBound="-1" eType="//Requirements/Node"
+          eOpposite="//Requirements/Node/pages"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RequirementsModel" eSuperTypes="//UWEModel"/>
+  </eSubpackages>
+</ecore:EPackage>

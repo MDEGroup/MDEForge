@@ -1,0 +1,67 @@
+-- @name	KM3 
+-- @version	1.1
+-- @domains	KM3 language
+-- @authors	Frédéric Jouault (frederic.jouault@univ-nantes.fr)
+-- @date	2004/11/01	
+-- @description	KM3, the Kernel MetaMetaModel, provides a textual concrete syntax that eases the coding of metamodels. Its syntax is simple, straight forward and has some similarities with the Java notation. KM3 resembles Ecore terminology and has the notion of package, class, attribute, reference and primitive datatype.
+-- @see		"KM3 User Manual", ATL Subproject, ATL Documentation Section, http://www.eclipse.org/gmt/
+		
+-- @nsURI KM3
+package KM3 {
+	abstract class LocatedElement {
+		attribute location : String;
+	}
+	
+	abstract class ModelElement extends LocatedElement {
+		attribute name : String;
+		reference "package" : Package oppositeOf contents;
+	}
+
+	class Classifier extends ModelElement {}
+
+	class DataType extends Classifier {}
+
+	class Enumeration extends Classifier {
+		reference literals[*] ordered container : EnumLiteral;
+	}
+
+	class EnumLiteral extends ModelElement {}
+
+	class Class extends Classifier {
+		attribute isAbstract : Boolean;
+		reference supertypes[*] : Class;
+		reference structuralFeatures[*] ordered container : StructuralFeature oppositeOf owner;
+	}
+
+	class StructuralFeature extends ModelElement {
+		attribute lower : Integer;
+		attribute upper : Integer;
+		attribute isOrdered : Boolean;
+		attribute isUnique : Boolean;
+		reference owner : Class oppositeOf structuralFeatures;
+		reference type : Classifier;
+	}
+
+	class Attribute extends StructuralFeature {}
+
+	class Reference extends StructuralFeature {
+		attribute isContainer : Boolean;
+		reference opposite[0-1] : Reference;
+	}
+
+	class Package extends ModelElement {
+		reference contents[*] ordered container : ModelElement oppositeOf "package";
+		reference metamodel : Metamodel oppositeOf contents;
+	}
+
+	class Metamodel extends LocatedElement {
+		reference contents[*] ordered container : Package oppositeOf metamodel;
+	}
+}
+
+package PrimitiveTypes {
+	datatype Boolean;
+	datatype Integer;
+	datatype String;
+}
+

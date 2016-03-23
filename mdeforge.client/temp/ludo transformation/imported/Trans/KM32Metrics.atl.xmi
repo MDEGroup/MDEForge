@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-304:2" name="KM32Metrics">
+    <inModels location="2:27-2:35" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:21" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="11:1-11:68">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- HELPERS --------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- This helper computes the set of all the Class elements of the input model.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Set(KM3!Class)</commentsBefore>
+      <commentsAfter>-- This helper computes the set of all the Reference elements of the input</commentsAfter>
+      <commentsAfter>-- model.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- RETURN:	Set(KM3!Reference)</commentsAfter>
+      <definition location="11:8-11:67">
+        <feature xsi:type="ocl:Attribute" location="11:13-11:67" name="allClasses">
+          <initExpression xsi:type="ocl:OperationCallExp" location="11:43-11:67" operationName="allInstances">
+            <source xsi:type="ocl:OclModelElement" location="11:43-11:52" name="Class" model="/4"/>
+          </initExpression>
+          <type xsi:type="ocl:SetType" location="11:26-11:40">
+            <elementType xsi:type="ocl:OclModelElement" location="11:30-11:39" name="Class" model="/3"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="17:1-17:79">
+      <commentsBefore>-- This helper computes the set of all the Reference elements of the input</commentsBefore>
+      <commentsBefore>-- model.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Set(KM3!Reference)</commentsBefore>
+      <commentsAfter>-- This helper computes the set of all the Class elements of the input model</commentsAfter>
+      <commentsAfter>-- that correspond to the root of the different inheritance trees.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- RETURN:	Set(KM3!Class)</commentsAfter>
+      <definition location="17:8-17:78">
+        <feature xsi:type="ocl:Attribute" location="17:13-17:78" name="allReferences">
+          <initExpression xsi:type="ocl:OperationCallExp" location="17:50-17:78" operationName="allInstances">
+            <source xsi:type="ocl:OclModelElement" location="17:50-17:63" name="Reference" model="/6"/>
+          </initExpression>
+          <type xsi:type="ocl:SetType" location="17:29-17:47">
+            <elementType xsi:type="ocl:OclModelElement" location="17:33-17:46" name="Reference" model="/5"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="23:1-25:41">
+      <commentsBefore>-- This helper computes the set of all the Class elements of the input model</commentsBefore>
+      <commentsBefore>-- that correspond to the root of the different inheritance trees.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Set(KM3!Class)</commentsBefore>
+      <commentsAfter>-- This helper returns the number of own attributes of the contextual Class.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="23:8-25:40">
+        <feature xsi:type="ocl:Attribute" location="23:13-25:40" name="inheritanceRoots">
+          <initExpression xsi:type="ocl:IteratorExp" location="24:2-25:40" name="select">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="24:2-24:23" name="allClasses">
+              <source xsi:type="ocl:VariableExp" location="24:2-24:12" referredVariable="/8"/>
+            </source>
+            <body xsi:type="ocl:CollectionOperationCallExp" location="25:16-25:39" operationName="isEmpty">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="25:16-25:28" name="supertypes">
+                <source xsi:type="ocl:VariableExp" location="25:16-25:17" referredVariable="/0/@elements.2/@definition/@feature/@initExpression/@iterators.0"/>
+              </source>
+            </body>
+            <iterators location="25:12-25:13" varName="e" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@body/@source/@source"/>
+          </initExpression>
+          <type xsi:type="ocl:SetType" location="23:32-23:46">
+            <elementType xsi:type="ocl:OclModelElement" location="23:36-23:45" name="Class" model="/7"/>
+          </type>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="30:1-33:12">
+      <commentsBefore>-- This helper returns the number of own attributes of the contextual Class.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the total number of attributes (including inherited</commentsAfter>
+      <commentsAfter>-- ones) of the contextual Class.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="30:8-33:11">
+        <feature xsi:type="ocl:Attribute" location="30:31-33:11" name="attributeNb">
+          <initExpression xsi:type="ocl:CollectionOperationCallExp" location="31:2-33:11" operationName="size">
+            <source xsi:type="ocl:IteratorExp" location="31:2-32:45" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="31:2-31:25" name="structuralFeatures">
+                <source xsi:type="ocl:VariableExp" location="31:2-31:6" referredVariable="/10"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="32:16-32:44" operationName="oclIsTypeOf">
+                <source xsi:type="ocl:VariableExp" location="32:16-32:17" referredVariable="/0/@elements.3/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                <arguments xsi:type="ocl:OclModelElement" location="32:30-32:43" name="Attribute" model="/11"/>
+              </body>
+              <iterators location="32:12-32:13" varName="e" variableExp="/0/@elements.3/@definition/@feature/@initExpression/@source/@body/@source"/>
+            </source>
+          </initExpression>
+          <type xsi:type="ocl:IntegerType" location="30:45-30:52"/>
+        </feature>
+        <context_ location="30:8-30:25">
+          <context_ xsi:type="ocl:OclModelElement" location="30:16-30:25" name="Class" model="/9"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="39:1-44:5">
+      <commentsBefore>-- This helper returns the total number of attributes (including inherited</commentsBefore>
+      <commentsBefore>-- ones) of the contextual Class.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the number of own references of the contextual Class.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="39:8-44:4">
+        <feature xsi:type="ocl:Attribute" location="39:31-44:4" name="attributeNb2">
+          <initExpression xsi:type="ocl:OperatorCallExp" location="40:2-44:4" operationName="+">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="40:2-40:18" name="attributeNb">
+              <source xsi:type="ocl:VariableExp" location="40:2-40:6" referredVariable="/13"/>
+            </source>
+            <arguments xsi:type="ocl:IterateExp" location="41:2-44:4">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="41:2-41:17" name="supertypes">
+                <source xsi:type="ocl:VariableExp" location="41:2-41:6" referredVariable="/14"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="43:4-43:23" operationName="+">
+                <source xsi:type="ocl:VariableExp" location="43:4-43:7" referredVariable="/0/@elements.4/@definition/@feature/@initExpression/@arguments.0/@result"/>
+                <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="43:10-43:23" name="attributeNb">
+                  <source xsi:type="ocl:VariableExp" location="43:10-43:11" referredVariable="/0/@elements.4/@definition/@feature/@initExpression/@arguments.0/@iterators.0"/>
+                </arguments>
+              </body>
+              <iterators location="42:13-42:14" varName="e" variableExp="/0/@elements.4/@definition/@feature/@initExpression/@arguments.0/@body/@arguments.0/@source"/>
+              <result location="42:16-42:33" varName="sum" variableExp="/0/@elements.4/@definition/@feature/@initExpression/@arguments.0/@body/@source">
+                <type xsi:type="ocl:IntegerType" location="42:22-42:29"/>
+                <initExpression xsi:type="ocl:IntegerExp" location="42:32-42:33"/>
+              </result>
+            </arguments>
+          </initExpression>
+          <type xsi:type="ocl:IntegerType" location="39:46-39:53"/>
+        </feature>
+        <context_ location="39:8-39:25">
+          <context_ xsi:type="ocl:OclModelElement" location="39:16-39:25" name="Class" model="/12"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="49:1-52:12">
+      <commentsBefore>-- This helper returns the number of own references of the contextual Class.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the total number of references (including inherited</commentsAfter>
+      <commentsAfter>-- ones) of the contextual Class.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="49:8-52:11">
+        <feature xsi:type="ocl:Attribute" location="49:31-52:11" name="referenceNb">
+          <initExpression xsi:type="ocl:CollectionOperationCallExp" location="50:2-52:11" operationName="size">
+            <source xsi:type="ocl:IteratorExp" location="50:2-51:45" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="50:2-50:25" name="structuralFeatures">
+                <source xsi:type="ocl:VariableExp" location="50:2-50:6" referredVariable="/16"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="51:16-51:44" operationName="oclIsTypeOf">
+                <source xsi:type="ocl:VariableExp" location="51:16-51:17" referredVariable="/0/@elements.5/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                <arguments xsi:type="ocl:OclModelElement" location="51:30-51:43" name="Reference" model="/17"/>
+              </body>
+              <iterators location="51:12-51:13" varName="e" variableExp="/0/@elements.5/@definition/@feature/@initExpression/@source/@body/@source"/>
+            </source>
+          </initExpression>
+          <type xsi:type="ocl:IntegerType" location="49:45-49:52"/>
+        </feature>
+        <context_ location="49:8-49:25">
+          <context_ xsi:type="ocl:OclModelElement" location="49:16-49:25" name="Class" model="/15"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="58:1-63:5">
+      <commentsBefore>-- This helper returns the total number of references (including inherited</commentsBefore>
+      <commentsBefore>-- ones) of the contextual Class.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the size of the maximum lenght of the inheritance trees</commentsAfter>
+      <commentsAfter>-- that lead to the contextual Class.</commentsAfter>
+      <commentsAfter>-- If the class has no supertype, the helper returns 0. Otherwise, it iterates</commentsAfter>
+      <commentsAfter>-- through the set of supertypes of the contextual Class in order to find out</commentsAfter>
+      <commentsAfter>-- the maximum lenght of inheritance trees (from roots to the contextual</commentsAfter>
+      <commentsAfter>-- Class).</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="58:8-63:4">
+        <feature xsi:type="ocl:Attribute" location="58:31-63:4" name="referenceNb2">
+          <initExpression xsi:type="ocl:OperatorCallExp" location="59:2-63:4" operationName="+">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="59:2-59:18" name="referenceNb">
+              <source xsi:type="ocl:VariableExp" location="59:2-59:6" referredVariable="/19"/>
+            </source>
+            <arguments xsi:type="ocl:IterateExp" location="60:2-63:4">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="60:2-60:17" name="supertypes">
+                <source xsi:type="ocl:VariableExp" location="60:2-60:6" referredVariable="/20"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="62:4-62:23" operationName="+">
+                <source xsi:type="ocl:VariableExp" location="62:4-62:7" referredVariable="/0/@elements.6/@definition/@feature/@initExpression/@arguments.0/@result"/>
+                <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="62:10-62:23" name="referenceNb">
+                  <source xsi:type="ocl:VariableExp" location="62:10-62:11" referredVariable="/0/@elements.6/@definition/@feature/@initExpression/@arguments.0/@iterators.0"/>
+                </arguments>
+              </body>
+              <iterators location="61:13-61:14" varName="e" variableExp="/0/@elements.6/@definition/@feature/@initExpression/@arguments.0/@body/@arguments.0/@source"/>
+              <result location="61:16-61:33" varName="sum" variableExp="/0/@elements.6/@definition/@feature/@initExpression/@arguments.0/@body/@source">
+                <type xsi:type="ocl:IntegerType" location="61:22-61:29"/>
+                <initExpression xsi:type="ocl:IntegerExp" location="61:32-61:33"/>
+              </result>
+            </arguments>
+          </initExpression>
+          <type xsi:type="ocl:IntegerType" location="58:46-58:53"/>
+        </feature>
+        <context_ location="58:8-58:25">
+          <context_ xsi:type="ocl:OclModelElement" location="58:16-58:25" name="Class" model="/18"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="73:1-86:8">
+      <commentsBefore>-- This helper returns the size of the maximum lenght of the inheritance trees</commentsBefore>
+      <commentsBefore>-- that lead to the contextual Class.</commentsBefore>
+      <commentsBefore>-- If the class has no supertype, the helper returns 0. Otherwise, it iterates</commentsBefore>
+      <commentsBefore>-- through the set of supertypes of the contextual Class in order to find out</commentsBefore>
+      <commentsBefore>-- the maximum lenght of inheritance trees (from roots to the contextual</commentsBefore>
+      <commentsBefore>-- Class).</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the maximal depth of an inheritance tree in the input</commentsAfter>
+      <commentsAfter>-- metamodel. For this purpose, it calls the getInheritanceLenght() helper on</commentsAfter>
+      <commentsAfter>-- each Class of the input model and returns the maximum value.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="73:8-86:7">
+        <feature xsi:type="ocl:Operation" location="73:31-86:7" name="getInheritanceLenght">
+          <returnType xsi:type="ocl:IntegerType" location="73:56-73:63"/>
+          <body xsi:type="ocl:IfExp" location="74:2-86:7">
+            <thenExpression xsi:type="ocl:IntegerExp" location="76:3-76:4"/>
+            <condition xsi:type="ocl:OperatorCallExp" location="74:5-74:32" operationName="=">
+              <source xsi:type="ocl:CollectionOperationCallExp" location="74:5-74:28" operationName="size">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="74:5-74:20" name="supertypes">
+                  <source xsi:type="ocl:VariableExp" location="74:5-74:9" referredVariable="/22"/>
+                </source>
+              </source>
+              <arguments xsi:type="ocl:IntegerExp" location="74:31-74:32"/>
+            </condition>
+            <elseExpression xsi:type="ocl:IterateExp" location="78:3-85:4">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="78:3-78:18" name="supertypes">
+                <source xsi:type="ocl:VariableExp" location="78:3-78:7" referredVariable="/23"/>
+              </source>
+              <body xsi:type="ocl:IfExp" location="79:4-84:9">
+                <thenExpression xsi:type="ocl:OperatorCallExp" location="81:5-81:33" operationName="+">
+                  <source xsi:type="ocl:OperationCallExp" location="81:5-81:29" operationName="getInheritanceLenght">
+                    <source xsi:type="ocl:VariableExp" location="81:5-81:6" referredVariable="/0/@elements.7/@definition/@feature/@body/@elseExpression/@iterators.0"/>
+                  </source>
+                  <arguments xsi:type="ocl:IntegerExp" location="81:32-81:33" integerSymbol="1"/>
+                </thenExpression>
+                <condition xsi:type="ocl:OperatorCallExp" location="79:7-79:41" operationName=">">
+                  <source xsi:type="ocl:OperatorCallExp" location="79:7-79:35" operationName="+">
+                    <source xsi:type="ocl:OperationCallExp" location="79:7-79:31" operationName="getInheritanceLenght">
+                      <source xsi:type="ocl:VariableExp" location="79:7-79:8" referredVariable="/0/@elements.7/@definition/@feature/@body/@elseExpression/@iterators.0"/>
+                    </source>
+                    <arguments xsi:type="ocl:IntegerExp" location="79:34-79:35" integerSymbol="1"/>
+                  </source>
+                  <arguments xsi:type="ocl:VariableExp" location="79:38-79:41" referredVariable="/0/@elements.7/@definition/@feature/@body/@elseExpression/@result"/>
+                </condition>
+                <elseExpression xsi:type="ocl:VariableExp" location="83:5-83:8" referredVariable="/0/@elements.7/@definition/@feature/@body/@elseExpression/@result"/>
+              </body>
+              <iterators location="78:28-78:29" varName="e" variableExp="/0/@elements.7/@definition/@feature/@body/@elseExpression/@body/@condition/@source/@source/@source /0/@elements.7/@definition/@feature/@body/@elseExpression/@body/@thenExpression/@source/@source"/>
+              <result location="78:31-78:48" varName="max" variableExp="/0/@elements.7/@definition/@feature/@body/@elseExpression/@body/@condition/@arguments.0 /0/@elements.7/@definition/@feature/@body/@elseExpression/@body/@elseExpression">
+                <type xsi:type="ocl:IntegerType" location="78:37-78:44"/>
+                <initExpression xsi:type="ocl:IntegerExp" location="78:47-78:48"/>
+              </result>
+            </elseExpression>
+          </body>
+        </feature>
+        <context_ location="73:8-73:25">
+          <context_ xsi:type="ocl:OclModelElement" location="73:16-73:25" name="Class" model="/21"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="93:1-102:5">
+      <commentsBefore>-- This helper returns the maximal depth of an inheritance tree in the input</commentsBefore>
+      <commentsBefore>-- metamodel. For this purpose, it calls the getInheritanceLenght() helper on</commentsBefore>
+      <commentsBefore>-- each Class of the input model and returns the maximum value.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the number of inheritance trees in the input model.</commentsAfter>
+      <commentsAfter>-- For this purpose, it computes the number of &quot;root&quot; classes, that is the</commentsAfter>
+      <commentsAfter>-- classes that donot have any supertype.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="93:8-102:4">
+        <feature xsi:type="ocl:Operation" location="93:13-102:4" name="getInheritanceMaxDepth">
+          <returnType xsi:type="ocl:IntegerType" location="93:40-93:47"/>
+          <body xsi:type="ocl:IterateExp" location="94:2-102:4">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="94:2-94:23" name="allClasses">
+              <source xsi:type="ocl:VariableExp" location="94:2-94:12" referredVariable="/24"/>
+            </source>
+            <body xsi:type="ocl:IfExp" location="96:4-101:9">
+              <thenExpression xsi:type="ocl:OperationCallExp" location="98:5-98:29" operationName="getInheritanceLenght">
+                <source xsi:type="ocl:VariableExp" location="98:5-98:6" referredVariable="/0/@elements.8/@definition/@feature/@body/@iterators.0"/>
+              </thenExpression>
+              <condition xsi:type="ocl:OperatorCallExp" location="96:7-96:37" operationName=">">
+                <source xsi:type="ocl:OperationCallExp" location="96:7-96:31" operationName="getInheritanceLenght">
+                  <source xsi:type="ocl:VariableExp" location="96:7-96:8" referredVariable="/0/@elements.8/@definition/@feature/@body/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:VariableExp" location="96:34-96:37" referredVariable="/0/@elements.8/@definition/@feature/@body/@result"/>
+              </condition>
+              <elseExpression xsi:type="ocl:VariableExp" location="100:5-100:8" referredVariable="/0/@elements.8/@definition/@feature/@body/@result"/>
+            </body>
+            <iterators location="95:13-95:14" varName="e" variableExp="/0/@elements.8/@definition/@feature/@body/@body/@condition/@source/@source /0/@elements.8/@definition/@feature/@body/@body/@thenExpression/@source"/>
+            <result location="95:16-95:33" varName="max" variableExp="/0/@elements.8/@definition/@feature/@body/@body/@condition/@arguments.0 /0/@elements.8/@definition/@feature/@body/@body/@elseExpression">
+              <type xsi:type="ocl:IntegerType" location="95:22-95:29"/>
+              <initExpression xsi:type="ocl:IntegerExp" location="95:32-95:33"/>
+            </result>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="109:1-110:38">
+      <commentsBefore>-- This helper returns the number of inheritance trees in the input model.</commentsBefore>
+      <commentsBefore>-- For this purpose, it computes the number of &quot;root&quot; classes, that is the</commentsBefore>
+      <commentsBefore>-- classes that donot have any supertype.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the set of subtypes of its contextual Class.</commentsAfter>
+      <commentsAfter>-- For this purpose, it selects among all existing Class elements, those that</commentsAfter>
+      <commentsAfter>-- have the contextual Class as a supertype.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Set(KM3!Class)</commentsAfter>
+      <definition location="109:8-110:37">
+        <feature xsi:type="ocl:Operation" location="109:13-110:37" name="getInheritanceTreeNb">
+          <returnType xsi:type="ocl:IntegerType" location="109:38-109:45"/>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="110:2-110:37" operationName="size">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="110:2-110:29" name="inheritanceRoots">
+              <source xsi:type="ocl:VariableExp" location="110:2-110:12" referredVariable="/25"/>
+            </source>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="117:1-120:13">
+      <commentsBefore>-- This helper returns the set of subtypes of its contextual Class.</commentsBefore>
+      <commentsBefore>-- For this purpose, it selects among all existing Class elements, those that</commentsBefore>
+      <commentsBefore>-- have the contextual Class as a supertype.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Set(KM3!Class)</commentsBefore>
+      <commentsAfter>-- This helper computes the inheritance subtree of the contextual Class.</commentsAfter>
+      <commentsAfter>-- For this purpose, the helper recursively calls itself for each subtype of</commentsAfter>
+      <commentsAfter>-- the contextual Class, adding this contextual Class to the computed result.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	KM3!Class</commentsAfter>
+      <commentsAfter>-- RETURN:	Set(KM3!Class)</commentsAfter>
+      <definition location="117:8-120:12">
+        <feature xsi:type="ocl:Attribute" location="117:31-120:12" name="subTypes">
+          <initExpression xsi:type="ocl:CollectionOperationCallExp" location="118:2-120:12" operationName="asSet">
+            <source xsi:type="ocl:IteratorExp" location="118:2-119:45" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="118:2-118:23" name="allClasses">
+                <source xsi:type="ocl:VariableExp" location="118:2-118:12" referredVariable="/28"/>
+              </source>
+              <body xsi:type="ocl:CollectionOperationCallExp" location="119:16-119:44" operationName="includes">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="119:16-119:28" name="supertypes">
+                  <source xsi:type="ocl:VariableExp" location="119:16-119:17" referredVariable="/0/@elements.10/@definition/@feature/@initExpression/@source/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:VariableExp" location="119:39-119:43" referredVariable="/29"/>
+              </body>
+              <iterators location="119:12-119:13" varName="e" variableExp="/0/@elements.10/@definition/@feature/@initExpression/@source/@body/@source/@source"/>
+            </source>
+          </initExpression>
+          <type xsi:type="ocl:SetType" location="117:42-117:56">
+            <elementType xsi:type="ocl:OclModelElement" location="117:46-117:55" name="Class" model="/27"/>
+          </type>
+        </feature>
+        <context_ location="117:8-117:25">
+          <context_ xsi:type="ocl:OclModelElement" location="117:16-117:25" name="Class" model="/26"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="127:1-130:4">
+      <commentsBefore>-- This helper computes the inheritance subtree of the contextual Class.</commentsBefore>
+      <commentsBefore>-- For this purpose, the helper recursively calls itself for each subtype of</commentsBefore>
+      <commentsBefore>-- the contextual Class, adding this contextual Class to the computed result.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	KM3!Class</commentsBefore>
+      <commentsBefore>-- RETURN:	Set(KM3!Class)</commentsBefore>
+      <commentsAfter>-- This helper computes a boolean value stating whether its exists an (or more)</commentsAfter>
+      <commentsAfter>-- inheritance relation between classes of trees t1 and t2.</commentsAfter>
+      <commentsAfter>-- The helper checks whether such a relation (supertype/subtype) exists between</commentsAfter>
+      <commentsAfter>-- each class of the tree t1 and the classes of the tree t2.</commentsAfter>
+      <commentsAfter>-- Comment sur les asSet()...</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- IN:		Set(KM3!Class), Set(KM3!Class)</commentsAfter>
+      <commentsAfter>-- RETURN:	Boolean</commentsAfter>
+      <definition location="127:8-130:3">
+        <feature xsi:type="ocl:Operation" location="127:31-130:3" name="getTree">
+          <returnType xsi:type="ocl:SetType" location="127:43-127:57">
+            <elementType xsi:type="ocl:OclModelElement" location="127:47-127:56" name="Class" model="/31"/>
+          </returnType>
+          <body xsi:type="ocl:IterateExp" location="128:2-130:3">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="128:2-128:15" name="subTypes">
+              <source xsi:type="ocl:VariableExp" location="128:2-128:6" referredVariable="/32"/>
+            </source>
+            <body xsi:type="ocl:CollectionOperationCallExp" location="129:3-129:29" operationName="union">
+              <source xsi:type="ocl:VariableExp" location="129:3-129:7" referredVariable="/0/@elements.11/@definition/@feature/@body/@result"/>
+              <arguments xsi:type="ocl:OperationCallExp" location="129:16-129:27" operationName="getTree">
+                <source xsi:type="ocl:VariableExp" location="129:16-129:17" referredVariable="/0/@elements.11/@definition/@feature/@body/@iterators.0"/>
+              </arguments>
+            </body>
+            <iterators location="128:25-128:26" varName="e" variableExp="/0/@elements.11/@definition/@feature/@body/@body/@arguments.0/@source"/>
+            <result location="128:28-128:61" varName="tree" variableExp="/0/@elements.11/@definition/@feature/@body/@body/@source">
+              <type xsi:type="ocl:SetType" location="128:35-128:49">
+                <elementType xsi:type="ocl:OclModelElement" location="128:39-128:48" name="Class" model="/33"/>
+              </type>
+              <initExpression xsi:type="ocl:SetExp" location="128:52-128:61">
+                <elements xsi:type="ocl:VariableExp" location="128:56-128:60" referredVariable="/34"/>
+              </initExpression>
+            </result>
+          </body>
+        </feature>
+        <context_ location="127:8-127:25">
+          <context_ xsi:type="ocl:OclModelElement" location="127:16-127:25" name="Class" model="/30"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="140:1-149:4">
+      <commentsBefore>-- This helper computes a boolean value stating whether its exists an (or more)</commentsBefore>
+      <commentsBefore>-- inheritance relation between classes of trees t1 and t2.</commentsBefore>
+      <commentsBefore>-- The helper checks whether such a relation (supertype/subtype) exists between</commentsBefore>
+      <commentsBefore>-- each class of the tree t1 and the classes of the tree t2.</commentsBefore>
+      <commentsBefore>-- Comment sur les asSet()...</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- IN:		Set(KM3!Class), Set(KM3!Class)</commentsBefore>
+      <commentsBefore>-- RETURN:	Boolean</commentsBefore>
+      <commentsAfter>-- This recursive helper computes the number of independant inheritance graphs</commentsAfter>
+      <commentsAfter>-- corresponding to the sequence of inheritance trees passed as a parameter.</commentsAfter>
+      <commentsAfter>-- If the input sequence contains a single tree, the helper returns 1.</commentsAfter>
+      <commentsAfter>-- Otherwise, the helper checks whether there exists inheritance relationships</commentsAfter>
+      <commentsAfter>-- (super/subtype) between classes of the first tree of the input sequence (the</commentsAfter>
+      <commentsAfter>-- reference tree), and the following ones. If so, it merges the linked trees</commentsAfter>
+      <commentsAfter>-- into the reference tree.</commentsAfter>
+      <commentsAfter>-- If the new tree sequence built this way contains a single tree, the helper</commentsAfter>
+      <commentsAfter>-- returns 1. Otherwise, the helper returns 1 + the value provideed by a</commentsAfter>
+      <commentsAfter>-- recursive call of itself on the newly calculated tree sequence without its</commentsAfter>
+      <commentsAfter>-- first reference tree.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- IN:		Sequence(Set(KM3!Class))</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="140:8-149:3">
+        <feature xsi:type="ocl:Operation" location="140:13-149:3" name="existsHLink">
+          <parameters location="140:25-140:44" varName="t1" variableExp="/0/@elements.12/@definition/@feature/@body/@source">
+            <type xsi:type="ocl:SetType" location="140:30-140:44">
+              <elementType xsi:type="ocl:OclModelElement" location="140:34-140:43" name="Class" model="/35"/>
+            </type>
+          </parameters>
+          <parameters location="140:46-140:65" varName="t2" variableExp="/0/@elements.12/@definition/@feature/@body/@body/@condition/@source/@source/@arguments.0 /0/@elements.12/@definition/@feature/@body/@body/@condition/@arguments.0/@source/@arguments.0">
+            <type xsi:type="ocl:SetType" location="140:51-140:65">
+              <elementType xsi:type="ocl:OclModelElement" location="140:55-140:64" name="Class" model="/36"/>
+            </type>
+          </parameters>
+          <returnType xsi:type="ocl:BooleanType" location="140:69-140:76"/>
+          <body xsi:type="ocl:IterateExp" location="141:2-149:3">
+            <source xsi:type="ocl:VariableExp" location="141:2-141:4" referredVariable="/0/@elements.12/@definition/@feature/@parameters.0"/>
+            <body xsi:type="ocl:IfExp" location="142:3-148:8">
+              <thenExpression xsi:type="ocl:VariableExp" location="145:4-145:7" referredVariable="/0/@elements.12/@definition/@feature/@body/@result"/>
+              <condition xsi:type="ocl:OperatorCallExp" location="142:7-143:52" operationName="and">
+                <source xsi:type="ocl:CollectionOperationCallExp" location="142:7-142:57" operationName="isEmpty">
+                  <source xsi:type="ocl:CollectionOperationCallExp" location="142:7-142:46" operationName="intersection">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="142:7-142:28" operationName="asSet">
+                      <source xsi:type="ocl:NavigationOrAttributeCallExp" location="142:7-142:19" name="supertypes">
+                        <source xsi:type="ocl:VariableExp" location="142:7-142:8" referredVariable="/0/@elements.12/@definition/@feature/@body/@iterators.0"/>
+                      </source>
+                    </source>
+                    <arguments xsi:type="ocl:VariableExp" location="142:43-142:45" referredVariable="/0/@elements.12/@definition/@feature/@parameters.1"/>
+                  </source>
+                </source>
+                <arguments xsi:type="ocl:CollectionOperationCallExp" location="143:4-143:52" operationName="isEmpty">
+                  <source xsi:type="ocl:CollectionOperationCallExp" location="143:4-143:41" operationName="intersection">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="143:4-143:23" operationName="asSet">
+                      <source xsi:type="ocl:NavigationOrAttributeCallExp" location="143:4-143:14" name="subTypes">
+                        <source xsi:type="ocl:VariableExp" location="143:4-143:5" referredVariable="/0/@elements.12/@definition/@feature/@body/@iterators.0"/>
+                      </source>
+                    </source>
+                    <arguments xsi:type="ocl:VariableExp" location="143:38-143:40" referredVariable="/0/@elements.12/@definition/@feature/@parameters.1"/>
+                  </source>
+                </arguments>
+              </condition>
+              <elseExpression xsi:type="ocl:BooleanExp" location="147:4-147:8" booleanSymbol="true"/>
+            </body>
+            <iterators location="141:14-141:15" varName="e" variableExp="/0/@elements.12/@definition/@feature/@body/@body/@condition/@source/@source/@source/@source/@source /0/@elements.12/@definition/@feature/@body/@body/@condition/@arguments.0/@source/@source/@source/@source"/>
+            <result location="141:17-141:38" varName="res" variableExp="/0/@elements.12/@definition/@feature/@body/@body/@thenExpression">
+              <type xsi:type="ocl:BooleanType" location="141:23-141:30"/>
+              <initExpression xsi:type="ocl:BooleanExp" location="141:33-141:38"/>
+            </result>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="165:1-193:8">
+      <commentsBefore>-- This recursive helper computes the number of independant inheritance graphs</commentsBefore>
+      <commentsBefore>-- corresponding to the sequence of inheritance trees passed as a parameter.</commentsBefore>
+      <commentsBefore>-- If the input sequence contains a single tree, the helper returns 1.</commentsBefore>
+      <commentsBefore>-- Otherwise, the helper checks whether there exists inheritance relationships</commentsBefore>
+      <commentsBefore>-- (super/subtype) between classes of the first tree of the input sequence (the</commentsBefore>
+      <commentsBefore>-- reference tree), and the following ones. If so, it merges the linked trees</commentsBefore>
+      <commentsBefore>-- into the reference tree.</commentsBefore>
+      <commentsBefore>-- If the new tree sequence built this way contains a single tree, the helper</commentsBefore>
+      <commentsBefore>-- returns 1. Otherwise, the helper returns 1 + the value provideed by a</commentsBefore>
+      <commentsBefore>-- recursive call of itself on the newly calculated tree sequence without its</commentsBefore>
+      <commentsBefore>-- first reference tree.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- IN:		Sequence(Set(KM3!Class))</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-- This helper returns the number of inheritage graphs in the input model.</commentsAfter>
+      <commentsAfter>-- For this purpose, it first computes a sequence containing the set of classes</commentsAfter>
+      <commentsAfter>-- representing the different inheritance trees of the input model. The helper</commentsAfter>
+      <commentsAfter>-- then calls the recursive computeGraphNb with the calculated sequence as a </commentsAfter>
+      <commentsAfter>-- parameter.</commentsAfter>
+      <commentsAfter>-- CONTEXT:	thisModule</commentsAfter>
+      <commentsAfter>-- RETURN:	Integer</commentsAfter>
+      <definition location="165:8-193:7">
+        <feature xsi:type="ocl:Operation" location="165:13-193:7" name="computeGraphNb">
+          <parameters location="165:28-165:63" varName="tree_seq" variableExp="/0/@elements.13/@definition/@feature/@body/@condition/@source/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@variable/@initExpression/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@source/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@source/@arguments.1/@source">
+            <type xsi:type="ocl:SequenceType" location="165:39-165:63">
+              <elementType xsi:type="ocl:SetType" location="165:48-165:62">
+                <elementType xsi:type="ocl:OclModelElement" location="165:52-165:61" name="Class" model="/37"/>
+              </elementType>
+            </type>
+          </parameters>
+          <returnType xsi:type="ocl:IntegerType" location="165:67-165:74"/>
+          <body xsi:type="ocl:IfExp" location="166:2-193:7">
+            <thenExpression xsi:type="ocl:IntegerExp" location="168:3-168:4" integerSymbol="1"/>
+            <condition xsi:type="ocl:OperatorCallExp" location="166:5-166:25" operationName="=">
+              <source xsi:type="ocl:CollectionOperationCallExp" location="166:5-166:21" operationName="size">
+                <source xsi:type="ocl:VariableExp" location="166:5-166:13" referredVariable="/0/@elements.13/@definition/@feature/@parameters.0"/>
+              </source>
+              <arguments xsi:type="ocl:IntegerExp" location="166:24-166:25" integerSymbol="1"/>
+            </condition>
+            <elseExpression xsi:type="ocl:LetExp" location="170:3-192:8">
+              <variable location="170:7-170:51" varName="first_t" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result/@initExpression/@elements.0 /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@condition/@arguments.0">
+                <type xsi:type="ocl:SetType" location="170:17-170:31">
+                  <elementType xsi:type="ocl:OclModelElement" location="170:21-170:30" name="Class" model="/38"/>
+                </type>
+                <initExpression xsi:type="ocl:CollectionOperationCallExp" location="170:34-170:51" operationName="first">
+                  <source xsi:type="ocl:VariableExp" location="170:34-170:42" referredVariable="/0/@elements.13/@definition/@feature/@parameters.0"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:LetExp" location="171:3-192:8">
+                <variable location="171:7-183:5" varName="new_seq" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@in_/@condition/@source/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@in_/@elseExpression/@source/@arguments.0/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@in_/@elseExpression/@source/@arguments.0/@arguments.1/@source">
+                  <type xsi:type="ocl:SequenceType" location="171:17-171:41">
+                    <elementType xsi:type="ocl:SetType" location="171:26-171:40">
+                      <elementType xsi:type="ocl:OclModelElement" location="171:30-171:39" name="Class" model="/39"/>
+                    </elementType>
+                  </type>
+                  <initExpression xsi:type="ocl:IterateExp" location="172:3-183:5">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="172:3-173:38" operationName="subSequence">
+                      <source xsi:type="ocl:VariableExp" location="172:3-172:11" referredVariable="/0/@elements.13/@definition/@feature/@parameters.0"/>
+                      <arguments xsi:type="ocl:IntegerExp" location="173:18-173:19" integerSymbol="2"/>
+                      <arguments xsi:type="ocl:CollectionOperationCallExp" location="173:21-173:37" operationName="size">
+                        <source xsi:type="ocl:VariableExp" location="173:21-173:29" referredVariable="/0/@elements.13/@definition/@feature/@parameters.0"/>
+                      </arguments>
+                    </source>
+                    <body xsi:type="ocl:IfExp" location="175:5-182:10">
+                      <thenExpression xsi:type="ocl:CollectionOperationCallExp" location="177:6-179:46" operationName="prepend">
+                        <source xsi:type="ocl:CollectionOperationCallExp" location="177:6-178:38" operationName="subSequence">
+                          <source xsi:type="ocl:VariableExp" location="177:6-177:11" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result"/>
+                          <arguments xsi:type="ocl:IntegerExp" location="178:21-178:22" integerSymbol="2"/>
+                          <arguments xsi:type="ocl:CollectionOperationCallExp" location="178:24-178:37" operationName="size">
+                            <source xsi:type="ocl:VariableExp" location="178:24-178:29" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result"/>
+                          </arguments>
+                        </source>
+                        <arguments xsi:type="ocl:CollectionOperationCallExp" location="179:17-179:45" operationName="including">
+                          <source xsi:type="ocl:CollectionOperationCallExp" location="179:17-179:31" operationName="first">
+                            <source xsi:type="ocl:VariableExp" location="179:17-179:22" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result"/>
+                          </source>
+                          <arguments xsi:type="ocl:VariableExp" location="179:43-179:44" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@iterators.0"/>
+                        </arguments>
+                      </thenExpression>
+                      <condition xsi:type="ocl:OperationCallExp" location="175:8-175:42" operationName="existsHLink">
+                        <source xsi:type="ocl:VariableExp" location="175:8-175:18" referredVariable="/41"/>
+                        <arguments xsi:type="ocl:VariableExp" location="175:31-175:38" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@variable"/>
+                        <arguments xsi:type="ocl:VariableExp" location="175:40-175:41" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@iterators.0"/>
+                      </condition>
+                      <elseExpression xsi:type="ocl:OperationCallExp" location="181:6-181:21" operationName="append">
+                        <source xsi:type="ocl:VariableExp" location="181:6-181:11" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result"/>
+                        <arguments xsi:type="ocl:VariableExp" location="181:19-181:20" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@iterators.0"/>
+                      </elseExpression>
+                    </body>
+                    <iterators location="174:14-174:15" varName="e" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@condition/@arguments.1 /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@thenExpression/@arguments.0/@arguments.0 /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@elseExpression/@arguments.0"/>
+                    <result location="174:16-174:68" varName="t_seq" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@thenExpression/@source/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@thenExpression/@source/@arguments.1/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@thenExpression/@arguments.0/@source/@source /0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@elseExpression/@source">
+                      <type xsi:type="ocl:SequenceType" location="174:24-174:48">
+                        <elementType xsi:type="ocl:SetType" location="174:33-174:47">
+                          <elementType xsi:type="ocl:OclModelElement" location="174:37-174:46" name="Class" model="/40"/>
+                        </elementType>
+                      </type>
+                      <initExpression xsi:type="ocl:SequenceExp" location="174:51-174:68">
+                        <elements xsi:type="ocl:VariableExp" location="174:60-174:67" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@variable"/>
+                      </initExpression>
+                    </result>
+                  </initExpression>
+                </variable>
+                <in_ xsi:type="ocl:IfExp" location="185:3-192:8">
+                  <thenExpression xsi:type="ocl:IntegerExp" location="187:4-187:5" integerSymbol="1"/>
+                  <condition xsi:type="ocl:OperatorCallExp" location="185:6-185:25" operationName="=">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="185:6-185:21" operationName="size">
+                      <source xsi:type="ocl:VariableExp" location="185:6-185:13" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable"/>
+                    </source>
+                    <arguments xsi:type="ocl:IntegerExp" location="185:24-185:25" integerSymbol="1"/>
+                  </condition>
+                  <elseExpression xsi:type="ocl:OperatorCallExp" location="189:4-191:9" operationName="+">
+                    <source xsi:type="ocl:OperationCallExp" location="189:4-191:5" operationName="computeGraphNb">
+                      <source xsi:type="ocl:VariableExp" location="189:4-189:14" referredVariable="/42"/>
+                      <arguments xsi:type="ocl:CollectionOperationCallExp" location="190:5-190:45" operationName="subSequence">
+                        <source xsi:type="ocl:VariableExp" location="190:5-190:12" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable"/>
+                        <arguments xsi:type="ocl:IntegerExp" location="190:26-190:27" integerSymbol="2"/>
+                        <arguments xsi:type="ocl:CollectionOperationCallExp" location="190:29-190:44" operationName="size">
+                          <source xsi:type="ocl:VariableExp" location="190:29-190:36" referredVariable="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable"/>
+                        </arguments>
+                      </arguments>
+                    </source>
+                    <arguments xsi:type="ocl:IntegerExp" location="191:8-191:9" integerSymbol="1"/>
+                  </elseExpression>
+                </in_>
+              </in_>
+            </elseExpression>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="202:1-207:41">
+      <commentsBefore>-- This helper returns the number of inheritage graphs in the input model.</commentsBefore>
+      <commentsBefore>-- For this purpose, it first computes a sequence containing the set of classes</commentsBefore>
+      <commentsBefore>-- representing the different inheritance trees of the input model. The helper</commentsBefore>
+      <commentsBefore>-- then calls the recursive computeGraphNb with the calculated sequence as a </commentsBefore>
+      <commentsBefore>-- parameter.</commentsBefore>
+      <commentsBefore>-- CONTEXT:	thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	Integer</commentsBefore>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- RULES ----------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- Rule 'Model'</commentsAfter>
+      <commentsAfter>-- This rule generates metrics elements that are relative to the input model:</commentsAfter>
+      <commentsAfter>-- * the number of classes of the model;</commentsAfter>
+      <commentsAfter>-- * the number of associations of the model (this number corresponds to the</commentsAfter>
+      <commentsAfter>--   number of references without an opposite, plus the half of the number of</commentsAfter>
+      <commentsAfter>--   references that has an opposite);</commentsAfter>
+      <commentsAfter>-- * the maximal depth of an inheritance tree (computed by the</commentsAfter>
+      <commentsAfter>--   getInheritanceMaxDepth helper);</commentsAfter>
+      <commentsAfter>-- * the number of inheritance trees (computed by the getInheritanceTreeNb</commentsAfter>
+      <commentsAfter>--   helper);</commentsAfter>
+      <commentsAfter>-- * the number of inheritance graphs (computed by the getInheritanceGraphNb</commentsAfter>
+      <commentsAfter>--   helper).</commentsAfter>
+      <definition location="202:8-207:40">
+        <feature xsi:type="ocl:Operation" location="202:13-207:40" name="getInheritanceGraphNb">
+          <returnType xsi:type="ocl:IntegerType" location="202:39-202:46"/>
+          <body xsi:type="ocl:LetExp" location="203:2-207:40">
+            <variable location="203:6-206:18" varName="tree_seq" variableExp="/0/@elements.14/@definition/@feature/@body/@in_/@arguments.0">
+              <type xsi:type="ocl:SequenceType" location="203:17-203:41">
+                <elementType xsi:type="ocl:SetType" location="203:26-203:40">
+                  <elementType xsi:type="ocl:OclModelElement" location="203:30-203:39" name="Class" model="/43"/>
+                </elementType>
+              </type>
+              <initExpression xsi:type="ocl:CollectionOperationCallExp" location="204:3-206:18" operationName="asSequence">
+                <source xsi:type="ocl:IteratorExp" location="204:3-205:30" name="collect">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="204:3-204:30" name="inheritanceRoots">
+                    <source xsi:type="ocl:VariableExp" location="204:3-204:13" referredVariable="/44"/>
+                  </source>
+                  <body xsi:type="ocl:OperationCallExp" location="205:18-205:29" operationName="getTree">
+                    <source xsi:type="ocl:VariableExp" location="205:18-205:19" referredVariable="/0/@elements.14/@definition/@feature/@body/@variable/@initExpression/@source/@iterators.0"/>
+                  </body>
+                  <iterators location="205:14-205:15" varName="e" variableExp="/0/@elements.14/@definition/@feature/@body/@variable/@initExpression/@source/@body/@source"/>
+                </source>
+              </initExpression>
+            </variable>
+            <in_ xsi:type="ocl:OperationCallExp" location="207:5-207:40" operationName="computeGraphNb">
+              <source xsi:type="ocl:VariableExp" location="207:5-207:15" referredVariable="/45"/>
+              <arguments xsi:type="ocl:VariableExp" location="207:31-207:39" referredVariable="/0/@elements.14/@definition/@feature/@body/@variable"/>
+            </in_>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="226:1-266:2" name="Model">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- RULES ----------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- Rule 'Model'</commentsBefore>
+      <commentsBefore>-- This rule generates metrics elements that are relative to the input model:</commentsBefore>
+      <commentsBefore>-- * the number of classes of the model;</commentsBefore>
+      <commentsBefore>-- * the number of associations of the model (this number corresponds to the</commentsBefore>
+      <commentsBefore>--   number of references without an opposite, plus the half of the number of</commentsBefore>
+      <commentsBefore>--   references that has an opposite);</commentsBefore>
+      <commentsBefore>-- * the maximal depth of an inheritance tree (computed by the</commentsBefore>
+      <commentsBefore>--   getInheritanceMaxDepth helper);</commentsBefore>
+      <commentsBefore>-- * the number of inheritance trees (computed by the getInheritanceTreeNb</commentsBefore>
+      <commentsBefore>--   helper);</commentsBefore>
+      <commentsBefore>-- * the number of inheritance graphs (computed by the getInheritanceGraphNb</commentsBefore>
+      <commentsBefore>--   helper).</commentsBefore>
+      <commentsAfter>-- Rule 'Class'</commentsAfter>
+      <commentsAfter>-- This rule generates metrics elements taht are relative to a Class of the</commentsAfter>
+      <commentsAfter>-- input model. The context of the generated metrics elements therefore</commentsAfter>
+      <commentsAfter>-- includes the name of the class theyr refer to.</commentsAfter>
+      <commentsAfter>-- Generated metrics are:</commentsAfter>
+      <commentsAfter>-- * the number of own attributes of the class;</commentsAfter>
+      <commentsAfter>-- * the number of own references of the class;</commentsAfter>
+      <commentsAfter>-- * the total number of attributes of the class (including inherited ones);</commentsAfter>
+      <commentsAfter>-- * the total number of references of the class (including inherited ones);</commentsAfter>
+      <outPattern location="229:2-265:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="230:3-234:4" varName="o1">
+          <type xsi:type="ocl:OclModelElement" location="230:8-230:29" name="IntegerMetric" model="/47"/>
+          <bindings location="231:4-231:24" propertyName="context">
+            <value xsi:type="ocl:StringExp" location="231:17-231:24" stringSymbol="Model"/>
+          </bindings>
+          <bindings location="232:4-232:32" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="232:13-232:32" stringSymbol="Number of classes"/>
+          </bindings>
+          <bindings location="233:4-233:41" propertyName="data">
+            <value xsi:type="ocl:CollectionOperationCallExp" location="233:12-233:41" operationName="size">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="233:12-233:33" name="allClasses">
+                <source xsi:type="ocl:VariableExp" location="233:12-233:22" referredVariable="/48"/>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="236:3-247:4" varName="o2">
+          <type xsi:type="ocl:OclModelElement" location="236:8-236:29" name="IntegerMetric" model="/49"/>
+          <bindings location="237:4-237:24" propertyName="context">
+            <value xsi:type="ocl:StringExp" location="237:17-237:24" stringSymbol="Model"/>
+          </bindings>
+          <bindings location="238:4-238:37" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="238:13-238:37" stringSymbol="Number of associations"/>
+          </bindings>
+          <bindings location="239:4-246:22" propertyName="data">
+            <value xsi:type="ocl:OperatorCallExp" location="240:5-246:22" operationName="+">
+              <source xsi:type="ocl:CollectionOperationCallExp" location="240:6-242:14" operationName="size">
+                <source xsi:type="ocl:IteratorExp" location="240:6-241:45" name="select">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="240:6-240:30" name="allReferences">
+                    <source xsi:type="ocl:VariableExp" location="240:6-240:16" referredVariable="/50"/>
+                  </source>
+                  <body xsi:type="ocl:OperatorCallExp" location="241:19-241:44" operationName="=">
+                    <source xsi:type="ocl:NavigationOrAttributeCallExp" location="241:19-241:29" name="opposite">
+                      <source xsi:type="ocl:VariableExp" location="241:19-241:20" referredVariable="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@source/@source/@iterators.0"/>
+                    </source>
+                    <arguments xsi:type="ocl:OclUndefinedExp" location="241:32-241:44"/>
+                  </body>
+                  <iterators location="241:15-241:16" varName="e" variableExp="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@source/@source/@body/@source/@source"/>
+                </source>
+              </source>
+              <arguments xsi:type="ocl:OperatorCallExp" location="244:6-246:21" operationName="div">
+                <source xsi:type="ocl:CollectionOperationCallExp" location="244:7-246:14" operationName="size">
+                  <source xsi:type="ocl:IteratorExp" location="244:7-245:46" name="select">
+                    <source xsi:type="ocl:NavigationOrAttributeCallExp" location="244:7-244:31" name="allReferences">
+                      <source xsi:type="ocl:VariableExp" location="244:7-244:17" referredVariable="/51"/>
+                    </source>
+                    <body xsi:type="ocl:OperatorCallExp" location="245:19-245:45" operationName="&lt;>">
+                      <source xsi:type="ocl:NavigationOrAttributeCallExp" location="245:19-245:29" name="opposite">
+                        <source xsi:type="ocl:VariableExp" location="245:19-245:20" referredVariable="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@arguments.0/@source/@source/@iterators.0"/>
+                      </source>
+                      <arguments xsi:type="ocl:OclUndefinedExp" location="245:33-245:45"/>
+                    </body>
+                    <iterators location="245:15-245:16" varName="e" variableExp="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@arguments.0/@source/@source/@body/@source/@source"/>
+                  </source>
+                </source>
+                <arguments xsi:type="ocl:IntegerExp" location="246:20-246:21" integerSymbol="2"/>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="249:3-253:4" varName="o3">
+          <type xsi:type="ocl:OclModelElement" location="249:8-249:29" name="IntegerMetric" model="/52"/>
+          <bindings location="250:4-250:24" propertyName="context">
+            <value xsi:type="ocl:StringExp" location="250:17-250:24" stringSymbol="Model"/>
+          </bindings>
+          <bindings location="251:4-251:41" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="251:13-251:41" stringSymbol="Maximal depth of heritance"/>
+          </bindings>
+          <bindings location="252:4-252:47" propertyName="data">
+            <value xsi:type="ocl:OperationCallExp" location="252:12-252:47" operationName="getInheritanceMaxDepth">
+              <source xsi:type="ocl:VariableExp" location="252:12-252:22" referredVariable="/53"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="255:3-259:4" varName="o4">
+          <type xsi:type="ocl:OclModelElement" location="255:8-255:29" name="IntegerMetric" model="/54"/>
+          <bindings location="256:4-256:24" propertyName="context">
+            <value xsi:type="ocl:StringExp" location="256:17-256:24" stringSymbol="Model"/>
+          </bindings>
+          <bindings location="257:4-257:42" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="257:13-257:42" stringSymbol="Number of inheritance trees"/>
+          </bindings>
+          <bindings location="258:4-258:45" propertyName="data">
+            <value xsi:type="ocl:OperationCallExp" location="258:12-258:45" operationName="getInheritanceTreeNb">
+              <source xsi:type="ocl:VariableExp" location="258:12-258:22" referredVariable="/55"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="261:3-265:4" varName="o5">
+          <type xsi:type="ocl:OclModelElement" location="261:8-261:29" name="IntegerMetric" model="/56"/>
+          <bindings location="262:4-262:24" propertyName="context">
+            <value xsi:type="ocl:StringExp" location="262:17-262:24" stringSymbol="Model"/>
+          </bindings>
+          <bindings location="263:4-263:43" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="263:13-263:43" stringSymbol="Number of inheritance graphs"/>
+          </bindings>
+          <bindings location="264:4-264:46" propertyName="data">
+            <value xsi:type="ocl:OperationCallExp" location="264:12-264:46" operationName="getInheritanceGraphNb">
+              <source xsi:type="ocl:VariableExp" location="264:12-264:22" referredVariable="/57"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="227:2-228:20">
+        <elements xsi:type="atl:SimpleInPatternElement" location="228:3-228:20" varName="i">
+          <type xsi:type="ocl:OclModelElement" location="228:7-228:20" name="Metamodel" model="/46"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="277:1-304:2" name="Class">
+      <commentsBefore>-- Rule 'Class'</commentsBefore>
+      <commentsBefore>-- This rule generates metrics elements taht are relative to a Class of the</commentsBefore>
+      <commentsBefore>-- input model. The context of the generated metrics elements therefore</commentsBefore>
+      <commentsBefore>-- includes the name of the class theyr refer to.</commentsBefore>
+      <commentsBefore>-- Generated metrics are:</commentsBefore>
+      <commentsBefore>-- * the number of own attributes of the class;</commentsBefore>
+      <commentsBefore>-- * the number of own references of the class;</commentsBefore>
+      <commentsBefore>-- * the total number of attributes of the class (including inherited ones);</commentsBefore>
+      <commentsBefore>-- * the total number of references of the class (including inherited ones);</commentsBefore>
+      <outPattern location="280:2-303:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="281:3-285:4" varName="o1">
+          <type xsi:type="ocl:OclModelElement" location="281:8-281:29" name="IntegerMetric" model="/59"/>
+          <bindings location="282:4-282:34" propertyName="context">
+            <value xsi:type="ocl:OperatorCallExp" location="282:17-282:34" operationName="+">
+              <source xsi:type="ocl:StringExp" location="282:17-282:25" stringSymbol="Class "/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="282:28-282:34" name="name">
+                <source xsi:type="ocl:VariableExp" location="282:28-282:29" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="283:4-283:39" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="283:13-283:39" stringSymbol="Number of own attributes"/>
+          </bindings>
+          <bindings location="284:4-284:25" propertyName="data">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="284:12-284:25" name="attributeNb">
+              <source xsi:type="ocl:VariableExp" location="284:12-284:13" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="287:3-291:4" varName="o2">
+          <type xsi:type="ocl:OclModelElement" location="287:8-287:29" name="IntegerMetric" model="/60"/>
+          <bindings location="288:4-288:34" propertyName="context">
+            <value xsi:type="ocl:OperatorCallExp" location="288:17-288:34" operationName="+">
+              <source xsi:type="ocl:StringExp" location="288:17-288:25" stringSymbol="Class "/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="288:28-288:34" name="name">
+                <source xsi:type="ocl:VariableExp" location="288:28-288:29" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="289:4-289:39" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="289:13-289:39" stringSymbol="Number of own references"/>
+          </bindings>
+          <bindings location="290:4-290:25" propertyName="data">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="290:12-290:25" name="referenceNb">
+              <source xsi:type="ocl:VariableExp" location="290:12-290:13" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="293:3-297:4" varName="o3">
+          <type xsi:type="ocl:OclModelElement" location="293:8-293:29" name="IntegerMetric" model="/61"/>
+          <bindings location="294:4-294:34" propertyName="context">
+            <value xsi:type="ocl:OperatorCallExp" location="294:17-294:34" operationName="+">
+              <source xsi:type="ocl:StringExp" location="294:17-294:25" stringSymbol="Class "/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="294:28-294:34" name="name">
+                <source xsi:type="ocl:VariableExp" location="294:28-294:29" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="295:4-295:41" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="295:13-295:41" stringSymbol="Total number of attributes"/>
+          </bindings>
+          <bindings location="296:4-296:26" propertyName="data">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="296:12-296:26" name="attributeNb2">
+              <source xsi:type="ocl:VariableExp" location="296:12-296:13" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="299:3-303:4" varName="o4">
+          <type xsi:type="ocl:OclModelElement" location="299:8-299:29" name="IntegerMetric" model="/62"/>
+          <bindings location="300:4-300:34" propertyName="context">
+            <value xsi:type="ocl:OperatorCallExp" location="300:17-300:34" operationName="+">
+              <source xsi:type="ocl:StringExp" location="300:17-300:25" stringSymbol="Class "/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="300:28-300:34" name="name">
+                <source xsi:type="ocl:VariableExp" location="300:28-300:29" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+          <bindings location="301:4-301:41" propertyName="label">
+            <value xsi:type="ocl:StringExp" location="301:13-301:41" stringSymbol="Total number of references"/>
+          </bindings>
+          <bindings location="302:4-302:26" propertyName="data">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="302:12-302:26" name="referenceNb2">
+              <source xsi:type="ocl:VariableExp" location="302:12-302:13" referredVariable="/0/@elements.16/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="278:2-279:16">
+        <elements xsi:type="atl:SimpleInPatternElement" location="279:3-279:16" varName="i" variableExp="/0/@elements.16/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source /0/@elements.16/@outPattern/@elements.0/@bindings.2/@value/@source /0/@elements.16/@outPattern/@elements.1/@bindings.0/@value/@arguments.0/@source /0/@elements.16/@outPattern/@elements.1/@bindings.2/@value/@source /0/@elements.16/@outPattern/@elements.2/@bindings.0/@value/@arguments.0/@source /0/@elements.16/@outPattern/@elements.2/@bindings.2/@value/@source /0/@elements.16/@outPattern/@elements.3/@bindings.0/@value/@arguments.0/@source /0/@elements.16/@outPattern/@elements.3/@bindings.2/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="279:7-279:16" name="Class" model="/58"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:21" name="Metrics" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:32-2:35" name="KM3" model="/0/@inModels.0"/>
+  <ocl:OclModel location="11:30-11:33" name="KM3" elements="/0/@elements.0/@definition/@feature/@type/@elementType"/>
+  <ocl:OclModel location="11:43-11:46" name="KM3" elements="/0/@elements.0/@definition/@feature/@initExpression/@source"/>
+  <ocl:OclModel location="17:33-17:36" name="KM3" elements="/0/@elements.1/@definition/@feature/@type/@elementType"/>
+  <ocl:OclModel location="17:50-17:53" name="KM3" elements="/0/@elements.1/@definition/@feature/@initExpression/@source"/>
+  <ocl:OclModel location="23:36-23:39" name="KM3" elements="/0/@elements.2/@definition/@feature/@type/@elementType"/>
+  <ocl:VariableDeclaration location="24:2-24:12" varName="thisModule" variableExp="/0/@elements.2/@definition/@feature/@initExpression/@source/@source"/>
+  <ocl:OclModel location="30:16-30:19" name="KM3" elements="/0/@elements.3/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="31:2-31:6" varName="self" variableExp="/0/@elements.3/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="32:30-32:33" name="KM3" elements="/0/@elements.3/@definition/@feature/@initExpression/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="39:16-39:19" name="KM3" elements="/0/@elements.4/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="40:2-40:6" varName="self" variableExp="/0/@elements.4/@definition/@feature/@initExpression/@source/@source"/>
+  <ocl:VariableDeclaration location="41:2-41:6" varName="self" variableExp="/0/@elements.4/@definition/@feature/@initExpression/@arguments.0/@source/@source"/>
+  <ocl:OclModel location="49:16-49:19" name="KM3" elements="/0/@elements.5/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="50:2-50:6" varName="self" variableExp="/0/@elements.5/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:OclModel location="51:30-51:33" name="KM3" elements="/0/@elements.5/@definition/@feature/@initExpression/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="58:16-58:19" name="KM3" elements="/0/@elements.6/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="59:2-59:6" varName="self" variableExp="/0/@elements.6/@definition/@feature/@initExpression/@source/@source"/>
+  <ocl:VariableDeclaration location="60:2-60:6" varName="self" variableExp="/0/@elements.6/@definition/@feature/@initExpression/@arguments.0/@source/@source"/>
+  <ocl:OclModel location="73:16-73:19" name="KM3" elements="/0/@elements.7/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="74:5-74:9" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@condition/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="78:3-78:7" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@elseExpression/@source/@source"/>
+  <ocl:VariableDeclaration location="94:2-94:12" varName="thisModule" variableExp="/0/@elements.8/@definition/@feature/@body/@source/@source"/>
+  <ocl:VariableDeclaration location="110:2-110:12" varName="thisModule" variableExp="/0/@elements.9/@definition/@feature/@body/@source/@source"/>
+  <ocl:OclModel location="117:16-117:19" name="KM3" elements="/0/@elements.10/@definition/@context_/@context_"/>
+  <ocl:OclModel location="117:46-117:49" name="KM3" elements="/0/@elements.10/@definition/@feature/@type/@elementType"/>
+  <ocl:VariableDeclaration location="118:2-118:12" varName="thisModule" variableExp="/0/@elements.10/@definition/@feature/@initExpression/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="119:39-119:43" varName="self" variableExp="/0/@elements.10/@definition/@feature/@initExpression/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="127:16-127:19" name="KM3" elements="/0/@elements.11/@definition/@context_/@context_"/>
+  <ocl:OclModel location="127:47-127:50" name="KM3" elements="/0/@elements.11/@definition/@feature/@returnType/@elementType"/>
+  <ocl:VariableDeclaration location="128:2-128:6" varName="self" variableExp="/0/@elements.11/@definition/@feature/@body/@source/@source"/>
+  <ocl:OclModel location="128:39-128:42" name="KM3" elements="/0/@elements.11/@definition/@feature/@body/@result/@type/@elementType"/>
+  <ocl:VariableDeclaration location="128:56-128:60" varName="self" variableExp="/0/@elements.11/@definition/@feature/@body/@result/@initExpression/@elements.0"/>
+  <ocl:OclModel location="140:34-140:37" name="KM3" elements="/0/@elements.12/@definition/@feature/@parameters.0/@type/@elementType"/>
+  <ocl:OclModel location="140:55-140:58" name="KM3" elements="/0/@elements.12/@definition/@feature/@parameters.1/@type/@elementType"/>
+  <ocl:OclModel location="165:52-165:55" name="KM3" elements="/0/@elements.13/@definition/@feature/@parameters.0/@type/@elementType/@elementType"/>
+  <ocl:OclModel location="170:21-170:24" name="KM3" elements="/0/@elements.13/@definition/@feature/@body/@elseExpression/@variable/@type/@elementType"/>
+  <ocl:OclModel location="171:30-171:33" name="KM3" elements="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@type/@elementType/@elementType"/>
+  <ocl:OclModel location="174:37-174:40" name="KM3" elements="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@result/@type/@elementType/@elementType"/>
+  <ocl:VariableDeclaration location="175:8-175:18" varName="thisModule" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@variable/@initExpression/@body/@condition/@source"/>
+  <ocl:VariableDeclaration location="189:4-189:14" varName="thisModule" variableExp="/0/@elements.13/@definition/@feature/@body/@elseExpression/@in_/@in_/@elseExpression/@source/@source"/>
+  <ocl:OclModel location="203:30-203:33" name="KM3" elements="/0/@elements.14/@definition/@feature/@body/@variable/@type/@elementType/@elementType"/>
+  <ocl:VariableDeclaration location="204:3-204:13" varName="thisModule" variableExp="/0/@elements.14/@definition/@feature/@body/@variable/@initExpression/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="207:5-207:15" varName="thisModule" variableExp="/0/@elements.14/@definition/@feature/@body/@in_/@source"/>
+  <ocl:OclModel location="228:7-228:10" name="KM3" elements="/0/@elements.15/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="230:8-230:15" name="Metrics" elements="/0/@elements.15/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="233:12-233:22" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.0/@bindings.2/@value/@source/@source"/>
+  <ocl:OclModel location="236:8-236:15" name="Metrics" elements="/0/@elements.15/@outPattern/@elements.1/@type"/>
+  <ocl:VariableDeclaration location="240:6-240:16" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@source/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="244:7-244:17" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.1/@bindings.2/@value/@arguments.0/@source/@source/@source/@source"/>
+  <ocl:OclModel location="249:8-249:15" name="Metrics" elements="/0/@elements.15/@outPattern/@elements.2/@type"/>
+  <ocl:VariableDeclaration location="252:12-252:22" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.2/@bindings.2/@value/@source"/>
+  <ocl:OclModel location="255:8-255:15" name="Metrics" elements="/0/@elements.15/@outPattern/@elements.3/@type"/>
+  <ocl:VariableDeclaration location="258:12-258:22" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.3/@bindings.2/@value/@source"/>
+  <ocl:OclModel location="261:8-261:15" name="Metrics" elements="/0/@elements.15/@outPattern/@elements.4/@type"/>
+  <ocl:VariableDeclaration location="264:12-264:22" varName="thisModule" variableExp="/0/@elements.15/@outPattern/@elements.4/@bindings.2/@value/@source"/>
+  <ocl:OclModel location="279:7-279:10" name="KM3" elements="/0/@elements.16/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="281:8-281:15" name="Metrics" elements="/0/@elements.16/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="287:8-287:15" name="Metrics" elements="/0/@elements.16/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="293:8-293:15" name="Metrics" elements="/0/@elements.16/@outPattern/@elements.2/@type"/>
+  <ocl:OclModel location="299:8-299:15" name="Metrics" elements="/0/@elements.16/@outPattern/@elements.3/@type"/>
+</xmi:XMI>

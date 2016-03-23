@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="4:1-30:2" name="A2B">
+    <commentsBefore>-- @path A=/ListMetamodelRefactoring/Metamodel/TypeA.ecore</commentsBefore>
+    <commentsBefore>-- @path B=/ListMetamodelRefactoring/Metamodel/TypeB.ecore</commentsBefore>
+    <inModels location="5:25-5:35" name="IN" metamodel="/2"/>
+    <outModels location="5:8-5:19" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:MatchedRule" location="9:1-19:2" name="Root">
+      <commentsBefore>-- This rule transforms a RootA into RootB.</commentsBefore>
+      <commentsBefore>-- An ElementB is created from the name of RootA and it is placed at the first position of the list.</commentsBefore>
+      <commentsAfter>-- This rule transforms an ElementA into an ElementB.</commentsAfter>
+      <commentsAfter>-- 'B_' is prefixed to the name of each ElementB</commentsAfter>
+      <outPattern location="12:2-18:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="13:3-15:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="13:7-13:14" name="RootB" model="/4"/>
+          <bindings location="14:4-14:46" propertyName="elms">
+            <value xsi:type="ocl:OrderedSetExp" location="14:12-14:46">
+              <elements xsi:type="ocl:VariableExp" location="14:24-14:37" referredVariable="/0/@elements.0/@outPattern/@elements.1"/>
+              <elements xsi:type="ocl:NavigationOrAttributeCallExp" location="14:39-14:45" name="elms">
+                <source xsi:type="ocl:VariableExp" location="14:39-14:40" referredVariable="/0/@elements.0/@inPattern/@elements.0"/>
+              </elements>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="16:3-18:4" varName="first_element" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.0/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="16:19-16:29" name="ElementB" model="/5"/>
+          <bindings location="17:4-17:25" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="17:12-17:25" operationName="+">
+              <source xsi:type="ocl:StringExp" location="17:12-17:16" stringSymbol="B_"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="17:19-17:25" name="name">
+                <source xsi:type="ocl:VariableExp" location="17:19-17:20" referredVariable="/0/@elements.0/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="10:2-11:14">
+        <elements xsi:type="atl:SimpleInPatternElement" location="11:3-11:14" varName="s" variableExp="/0/@elements.0/@outPattern/@elements.0/@bindings.0/@value/@elements.1/@source /0/@elements.0/@outPattern/@elements.1/@bindings.0/@value/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="11:7-11:14" name="RootA" model="/3"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="23:1-30:2" name="Element">
+      <commentsBefore>-- This rule transforms an ElementA into an ElementB.</commentsBefore>
+      <commentsBefore>-- 'B_' is prefixed to the name of each ElementB</commentsBefore>
+      <outPattern location="26:2-29:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="27:3-29:4" varName="t">
+          <type xsi:type="ocl:OclModelElement" location="27:7-27:17" name="ElementB" model="/7"/>
+          <bindings location="28:4-28:25" propertyName="name">
+            <value xsi:type="ocl:OperatorCallExp" location="28:12-28:25" operationName="+">
+              <source xsi:type="ocl:StringExp" location="28:12-28:16" stringSymbol="B_"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="28:19-28:25" name="name">
+                <source xsi:type="ocl:VariableExp" location="28:19-28:20" referredVariable="/0/@elements.1/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="24:2-25:17">
+        <elements xsi:type="atl:SimpleInPatternElement" location="25:3-25:17" varName="s" variableExp="/0/@elements.1/@outPattern/@elements.0/@bindings.0/@value/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="25:7-25:17" name="ElementA" model="/6"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="5:14-5:19" name="TypeB" model="/0/@outModels.0"/>
+  <ocl:OclModel location="5:30-5:35" name="TypeA" model="/0/@inModels.0"/>
+  <ocl:OclModel location="11:7-11:8" name="A" elements="/0/@elements.0/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="13:7-13:8" name="B" elements="/0/@elements.0/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="16:19-16:20" name="B" elements="/0/@elements.0/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="25:7-25:8" name="A" elements="/0/@elements.1/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="27:7-27:8" name="B" elements="/0/@elements.1/@outPattern/@elements.0/@type"/>
+</xmi:XMI>

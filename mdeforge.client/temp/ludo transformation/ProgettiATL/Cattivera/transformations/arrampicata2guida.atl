@@ -1,0 +1,85 @@
+-- @path Falesia=/arrampicata2guida/metamodels/Falesia.ecore
+-- @path Guida=/arrampicata2guida/metammodels/Guida.ecore
+
+module arrampicata2guida;
+create OUT : Guida from falesiamodel : Falesia;
+
+helper context Falesia!Settori def: ComponiTesto() : String= 'esposizione:'.concat(self.esposizione.asSequence()).concat(', altezza sul livello del mare:').concat(self.altezzaSulLivelloDelMare).concat(', tipo di roccia:').concat(self.tipoRoccia);
+
+		 
+rule Arrampicata2Guida{
+	from 
+		a:Falesia!Arrampicata
+	to 
+		g: Guida!Guida(
+			località <- a.falesie,
+			località <- a.areaBulder,
+			località <- a.vieLunghe)
+		
+}
+
+rule Falesia2Localita{
+	from 
+		f:Falesia!Falesie
+	to 	
+		l: Guida!Localita(
+			testo <- f.regione.toString(),
+			titolo <- f.nome,
+			descrizione <- f.descrizione,
+			postiCaratteristici <- f.settori)
+}
+
+rule VieLunghe2Localita{
+	from 
+		f:Falesia!VieLunghe
+	to 
+		l: Guida!Localita(
+				titolo <- f.nome,
+				descrizione <- f.gradoComplessivo,
+				testo <- f.regione.toString(),
+				postiCaratteristici <- f.vie
+			)
+	}
+
+rule AreaBulder2Localita{
+	from 
+		a: Falesia!AreaBulder
+	to 
+		l: Guida!Localita(
+			testo <- a.descrizione,
+			titolo <- a.nome,
+			descrizione <- a.descrizione,
+			postiCaratteristici <- a.bulder)
+}
+
+rule Settori2PostiCaratteristici{
+	from s:Falesia!Settori
+	to l: Guida!PostiCaratteristici(
+		titolo <- s.nome,
+		comeArrivare <- s.accesso,
+		testo <- s.ComponiTesto(),
+		particolarita <- s.vie
+		)
+	}
+
+
+rule Bulder2PostiCaratteristici{
+	from 
+		b: Falesia!Bulder
+	to 
+		p: Guida!PostiCaratteristici(
+			comeArrivare <- b.areaBulder.accesso,
+			titolo <- b.nome,
+			testo <- b.difficoltaPassaggioChiave )
+		}
+
+
+rule Vie2Particolarità{
+	from 
+		s:Falesia!Vie
+	to
+		l: Guida!Particolarita(
+			titolo <- s.nome,
+			testo <- s.grado)
+	
+	}

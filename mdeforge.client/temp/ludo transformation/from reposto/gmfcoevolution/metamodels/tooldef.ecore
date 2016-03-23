@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tooldef"
+    nsURI="http://www.eclipse.org/gmf/2005/ToolDefinition" nsPrefix="gmftool">
+  <eClassifiers xsi:type="ecore:EClass" name="ToolRegistry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sharedActions" upperBound="-1"
+        eType="#//MenuAction" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Instead of placing&#x9;common actions somewhere in menu hierarchy and referencing them in (2..n) cases, keep them in this central registry and use ItemRef everywhere (i.e. in 1..n cases)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allMenus" upperBound="-1"
+        eType="#//Menu" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="palette" eType="#//Palette"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTool" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="smallIcon" eType="#//Image"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="largeIcon" eType="#//Image"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolContainer" abstract="true" eSuperTypes="#//AbstractTool">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tools" upperBound="-1"
+        eType="#//AbstractTool" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PaletteSeparator" eSuperTypes="#//AbstractTool"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolGroup" eSuperTypes="#//ToolContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collapsible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stack" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="active" eType="#//AbstractTool"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Palette" eSuperTypes="#//ToolContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//AbstractTool"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StandardTool" eSuperTypes="#//AbstractTool">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="predefined, like zoom or marquee"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toolKind" eType="#//StandardToolKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StandardToolKind">
+    <eLiterals name="SELECT"/>
+    <eLiterals name="SELECT_PAN" value="1"/>
+    <eLiterals name="MARQUEE" value="2"/>
+    <eLiterals name="ZOOM_PAN" value="3"/>
+    <eLiterals name="ZOOM_IN" value="4"/>
+    <eLiterals name="ZOOM_OUT" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreationTool" eSuperTypes="#//AbstractTool"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericTool" eSuperTypes="#//AbstractTool">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toolClass" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ItemBase" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Menu" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ItemBase" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Separator" eSuperTypes="#//ItemBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PredefinedItem" eSuperTypes="#//ItemBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PredefinedMenu" eSuperTypes="#//Menu #//PredefinedItem"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContributionItem" abstract="true" interface="true"
+      eSuperTypes="#//ItemBase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="icon" eType="#//Image"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MenuAction" eSuperTypes="#//ContributionItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ActionKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hotKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ItemRef" eSuperTypes="#//ItemBase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" eType="#//ItemBase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContextMenu" eSuperTypes="#//Menu">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//MenuAction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PopupMenu" eSuperTypes="#//Menu #//ContributionItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MainMenu" eSuperTypes="#//Menu">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="no default action and no id, just a collection of items"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Toolbar" eSuperTypes="#//Menu"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ActionKind">
+    <eLiterals name="CREATE"/>
+    <eLiterals name="PROPCHANGE" value="1"/>
+    <eLiterals name="MODIFY" value="2"/>
+    <eLiterals name="PROCESS" value="3"/>
+    <eLiterals name="CUSTOM" value="99"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Image" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultImage" eSuperTypes="#//Image">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Delegate to EMF.Edit providers"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BundleImage" eSuperTypes="#//Image">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Image bundled as part of distribution"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Relative path to image"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bundle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Empty value means image path is relative to generated bundle"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StyleSelector" abstract="true" interface="true">
+    <eOperations name="isOk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="style" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericStyleSelector" eSuperTypes="#//StyleSelector">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="1"
+        upperBound="-1" eType="#//AppearanceStyle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AppearanceStyle">
+    <eLiterals name="Font"/>
+    <eLiterals name="Fill" value="1"/>
+    <eLiterals name="Line" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

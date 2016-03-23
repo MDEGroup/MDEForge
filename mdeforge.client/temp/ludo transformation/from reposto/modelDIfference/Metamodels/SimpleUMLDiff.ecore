@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+  <ecore:EPackage name="SimpleUMLDiff">
+    <eClassifiers xsi:type="ecore:EClass" name="Added" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Deleted" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Changed" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IdentifiedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UMLModel" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classes" ordered="false" upperBound="-1" eType="/0/Class" containment="true" eOpposite="/0/Class/model"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="associations" ordered="false" upperBound="-1" eType="/0/Association" containment="true" eOpposite="/0/Association/model"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="primitiveDataTypes" ordered="false" upperBound="-1" eType="/0/PrimitiveDataType" containment="true" eOpposite="/0/PrimitiveDataType/model"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Classifier" abstract="true" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="/0/Classifier">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAbstract" ordered="false" unique="false" lowerBound="1" eType="/1/Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false" lowerBound="1" eType="/0/UMLModel" eOpposite="/0/UMLModel/classes"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" ordered="false" lowerBound="1" eType="/0/Class"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" ordered="false" upperBound="-1" eType="/0/Attribute" containment="true" eOpposite="/0/Attribute/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" ordered="false" upperBound="-1" eType="/0/Operation" containment="true" eOpposite="/0/Operation/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimitiveDataType" eSuperTypes="/0/Classifier">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false" lowerBound="1" eType="/0/UMLModel" eOpposite="/0/UMLModel/primitiveDataTypes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Association" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComposition" ordered="false" unique="false" lowerBound="1" eType="/1/Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAggregation" ordered="false" unique="false" lowerBound="1" eType="/1/Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false" lowerBound="1" eType="/0/UMLModel" eOpposite="/0/UMLModel/associations"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false" lowerBound="1" eType="/0/Class"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false" lowerBound="1" eType="/0/Class"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1" eType="/0/Classifier"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/Class" eOpposite="/0/Class/attributes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1" eType="/0/Parameter" containment="true" eOpposite="/0/Parameter/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/Class" eOpposite="/0/Class/operations"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" ordered="false" lowerBound="1" eType="/0/Classifier"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="/0/IdentifiedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/1/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/0/Operation" eOpposite="/0/Operation/parameters"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1" eType="/0/Classifier"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedUMLModel" eSuperTypes="/0/UMLModel /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedUMLModel" eSuperTypes="/0/UMLModel /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedUMLModel" eSuperTypes="/0/UMLModel /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/UMLModel"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedClass" eSuperTypes="/0/Class /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedClass" eSuperTypes="/0/Class /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedClass" eSuperTypes="/0/Class /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/Class"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedPrimitiveDataType" eSuperTypes="/0/PrimitiveDataType /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedPrimitiveDataType" eSuperTypes="/0/PrimitiveDataType /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedPrimitiveDataType" eSuperTypes="/0/PrimitiveDataType /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/PrimitiveDataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedAssociation" eSuperTypes="/0/Association /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedAssociation" eSuperTypes="/0/Association /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedAssociation" eSuperTypes="/0/Association /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/Association"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedAttribute" eSuperTypes="/0/Attribute /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedAttribute" eSuperTypes="/0/Attribute /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedAttribute" eSuperTypes="/0/Attribute /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/Attribute"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedOperation" eSuperTypes="/0/Operation /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedOperation" eSuperTypes="/0/Operation /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedOperation" eSuperTypes="/0/Operation /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/Operation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddedParameter" eSuperTypes="/0/Parameter /0/Added"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeletedParameter" eSuperTypes="/0/Parameter /0/Deleted"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ChangedParameter" eSuperTypes="/0/Parameter /0/Changed">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upDatedElement" ordered="false" lowerBound="1" eType="/0/Parameter"/>
+    </eClassifiers>
+  </ecore:EPackage>
+  <ecore:EPackage name="PrimitiveTypes">
+    <eClassifiers xsi:type="ecore:EDataType" name="Integer"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="String"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Boolean"/>
+  </ecore:EPackage>
+</xmi:XMI>

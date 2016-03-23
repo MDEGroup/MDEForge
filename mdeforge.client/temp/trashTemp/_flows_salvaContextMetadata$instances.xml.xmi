@@ -1,0 +1,803 @@
+<?xml version="1.0" encoding="ASCII"?>
+<defs:revoModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commons="http:/commons" xmlns:defs="http://generator.revo.genesys.it/components/defs" xmlns:frontend="http:/frontend">
+  <composedBy xsi:type="frontend:Flow" label="Flusso applicativo" group="/" documentation="Componente che modella un flusso applicativo" abstract="false" resource="true" category="frontend" id="Flow" version="1.1" idInstance="P27BM1448E01B444N4" startState_ref="P27BM1448E020E09N5" states_ref="P27BM1448E020E09N5 P27BM1448E14A30FN6 P27BM1448E18CEBFNF P27BM1448E1F3C13N19" transitions_ref="P27BM1448E14B627NA P27BM1448E19DE87N13 P27BM1448E1FD458N1A">
+    <attributes>
+      <attribute label="Nome" mandatory="true" documentation="Nome del flusso applicativo" context="model" name="name">
+        <valueType type="String" defaultValue="" value="salvaContextMetadata"/>
+        <helpManager qualifier="web">
+          <property name="url" value="http://192.168.1.251/genesyswiki/index.php/Framework_Generatore:Flow_component"/>
+        </helpManager>
+      </attribute>
+      <attribute label="Stato Iniziale" mandatory="true" documentation="Stato di avvio del flusso applicativo" context="model" name="startState">
+        <componentRef componentId="State" useInstance="true"/>
+      </attribute>
+      <attribute label="Stati" mandatory="true" documentation="Elenco degli stati che compongono il flusso applicativo" context="model" name="states">
+        <collectionComponentRef componentId="State" useInstance="true" reverseAttribute="flow"/>
+      </attribute>
+      <attribute label="Transizioni" mandatory="false" documentation="Elenco delle transizioni che compongono il flusso applicativo" context="model" name="transitions">
+        <collectionComponentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Input" mandatory="false" documentation="Elenco degli attributi di input utilizzati dal flusso" context="model" name="inputAttributes">
+        <collectionValueType type="String"/>
+      </attribute>
+      <attribute label="Output" mandatory="false" documentation="Elenco degli attributi di output utilizzati dal flusso" context="model" name="outputAttributes">
+        <collectionValueType type="String"/>
+      </attribute>
+      <attribute label="In white list" mandatory="true" documentation="Flag che indica se il flusso va inserito tra quelli considerati in &lt;em>white-revo&lt;/em>, tra quelli cio&#xe8; per i quali non valgono le autorizzazioni d'accesso fornite dal &lt;em>Profiler&lt;/em> bens&#xec; una gestione separata." context="model" name="inWhiteList">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Aggiungere alla lista di portlet" mandatory="false" documentation="Flag che indica se il flusso verr&#xe0; publicato come portlet in fase di generazione del progetto portlet" context="model" name="createPortlet">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Eventi processati" mandatory="false" documentation="Elenco degli eventi processati" context="model" name="supportedProcessingEvents">
+        <collectionComponentRef componentId="PresentationEvent" useInstance="false" reverseAttribute="flowContainer"/>
+      </attribute>
+      <attribute label="Eventi pubblicati" mandatory="false" documentation="Elenco degli eventi pubblicati" context="model" name="supportedPublishingEvents">
+        <collectionComponentRef componentId="PresentationEvent" useInstance="false" reverseAttribute="flowContainer"/>
+      </attribute>
+      <attribute label="label" mandatory="false" documentation="Etichetta di identificazione del componente" context="model" name="label">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+      <attribute label="description" mandatory="false" documentation="Descrizione del componente" context="model" name="description">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>GenericComponent</parentComponentId>
+    </parentComponents>
+    <generator instanceIdTemplate="${this.name}">
+      <processor value="WebflowServletConfig"/>
+      <processor value="WebflowExecutorConfig"/>
+      <processor value="WebflowActionBeans"/>
+      <processor value="WebflowBindingBeans"/>
+      <processor value="WebflowConfig"/>
+      <processor value="MessageBundle"/>
+      <processor value="StrutsTilesConfig"/>
+      <processor value="ApplicationContext"/>
+      <processor value="PortletDeploymentDescriptor" condition="instance.get('createPortlet') == 'true'"/>
+      <processor value="PortletWebflowContext" condition="instance.get('createPortlet') == 'true'"/>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:EmptyExecutionState" label="EmptyExecutionState" group="/States/ExecutionStates/" documentation="Componente che definisce uno stato di esecuzione vuoto" abstract="false" resource="false" id="EmptyExecutionState" version="001.000" idInstance="P27BM1448E020E09N5" flow_ref="P27BM1448E01B444N4" transitions_ref="P27BM1448E14B627NA" okTransition_ref="P27BM1448E14B627NA">
+    <attributes>
+      <attribute label="Con DTO" mandatory="true" documentation="Indicazione se il risultato dell'esecuzione &#xe8; messo in un DTO" context="model" name="withDTO">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Nome del risultato" mandatory="false" documentation="Chiave con cui viene salvato nel flow scope il risultato dell'esecuzione" context="model" name="resultKey">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+      <attribute label="Ferma all'errore" mandatory="true" documentation="Indica se l'esecuzione deve fermarsi in caso di errore" context="model" name="stopErrors">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Transizione OK" mandatory="true" documentation="Transizione di uscita normale dello stato" context="model" name="okTransition">
+        <componentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Chiave origine" mandatory="false" documentation="Chiave nel flowscope dell'oggetto in input" context="model" name="sourceKey">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+      <attribute label="ID" mandatory="true" documentation="Identificativo univoco dello stato dell'applicazione" context="model" name="id">
+        <valueType type="string" defaultValue="" value="start"/>
+        <helpManager qualifier="web">
+          <property name="url" value="http://localhost/state/id"/>
+        </helpManager>
+      </attribute>
+      <attribute label="Flusso" mandatory="true" documentation="Il flusso di cui lo stato fa parte" context="model" name="flow">
+        <componentRef componentId="Flow" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Transizioni" mandatory="false" documentation="Elenco delle transizioni in uscita dallo stato corrente" context="model" name="transitions">
+        <collectionComponentRef componentId="Transition" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ExecutionState</parentComponentId>
+    </parentComponents>
+    <helpManager qualifier="web">
+      <property name="url" value="http://localhost/state"/>
+    </helpManager>
+    <generator instanceIdTemplate="${this.id?cap_first}FormAction">
+      <processor value="ActionBean"/>
+      <processor value="PortletActionBean"/>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="actionBeanDefinition" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="import" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="body" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="tiles" function="false" mandatory="false">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:ServiceCall" label="Chiamata a servizio" group="/States/" documentation="Componente che definisce uno stato di esecuzione di un metodo di Business Delegate, dando la possibilit&#xe0; di utilizzare input provenienti da uno degli &lt;em>scope&lt;/em> di Webflow e di salvare l'output in uno di tali &lt;em>scope&lt;/em>" abstract="false" resource="false" id="ServiceCall" version="001.000" idInstance="P27BM1448E14A30FN6" flow_ref="P27BM1448E01B444N4" transitions_ref="P27BM1448E19DE87N13" okTransition_ref="P27BM1448E19DE87N13" businessDelegate_ref="P27BM1448E14A314N7">
+    <attributes>
+      <attribute label="Chiave di output" mandatory="true" documentation="Chiave con cui viene salvato nello scope di output il risultato dell'esecuzione" context="model" name="outputKey">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Scope di output" mandatory="true" documentation="Scope nel quale esportare il risultato dell'esecuzione" context="model" name="outputScope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+      <attribute label="Chiave oggetto di contesto per registrazione errori" mandatory="false" documentation="Se specificata, la chiave del flowScope dell'oggetto che funge da contesto per la registrazione degli errori (di default viene utilizzata la chiave di input)" context="model" name="errorsContextKey">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+      <attribute label="Ferma all'errore" mandatory="true" documentation="Indica se l'esecuzione deve fermarsi in caso di errore" context="model" name="stopErrors">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Transizione OK" mandatory="true" documentation="Transizione di uscita normale dello stato" context="model" name="okTransition">
+        <componentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Metodo business delegate associato" mandatory="true" documentation="Metodo di business delegate associato allo stato di esecuzione" context="model" name="businessDelegate">
+        <componentRef componentId="MethodDefinition" useInstance="false"/>
+      </attribute>
+      <attribute label="Transizione da seguire in caso di errore" mandatory="false" documentation="Se presente, rappresenta la transizione da seguire in caso di DTO ricevuto da BE contenente errori. Se non presente, la gestione degli errori rimarr&#xe0; quella standard, di ritorno all'ultimo ViewState precedente" context="model" name="errorTransition">
+        <componentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Rimozione duplicati" mandatory="true" documentation="Flag che indica se rimuovere eventuali duplicati dall'eventuale lista di DTOInfo restituita dal servizio" context="model" name="removeDuplicatesFromInfoList">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Check warning" mandatory="true" documentation="Flag che indica se rendere disponibile eventuali warning per la visualizzazione, anche in assenza in errori" context="model" name="willCheckWarnings">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Decodifica errori" documentation="Mappa di decodifica dei nomi degli attribuiti su cui registrare gli errori. Va utilizzata quando i nomi degli attributi del bean del form di input differiscono da quelli del bean passato al servizio" context="model" name="errorsDecodingTable">
+        <collectionComponentRef componentId="MapEntry" useInstance="false"/>
+      </attribute>
+      <attribute label="Condizioni" mandatory="false" documentation="Condizioni per l'esecuzione del flusso" context="model" name="conditions">
+        <collectionComponentRef componentId="Condition" useInstance="false"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+      <attribute label="ID" mandatory="true" documentation="Identificativo univoco dello stato dell'applicazione" context="model" name="id">
+        <valueType type="string" defaultValue="" value="SalvaContesto"/>
+        <helpManager qualifier="web">
+          <property name="url" value="http://localhost/state/id"/>
+        </helpManager>
+      </attribute>
+      <attribute label="Flusso" mandatory="true" documentation="Il flusso di cui lo stato fa parte" context="model" name="flow">
+        <componentRef componentId="Flow" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Transizioni" mandatory="false" documentation="Elenco delle transizioni in uscita dallo stato corrente" context="model" name="transitions">
+        <collectionComponentRef componentId="Transition" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>State</parentComponentId>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>DTOCriteriaManager</parentComponentId>
+    </parentComponents>
+    <helpManager qualifier="web">
+      <property name="url" value="http://localhost/state"/>
+    </helpManager>
+    <generator instanceIdTemplate="${this.id?cap_first}Action">
+      <processor value="ActionBean"/>
+      <processor value="PortletActionBean"/>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="tiles" function="false" mandatory="false">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="webflowConfig" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:MethodDefinition" label="Definizione di una classe" documentation="Componente che definisce una classe un metodo" abstract="false" resource="false" id="MethodDefinition" idInstance="P27BM1448E14A314N7" clazz_ref="P27BM1448E14A31CN9">
+    <attributes>
+      <attribute label="Classe" mandatory="true" documentation="La classe di appartenenza del metodo" context="model" name="clazz">
+        <componentRef componentId="ClassDefinition" useInstance="false"/>
+      </attribute>
+      <attribute label="Nome metodo" mandatory="true" documentation="Nome del metodo" context="model" name="methodName">
+        <valueType type="string" defaultValue="" value="salvaUtente"/>
+      </attribute>
+      <attribute label="Collezione" mandatory="true" documentation="Flag che stabilisce se il metodo in questione restituisce una collection (true) od un singolo risultato (false)" context="model" name="collectionResult">
+        <valueType type="boolean" defaultValue="true" value="false"/>
+      </attribute>
+      <attribute label="Usa il record blocking" mandatory="true" documentation="Flag che stabilisce se utilizzare o meno il record blocking. L'oggetto BlockRecordsCriteria sar&#xe0; configurato nel dto e recuperato dal flowscope nel CollectionResultState per il corretto rendering dei Block Records Link." context="model" name="useRecordBlocking">
+        <valueType type="boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Collezione in input" mandatory="false" documentation="Flag che stabilisce se il metodo in questione accetta in input una collection (true) od un singolo oggetto (false)" context="model" name="collectionInput">
+        <valueType type="boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Numero massimo di record" mandatory="false" documentation="Massimo numero di record che si desidera ottenere come risultato. Se lasciato vuoto il valore sar&#xe0; automaticamente settato a -1 (senza un limite). Se specificato, il numero dovr&#xe0; presumibilmente essere un multiplo del numero dei risultati per pagina del CollectionResultState popolato con l'output del metodo selezionato." context="model" name="maxRecordsNumber">
+        <valueType type="int" value=""/>
+      </attribute>
+      <attribute label="Servizio" mandatory="false" virtual="true" documentation="Servizio che viene associato alla chiamata del metodo" context="model" name="serviceElement">
+        <componentRef componentId="Service" useInstance="true"/>
+      </attribute>
+      <attribute label="Metodo" mandatory="false" virtual="true" documentation="Identifica l'azione associata al metodo che viene chiamato" context="model" name="actionElement">
+        <componentRef componentId="Action" useInstance="true"/>
+      </attribute>
+    </attributes>
+  </composedBy>
+  <composedBy xsi:type="commons:ClassDefinition" label="Definizione di una classe" documentation="Componente che definisce una classe" abstract="false" resource="false" id="ClassDefinition" idInstance="P27BM1448E14A31CN9">
+    <attributes>
+      <attribute label="Package" mandatory="true" documentation="Nome del package" context="model" name="packageName">
+        <valueType type="String" defaultValue="" value="com.smartshaped.usr.business"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Nome della classe" context="model" name="className">
+        <valueType type="String" defaultValue="" value="Utenti"/>
+      </attribute>
+    </attributes>
+    <views>
+      <view name="classDefinitionPopupView">
+        <revoDialog name="classDialog" title="Definizione Classe">
+          <revoPanel label="Dettagli:" name="classPanel">
+            <revoText label="Nome package:" name="packageText"/>
+            <revoText label="Nome classe:" name="classText"/>
+          </revoPanel>
+        </revoDialog>
+      </view>
+    </views>
+    <actionRules>
+      <actionRule container="classDialog" event="POPUP_OK">
+        <action name="saveAfterEditComponent"/>
+      </actionRule>
+      <actionRule container="classDialog" event="POPUP_CANCEL">
+        <action name="cancelComponent"/>
+      </actionRule>
+      <actionRule container="bottoneElimina" event="BUTTON_CLICKED">
+        <action name="deleteComponent"/>
+      </actionRule>
+    </actionRules>
+  </composedBy>
+  <composedBy xsi:type="frontend:Transition" label="Transition" documentation="Transizione tra due stati del flusso" abstract="false" resource="false" id="Transition" idInstance="P27BM1448E14B627NA" source_ref="P27BM1448E020E09N5" destination_ref="P27BM1448E14A30FN6" inputs_ref="P27BM1448E15040ENB P27BM1448E157709NC" outputs_ref="P27BM1448E166132ND P27BM1448E16913DNE">
+    <attributes>
+      <attribute label="Event" mandatory="true" documentation="Nome dell'event della transizione" context="model" name="event">
+        <valueType type="String" defaultValue="" value="to_SalvaDati"/>
+      </attribute>
+      <attribute label="Source" mandatory="true" documentation="Stato di origine della Transition corrente" context="model" name="source">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Destination" mandatory="true" documentation="Stato di destinazione della Transition corrente" context="model" name="destination">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Variabili in ingresso" mandatory="false" documentation="Elenco delle variabili in ingresso all'eleborazione" context="model" name="inputs">
+        <collectionComponentRef componentId="TransitionInput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Azioni" mandatory="false" documentation="Lista delle azioni da eseguire" context="model" name="actions">
+        <collectionComponentRef componentId="TransitionAction" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Variabili in uscita" mandatory="false" documentation="Elenco delle variabili in uscita dall'eleborazione" context="model" name="outputs">
+        <collectionComponentRef componentId="TransitionOutput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Flag &quot;magico&quot;" mandatory="true" documentation="Flag che indica se lo stato di destinazione, qualora sia un &lt;code>BusinessDelegateExecutionState&lt;/code> che esegue una query dinamica, deve utilizzare i parametri utilizzati all'esecuzione precedente e non i parametri correnti dalla request HTTP." context="model" name="magicFlag">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Genera per debug" mandatory="true" documentation="Flag che indica se la classe della transizione va generata anche quando non serve (ovvero se non ci sono input o non ci sono output n&#xe9; action)." context="model" name="generateForDebug">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+    </attributes>
+    <generator instanceIdTemplate="${this.source.id?cap_first}_${this.event?cap_first}Transition">
+      <processor value="TransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+      <processor value="PortletTransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionInput" label="TransitionInput" documentation="Definizione di una variabile di input per l'elaborazione di una Transition" abstract="false" resource="false" id="TransitionInput" idInstance="P27BM1448E15040ENB" transition_ref="P27BM1448E14B627NA">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Datamodel variabile" mandatory="false" virtual="true" documentation="Tipo della variabile da definire" context="model" name="variableDatamodel">
+        <componentRef componentId="DataModelFE" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+      <attribute label="Package" mandatory="true" documentation="Package del tipo della variabile creata" context="model" name="variablePackage">
+        <valueType type="String" defaultValue="" value="com.smartshaped.usr.datamodel.fe"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Classe della variabile creata" context="model" name="variableClass">
+        <valueType type="String" defaultValue="" value="Context"/>
+      </attribute>
+      <attribute label="Nome variabile" mandatory="true" documentation="Nome della variabile da gestire" context="model" name="variableName">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>VariableCreator</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionInput" label="TransitionInput" documentation="Definizione di una variabile di input per l'elaborazione di una Transition" abstract="false" resource="false" id="TransitionInput" idInstance="P27BM1448E157709NC" transition_ref="P27BM1448E14B627NA">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Datamodel variabile" mandatory="false" virtual="true" documentation="Tipo della variabile da definire" context="model" name="variableDatamodel">
+        <componentRef componentId="DataModelFE" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+      <attribute label="Package" mandatory="true" documentation="Package del tipo della variabile creata" context="model" name="variablePackage">
+        <valueType type="String" defaultValue="" value="java.util"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Classe della variabile creata" context="model" name="variableClass">
+        <valueType type="String" defaultValue="" value="Collection"/>
+      </attribute>
+      <attribute label="Nome variabile" mandatory="true" documentation="Nome della variabile da gestire" context="model" name="variableName">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>VariableCreator</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionOutput" label="TransitionOutput" documentation="Definizione di un output dell'elaborazione di una Transition" abstract="false" resource="false" id="TransitionOutput" idInstance="P27BM1448E166132ND" transition_ref="P27BM1448E14B627NA" exportVar_ref="P27BM1448E15040ENB">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Sovrascrivi" mandatory="true" documentation="Flag che indica se sovrascrivere eventuali valori gi&#xe0; associati alla chiave di destinazione nello scope prescelto" context="model" name="overrideIfExists">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Variabile" mandatory="true" documentation="Variabile da esportare" context="model" name="exportVar">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionOutput" label="TransitionOutput" documentation="Definizione di un output dell'elaborazione di una Transition" abstract="false" resource="false" id="TransitionOutput" idInstance="P27BM1448E16913DNE" transition_ref="P27BM1448E14B627NA" exportVar_ref="P27BM1448E157709NC">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Sovrascrivi" mandatory="true" documentation="Flag che indica se sovrascrivere eventuali valori gi&#xe0; associati alla chiave di destinazione nello scope prescelto" context="model" name="overrideIfExists">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Variabile" mandatory="true" documentation="Variabile da esportare" context="model" name="exportVar">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:ServiceCall" label="Chiamata a servizio" group="/States/" documentation="Componente che definisce uno stato di esecuzione di un metodo di Business Delegate, dando la possibilit&#xe0; di utilizzare input provenienti da uno degli &lt;em>scope&lt;/em> di Webflow e di salvare l'output in uno di tali &lt;em>scope&lt;/em>" abstract="false" resource="false" id="ServiceCall" version="001.000" idInstance="P27BM1448E18CEBFNF" flow_ref="P27BM1448E01B444N4" transitions_ref="P27BM1448E1FD458N1A" okTransition_ref="P27BM1448E1FD458N1A" businessDelegate_ref="P27BM1448E18CEC4N10">
+    <attributes>
+      <attribute label="Chiave di output" mandatory="true" documentation="Chiave con cui viene salvato nello scope di output il risultato dell'esecuzione" context="model" name="outputKey">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope di output" mandatory="true" documentation="Scope nel quale esportare il risultato dell'esecuzione" context="model" name="outputScope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+      <attribute label="Chiave oggetto di contesto per registrazione errori" mandatory="false" documentation="Se specificata, la chiave del flowScope dell'oggetto che funge da contesto per la registrazione degli errori (di default viene utilizzata la chiave di input)" context="model" name="errorsContextKey">
+        <valueType type="String" defaultValue="" value=""/>
+      </attribute>
+      <attribute label="Ferma all'errore" mandatory="true" documentation="Indica se l'esecuzione deve fermarsi in caso di errore" context="model" name="stopErrors">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Transizione OK" mandatory="true" documentation="Transizione di uscita normale dello stato" context="model" name="okTransition">
+        <componentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Metodo business delegate associato" mandatory="true" documentation="Metodo di business delegate associato allo stato di esecuzione" context="model" name="businessDelegate">
+        <componentRef componentId="MethodDefinition" useInstance="false"/>
+      </attribute>
+      <attribute label="Transizione da seguire in caso di errore" mandatory="false" documentation="Se presente, rappresenta la transizione da seguire in caso di DTO ricevuto da BE contenente errori. Se non presente, la gestione degli errori rimarr&#xe0; quella standard, di ritorno all'ultimo ViewState precedente" context="model" name="errorTransition">
+        <componentRef componentId="Transition" useInstance="true"/>
+      </attribute>
+      <attribute label="Rimozione duplicati" mandatory="true" documentation="Flag che indica se rimuovere eventuali duplicati dall'eventuale lista di DTOInfo restituita dal servizio" context="model" name="removeDuplicatesFromInfoList">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Check warning" mandatory="true" documentation="Flag che indica se rendere disponibile eventuali warning per la visualizzazione, anche in assenza in errori" context="model" name="willCheckWarnings">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Decodifica errori" documentation="Mappa di decodifica dei nomi degli attribuiti su cui registrare gli errori. Va utilizzata quando i nomi degli attributi del bean del form di input differiscono da quelli del bean passato al servizio" context="model" name="errorsDecodingTable">
+        <collectionComponentRef componentId="MapEntry" useInstance="false"/>
+      </attribute>
+      <attribute label="Condizioni" mandatory="false" documentation="Condizioni per l'esecuzione del flusso" context="model" name="conditions">
+        <collectionComponentRef componentId="Condition" useInstance="false"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+      <attribute label="ID" mandatory="true" documentation="Identificativo univoco dello stato dell'applicazione" context="model" name="id">
+        <valueType type="string" defaultValue="" value="saveContextMetadati"/>
+        <helpManager qualifier="web">
+          <property name="url" value="http://localhost/state/id"/>
+        </helpManager>
+      </attribute>
+      <attribute label="Flusso" mandatory="true" documentation="Il flusso di cui lo stato fa parte" context="model" name="flow">
+        <componentRef componentId="Flow" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Transizioni" mandatory="false" documentation="Elenco delle transizioni in uscita dallo stato corrente" context="model" name="transitions">
+        <collectionComponentRef componentId="Transition" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>State</parentComponentId>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>DTOCriteriaManager</parentComponentId>
+    </parentComponents>
+    <helpManager qualifier="web">
+      <property name="url" value="http://localhost/state"/>
+    </helpManager>
+    <generator instanceIdTemplate="${this.id?cap_first}Action">
+      <processor value="ActionBean"/>
+      <processor value="PortletActionBean"/>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="tiles" function="false" mandatory="false">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="webflowConfig" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:MethodDefinition" label="Definizione di una classe" documentation="Componente che definisce una classe un metodo" abstract="false" resource="false" id="MethodDefinition" idInstance="P27BM1448E18CEC4N10" clazz_ref="P27BM1448E18CECBN12">
+    <attributes>
+      <attribute label="Classe" mandatory="true" documentation="La classe di appartenenza del metodo" context="model" name="clazz">
+        <componentRef componentId="ClassDefinition" useInstance="false"/>
+      </attribute>
+      <attribute label="Nome metodo" mandatory="true" documentation="Nome del metodo" context="model" name="methodName">
+        <valueType type="string" defaultValue="" value="multiSaveMetadatoContesto"/>
+      </attribute>
+      <attribute label="Collezione" mandatory="true" documentation="Flag che stabilisce se il metodo in questione restituisce una collection (true) od un singolo risultato (false)" context="model" name="collectionResult">
+        <valueType type="boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Usa il record blocking" mandatory="true" documentation="Flag che stabilisce se utilizzare o meno il record blocking. L'oggetto BlockRecordsCriteria sar&#xe0; configurato nel dto e recuperato dal flowscope nel CollectionResultState per il corretto rendering dei Block Records Link." context="model" name="useRecordBlocking">
+        <valueType type="boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Collezione in input" mandatory="false" documentation="Flag che stabilisce se il metodo in questione accetta in input una collection (true) od un singolo oggetto (false)" context="model" name="collectionInput">
+        <valueType type="boolean" defaultValue="false" value="true"/>
+      </attribute>
+      <attribute label="Numero massimo di record" mandatory="false" documentation="Massimo numero di record che si desidera ottenere come risultato. Se lasciato vuoto il valore sar&#xe0; automaticamente settato a -1 (senza un limite). Se specificato, il numero dovr&#xe0; presumibilmente essere un multiplo del numero dei risultati per pagina del CollectionResultState popolato con l'output del metodo selezionato." context="model" name="maxRecordsNumber">
+        <valueType type="int" value=""/>
+      </attribute>
+      <attribute label="Servizio" mandatory="false" virtual="true" documentation="Servizio che viene associato alla chiamata del metodo" context="model" name="serviceElement">
+        <componentRef componentId="Service" useInstance="true"/>
+      </attribute>
+      <attribute label="Metodo" mandatory="false" virtual="true" documentation="Identifica l'azione associata al metodo che viene chiamato" context="model" name="actionElement">
+        <componentRef componentId="Action" useInstance="true"/>
+      </attribute>
+    </attributes>
+  </composedBy>
+  <composedBy xsi:type="commons:ClassDefinition" label="Definizione di una classe" documentation="Componente che definisce una classe" abstract="false" resource="false" id="ClassDefinition" idInstance="P27BM1448E18CECBN12">
+    <attributes>
+      <attribute label="Package" mandatory="true" documentation="Nome del package" context="model" name="packageName">
+        <valueType type="String" defaultValue="" value="com.smartshaped.usr.business"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Nome della classe" context="model" name="className">
+        <valueType type="String" defaultValue="" value="Metadati"/>
+      </attribute>
+    </attributes>
+    <views>
+      <view name="classDefinitionPopupView">
+        <revoDialog name="classDialog" title="Definizione Classe">
+          <revoPanel label="Dettagli:" name="classPanel">
+            <revoText label="Nome package:" name="packageText"/>
+            <revoText label="Nome classe:" name="classText"/>
+          </revoPanel>
+        </revoDialog>
+      </view>
+    </views>
+    <actionRules>
+      <actionRule container="classDialog" event="POPUP_OK">
+        <action name="saveAfterEditComponent"/>
+      </actionRule>
+      <actionRule container="classDialog" event="POPUP_CANCEL">
+        <action name="cancelComponent"/>
+      </actionRule>
+      <actionRule container="bottoneElimina" event="BUTTON_CLICKED">
+        <action name="deleteComponent"/>
+      </actionRule>
+    </actionRules>
+  </composedBy>
+  <composedBy xsi:type="frontend:Transition" label="Transition" documentation="Transizione tra due stati del flusso" abstract="false" resource="false" id="Transition" idInstance="P27BM1448E19DE87N13" source_ref="P27BM1448E14A30FN6" destination_ref="P27BM1448E18CEBFNF" inputs_ref="P27BM1448E1AA9DEN14 P27BM1448E1B04B4N15" actions_ref="P27BM1448E1B78F7N16" outputs_ref="P27BM1448E1D982CN18">
+    <attributes>
+      <attribute label="Event" mandatory="true" documentation="Nome dell'event della transizione" context="model" name="event">
+        <valueType type="String" defaultValue="" value="to_saveContextMetadati"/>
+      </attribute>
+      <attribute label="Source" mandatory="true" documentation="Stato di origine della Transition corrente" context="model" name="source">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Destination" mandatory="true" documentation="Stato di destinazione della Transition corrente" context="model" name="destination">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Variabili in ingresso" mandatory="false" documentation="Elenco delle variabili in ingresso all'eleborazione" context="model" name="inputs">
+        <collectionComponentRef componentId="TransitionInput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Azioni" mandatory="false" documentation="Lista delle azioni da eseguire" context="model" name="actions">
+        <collectionComponentRef componentId="TransitionAction" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Variabili in uscita" mandatory="false" documentation="Elenco delle variabili in uscita dall'eleborazione" context="model" name="outputs">
+        <collectionComponentRef componentId="TransitionOutput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Flag &quot;magico&quot;" mandatory="true" documentation="Flag che indica se lo stato di destinazione, qualora sia un &lt;code>BusinessDelegateExecutionState&lt;/code> che esegue una query dinamica, deve utilizzare i parametri utilizzati all'esecuzione precedente e non i parametri correnti dalla request HTTP." context="model" name="magicFlag">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Genera per debug" mandatory="true" documentation="Flag che indica se la classe della transizione va generata anche quando non serve (ovvero se non ci sono input o non ci sono output n&#xe9; action)." context="model" name="generateForDebug">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+    </attributes>
+    <generator instanceIdTemplate="${this.source.id?cap_first}_${this.event?cap_first}Transition">
+      <processor value="TransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+      <processor value="PortletTransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionInput" label="TransitionInput" documentation="Definizione di una variabile di input per l'elaborazione di una Transition" abstract="false" resource="false" id="TransitionInput" idInstance="P27BM1448E1AA9DEN14" transition_ref="P27BM1448E19DE87N13">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Datamodel variabile" mandatory="false" virtual="true" documentation="Tipo della variabile da definire" context="model" name="variableDatamodel">
+        <componentRef componentId="DataModelFE" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+      <attribute label="Package" mandatory="true" documentation="Package del tipo della variabile creata" context="model" name="variablePackage">
+        <valueType type="String" defaultValue="" value="com.smartshaped.usr.datamodel.fe"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Classe della variabile creata" context="model" name="variableClass">
+        <valueType type="String" defaultValue="" value="Context"/>
+      </attribute>
+      <attribute label="Nome variabile" mandatory="true" documentation="Nome della variabile da gestire" context="model" name="variableName">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="newContext"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>VariableCreator</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionInput" label="TransitionInput" documentation="Definizione di una variabile di input per l'elaborazione di una Transition" abstract="false" resource="false" id="TransitionInput" idInstance="P27BM1448E1B04B4N15" transition_ref="P27BM1448E19DE87N13">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Datamodel variabile" mandatory="false" virtual="true" documentation="Tipo della variabile da definire" context="model" name="variableDatamodel">
+        <componentRef componentId="DataModelFE" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+      <attribute label="Package" mandatory="true" documentation="Package del tipo della variabile creata" context="model" name="variablePackage">
+        <valueType type="String" defaultValue="" value="java.util"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Classe della variabile creata" context="model" name="variableClass">
+        <valueType type="String" defaultValue="" value="Collection"/>
+      </attribute>
+      <attribute label="Nome variabile" mandatory="true" documentation="Nome della variabile da gestire" context="model" name="variableName">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+      <parentComponentId>VariableCreator</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:Iteration" label="Iteration" documentation="TransitionAction per iterazione su collezioni" abstract="false" resource="false" category="frontend" id="Iteration" idInstance="P27BM1448E1B78F7N16" transition_ref="P27BM1448E19DE87N13" iterable_ref="P27BM1448E1B04B4N15" actions_ref="P27BM1448E1C9E75N17">
+    <attributes>
+      <attribute label="Variabile su cui iterare" mandatory="true" documentation="Variabile di input sui cui elementi iterare" context="model" name="iterable">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Datamodel variabile" mandatory="false" virtual="true" documentation="Tipo della variabile da definire" context="model" name="variableDatamodel">
+        <componentRef componentId="DataModelFE" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+      <attribute label="Azioni" mandatory="true" documentation="Lista delle azioni da eseguire ad ogni iterazione" context="model" name="actions">
+        <collectionComponentRef componentId="TransitionAction"/>
+      </attribute>
+      <attribute label="Package" mandatory="true" documentation="Package del tipo della variabile creata" context="model" name="variablePackage">
+        <valueType type="String" defaultValue="" value="com.smartshaped.usr.datamodel.fe"/>
+      </attribute>
+      <attribute label="Classe" mandatory="true" documentation="Classe della variabile creata" context="model" name="variableClass">
+        <valueType type="String" defaultValue="" value="ContextMetadata"/>
+      </attribute>
+      <attribute label="Nome variabile" mandatory="true" documentation="Nome della variabile da gestire" context="model" name="variableName">
+        <valueType type="String" defaultValue="" value="contextMetadata"/>
+      </attribute>
+      <attribute label="Descrizione" mandatory="true" documentation="Descrizione dell'azione" context="model" name="description">
+        <valueType type="String" defaultValue="" value="Cicliamo listaContextMetadata e agganciamo l'oggetto contesto."/>
+      </attribute>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>TransitionAction</parentComponentId>
+      <parentComponentId>VariableCreator</parentComponentId>
+    </parentComponents>
+    <generator>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="buildActionsCode" function="true" mandatory="true">
+            <parameters>
+              <parameterName>action</parameterName>
+              <parameterName>index</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:SetAttribute" label="SetAttribute" documentation="TransitionAction per editing di &lt;em>value object&lt;/em>" abstract="false" resource="false" category="frontend" id="SetAttribute" idInstance="P27BM1448E1C9E75N17" transition_ref="P27BM1448E19DE87N13" propertyValueVar_ref="P27BM1448E1AA9DEN14">
+    <attributes>
+      <attribute label="Pojo su cui settare una property" mandatory="true" documentation="Variabile di input" context="model" name="pojoVar">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Variabile valore" mandatory="true" documentation="Variabile da passare all'invocazione del setter" context="model" name="propertyValueVar">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Nome property" mandatory="true" documentation="Nome della property del BO da valorizzare" context="model" name="propertyName">
+        <valueType type="String" defaultValue="" value="context"/>
+      </attribute>
+      <attribute label="Descrizione" mandatory="true" documentation="Descrizione dell'azione" context="model" name="description">
+        <valueType type="String" defaultValue="" value="Settiamo il contesto all'oggetto corrente"/>
+      </attribute>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>TransitionAction</parentComponentId>
+    </parentComponents>
+    <generator>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="buildActionsCode" function="true" mandatory="true">
+            <parameters>
+              <parameterName>action</parameterName>
+              <parameterName>index</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:TransitionOutput" label="TransitionOutput" documentation="Definizione di un output dell'elaborazione di una Transition" abstract="false" resource="false" id="TransitionOutput" idInstance="P27BM1448E1D982CN18" transition_ref="P27BM1448E19DE87N13" exportVar_ref="P27BM1448E1B04B4N15">
+    <attributes>
+      <attribute label="Source" mandatory="true" documentation="Transition di appartenenza" context="model" name="transition">
+        <componentRef componentId="Transition" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Sovrascrivi" mandatory="true" documentation="Flag che indica se sovrascrivere eventuali valori gi&#xe0; associati alla chiave di destinazione nello scope prescelto" context="model" name="overrideIfExists">
+        <valueType type="Boolean" defaultValue="true" value="true"/>
+      </attribute>
+      <attribute label="Variabile" mandatory="true" documentation="Variabile da esportare" context="model" name="exportVar">
+        <componentRef componentId="TransitionInput" useInstance="true"/>
+      </attribute>
+      <attribute label="Chiave" mandatory="true" documentation="Chiave con cui prendere un oggetto dalla sessione" context="model" name="key">
+        <valueType type="String" defaultValue="" value="listaContextMetadata"/>
+      </attribute>
+      <attribute label="Scope" mandatory="true" documentation="Scope dal quale prendere un oggetto" context="model" name="scope">
+        <valueType type="String" defaultValue="flow" value="flow"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>ScopesAccessor</parentComponentId>
+    </parentComponents>
+  </composedBy>
+  <composedBy xsi:type="frontend:SubflowState" label="SubflowState" group="/States/" documentation="Stato innesco di un sottoflusso" abstract="false" resource="false" id="SubflowState" version="001.000" idInstance="P27BM1448E1F3C13N19" flow_ref="P27BM1448E01B444N4">
+    <attributes>
+      <attribute label="Flusso" mandatory="true" documentation="Flusso da innescare come subflow" context="model" name="subflow">
+        <componentRef componentId="Flow" useInstance="true"/>
+      </attribute>
+      <attribute label="ID" mandatory="true" documentation="Identificativo univoco dello stato dell'applicazione" context="model" name="id">
+        <valueType type="string" defaultValue="" value="TornaAListaContesti"/>
+        <helpManager qualifier="web">
+          <property name="url" value="http://localhost/state/id"/>
+        </helpManager>
+      </attribute>
+      <attribute label="Flusso" mandatory="true" documentation="Il flusso di cui lo stato fa parte" context="model" name="flow">
+        <componentRef componentId="Flow" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Transizioni" mandatory="false" documentation="Elenco delle transizioni in uscita dallo stato corrente" context="model" name="transitions">
+        <collectionComponentRef componentId="Transition" useInstance="true" excludeOnCopy="true"/>
+      </attribute>
+    </attributes>
+    <parentComponents>
+      <parentComponentId>State</parentComponentId>
+    </parentComponents>
+    <helpManager qualifier="web">
+      <property name="url" value="http://localhost/state"/>
+    </helpManager>
+    <generator>
+      <extensionPolicy>
+        <requiredMacros>
+          <macro name="tiles" function="false" mandatory="false">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+          <macro name="webflowConfig" function="false" mandatory="true">
+            <parameters>
+              <parameterName>state</parameterName>
+            </parameters>
+          </macro>
+        </requiredMacros>
+      </extensionPolicy>
+    </generator>
+  </composedBy>
+  <composedBy xsi:type="frontend:Transition" label="Transition" documentation="Transizione tra due stati del flusso" abstract="false" resource="false" id="Transition" idInstance="P27BM1448E1FD458N1A" source_ref="P27BM1448E18CEBFNF" destination_ref="P27BM1448E1F3C13N19">
+    <attributes>
+      <attribute label="Event" mandatory="true" documentation="Nome dell'event della transizione" context="model" name="event">
+        <valueType type="String" defaultValue="" value="to_TornaAListaContesti"/>
+      </attribute>
+      <attribute label="Source" mandatory="true" documentation="Stato di origine della Transition corrente" context="model" name="source">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Destination" mandatory="true" documentation="Stato di destinazione della Transition corrente" context="model" name="destination">
+        <componentRef componentId="State" useInstance="true" reverse="true"/>
+      </attribute>
+      <attribute label="Variabili in ingresso" mandatory="false" documentation="Elenco delle variabili in ingresso all'eleborazione" context="model" name="inputs">
+        <collectionComponentRef componentId="TransitionInput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Azioni" mandatory="false" documentation="Lista delle azioni da eseguire" context="model" name="actions">
+        <collectionComponentRef componentId="TransitionAction" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Variabili in uscita" mandatory="false" documentation="Elenco delle variabili in uscita dall'eleborazione" context="model" name="outputs">
+        <collectionComponentRef componentId="TransitionOutput" useInstance="false" reverseAttribute="transition"/>
+      </attribute>
+      <attribute label="Flag &quot;magico&quot;" mandatory="true" documentation="Flag che indica se lo stato di destinazione, qualora sia un &lt;code>BusinessDelegateExecutionState&lt;/code> che esegue una query dinamica, deve utilizzare i parametri utilizzati all'esecuzione precedente e non i parametri correnti dalla request HTTP." context="model" name="magicFlag">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+      <attribute label="Genera per debug" mandatory="true" documentation="Flag che indica se la classe della transizione va generata anche quando non serve (ovvero se non ci sono input o non ci sono output n&#xe9; action)." context="model" name="generateForDebug">
+        <valueType type="Boolean" defaultValue="false" value="false"/>
+      </attribute>
+    </attributes>
+    <generator instanceIdTemplate="${this.source.id?cap_first}_${this.event?cap_first}Transition">
+      <processor value="TransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+      <processor value="PortletTransitionSupportBean" condition="instance.get('generateForDebug') == 'true' || (instance.get('inputs').size() > 0 &amp;&amp; instance.get('actions').size() > 0) || instance.get('outputs').size() > 0"/>
+    </generator>
+  </composedBy>
+</defs:revoModel>

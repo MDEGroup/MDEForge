@@ -1,0 +1,514 @@
+module SimpleUMLDiff2SimpleUML; create OUT : SimpleUML from IN1 : SimpleUML, IN2 : SimpleUMLDiff, IN3 : DA;
+
+rule UnchangedUMLModel2UMLModel {
+  from
+    s : SimpleUML!UMLModel
+    (
+      s.oclIsTypeOf(SimpleUML!UMLModel) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!UMLModel(
+      classes <- s.classes,
+      primitiveDataTypes <- s.primitiveDataTypes,
+      associations <- s.associations,
+      id <- s.id
+    )
+}
+
+rule UnchangedClass2Class {
+  from
+    s : SimpleUML!Class
+    (
+      s.oclIsTypeOf(SimpleUML!Class) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!Class(
+      isAbstract <- s.isAbstract,
+      attributes <- s.attributes,
+      parent <- s.parent,
+      model <- s.model,
+      operations <- s.operations,
+      name <- s.name,
+      id <- s.id
+    )
+}
+
+rule UnchangedPrimitiveDataType2PrimitiveDataType {
+  from
+    s : SimpleUML!PrimitiveDataType
+    (
+      s.oclIsTypeOf(SimpleUML!PrimitiveDataType) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!PrimitiveDataType(
+      model <- s.model,
+      name <- s.name,
+      id <- s.id
+    )
+}
+
+rule UnchangedAssociation2Association {
+  from
+    s : SimpleUML!Association
+    (
+      s.oclIsTypeOf(SimpleUML!Association) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!Association(
+      isAggregation <- s.isAggregation,
+      isComposition <- s.isComposition,
+      target <- s.target,
+      model <- s.model,
+      source <- s.source,
+      id <- s.id
+    )
+}
+
+rule UnchangedAttribute2Attribute {
+  from
+    s : SimpleUML!Attribute
+    (
+      s.oclIsTypeOf(SimpleUML!Attribute) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!Attribute(
+      name <- s.name,
+      type <- s.type,
+      owner <- s.owner,
+      id <- s.id
+	  )
+ 
+	
+}
+
+rule UnchangedOperation2Operation {
+  from
+    s : SimpleUML!Operation
+    (
+      s.oclIsTypeOf(SimpleUML!Operation) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!Operation(
+      name <- s.name,
+      parameters <- s.parameters,
+      owner <- s.owner,
+      returnType <- s.returnType,
+      id <- s.id
+    )
+}
+
+rule UnchangedParameter2Parameter {
+  from
+    s : SimpleUML!Parameter
+    (
+      s.oclIsTypeOf(SimpleUML!Parameter) and not s.isChanged and not s.isDeleted
+    )
+  to
+    t : SimpleUML!Parameter(
+      name <- s.name,
+      type <- s.type,
+      id <- s.id
+    )
+}
+
+rule AddedParameter2Parameter {
+  from
+    s : SimpleUMLDiff!AddedParameter
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedParameter)
+    )
+  to
+    t : SimpleUML!Parameter(
+      name <- s.name,
+      id <- s.id,
+      type <- s.getAddedParametertype,
+      owner <- s.getAddedParameterowner
+    )
+}
+
+rule ChangedParameter2Parameter {
+  from
+    s : SimpleUMLDiff!ChangedParameter
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedParameter) and not s.upDatedElement.oclIsUndefined()
+    )
+  to
+    t : SimpleUML!Parameter(
+      name <- s.getChangedParametername,
+      id <- s.getChangedParameterid,
+      type <- s.getChangedParametertype,
+      owner <- s.getChangedParameterowner
+    )
+}
+
+rule AddedClass2Class {
+  from
+    s : SimpleUMLDiff!AddedClass
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedClass)
+    )
+  to
+    t : SimpleUML!Class(
+      isAbstract <- s.isAbstract,
+      name <- s.name,
+      id <- s.id,
+      parent <- s.getAddedClassparent,
+      model <- s.getAddedClassmodel,
+      attributes <- s.attributes,
+      operations <- s.operations
+    )
+}
+
+rule ChangedClass2Class {
+  from
+    s : SimpleUMLDiff!ChangedClass
+    (
+      not s.upDatedElement.oclIsUndefined() and s.oclIsTypeOf(SimpleUMLDiff!ChangedClass) and s.isApplied 
+    )
+  to
+    t : SimpleUML!Class(
+      isAbstract <- s.getChangedClassisAbstract,
+      name <- s.getChangedClassname,
+      id <- s.getChangedClassid,
+      parent <- s.getChangedClassparent,
+      model <- s.getChangedClassmodel,
+      attributes <-  Sequence{s.attributes, s.getAppliedClass.attributes},
+      operations <- s.operations
+    )
+}
+
+rule AddedPrimitiveDataType2PrimitiveDataType {
+  from
+    s : SimpleUMLDiff!AddedPrimitiveDataType
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedPrimitiveDataType)
+    )
+  to
+    t : SimpleUML!PrimitiveDataType(
+      name <- s.name,
+      id <- s.id,
+      model <- s.getAddedPrimitiveDataTypemodel
+    )
+}
+
+rule ChangedPrimitiveDataType2PrimitiveDataType {
+  from
+    s : SimpleUMLDiff!ChangedPrimitiveDataType
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedPrimitiveDataType) and not s.upDatedElement.oclIsUndefined()
+    )
+  to
+    t : SimpleUML!PrimitiveDataType(
+      name <- s.getChangedPrimitiveDataTypename,
+      id <- s.getChangedPrimitiveDataTypeid,
+      model <- s.getChangedPrimitiveDataTypemodel
+    )
+}
+
+rule AddedAttribute2Attribute {
+  from
+    s : SimpleUMLDiff!AddedAttribute
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedAttribute)
+    )
+  to
+    t : SimpleUML!Attribute(
+      name <- s.name,
+      id <- s.id,
+      type <- s.getAddedAttributetype,
+      owner <- s.getAddedAttributeowner
+    )
+}
+
+rule ChangedAttribute2Attribute {
+  from
+    s : SimpleUMLDiff!ChangedAttribute
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedAttribute) and not s.upDatedElement.oclIsUndefined() and s.isApplied 
+    )
+  to
+  	
+    t : SimpleUML!Attribute(
+      name <- s.getChangedAttributename,
+      id <- s.getChangedAttributeid,
+      type <- s.getChangedAttributetype,
+      owner <- s.getChangedAttributeowner
+    )
+	
+}
+
+rule AddedAssociation2Association {
+  from
+    s : SimpleUMLDiff!AddedAssociation
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedAssociation)
+    )
+  to
+    t : SimpleUML!Association(
+      isAggregation <- s.isAggregation,
+      isComposition <- s.isComposition,
+      id <- s.id,
+      target <- s.getAddedAssociationtarget,
+      model <- s.getAddedAssociationmodel,
+      source <- s.getAddedAssociationsource
+    )
+}
+
+rule ChangedAssociation2Association {
+  from
+    s : SimpleUMLDiff!ChangedAssociation
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedAssociation) and not s.upDatedElement.oclIsUndefined()
+    )
+  to
+    t : SimpleUML!Association(
+      isAggregation <- s.getChangedAssociationisAggregation,
+      isComposition <- s.getChangedAssociationisComposition,
+      id <- s.getChangedAssociationid,
+      target <- s.getChangedAssociationtarget,
+      model <- s.getChangedAssociationmodel,
+      source <- s.getChangedAssociationsource
+    )
+}
+
+rule AddedOperation2Operation {
+  from
+    s : SimpleUMLDiff!AddedOperation
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedOperation)
+    )
+  to
+    t : SimpleUML!Operation(
+      name <- s.name,
+      id <- s.id,
+      owner <- s.getAddedOperationowner,
+      returnType <- s.getAddedOperationreturnType,
+      parameters <- s.parameters
+    )
+}
+
+rule ChangedOperation2Operation {
+  from
+    s : SimpleUMLDiff!ChangedOperation
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedOperation) and not s.upDatedElement.oclIsUndefined()
+    )
+  to
+    t : SimpleUML!Operation(
+      name <- s.getChangedOperationname,
+      id <- s.getChangedOperationid,
+      owner <- s.getChangedOperationowner,
+      returnType <- s.getChangedOperationreturnType,
+      parameters <- s.parameters
+    )
+}
+
+rule AddedUMLModel2UMLModel {
+  from
+    s : SimpleUMLDiff!AddedUMLModel
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!AddedUMLModel)
+    )
+  to
+    t : SimpleUML!UMLModel(
+      id <- s.id,
+      classes <- s.classes,
+      primitiveDataTypes <- s.primitiveDataTypes,
+      associations <- s.associations
+    )
+}
+
+rule ChangedUMLModel2UMLModel {
+  from
+    s : SimpleUMLDiff!ChangedUMLModel
+    (
+      s.oclIsTypeOf(SimpleUMLDiff!ChangedUMLModel) and not s.upDatedElement.oclIsUndefined()
+    )
+  to
+    t : SimpleUML!UMLModel(
+      id <- s.getChangedUMLModelid,
+      classes <- s.classes,
+      primitiveDataTypes <- s.primitiveDataTypes,
+      associations <- s.associations
+    )
+}
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationtarget : SimpleUML!Class =
+  if not self.upDatedElement.target.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.upDatedElement.target.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.upDatedElement.target.id = e.id).first() else SimpleUMLDiff!Class.allInstancesFrom('IN2')->select(e | self.upDatedElement.target.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationmodel : SimpleUML!UMLModel =
+  if not self.upDatedElement.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.upDatedElement.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.upDatedElement.model.id = e.id).first() else SimpleUMLDiff!UMLModel.allInstancesFrom('IN2')->select(e | self.upDatedElement.model.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationsource : SimpleUML!Class =
+  if not self.upDatedElement.source.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.upDatedElement.source.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.upDatedElement.source.id = e.id).first() else SimpleUMLDiff!Class.allInstancesFrom('IN2')->select(e | self.upDatedElement.source.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationisAggregation : Boolean =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.isAggregation else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationisComposition : Boolean =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.isComposition else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAssociation def: getChangedAssociationid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedOperation def: getChangedOperationowner : SimpleUML!Class =
+  if not self.upDatedElement.owner.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.upDatedElement.owner.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.upDatedElement.owner.id = e.id).first() else SimpleUMLDiff!Class.allInstancesFrom('IN2')->select(e | self.upDatedElement.owner.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedOperation def: getChangedOperationreturnType : SimpleUML!Classifier =
+  if not self.upDatedElement.returnType.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.upDatedElement.returnType.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.upDatedElement.returnType.id = e.id).first() else SimpleUMLDiff!Classifier.allInstancesFrom('IN2')->select(e | self.upDatedElement.returnType.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedOperation def: getChangedOperationname : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.name else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedOperation def: getChangedOperationid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedClass def: getChangedClassparent : SimpleUML!Class =
+  if not self.upDatedElement.parent.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.upDatedElement.parent.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.upDatedElement.parent.id = e.id).first() else SimpleUMLDiff!Class.allInstancesFrom('IN2')->select(e | self.upDatedElement.parent.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedClass def: getChangedClassmodel : SimpleUML!UMLModel =
+  if not self.upDatedElement.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.upDatedElement.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.upDatedElement.model.id = e.id).first() else SimpleUMLDiff!UMLModel.allInstancesFrom('IN2')->select(e | self.upDatedElement.model.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedClass def: getChangedClassisAbstract : Boolean =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.isAbstract else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedClass def: getChangedClassname : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.name else OclUndefined endif;
+
+
+
+helper context SimpleUMLDiff!ChangedClass def: getAppliedClass : SimpleUML!Class =
+  if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | e.id = l.left.ref and  self.id = l.right.ref)) 
+  then SimpleUML!Class.allInstancesFrom('IN1')->select(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | e.id = l.left.ref and  self.id = l.right.ref)).first()
+  else OclUndefined
+  endif;
+	
+
+helper context SimpleUMLDiff!ChangedClass def: getChangedClassid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+
+helper context SimpleUMLDiff!ChangedParameter def: getChangedParametertype : SimpleUML!Classifier =
+  if not self.upDatedElement.type.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.upDatedElement.type.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.upDatedElement.type.id = e.id).first() else SimpleUMLDiff!Classifier.allInstancesFrom('IN2')->select(e | self.upDatedElement.type.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedParameter def: getChangedParameterowner : SimpleUML!Operation =
+  if not self.upDatedElement.owner.oclIsUndefined() then if SimpleUML!Operation.allInstancesFrom('IN1')->exists(e | self.upDatedElement.owner.id = e.id) then SimpleUML!Operation.allInstancesFrom('IN1')->select(e | self.upDatedElement.owner.id = e.id).first() else SimpleUMLDiff!Operation.allInstancesFrom('IN2')->select(e | self.upDatedElement.owner.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedParameter def: getChangedParametername : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.name else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedParameter def: getChangedParameterid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedUMLModel def: getChangedUMLModelid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAttribute def: getChangedAttributetype : SimpleUML!Classifier =
+  if not self.upDatedElement.type.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.upDatedElement.type.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.upDatedElement.type.id = e.id).first() else SimpleUMLDiff!Classifier.allInstancesFrom('IN2')->select(e | self.upDatedElement.type.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAttribute def: getChangedAttributeowner : SimpleUML!Class =
+  if not self.upDatedElement.owner.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.upDatedElement.owner.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.upDatedElement.owner.id = e.id).first() else SimpleUMLDiff!Class.allInstancesFrom('IN2')->select(e | self.upDatedElement.owner.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAttribute def: getChangedAttributename : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.name else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedAttribute def: getChangedAttributeid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedPrimitiveDataType def: getChangedPrimitiveDataTypemodel : SimpleUML!UMLModel =
+  if not self.upDatedElement.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.upDatedElement.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.upDatedElement.model.id = e.id).first() else SimpleUMLDiff!UMLModel.allInstancesFrom('IN2')->select(e | self.upDatedElement.model.id = e.id).first() endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedPrimitiveDataType def: getChangedPrimitiveDataTypename : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.name else OclUndefined endif;
+
+helper context SimpleUMLDiff!ChangedPrimitiveDataType def: getChangedPrimitiveDataTypeid : String =
+  if not self.upDatedElement.oclIsUndefined() then self.upDatedElement.id else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedAssociation def: getAddedAssociationtarget : SimpleUML!Class =
+  if not self.target.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.target.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.target.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedAssociation def: getAddedAssociationmodel : SimpleUML!UMLModel =
+  if not self.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.model.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedAssociation def: getAddedAssociationsource : SimpleUML!Class =
+  if not self.source.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.source.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.source.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedPrimitiveDataType def: getAddedPrimitiveDataTypemodel : SimpleUML!UMLModel =
+  if not self.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.model.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedAttribute def: getAddedAttributetype : SimpleUML!Classifier =
+  if not self.type.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.type.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.type.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedAttribute def: getAddedAttributeowner : SimpleUML!Class =
+  if not self.owner.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.owner.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.owner.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedOperation def: getAddedOperationowner : SimpleUML!Class =
+  if not self.owner.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.owner.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.owner.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedOperation def: getAddedOperationreturnType : SimpleUML!Classifier =
+  if not self.returnType.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.returnType.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.returnType.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedClass def: getAddedClassparent : SimpleUML!Class =
+  if not self.parent.oclIsUndefined() then if SimpleUML!Class.allInstancesFrom('IN1')->exists(e | self.parent.id = e.id) then SimpleUML!Class.allInstancesFrom('IN1')->select(e | self.parent.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedClass def: getAddedClassmodel : SimpleUML!UMLModel =
+  if not self.model.oclIsUndefined() then if SimpleUML!UMLModel.allInstancesFrom('IN1')->exists(e | self.model.id = e.id) then SimpleUML!UMLModel.allInstancesFrom('IN1')->select(e | self.model.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedParameter def: getAddedParametertype : SimpleUML!Classifier =
+  if not self.type.oclIsUndefined() then if SimpleUML!Classifier.allInstancesFrom('IN1')->exists(e | self.type.id = e.id) then SimpleUML!Classifier.allInstancesFrom('IN1')->select(e | self.type.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUMLDiff!AddedParameter def: getAddedParameterowner : SimpleUML!Operation =
+  if not self.owner.oclIsUndefined() then if SimpleUML!Operation.allInstancesFrom('IN1')->exists(e | self.owner.id = e.id) then SimpleUML!Operation.allInstancesFrom('IN1')->select(e | self.owner.id = e.id).first() else OclUndefined endif else OclUndefined endif;
+
+helper context SimpleUML!PrimitiveDataType def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedPrimitiveDataType.allInstancesFrom('IN2')->exists(e | self.id = e.upDatedElement.id);
+
+helper context SimpleUML!PrimitiveDataType def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedPrimitiveDataType.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+helper context SimpleUML!Attribute def: isChanged : Boolean =
+	SimpleUMLDiff!ChangedAttribute.allInstancesFrom('IN2')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | e.id = l.right.ref and  self.id = l.left.ref));
+
+helper context SimpleUML!Attribute def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedAttribute.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+helper context SimpleUML!Association def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedAssociation.allInstancesFrom('IN2')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | e.id = l.right.ref and  self.id = l.left.ref));
+
+helper context SimpleUML!Association def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedAssociation.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+
+helper context SimpleUMLDiff!ChangedAttribute def: isApplied : Boolean =
+SimpleUML!Attribute.allInstancesFrom('IN1')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | self.id = l.right.ref and  l.left.ref = e.id));
+
+
+helper context SimpleUML!Class def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedClass.allInstancesFrom('IN2')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | e.id = l.right.ref and  self.id = l.left.ref));
+
+
+helper context SimpleUMLDiff!ChangedClass def: isApplied : Boolean =
+SimpleUML!Class.allInstancesFrom('IN1')->exists(e | DA!ApplicationWLink.allInstancesFrom('IN3')->exists(l | self.id = l.right.ref and  l.left.ref = e.id));
+
+
+
+helper context SimpleUML!Class def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedClass.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+helper context SimpleUML!Parameter def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedParameter.allInstancesFrom('IN2')->exists(e | self.id = e.upDatedElement.id);
+
+helper context SimpleUML!Parameter def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedParameter.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+helper context SimpleUML!UMLModel def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedUMLModel.allInstancesFrom('IN2')->exists(e | self.id = e.upDatedElement.id);
+
+helper context SimpleUML!UMLModel def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedUMLModel.allInstancesFrom('IN2')->exists(e | self.id = e.id);
+
+helper context SimpleUML!Operation def: isChanged : Boolean =
+  SimpleUMLDiff!ChangedOperation.allInstancesFrom('IN2')->exists(e | self.id = e.upDatedElement.id);
+
+helper context SimpleUML!Operation def: isDeleted : Boolean =
+  SimpleUMLDiff!DeletedOperation.allInstancesFrom('IN2')->exists(e | self.id = e.id);

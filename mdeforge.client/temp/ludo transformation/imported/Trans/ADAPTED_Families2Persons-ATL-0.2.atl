@@ -1,0 +1,91 @@
+-- @atlcompiler atl2006
+-- @path Families=/Families2Persons/Families.ecore
+-- @path Persons=/Families2Persons/Persons.ecore
+module ADAPTED_Families2Persons;
+create OUT : Persons from IN : Families;
+
+helper def: getCiao : String =
+  'ciao';
+
+helper def: firstMember : --Warning: element Member has been deleted!
+Families!"Deleted:???Member???" =
+  if --Warning: element Member has been deleted!
+  Families!"Deleted:???Member???".allInstances().size() > 0 then
+    --Warning: element Member has been deleted!
+    Families!"Deleted:???Member???".allInstances()->first()
+  else
+    thisModule.getCiao
+  endif;
+
+helper context --Warning: element Member has been deleted!
+Families!"Deleted:???Member???" def: newName : String =
+  'prefix_' + self.firstName;
+
+helper context --Warning: element Member has been deleted!
+Families!"Deleted:???Member???" def: funzione() : String =
+  self.newName;
+
+helper context --Warning: element Member has been deleted!
+Families!"Deleted:???Member???" def: familyName : String =
+  if not self.familyFather.oclIsUndefined() then
+    self.familyFather.lastName
+  else
+    if not self."???familyMother???".oclIsUndefined() then
+      self."???familyMother???".lastName
+    else
+      if not self.familySon.oclIsUndefined() then
+        self.familySon.lastName
+      else
+        self.familyDaughter.lastName
+      endif
+    endif
+  endif;
+
+helper context --Warning: element Member has been deleted!
+Families!"Deleted:???Member???" def: isFemale() : Boolean =
+  if not self."???familyMother???".oclIsUndefined() then
+    true
+  else
+    if not self.familyDaughter.oclIsUndefined() then
+      true
+    else
+      false
+    endif
+  endif;
+
+rule Member2Male {
+  from
+    s : --Warning: element Member has been deleted!
+    Families!"Deleted:???Member???"
+    (
+      not s.isFemale()
+    )
+  using
+  {
+    newName : String = 'Sig.' + s.firstName;
+  }
+  to
+    t : Persons!Male (
+      fullName <- newName + ' ' + s.familyName
+    )
+}
+
+rule Member2Female {
+  from
+    s : --Warning: element Member has been deleted!
+    Families!"Deleted:???Member???",
+    s1 : Families!Family
+  to
+    t : Persons!Female (
+      fullName <- s.firstName + ' ' + s.familyName + s."???familyMother???".toString()
+    )
+}
+
+--@Rule for Container added class : automatically generated
+rule Container {
+  from
+    s_Container : Families!Container
+  to
+    t_Container : Families!Container
+} --@End Rule for Container added class : automatically generated
+

@@ -1,0 +1,952 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-337:2" name="PathExp2TextualPathExp">
+    <inModels location="2:34-2:46" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:28" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="14:1-18:13">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- HELPERS --------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- This helper computes the root State of the input PathExp model.</commentsBefore>
+      <commentsBefore>-- To this end, it selects among all State instances the one that has no</commentsBefore>
+      <commentsBefore>-- incoming transition.</commentsBefore>
+      <commentsBefore>-- CONTEXT: thisModule</commentsBefore>
+      <commentsBefore>-- RETURN:	PathExp!State</commentsBefore>
+      <commentsAfter>-- This helper computes a boolean value stating whether a loop transition is</commentsAfter>
+      <commentsAfter>-- defined for the contextual State.</commentsAfter>
+      <commentsAfter>-- For this purpose, the helper checks if there exists an incoming transition</commentsAfter>
+      <commentsAfter>-- whose source is the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Boolean</commentsAfter>
+      <definition location="14:8-18:12">
+        <feature xsi:type="ocl:Attribute" location="14:13-18:12" name="rootState">
+          <initExpression xsi:type="ocl:CollectionOperationCallExp" location="15:2-18:12" operationName="first">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="15:2-17:17" operationName="asSequence">
+              <source xsi:type="ocl:IteratorExp" location="15:2-16:38" name="select">
+                <source xsi:type="ocl:OperationCallExp" location="15:2-15:30" operationName="allInstances">
+                  <source xsi:type="ocl:OclModelElement" location="15:2-15:15" name="State" model="/4"/>
+                </source>
+                <body xsi:type="ocl:CollectionOperationCallExp" location="16:16-16:37" operationName="isEmpty">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="16:16-16:26" name="incoming">
+                    <source xsi:type="ocl:VariableExp" location="16:16-16:17" referredVariable="/0/@elements.0/@definition/@feature/@initExpression/@source/@source/@iterators.0"/>
+                  </source>
+                </body>
+                <iterators location="16:12-16:13" varName="s" variableExp="/0/@elements.0/@definition/@feature/@initExpression/@source/@source/@body/@source/@source"/>
+              </source>
+            </source>
+          </initExpression>
+          <type xsi:type="ocl:OclModelElement" location="14:25-14:38" name="State" model="/3"/>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="27:1-30:16">
+      <commentsBefore>-- This helper computes a boolean value stating whether a loop transition is</commentsBefore>
+      <commentsBefore>-- defined for the contextual State.</commentsBefore>
+      <commentsBefore>-- For this purpose, the helper checks if there exists an incoming transition</commentsBefore>
+      <commentsBefore>-- whose source is the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Boolean</commentsBefore>
+      <commentsAfter>-- This helper returns the loop Transition defined for the contextual State.</commentsAfter>
+      <commentsAfter>-- To this end, it returns the first incoming transition that has the</commentsAfter>
+      <commentsAfter>-- contextual State as source.</commentsAfter>
+      <commentsAfter>-- PRECOND:	a loop transition must be defined for the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	PathExp!Transition</commentsAfter>
+      <definition location="27:8-30:15">
+        <feature xsi:type="ocl:Operation" location="27:35-30:15" name="existLoop">
+          <returnType xsi:type="ocl:BooleanType" location="27:49-27:56"/>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="28:2-30:15" operationName="notEmpty">
+            <source xsi:type="ocl:IteratorExp" location="28:2-29:32" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="28:2-28:15" name="incoming">
+                <source xsi:type="ocl:VariableExp" location="28:2-28:6" referredVariable="/6"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="29:16-29:31" operationName="=">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="29:16-29:24" name="source">
+                  <source xsi:type="ocl:VariableExp" location="29:16-29:17" referredVariable="/0/@elements.1/@definition/@feature/@body/@source/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:VariableExp" location="29:27-29:31" referredVariable="/7"/>
+              </body>
+              <iterators location="29:12-29:13" varName="e" variableExp="/0/@elements.1/@definition/@feature/@body/@source/@body/@source/@source"/>
+            </source>
+          </body>
+        </feature>
+        <context_ location="27:8-27:29">
+          <context_ xsi:type="ocl:OclModelElement" location="27:16-27:29" name="State" model="/5"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="39:1-43:13">
+      <commentsBefore>-- This helper returns the loop Transition defined for the contextual State.</commentsBefore>
+      <commentsBefore>-- To this end, it returns the first incoming transition that has the</commentsBefore>
+      <commentsBefore>-- contextual State as source.</commentsBefore>
+      <commentsBefore>-- PRECOND:	a loop transition must be defined for the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	PathExp!Transition</commentsBefore>
+      <commentsAfter>-- This helper computes the set of non-loop incoming transitions of the</commentsAfter>
+      <commentsAfter>-- contextual State.</commentsAfter>
+      <commentsAfter>-- To this end, it selects among incoming transitions the ones that do not</commentsAfter>
+      <commentsAfter>-- target the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(PathExp!Transition)</commentsAfter>
+      <definition location="39:8-43:12">
+        <feature xsi:type="ocl:Operation" location="39:35-43:12" name="getLoop">
+          <returnType xsi:type="ocl:OclModelElement" location="39:47-39:65" name="Transition" model="/9"/>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="40:2-43:12" operationName="first">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="40:2-42:17" operationName="asSequence">
+              <source xsi:type="ocl:IteratorExp" location="40:2-41:32" name="select">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="40:2-40:15" name="incoming">
+                  <source xsi:type="ocl:VariableExp" location="40:2-40:6" referredVariable="/10"/>
+                </source>
+                <body xsi:type="ocl:OperatorCallExp" location="41:16-41:31" operationName="=">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="41:16-41:24" name="source">
+                    <source xsi:type="ocl:VariableExp" location="41:16-41:17" referredVariable="/0/@elements.2/@definition/@feature/@body/@source/@source/@iterators.0"/>
+                  </source>
+                  <arguments xsi:type="ocl:VariableExp" location="41:27-41:31" referredVariable="/11"/>
+                </body>
+                <iterators location="41:12-41:13" varName="e" variableExp="/0/@elements.2/@definition/@feature/@body/@source/@source/@body/@source/@source"/>
+              </source>
+            </source>
+          </body>
+        </feature>
+        <context_ location="39:8-39:29">
+          <context_ xsi:type="ocl:OclModelElement" location="39:16-39:29" name="State" model="/8"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="52:1-55:18">
+      <commentsBefore>-- This helper computes the set of non-loop incoming transitions of the</commentsBefore>
+      <commentsBefore>-- contextual State.</commentsBefore>
+      <commentsBefore>-- To this end, it selects among incoming transitions the ones that do not</commentsBefore>
+      <commentsBefore>-- target the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(PathExp!Transition)</commentsBefore>
+      <commentsAfter>-- This helper computes the set of non-loop outgoing transitions of the</commentsAfter>
+      <commentsAfter>-- contextual State.</commentsAfter>
+      <commentsAfter>-- To this end, it selects among outgoing transitions the ones that do not</commentsAfter>
+      <commentsAfter>-- target the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(PathExp!Transition)</commentsAfter>
+      <definition location="52:8-55:17">
+        <feature xsi:type="ocl:Operation" location="52:35-55:17" name="getInT">
+          <returnType xsi:type="ocl:SequenceType" location="52:46-52:74">
+            <elementType xsi:type="ocl:OclModelElement" location="52:55-52:73" name="Transition" model="/13"/>
+          </returnType>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="53:2-55:17" operationName="asSequence">
+            <source xsi:type="ocl:IteratorExp" location="53:2-54:33" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="53:2-53:15" name="incoming">
+                <source xsi:type="ocl:VariableExp" location="53:2-53:6" referredVariable="/14"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="54:16-54:32" operationName="&lt;>">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="54:16-54:24" name="source">
+                  <source xsi:type="ocl:VariableExp" location="54:16-54:17" referredVariable="/0/@elements.3/@definition/@feature/@body/@source/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:VariableExp" location="54:28-54:32" referredVariable="/15"/>
+              </body>
+              <iterators location="54:12-54:13" varName="e" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@body/@source/@source"/>
+            </source>
+          </body>
+        </feature>
+        <context_ location="52:8-52:29">
+          <context_ xsi:type="ocl:OclModelElement" location="52:16-52:29" name="State" model="/12"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="64:1-67:18">
+      <commentsBefore>-- This helper computes the set of non-loop outgoing transitions of the</commentsBefore>
+      <commentsBefore>-- contextual State.</commentsBefore>
+      <commentsBefore>-- To this end, it selects among outgoing transitions the ones that do not</commentsBefore>
+      <commentsBefore>-- target the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(PathExp!Transition)</commentsBefore>
+      <commentsAfter>-- This helper computes the set of States whose transitions lead to the</commentsAfter>
+      <commentsAfter>-- contextual State (except the contextual State if it is reachable from itself</commentsAfter>
+      <commentsAfter>-- by means of a loop transitions).</commentsAfter>
+      <commentsAfter>-- For this purpose, the helper simply collects the source of the transitions</commentsAfter>
+      <commentsAfter>-- returned by the call of the 'getInT' helper onto the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(PathExp!State)</commentsAfter>
+      <definition location="64:8-67:17">
+        <feature xsi:type="ocl:Operation" location="64:35-67:17" name="getOutT">
+          <returnType xsi:type="ocl:SequenceType" location="64:47-64:75">
+            <elementType xsi:type="ocl:OclModelElement" location="64:56-64:74" name="Transition" model="/17"/>
+          </returnType>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="65:2-67:17" operationName="asSequence">
+            <source xsi:type="ocl:IteratorExp" location="65:2-66:33" name="select">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="65:2-65:15" name="outgoing">
+                <source xsi:type="ocl:VariableExp" location="65:2-65:6" referredVariable="/18"/>
+              </source>
+              <body xsi:type="ocl:OperatorCallExp" location="66:16-66:32" operationName="&lt;>">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="66:16-66:24" name="target">
+                  <source xsi:type="ocl:VariableExp" location="66:16-66:17" referredVariable="/0/@elements.4/@definition/@feature/@body/@source/@iterators.0"/>
+                </source>
+                <arguments xsi:type="ocl:VariableExp" location="66:28-66:32" referredVariable="/19"/>
+              </body>
+              <iterators location="66:12-66:13" varName="e" variableExp="/0/@elements.4/@definition/@feature/@body/@source/@body/@source/@source"/>
+            </source>
+          </body>
+        </feature>
+        <context_ location="64:8-64:29">
+          <context_ xsi:type="ocl:OclModelElement" location="64:16-64:29" name="State" model="/16"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="77:1-78:39">
+      <commentsBefore>-- This helper computes the set of States whose transitions lead to the</commentsBefore>
+      <commentsBefore>-- contextual State (except the contextual State if it is reachable from itself</commentsBefore>
+      <commentsBefore>-- by means of a loop transitions).</commentsBefore>
+      <commentsBefore>-- For this purpose, the helper simply collects the source of the transitions</commentsBefore>
+      <commentsBefore>-- returned by the call of the 'getInT' helper onto the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(PathExp!State)</commentsBefore>
+      <commentsAfter>-- This helper computes the set of States that can be reached by means of</commentsAfter>
+      <commentsAfter>-- outgoing transitions of the contextual State (except the contextual State</commentsAfter>
+      <commentsAfter>-- if it is reachable from itself through a loop transitions).</commentsAfter>
+      <commentsAfter>-- For this purpose, the helper simply collects the target of the transitions</commentsAfter>
+      <commentsAfter>-- returned by the call of the 'getOutT' helper onto the contextual State.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(PathExp!State)</commentsAfter>
+      <definition location="77:8-78:38">
+        <feature xsi:type="ocl:Operation" location="77:35-78:38" name="getPrevStates">
+          <returnType xsi:type="ocl:SequenceType" location="77:53-77:76">
+            <elementType xsi:type="ocl:OclModelElement" location="77:62-77:75" name="State" model="/21"/>
+          </returnType>
+          <body xsi:type="ocl:IteratorExp" location="78:2-78:38" name="collect">
+            <source xsi:type="ocl:OperationCallExp" location="78:2-78:15" operationName="getInT">
+              <source xsi:type="ocl:VariableExp" location="78:2-78:6" referredVariable="/22"/>
+            </source>
+            <body xsi:type="ocl:NavigationOrAttributeCallExp" location="78:29-78:37" name="source">
+              <source xsi:type="ocl:VariableExp" location="78:29-78:30" referredVariable="/0/@elements.5/@definition/@feature/@body/@iterators.0"/>
+            </body>
+            <iterators location="78:25-78:26" varName="e" variableExp="/0/@elements.5/@definition/@feature/@body/@body/@source"/>
+          </body>
+        </feature>
+        <context_ location="77:8-77:29">
+          <context_ xsi:type="ocl:OclModelElement" location="77:16-77:29" name="State" model="/20"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="88:1-89:40">
+      <commentsBefore>-- This helper computes the set of States that can be reached by means of</commentsBefore>
+      <commentsBefore>-- outgoing transitions of the contextual State (except the contextual State</commentsBefore>
+      <commentsBefore>-- if it is reachable from itself through a loop transitions).</commentsBefore>
+      <commentsBefore>-- For this purpose, the helper simply collects the target of the transitions</commentsBefore>
+      <commentsBefore>-- returned by the call of the 'getOutT' helper onto the contextual State.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(PathExp!State)</commentsBefore>
+      <commentsAfter>-- This helper computes the sequence of both Path!State and Path!Transition</commentsAfter>
+      <commentsAfter>-- input elements that correspond to the transitions of the Path initiated by</commentsAfter>
+      <commentsAfter>-- the contextual State.</commentsAfter>
+      <commentsAfter>-- The helper accepts a Boolean parameter that encodes the fact that what</commentsAfter>
+      <commentsAfter>-- cooresponds to a nested alternative transition has just been parsed. The</commentsAfter>
+      <commentsAfter>-- helper is initially called with false as parameter.</commentsAfter>
+      <commentsAfter>--  * A contextual State with several non-loop incoming transitions along with</commentsAfter>
+      <commentsAfter>--    a false nested parameter, identifies the end of the current Path. The</commentsAfter>
+      <commentsAfter>--    helper therefore returns an empty sequence.</commentsAfter>
+      <commentsAfter>--  * If the contextual State has several non-loop outgoing transitions with a</commentsAfter>
+      <commentsAfter>--    true along with a nested parameter, this identifies the beginning of a</commentsAfter>
+      <commentsAfter>--    new nested alternative transition within the current Path. The helper</commentsAfter>
+      <commentsAfter>--    then returns a sequence made of 1) the loop transition of the contextual</commentsAfter>
+      <commentsAfter>--    State, if it is defined, 2) the contextual State itself, and 3) the</commentsAfter>
+      <commentsAfter>--    sequence returned by a recursive call of 'getTransitionsFromState' on the</commentsAfter>
+      <commentsAfter>--    state that closes the new alternative transition (it is computed by the</commentsAfter>
+      <commentsAfter>--    'findNextState' helper), with the nested parameter set to true.</commentsAfter>
+      <commentsAfter>--  * If the contextual State has a single non-loop outgoing transition, the</commentsAfter>
+      <commentsAfter>--    helper returns a sequence made of 1) the loop transition of the</commentsAfter>
+      <commentsAfter>--    contextual State, if it is defined, 2) the outgoing transition of the</commentsAfter>
+      <commentsAfter>--    contextual State, and 3) the sequence returned by a recursive call of</commentsAfter>
+      <commentsAfter>--    'getTransitionsFromState' onto the the next state of the contextual</commentsAfter>
+      <commentsAfter>--    State, with the nested parameter set to false.</commentsAfter>
+      <commentsAfter>--  * Finally, a contextual State with no outgoing Transitions indicates the</commentsAfter>
+      <commentsAfter>--    end of the input PathExp and (also) of the current Path. The  helper</commentsAfter>
+      <commentsAfter>--    therefore returns an empty sequence.</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>-- NOTE: the result type of the helper is currently encoded as a sequence of</commentsAfter>
+      <commentsAfter>-- strings since 1) the oclAny type is not implemented yet 2) and no type</commentsAfter>
+      <commentsAfter>-- verifications are performed by the current atl version.</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- IN:		Boolean</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(oclAny)</commentsAfter>
+      <definition location="88:8-89:39">
+        <feature xsi:type="ocl:Operation" location="88:35-89:39" name="getNextStates">
+          <returnType xsi:type="ocl:SequenceType" location="88:53-88:76">
+            <elementType xsi:type="ocl:OclModelElement" location="88:62-88:75" name="State" model="/24"/>
+          </returnType>
+          <body xsi:type="ocl:IteratorExp" location="89:2-89:39" name="collect">
+            <source xsi:type="ocl:OperationCallExp" location="89:2-89:16" operationName="getOutT">
+              <source xsi:type="ocl:VariableExp" location="89:2-89:6" referredVariable="/25"/>
+            </source>
+            <body xsi:type="ocl:NavigationOrAttributeCallExp" location="89:30-89:38" name="target">
+              <source xsi:type="ocl:VariableExp" location="89:30-89:31" referredVariable="/0/@elements.6/@definition/@feature/@body/@iterators.0"/>
+            </body>
+            <iterators location="89:26-89:27" varName="e" variableExp="/0/@elements.6/@definition/@feature/@body/@body/@source"/>
+          </body>
+        </feature>
+        <context_ location="88:8-88:29">
+          <context_ xsi:type="ocl:OclModelElement" location="88:16-88:29" name="State" model="/23"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="126:1-159:8">
+      <commentsBefore>-- This helper computes the sequence of both Path!State and Path!Transition</commentsBefore>
+      <commentsBefore>-- input elements that correspond to the transitions of the Path initiated by</commentsBefore>
+      <commentsBefore>-- the contextual State.</commentsBefore>
+      <commentsBefore>-- The helper accepts a Boolean parameter that encodes the fact that what</commentsBefore>
+      <commentsBefore>-- cooresponds to a nested alternative transition has just been parsed. The</commentsBefore>
+      <commentsBefore>-- helper is initially called with false as parameter.</commentsBefore>
+      <commentsBefore>--  * A contextual State with several non-loop incoming transitions along with</commentsBefore>
+      <commentsBefore>--    a false nested parameter, identifies the end of the current Path. The</commentsBefore>
+      <commentsBefore>--    helper therefore returns an empty sequence.</commentsBefore>
+      <commentsBefore>--  * If the contextual State has several non-loop outgoing transitions with a</commentsBefore>
+      <commentsBefore>--    true along with a nested parameter, this identifies the beginning of a</commentsBefore>
+      <commentsBefore>--    new nested alternative transition within the current Path. The helper</commentsBefore>
+      <commentsBefore>--    then returns a sequence made of 1) the loop transition of the contextual</commentsBefore>
+      <commentsBefore>--    State, if it is defined, 2) the contextual State itself, and 3) the</commentsBefore>
+      <commentsBefore>--    sequence returned by a recursive call of 'getTransitionsFromState' on the</commentsBefore>
+      <commentsBefore>--    state that closes the new alternative transition (it is computed by the</commentsBefore>
+      <commentsBefore>--    'findNextState' helper), with the nested parameter set to true.</commentsBefore>
+      <commentsBefore>--  * If the contextual State has a single non-loop outgoing transition, the</commentsBefore>
+      <commentsBefore>--    helper returns a sequence made of 1) the loop transition of the</commentsBefore>
+      <commentsBefore>--    contextual State, if it is defined, 2) the outgoing transition of the</commentsBefore>
+      <commentsBefore>--    contextual State, and 3) the sequence returned by a recursive call of</commentsBefore>
+      <commentsBefore>--    'getTransitionsFromState' onto the the next state of the contextual</commentsBefore>
+      <commentsBefore>--    State, with the nested parameter set to false.</commentsBefore>
+      <commentsBefore>--  * Finally, a contextual State with no outgoing Transitions indicates the</commentsBefore>
+      <commentsBefore>--    end of the input PathExp and (also) of the current Path. The  helper</commentsBefore>
+      <commentsBefore>--    therefore returns an empty sequence.</commentsBefore>
+      <commentsBefore>--</commentsBefore>
+      <commentsBefore>-- NOTE: the result type of the helper is currently encoded as a sequence of</commentsBefore>
+      <commentsBefore>-- strings since 1) the oclAny type is not implemented yet 2) and no type</commentsBefore>
+      <commentsBefore>-- verifications are performed by the current atl version.</commentsBefore>
+      <commentsBefore>--</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- IN:		Boolean</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(oclAny)</commentsBefore>
+      <commentsAfter>-- This helper computes the sequence of both Path!State and Path!Transition</commentsAfter>
+      <commentsAfter>-- input elements that correspond to the transitions of the Path initiated by</commentsAfter>
+      <commentsAfter>-- the contextual Transition.</commentsAfter>
+      <commentsAfter>-- The returned sequence is composed of the contextual transition followed by</commentsAfter>
+      <commentsAfter>-- the result of the call of the 'getTransitionsFromState' helper onto the</commentsAfter>
+      <commentsAfter>-- target of this contextual transition.</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>-- NOTE: the result type of the helper is currently encoded as a sequence of</commentsAfter>
+      <commentsAfter>-- strings since 1) the oclAny type is not implemented yet 2) and no type</commentsAfter>
+      <commentsAfter>-- verifications are performed by the current atl version.</commentsAfter>
+      <commentsAfter>--</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- RETURN:	Sequence(oclAny)</commentsAfter>
+      <definition location="126:8-159:7">
+        <feature xsi:type="ocl:Operation" location="127:7-159:7" name="getTransitionsFromState">
+          <parameters location="127:31-127:47" varName="nested" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@condition/@arguments.0/@source">
+            <type xsi:type="ocl:BooleanType" location="127:40-127:47"/>
+          </parameters>
+          <returnType xsi:type="ocl:SequenceType" location="127:51-127:67">
+            <elementType xsi:type="ocl:StringType" location="127:60-127:66"/>
+          </returnType>
+          <body xsi:type="ocl:LetExp" location="128:2-159:7">
+            <variable location="128:6-128:65" varName="nextStates" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@condition/@source/@source /0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@variable/@initExpression/@source/@source /0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@elseExpression/@condition/@source/@source /0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@elseExpression/@thenExpression/@source/@elements.2/@source/@source">
+              <type xsi:type="ocl:SequenceType" location="128:19-128:42">
+                <elementType xsi:type="ocl:OclModelElement" location="128:28-128:41" name="State" model="/27"/>
+              </type>
+              <initExpression xsi:type="ocl:OperationCallExp" location="128:45-128:65" operationName="getNextStates">
+                <source xsi:type="ocl:VariableExp" location="128:45-128:49" referredVariable="/28"/>
+              </initExpression>
+            </variable>
+            <in_ xsi:type="ocl:LetExp" location="129:5-159:7">
+              <variable location="129:9-129:68" varName="prevStates" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@condition/@source/@source/@source">
+                <type xsi:type="ocl:SequenceType" location="129:22-129:45">
+                  <elementType xsi:type="ocl:OclModelElement" location="129:31-129:44" name="State" model="/29"/>
+                </type>
+                <initExpression xsi:type="ocl:OperationCallExp" location="129:48-129:68" operationName="getPrevStates">
+                  <source xsi:type="ocl:VariableExp" location="129:48-129:52" referredVariable="/30"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:LetExp" location="130:5-159:7">
+                <variable location="130:9-135:8" varName="loop" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@in_/@source/@elements.0 /0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@elseExpression/@thenExpression/@source/@elements.0">
+                  <type xsi:type="ocl:SequenceType" location="130:16-130:44">
+                    <elementType xsi:type="ocl:OclModelElement" location="130:25-130:43" name="Transition" model="/31"/>
+                  </type>
+                  <initExpression xsi:type="ocl:IfExp" location="131:3-135:8">
+                    <thenExpression xsi:type="ocl:OperationCallExp" location="132:4-132:18" operationName="getLoop">
+                      <source xsi:type="ocl:VariableExp" location="132:4-132:8" referredVariable="/33"/>
+                    </thenExpression>
+                    <condition xsi:type="ocl:OperationCallExp" location="131:6-131:22" operationName="existLoop">
+                      <source xsi:type="ocl:VariableExp" location="131:6-131:10" referredVariable="/32"/>
+                    </condition>
+                    <elseExpression xsi:type="ocl:SequenceExp" location="134:4-134:14"/>
+                  </initExpression>
+                </variable>
+                <in_ xsi:type="ocl:IfExp" location="138:2-159:7">
+                  <thenExpression xsi:type="ocl:SequenceExp" location="139:3-139:13"/>
+                  <condition xsi:type="ocl:OperatorCallExp" location="138:5-138:42" operationName="and">
+                    <source xsi:type="ocl:OperatorCallExp" location="138:5-138:27" operationName=">">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="138:5-138:23" operationName="size">
+                        <source xsi:type="ocl:VariableExp" location="138:5-138:15" referredVariable="/0/@elements.7/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:IntegerExp" location="138:26-138:27" integerSymbol="1"/>
+                    </source>
+                    <arguments xsi:type="ocl:OperatorCallExp" location="138:32-138:42" operationName="not">
+                      <source xsi:type="ocl:VariableExp" location="138:36-138:42" referredVariable="/0/@elements.7/@definition/@feature/@parameters.0"/>
+                    </arguments>
+                  </condition>
+                  <elseExpression xsi:type="ocl:IfExp" location="141:3-158:8">
+                    <thenExpression xsi:type="ocl:LetExp" location="142:4-147:17">
+                      <variable location="142:8-142:68" varName="state" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@in_/@source/@elements.2/@source">
+                        <type xsi:type="ocl:OclModelElement" location="142:16-142:29" name="State" model="/34"/>
+                        <initExpression xsi:type="ocl:OperationCallExp" location="142:32-142:68" operationName="findNextState">
+                          <source xsi:type="ocl:CollectionOperationCallExp" location="142:32-142:51" operationName="first">
+                            <source xsi:type="ocl:VariableExp" location="142:32-142:42" referredVariable="/0/@elements.7/@definition/@feature/@body/@variable"/>
+                          </source>
+                          <arguments xsi:type="ocl:IntegerExp" location="142:66-142:67"/>
+                        </initExpression>
+                      </variable>
+                      <in_ xsi:type="ocl:CollectionOperationCallExp" location="143:7-147:17" operationName="flatten">
+                        <source xsi:type="ocl:SequenceExp" location="143:7-147:6">
+                          <elements xsi:type="ocl:VariableExp" location="144:6-144:10" referredVariable="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@variable"/>
+                          <elements xsi:type="ocl:VariableExp" location="145:6-145:10" referredVariable="/35"/>
+                          <elements xsi:type="ocl:OperationCallExp" location="146:6-146:41" operationName="getTransitionsFromState">
+                            <source xsi:type="ocl:VariableExp" location="146:6-146:11" referredVariable="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@variable"/>
+                            <arguments xsi:type="ocl:BooleanExp" location="146:36-146:40" booleanSymbol="true"/>
+                          </elements>
+                        </source>
+                      </in_>
+                    </thenExpression>
+                    <condition xsi:type="ocl:OperatorCallExp" location="141:6-141:28" operationName=">">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="141:6-141:24" operationName="size">
+                        <source xsi:type="ocl:VariableExp" location="141:6-141:16" referredVariable="/0/@elements.7/@definition/@feature/@body/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:IntegerExp" location="141:27-141:28" integerSymbol="1"/>
+                    </condition>
+                    <elseExpression xsi:type="ocl:IfExp" location="149:4-157:9">
+                      <thenExpression xsi:type="ocl:CollectionOperationCallExp" location="150:5-154:17" operationName="flatten">
+                        <source xsi:type="ocl:SequenceExp" location="150:5-154:6">
+                          <elements xsi:type="ocl:VariableExp" location="151:6-151:10" referredVariable="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@variable"/>
+                          <elements xsi:type="ocl:CollectionOperationCallExp" location="152:6-152:29" operationName="first">
+                            <source xsi:type="ocl:OperationCallExp" location="152:6-152:20" operationName="getOutT">
+                              <source xsi:type="ocl:VariableExp" location="152:6-152:10" referredVariable="/36"/>
+                            </source>
+                          </elements>
+                          <elements xsi:type="ocl:OperationCallExp" location="153:6-153:56" operationName="getTransitionsFromState">
+                            <source xsi:type="ocl:CollectionOperationCallExp" location="153:6-153:25" operationName="first">
+                              <source xsi:type="ocl:VariableExp" location="153:6-153:16" referredVariable="/0/@elements.7/@definition/@feature/@body/@variable"/>
+                            </source>
+                            <arguments xsi:type="ocl:BooleanExp" location="153:50-153:55"/>
+                          </elements>
+                        </source>
+                      </thenExpression>
+                      <condition xsi:type="ocl:OperatorCallExp" location="149:7-149:29" operationName="=">
+                        <source xsi:type="ocl:CollectionOperationCallExp" location="149:7-149:25" operationName="size">
+                          <source xsi:type="ocl:VariableExp" location="149:7-149:17" referredVariable="/0/@elements.7/@definition/@feature/@body/@variable"/>
+                        </source>
+                        <arguments xsi:type="ocl:IntegerExp" location="149:28-149:29" integerSymbol="1"/>
+                      </condition>
+                      <elseExpression xsi:type="ocl:SequenceExp" location="156:5-156:15"/>
+                    </elseExpression>
+                  </elseExpression>
+                </in_>
+              </in_>
+            </in_>
+          </body>
+        </feature>
+        <context_ location="126:8-126:29">
+          <context_ xsi:type="ocl:OclModelElement" location="126:16-126:29" name="State" model="/26"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="175:1-177:72">
+      <commentsBefore>-- This helper computes the sequence of both Path!State and Path!Transition</commentsBefore>
+      <commentsBefore>-- input elements that correspond to the transitions of the Path initiated by</commentsBefore>
+      <commentsBefore>-- the contextual Transition.</commentsBefore>
+      <commentsBefore>-- The returned sequence is composed of the contextual transition followed by</commentsBefore>
+      <commentsBefore>-- the result of the call of the 'getTransitionsFromState' helper onto the</commentsBefore>
+      <commentsBefore>-- target of this contextual transition.</commentsBefore>
+      <commentsBefore>--</commentsBefore>
+      <commentsBefore>-- NOTE: the result type of the helper is currently encoded as a sequence of</commentsBefore>
+      <commentsBefore>-- strings since 1) the oclAny type is not implemented yet 2) and no type</commentsBefore>
+      <commentsBefore>-- verifications are performed by the current atl version.</commentsBefore>
+      <commentsBefore>--</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- RETURN:	Sequence(oclAny)</commentsBefore>
+      <commentsAfter>-- This helper aims to compute the State that closes the alternative transition</commentsAfter>
+      <commentsAfter>-- that is started at the contextual State of the initial call.</commentsAfter>
+      <commentsAfter>-- It accepts an Integer as parameter which indicates the number of opened</commentsAfter>
+      <commentsAfter>-- nested alternative transitions. It is initially called with n = 0.</commentsAfter>
+      <commentsAfter>-- In order to compute its closing State, the helper recursively parses the</commentsAfter>
+      <commentsAfter>-- Path:</commentsAfter>
+      <commentsAfter>--  * if the contextual State has more than one incoming transition and no</commentsAfter>
+      <commentsAfter>--    nested alternative trans. are opened (n=0), the helper returns the</commentsAfter>
+      <commentsAfter>--    contextualState.</commentsAfter>
+      <commentsAfter>--  * if the contextual State has more than one incoming transition and more</commentsAfter>
+      <commentsAfter>--    than one outgoing transition, the helper returns the value provided by</commentsAfter>
+      <commentsAfter>--    the recursive call of 'findNextState(n)' onto one of the next states of</commentsAfter>
+      <commentsAfter>--    the contextual state.</commentsAfter>
+      <commentsAfter>--  * if the contextual State has more than one incoming transition but a</commentsAfter>
+      <commentsAfter>--    single outgoing transition, the helper returns the value provided by the</commentsAfter>
+      <commentsAfter>--    recursive call of 'findNextState(n-1)' onto the next state of the</commentsAfter>
+      <commentsAfter>--    contextual state.</commentsAfter>
+      <commentsAfter>--  * if the contextual State has a single incoming transition and more than</commentsAfter>
+      <commentsAfter>--    one outgoing transition, the helper returns the value provided by the</commentsAfter>
+      <commentsAfter>--    'findNextState(n+1)' onto one of the next states of the contextual state.</commentsAfter>
+      <commentsAfter>--  * finally, if the contextual State has a single incoming transition and a</commentsAfter>
+      <commentsAfter>--    single outgoing transition, the helper returns the value provided by the</commentsAfter>
+      <commentsAfter>--    recursive call of 'findNextState(n+)' onto the next state of the</commentsAfter>
+      <commentsAfter>--    contextual state.</commentsAfter>
+      <commentsAfter>-- CONTEXT: PathExp!State</commentsAfter>
+      <commentsAfter>-- IN:		Integer</commentsAfter>
+      <commentsAfter>-- RETURN:	PathExp!State</commentsAfter>
+      <definition location="175:8-177:71">
+        <feature xsi:type="ocl:Operation" location="176:7-177:71" name="getTransitionsFromTrans">
+          <returnType xsi:type="ocl:SequenceType" location="176:35-176:51">
+            <elementType xsi:type="ocl:StringType" location="176:44-176:50"/>
+          </returnType>
+          <body xsi:type="ocl:CollectionOperationCallExp" location="177:2-177:71" operationName="flatten">
+            <source xsi:type="ocl:SequenceExp" location="177:2-177:60">
+              <elements xsi:type="ocl:VariableExp" location="177:11-177:15" referredVariable="/38"/>
+              <elements xsi:type="ocl:OperationCallExp" location="177:17-177:59" operationName="getTransitionsFromState">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="177:17-177:28" name="target">
+                  <source xsi:type="ocl:VariableExp" location="177:17-177:21" referredVariable="/39"/>
+                </source>
+                <arguments xsi:type="ocl:BooleanExp" location="177:53-177:58"/>
+              </elements>
+            </source>
+          </body>
+        </feature>
+        <context_ location="175:8-175:34">
+          <context_ xsi:type="ocl:OclModelElement" location="175:16-175:34" name="Transition" model="/37"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="207:1-226:8">
+      <commentsBefore>-- This helper aims to compute the State that closes the alternative transition</commentsBefore>
+      <commentsBefore>-- that is started at the contextual State of the initial call.</commentsBefore>
+      <commentsBefore>-- It accepts an Integer as parameter which indicates the number of opened</commentsBefore>
+      <commentsBefore>-- nested alternative transitions. It is initially called with n = 0.</commentsBefore>
+      <commentsBefore>-- In order to compute its closing State, the helper recursively parses the</commentsBefore>
+      <commentsBefore>-- Path:</commentsBefore>
+      <commentsBefore>--  * if the contextual State has more than one incoming transition and no</commentsBefore>
+      <commentsBefore>--    nested alternative trans. are opened (n=0), the helper returns the</commentsBefore>
+      <commentsBefore>--    contextualState.</commentsBefore>
+      <commentsBefore>--  * if the contextual State has more than one incoming transition and more</commentsBefore>
+      <commentsBefore>--    than one outgoing transition, the helper returns the value provided by</commentsBefore>
+      <commentsBefore>--    the recursive call of 'findNextState(n)' onto one of the next states of</commentsBefore>
+      <commentsBefore>--    the contextual state.</commentsBefore>
+      <commentsBefore>--  * if the contextual State has more than one incoming transition but a</commentsBefore>
+      <commentsBefore>--    single outgoing transition, the helper returns the value provided by the</commentsBefore>
+      <commentsBefore>--    recursive call of 'findNextState(n-1)' onto the next state of the</commentsBefore>
+      <commentsBefore>--    contextual state.</commentsBefore>
+      <commentsBefore>--  * if the contextual State has a single incoming transition and more than</commentsBefore>
+      <commentsBefore>--    one outgoing transition, the helper returns the value provided by the</commentsBefore>
+      <commentsBefore>--    'findNextState(n+1)' onto one of the next states of the contextual state.</commentsBefore>
+      <commentsBefore>--  * finally, if the contextual State has a single incoming transition and a</commentsBefore>
+      <commentsBefore>--    single outgoing transition, the helper returns the value provided by the</commentsBefore>
+      <commentsBefore>--    recursive call of 'findNextState(n+)' onto the next state of the</commentsBefore>
+      <commentsBefore>--    contextual state.</commentsBefore>
+      <commentsBefore>-- CONTEXT: PathExp!State</commentsBefore>
+      <commentsBefore>-- IN:		Integer</commentsBefore>
+      <commentsBefore>-- RETURN:	PathExp!State</commentsBefore>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- RULES ----------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-------------------------------------------------------------------------------</commentsAfter>
+      <commentsAfter>-- Rule 'Main'</commentsAfter>
+      <commentsAfter>-- This rule generates both a TextualPathExp and its main Path from the root</commentsAfter>
+      <commentsAfter>-- PathExp input element.</commentsAfter>
+      <commentsAfter>-- The generated TextualPathExp accepts the Path generated by the rule as path.</commentsAfter>
+      <commentsAfter>-- The sequence of transitions contained by the generated Path is returned by</commentsAfter>
+      <commentsAfter>-- the call of the 'getTransitionsFromState' helper onto the root State element</commentsAfter>
+      <commentsAfter>-- of the input model.</commentsAfter>
+      <definition location="207:8-226:7">
+        <feature xsi:type="ocl:Operation" location="207:35-226:7" name="findNextState">
+          <parameters location="207:49-207:60" varName="n" variableExp="/0/@elements.9/@definition/@feature/@body/@in_/@in_/@condition/@arguments.0/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@thenExpression/@thenExpression/@arguments.0 /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@thenExpression/@elseExpression/@arguments.0/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@elseExpression/@thenExpression/@arguments.0/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@elseExpression/@elseExpression/@arguments.0">
+            <type xsi:type="ocl:IntegerType" location="207:53-207:60"/>
+          </parameters>
+          <returnType xsi:type="ocl:OclModelElement" location="207:64-207:77" name="State" model="/41"/>
+          <body xsi:type="ocl:LetExp" location="208:2-226:7">
+            <variable location="208:6-208:65" varName="prevStates" variableExp="/0/@elements.9/@definition/@feature/@body/@in_/@in_/@condition/@source/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@condition/@source/@source">
+              <type xsi:type="ocl:SequenceType" location="208:19-208:42">
+                <elementType xsi:type="ocl:OclModelElement" location="208:28-208:41" name="State" model="/42"/>
+              </type>
+              <initExpression xsi:type="ocl:OperationCallExp" location="208:45-208:65" operationName="getPrevStates">
+                <source xsi:type="ocl:VariableExp" location="208:45-208:49" referredVariable="/43"/>
+              </initExpression>
+            </variable>
+            <in_ xsi:type="ocl:LetExp" location="209:2-226:7">
+              <variable location="209:6-209:65" varName="nextStates" variableExp="/0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@thenExpression/@condition/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@thenExpression/@thenExpression/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@thenExpression/@elseExpression/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@elseExpression/@condition/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@elseExpression/@thenExpression/@source/@source /0/@elements.9/@definition/@feature/@body/@in_/@in_/@elseExpression/@elseExpression/@elseExpression/@source/@source">
+                <type xsi:type="ocl:SequenceType" location="209:19-209:42">
+                  <elementType xsi:type="ocl:OclModelElement" location="209:28-209:41" name="State" model="/44"/>
+                </type>
+                <initExpression xsi:type="ocl:OperationCallExp" location="209:45-209:65" operationName="getNextStates">
+                  <source xsi:type="ocl:VariableExp" location="209:45-209:49" referredVariable="/45"/>
+                </initExpression>
+              </variable>
+              <in_ xsi:type="ocl:IfExp" location="210:2-226:7">
+                <thenExpression xsi:type="ocl:VariableExp" location="211:3-211:7" referredVariable="/46"/>
+                <condition xsi:type="ocl:OperatorCallExp" location="210:5-210:37" operationName="and">
+                  <source xsi:type="ocl:OperatorCallExp" location="210:5-210:27" operationName=">">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="210:5-210:23" operationName="size">
+                      <source xsi:type="ocl:VariableExp" location="210:5-210:15" referredVariable="/0/@elements.9/@definition/@feature/@body/@variable"/>
+                    </source>
+                    <arguments xsi:type="ocl:IntegerExp" location="210:26-210:27" integerSymbol="1"/>
+                  </source>
+                  <arguments xsi:type="ocl:OperatorCallExp" location="210:32-210:37" operationName="=">
+                    <source xsi:type="ocl:VariableExp" location="210:32-210:33" referredVariable="/0/@elements.9/@definition/@feature/@parameters.0"/>
+                    <arguments xsi:type="ocl:IntegerExp" location="210:36-210:37"/>
+                  </arguments>
+                </condition>
+                <elseExpression xsi:type="ocl:IfExp" location="213:3-225:8">
+                  <thenExpression xsi:type="ocl:IfExp" location="214:4-218:9">
+                    <thenExpression xsi:type="ocl:OperationCallExp" location="215:5-215:41" operationName="findNextState">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="215:5-215:24" operationName="first">
+                        <source xsi:type="ocl:VariableExp" location="215:5-215:15" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:VariableExp" location="215:39-215:40" referredVariable="/0/@elements.9/@definition/@feature/@parameters.0"/>
+                    </thenExpression>
+                    <condition xsi:type="ocl:OperatorCallExp" location="214:7-214:29" operationName=">">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="214:7-214:25" operationName="size">
+                        <source xsi:type="ocl:VariableExp" location="214:7-214:17" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:IntegerExp" location="214:28-214:29" integerSymbol="1"/>
+                    </condition>
+                    <elseExpression xsi:type="ocl:OperationCallExp" location="217:5-217:43" operationName="findNextState">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="217:5-217:24" operationName="first">
+                        <source xsi:type="ocl:VariableExp" location="217:5-217:15" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:OperatorCallExp" location="217:39-217:42" operationName="-">
+                        <source xsi:type="ocl:VariableExp" location="217:39-217:40" referredVariable="/0/@elements.9/@definition/@feature/@parameters.0"/>
+                        <arguments xsi:type="ocl:IntegerExp" location="217:41-217:42" integerSymbol="1"/>
+                      </arguments>
+                    </elseExpression>
+                  </thenExpression>
+                  <condition xsi:type="ocl:OperatorCallExp" location="213:6-213:28" operationName=">">
+                    <source xsi:type="ocl:CollectionOperationCallExp" location="213:6-213:24" operationName="size">
+                      <source xsi:type="ocl:VariableExp" location="213:6-213:16" referredVariable="/0/@elements.9/@definition/@feature/@body/@variable"/>
+                    </source>
+                    <arguments xsi:type="ocl:IntegerExp" location="213:27-213:28" integerSymbol="1"/>
+                  </condition>
+                  <elseExpression xsi:type="ocl:IfExp" location="220:4-224:9">
+                    <thenExpression xsi:type="ocl:OperationCallExp" location="221:5-221:43" operationName="findNextState">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="221:5-221:24" operationName="first">
+                        <source xsi:type="ocl:VariableExp" location="221:5-221:15" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:OperatorCallExp" location="221:39-221:42" operationName="+">
+                        <source xsi:type="ocl:VariableExp" location="221:39-221:40" referredVariable="/0/@elements.9/@definition/@feature/@parameters.0"/>
+                        <arguments xsi:type="ocl:IntegerExp" location="221:41-221:42" integerSymbol="1"/>
+                      </arguments>
+                    </thenExpression>
+                    <condition xsi:type="ocl:OperatorCallExp" location="220:7-220:29" operationName=">">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="220:7-220:25" operationName="size">
+                        <source xsi:type="ocl:VariableExp" location="220:7-220:17" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:IntegerExp" location="220:28-220:29" integerSymbol="1"/>
+                    </condition>
+                    <elseExpression xsi:type="ocl:OperationCallExp" location="223:5-223:41" operationName="findNextState">
+                      <source xsi:type="ocl:CollectionOperationCallExp" location="223:5-223:24" operationName="first">
+                        <source xsi:type="ocl:VariableExp" location="223:5-223:15" referredVariable="/0/@elements.9/@definition/@feature/@body/@in_/@variable"/>
+                      </source>
+                      <arguments xsi:type="ocl:VariableExp" location="223:39-223:40" referredVariable="/0/@elements.9/@definition/@feature/@parameters.0"/>
+                    </elseExpression>
+                  </elseExpression>
+                </elseExpression>
+              </in_>
+            </in_>
+          </body>
+        </feature>
+        <context_ location="207:8-207:29">
+          <context_ xsi:type="ocl:OclModelElement" location="207:16-207:29" name="State" model="/40"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="240:1-251:2" name="Main">
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- RULES ----------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-------------------------------------------------------------------------------</commentsBefore>
+      <commentsBefore>-- Rule 'Main'</commentsBefore>
+      <commentsBefore>-- This rule generates both a TextualPathExp and its main Path from the root</commentsBefore>
+      <commentsBefore>-- PathExp input element.</commentsBefore>
+      <commentsBefore>-- The generated TextualPathExp accepts the Path generated by the rule as path.</commentsBefore>
+      <commentsBefore>-- The sequence of transitions contained by the generated Path is returned by</commentsBefore>
+      <commentsBefore>-- the call of the 'getTransitionsFromState' helper onto the root State element</commentsBefore>
+      <commentsBefore>-- of the input model.</commentsBefore>
+      <commentsAfter>-- Rule 'Loop'</commentsAfter>
+      <commentsAfter>-- This rule generates a multiple PrimitiveTrans from a loop Transition.</commentsAfter>
+      <commentsAfter>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsAfter>
+      <commentsAfter>-- 'isMultiple' attribute is set to 'true'.</commentsAfter>
+      <outPattern location="243:2-250:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="244:3-246:4" varName="tpe">
+          <type xsi:type="ocl:OclModelElement" location="244:9-244:38" name="TextualPathExp" model="/48"/>
+          <bindings location="245:4-245:13" propertyName="path">
+            <value xsi:type="ocl:VariableExp" location="245:12-245:13" referredVariable="/0/@elements.10/@outPattern/@elements.1"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="248:3-250:4" varName="p" variableExp="/0/@elements.10/@outPattern/@elements.0/@bindings.0/@value">
+          <type xsi:type="ocl:OclModelElement" location="248:7-248:26" name="Path" model="/49"/>
+          <bindings location="249:4-249:70" propertyName="transitions">
+            <value xsi:type="ocl:OperationCallExp" location="249:19-249:70" operationName="getTransitionsFromState">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="249:19-249:39" name="rootState">
+                <source xsi:type="ocl:VariableExp" location="249:19-249:29" referredVariable="/50"/>
+              </source>
+              <arguments xsi:type="ocl:BooleanExp" location="249:64-249:69"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="241:2-242:29">
+        <elements xsi:type="atl:SimpleInPatternElement" location="242:9-242:29" varName="pe">
+          <type xsi:type="ocl:OclModelElement" location="242:14-242:29" name="PathExp" model="/47"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="258:1-268:2" name="Loop">
+      <commentsBefore>-- Rule 'Loop'</commentsBefore>
+      <commentsBefore>-- This rule generates a multiple PrimitiveTrans from a loop Transition.</commentsBefore>
+      <commentsBefore>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsBefore>
+      <commentsBefore>-- 'isMultiple' attribute is set to 'true'.</commentsBefore>
+      <commentsAfter>-- Rule 'STransition'</commentsAfter>
+      <commentsAfter>-- This rule generates a simple PrimitiveTrans from a non-loop transition</commentsAfter>
+      <commentsAfter>-- which is the only outgoing transition of its source State.</commentsAfter>
+      <commentsAfter>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsAfter>
+      <commentsAfter>-- 'isMultiple' attribute is set to 'false'.</commentsAfter>
+      <outPattern location="263:2-267:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="264:3-267:4" varName="pt">
+          <type xsi:type="ocl:OclModelElement" location="264:8-264:37" name="PrimitiveTrans" model="/52"/>
+          <bindings location="265:4-265:14" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="265:12-265:14" stringSymbol=""/>
+          </bindings>
+          <bindings location="266:4-266:22" propertyName="isMultiple">
+            <value xsi:type="ocl:BooleanExp" location="266:18-266:22" booleanSymbol="true"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="259:2-262:9">
+        <elements xsi:type="atl:SimpleInPatternElement" location="260:8-260:30" varName="t" variableExp="/0/@elements.11/@inPattern/@filter/@source/@source /0/@elements.11/@inPattern/@filter/@arguments.0/@source">
+          <type xsi:type="ocl:OclModelElement" location="260:12-260:30" name="Transition" model="/51"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="261:10-261:29" operationName="=">
+          <source xsi:type="ocl:NavigationOrAttributeCallExp" location="261:10-261:18" name="source">
+            <source xsi:type="ocl:VariableExp" location="261:10-261:11" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+          </source>
+          <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="261:21-261:29" name="target">
+            <source xsi:type="ocl:VariableExp" location="261:21-261:22" referredVariable="/0/@elements.11/@inPattern/@elements.0"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="276:1-287:2" name="STransition">
+      <commentsBefore>-- Rule 'STransition'</commentsBefore>
+      <commentsBefore>-- This rule generates a simple PrimitiveTrans from a non-loop transition</commentsBefore>
+      <commentsBefore>-- which is the only outgoing transition of its source State.</commentsBefore>
+      <commentsBefore>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsBefore>
+      <commentsBefore>-- 'isMultiple' attribute is set to 'false'.</commentsBefore>
+      <commentsAfter>-- Rule 'MTransition'</commentsAfter>
+      <commentsAfter>-- This rule generates a simple PrimitiveTrans from a non-loop transition</commentsAfter>
+      <commentsAfter>-- which is NOT the only outgoing transition of its source State.</commentsAfter>
+      <commentsAfter>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsAfter>
+      <commentsAfter>-- 'isMultiple' attribute is set to 'false'.</commentsAfter>
+      <outPattern location="282:2-286:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="283:3-286:4" varName="pt">
+          <type xsi:type="ocl:OclModelElement" location="283:8-283:37" name="PrimitiveTrans" model="/54"/>
+          <bindings location="284:4-284:14" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="284:12-284:14" stringSymbol=""/>
+          </bindings>
+          <bindings location="285:4-285:23" propertyName="isMultiple">
+            <value xsi:type="ocl:BooleanExp" location="285:18-285:23"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="277:2-281:9">
+        <elements xsi:type="atl:SimpleInPatternElement" location="278:8-278:30" varName="t" variableExp="/0/@elements.12/@inPattern/@filter/@source/@source/@source /0/@elements.12/@inPattern/@filter/@source/@arguments.0/@source /0/@elements.12/@inPattern/@filter/@arguments.0/@source/@source/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="278:12-278:30" name="Transition" model="/53"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="279:10-280:40" operationName="and">
+          <source xsi:type="ocl:OperatorCallExp" location="279:10-279:30" operationName="&lt;>">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="279:10-279:18" name="source">
+              <source xsi:type="ocl:VariableExp" location="279:10-279:11" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="279:22-279:30" name="target">
+              <source xsi:type="ocl:VariableExp" location="279:22-279:23" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+            </arguments>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="280:10-280:40" operationName="=">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="280:10-280:36" operationName="size">
+              <source xsi:type="ocl:OperationCallExp" location="280:10-280:28" operationName="getOutT">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="280:10-280:18" name="source">
+                  <source xsi:type="ocl:VariableExp" location="280:10-280:11" referredVariable="/0/@elements.12/@inPattern/@elements.0"/>
+                </source>
+              </source>
+            </source>
+            <arguments xsi:type="ocl:IntegerExp" location="280:39-280:40" integerSymbol="1"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="295:1-306:2" name="MTransition">
+      <commentsBefore>-- Rule 'MTransition'</commentsBefore>
+      <commentsBefore>-- This rule generates a simple PrimitiveTrans from a non-loop transition</commentsBefore>
+      <commentsBefore>-- which is NOT the only outgoing transition of its source State.</commentsBefore>
+      <commentsBefore>-- The generated PrimitiveTrans accepts an empty string as name. Its</commentsBefore>
+      <commentsBefore>-- 'isMultiple' attribute is set to 'false'.</commentsBefore>
+      <commentsAfter>-- Rule 'State'</commentsAfter>
+      <commentsAfter>-- This rule generates both an AlternativeTransition and the different Paths</commentsAfter>
+      <commentsAfter>-- that compose that compose this alternative transition from an input State</commentsAfter>
+      <commentsAfter>-- that has multiple non-loop outgoing Transitions.</commentsAfter>
+      <commentsAfter>-- Paths of the generated AlternativeTransition are those that are generated</commentsAfter>
+      <commentsAfter>-- by the rule. Its 'isMultiple' attribute is set to 'false'.</commentsAfter>
+      <commentsAfter>-- A distinct Path is generated for each non-loop outgoing Transition of the</commentsAfter>
+      <commentsAfter>-- input State. The sequence of transitions that is assigned to a generated</commentsAfter>
+      <commentsAfter>-- Path is the corresponding (ie. at same rank) sequence of model elements in</commentsAfter>
+      <commentsAfter>-- the 'transitions2' sequence (calculated in the using clause).</commentsAfter>
+      <outPattern location="301:2-305:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="302:3-305:4" varName="pt">
+          <type xsi:type="ocl:OclModelElement" location="302:8-302:37" name="PrimitiveTrans" model="/56"/>
+          <bindings location="303:4-303:14" propertyName="name">
+            <value xsi:type="ocl:StringExp" location="303:12-303:14" stringSymbol=""/>
+          </bindings>
+          <bindings location="304:4-304:23" propertyName="isMultiple">
+            <value xsi:type="ocl:BooleanExp" location="304:18-304:23"/>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="296:2-300:9">
+        <elements xsi:type="atl:SimpleInPatternElement" location="297:8-297:30" varName="t" variableExp="/0/@elements.13/@inPattern/@filter/@source/@source/@source /0/@elements.13/@inPattern/@filter/@source/@arguments.0/@source /0/@elements.13/@inPattern/@filter/@arguments.0/@source/@source/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="297:12-297:30" name="Transition" model="/55"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="298:10-299:40" operationName="and">
+          <source xsi:type="ocl:OperatorCallExp" location="298:10-298:30" operationName="&lt;>">
+            <source xsi:type="ocl:NavigationOrAttributeCallExp" location="298:10-298:18" name="source">
+              <source xsi:type="ocl:VariableExp" location="298:10-298:11" referredVariable="/0/@elements.13/@inPattern/@elements.0"/>
+            </source>
+            <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="298:22-298:30" name="target">
+              <source xsi:type="ocl:VariableExp" location="298:22-298:23" referredVariable="/0/@elements.13/@inPattern/@elements.0"/>
+            </arguments>
+          </source>
+          <arguments xsi:type="ocl:OperatorCallExp" location="299:10-299:40" operationName=">">
+            <source xsi:type="ocl:CollectionOperationCallExp" location="299:10-299:36" operationName="size">
+              <source xsi:type="ocl:OperationCallExp" location="299:10-299:28" operationName="getOutT">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="299:10-299:18" name="source">
+                  <source xsi:type="ocl:VariableExp" location="299:10-299:11" referredVariable="/0/@elements.13/@inPattern/@elements.0"/>
+                </source>
+              </source>
+            </source>
+            <arguments xsi:type="ocl:IntegerExp" location="299:39-299:40" integerSymbol="1"/>
+          </arguments>
+        </filter>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="319:1-337:2" name="State">
+      <commentsBefore>-- Rule 'State'</commentsBefore>
+      <commentsBefore>-- This rule generates both an AlternativeTransition and the different Paths</commentsBefore>
+      <commentsBefore>-- that compose that compose this alternative transition from an input State</commentsBefore>
+      <commentsBefore>-- that has multiple non-loop outgoing Transitions.</commentsBefore>
+      <commentsBefore>-- Paths of the generated AlternativeTransition are those that are generated</commentsBefore>
+      <commentsBefore>-- by the rule. Its 'isMultiple' attribute is set to 'false'.</commentsBefore>
+      <commentsBefore>-- A distinct Path is generated for each non-loop outgoing Transition of the</commentsBefore>
+      <commentsBefore>-- input State. The sequence of transitions that is assigned to a generated</commentsBefore>
+      <commentsBefore>-- Path is the corresponding (ie. at same rank) sequence of model elements in</commentsBefore>
+      <commentsBefore>-- the 'transitions2' sequence (calculated in the using clause).</commentsBefore>
+      <outPattern location="328:2-336:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="329:3-332:4" varName="at">
+          <type xsi:type="ocl:OclModelElement" location="329:8-329:39" name="AlternativeTrans" model="/58"/>
+          <bindings location="330:4-330:21" propertyName="altPaths">
+            <value xsi:type="ocl:VariableExp" location="330:16-330:21" referredVariable="/0/@elements.14/@outPattern/@elements.1"/>
+          </bindings>
+          <bindings location="331:4-331:23" propertyName="isMultiple">
+            <value xsi:type="ocl:BooleanExp" location="331:18-331:23"/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:ForEachOutPatternElement" location="334:3-336:4" varName="paths" variableExp="/0/@elements.14/@outPattern/@elements.0/@bindings.0/@value">
+          <type xsi:type="ocl:OclModelElement" location="334:20-334:39" name="Path" model="/59"/>
+          <bindings location="335:4-335:31" propertyName="transitions">
+            <value xsi:type="ocl:VariableExp" location="335:19-335:31" referredVariable="/0/@elements.14/@variables.0"/>
+          </bindings>
+          <collection xsi:type="ocl:VariableExp" location="334:53-334:65" referredVariable="/0/@elements.14/@variables.0"/>
+          <iterator location="334:48-334:49" varName="e"/>
+        </elements>
+      </outPattern>
+      <variables location="325:6-326:61" varName="transitions2" variableExp="/0/@elements.14/@outPattern/@elements.1/@collection /0/@elements.14/@outPattern/@elements.1/@bindings.0/@value">
+        <type xsi:type="ocl:SequenceType" location="325:21-325:37">
+          <elementType xsi:type="ocl:StringType" location="325:30-325:36"/>
+        </type>
+        <initExpression xsi:type="ocl:IteratorExp" location="326:7-326:60" name="collect">
+          <source xsi:type="ocl:OperationCallExp" location="326:7-326:18" operationName="getOutT">
+            <source xsi:type="ocl:VariableExp" location="326:7-326:8" referredVariable="/0/@elements.14/@inPattern/@elements.0"/>
+          </source>
+          <body xsi:type="ocl:OperationCallExp" location="326:32-326:59" operationName="getTransitionsFromTrans">
+            <source xsi:type="ocl:VariableExp" location="326:32-326:33" referredVariable="/0/@elements.14/@variables.0/@initExpression/@iterators.0"/>
+          </body>
+          <iterators location="326:28-326:29" varName="e" variableExp="/0/@elements.14/@variables.0/@initExpression/@body/@source"/>
+        </initExpression>
+      </variables>
+      <inPattern location="320:2-323:10">
+        <elements xsi:type="atl:SimpleInPatternElement" location="321:9-321:26" varName="s" variableExp="/0/@elements.14/@inPattern/@filter/@source/@source/@source /0/@elements.14/@variables.0/@initExpression/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="321:13-321:26" name="State" model="/57"/>
+        </elements>
+        <filter xsi:type="ocl:OperatorCallExp" location="322:10-322:33" operationName=">">
+          <source xsi:type="ocl:CollectionOperationCallExp" location="322:10-322:29" operationName="size">
+            <source xsi:type="ocl:OperationCallExp" location="322:10-322:21" operationName="getOutT">
+              <source xsi:type="ocl:VariableExp" location="322:10-322:11" referredVariable="/0/@elements.14/@inPattern/@elements.0"/>
+            </source>
+          </source>
+          <arguments xsi:type="ocl:IntegerExp" location="322:32-322:33" integerSymbol="1"/>
+        </filter>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:28" name="TextualPathExp" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:39-2:46" name="PathExp" model="/0/@inModels.0"/>
+  <ocl:OclModel location="14:25-14:32" name="PathExp" elements="/0/@elements.0/@definition/@feature/@type"/>
+  <ocl:OclModel location="15:2-15:9" name="PathExp" elements="/0/@elements.0/@definition/@feature/@initExpression/@source/@source/@source/@source"/>
+  <ocl:OclModel location="27:16-27:23" name="PathExp" elements="/0/@elements.1/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="28:2-28:6" varName="self" variableExp="/0/@elements.1/@definition/@feature/@body/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="29:27-29:31" varName="self" variableExp="/0/@elements.1/@definition/@feature/@body/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="39:16-39:23" name="PathExp" elements="/0/@elements.2/@definition/@context_/@context_"/>
+  <ocl:OclModel location="39:47-39:54" name="PathExp" elements="/0/@elements.2/@definition/@feature/@returnType"/>
+  <ocl:VariableDeclaration location="40:2-40:6" varName="self" variableExp="/0/@elements.2/@definition/@feature/@body/@source/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="41:27-41:31" varName="self" variableExp="/0/@elements.2/@definition/@feature/@body/@source/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="52:16-52:23" name="PathExp" elements="/0/@elements.3/@definition/@context_/@context_"/>
+  <ocl:OclModel location="52:55-52:62" name="PathExp" elements="/0/@elements.3/@definition/@feature/@returnType/@elementType"/>
+  <ocl:VariableDeclaration location="53:2-53:6" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="54:28-54:32" varName="self" variableExp="/0/@elements.3/@definition/@feature/@body/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="64:16-64:23" name="PathExp" elements="/0/@elements.4/@definition/@context_/@context_"/>
+  <ocl:OclModel location="64:56-64:63" name="PathExp" elements="/0/@elements.4/@definition/@feature/@returnType/@elementType"/>
+  <ocl:VariableDeclaration location="65:2-65:6" varName="self" variableExp="/0/@elements.4/@definition/@feature/@body/@source/@source/@source"/>
+  <ocl:VariableDeclaration location="66:28-66:32" varName="self" variableExp="/0/@elements.4/@definition/@feature/@body/@source/@body/@arguments.0"/>
+  <ocl:OclModel location="77:16-77:23" name="PathExp" elements="/0/@elements.5/@definition/@context_/@context_"/>
+  <ocl:OclModel location="77:62-77:69" name="PathExp" elements="/0/@elements.5/@definition/@feature/@returnType/@elementType"/>
+  <ocl:VariableDeclaration location="78:2-78:6" varName="self" variableExp="/0/@elements.5/@definition/@feature/@body/@source/@source"/>
+  <ocl:OclModel location="88:16-88:23" name="PathExp" elements="/0/@elements.6/@definition/@context_/@context_"/>
+  <ocl:OclModel location="88:62-88:69" name="PathExp" elements="/0/@elements.6/@definition/@feature/@returnType/@elementType"/>
+  <ocl:VariableDeclaration location="89:2-89:6" varName="self" variableExp="/0/@elements.6/@definition/@feature/@body/@source/@source"/>
+  <ocl:OclModel location="126:16-126:23" name="PathExp" elements="/0/@elements.7/@definition/@context_/@context_"/>
+  <ocl:OclModel location="128:28-128:35" name="PathExp" elements="/0/@elements.7/@definition/@feature/@body/@variable/@type/@elementType"/>
+  <ocl:VariableDeclaration location="128:45-128:49" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@variable/@initExpression/@source"/>
+  <ocl:OclModel location="129:31-129:38" name="PathExp" elements="/0/@elements.7/@definition/@feature/@body/@in_/@variable/@type/@elementType"/>
+  <ocl:VariableDeclaration location="129:48-129:52" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@variable/@initExpression/@source"/>
+  <ocl:OclModel location="130:25-130:32" name="PathExp" elements="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@variable/@type/@elementType"/>
+  <ocl:VariableDeclaration location="131:6-131:10" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@variable/@initExpression/@condition/@source"/>
+  <ocl:VariableDeclaration location="132:4-132:8" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@variable/@initExpression/@thenExpression/@source"/>
+  <ocl:OclModel location="142:16-142:23" name="PathExp" elements="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@variable/@type"/>
+  <ocl:VariableDeclaration location="145:6-145:10" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@thenExpression/@in_/@source/@elements.1"/>
+  <ocl:VariableDeclaration location="152:6-152:10" varName="self" variableExp="/0/@elements.7/@definition/@feature/@body/@in_/@in_/@in_/@elseExpression/@elseExpression/@thenExpression/@source/@elements.1/@source/@source"/>
+  <ocl:OclModel location="175:16-175:23" name="PathExp" elements="/0/@elements.8/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="177:11-177:15" varName="self" variableExp="/0/@elements.8/@definition/@feature/@body/@source/@elements.0"/>
+  <ocl:VariableDeclaration location="177:17-177:21" varName="self" variableExp="/0/@elements.8/@definition/@feature/@body/@source/@elements.1/@source/@source"/>
+  <ocl:OclModel location="207:16-207:23" name="PathExp" elements="/0/@elements.9/@definition/@context_/@context_"/>
+  <ocl:OclModel location="207:64-207:71" name="PathExp" elements="/0/@elements.9/@definition/@feature/@returnType"/>
+  <ocl:OclModel location="208:28-208:35" name="PathExp" elements="/0/@elements.9/@definition/@feature/@body/@variable/@type/@elementType"/>
+  <ocl:VariableDeclaration location="208:45-208:49" varName="self" variableExp="/0/@elements.9/@definition/@feature/@body/@variable/@initExpression/@source"/>
+  <ocl:OclModel location="209:28-209:35" name="PathExp" elements="/0/@elements.9/@definition/@feature/@body/@in_/@variable/@type/@elementType"/>
+  <ocl:VariableDeclaration location="209:45-209:49" varName="self" variableExp="/0/@elements.9/@definition/@feature/@body/@in_/@variable/@initExpression/@source"/>
+  <ocl:VariableDeclaration location="211:3-211:7" varName="self" variableExp="/0/@elements.9/@definition/@feature/@body/@in_/@in_/@thenExpression"/>
+  <ocl:OclModel location="242:14-242:21" name="PathExp" elements="/0/@elements.10/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="244:9-244:23" name="TextualPathExp" elements="/0/@elements.10/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="248:7-248:21" name="TextualPathExp" elements="/0/@elements.10/@outPattern/@elements.1/@type"/>
+  <ocl:VariableDeclaration location="249:19-249:29" varName="thisModule" variableExp="/0/@elements.10/@outPattern/@elements.1/@bindings.0/@value/@source/@source"/>
+  <ocl:OclModel location="260:12-260:19" name="PathExp" elements="/0/@elements.11/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="264:8-264:22" name="TextualPathExp" elements="/0/@elements.11/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="278:12-278:19" name="PathExp" elements="/0/@elements.12/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="283:8-283:22" name="TextualPathExp" elements="/0/@elements.12/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="297:12-297:19" name="PathExp" elements="/0/@elements.13/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="302:8-302:22" name="TextualPathExp" elements="/0/@elements.13/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="321:13-321:20" name="PathExp" elements="/0/@elements.14/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="329:8-329:22" name="TextualPathExp" elements="/0/@elements.14/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="334:20-334:34" name="TextualPathExp" elements="/0/@elements.14/@outPattern/@elements.1/@type"/>
+</xmi:XMI>

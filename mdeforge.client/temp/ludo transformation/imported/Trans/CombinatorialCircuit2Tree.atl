@@ -1,0 +1,82 @@
+-- @path circuit=/it.univaq.disim.mde.atl.combinatorial2tree/metamodels/combinatorialcircuit.ecore
+-- @path tree=/it.univaq.disim.mde.atl.combinatorial2tree/metamodels/tree.ecore
+
+module CombinatorialCircuit2Tree;
+
+create OUT : tree from IN : combinatorialcircuit;
+
+helper def : getType(o : OclAny) : String = o.oclType().toString(); -- metamodel!instance
+helper def : getInstanceType(o : OclAny) : String = thisModule.getType(o).substring(thisModule.getType(o).indexOf('!')+2, thisModule.getType(o).size()); -- instance
+
+
+unique lazy rule GateToNode {
+	from s: circuit!Gate
+	to t: tree!Node(
+		type <- thisModule.getInstanceType(s),
+		name <- s.name
+	)
+}
+
+unique lazy rule StartToNode {
+	from s: circuit!Start
+	to t: tree!Node(
+		type <- thisModule.getInstanceType(s),
+		name <- s.name
+	)
+}
+
+unique lazy rule SinkToNode {
+	from s: circuit!Sink
+	to t: tree!Node(
+		type <- thisModule.getInstanceType(s),
+		name <- s.name
+	)
+}
+
+lazy rule Start2GateToArch {
+	from s: circuit!Start2Gate
+	to t: tree!Arch(
+		name <- s.name,
+		value <- s.value,
+		from <- thisModule.StartToNode(s.source),
+		to <- thisModule.GateToNode(s.target)
+	)
+}
+
+lazy rule Gate2GateToArch {
+	from s: circuit!Gate2Gate
+	to t: tree!Arch(
+		name <- s.name,
+		value <- s.value,
+		from <- thisModule.GateToNode(s.source),
+		to <- thisModule.GateToNode(s.target)
+	)
+}
+
+lazy rule Gate2SinkToArch {
+	from s: circuit!Gate2Sink
+	to t: tree!Arch(
+		name <- s.name,
+		value <- s.value,
+		from <- thisModule.GateToNode(s.source),
+		to <- thisModule.SinkToNode(s.target)
+	)
+}
+
+rule CombinatorialcircuitToTree {
+	from s: circuit!Combinatorialcircuit
+	to t: tree!Tree(
+		name <- s.name,
+		nodes <- s.starts->collect(start | thisModule.StartToNode(start))
+				 ->union(s.gates->collect(gate | thisModule.GateToNode(gate)))
+				 ->union(s.sinks->collect(sink | thisModule.SinkToNode(sink))),
+				 
+		archs <- s.start2Gates->collect(start2Gate | thisModule.Start2GateToArch(start2Gate))
+				 ->union(s.gate2Gates->collect(gate2Gate | thisModule.Gate2GateToArch(gate2Gate)))
+				 ->union(s.gate2Sinks->collect(gate2Sink | thisModule.Gate2SinkToArch(gate2Sink)))
+		
+		-- Alternative method (no lazy):
+		--nodes <- tree!Node.allInstances(),
+		--archs <- tree!Arch.allInstances()
+	)
+}

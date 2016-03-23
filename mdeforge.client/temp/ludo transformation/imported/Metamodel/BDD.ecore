@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore">
+  <ecore:EPackage name="PrimitiveTypes">
+    <eClassifiers xsi:type="ecore:EDataType" name="String"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Boolean"/>
+  </ecore:EPackage>
+  <ecore:EPackage name="BDD">
+    <eClassifiers xsi:type="ecore:EClass" name="BDD">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/0/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ports" ordered="false" lowerBound="1" upperBound="-1" eType="/1/Port" containment="true" eOpposite="/1/Port/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tree" ordered="false" lowerBound="1" eType="/1/Tree" containment="true" eOpposite="/1/Tree/ownerBDD"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false" lowerBound="1" eType="/0/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/1/BDD" eOpposite="/1/BDD/ports"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="/1/Port">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subtrees" ordered="false" upperBound="-1" eType="/1/Subtree" eOpposite="/1/Subtree/port"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="/1/Port">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" ordered="false" upperBound="-1" eType="/1/Assignment" eOpposite="/1/Assignment/port"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Tree" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownerBDD" ordered="false" eType="/1/BDD" eOpposite="/1/BDD/tree"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownerSubtreeForZero" ordered="false" eType="/1/Subtree" eOpposite="/1/Subtree/treeForZero"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownerSubtreeForOne" ordered="false" eType="/1/Subtree" eOpposite="/1/Subtree/treeForOne"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Leaf" eSuperTypes="/1/Tree">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" ordered="false" lowerBound="1" upperBound="-1" eType="/1/Assignment" containment="true" eOpposite="/1/Assignment/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Assignment">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false" unique="false" lowerBound="1" eType="/0/Boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" ordered="false" lowerBound="1" eType="/1/OutputPort" eOpposite="/1/OutputPort/assignments"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false" lowerBound="1" eType="/1/Leaf" eOpposite="/1/Leaf/assignments"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Subtree" eSuperTypes="/1/Tree">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="port" ordered="false" lowerBound="1" eType="/1/InputPort" eOpposite="/1/InputPort/subtrees"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="treeForZero" ordered="false" lowerBound="1" eType="/1/Tree" containment="true" eOpposite="/1/Tree/ownerSubtreeForZero"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="treeForOne" ordered="false" lowerBound="1" eType="/1/Tree" containment="true" eOpposite="/1/Tree/ownerSubtreeForOne"/>
+    </eClassifiers>
+  </ecore:EPackage>
+</xmi:XMI>

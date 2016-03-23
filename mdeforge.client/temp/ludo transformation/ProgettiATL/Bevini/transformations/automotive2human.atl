@@ -1,0 +1,67 @@
+-- @path automotiveMM=/it.univaq.disim.mde.auto2hum/metamodels/automotiveMM.ecore
+-- @path humanMM=/it.univaq.disim.mde.auto2hum/metamodels/humanMM.ecore
+
+module automotive2human;
+create OUT : humanMM from IN : automotiveMM;
+
+
+rule automotive_system2Robot{
+	from a: automotiveMM!Automotive_system
+	to h: humanMM!Robot(
+		name <- a.name,
+		ownee <- a.ownee1, -- to body parts
+		ownee1 <- a.ownee -- to CPU
+		)
+}
+
+rule Central_unit2CPU{
+	from a: automotiveMM!Central_unit
+	to h: humanMM!CPU(
+		component <- a.component, -- to body parts
+		name <- a.name)
+}
+
+
+rule Break_control2Arms{
+	from a: automotiveMM!Break_control
+	to h: humanMM!Arms(
+		name <- a.name
+		)
+}
+
+rule Engine_control2Energy_Core{
+	from a: automotiveMM!Engine_control
+	to h: humanMM!Energy_Core(
+		name <- a.name
+		)
+}
+
+rule Security_control2Safety_Control{
+	from a: automotiveMM!Security_control
+	to h: humanMM!Safety_Control(
+		name <- a.name
+		)
+}
+
+rule Sensor_control2Senses{
+	from a: automotiveMM!Sensor_control
+	to h: humanMM!Senses(
+		name <- a.name
+		)
+}
+
+rule Notification_Manager2Senses{
+	from a: automotiveMM!Notification_manager
+	to h: humanMM!Senses(
+		name <- a.name
+	)
+}
+
+rule Notification2Vocal_Message{
+	from a: automotiveMM!Notification
+	to h: humanMM!Vocal_Message(
+		collector <- a.collector,
+		name <- a.name,
+		message <- a.message		
+		)
+}

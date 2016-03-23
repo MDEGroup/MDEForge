@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="ASCII"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:atl="http://www.eclipse.org/gmt/2005/ATL" xmlns:ocl="http://www.eclipse.org/gmt/2005/OCL">
+  <atl:Module location="1:1-131:2" name="SoftwareQualityControl2Mantis">
+    <inModels location="2:26-2:53" name="IN" metamodel="/2"/>
+    <outModels location="2:8-2:20" name="OUT" metamodel="/1"/>
+    <elements xsi:type="atl:Helper" location="8:1-11:29">
+      <commentsBefore>-- This helper permits to convert the status value of a bug in string </commentsBefore>
+      <commentsBefore>-- CONTEXT: n/a</commentsBefore>
+      <commentsBefore>-- RETURN: String</commentsBefore>
+      <commentsAfter>-- This helper permits to get the name of the person who is responsible for the bug.</commentsAfter>
+      <commentsAfter>-- If the &quot;responsible&quot; field is not valued, the responsible of this bug is the</commentsAfter>
+      <commentsAfter>-- control responsible.</commentsAfter>
+      <commentsAfter>-- CONTEXT: n/a</commentsAfter>
+      <commentsAfter>-- RETURN: String</commentsAfter>
+      <definition location="8:8-11:28">
+        <feature xsi:type="ocl:Operation" location="8:13-11:28" name="convertStatus">
+          <parameters location="8:27-8:68" varName="bs" variableExp="/0/@elements.0/@definition/@feature/@body/@variable/@initExpression/@source">
+            <type xsi:type="ocl:OclModelElement" location="8:32-8:68" name="BugStatusType" model="/3"/>
+          </parameters>
+          <returnType xsi:type="ocl:StringType" location="8:73-8:79"/>
+          <body xsi:type="ocl:LetExp" location="9:2-11:28">
+            <variable location="9:6-9:33" varName="sv" variableExp="/0/@elements.0/@definition/@feature/@body/@in_/@source /0/@elements.0/@definition/@feature/@body/@in_/@arguments.1/@source">
+              <type xsi:type="ocl:StringType" location="9:11-9:17"/>
+              <initExpression xsi:type="ocl:OperationCallExp" location="9:20-9:33" operationName="toString">
+                <source xsi:type="ocl:VariableExp" location="9:20-9:22" referredVariable="/0/@elements.0/@definition/@feature/@parameters.0"/>
+              </initExpression>
+            </variable>
+            <in_ xsi:type="ocl:OperationCallExp" location="11:3-11:28" operationName="substring">
+              <source xsi:type="ocl:VariableExp" location="11:3-11:5" referredVariable="/0/@elements.0/@definition/@feature/@body/@variable"/>
+              <arguments xsi:type="ocl:IntegerExp" location="11:16-11:17" integerSymbol="5"/>
+              <arguments xsi:type="ocl:OperationCallExp" location="11:18-11:27" operationName="size">
+                <source xsi:type="ocl:VariableExp" location="11:18-11:20" referredVariable="/0/@elements.0/@definition/@feature/@body/@variable"/>
+              </arguments>
+            </in_>
+          </body>
+        </feature>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:Helper" location="18:1-26:9">
+      <commentsBefore>-- This helper permits to get the name of the person who is responsible for the bug.</commentsBefore>
+      <commentsBefore>-- If the &quot;responsible&quot; field is not valued, the responsible of this bug is the</commentsBefore>
+      <commentsBefore>-- control responsible.</commentsBefore>
+      <commentsBefore>-- CONTEXT: n/a</commentsBefore>
+      <commentsBefore>-- RETURN: String</commentsBefore>
+      <commentsAfter>-- Rule 'BugTracking2MantisRoot'</commentsAfter>
+      <commentsAfter>-- This rule generates the root of the Mantis output model</commentsAfter>
+      <commentsAfter>-- if a BugTracking element exists in the input model</commentsAfter>
+      <definition location="18:8-26:8">
+        <feature xsi:type="ocl:Operation" location="18:48-26:8" name="getResponsibleName">
+          <returnType xsi:type="ocl:StringType" location="18:72-18:78"/>
+          <body xsi:type="ocl:LetExp" location="19:2-26:8">
+            <variable location="19:6-19:36" varName="rv" variableExp="/0/@elements.1/@definition/@feature/@body/@in_/@condition/@source /0/@elements.1/@definition/@feature/@body/@in_/@elseExpression">
+              <type xsi:type="ocl:StringType" location="19:11-19:17"/>
+              <initExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="19:20-19:36" name="responsible">
+                <source xsi:type="ocl:VariableExp" location="19:20-19:24" referredVariable="/5"/>
+              </initExpression>
+            </variable>
+            <in_ xsi:type="ocl:IfExp" location="21:3-26:8">
+              <thenExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="23:4-23:45" name="responsible">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="23:4-23:33" name="ct_control">
+                  <source xsi:type="ocl:NavigationOrAttributeCallExp" location="23:4-23:22" name="b_bugTracking">
+                    <source xsi:type="ocl:VariableExp" location="23:4-23:8" referredVariable="/6"/>
+                  </source>
+                </source>
+              </thenExpression>
+              <condition xsi:type="ocl:OperationCallExp" location="21:6-21:25" operationName="oclIsUndefined">
+                <source xsi:type="ocl:VariableExp" location="21:6-21:8" referredVariable="/0/@elements.1/@definition/@feature/@body/@variable"/>
+              </condition>
+              <elseExpression xsi:type="ocl:VariableExp" location="25:4-25:6" referredVariable="/0/@elements.1/@definition/@feature/@body/@variable"/>
+            </in_>
+          </body>
+        </feature>
+        <context_ location="18:8-18:42">
+          <context_ xsi:type="ocl:OclModelElement" location="18:16-18:42" name="Bug" model="/4"/>
+        </context_>
+      </definition>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="33:1-41:2" name="BugTracking2MantisRoot">
+      <commentsBefore>-- Rule 'BugTracking2MantisRoot'</commentsBefore>
+      <commentsBefore>-- This rule generates the root of the Mantis output model</commentsBefore>
+      <commentsBefore>-- if a BugTracking element exists in the input model</commentsBefore>
+      <commentsAfter>-- Rule 'Bug2Issue'</commentsAfter>
+      <commentsAfter>-- This rule generates a issue in Mantis for each</commentsAfter>
+      <commentsAfter>-- bug reported in the BugTracking element.</commentsAfter>
+      <outPattern location="37:2-40:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="38:3-40:4" varName="mr">
+          <type xsi:type="ocl:OclModelElement" location="38:8-38:25" name="MantisRoot" model="/8"/>
+          <bindings location="39:4-39:67" propertyName="issues">
+            <value xsi:type="ocl:IteratorExp" location="39:14-39:67" name="collect">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="39:14-39:21" name="bugs">
+                <source xsi:type="ocl:VariableExp" location="39:14-39:16" referredVariable="/0/@elements.2/@inPattern/@elements.0"/>
+              </source>
+              <body xsi:type="ocl:OperationCallExp" location="39:35-39:66" operationName="resolveTemp">
+                <source xsi:type="ocl:VariableExp" location="39:35-39:45" referredVariable="/9"/>
+                <arguments xsi:type="ocl:VariableExp" location="39:58-39:59" referredVariable="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@iterators.0"/>
+                <arguments xsi:type="ocl:StringExp" location="39:61-39:65" stringSymbol="mi"/>
+              </body>
+              <iterators location="39:31-39:32" varName="e" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@body/@arguments.0"/>
+            </value>
+          </bindings>
+        </elements>
+      </outPattern>
+      <inPattern location="34:2-35:42">
+        <elements xsi:type="atl:SimpleInPatternElement" location="35:3-35:42" varName="bt" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@source/@source">
+          <type xsi:type="ocl:OclModelElement" location="35:8-35:42" name="BugTracking" model="/7"/>
+        </elements>
+      </inPattern>
+    </elements>
+    <elements xsi:type="atl:MatchedRule" location="47:1-131:2" name="Bug2Issue">
+      <commentsBefore>-- Rule 'Bug2Issue'</commentsBefore>
+      <commentsBefore>-- This rule generates a issue in Mantis for each</commentsBefore>
+      <commentsBefore>-- bug reported in the BugTracking element.</commentsBefore>
+      <outPattern location="61:2-130:4">
+        <elements xsi:type="atl:SimpleOutPatternElement" location="62:3-90:4" varName="mi">
+          <type xsi:type="ocl:OclModelElement" location="62:8-62:20" name="Issue" model="/11"/>
+          <bindings location="63:4-63:20" propertyName="id">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="63:10-63:20" name="number">
+              <source xsi:type="ocl:VariableExp" location="63:10-63:13" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="64:4-64:19" propertyName="project">
+            <value xsi:type="ocl:VariableExp" location="64:15-64:19" referredVariable="/0/@elements.3/@outPattern/@elements.1"/>
+          </bindings>
+          <bindings location="65:4-65:18" propertyName="category">
+            <value xsi:type="ocl:StringExp" location="65:16-65:18" stringSymbol=""/>
+          </bindings>
+          <bindings location="66:4-66:21" propertyName="priority">
+            <value xsi:type="ocl:VariableExp" location="66:16-66:21" referredVariable="/0/@elements.3/@outPattern/@elements.2"/>
+          </bindings>
+          <bindings location="67:4-67:19" propertyName="severity">
+            <value xsi:type="ocl:VariableExp" location="67:16-67:19" referredVariable="/0/@elements.3/@outPattern/@elements.3"/>
+          </bindings>
+          <bindings location="68:4-68:18" propertyName="status">
+            <value xsi:type="ocl:VariableExp" location="68:14-68:18" referredVariable="/0/@elements.3/@outPattern/@elements.4"/>
+          </bindings>
+          <bindings location="69:4-69:19" propertyName="reporter">
+            <value xsi:type="ocl:VariableExp" location="69:16-69:19" referredVariable="/0/@elements.3/@outPattern/@elements.5"/>
+          </bindings>
+          <bindings location="70:4-70:17" propertyName="summary">
+            <value xsi:type="ocl:StringExp" location="70:15-70:17" stringSymbol=""/>
+          </bindings>
+          <bindings location="71:4-71:34" propertyName="description">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="71:19-71:34" name="description">
+              <source xsi:type="ocl:VariableExp" location="71:19-71:22" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="72:4-72:35" propertyName="version">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="72:15-72:35" name="componentVersion">
+              <source xsi:type="ocl:VariableExp" location="72:15-72:18" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="77:4-77:29" propertyName="reproducibility">
+            <commentsBefore>--			build &lt;-,</commentsBefore>
+            <commentsBefore>--			platform &lt;-,</commentsBefore>
+            <commentsBefore>--			os &lt;-,</commentsBefore>
+            <commentsBefore>--			osVersion &lt;-</commentsBefore>
+            <value xsi:type="ocl:VariableExp" location="77:23-77:29" referredVariable="/0/@elements.3/@outPattern/@elements.6"/>
+          </bindings>
+          <bindings location="80:4-80:22" propertyName="dateSubmitted">
+            <commentsBefore>--			stepsToReproduce &lt;-,</commentsBefore>
+            <commentsBefore>--			additionalInfo &lt;-,</commentsBefore>
+            <value xsi:type="ocl:IntegerExp" location="80:21-80:22"/>
+          </bindings>
+          <bindings location="81:4-81:20" propertyName="assignedTo">
+            <commentsBefore>-- the date is an integer value in a specific format : how to convert?</commentsBefore>
+            <value xsi:type="ocl:VariableExp" location="81:18-81:20" referredVariable="/0/@elements.3/@outPattern/@elements.7"/>
+          </bindings>
+          <bindings location="86:4-86:29" propertyName="attachments">
+            <commentsBefore>--			projection &lt;-,</commentsBefore>
+            <commentsBefore>--			eta &lt;-,</commentsBefore>
+            <commentsBefore>--			resolution &lt;-,</commentsBefore>
+            <commentsBefore>--			fixedInVersion &lt;-,</commentsBefore>
+            <value xsi:type="ocl:SequenceExp" location="86:19-86:29"/>
+          </bindings>
+          <bindings location="87:4-87:31" propertyName="relationships">
+            <value xsi:type="ocl:SequenceExp" location="87:21-87:31"/>
+          </bindings>
+          <bindings location="88:4-88:27" propertyName="notes">
+            <value xsi:type="ocl:SequenceExp" location="88:13-88:27">
+              <elements xsi:type="ocl:VariableExp" location="88:22-88:26" referredVariable="/0/@elements.3/@outPattern/@elements.8"/>
+            </value>
+          </bindings>
+          <bindings location="89:4-89:19" propertyName="lastUpdate">
+            <commentsAfter>-- this date is not mentionned in any field in the Software Quality Control metamodel</commentsAfter>
+            <value xsi:type="ocl:IntegerExp" location="89:18-89:19">
+              <commentsAfter>-- this date is not mentionned in any field in the Software Quality Control metamodel</commentsAfter>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="91:3-94:4" varName="proj" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.1/@value">
+          <type xsi:type="ocl:OclModelElement" location="91:10-91:28" name="ValueWithId" model="/12"/>
+          <bindings location="92:4-92:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="92:10-92:11"/>
+          </bindings>
+          <bindings location="93:4-93:51" propertyName="value">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="93:13-93:51" name="component">
+              <source xsi:type="ocl:NavigationOrAttributeCallExp" location="93:13-93:41" name="ct_control">
+                <source xsi:type="ocl:NavigationOrAttributeCallExp" location="93:13-93:30" name="b_bugTracking">
+                  <source xsi:type="ocl:VariableExp" location="93:13-93:16" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+                </source>
+              </source>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="95:3-98:4" varName="prior" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.3/@value">
+          <type xsi:type="ocl:OclModelElement" location="95:11-95:29" name="ValueWithId" model="/13"/>
+          <bindings location="96:4-96:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="96:10-96:11"/>
+          </bindings>
+          <bindings location="97:4-97:15" propertyName="value">
+            <value xsi:type="ocl:StringExp" location="97:13-97:15" stringSymbol=""/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="99:3-102:4" varName="sev" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.4/@value">
+          <type xsi:type="ocl:OclModelElement" location="99:9-99:27" name="ValueWithId" model="/14"/>
+          <bindings location="100:4-100:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="100:10-100:11"/>
+          </bindings>
+          <bindings location="101:4-101:15" propertyName="value">
+            <value xsi:type="ocl:StringExp" location="101:13-101:15" stringSymbol=""/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="103:3-106:4" varName="stat" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.5/@value">
+          <type xsi:type="ocl:OclModelElement" location="103:10-103:28" name="ValueWithId" model="/15"/>
+          <bindings location="104:4-104:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="104:10-104:11"/>
+          </bindings>
+          <bindings location="105:4-105:49" propertyName="value">
+            <value xsi:type="ocl:OperationCallExp" location="105:13-105:49" operationName="convertStatus">
+              <source xsi:type="ocl:VariableExp" location="105:13-105:23" referredVariable="/16"/>
+              <arguments xsi:type="ocl:NavigationOrAttributeCallExp" location="105:38-105:48" name="status">
+                <source xsi:type="ocl:VariableExp" location="105:38-105:41" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+              </arguments>
+            </value>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="107:3-111:4" varName="rep" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.6/@value">
+          <type xsi:type="ocl:OclModelElement" location="107:9-107:22" name="Person" model="/17"/>
+          <bindings location="108:4-108:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="108:10-108:11"/>
+          </bindings>
+          <bindings location="109:4-109:27" propertyName="value">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="109:13-109:27" name="originator">
+              <source xsi:type="ocl:VariableExp" location="109:13-109:16" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="110:4-110:14" propertyName="login">
+            <value xsi:type="ocl:StringExp" location="110:12-110:14" stringSymbol=""/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="112:3-115:4" varName="reprod" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.10/@value">
+          <type xsi:type="ocl:OclModelElement" location="112:12-112:30" name="ValueWithId" model="/18"/>
+          <bindings location="113:4-113:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="113:10-113:11"/>
+          </bindings>
+          <bindings location="114:4-114:15" propertyName="value">
+            <value xsi:type="ocl:StringExp" location="114:13-114:15" stringSymbol=""/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:SimpleOutPatternElement" location="116:3-120:4" varName="at" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.12/@value">
+          <type xsi:type="ocl:OclModelElement" location="116:8-116:21" name="Person" model="/19"/>
+          <bindings location="117:4-117:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="117:10-117:11"/>
+          </bindings>
+          <bindings location="118:4-118:37" propertyName="value">
+            <value xsi:type="ocl:OperationCallExp" location="118:13-118:37" operationName="getResponsibleName">
+              <source xsi:type="ocl:VariableExp" location="118:13-118:16" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="119:4-119:14" propertyName="login">
+            <value xsi:type="ocl:StringExp" location="119:12-119:14" stringSymbol=""/>
+          </bindings>
+        </elements>
+        <elements xsi:type="atl:ForEachOutPatternElement" location="121:3-125:4" varName="note" variableExp="/0/@elements.3/@outPattern/@elements.0/@bindings.15/@value/@elements.0">
+          <type xsi:type="ocl:OclModelElement" location="121:19-121:30" name="Note" model="/20"/>
+          <bindings location="122:4-122:18" propertyName="timestamp">
+            <value xsi:type="ocl:IntegerExp" location="122:17-122:18"/>
+          </bindings>
+          <bindings location="123:4-123:17" propertyName="author">
+            <value xsi:type="ocl:VariableExp" location="123:14-123:17" referredVariable="/0/@elements.3/@outPattern/@elements.9"/>
+          </bindings>
+          <bindings location="124:4-124:30" propertyName="text">
+            <value xsi:type="ocl:VariableExp" location="124:12-124:30" referredVariable="/0/@elements.3/@outPattern/@elements.8/@iterator"/>
+          </bindings>
+          <collection xsi:type="ocl:VariableExp" location="121:61-121:81" referredVariable="/0/@elements.3/@variables.0"/>
+          <iterator location="121:39-121:57" varName="commentsAnswersVal" variableExp="/0/@elements.3/@outPattern/@elements.8/@bindings.2/@value"/>
+        </elements>
+        <elements xsi:type="atl:ForEachOutPatternElement" location="126:3-130:4" varName="aut" variableExp="/0/@elements.3/@outPattern/@elements.8/@bindings.1/@value">
+          <type xsi:type="ocl:OclModelElement" location="126:18-126:31" name="Person" model="/21"/>
+          <bindings location="127:4-127:11" propertyName="id">
+            <value xsi:type="ocl:IntegerExp" location="127:10-127:11"/>
+          </bindings>
+          <bindings location="128:4-128:27" propertyName="value">
+            <value xsi:type="ocl:NavigationOrAttributeCallExp" location="128:13-128:27" name="originator">
+              <source xsi:type="ocl:VariableExp" location="128:13-128:16" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </value>
+          </bindings>
+          <bindings location="129:4-129:14" propertyName="login">
+            <value xsi:type="ocl:StringExp" location="129:12-129:14" stringSymbol=""/>
+          </bindings>
+          <collection xsi:type="ocl:VariableExp" location="126:62-126:82" referredVariable="/0/@elements.3/@variables.0"/>
+          <iterator location="126:40-126:58" varName="commentsAnswersVal"/>
+        </elements>
+      </outPattern>
+      <variables location="51:3-59:11" varName="commentsAnswersOrNot" variableExp="/0/@elements.3/@outPattern/@elements.8/@collection /0/@elements.3/@outPattern/@elements.9/@collection">
+        <type xsi:type="ocl:SequenceType" location="51:26-51:42">
+          <elementType xsi:type="ocl:StringType" location="51:35-51:41"/>
+        </type>
+        <initExpression xsi:type="ocl:LetExp" location="52:4-59:10">
+          <variable location="52:8-52:41" varName="ca" variableExp="/0/@elements.3/@variables.0/@initExpression/@in_/@condition/@source /0/@elements.3/@variables.0/@initExpression/@in_/@elseExpression/@elements.0">
+            <type xsi:type="ocl:StringType" location="52:13-52:19"/>
+            <initExpression xsi:type="ocl:NavigationOrAttributeCallExp" location="52:22-52:41" name="commentsAnswers">
+              <source xsi:type="ocl:VariableExp" location="52:22-52:25" referredVariable="/0/@elements.3/@inPattern/@elements.0"/>
+            </initExpression>
+          </variable>
+          <in_ xsi:type="ocl:IfExp" location="54:5-59:10">
+            <thenExpression xsi:type="ocl:SequenceExp" location="56:6-56:16"/>
+            <condition xsi:type="ocl:OperationCallExp" location="54:8-54:27" operationName="oclIsUndefined">
+              <source xsi:type="ocl:VariableExp" location="54:8-54:10" referredVariable="/0/@elements.3/@variables.0/@initExpression/@variable"/>
+            </condition>
+            <elseExpression xsi:type="ocl:SequenceExp" location="58:6-58:18">
+              <elements xsi:type="ocl:VariableExp" location="58:15-58:17" referredVariable="/0/@elements.3/@variables.0/@initExpression/@variable"/>
+            </elseExpression>
+          </in_>
+        </initExpression>
+      </variables>
+      <inPattern location="48:2-49:35">
+        <elements xsi:type="atl:SimpleInPatternElement" location="49:3-49:35" varName="bbt" variableExp="/0/@elements.3/@variables.0/@initExpression/@variable/@initExpression/@source /0/@elements.3/@outPattern/@elements.0/@bindings.0/@value/@source /0/@elements.3/@outPattern/@elements.0/@bindings.8/@value/@source /0/@elements.3/@outPattern/@elements.0/@bindings.9/@value/@source /0/@elements.3/@outPattern/@elements.1/@bindings.1/@value/@source/@source/@source /0/@elements.3/@outPattern/@elements.4/@bindings.1/@value/@arguments.0/@source /0/@elements.3/@outPattern/@elements.5/@bindings.1/@value/@source /0/@elements.3/@outPattern/@elements.7/@bindings.1/@value/@source /0/@elements.3/@outPattern/@elements.9/@bindings.1/@value/@source">
+          <type xsi:type="ocl:OclModelElement" location="49:9-49:35" name="Bug" model="/10"/>
+        </elements>
+      </inPattern>
+    </elements>
+  </atl:Module>
+  <ocl:OclModel location="2:14-2:20" name="Mantis" model="/0/@outModels.0"/>
+  <ocl:OclModel location="2:31-2:53" name="SoftwareQualityControl" model="/0/@inModels.0"/>
+  <ocl:OclModel location="8:32-8:54" name="SoftwareQualityControl" elements="/0/@elements.0/@definition/@feature/@parameters.0/@type"/>
+  <ocl:OclModel location="18:16-18:38" name="SoftwareQualityControl" elements="/0/@elements.1/@definition/@context_/@context_"/>
+  <ocl:VariableDeclaration location="19:20-19:24" varName="self" variableExp="/0/@elements.1/@definition/@feature/@body/@variable/@initExpression/@source"/>
+  <ocl:VariableDeclaration location="23:4-23:8" varName="self" variableExp="/0/@elements.1/@definition/@feature/@body/@in_/@thenExpression/@source/@source/@source"/>
+  <ocl:OclModel location="35:8-35:30" name="SoftwareQualityControl" elements="/0/@elements.2/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="38:8-38:14" name="Mantis" elements="/0/@elements.2/@outPattern/@elements.0/@type"/>
+  <ocl:VariableDeclaration location="39:35-39:45" varName="thisModule" variableExp="/0/@elements.2/@outPattern/@elements.0/@bindings.0/@value/@body/@source"/>
+  <ocl:OclModel location="49:9-49:31" name="SoftwareQualityControl" elements="/0/@elements.3/@inPattern/@elements.0/@type"/>
+  <ocl:OclModel location="62:8-62:14" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.0/@type"/>
+  <ocl:OclModel location="91:10-91:16" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.1/@type"/>
+  <ocl:OclModel location="95:11-95:17" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.2/@type"/>
+  <ocl:OclModel location="99:9-99:15" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.3/@type"/>
+  <ocl:OclModel location="103:10-103:16" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.4/@type"/>
+  <ocl:VariableDeclaration location="105:13-105:23" varName="thisModule" variableExp="/0/@elements.3/@outPattern/@elements.4/@bindings.1/@value/@source"/>
+  <ocl:OclModel location="107:9-107:15" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.5/@type"/>
+  <ocl:OclModel location="112:12-112:18" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.6/@type"/>
+  <ocl:OclModel location="116:8-116:14" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.7/@type"/>
+  <ocl:OclModel location="121:19-121:25" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.8/@type"/>
+  <ocl:OclModel location="126:18-126:24" name="Mantis" elements="/0/@elements.3/@outPattern/@elements.9/@type"/>
+</xmi:XMI>

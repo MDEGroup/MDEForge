@@ -1,0 +1,45 @@
+-- @path OrgchartMM=/it.univaq.disim.mde.atl.MM2CD/metamodels/Orgchart.ecore
+-- @path CompanyMM=/it.univaq.disim.mde.atl.MM2CD/metamodels/CompanyMM.ecore
+
+module OrgChart2Company;
+create OUT : CompanyMM from IN : OrgchartMM;
+
+helper def :  mainCompany: CompanyMM!Company=OclUndefined;
+
+helper def: allRoles(): Set(CompanyMM!Role)= OrgchartMM!Role.eLiterals;
+
+
+
+rule President2Company{
+	from s: OrgchartMM!President
+	to c: CompanyMM!Company(
+	name <- s.companyName	,
+	employees <- s.subemplyees
+	),
+	president: CompanyMM!Employee(
+	name <- s.name,
+	company <- c,
+	role <- 'President'
+	)
+	do{
+		
+		thisModule.mainCompany<-c;
+		--s.debug(thisModule.allRoles());
+	}
+	
+	
+}
+
+
+rule Member2Employee{
+	
+	from s: OrgchartMM!Member (not s.oclIsTypeOf(OrgchartMM!President))
+	
+	to t: CompanyMM!Employee(
+	name <- s.name	,
+	role<-s.role.toString(),
+	company<-thisModule.mainCompany
+	)
+	
+	
+}

@@ -1,0 +1,64 @@
+package SimpleUML {
+
+	abstract class IdentifiedElement {
+		attribute id : String;
+	}
+
+	class UMLModel extends IdentifiedElement {
+		reference classes[*] container : Class oppositeOf model;
+		reference associations[*] container : Association oppositeOf model;
+		reference primitiveDataTypes[*] container : PrimitiveDataType oppositeOf model;
+	}
+
+	abstract class Classifier extends IdentifiedElement {
+		attribute name : String;
+	}
+
+	class Class extends Classifier {
+		attribute isAbstract : Boolean;
+		reference model : UMLModel oppositeOf classes;
+		reference parent : Class;
+		reference attributes[*] container : Attribute oppositeOf owner;
+		reference operations[*] container : Operation oppositeOf owner;
+	}
+
+	class PrimitiveDataType extends Classifier {
+		reference model : UMLModel oppositeOf primitiveDataTypes;
+	}
+
+	class Association extends IdentifiedElement {
+		reference model : UMLModel oppositeOf associations;
+		reference source : Class;
+		reference target : Class;
+		attribute isComposition : Boolean;
+		attribute isAggregation : Boolean;
+	}
+
+	class Attribute extends IdentifiedElement {
+		attribute name : String;
+		reference type : Classifier;
+		reference owner : Class oppositeOf attributes;
+	}
+
+	class Operation extends IdentifiedElement {
+		attribute name : String;
+		reference parameters[*] ordered container : Parameter oppositeOf owner;
+		reference owner : Class oppositeOf operations;
+		reference returnType : Classifier;
+	}
+
+	class Parameter extends IdentifiedElement {
+		reference owner : Operation oppositeOf parameters;
+		attribute name : String;
+		reference type : Classifier;
+	}
+}
+
+package PrimitiveTypes {
+
+	datatype Integer;
+
+	datatype String;
+
+	datatype Boolean;
+}
