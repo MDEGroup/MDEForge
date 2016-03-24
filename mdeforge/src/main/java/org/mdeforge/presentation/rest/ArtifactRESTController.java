@@ -102,8 +102,8 @@ public class ArtifactRESTController {
 	}
 
 	// search artifacts ordered by score
-	@RequestMapping(value = "/orederedSearch/{text}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> orderedSearch(@PathVariable("text") String text) {
+	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
 			SearchProvider searchProvider = (SearchProvider) artifactService;
 			ArtifactList list = new ArtifactList(searchProvider.search(text));
@@ -127,13 +127,5 @@ public class ArtifactRESTController {
 			return new ResponseEntity<String>("false",
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
-	}
-	
-	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
-	public HttpEntity<ArtifactList> searchResult(
-			@PathVariable(value = "search_string") String searchString) {
-		ArtifactList artifacts = new ArtifactList(artifactService.search(searchString));
-		return new ResponseEntity<ArtifactList> (artifacts,
-				HttpStatus.OK);
 	}
 }

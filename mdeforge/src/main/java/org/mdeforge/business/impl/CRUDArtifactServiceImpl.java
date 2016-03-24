@@ -22,7 +22,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
+import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -44,8 +43,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
-
-import com.mongodb.Mongo;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T>{
@@ -84,26 +81,18 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 
 		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-				.onField("name", 20F).onField("description", 10F)
-				.onField("authors", 5F).onField("tags", 7F)
-				.onField("extractedContents").named("ArtifactIndex").build();
+			.onField("nameForIndex", 20F).onField("descriptionForIndex", 15F)
+			.onField("authors", 10F).onField("tags", 15F)
+			.onField("weightedContentsThree", 12F).onField("weightedContentsTwo", 10F)
+			.onField("weightedContentsOne", 7F).onField("defaultWeightedContents")
+			.named("ArtifactIndex").build();
 
 		operations.indexOps(Artifact.class).ensureIndex(textIndex);
 	}
 
 	@Override
-	public List<T> search(String searchString) throws BusinessException {
-		TextCriteria criteria = TextCriteria.forLanguage("en").matching(
-				searchString);
-		Query query = TextQuery.queryText(criteria).sortByScore()
-				.with(new PageRequest(0, 5));
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		List<T> result = operations.find(query, persistentClass);
-		return result;
-	}
-
-	@Override
-	public List<T> orederedSearch(String text) {
+	public List<T> search(String text) throws BusinessException {
+		text = Tokenizer.tokenizeString(text);
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 
 		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(

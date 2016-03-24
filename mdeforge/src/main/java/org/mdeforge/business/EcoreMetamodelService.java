@@ -9,7 +9,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import anatlyzer.atlext.OCL.OclExpression;
 
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,
-		MetricProvider, SimilarityService, ValidateService, ClusterService, SearchProvider<EcoreMetamodel> {
+		MetricProvider, SimilarityService, ValidateService, ClusterService {
 	
 	List<EcoreMetamodel> findEcoreMetamodelByURI(String URI);
 	//ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)  throws BusinessException;

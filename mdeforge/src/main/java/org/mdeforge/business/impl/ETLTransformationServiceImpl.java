@@ -31,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -229,15 +230,22 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 	@Override
 	public List<ETLTransformation> findTransformationsBySourceMetamodels(
 			ETLTransformation metamodel) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<ETLTransformation> findTransformationsByTargetMetamodels(
 			ETLTransformation metamodel) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public void extractedContent(ETLTransformation artifact) {
+		
+	}
+	@Override
+	public void createIndex(TextIndexDefinition textIndex)
+			throws BusinessException {
+		
 	}
 }
 

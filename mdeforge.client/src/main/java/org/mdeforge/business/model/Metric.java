@@ -8,6 +8,7 @@ property = "_class")
 public class Metric {
 
 	private String name;
+	private String id;
 	private Artifact artifact;
 	private String description;
 	public Artifact getArtifact() {
@@ -32,6 +33,14 @@ public class Metric {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	

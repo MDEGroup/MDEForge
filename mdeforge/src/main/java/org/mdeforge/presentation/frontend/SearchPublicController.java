@@ -69,13 +69,13 @@ public class SearchPublicController {
 				artifactTypes = ARTIFACT_TYPE;
 			for (String string : artifactTypes) {
 				if (string.equals("models"))
-					al.addAll(modelService.orederedSearch(searchString));
+					al.addAll(modelService.search(searchString));
 				if (string.equals("transformations"))
 					al.addAll(aTLTransformationService
-							.orederedSearch(searchString));
+							.search(searchString));
 				if (string.equals("metamodels"))
 					al.addAll(ecoreMetamodelService
-							.orederedSearch(searchString));
+							.search(searchString));
 			}
 		}
 		Collections.sort(al, new Comparator<Artifact>(){

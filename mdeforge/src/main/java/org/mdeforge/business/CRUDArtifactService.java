@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 
 
-public interface CRUDArtifactService <T extends Artifact> {
+public interface CRUDArtifactService <T extends Artifact> extends SearchProvider<T>{
 	T create(T art) throws BusinessException;
 	//void delete(String idArtifact, User idUser) throws BusinessException;
 	void update(T artifact) throws BusinessException;
@@ -34,7 +35,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 
 	List<T> search(String searchString) throws BusinessException;
 	void createIndex();
-	List<T> orederedSearch(String text);
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
 	long countAll() throws BusinessException;

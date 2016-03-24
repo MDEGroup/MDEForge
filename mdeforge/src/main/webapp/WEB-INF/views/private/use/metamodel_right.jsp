@@ -125,7 +125,7 @@
 						<div class="tab-pane" id="standard">
 
 							<c:set var="serializedContext_trim"
-								value="${fn:trim(artifact.getExtractedContents())}" />
+								value="${fn:trim(artifact.getDefaultWeightedContents())}" />
 							<c:set var="serializedContext_splitted"
 								value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
 							${serializedContext_splitted}
@@ -143,7 +143,7 @@
 	<!-- // Widget END -->
 </div>
 <script>
-	var res = '${artifact.getExtractedContents()}'.trim();
+	var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 
 	var wordlist = [];

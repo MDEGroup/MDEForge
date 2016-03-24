@@ -155,9 +155,9 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		EcoreMetamodel mmID = (EcoreMetamodel) art.getMetamodel().getToArtifact();
 		Resource mm = ecoreMetamodelService.loadArtifact(mmID);
 		EPackage mmePackage = null;
-		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
-				+ "/" + mongoDbFactory.getDb().getName() + "/"
-				+ jsonArtifactCollection + "/";
+//		String jsonMongoUriBase = mongoPrefix + mongo.getAddress().toString()
+//				+ "/" + mongoDbFactory.getDb().getName() + "/"
+//				+ jsonArtifactCollection + "/";
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 
 		for (EObject eObject : mm.getContents()) {
@@ -174,12 +174,12 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		Resource load_resource = load_resourceSet.getResource(
 				URI.createURI(gridFileMediaService.getFilePath(art)), true);
 
-		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
-				URI.createURI(jsonMongoUriBase + art.getId()));
-
-		EList<EObject> cs = load_resource.getContents();
-
-		res.getContents().addAll(cs);
+//		Resource res = jsonMongoResourceSet.getResourceSet().createResource(
+//				URI.createURI(jsonMongoUriBase + art.getId()));
+//
+//		EList<EObject> cs = load_resource.getContents();
+//
+//		res.getContents().addAll(cs);
 
 		WeightedContents ws = WeightedResourceSerializer.serialize(load_resource);
 		art.setNameForIndex(Tokenizer.tokenizeString(art.getName()));
@@ -189,12 +189,12 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 		art.setWeightedContentsOne(ws.getWeightedContentsOne());
 		art.setDefaultWeightedContents(ws.getDefaultContents());
 
-		try {
-			res.save(null);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new BusinessException();
-		}
+//		try {
+//			res.save(null);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			throw new BusinessException();
+//		}
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 
 public interface ModelService extends CRUDArtifactService<Model>, 
-		ValidateService, SimilarityService, SearchProvider<Model> {
+		ValidateService, SimilarityService {
 	List<Model> findModelsByMetamodel(Metamodel metamodel);
 
 	List<org.mdeforge.business.model.Model> findByTransformation(

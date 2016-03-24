@@ -106,11 +106,12 @@ public class TestClient {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testAddEcoreMetamodel () {
 		try {
 			EcoreMetamodel emm = new EcoreMetamodel();
-			emm.setName("BookStore2");
+			emm.setName("BookStore");
 //			List<String> tags = Arrays.asList("DB, DataBase, Relational".split(","));
 //			emm.setTags(tags);
 			emm.setDescription("Describes the basic structure of a book store");
@@ -127,7 +128,8 @@ public class TestClient {
 	@Test
 	public void testAddModel(){
 		try {
-			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56e40913e4b044537d4d50bd");
+			//EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodel("56e40913e4b044537d4d50bd");
+			EcoreMetamodel mm = ecoreMetamodelService.getEcoreMetamodelByName("BookStore");
 			Model m = new Model();
 			m.setName("FirstLibrary");
 //			List<String> tags = Arrays.asList("DB, Data, DataBase, Data Base, Relational".split(","));
@@ -187,11 +189,10 @@ public class TestClient {
 		}
 	}
 
-	@Ignore
 	@Test
 	public void testSearch(){
 		try {
-			List<Artifact> artifacts = ecoreMetamodelService.orderedSearch("context");
+			List<Artifact> artifacts = ecoreMetamodelService.search("Potter");
 			if (artifacts.size()>0)
 				printArtifacts(artifacts);
 			else

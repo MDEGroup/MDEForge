@@ -22,8 +22,8 @@ public class EcoreMetamodelService extends ArtifactService {
 		String result = doGetRequest(connectionUrl + "api/EcoreMetamodel/" + idMetamodel + "/metrics");
 		return mapper.readValue(result, new TypeReference<List<Metric>>() {});
 	}
-	public List<Artifact> orderedSearch(String text) throws Exception{
-		String result = doGetRequest(connectionUrl + "api/Artifact/orederedSearch/" + text);
+	public List<Artifact> search(String text) throws Exception{
+		String result = doGetRequest(connectionUrl + "api/Artifact/search/" + text);
 		return mapper.readValue(result, new TypeReference<List<Artifact>>() {});
 	}
 	public List<EcoreMetamodel> getEcoreMetamodels() throws Exception {
