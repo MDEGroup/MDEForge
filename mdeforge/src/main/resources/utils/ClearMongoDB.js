@@ -41,6 +41,7 @@ var users =
 	        }
 	    ],
 	    "owner" : [],
+	    "enabled" : true,
 	    "sharedProject" : [],
 	    "sharedArtifact" : [],
 	    "workspaces" : []
@@ -60,6 +61,7 @@ var users =
 	        }
 	    ],
 	    "owner" : [],
+	    "enabled" : true,
 	    "sharedProject" : [],
 	    "sharedArtifact" : [],
 	    "workspaces" : []
