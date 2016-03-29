@@ -76,6 +76,7 @@ import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
@@ -132,6 +133,17 @@ public class EcoreMetamodelServiceImpl extends
 	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
 		
 		EcoreMetamodel a = super.findOneById(idArtifact, user);
+		try {
+			a.setMetrics(getMetrics(a));
+		} catch (BusinessException e) {
+			logger.error(e.getMessage());
+		}
+		return a;
+	}
+	
+	@Override
+	public EcoreMetamodel findOneInProject(String project_id, String artifact_id, User user) {
+		EcoreMetamodel a = super.findOneInProject(project_id, artifact_id, user);
 		try {
 			a.setMetrics(getMetrics(a));
 		} catch (BusinessException e) {

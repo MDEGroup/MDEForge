@@ -134,6 +134,17 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
+	public ATLTransformation findOneInProject(String project_id, String artifact_id, User user) {
+		ATLTransformation a = super.findOneInProject(project_id, artifact_id, user);
+		try {
+			a.setMetrics(getMetrics(a));
+		} catch (BusinessException e) {
+			logger.error(e.getMessage());
+		}
+		return a;
+	}
+	
+	@Override
 	public ATLTransformation findOneById(String idArtifact, User user)
 			throws BusinessException {
 		ATLTransformation a = super.findOneById(idArtifact, user);
