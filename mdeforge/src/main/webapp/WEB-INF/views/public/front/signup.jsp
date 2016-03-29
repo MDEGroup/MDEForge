@@ -133,21 +133,14 @@
 							%>
 						</div>
 						<!-- // Row END -->
-
 					</form>
 					<!-- // Form END -->
-
-
 				</div>
 				<!-- // Box END -->
-
 			</div>
-
 		</div>
-
 	</div>
 	<!-- // Wrapper END -->
-
 	<!-- Themer -->
 	<div id="themer" class="collapse">
 		<div class="wrapper">
@@ -183,8 +176,6 @@
 		</div>
 	</div>
 	<!-- // Themer END -->
-
-
 	<!-- Code Beautify -->
 	<script
 		src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/js-beautify/beautify.js"></script>

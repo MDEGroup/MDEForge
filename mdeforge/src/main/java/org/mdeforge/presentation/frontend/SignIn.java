@@ -1,5 +1,8 @@
 package org.mdeforge.presentation.frontend;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 import javax.servlet.http.HttpServletRequest;
 
 import net.tanesha.recaptcha.ReCaptchaImpl;
@@ -7,7 +10,10 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.VerificationToken;
+import org.mdeforge.common.spring.security.OnRegistrationCompleteEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,62 +35,56 @@ public class SignIn {
 	ReCaptchaImpl reCaptcha;
 	@Autowired
 	private UserService userService;
-	
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+
 	@RequestMapping(value = "/signin", method = { RequestMethod.GET })
 	public String signIn(Model model) {
-		model.addAttribute("",new User());
+		model.addAttribute("user",new User());
 		return "public.signin";
 	}
 	@RequestMapping(value = "/signin", method = { RequestMethod.POST })
-	public String signInPost(Model model, @ModelAttribute ("transformation") User user,
+	public String signInPost(Model model, @ModelAttribute ("user") User user,
 			@RequestParam("recaptcha_challenge_field") String challangeField, 
 			@RequestParam("recaptcha_response_field") String responseField, 
 			HttpServletRequest request) {
-		String remoteAddress = "localhost";
+		String remoteAddress = request.getServerName();
 		ReCaptchaResponse reCaptchaResponse = this.reCaptcha.checkAnswer(remoteAddress, challangeField, responseField);
 		if(reCaptchaResponse.isValid() ){
-			userService.create(user);
-			authenticateUserAndSetSession(user, request);
+			String appUrl = request.getContextPath();
+			try {
+				eventPublisher.publishEvent(new OnRegistrationCompleteEvent
+						(user, request.getLocale(), appUrl));
+			}catch (Exception e) {System.out.println(e.getMessage());}
 		}
 		else {
-			model.addAttribute(user);
+			model.addAttribute("user", user);
 			model.addAttribute("captcha",true);
 			return "public.signin";
 		}
-		return "redirect:/private/dashboard";
+		return "public.registration.request";
 	}
-	
-    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
-        String username = user.getUsername();
-        String password = user.getPassword();
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
-        // generate session if one doesn't exist
-        request.getSession();
-        token.setDetails(new WebAuthenticationDetails(request));
-        Authentication authenticatedUser = authenticationManager.authenticate(token);
-        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+
+    @RequestMapping(value = "/regitrationConfirm", method = RequestMethod.GET)
+    public String confirmRegistration
+          (HttpServletRequest request, Model model, @RequestParam("token") String token) {
+        VerificationToken verificationToken = userService.getVerificationToken(token);
+        if (verificationToken == null) {
+            model.addAttribute("message", "The user couldn't be found!");
+            return "public.registration.status"; 
+        }
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            model.addAttribute("message", "The token has been expired!");
+            return "public.registration.status"; 
+        } 
+        User user = verificationToken.getUser();
+        model.addAttribute("message", "User is confirmed. Please login!");
+        user.setEnabled(true); 
+        userService.saveRegisteredUser(user); 
+        return "public.registration.status"; 
     }
-	
-	
-//	@RequestMapping(value = "/search_metamodel_by_example/result", method = { RequestMethod.POST })
-//	public String searchEcoreMetamodelResultByExampleTop5(
-//			Model model,
-//			@RequestParam("metamodelfile") MultipartFile file) throws IOException {
-//		EcoreMetamodel m = new EcoreMetamodel();
-//		byte[] bytes = file.getBytes();
-//		GridFileMedia gfm = new GridFileMedia();
-//		gfm.setByteArray(bytes);
-//		gfm.setFileName("searchFragment.ecore");
-//		m.setFile(gfm);
-//		m.setName("searchFragment");        
-//		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.5);
-//		for (EcoreMetamodel ecoreMetamodel : el) {
-//			ecoreMetamodel.setFile(null);
-//		}
-//		model.addAttribute("artifactListByExample", el);
-//		return "public.search";
-//
-//	}
+
 	
 
 }

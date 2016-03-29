@@ -17,6 +17,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Document(collection="Users")
 public class User implements java.io.Serializable{
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	@Id
 	private String id = null;
 	private static final long serialVersionUID = -8418304837964858131L;
@@ -26,7 +35,7 @@ public class User implements java.io.Serializable{
 	private String username = null;
 	@JsonIgnore
 	private String password = null;
-
+	private boolean enabled;
 	@DBRef(lazy=true)
 	private List<Role> roles = new ArrayList<Role>();
 

@@ -13,6 +13,23 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
+	<!-- Mail sender -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	    
+	    <property name="username" value="user@user.com" />
+	    <property name="password" value="password" />
+	 	<property name="host" value="smtp.univaq.it" />
+	    <property name="port" value="587" />
+	    <property name="javaMailProperties">
+	        <!-- additional properties specific to JavaMail -->
+	        <props>
+	        	<prop key="mail.transport.protocol">smtp</prop>
+	            <prop key="mail.smtp.auth">true</prop>
+	            <prop key="mail.smtp.starttls.enable">true</prop>
+	        </props>
+	    </property>
+	</bean>
+	
 	<security:http pattern="/oauth/token" create-session="stateless"
 		authentication-manager-ref="clientAuthenticationManager">
 		<security:intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
@@ -83,11 +100,14 @@
 
 	<!-- Authentication in config file -->
 	<security:authentication-manager id="clientAuthenticationManager">
-		<security:authentication-provider user-service-ref="clientDetailsUserService" />
+		<security:authentication-provider user-service-ref="clientDetailsUserService">
+		</security:authentication-provider>
 	</security:authentication-manager>
 
 	<security:authentication-manager alias="authenticationManager">
-			<security:authentication-provider user-service-ref="myUserDetailsService"/>
+			<security:authentication-provider user-service-ref="myUserDetailsService">
+				<security:password-encoder hash="bcrypt" />
+			</security:authentication-provider>
 	</security:authentication-manager>
 
 	<bean id="myUserDetailsService" class="org.mdeforge.common.spring.security.UserDetailsServiceImpl"/>

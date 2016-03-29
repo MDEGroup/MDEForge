@@ -1,0 +1,1 @@
+An email will be forwarded to you in order to activate your account!
