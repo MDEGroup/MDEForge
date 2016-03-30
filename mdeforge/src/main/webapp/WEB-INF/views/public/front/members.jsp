@@ -24,7 +24,7 @@
 			
 				<!-- Thumbnail -->
 				<div class="thumbnail widget-thumbnail">
-					<img src="${pageContext.request.contextPath}/resources/theme/images/members/alfonso_pierantonio.jpg" alt="Alfonso Pierantonio" style="width:152px;"/>
+					<img src="${pageContext.request.contextPath}/resources/theme/images/members/alfonso_pierantonio.jpg" alt="Alfonso Pierantonio" style="border-radius: 50%"/>
 					<div class="caption">
 						<h4>Alfonso Pierantonio</h4>
 						<div class="media">
