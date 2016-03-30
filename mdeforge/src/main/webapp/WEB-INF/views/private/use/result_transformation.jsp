@@ -30,7 +30,7 @@
 						<c:forEach items="${models}" var="model">
 							<tr>
 								<td>
-									<a href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${model.getId()}">${model.getName()}</a>
+									<a href="${pageContext.request.contextPath}/private/Model/artifact?artifact_id=${model.getId()}">${model.getName()}</a>
 								</td>
 								<td>
 									<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${model.metamodel.getToArtifact().getId()}">${model.getMetamodel().getToArtifact().getName() }</a>

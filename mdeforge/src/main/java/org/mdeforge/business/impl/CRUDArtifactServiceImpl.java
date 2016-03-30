@@ -69,12 +69,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected UserRepository userRepository;
 	@Autowired
 	protected GridFileMediaService gridFileMediaService;
-	@Value("#{cfgproperties[basePath]}")
-	protected String basePath;
-	@Value("#{cfgproperties[mongoPrefix]}")
-	private String mongoPrefix;
-	@Value("#{cfgproperties[jsonArtifactCollection]}")
-	private String jsonArtifactCollection;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	protected Class<T> persistentClass;
 	public void createIndex() {

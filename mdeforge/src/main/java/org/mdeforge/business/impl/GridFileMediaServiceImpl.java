@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -16,6 +17,9 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.integration.GridFileMediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -35,7 +39,8 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	GridFsTemplate operations;
 	@Autowired
 	GridFileMediaRepository gridFileMediaRepository;
-
+	@Value("#{cfgproperties[basePath]}")
+	private String basePath;
 	@Override
 	public void store(GridFileMedia gridFileMedia) throws BusinessException {
 		GridFSFile gridFile = operations.store(new ByteArrayInputStream(
@@ -85,8 +90,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		gridFileMediaRepository.delete(file);
 	}
 
-	@Value("#{cfgproperties[basePath]}")
-	private String basePath;
+
 
 	@Override
 	public String getFilePath(Artifact artifact) throws BusinessException {
@@ -94,10 +98,10 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		if (artifact.getFile().getId()!=null)
 			grm = getGridFileMedia(artifact.getFile());
 		else grm = artifact.getFile();
-		FileOutputStream out;
+		OutputStream out;
 		try {
-			String path = basePath + artifact.getFile().getFileName();
-			out = new FileOutputStream(path);
+			FileSystemResource resource = new FileSystemResource(basePath + artifact.getFile().getFileName());
+			out = resource.getOutputStream();
 			if (grm.getByteArray() != null && grm.getByteArray().length != 0)
 				out.write(grm.getByteArray());
 
@@ -105,7 +109,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 				out.write(Base64.decode(grm.getContent().getBytes()));
 
 			out.close();
-			return path;
+			return resource.getPath();
 		} catch (FileNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
@@ -119,10 +123,10 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	@Override
 	public String getFilePathFromContent(GridFileMedia gdf) throws BusinessException {
 		
-		FileOutputStream out;
+		OutputStream out;
 		try {
-			String path = basePath + "tempTransf.atl";
-			out = new FileOutputStream(path);
+			FileSystemResource resource = new FileSystemResource(basePath + gdf.getFileName());
+			out = resource.getOutputStream();
 			if (gdf.getContent() != null)
 				out.write(Base64.decode(gdf.getContent().getBytes()));
 			if (gdf.getByteArray() != null)
@@ -132,7 +136,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 				throw new BusinessException("No Content");
 			}
 			out.close();
-			return path;
+			return resource.getPath();
 		} catch (FileNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {

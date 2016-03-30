@@ -31,12 +31,13 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
          
         String recipientAddress = user.getEmail();
         String subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm.html?token=" + token;
-        String message = "messaggio";
+        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm?token=" + token;
+        String message = "Activation link: ";
         SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom("mdeforge.org@mdeforge.org");
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + " rn" + "http://localhost:8080" + confirmationUrl);
+        email.setText(message + "http://localhost:8080" + confirmationUrl);
         mailSender.send(email);
     }
 }

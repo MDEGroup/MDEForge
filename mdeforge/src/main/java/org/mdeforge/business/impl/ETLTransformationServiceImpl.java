@@ -26,6 +26,7 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ETLTransformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -39,8 +40,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTransformation> implements ETLTransformationService {
 
-	
-
+//	@Value("#{cfgproperties[basePath]}")
+//	protected String basePath;
+//	
 	@Autowired
 	private ETLTransformationRepository ETLTransformationRepository;
 	@Autowired
@@ -128,7 +130,7 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 		//STATICAMENTE
 		//transformation.setTargetName("Target");
 		Random randomGenerator = new Random();
-		String outputPath = basePath + randomGenerator.nextInt(100);
+		String outputPath = "" + randomGenerator.nextInt(100);
 		
 		try {
 			module.parse(new File(transformationPath));

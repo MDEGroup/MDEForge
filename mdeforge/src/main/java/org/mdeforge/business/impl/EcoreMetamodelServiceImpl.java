@@ -173,8 +173,8 @@ public class EcoreMetamodelServiceImpl extends
 	@Autowired
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 
-	@Value("#{cfgproperties[basePath]}")
-	protected String basePath;
+//	@Value("#{cfgproperties[basePath]}")
+//	protected String basePath;
 	Logger logger = LoggerFactory
 			.getLogger(EcoreMetamodelImporterServiceImpl.class);
 	@Value("#{cfgproperties[mongoPrefix]}")
@@ -303,13 +303,12 @@ public class EcoreMetamodelServiceImpl extends
 			transformationLauncher.launch(ILauncher.RUN_MODE, null,
 					new HashMap<String, Object>(),
 					(Object[]) getModulesList(getClass().getResource("/utils/EcoreMetric.asm").getFile()));
-			extractor.extract(outModel, basePath + "sampleCompany_Cut.xmi");
+			extractor.extract(outModel, "sampleCompany_Cut.xmi");
 			EMFModelFactory emfModelFactory = (EMFModelFactory) modelFactory;
 			emfModelFactory.unload((EMFReferenceModel) inputMetamodel);
 			emfModelFactory.unload((EMFReferenceModel) outputMetamodel);
-			List<Metric> result = getMetricList(basePath
-					+ "sampleCompany_Cut.xmi", emm);
-			File temp2 = new File(basePath + "sampleCompany_Cut.xmi");
+			List<Metric> result = getMetricList("sampleCompany_Cut.xmi", emm);
+			File temp2 = new File("sampleCompany_Cut.xmi");
 			temp2.delete();
 			metricRepository.save(result);
 			return result;
@@ -631,8 +630,7 @@ public class EcoreMetamodelServiceImpl extends
 		m.put("xmi", new XMIResourceFactoryImpl());
 		ResourceSet resSet = new ResourceSetImpl();
 		// create a resource
-		Resource resource = resSet.createResource(URI.createURI(basePath
-				+ "/compare.xmi"));
+		Resource resource = resSet.createResource(URI.createURI("/compare.xmi"));
 		resource.getContents().add(comparison);
 		// try {
 		// resource.save(Collections.EMPTY_MAP);
@@ -983,7 +981,7 @@ public class EcoreMetamodelServiceImpl extends
 		Graphics2D g = bi.createGraphics();
 		dp.paint(g);
 		dp.print(g);
-		File outputfile = new File(basePath + "/hcluster.jpg");
+		File outputfile = new File("/hcluster.jpg");
 		try {
 			ImageIO.write(bi, "jpg", outputfile);
 		} catch (IOException e) {

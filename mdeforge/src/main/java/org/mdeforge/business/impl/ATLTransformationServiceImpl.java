@@ -50,7 +50,6 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.MetricEngineException;
-import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
@@ -85,13 +84,13 @@ import org.mdeforge.integration.MetricRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
-import transML.exceptions.transException;
 import anatlyzer.atl.analyser.AnalysisResult;
 import anatlyzer.atl.errors.Problem;
 import anatlyzer.atl.errors.ProblemStatus;
@@ -104,6 +103,7 @@ import anatlyzer.atl.util.AnalyserUtils;
 import anatlyzer.atlext.ATL.Callable;
 import anatlyzer.atlext.OCL.OclType;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
+import transML.exceptions.transException;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
@@ -120,6 +120,9 @@ public class ATLTransformationServiceImpl extends
 	private UNIVAQTesterService univaqTesterService;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
+//	@Value("#{cfgproperties[basePath]}")
+//	protected String basePath;
+	
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
 
 	@Override
@@ -406,7 +409,7 @@ public class ATLTransformationServiceImpl extends
 	@Override
 	public String inject(ATLTransformation atlTransformation)
 			throws BusinessException {
-		String outputFilePath = basePath + atlTransformation.getName() + ".xmi";
+		String outputFilePath = atlTransformation.getName() + ".xmi";
 		AtlResourceImpl ri = new AtlResourceImpl();
 		ResourceSet rs = new ResourceSetImpl();
 		rs.getResources().add(ri);
@@ -500,7 +503,7 @@ public class ATLTransformationServiceImpl extends
 			SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
 			String formats1 = formatter5.format(ss1);
 
-			String tempModelPath = basePath + "generatedBy_"
+			String tempModelPath = "generatedBy_"
 					+ transformation.getName() + "_" + formats1 + ".xmi";
 			String fileName = "generatedBy_"
 					+ transformation.getName().replace(" ", "")
