@@ -28,7 +28,6 @@ import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.eclipse.m2m.atl.engine.compiler.CompileTimeError;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.mdeforge.business.ATLTransformationCompilationError;
-import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.UNIVAQTesterService;
@@ -44,18 +43,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import transML.exceptions.transException;
-import transML.utils.transMLProperties;
-import transML.utils.modeling.ATLEngine;
-import transML.utils.modeling.TrafoEngine;
-import transML.utils.solver.FactorySolver;
-import transML.utils.solver.SolverWrapper;
 import anatlyzer.atl.model.ATLModel;
 import anatlyzer.atlext.ATL.Module;
 import anatlyzer.evaluation.models.FullModelGenerationStrategy;
 import anatlyzer.evaluation.models.LiteModelGenerationStrategy;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
 import anatlyzer.evaluation.report.Report;
+import transML.exceptions.transException;
+import transML.utils.transMLProperties;
+import transML.utils.modeling.ATLEngine;
+import transML.utils.modeling.TrafoEngine;
+import transML.utils.solver.FactorySolver;
+import transML.utils.solver.SolverWrapper;
 
 
 @Service
@@ -66,12 +65,9 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 	protected String basePath;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-	@Autowired
-	private ATLTransformationService atlTransformationService;
 	public List<ATLTransformationTestServiceError> executeTransformation(EMFModel atlModel, ATLTransformation transformation, List<Model> models,
 			boolean exhaustive) throws ATLTransformationCompilationError {
 		List<ATLTransformationTestServiceError> result = new ArrayList<ATLTransformationTestServiceError>();
-		String folderModels = basePath + "anatlyze/testmodels" + File.separator;
 		ResourceSetImpl rs = new ResourceSetImpl();
 		Report report = new Report();
 		List<DomainConformToRelation> inputMetamodelRelations = new ArrayList<DomainConformToRelation>();
@@ -86,10 +82,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 
 		// name of input/output metamodels of the transformation
 		// TODO: there may be several input/output metamodels
-		EcoreMetamodel immAlias = (EcoreMetamodel) inputMetamodelRelations.get(0)
-				.getToArtifact();
-		EcoreMetamodel ommAlias = (EcoreMetamodel) outputMetamodels.get(0)
-				.getToArtifact();
+		
 		String aux = URI.createFileURI(basePath + transformation.getName())
 				.lastSegment();
 		String oFolder = "";

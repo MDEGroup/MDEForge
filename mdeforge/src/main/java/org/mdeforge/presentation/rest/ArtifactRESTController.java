@@ -7,8 +7,10 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
+import org.mdeforge.business.model.wrapper.json.MetricList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -88,7 +90,15 @@ public class ArtifactRESTController {
 		}
 	}
 
-
+	@RequestMapping(value = "/{id_artifact}/metrics", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<MetricList> getArtifactMetrics(@PathVariable("id_artifact") String idArtifact) {
+		try {
+			List<Metric> artifact = artifactService.findMetric(idArtifact, user);
+			return new ResponseEntity<MetricList>(new MetricList(artifact), HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<MetricList>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	//create artifact index
 	@RequestMapping(value = "/createIndex", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> createIndex() {

@@ -82,6 +82,8 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void createVerificationToken(User user, String token) {
+		Role role = roleRepository.findOne("546f7ba5ce248eba4487eda5");
+		user.getRoles().add(role);
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		user = userRepository.save(user);
 		VerificationToken vt = new VerificationToken(token, user);

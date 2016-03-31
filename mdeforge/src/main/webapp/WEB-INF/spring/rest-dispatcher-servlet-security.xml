@@ -13,26 +13,63 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
+
+
+
+
 	<!-- Mail sender -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-	    
-	    <property name="username" value="mdeforge.org@mdeforge.org" />
-	    <property name="password" value="Pavone84" />
-	 	<property name="host" value="mail.mdeforge.org" />
-	    <property name="port" value="587" />
-	    <property name="javaMailProperties">
-	        <!-- additional properties specific to JavaMail -->
-	        <props>
-	        	<prop key="mail.transport.protocol">smtp</prop>
-	            <prop key="mail.smtp.auth">true</prop>
-	            <prop key="mail.smtp.starttls.enable">true</prop>
-	        </props>
-	    </property>
+
+		<property name="username" value="mdeforge.org@mdeforge.org" />
+		<property name="password" value="Pavone84" />
+		<property name="host" value="mail.mdeforge.org" />
+		<property name="port" value="587" />
+		<property name="javaMailProperties">
+			<!-- additional properties specific to JavaMail -->
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+
+
+	<!-- OAUTH MANAGER -->
+	<security:authentication-manager id="clientAuthenticationManager">
+		<security:authentication-provider
+			user-service-ref="clientDetailsUserService">
+		</security:authentication-provider>
+	</security:authentication-manager>
+	<!-- WEB MANAGER -->
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider
+			user-service-ref="myUserDetailsService">
+			<security:password-encoder hash="bcrypt" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<bean id="myUserDetailsService"
+		class="org.mdeforge.common.spring.security.UserDetailsServiceImpl" />
+
+	<bean id="clientDetailsUserService"
+		class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+		<constructor-arg ref="clientDetails" />
 	</bean>
 	
+		<!-- Client Definition -->
+	<oauth:client-details-service id="clientDetails">
+		<oauth:client client-id="my-trusted-client"
+			authorized-grant-types="password,authorization_code,refresh_token,implicit,redirect"
+			authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" redirect-uri="/web"
+			scope="read,write,trust" access-token-validity="300000"
+			refresh-token-validity="6000000" />
+	</oauth:client-details-service>
+
 	<security:http pattern="/oauth/token" create-session="stateless"
 		authentication-manager-ref="clientAuthenticationManager">
-		<security:intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY" />
+		<security:intercept-url pattern="/oauth/token"
+			access="IS_AUTHENTICATED_FULLY" />
 		<security:anonymous enabled="false" />
 		<security:http-basic entry-point-ref="clientAuthenticationEntryPoint" />
 		<!-- include this only if you need to authenticate clients via request 
@@ -47,24 +84,30 @@
 		entry-point-ref="oauthAuthenticationEntryPoint"
 		access-decision-manager-ref="accessDecisionManager">
 		<security:anonymous enabled="false" />
-		<security:intercept-url pattern="/api/**" access="ROLE_USER" />
-		<security:custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<security:intercept-url pattern="/api/**"
+			access="ROLE_USER" />
+		<security:custom-filter ref="resourceServerFilter"
+			before="PRE_AUTH_FILTER" />
 		<security:access-denied-handler ref="oauthAccessDeniedHandler" />
 	</security:http>
 
 	<security:http auto-config='true' use-expressions="true">
-		<security:access-denied-handler error-page="/WEB-INF/views/common/accessdenied.jsp" />
-		<security:intercept-url pattern="/resources/**" access="permitAll" />
+		<security:access-denied-handler
+			error-page="/WEB-INF/views/common/accessdenied.jsp" />
+		<security:intercept-url pattern="/resources/**"
+			access="permitAll" />
 		<security:intercept-url pattern="/" access="permitAll" />
-		
-		<security:intercept-url pattern="/common/**" access="isAuthenticated()" />
-		<security:intercept-url pattern="/private/**" access="isAuthenticated()" />
-		<security:intercept-url pattern="/categoria/**" access="hasAnyRole('admin')"/>
- 		
-		<security:form-login login-page="/login" 
-							 authentication-failure-url="/login" 
-							 default-target-url="/private/dashboard"
-							 always-use-default-target="false"/>
+
+		<security:intercept-url pattern="/common/**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/private/**"
+			access="isAuthenticated()" />
+		<security:intercept-url pattern="/categoria/**"
+			access="hasAnyRole('admin')" />
+
+		<security:form-login login-page="/login"
+			authentication-failure-url="/login" default-target-url="/private/dashboard"
+			always-use-default-target="false" />
 	</security:http>
 
 
@@ -98,24 +141,7 @@
 		</constructor-arg>
 	</bean>
 
-	<!-- Authentication in config file -->
-	<security:authentication-manager id="clientAuthenticationManager">
-		<security:authentication-provider user-service-ref="clientDetailsUserService">
-		</security:authentication-provider>
-	</security:authentication-manager>
 
-	<security:authentication-manager alias="authenticationManager">
-			<security:authentication-provider user-service-ref="myUserDetailsService">
-				<security:password-encoder hash="bcrypt" />
-			</security:authentication-provider>
-	</security:authentication-manager>
-
-	<bean id="myUserDetailsService" class="org.mdeforge.common.spring.security.UserDetailsServiceImpl"/>
-	
-	<bean id="clientDetailsUserService"
-		class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
-		<constructor-arg ref="clientDetails" />
-	</bean>
 
 	<!-- Token Store -->
 	<bean id="tokenStore"
@@ -130,7 +156,7 @@
 		<property name="accessTokenValiditySeconds" value="100000" />
 	</bean>
 
-	
+
 
 	<!-- Token management -->
 	<oauth:authorization-server
@@ -144,18 +170,6 @@
 
 	<oauth:resource-server id="resourceServerFilter"
 		resource-id="dstest" token-services-ref="tokenServices" />
-
-	<!-- Client Definition -->
-	<oauth:client-details-service id="clientDetails">
-
-		<oauth:client client-id="my-trusted-client"
-			authorized-grant-types="password,authorization_code,refresh_token,implicit,redirect"
-			authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT" redirect-uri="/web"
-			scope="read,write,trust" access-token-validity="300000"
-			refresh-token-validity="6000000" />
-
-	</oauth:client-details-service>
-
 
 	<security:global-method-security
 		pre-post-annotations="enabled" proxy-target-class="true">

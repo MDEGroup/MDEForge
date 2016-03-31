@@ -24,6 +24,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.integration.ArtifactRepository;
+import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
 import org.mdeforge.integration.UserRepository;
@@ -46,7 +47,8 @@ import org.springframework.security.crypto.codec.Base64;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T>{
-
+	@Autowired
+	private MetricRepository metricRepository;
 	@Autowired
 	private CRUDRelationService<Relation> crudRelationService;
 	@Autowired
@@ -132,7 +134,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		artifact.getFile().setByteArray(
 				gridFileMediaService.getFileByte(artifact));
-
+		artifact.setMetrics(metricRepository.findByArtifactId(new ObjectId(idArtifact)));
 		return artifact;
 	}
 
@@ -788,5 +790,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		art.getShared().remove(user);
 		userRepository.save(user);
 		artifactRepository.save(art);
+	}
+	
+	@Override
+	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
+		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
 	}
 }

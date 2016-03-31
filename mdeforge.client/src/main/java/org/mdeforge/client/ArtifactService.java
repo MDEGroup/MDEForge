@@ -3,6 +3,7 @@ package org.mdeforge.client;
 import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Metric;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -33,6 +34,10 @@ public class ArtifactService extends MDEForgeClient {
 	public List<Artifact> searchArtifacts(String terms) throws Exception {
 		String result = doGetRequest(connectionUrl + "api/Artifact/search/" + terms);
 		return mapper.readValue(result, new TypeReference<List<Artifact>>(){});
+	}
+	public List<Metric> getArtifactMetrics(String id) throws Exception {
+		String result = doGetRequest(connectionUrl + "api/Artifact/" + id + "/metrics");
+		return mapper.readValue(result, new TypeReference<List<Metric>>(){});
 	}
 	
 }
