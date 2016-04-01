@@ -167,7 +167,7 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			@RequestParam String transformation_id) {
 		ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
 		List<ATLTransformationError> errors =	aTLTransformationService
-				.anATLyzer(atlTransformation, user);
+				.anATLyzer(atlTransformation);
 		atlTransformation.setAtlError(errors);
 		model.addAttribute("atlTransformation", atlTransformation);
 		String pathToDownload = gridFileMediaService
@@ -181,7 +181,7 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			@RequestParam String transformation_id) {
 		try {
 			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
-			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id, user);
+			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id);
 			atlTransformation.setAtlTestError(r);
 			System.out.println(r);
 			String pathToDownload = gridFileMediaService
@@ -205,10 +205,10 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			@RequestParam String transformation_id) {
 		try {
 			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
-			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id, user);
+			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id);
 			atlTransformation.setAtlTestError(r);
 			List<ATLTransformationError> errors =	aTLTransformationService
-					.anATLyzer(atlTransformation, user);
+					.anATLyzer(atlTransformation);
 			atlTransformation.setAtlError(errors);
 			String pathToDownload = gridFileMediaService
 					.getFilePath(atlTransformation);

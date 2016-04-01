@@ -603,8 +603,8 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public List<ATLTransformationTestServiceError> testServices(String transformation_id, User user) throws ATLTransformationCompilationError, transException {
-		ATLTransformation atl = findOneById(transformation_id, user);
+	public List<ATLTransformationTestServiceError> testServices(String transformation_id) throws ATLTransformationCompilationError, transException {
+		ATLTransformation atl = findOne(transformation_id);
 		EMFModel atlModel = injectATLModel(atl);
 		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
 		for (Model model : modelList) {
@@ -619,8 +619,8 @@ public class ATLTransformationServiceImpl extends
 		return r;	
 	}
 	@Override
-	public List<ATLTransformationTestServiceError> testServices(ATLTransformation transformation_id, User user) throws ATLTransformationCompilationError, transException {
-		ATLTransformation atl = findOneById(transformation_id.getId(), user);
+	public List<ATLTransformationTestServiceError> testServices(ATLTransformation transformation_id) throws ATLTransformationCompilationError, transException {
+		ATLTransformation atl = findOne(transformation_id.getId());
 		EMFModel atlModel = injectATLModel(atl);
 		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
 		for (Model model : modelList) {
@@ -635,7 +635,7 @@ public class ATLTransformationServiceImpl extends
 	}
 
 	@Override
-	public List<ATLTransformationError> anATLyzer(ATLTransformation atl, User user)
+	public List<ATLTransformationError> anATLyzer(ATLTransformation atl)
 			throws BusinessException {
 		List<ATLTransformationError> resultMethod = new ArrayList<ATLTransformationError>();
 		try {

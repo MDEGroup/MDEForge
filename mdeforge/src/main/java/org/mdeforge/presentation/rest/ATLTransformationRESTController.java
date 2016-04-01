@@ -234,7 +234,7 @@ public class ATLTransformationRESTController {
 	public @ResponseBody HttpEntity<List<ATLTransformationError>> anATLyzer(@PathVariable("id_artifact") String id) {
 		try {
 			ATLTransformation transformation = ATLtransformationService.findOneById(id, user);
-			List<ATLTransformationError> errors = ATLtransformationService.anATLyzer(transformation, user);
+			List<ATLTransformationError> errors = ATLtransformationService.anATLyzer(transformation);
 			return new ResponseEntity<List<ATLTransformationError>>(errors, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<List<ATLTransformationError>>(HttpStatus.UNPROCESSABLE_ENTITY);
@@ -245,7 +245,7 @@ public class ATLTransformationRESTController {
 			) {
 		try {
 			ATLTransformation transformation = ATLtransformationService.findOneById(id, user);
-			List<ATLTransformationTestServiceError> errors = ATLtransformationService.testServices(transformation, user);
+			List<ATLTransformationTestServiceError> errors = ATLtransformationService.testServices(transformation);
 			return new ResponseEntity<List<ATLTransformationTestServiceError>>(errors, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<List<ATLTransformationTestServiceError>>(HttpStatus.UNPROCESSABLE_ENTITY);

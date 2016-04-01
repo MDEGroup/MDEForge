@@ -20,6 +20,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.search.Tokenizer;
@@ -27,6 +28,7 @@ import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RelationRepository;
+import org.mdeforge.integration.ToBeAnalyseRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
 import org.slf4j.Logger;
@@ -59,6 +61,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected ArtifactRepository artifactRepository;
 	@Autowired
 	protected ProjectService projectService;
+	@Autowired
+	protected ToBeAnalyseRepository toBeAnalyzedRepository;
 	@Autowired
 	protected ProjectRepository projectRepository;
 	@Autowired
@@ -463,6 +467,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				u.getSharedArtifact().add(artifact);
 				userRepository.save(u);
 			}
+			ToBeAnalyse art = new ToBeAnalyse();
+			art.setArtifact(artifact);
+			toBeAnalyzedRepository.save(art);
+			
 			return artifact;
 		} catch (Exception e) {
 			throw new BusinessException();

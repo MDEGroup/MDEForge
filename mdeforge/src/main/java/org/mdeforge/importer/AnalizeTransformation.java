@@ -25,7 +25,7 @@ public class AnalizeTransformation {
 		
 		for (ATLTransformation atlTransformation : atlList) {
 			try {
-				atlTransformation.getAtlError().addAll(atlTransformationService.anATLyzer(atlTransformation, usr));
+				atlTransformation.getAtlError().addAll(atlTransformationService.anATLyzer(atlTransformation));
 				atlRepo.save(atlTransformation);
 				System.out.println(atlTransformation.getName());
 				
