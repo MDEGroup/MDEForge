@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.mdeforge.business.ATLTransformationService;
+import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
@@ -70,8 +71,10 @@ public class ImportTransformationFromFileSystem {
 								if (!mm.exists())
 									System.err.println("IN err");
 								else {
-									EcoreMetamodel ecore = ecoreMetamodelService.findOneByName(mmName);
-									if (ecore == null) {
+									EcoreMetamodel ecore;
+									try {
+										ecore = ecoreMetamodelService.findOneByName(mmName);
+									} catch (ArtifactNotFoundException e){
 										ecore = new EcoreMetamodel();
 										ecore.setOpen(true);
 										ecore.setName(mmName);
@@ -81,6 +84,7 @@ public class ImportTransformationFromFileSystem {
 										ecore.setFile(gfme);
 										ecoreMetamodelService.create(ecore);
 									}
+									
 									relation.setToArtifact(ecore);
 								}
 							}
@@ -94,8 +98,10 @@ public class ImportTransformationFromFileSystem {
 								if (!mm.exists())
 									System.err.println("OUT err");
 								else {
-									EcoreMetamodel ecore = ecoreMetamodelService.findOneByName(mmName);
-									if (ecore == null) {
+									EcoreMetamodel ecore;// = ecoreMetamodelService.findOneByName(mmName);
+									try {
+										ecore = ecoreMetamodelService.findOneByName(mmName);
+									}catch (ArtifactNotFoundException e) {
 										ecore = new EcoreMetamodel();
 										ecore.setOpen(true);
 										ecore.setName(mmName);
