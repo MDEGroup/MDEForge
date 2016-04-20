@@ -31,11 +31,14 @@ import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.Match;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -588,64 +591,126 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		// try {
-//		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
-//		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
-//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-//				"ecore", new XMIResourceFactoryImpl());
-//		ResourceSet resourceSet1 = new ResourceSetImpl();
-//		ResourceSet resourceSet2 = new ResourceSetImpl();
-//		resourceSet1.getResource(uri1, true);
-//		resourceSet2.getResource(uri2, true);
-//		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
-//				resourceSet2, null);
+		URI uri1 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art2));
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"*", new XMIResourceFactoryImpl());
+		ResourceSet resourceSet1 = new ResourceSetImpl();
+		ResourceSet resourceSet2 = new ResourceSetImpl();
+		resourceSet1.getResource(uri1, true);
+		resourceSet2.getResource(uri2, true);
+		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+				resourceSet2, null);
+		Comparison comparison2 = EMFCompare.builder().build().compare(scope);
+		
+		List<Match> matches2 = comparison2.getMatches();
+		int total2 = matches2.size();
+//		int counter2 = 0;
+//		int counterLeft = 0;
+//		int counterRight = 0;
+//		for (Match match : matches2) {
+//			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+//			total2 += lm.size();
+//			for (Match match2 : lm) {
+//				if (match2.getLeft() != null)
+//					counterLeft++;
+//				if (match2.getRight() != null)
+//					counterRight++;
+//				if (match2.getLeft() != null && match2.getRight() != null)
+//					counter2++;
+//			}
+//			if (match.getLeft() != null && match.getRight() != null)
+//				counter2++;
+//		}
+//		double semValue = (counter2 * 1.0) / total2;
+		
+		
+		
+		
 		Comparison comparison = SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
-		//Comparison comparison = EMFCompare.builder().build().compare(scope);
 		List<Match> matches = comparison.getMatches();
 		int total = matches.size();
 		int counter = 0;
-		for (Match match : matches) 
+//		List<EAttribute> attrs = new ArrayList<EAttribute>();
+//		List<EReference> refs = new ArrayList<EReference>();
+//		List<EClass> classes = new ArrayList<EClass>();
+//		List<EDataType> dataTypes = new ArrayList<EDataType>();
+//		List<EPackage> packs = new ArrayList<EPackage>();
+//		COSA SEI:class org.eclipse.emf.ecore.impl.EClassImpl
+//		COSA SEI:class org.eclipse.emf.ecore.impl.EPackageImpl
+//		COSA SEI:class org.eclipse.emf.ecore.impl.EDataTypeImpl
+		for (Match match : matches) {
 			if (match.getLeft() != null && match.getRight() != null)
 					counter++;
-		double simValue = (counter * 1.0) / matches.size();
+//			else {
+//				if (match.getLeft() != null){
+//					if (match.getLeft() instanceof EAttribute)
+//						if(attrs.contains(match.getLeft()))
+//							total--;
+//						else attrs.add((EAttribute) match.getLeft());
+//					
+//					else 
+//						if (match.getLeft() instanceof EReference) 
+//							if(refs.contains(match.getLeft()))
+//								total--;
+//							else refs.add((EReference) match.getLeft());
+//						else
+//							if (match.getLeft() instanceof EPackage) 
+//								if(refs.contains(match.getLeft()))
+//									total--;
+//								else packs.add((EPackage) match.getLeft());
+//							else
+//								if (match.getLeft() instanceof EDataType) 
+//									if(dataTypes.contains(match.getLeft()))
+//										total--;
+//									else dataTypes.add((EDataType) match.getLeft());
+//								else
+//									if (match.getLeft() instanceof EClass) 
+//										if(classes.contains(match.getLeft()))
+//											total--;
+//										else classes.add((EClass) match.getLeft());
+//									else System.out.println("COSA: " + match.getRight().getClass());
+//									
+//						
+//				}
+//				else if (match.getRight() != null){
+//					if (match.getRight() instanceof EAttribute)
+//						if(attrs.contains(match.getRight()))
+//							total--;
+//						else attrs.add((EAttribute) match.getRight());
+//					
+//					else
+//						if (match.getRight() instanceof EReference) 
+//							if(refs.contains(match.getRight()))
+//								total--;
+//							else refs.add((EReference) match.getRight());
+//						else
+//							if (match.getRight() instanceof EPackage) 
+//								if(refs.contains(match.getRight()))
+//									total--;
+//								else packs.add((EPackage) match.getRight());
+//							else
+//								if (match.getRight() instanceof EDataType) 
+//									if(dataTypes.contains(match.getRight()))
+//										total--;
+//									else dataTypes.add((EDataType) match.getRight());
+//								else
+//									if (match.getRight() instanceof EClass) 
+//										if(classes.contains(match.getRight()))
+//											total--;
+//										else classes.add((EClass) match.getRight());
+//									else System.out.println("COSA: " + match.getRight().getClass());
+//				
+//				}		
+//			}
+		}
+		double simValue = (counter * 1.0) / total2;
 
-		// try {
-		// resource.save(Collections.EMPTY_MAP);
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// throw new BusinessException();
-		// }
 		SemanticSimilarityRelation sr = new SemanticSimilarityRelation();
 		sr.setFromArtifact(art1);
 		sr.setToArtifact(art2);
 		sr.setValue(simValue);
 		relationRepository.save(sr);
-//		ContainmentRelation cr = new ContainmentRelation();
-//		cr.setFromArtifact(art1);
-//		cr.setToArtifact(art2);
-//		cr.setValue(containmentValue);
-//		relationRepository.save(cr);
-//		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-//		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
-//
-//		String test = serializeContent(emm1);
-//		String test2 = serializeContent(emm2);
-//
-//		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
-//				test, test2);
-//		CosineSimilarityRelation csr = new CosineSimilarityRelation();
-//		csr.setFromArtifact(art1);
-//		csr.setToArtifact(art2);
-//		csr.setValue(cosineSimScore);
-//		relationService.save(csr);
-//
-//		DiceSimilarity ds = new DiceSimilarity();
-//		double diceSimScore = ds.getSimilarity(test, test2);
-//		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-//		dsr.setFromArtifact(art1);
-//		dsr.setToArtifact(art2);
-//		dsr.setValue(diceSimScore);
-//		relationService.save(dsr);
-
 		return simValue;
 	}
 
