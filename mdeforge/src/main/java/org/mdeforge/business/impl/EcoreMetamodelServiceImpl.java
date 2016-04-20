@@ -601,117 +601,36 @@ public class EcoreMetamodelServiceImpl extends
 		resourceSet2.getResource(uri2, true);
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
-		Comparison comparison2 = EMFCompare.builder().build().compare(scope);
-		
-		List<Match> matches2 = comparison2.getMatches();
-		int total2 = matches2.size();
-//		int counter2 = 0;
-//		int counterLeft = 0;
-//		int counterRight = 0;
-//		for (Match match : matches2) {
-//			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
-//			total2 += lm.size();
-//			for (Match match2 : lm) {
-//				if (match2.getLeft() != null)
-//					counterLeft++;
-//				if (match2.getRight() != null)
-//					counterRight++;
-//				if (match2.getLeft() != null && match2.getRight() != null)
-//					counter2++;
-//			}
-//			if (match.getLeft() != null && match.getRight() != null)
-//				counter2++;
-//		}
-//		double semValue = (counter2 * 1.0) / total2;
-		
-		
-		
-		
+		Comparison comparisonDef = EMFCompare.builder().build().compare(scope);
+		List<Match> matchesDef = comparisonDef.getMatches();
+		int total2 = 0;
+		int counterDef = 0;
+		for (Match match : matchesDef) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			total2 += lm.size();
+			for (Match match2 : lm) {
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counterDef++;
+			}
+			if (match.getLeft() != null && match.getRight() != null)
+				counterDef++;
+		}
 		Comparison comparison = SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
 		List<Match> matches = comparison.getMatches();
-		int total = matches.size();
 		int counter = 0;
-//		List<EAttribute> attrs = new ArrayList<EAttribute>();
-//		List<EReference> refs = new ArrayList<EReference>();
-//		List<EClass> classes = new ArrayList<EClass>();
-//		List<EDataType> dataTypes = new ArrayList<EDataType>();
-//		List<EPackage> packs = new ArrayList<EPackage>();
-//		COSA SEI:class org.eclipse.emf.ecore.impl.EClassImpl
-//		COSA SEI:class org.eclipse.emf.ecore.impl.EPackageImpl
-//		COSA SEI:class org.eclipse.emf.ecore.impl.EDataTypeImpl
+
 		for (Match match : matches) {
 			if (match.getLeft() != null && match.getRight() != null)
 					counter++;
-//			else {
-//				if (match.getLeft() != null){
-//					if (match.getLeft() instanceof EAttribute)
-//						if(attrs.contains(match.getLeft()))
-//							total--;
-//						else attrs.add((EAttribute) match.getLeft());
-//					
-//					else 
-//						if (match.getLeft() instanceof EReference) 
-//							if(refs.contains(match.getLeft()))
-//								total--;
-//							else refs.add((EReference) match.getLeft());
-//						else
-//							if (match.getLeft() instanceof EPackage) 
-//								if(refs.contains(match.getLeft()))
-//									total--;
-//								else packs.add((EPackage) match.getLeft());
-//							else
-//								if (match.getLeft() instanceof EDataType) 
-//									if(dataTypes.contains(match.getLeft()))
-//										total--;
-//									else dataTypes.add((EDataType) match.getLeft());
-//								else
-//									if (match.getLeft() instanceof EClass) 
-//										if(classes.contains(match.getLeft()))
-//											total--;
-//										else classes.add((EClass) match.getLeft());
-//									else System.out.println("COSA: " + match.getRight().getClass());
-//									
-//						
-//				}
-//				else if (match.getRight() != null){
-//					if (match.getRight() instanceof EAttribute)
-//						if(attrs.contains(match.getRight()))
-//							total--;
-//						else attrs.add((EAttribute) match.getRight());
-//					
-//					else
-//						if (match.getRight() instanceof EReference) 
-//							if(refs.contains(match.getRight()))
-//								total--;
-//							else refs.add((EReference) match.getRight());
-//						else
-//							if (match.getRight() instanceof EPackage) 
-//								if(refs.contains(match.getRight()))
-//									total--;
-//								else packs.add((EPackage) match.getRight());
-//							else
-//								if (match.getRight() instanceof EDataType) 
-//									if(dataTypes.contains(match.getRight()))
-//										total--;
-//									else dataTypes.add((EDataType) match.getRight());
-//								else
-//									if (match.getRight() instanceof EClass) 
-//										if(classes.contains(match.getRight()))
-//											total--;
-//										else classes.add((EClass) match.getRight());
-//									else System.out.println("COSA: " + match.getRight().getClass());
-//				
-//				}		
-//			}
 		}
-		double simValue = (counter * 1.0) / total2;
-
-		SemanticSimilarityRelation sr = new SemanticSimilarityRelation();
+		double simValue = (counterDef * 1.0) / total2;
+		SimilarityRelation sr = new SimilarityRelation();
 		sr.setFromArtifact(art1);
 		sr.setToArtifact(art2);
 		sr.setValue(simValue);
 		relationRepository.save(sr);
-		return simValue;
+		double semValue = (counter * 1.0) / total2;
+		return semValue;
 	}
 
 //	public double calculateSimilarity(Artifact art1, Artifact art2) {
