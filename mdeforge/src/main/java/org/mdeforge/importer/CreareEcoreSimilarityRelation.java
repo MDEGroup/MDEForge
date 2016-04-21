@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.SemanticSimilarityRelation;
+import org.mdeforge.business.model.SemanticSimilarityRelationV1;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.RelationRepository;
@@ -49,7 +50,7 @@ public class CreareEcoreSimilarityRelation {
 							double d = ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
 							Date end = new Date();
 							long time = end.getTime() - start.getTime();
-							SemanticSimilarityRelation sr = new SemanticSimilarityRelation();
+							SemanticSimilarityRelationV1 sr = new SemanticSimilarityRelationV1();
 							sr.setCompationTime(time);
 							sr.setFromMC(fromMC);
 							sr.setToMC(toMC);

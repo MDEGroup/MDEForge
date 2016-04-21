@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,14 +32,11 @@ import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.Match;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -77,29 +75,24 @@ import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.SemanticSimilarityRelationService;
+import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
-import org.mdeforge.business.model.ContainmentRelation;
-import org.mdeforge.business.model.CosineSimilarityRelation;
-import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SemanticSimilarityRelation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
-import org.mdeforge.business.search.SimilarityMethods;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
@@ -117,18 +110,19 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atlext.ATL.ATLPackage;
-import anatlyzer.atlext.OCL.OclExpression;
-import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
-
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;
+
+import anatlyzer.atl.util.ATLSerializer;
+import anatlyzer.atlext.ATL.ATLPackage;
+import anatlyzer.atlext.OCL.OclExpression;
+//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
+//import it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine;
+//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
@@ -174,6 +168,8 @@ public class EcoreMetamodelServiceImpl extends
 	private SimilarityRelationService similarityRelationService;
 	@Autowired
 	private SemanticSimilarityRelationService semanticSimilarityRelationService;
+	@Autowired
+	private SemanticSimilarityRelationServiceV1 semanticSimilarityRelationServiceV1;
 	@Autowired
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
@@ -602,12 +598,15 @@ public class EcoreMetamodelServiceImpl extends
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
 		Comparison comparisonDef = EMFCompare.builder().build().compare(scope);
+		/*
+		 * Test
+		 */
 		List<Match> matchesDef = comparisonDef.getMatches();
-		int total2 = 0;
+		int total = 0;
 		int counterDef = 0;
 		for (Match match : matchesDef) {
 			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
-			total2 += lm.size();
+			total += lm.size();
 			for (Match match2 : lm) {
 				if (match2.getLeft() != null && match2.getRight() != null)
 					counterDef++;
@@ -615,22 +614,41 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counterDef++;
 		}
-		Comparison comparison = SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
-		List<Match> matches = comparison.getMatches();
-		int counter = 0;
+		Date start1 = new Date();
+//		Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		Date start2 = new Date();
+		System.out.println("1: " + (start2.getTime()-start1.getTime()));
+		Comparison comparisonV1 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		
+		System.out.println("2: " + (new Date().getTime()-start2.getTime()));
+		List<Match> matchesV1 = comparisonV1.getMatches();
+		int counterV1 = 0;
 
-		for (Match match : matches) {
+//		for (Match match : matchesV1) {
+//			if (match.getLeft() != null && match.getRight() != null)
+//					counterV1++;
+//		}
+		
+		
+		
+		for (Match match : matchesV1) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			total += lm.size();
+			for (Match match2 : lm) {
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counterV1++;
+			}
 			if (match.getLeft() != null && match.getRight() != null)
-					counter++;
+				counterV1++;
 		}
-		double simValue = (counterDef * 1.0) / total2;
-		SimilarityRelation sr = new SimilarityRelation();
-		sr.setFromArtifact(art1);
-		sr.setToArtifact(art2);
-		sr.setValue(simValue);
-		relationRepository.save(sr);
-		double semValue = (counter * 1.0) / total2;
-		return semValue;
+//		double simValue = (counterDef * 1.0) / total2;
+//		SimilarityRelation sr = new SimilarityRelation();
+//		sr.setFromArtifact(art1);
+//		sr.setToArtifact(art2);
+//		sr.setValue(simValue);
+//		relationRepository.save(sr);
+		double semValueV2 = (counterV1 * 1.0) / total;
+		return semValueV2;
 	}
 
 //	public double calculateSimilarity(Artifact art1, Artifact art2) {
