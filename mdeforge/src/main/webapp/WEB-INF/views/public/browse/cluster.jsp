@@ -513,10 +513,10 @@
 																</c:choose>
 																<td class="center actions">
 																	<c:if test="${artifact.getOpen()}">
-																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
 																	</c:if>
 																	<c:if test="${not artifact.getOpen()}">																	
-																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
+																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
 																	</c:if>																	
 																</td>
 															</tr>

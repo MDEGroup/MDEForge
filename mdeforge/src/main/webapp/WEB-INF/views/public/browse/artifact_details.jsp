@@ -281,7 +281,7 @@ ${fn:escapeXml(fileToVisualize)}
 <!-- // Modal END -->
 
 <script>
-	var res = '${artifact.getExtractedContents()}'.trim();
+	var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 
 	var wordlist = [];

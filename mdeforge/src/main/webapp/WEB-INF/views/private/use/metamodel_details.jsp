@@ -807,7 +807,7 @@
 								<div class="tab-pane" id="standard">
 
 									<c:set var="serializedContext_trim"
-										value="${fn:trim(ecoreMetamodel.getExtractedContents())}" />
+										value="${fn:trim(ecoreMetamodel.getDefaultWeightedContents())}" />
 									<c:set var="serializedContext_splitted"
 										value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
 									${serializedContext_splitted}
