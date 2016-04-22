@@ -23,7 +23,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 15,
+            min: 0,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min .amount" ).val( "0." + ui.value );
@@ -43,7 +43,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 40,
+            min: 0,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min2 .amount" ).val( "0." + ui.value );
@@ -63,7 +63,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 20,
+            min: 0,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min3 .amount" ).val( "0." + ui.value );
@@ -83,7 +83,7 @@ $(function()
 			create: JQSliderCreate,
             range: "min",
             value: $( "#actual_threshold" ).val(),
-            min: 60,
+            min: 0,
             max: 99,
             slide: function( event, ui ) {
                 $( ".slider-range-min4 .amount" ).val( "0." + ui.value );
