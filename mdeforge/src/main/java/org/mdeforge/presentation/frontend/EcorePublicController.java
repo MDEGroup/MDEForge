@@ -222,6 +222,6 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 	
 	public String artifactFromName(@RequestParam String name,Model model) throws IOException{
 		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneByName(name);
-		return "redirect:/public/EcoreMetamodel/artifacts?artifact_id="+ ecoreMetamodel.getId();
+		return "redirect:/public/EcoreMetamodel/artifact?artifact_id="+ ecoreMetamodel.getId();
 	}
 }
