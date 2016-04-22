@@ -90,7 +90,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">EMFCompareStandard similarity</button>
 								</div>
 			
 							</form>
@@ -123,7 +123,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">EMFCompare Semantic (no-engine) similarity</button>
 								</div>
 			
 							</form>
@@ -157,7 +157,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">EMFCompare Semantic (engine) similarity</button>
 								</div>
 			
 							</form>
