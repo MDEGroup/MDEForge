@@ -615,10 +615,10 @@ public class EcoreMetamodelServiceImpl extends
 				counterDef++;
 		}
 		Date start1 = new Date();
-//		Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
 		Date start2 = new Date();
 		System.out.println("1: " + (start2.getTime()-start1.getTime()));
-		Comparison comparisonV1 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		//Comparison comparisonV1 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
 		
 		System.out.println("2: " + (new Date().getTime()-start2.getTime()));
 		List<Match> matchesV1 = comparisonV1.getMatches();
