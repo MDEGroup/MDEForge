@@ -46,18 +46,7 @@ public class CreareEcoreSimilarityRelation {
 							System.out.println(ecoreMMArray[j].getName());
 							if(j % 100 == 0)
 								System.out.println("Coputed " + j + " of " + (ecoreMMlist.size()-i));
-							Date start = new Date();
 							double d = ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
-							Date end = new Date();
-							long time = end.getTime() - start.getTime();
-							SemanticSimilarityRelationV1 sr = new SemanticSimilarityRelationV1();
-							sr.setCompationTime(time);
-							sr.setFromMC(fromMC);
-							sr.setToMC(toMC);
-							sr.setFromArtifact(ecoreMMArray[i]);
-							sr.setToArtifact(ecoreMMArray[j]);
-							sr.setValue(d);
-							rr.save(sr);
 						} catch (Exception e) {
 							System.err.println("ERROR: " + ecoreMMArray[i].getName() + " " + i  + " _ " + ecoreMMArray[j].getName() + " " + j);
 						}

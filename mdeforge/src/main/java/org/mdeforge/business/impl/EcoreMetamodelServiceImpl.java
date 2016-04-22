@@ -48,6 +48,7 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.epsilon.eol.parse.Eol_EolParserRules.statementA_return;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
 import org.eclipse.m2m.atl.core.IInjector;
@@ -88,6 +89,8 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SemanticSimilarityRelation;
+import org.mdeforge.business.model.SemanticSimilarityRelationV1;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
@@ -597,12 +600,10 @@ public class EcoreMetamodelServiceImpl extends
 		resourceSet2.getResource(uri2, true);
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
-		Comparison comparisonDef = EMFCompare.builder().build().compare(scope);
-		/*
-		 * Test
-		 */
-		List<Match> matchesDef = comparisonDef.getMatches();
 		int total = 0;
+		try {
+		Comparison comparisonDef = EMFCompare.builder().build().compare(scope);
+		List<Match> matchesDef = comparisonDef.getMatches();
 		int counterDef = 0;
 		for (Match match : matchesDef) {
 			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
@@ -614,42 +615,77 @@ public class EcoreMetamodelServiceImpl extends
 			if (match.getLeft() != null && match.getRight() != null)
 				counterDef++;
 		}
-		Date start1 = new Date();
-		Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
-		Date start2 = new Date();
-		System.out.println("1: " + (start2.getTime()-start1.getTime()));
-		//Comparison comparisonV1 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
-		
-		System.out.println("2: " + (new Date().getTime()-start2.getTime()));
-		List<Match> matchesV1 = comparisonV1.getMatches();
-		int counterV1 = 0;
-
-//		for (Match match : matchesV1) {
-//			if (match.getLeft() != null && match.getRight() != null)
-//					counterV1++;
-//		}
-		
-		
-		
-		for (Match match : matchesV1) {
-			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
-			total += lm.size();
-			for (Match match2 : lm) {
-				if (match2.getLeft() != null && match2.getRight() != null)
-					counterV1++;
-			}
-			if (match.getLeft() != null && match.getRight() != null)
-				counterV1++;
+		SimilarityRelation smrV1 = new SimilarityRelation();
+		smrV1.setFromArtifact(art1);
+		smrV1.setToArtifact(art2);
+		smrV1.setValue((counterDef*1.0)/total);
+		relationRepository.save(smrV1);
+		} catch (Exception e) {
+			SimilarityRelation smr = new SimilarityRelation();
+			smr.setFromArtifact(art1);
+			smr.setToArtifact(art2);
+			smr.setValue(0);
+			relationRepository.save(smr);
 		}
-//		double simValue = (counterDef * 1.0) / total2;
-//		SimilarityRelation sr = new SimilarityRelation();
-//		sr.setFromArtifact(art1);
-//		sr.setToArtifact(art2);
-//		sr.setValue(simValue);
-//		relationRepository.save(sr);
-		double semValueV2 = (counterV1 * 1.0) / total;
-		return semValueV2;
+		//Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		try {
+			Date start1 = new Date();
+			Comparison comparisonV2 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+			long timeV1 = new Date().getTime() - start1.getTime();
+			int counterV1 = 0;
+			for(Match match : comparisonV2.getMatches()){
+				if(match.getLeft() != null && match.getRight() != null) counterV1++;
+			}
+			SemanticSimilarityRelationV1 smrV1 = new SemanticSimilarityRelationV1();
+			smrV1.setCompationTime(timeV1);
+			smrV1.setFromArtifact(art1);
+			smrV1.setToArtifact(art2);
+			smrV1.setValue((counterV1*1.0)/total);
+			relationRepository.save(smrV1);
+		}catch (Exception e){
+			SemanticSimilarityRelationV1 smrV1 = new SemanticSimilarityRelationV1();
+			smrV1.setCompationTime(0);
+			smrV1.setFromArtifact(art1);
+			smrV1.setToArtifact(art2);
+			smrV1.setValue(0);
+			relationRepository.save(smrV1);
+		};
+		
+		try
+		{
+			Date start2 = new Date();
+			Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+			int counterV2 = 0;
+			for (Match match : comparisonV1.getMatches()) {
+				List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+				for (Match match2 : lm) {
+					if (match2.getLeft() != null && match2.getRight() != null)
+						counterV2++;
+				}
+				if (match.getLeft() != null && match.getRight() != null)
+					counterV2++;
+			}
+			SemanticSimilarityRelation smrV2 = new SemanticSimilarityRelation();
+			smrV2.setCompationTime(new Date().getTime() - start2.getTime());
+			smrV2.setFromArtifact(art1);
+			smrV2.setToArtifact(art2);
+			smrV2.setValue((counterV2*1.0)/total);
+			relationRepository.save(smrV2);
+			return (double)counterV2/(double)total;
+		}catch(Exception e){
+			SemanticSimilarityRelation smrV2 = new SemanticSimilarityRelation();
+			smrV2.setCompationTime(0);
+			smrV2.setFromArtifact(art1);
+			smrV2.setToArtifact(art2);
+			smrV2.setValue(0.0);
+			relationRepository.save(smrV2);
+			return 0;
+		}
+		
+			 
+
 	}
+	
 
 //	public double calculateSimilarity(Artifact art1, Artifact art2) {
 //		// try {
