@@ -25,60 +25,41 @@ public class ExportEcoreSimilarityRelationMatrix {
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 		MetricRepository mr = context.getBean(MetricRepository.class);
-//		RelationRepository rr = context.getBean(RelationRepository.class);
+		// RelationRepository rr = context.getBean(RelationRepository.class);
 		SemanticSimilarityRelationService sr = context.getBean(SemanticSimilarityRelationService.class);
 		File f = new File("C:\\Users\\juri\\development\\forgeDir\\AAA.txt");
 		FileWriter fw = new FileWriter(f);
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
-		EcoreMetamodel [] ecoreMMArray = ecoreMMlist.toArray(new EcoreMetamodel[ecoreMMlist.size()]);
+		EcoreMetamodel[] ecoreMMArray = ecoreMMlist.toArray(new EcoreMetamodel[ecoreMMlist.size()]);
 		System.out.println("start time: " + new Date());
-		for (int i = 0; i < ecoreMMArray.length-1; i++) {
-			SimpleMetric sm = (SimpleMetric) mr.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMMArray[i].getId()));
-			int fromMC = 100;
-			try {
-				fromMC = Integer.parseInt(sm.getValue());
-			} catch (Exception e) {}
-			if (fromMC < 10) {
-				fw.write(ecoreMMArray[i].getName()+";");
-			}
+		for (int i = 0; i < ecoreMMArray.length - 1; i++) {
+			fw.write(ecoreMMArray[i].getName() + ";");
 		}
 		fw.write(System.lineSeparator());
-		for (int i = 0; i < ecoreMMArray.length-1; i++) {
-			SimpleMetric sm = (SimpleMetric) mr.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMMArray[i].getId()));
-			int fromMC = 100;
-			try {
-				fromMC = Integer.parseInt(sm.getValue());
-			} catch (Exception e) {}
-			if (fromMC < 10) {
-				System.out.println(ecoreMMArray[i].getName() + " " + i + " of "+ (ecoreMMlist.size()-i) + " start time: " + new Date());
-				for (int j = 0; j <ecoreMMArray.length; j++) {
-					SimpleMetric sm2 = (SimpleMetric) mr.findOneByNameAndArtifactId("Number of MetaClass", new ObjectId(ecoreMMArray[j].getId()));
-					int toMC = 100;
-					try {
-						toMC = Integer.parseInt(sm2.getValue());
-					} catch (Exception e) {}
-					if (toMC < 10) {
-						if(ecoreMMArray[i].equals(ecoreMMArray[j])) {
-							fw.write("1.0;");
-						}
-						else {
-							SemanticSimilarityRelation smv = sr.findOneByArtifacts(ecoreMMArray[i], ecoreMMArray[j]);
-							if (smv==null) {
-								smv = sr.findOneByArtifacts(ecoreMMArray[j], ecoreMMArray[i]);
-								if (smv == null)
-									fw.write("NAN;");
-								else
-									fw.write(smv.getValue()+";");
-								}
-							else fw.write(smv.getValue()+";");
-						}
-					}
+		for (int i = 0; i < ecoreMMArray.length - 1; i++) {
+			System.out.println(ecoreMMArray[i].getName() + " " + i + " of " + (ecoreMMlist.size() - i) + " start time: "
+					+ new Date());
+			for (int j = 0; j < ecoreMMArray.length; j++) {
+
+				if (ecoreMMArray[i].equals(ecoreMMArray[j])) {
+					fw.write("1.0;");
+				} else {
+					SemanticSimilarityRelation smv = sr.findOneByArtifacts(ecoreMMArray[i], ecoreMMArray[j]);
+					if (smv == null) {
+						smv = sr.findOneByArtifacts(ecoreMMArray[j], ecoreMMArray[i]);
+						if (smv == null)
+							fw.write("NAN;");
+						else
+							fw.write(smv.getValue() + ";");
+					} else
+						fw.write(smv.getValue() + ";");
 				}
-				fw.write(System.lineSeparator());
+
 			}
+			fw.write(System.lineSeparator());
 		}
 		fw.close();
 		System.out.println("end time: " + new Date());
-		((ConfigurableApplicationContext)context).close();
+		((ConfigurableApplicationContext) context).close();
 	}
 }
