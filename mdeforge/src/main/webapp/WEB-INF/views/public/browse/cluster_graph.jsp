@@ -79,7 +79,7 @@
 											<!-- // Slider END -->
 								</div>
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">EMFCompareStandard similarity</button>
 								</div>
 							</form>
 							</div>
@@ -103,7 +103,7 @@
 											<!-- // Slider END -->
 								</div>
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">EMFCompare Semantic(no-engine) similarity</button>
 								</div>
 							</form>
 							</div>
@@ -127,37 +127,13 @@
 											<!-- // Slider END -->
 								</div>
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">EMFCompare Semantic (engine) similarity</button>
 								</div>
 							</form>
 							</div>
 						</div>
 						<hr>
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-									<!-- Slider -->
-									<div class="slider-range-min4 row-fluid">
-										<div class="span3">
-											<label class="span8">Threshold:</label> 
-											<input type="text" class="amount span4" name="threshold"/>
-										</div>
-										<div class="span9" style="padding: 5px 0 0;">
-											<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-											<div class="slider slider-primary"></div>
-										</div>
-									</div>
-									<!-- // Slider END -->
-								</div>
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
-								</div>
-			
-							</form>
-							</div>
-						</div>
-						<hr>
+						
 						<div class="widget-body">
 							<div class="row-fluid">
 							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">

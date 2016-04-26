@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +48,7 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.epsilon.eol.parse.Eol_EolParserRules.statementA_return;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
 import org.eclipse.m2m.atl.core.IInjector;
@@ -73,28 +75,27 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.MetricEngineException;
+import org.mdeforge.business.SemanticSimilarityRelationService;
+import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
 import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
-import org.mdeforge.business.model.ContainmentRelation;
-import org.mdeforge.business.model.CosineSimilarityRelation;
-import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SemanticSimilarityRelation;
+import org.mdeforge.business.model.SemanticSimilarityRelationV1;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
-import org.mdeforge.business.search.SimilarityMethods;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
@@ -112,17 +113,19 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
-import anatlyzer.atl.util.ATLSerializer;
-import anatlyzer.atlext.ATL.ATLPackage;
-import anatlyzer.atlext.OCL.OclExpression;
-
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.SingleLinkageStrategy;
 import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;
+
+import anatlyzer.atl.util.ATLSerializer;
+import anatlyzer.atlext.ATL.ATLPackage;
+import anatlyzer.atlext.OCL.OclExpression;
+//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
+//import it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine;
+//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
 
 @Service
 public class EcoreMetamodelServiceImpl extends
@@ -166,6 +169,10 @@ public class EcoreMetamodelServiceImpl extends
 	private RelationService relationService;
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private SemanticSimilarityRelationService semanticSimilarityRelationService;
+	@Autowired
+	private SemanticSimilarityRelationServiceV1 semanticSimilarityRelationServiceV1;
 	@Autowired
 	private DiceSimilarityRelationService diceSimilarityRelationService;
 	@Autowired
@@ -583,96 +590,196 @@ public class EcoreMetamodelServiceImpl extends
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
 		// try {
-		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
-		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+		URI uri1 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art2));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-				"ecore", new XMIResourceFactoryImpl());
+				"*", new XMIResourceFactoryImpl());
 		ResourceSet resourceSet1 = new ResourceSetImpl();
 		ResourceSet resourceSet2 = new ResourceSetImpl();
 		resourceSet1.getResource(uri1, true);
 		resourceSet2.getResource(uri2, true);
 		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
 				resourceSet2, null);
-		Comparison comparison = EMFCompare.builder().build().compare(scope);
-		List<Match> matches = comparison.getMatches();
-		int total = matches.size();
-		int counter = 0;
-		int counterLeft = 0;
-		int counterRight = 0;
-		for (Match match : matches) {
+		int total = 0;
+		try {
+		Comparison comparisonDef = EMFCompare.builder().build().compare(scope);
+		List<Match> matchesDef = comparisonDef.getMatches();
+		int counterDef = 0;
+		for (Match match : matchesDef) {
 			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
 			total += lm.size();
 			for (Match match2 : lm) {
-				if (match2.getLeft() != null)
-					counterLeft++;
-				if (match2.getRight() != null)
-					counterRight++;
 				if (match2.getLeft() != null && match2.getRight() != null)
-					counter++;
+					counterDef++;
 			}
 			if (match.getLeft() != null && match.getRight() != null)
-				counter++;
+				counterDef++;
 		}
-		// to save diff file
-		// List<Diff> differences = comparison.getDifferences();
-		// // Let's merge every single diff
-		// // IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
-		// IMerger.Registry mergerRegistry = IMerger.RegistryImpl
-		// .createStandaloneInstance();
-		// IBatchMerger merger = new BatchMerger(mergerRegistry);
-		// merger.copyAllLeftToRight(differences, new BasicMonitor());
-		double containmentValue = (counter * 1.0)
-				/ ((counterLeft < counterRight) ? counterLeft : counterRight);
-		double simValue = (counter * 1.0) / total;
-		// Used to save Diff model
-		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-		Map<String, Object> m = reg.getExtensionToFactoryMap();
-		m.put("xmi", new XMIResourceFactoryImpl());
-		ResourceSet resSet = new ResourceSetImpl();
-		// create a resource
-		Resource resource = resSet.createResource(URI.createURI("/compare.xmi"));
-		resource.getContents().add(comparison);
-		// try {
-		// resource.save(Collections.EMPTY_MAP);
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// throw new BusinessException();
-		// }
-		SimilarityRelation sr = new SimilarityRelation();
-		sr.setFromArtifact(art1);
-		sr.setToArtifact(art2);
-		sr.setValue(simValue);
-		relationRepository.save(sr);
-		ContainmentRelation cr = new ContainmentRelation();
-		cr.setFromArtifact(art1);
-		cr.setToArtifact(art2);
-		cr.setValue(containmentValue);
-		relationRepository.save(cr);
-		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+		SimilarityRelation smrV1 = new SimilarityRelation();
+		smrV1.setFromArtifact(art1);
+		smrV1.setToArtifact(art2);
+		smrV1.setValue((counterDef*1.0)/total);
+		relationRepository.save(smrV1);
+		} catch (Exception e) {
+			SimilarityRelation smr = new SimilarityRelation();
+			smr.setFromArtifact(art1);
+			smr.setToArtifact(art2);
+			smr.setValue(0);
+			relationRepository.save(smr);
+		}
+		//Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+		try {
+			Date start1 = new Date();
+			Comparison comparisonV2 = it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+			long timeV1 = new Date().getTime() - start1.getTime();
+			int counterV1 = 0;
+			for(Match match : comparisonV2.getMatches()){
+				if(match.getLeft() != null && match.getRight() != null) counterV1++;
+			}
+			SemanticSimilarityRelationV1 smrV1 = new SemanticSimilarityRelationV1();
+			smrV1.setCompationTime(timeV1);
+			smrV1.setFromArtifact(art1);
+			smrV1.setToArtifact(art2);
+			smrV1.setValue((counterV1*1.0)/total);
+			relationRepository.save(smrV1);
+		}catch (Exception e){
+			SemanticSimilarityRelationV1 smrV1 = new SemanticSimilarityRelationV1();
+			smrV1.setCompationTime(0);
+			smrV1.setFromArtifact(art1);
+			smrV1.setToArtifact(art2);
+			smrV1.setValue(0);
+			relationRepository.save(smrV1);
+		};
+		
+		try
+		{
+			Date start2 = new Date();
+			Comparison comparisonV1 = it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine.match("c:/" + gridFileMediaService.getFilePath(art1), "c:/" + gridFileMediaService.getFilePath(art2));
+			int counterV2 = 0;
+			for (Match match : comparisonV1.getMatches()) {
+				List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+				for (Match match2 : lm) {
+					if (match2.getLeft() != null && match2.getRight() != null)
+						counterV2++;
+				}
+				if (match.getLeft() != null && match.getRight() != null)
+					counterV2++;
+			}
+			SemanticSimilarityRelation smrV2 = new SemanticSimilarityRelation();
+			smrV2.setCompationTime(new Date().getTime() - start2.getTime());
+			smrV2.setFromArtifact(art1);
+			smrV2.setToArtifact(art2);
+			smrV2.setValue((counterV2*1.0)/total);
+			relationRepository.save(smrV2);
+			return (double)counterV2/(double)total;
+		}catch(Exception e){
+			SemanticSimilarityRelation smrV2 = new SemanticSimilarityRelation();
+			smrV2.setCompationTime(0);
+			smrV2.setFromArtifact(art1);
+			smrV2.setToArtifact(art2);
+			smrV2.setValue(0.0);
+			relationRepository.save(smrV2);
+			return 0;
+		}
+		
+			 
 
-		String test = serializeContent(emm1);
-		String test2 = serializeContent(emm2);
-
-		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
-				test, test2);
-		CosineSimilarityRelation csr = new CosineSimilarityRelation();
-		csr.setFromArtifact(art1);
-		csr.setToArtifact(art2);
-		csr.setValue(cosineSimScore);
-		relationService.save(csr);
-
-		DiceSimilarity ds = new DiceSimilarity();
-		double diceSimScore = ds.getSimilarity(test, test2);
-		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-		dsr.setFromArtifact(art1);
-		dsr.setToArtifact(art2);
-		dsr.setValue(diceSimScore);
-		relationService.save(dsr);
-
-		return simValue;
 	}
+	
 
+//	public double calculateSimilarity(Artifact art1, Artifact art2) {
+//		// try {
+//		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+//		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+//				"ecore", new XMIResourceFactoryImpl());
+//		ResourceSet resourceSet1 = new ResourceSetImpl();
+//		ResourceSet resourceSet2 = new ResourceSetImpl();
+//		resourceSet1.getResource(uri1, true);
+//		resourceSet2.getResource(uri2, true);
+//		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+//				resourceSet2, null);
+//		Comparison comparison = EMFCompare.builder().build().compare(scope);
+//		List<Match> matches = comparison.getMatches();
+//		int total = matches.size();
+//		int counter = 0;
+//		int counterLeft = 0;
+//		int counterRight = 0;
+//		for (Match match : matches) {
+//			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+//			total += lm.size();
+//			for (Match match2 : lm) {
+//				if (match2.getLeft() != null)
+//					counterLeft++;
+//				if (match2.getRight() != null)
+//					counterRight++;
+//				if (match2.getLeft() != null && match2.getRight() != null)
+//					counter++;
+//			}
+//			if (match.getLeft() != null && match.getRight() != null)
+//				counter++;
+//		}
+//		// to save diff file
+//		// List<Diff> differences = comparison.getDifferences();
+//		// // Let's merge every single diff
+//		// // IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
+//		// IMerger.Registry mergerRegistry = IMerger.RegistryImpl
+//		// .createStandaloneInstance();
+//		// IBatchMerger merger = new BatchMerger(mergerRegistry);
+//		// merger.copyAllLeftToRight(differences, new BasicMonitor());
+//		double containmentValue = (counter * 1.0)
+//				/ ((counterLeft < counterRight) ? counterLeft : counterRight);
+//		double simValue = (counter * 1.0) / total;
+//		// Used to save Diff model
+//		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+//		Map<String, Object> m = reg.getExtensionToFactoryMap();
+//		m.put("xmi", new XMIResourceFactoryImpl());
+//		ResourceSet resSet = new ResourceSetImpl();
+//		// create a resource
+//		Resource resource = resSet.createResource(URI.createURI("/compare.xmi"));
+//		resource.getContents().add(comparison);
+//		// try {
+//		// resource.save(Collections.EMPTY_MAP);
+//		// } catch (IOException e) {
+//		// e.printStackTrace();
+//		// throw new BusinessException();
+//		// }
+//		SimilarityRelation sr = new SimilarityRelation();
+//		sr.setFromArtifact(art1);
+//		sr.setToArtifact(art2);
+//		sr.setValue(simValue);
+//		relationRepository.save(sr);
+//		ContainmentRelation cr = new ContainmentRelation();
+//		cr.setFromArtifact(art1);
+//		cr.setToArtifact(art2);
+//		cr.setValue(containmentValue);
+//		relationRepository.save(cr);
+//		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
+//		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+//
+//		String test = serializeContent(emm1);
+//		String test2 = serializeContent(emm2);
+//
+//		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
+//				test, test2);
+//		CosineSimilarityRelation csr = new CosineSimilarityRelation();
+//		csr.setFromArtifact(art1);
+//		csr.setToArtifact(art2);
+//		csr.setValue(cosineSimScore);
+//		relationService.save(csr);
+//
+//		DiceSimilarity ds = new DiceSimilarity();
+//		double diceSimScore = ds.getSimilarity(test, test2);
+//		DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+//		dsr.setFromArtifact(art1);
+//		dsr.setToArtifact(art2);
+//		dsr.setValue(diceSimScore);
+//		relationService.save(dsr);
+//
+//		return simValue;
+//	}
+
+	
 	// region Cluster
 	@Override
 	public String getSimilarityGraph(double threshold,
