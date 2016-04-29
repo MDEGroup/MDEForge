@@ -1,9 +1,15 @@
 	
-
+<div class="main-banner">
+		<div class="container-960">
+			<div class="banner-wrapper banner-1">
+				<h2 class="title-banner"><span>Publications</span></h2>
+			</div>
+		</div>
+	</div>
 	
 	
 		<div class="container-960 innerT">
-			
+			<!--  
 			<h3 class="glyphicons book margin-none"><i></i>Publications</h3>
 				<div class="separator bottom"></div>
 			
@@ -14,18 +20,23 @@
 						</p>
 					</div>
 				</div>
+			-->
+				<div class="lead center innerTB">
+			<h2 style="color: #4a8bc2">Publications related to MDEForge</h2>
+		</div>
+		<div class="separator bottom"></div>
 				
-				
-				
-				
-				<div class="widget widget-heading-simple widget-body-white">
+		</div>
+		<div class="banner-wide" style="background: white">
+		<div class="container-960 innerT">
+				<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
 						<div class="separator bottom"></div>
 						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
-									<strong>MDEForge: an extensible Web-based modeling platform *</strong>
+									<h3>MDEForge: an extensible Web-based modeling platform *</h3>
 									<br> 
 										<span style="text-decoration: underline;">Francesco Basciani</span>, 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
@@ -58,17 +69,22 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			</div>
 			
 			
+			<div class="banner-wide">
+			<div class="container-960 innerT">
 			
-			<div class="widget widget-heading-simple widget-body-white">
+			
+			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
 						<div class="separator bottom"></div>
 						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
-									<strong>Describing the correlations between metamodels and transformations aspects</strong>
+									<h3>Describing the correlations between metamodels and transformations aspects</h3>
 									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
@@ -96,15 +112,20 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			</div>
 			
-			<div class="widget widget-heading-simple widget-body-white">
+			<div class="banner-wide" style="background: white">
+			<div class="container-960 innerT">
+			
+			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
 						<div class="separator bottom"></div>
 						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
-									<strong>Collaborative Repositories in Model-Driven Engineering</strong>
+									<h3>Collaborative Repositories in Model-Driven Engineering</h3>
 									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
@@ -122,15 +143,19 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			</div>
 			
-			<div class="widget widget-heading-simple widget-body-white">
+			<div class="banner-wide" >
+			<div class="container-960 innerT">
+			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
 						<div class="separator bottom"></div>
 						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
-									<strong>Qualifying chains of transformation with coverage based evaluation criteria</strong>
+									<h3>Qualifying chains of transformation with coverage based evaluation criteria</h3>
 									<br> 
 										<span style="text-decoration: underline;">Francesco Basciani</span>, 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
@@ -165,16 +190,20 @@
 					</div>
 				</div>
 			</div>
+			</div>
+			</div>
+			
+			<div class="banner-wide" style="background: white">
+			<div class="container-960 innerT">
 
-
-			<div class="widget widget-heading-simple widget-body-white">
+			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
 						<div class="separator bottom"></div>
 						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
-									<strong>Mining correlations of ATL model transformation and metamodel metrics</strong>
+									<h3>Mining correlations of ATL model transformation and metamodel metrics</h3>
 									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
@@ -194,15 +223,7 @@
 					</div>
 				</div>
 			</div>
-			
-			
-			
-			
-			
-			
-			
-			
-			
+			</div>
 			</div>	
 		
 

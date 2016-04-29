@@ -1,26 +1,36 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
-<div class="navbar main hidden-print">
+<div id="front-menu" class="navbar main hidden-print">
 			
 			<div class="secondary">
+			<!-- Menu Toggle Button -->
+			<button id="toggle-menu" type="button" class="btn btn-navbar hidden-desktop0">
+				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+			</button>
+			<!-- // Menu Toggle Button END -->
 				<div class="container-960">
-				
+					
 					<!-- Brand -->
-					<a href="${pageContext.request.contextPath}/" class="appbrand pull-left"><spring:message code="mdeforge" /></a>
+					<a href="${pageContext.request.contextPath}/" class="appbrand pull-left"><img class="logo-menu" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png"> <spring:message code="mdeforge" /></a>
 					
 					<!-- TOP Menu START -->
 					<ul class="topnav pull-right">												
 												
 						<%-- <li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/help.htm" class="glyphicons shield"><i></i><spring:message code="public.menu.help" /></a></li> --%>
 						<%-- <li class="hidden-phone"><a href="#" class="glyphicons shield"><i></i><spring:message code="public.menu.info" /></a></li> --%>
-						
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/"><spring:message code="common.home" /></a></li>
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/about"><spring:message code="public.menu.about" /></a></li>
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/members">MEMBERS</a></li>
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/publications">PUBLICATIONS</a></li>
 						<security:authorize access="isAnonymous()">
-						<li class="glyphs hidden-phone">
-							<ul>
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/signin" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li>
+							<!-- 
+								</ul>
 								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
 								<li><a href="${pageContext.request.contextPath}/signin" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li>
-							</ul>
-						</li>
+								</ul>
+							-->
 						</security:authorize>	
 						
 					</ul>					
@@ -31,20 +41,16 @@
 				</div>
 			</div>
 			
-			<div class="container-960">
-			
-			<!-- Menu Toggle Button -->
-			<button type="button" class="btn btn-navbar visible-phone">
-				<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-			</button>
-			<!-- // Menu Toggle Button END -->
+			<div class="container-960 visible-phone">
 			
 			
 			
+			
+			<%--
 			<ul class="topnav pull-left">
 				
 				<li class="active"><a href="${pageContext.request.contextPath}/" class="glyphicons home"><i></i><spring:message code="common.home" /></a></li>
-				<%-- <li><a href="${pageContext.request.contextPath}/public/about.htm" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li> --%>												
+				 <!-- <li><a href="${pageContext.request.contextPath}/public/about.htm" class="glyphicons circle_info"><i></i><spring:message code="common.home" /></a></li> -->												
 				<li><a href="${pageContext.request.contextPath}/public/about" class="glyphicons circle_info"><i></i><spring:message code="public.menu.about" /></a></li>
 				<li><a href="${pageContext.request.contextPath}/public/members" class="glyphicons group"><i></i>Members</a></li>
 				<li><a href="${pageContext.request.contextPath}/public/publications" class="glyphicons book"><i></i>Publications</a></li>
@@ -85,6 +91,7 @@
 						</security:authorize>			
 					
 			</ul>
+			--%>
 			<div class="clearfix"></div>
 			<!-- // Top Menu Right END -->
 				

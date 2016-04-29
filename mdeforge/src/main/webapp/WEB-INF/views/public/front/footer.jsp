@@ -37,7 +37,7 @@
 					</div>
 					<div class="span3">
 						<h4>Contact</h4>
-						<ul class="icons">
+						<ul class="icons email-field">
 							<!-- <li class="glyphicons phone"><i></i>+39 0862 433183</li> -->
 							<li class="glyphicons envelope"><i></i>mde@disim.univaq.it</li>
 						</ul>
