@@ -33,7 +33,7 @@ var users =
 	    "lastname" : "Basciani",
 	    "email" : "francesco.basciani@graduate.univaq.it ",
 	    "username" : "francesco",
-	    "password" : "test123",
+	    "password" : "$2a$10$vZICCUpPcecd/UYwHfDhU.3AUP90GOsbmUVsleIdkt7eOX4/tIYnW",
 	    "roles" : [ 
 	        {
 	            "$ref" : "Role",
@@ -53,7 +53,7 @@ var users =
 	    "lastname" : "Di Rocco",
 	    "email" : "juri.dirocco@univaq.it ",
 	    "username" : "Admin",
-	    "password" : "test123",
+	    "password" : "$2a$10$vZICCUpPcecd/UYwHfDhU.3AUP90GOsbmUVsleIdkt7eOX4/tIYnW",
 	    "roles" : [ 
 	        {
 	            "$ref" : "Role",
