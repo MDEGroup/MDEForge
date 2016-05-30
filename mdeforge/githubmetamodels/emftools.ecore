@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="emftools" nsURI="http://torusfw.org/org.torusfw.tools.emf/emftools.ecore"
+    nsPrefix="EmfTools">
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationContainer" abstract="true">
+    <eTypeParameters name="K">
+      <eBounds eClassifier="#//ConfigurationObject"/>
+    </eTypeParameters>
+    <eOperations name="refreshConfiguration"/>
+    <eOperations name="getConfigObjectFromId">
+      <eGenericType eTypeParameter="#//ConfigurationContainer/K"/>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extensionPointID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral=""
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="factory" eType="#//EFactory"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classToCreate" eType="#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurationObjects" upperBound="-1"
+        eKeys="#//ConfigurationObject/id">
+      <eGenericType eTypeParameter="#//ConfigurationContainer/K"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertiesObject" abstract="true">
+    <eOperations name="load">
+      <eParameters name="input" eType="#//Properties"/>
+    </eOperations>
+    <eOperations name="load">
+      <eParameters name="input" eType="#//IPath"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="EFactory" instanceClassName="org.eclipse.emf.ecore.EFactory"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EClass" instanceClassName="org.eclipse.emf.ecore.EClass"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Properties" instanceClassName="java.util.Properties"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IPath" instanceClassName="org.eclipse.core.runtime.IPath"/>
+</ecore:EPackage>

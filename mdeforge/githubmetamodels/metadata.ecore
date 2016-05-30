@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="metadata"
+    nsURI="http://org.eclipse.jst.jsf.common.metadata/metadata.ecore" nsPrefix="md">
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//Entity">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="kind" value="element"/>
+      <details key="name" value="metadatamodel"/>
+    </eAnnotations>
+    <eOperations name="findIncludeGroup" eType="#//EntityGroup">
+      <eParameters name="groupId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="accept">
+      <eParameters name="visitor" eType="#//IEntityVisitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityGroups" upperBound="-1"
+        eType="#//EntityGroup" containment="true" eKeys="#//Entity/id #//Entity/type">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="entityGroup"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceModelProvider" unique="false"
+        eType="#//IMetaDataSourceModelProvider" volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentModelContext" eType="#//ModelContext"
+        volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityGroup" eSuperTypes="#//Entity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="kind" value="element"/>
+      <details key="name" value="entity"/>
+    </eAnnotations>
+    <eOperations name="accept">
+      <eParameters name="visitor" eType="#//IEntityVisitor"/>
+    </eOperations>
+    <eOperations name="getModel" eType="#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childEntities" upperBound="-1"
+        eType="#//Entity" containment="true" eKeys="#//Entity/id #//Entity/type">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="entity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="traits" upperBound="-1"
+        eType="#//Trait" containment="true" eKeys="#//Trait/id">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="trait"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="includeGroups" upperBound="-1"
+        eType="#//IncludeEntityGroup">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="include-entity-group"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IncludeEntityGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelUri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="uri"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trait">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="kind" value="element"/>
+      <details key="name" value="trait"/>
+    </eAnnotations>
+    <eOperations name="accept">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="visitor.visit(this);"/>
+      </eAnnotations>
+      <eParameters name="visitor" eType="#//ITraitVisitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceModelProvider" eType="#//IMetaDataSourceModelProvider"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ITraitVisitor" instanceClassName="org.eclipse.jst.jsf.common.metadata.query.ITraitVisitor"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IEntityVisitor" instanceClassName="org.eclipse.jst.jsf.common.metadata.query.IEntityVisitor"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IMetaDataSourceModelProvider" instanceClassName="org.eclipse.jst.jsf.common.metadata.internal.IMetaDataSourceModelProvider"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ModelContext" instanceClassName="org.eclipse.jst.jsf.common.metadata.internal.ModelKeyDescriptor"/>
+</ecore:EPackage>

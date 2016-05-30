@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Warmok"
+    nsURI="http://www.meekmok.com/Warmok" nsPrefix="wrmk">
+  <eClassifiers xsi:type="ecore:EClass" name="WarmokGame" eSuperTypes="../../Games%20Model/model/games.ecore#//Game">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="world" lowerBound="1" eType="#//World"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nations" upperBound="-1"
+        eType="#//Nation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Round"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Orders">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nation" lowerBound="1"
+        eType="#//Nation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moves" upperBound="-1"
+        eType="#//Order" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Buy" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//UnitType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Move" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="units" lowerBound="1" upperBound="-1"
+        eType="#//Unit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="World">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="image" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="territories" upperBound="-1"
+        eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensions" lowerBound="1"
+        eType="#//GeoPoint"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//NationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="treasury" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="ecore:EClass ../../Games%20Model/model/games.ecore#//Player"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leader" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startTerritory" eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="territories" upperBound="-1"
+        eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
+        eType="#//Unit" eOpposite="#//Unit/nation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Territory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="center" lowerBound="1"
+        eType="#//GeoPoint"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adjacentTo" lowerBound="1"
+        upperBound="-1" eType="#//Territory"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="habitable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnitType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="movement" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fight" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Unit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nation" lowerBound="1"
+        eType="#//Nation" eOpposite="#//Nation/units"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//UnitType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NationType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeoPoint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

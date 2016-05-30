@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Lims"
+    nsURI="http://univ-nantes.fr/lims/" nsPrefix="lims">
+  <eClassifiers xsi:type="ecore:EEnum" name="Gender">
+    <eLiterals name="UNKNOWN" literal="UNKNOWN"/>
+    <eLiterals name="MALE" value="1" literal="MALE"/>
+    <eLiterals name="FEMALE" value="2" literal="FEMALE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Family">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="individuals" upperBound="-1"
+        eType="#//Individual" containment="true" eOpposite="#//Individual/family"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="laboratory" lowerBound="1"
+        eType="#//Laboratory" eOpposite="#//Laboratory/families"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Laboratory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="families" upperBound="-1"
+        eType="#//Family" containment="true" eOpposite="#//Family/laboratory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequencers" upperBound="-1"
+        eType="#//Sequencer" containment="true" eOpposite="#//Sequencer/laboratory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Individual">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gender" ordered="false"
+        unique="false" lowerBound="1" eType="#//Gender" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="family" unique="false"
+        lowerBound="1" eType="#//Family" eOpposite="#//Family/individuals"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Father" eType="#//Individual"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Mother" eType="#//Individual"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="samples" upperBound="-1"
+        eType="#//Sample" containment="true" eOpposite="#//Sample/individual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequencer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runs" upperBound="-1" eType="#//Run"
+        containment="true" eOpposite="#//Run/sequencer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="laboratory" lowerBound="1"
+        eType="#//Laboratory" eOpposite="#//Laboratory/sequencers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Run">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequenced" upperBound="-1"
+        eType="#//Sequenced" containment="true" eOpposite="#//Sequenced/run"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequencer" lowerBound="1"
+        eType="#//Sequencer" eOpposite="#//Sequencer/runs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sample">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="individual" lowerBound="1"
+        eType="#//Individual" eOpposite="#//Individual/samples"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequenced">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="run" unique="false" lowerBound="1"
+        eType="#//Run" eOpposite="#//Run/sequenced"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sample" unique="false"
+        lowerBound="1" eType="#//Sample"/>
+  </eClassifiers>
+</ecore:EPackage>

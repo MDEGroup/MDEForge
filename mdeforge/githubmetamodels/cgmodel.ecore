@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cgmodel" nsURI="http://www.eclipse.org/ocl/1.0.0/CG" nsPrefix="ch">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="The CGModel provides a Code Generation friendly form of the OCL Abstract Syntax pivot model, with distinct classes&#xA;such as LibraryPropertyCallExp and EcorePropertyCallExp for distinct purposes. Additional classes&#xA;such as BoxExp, CatchExp and CastExp support rewrite optimizations.&#xA;&lt;p>&#xA;References to the Abstract Syntax model are expressed as attributes with datatype values in order to avoid&#xA;confusion as to whether the new or old pivot mosdel is in use while code generating the pivot model."/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore#/"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="CGAccumulator" eSuperTypes="#//CGIterator">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGAccumulator is a mutable possibly invalid variable for use as an accumulator."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGBoolean" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGBoolean represents a boolean value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="booleanValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the boolean value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGBoxExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGBoxExp converts an unboxed source value to a boxed value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGBuiltInIterationCallExp" eSuperTypes="#//CGIterationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accumulator" eType="#//CGIterator"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGCallExp" abstract="true" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="invalidating" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Whether this call expression may return an invalid result for non-invalid inputs."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validating" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Whether this call expression may return a non-invalid result for invalid inputs."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGCastExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A cast expression imposes a known type on a poorly typer source such as a CGEcoreParameter."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorType" lowerBound="1"
+        eType="#//CGExecutorType" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared type."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGCatchExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGCatchExp converts an invalid source exception to an invalid value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGClass" eSuperTypes="#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containingPackage" lowerBound="1"
+        eType="#//CGPackage" resolveProxies="false" eOpposite="#//CGPackage/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" ordered="false"
+        upperBound="-1" eType="#//CGOperation" containment="true" resolveProxies="false"
+        eOpposite="#//CGOperation/containingClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" ordered="false"
+        upperBound="-1" eType="#//CGProperty" containment="true" resolveProxies="false"
+        eOpposite="#//CGProperty/containingClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariants" ordered="false"
+        upperBound="-1" eType="#//CGConstraint" containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Invariant constraints on instances of this class."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superTypes" upperBound="-1"
+        eType="#//CGClass" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interface" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the boolean value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateParameters" upperBound="-1"
+        eType="#//CGClass" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGCollectionExp" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//CGCollectionPart" containment="true" resolveProxies="false" eOpposite="#//CGCollectionPart/collectionExp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGCollectionPart" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="first" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="last" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collectionExp" lowerBound="1"
+        eType="#//CGCollectionExp" changeable="false" resolveProxies="false" eOpposite="#//CGCollectionExp/parts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGConstant" abstract="true" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGConstant represents a constant value that may be shared by may CGConstantExp. The shared&#xA;value may be generated as a global constant. Inlineable constants need no global declaration.&#xA;&#xA;Derived classes support distinct forms of constants."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGConstantExp" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGConstantExp is a constant valued expression that references a constant value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredConstant" lowerBound="1"
+        eType="#//CGValuedElement" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared constant providing the value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGConstraint" eSuperTypes="#//CGNamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGConstraint defines a constraint such as a class invariant."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="message" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGConstructorExp" abstract="true" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//CGConstructorPart" containment="true" resolveProxies="false" eOpposite="#//CGConstructorPart/constructorExp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorType" lowerBound="1"
+        eType="#//CGExecutorType" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGConstructorPart" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructorExp" lowerBound="1"
+        eType="#//CGConstructorExp" changeable="false" resolveProxies="false" eOpposite="#//CGConstructorExp/parts"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorPart" lowerBound="1"
+        eType="#//CGExecutorConstructorPart" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared type."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcoreClassConstructorExp" eSuperTypes="#//CGConstructorExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eClass" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcoreDataTypeConstructorExp" eSuperTypes="#//CGConstructorExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eDataType" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EDataType" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="string" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the integer value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcoreOperation" eSuperTypes="#//CGOperation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An operation that must be called using the EcoreOperation calling convention."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOperation" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EOperation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcoreOperationCallExp" eSuperTypes="#//CGOperationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOperation" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EOperation" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcorePropertyCallExp" eSuperTypes="#//CGPropertyCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGEcorePropertyCallExp navigates aproperty using Ecore support."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eStructuralFeature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGElement is the abstract class from which all classes contribution to a CG tree derive."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGElementId" eSuperTypes="#//CGConstant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementId" lowerBound="1"
+        eType="#//ElementId">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the integer value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEqualsExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGBoxExp converts an unboxed source value to a boxed value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorCompositionProperty" eSuperTypes="#//CGExecutorProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorConstructorPart" eSuperTypes="#//CGExecutorProperty">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTypeWithReflection defines a Static Single Assignment variable whose value is a DomainType."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorNavigationProperty" eSuperTypes="#//CGExecutorProperty">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGExecutorNavigationProperty specifies navigation in the absence of Ecore support."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorOppositeProperty" eSuperTypes="#//CGExecutorProperty">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGExecutorOppositeProperty specifies navigation of an unnavigable opposite."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorOperation" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTypeWithReflection defines a Static Single Assignment variable whose value is a DomainType."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="underlyingOperationId"
+        eType="#//CGElementId" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorOperationCallExp" eSuperTypes="#//CGOperationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorOperation" lowerBound="1"
+        eType="#//CGExecutorOperation" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorProperty" abstract="true"
+      eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTypeWithReflection defines a Static Single Assignment variable whose value is a DomainType."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="underlyingPropertyId" eType="#//CGElementId"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorPropertyCallExp" eSuperTypes="#//CGPropertyCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorProperty" lowerBound="1"
+        eType="#//CGExecutorProperty" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGExecutorType" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTypeWithReflection defines a Static Single Assignment variable whose value is a DomainType."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="underlyingTypeId" eType="#//CGTypeId"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGFinalVariable" eSuperTypes="#//CGVariable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGFinalVariable defines a Static Single Assignment variable, that is one&#xA;whose value is defined before use and never changed."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGGuardExp" eSuperTypes="#//CGCallExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGIfExp" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//CGValuedElement" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpression" lowerBound="1"
+        eType="#//CGValuedElement" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseExpression" lowerBound="1"
+        eType="#//CGValuedElement" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGInteger" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGInteger represents an integer value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integerValue" lowerBound="1"
+        eType="#//Number">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the integer value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGInvalid" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGInvalid represents an invalid value with an optional message."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageTemplate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="optional message template explaining the invalidity"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bindings" upperBound="-1"
+        eType="#//Object">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="bindings for use by the messageTemplate"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGIsInvalidExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGBoxExp converts an unboxed source value to a boxed value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGIsUndefinedExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGBoxExp converts an unboxed source value to a boxed value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGIterationCallExp" abstract="true"
+      eSuperTypes="#//CGCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referredIteration" lowerBound="1"
+        eType="#//Iteration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterators" upperBound="-1"
+        eType="#//CGIterator" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGIterator" eSuperTypes="#//CGParameter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGIterator is a mutable variable for use as the iterator or result of an iteration."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLetExp" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGLetExp makes a shared expression available for multiple use in another expression.&#xA;The sharred expression is defined as the initialaizer of a shared variable."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" lowerBound="1" eType="#//CGVariable"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLibraryIterateCallExp" eSuperTypes="#//CGLibraryIterationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//CGIterator"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLibraryIterationCallExp" eSuperTypes="#//CGIterationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="libraryIteration" lowerBound="1"
+        eType="#//LibraryIteration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLibraryOperation" eSuperTypes="#//CGOperation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An operation that must be called using the LibraryOperation calling convention."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLibraryOperationCallExp" eSuperTypes="#//CGOperationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="libraryOperation" lowerBound="1"
+        eType="#//LibraryOperation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLibraryPropertyCallExp" eSuperTypes="#//CGPropertyCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="libraryProperty" lowerBound="1"
+        eType="#//LibraryProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGLocalVariable" eSuperTypes="#//CGVariable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGLocalVariable defines a variable that may have exactly one of many values, typically&#xA;one value from an if thenExpression and another from an if elseExpression."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGModel" eSuperTypes="#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globals" ordered="false"
+        upperBound="-1" eType="#//CGConstant" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" ordered="false"
+        upperBound="-1" eType="#//CGPackage" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGNamedElement" abstract="true" eSuperTypes="#//CGElement #//Nameable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ast" lowerBound="1" eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGNull" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGNull represents the null value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGOperation" abstract="true" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" ordered="false"
+        upperBound="-1" eType="#//CGParameter" containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The parameters of this operation, with 'self' as the first parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The OCL-defined body of this operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preconditions" ordered="false"
+        upperBound="-1" eType="#//CGConstraint" containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The precondition constraints of this operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postconditions" ordered="false"
+        upperBound="-1" eType="#//CGConstraint" containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The postcondition constraints of this operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containingClass" lowerBound="1"
+        eType="#//CGClass" resolveProxies="false" eOpposite="#//CGClass/operations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGOperationCallExp" abstract="true"
+      eSuperTypes="#//CGCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//CGValuedElement" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referredOperation" lowerBound="1"
+        eType="#//Operation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGPackage" eSuperTypes="#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" ordered="false"
+        upperBound="-1" eType="#//CGClass" containment="true" resolveProxies="false"
+        eOpposite="#//CGClass/containingPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" ordered="false"
+        upperBound="-1" eType="#//CGPackage" containment="true" resolveProxies="false"
+        eOpposite="#//CGPackage/containingPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containingPackage" eType="#//CGPackage"
+        resolveProxies="false" eOpposite="#//CGPackage/packages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGParameter" eSuperTypes="#//CGVariable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" lowerBound="1"
+        eType="#//CGOperation" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGProperty" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containingClass" lowerBound="1"
+        eType="#//CGClass" resolveProxies="false" eOpposite="#//CGClass/properties"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The optional initializer or derivation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGPropertyCallExp" abstract="true" eSuperTypes="#//CGCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referredProperty" lowerBound="1"
+        eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGReal" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGReal represents a real value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="realValue" lowerBound="1"
+        eType="#//Number">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the real value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGSettableVariable" eSuperTypes="#//CGVariable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGSettableVariable defines a variable that may have many values, typically through&#xA;use as an iteration variable."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGString" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGInteger represents a string value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the string value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGText" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGText supports provision of literal language-specific text as an inline contribution to the generate code.&#xA;(e.g. the initialisation of an evaluator)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the string value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTextParameter" eSuperTypes="#//CGParameter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTextParameter supports provision of literal language-specific text as a parameter contribution to the generate code.&#xA;(e.g. the initialisation of the self parameter from this)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the string value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGThrowExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGThrowExp converts an invalid source value to a thrown invalid exception."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTupleExp" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//CGTuplePart" containment="true" resolveProxies="false" eOpposite="#//CGTuplePart/tupleExp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTuplePart" eSuperTypes="#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" lowerBound="1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tupleExp" lowerBound="1"
+        eType="#//CGTupleExp" changeable="false" resolveProxies="false" eOpposite="#//CGTupleExp/parts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTuplePartCallExp" eSuperTypes="#//CGPropertyCallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="astTuplePartId" lowerBound="1"
+        eType="#//TuplePartId"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTypeId" eSuperTypes="#//CGElementId"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTypeExp" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGTypeExp is a non-constant expression that references a type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorType" lowerBound="1"
+        eType="#//CGExecutorType" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared type."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTypedElement" abstract="true" eSuperTypes="#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeId" lowerBound="1"
+        eType="#//CGTypeId" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="required" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGUnboxExp" eSuperTypes="#//CGCallExp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGUnboxExp converts a boxed source value to an unboxed value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGUnlimited" eSuperTypes="#//CGConstant">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="CGUnlimited represents the unlimited value."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGValuedElement" abstract="true" eSuperTypes="#//CGTypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependsOn" upperBound="-1"
+        eType="#//CGValuedElement" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The elements that must be declared before this element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owns" upperBound="-1" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGVariable" abstract="true" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGVariable supports the shared use of its init expression by many VariableExps."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" eType="#//CGValuedElement"
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGVariableExp" eSuperTypes="#//CGValuedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A CGVariableExp references a variable that shared a common sub-expression."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredVariable" lowerBound="1"
+        eType="#//CGVariable" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared variable providing the value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Element" instanceClassName="org.eclipse.ocl.examples.pivot.Element"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ElementId" instanceClassName="org.eclipse.ocl.examples.domain.ids.ElementId"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EnumerationLiteralId" instanceClassName="org.eclipse.ocl.examples.domain.ids.EnumerationLiteralId"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Iteration" instanceClassName="org.eclipse.ocl.examples.pivot.Iteration"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="LibraryIteration" instanceClassName="org.eclipse.ocl.examples.domain.library.LibraryIteration"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="LibraryOperation" instanceClassName="org.eclipse.ocl.examples.domain.library.LibraryOperation"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="LibraryProperty" instanceClassName="org.eclipse.ocl.examples.domain.library.LibraryProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Nameable" instanceClassName="org.eclipse.ocl.examples.domain.elements.Nameable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Number" instanceClassName="java.lang.Number"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Operation" instanceClassName="org.eclipse.ocl.examples.pivot.Operation"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Property" instanceClassName="org.eclipse.ocl.examples.pivot.Property"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TuplePartId" instanceClassName="org.eclipse.ocl.examples.domain.ids.TuplePartId"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Type" instanceClassName="org.eclipse.ocl.examples.pivot.Type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TypeId" instanceClassName="org.eclipse.ocl.examples.domain.ids.TypeId"/>
+</ecore:EPackage>

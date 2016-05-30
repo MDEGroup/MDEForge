@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="MonitoringArchitecture"
+    nsURI="http://alive/online/monitoring/v0.1" nsPrefix="monitor">
+  <eSubpackages name="Monitor">
+    <eClassifiers xsi:type="ecore:EClass" name="Monitor" eSuperTypes="#//Monitor/IMonitor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ruleEngine" eType="#//Monitor/RuleEngine"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LocalMonitor" eSuperTypes="#//Monitor/Monitor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GlobalMonitor" eSuperTypes="#//Monitor/Monitor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Monitor/LocalMonitor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EventBus" eSuperTypes="#//Monitor/EventTransporter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IMonitor" abstract="true" interface="true"
+        eSuperTypes="#//Monitor/IComponent">
+      <eOperations name="initialize">
+        <eParameters name="listOfRules" upperBound="-1" eType="#//Monitor/Rule"/>
+      </eOperations>
+      <eOperations name="updateRules" eExceptions="#//Exceptions/RuleUpdateException">
+        <eParameters name="listOfRules" upperBound="-1" eType="#//Monitor/Rule"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connected" eType="#//Monitor/EventTransporter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EventTransporter" eSuperTypes="#//Monitor/IComponent"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Rule">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="if" lowerBound="1" eType="ecore:EClass PartialStateDescription.ecore#//CTL/PartialStateDescription"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1"
+          eType="ecore:EClass PartialStateDescription.ecore#//Actions/Action"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Response">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="success" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RuleEngine" eSuperTypes="#//Monitor/ReasonerModule">
+      <eOperations name="evaluate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="evaluateRule" lowerBound="1"
+          upperBound="-1" eType="#//Monitor/Rule"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="listOfRules" eType="#//Monitor/Rule"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EnactmentComponent" eSuperTypes="#//Monitor/IComponent">
+      <eOperations name="callServiceforTask"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="invoke" upperBound="-1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="localMonitor" eType="#//Monitor/LocalMonitor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ACLModule" eSuperTypes="#//Monitor/IComponent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="localMonitor" eType="#//Monitor/LocalMonitor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReasonerModule" eSuperTypes="#//Monitor/IComponent">
+      <eOperations name="handleObservation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="enactment" eType="#//Monitor/EnactmentComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="scheduler" eType="#//Monitor/GPGPScheduler"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GPGPScheduler" eSuperTypes="#//Monitor/TaskScheduler">
+      <eOperations name="schedule"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IComponent">
+      <eOperations name="subscribe" eExceptions="#//Exceptions/SubscribeException">
+        <eParameters name="endpoint" lowerBound="1" eType="#//Monitor/Endpoint"/>
+        <eParameters name="listOfFacts" lowerBound="1" upperBound="-1" eType="#//Event/Fact"/>
+      </eOperations>
+      <eOperations name="publish">
+        <eParameters name="fact" eType="#//Event/Fact"/>
+      </eOperations>
+      <eOperations name="cancelSubscription" eExceptions="#//Exceptions/CancelSubscriptionException"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endpoint" eType="#//Monitor/Endpoint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TaskScheduler" eSuperTypes="#//Monitor/IComponent"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Endpoint" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Session"/>
+    <eClassifiers xsi:type="ecore:EClass" name="JavaEndpoint" eSuperTypes="#//Monitor/Endpoint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WSEndpoint" eSuperTypes="#//Monitor/Endpoint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ACLEndpoint" eSuperTypes="#//Monitor/Endpoint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Agent" eSuperTypes="#//Event/Actor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aclModule" eType="#//Monitor/ACLModule"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="brain" eType="#//Monitor/ReasonerModule"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="enactment" eType="#//Monitor/EnactmentComponent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="planner" eType="#//Monitor/TaskScheduler"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Event">
+    <eClassifiers xsi:type="ecore:EClass" name="Event">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="localKey" lowerBound="1"
+          eType="#//Event/Key"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="asserter" lowerBound="1"
+          eType="#//Event/Actor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" lowerBound="1"
+          eType="#//Event/Fact"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="encoding" lowerBound="1"
+          eType="#//Event/Encoding"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pointOfView" lowerBound="1"
+          eType="#//Event/PointOfView"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="language" lowerBound="1"
+          eType="#//Event/Language"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Key" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="localMonitor" eType="#//Monitor/LocalMonitor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Fact" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EGenericType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Encoding" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PointOfView" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Ontology" eSuperTypes="#//Event/Language">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActorView" eSuperTypes="#//Event/PointOfView"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ObserverView" eSuperTypes="#//Event/PointOfView"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProxyView" eSuperTypes="#//Event/PointOfView">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transmitter" eType="#//Event/Actor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//Event/Actor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endpoint" upperBound="-1"
+          eType="#//Monitor/Endpoint"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+          eType="#//Event/Operation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Language" abstract="true" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PlainText" eSuperTypes="#//Event/Encoding"/>
+    <eClassifiers xsi:type="ecore:EClass" name="XML" eSuperTypes="#//Event/Encoding"/>
+    <eClassifiers xsi:type="ecore:EClass" name="XMLSchema" eSuperTypes="#//Event/Language">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Operation">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argumentTypes" upperBound="-1"
+          eType="#//Event/Type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Event/Type"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true"/>
+  </eSubpackages>
+  <eSubpackages name="Architecture"/>
+  <eSubpackages name="Exceptions">
+    <eClassifiers xsi:type="ecore:EClass" name="RuleUpdateException" eSuperTypes="#//Exceptions/Exception"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CancelSubscriptionException" eSuperTypes="#//Exceptions/Exception"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SendEventException" eSuperTypes="#//Exceptions/Exception"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SubscribeException" eSuperTypes="#//Exceptions/Exception"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Exception" eSuperTypes="#//Monitor/Response"/>
+  </eSubpackages>
+</ecore:EPackage>

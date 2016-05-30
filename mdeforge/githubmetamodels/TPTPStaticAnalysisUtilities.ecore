@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="util"
+    nsURI="http:///org/eclipse/tptp/platform/analysis/util.ecore" nsPrefix="org.eclipse.tptp.platform.analysis.util">
+  <eSubpackages name="types" nsURI="http:///org/eclipse/tptp/platform/analysis/util/types.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.util.types">
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaString" instanceClassName="java.lang.String"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaClass" instanceClassName="java.lang.Class"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaStringArray" instanceClassName="java.lang.String[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaObject" instanceClassName="java.lang.Object"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="EclipseResource" instanceClassName="org.eclipse.core.resources.IResource"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="URL" instanceClassName="java.net.URL"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaNumber" instanceClassName="java.lang.Number"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EclipseProgressMonitor" instanceClassName="org.eclipse.core.runtime.IProgressMonitor"
+        abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaThrowable" instanceClassName="java.lang.Throwable"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaFile" instanceClassName="java.io.File"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaException" instanceClassName="java.lang.Exception"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="EMFObject" instanceClassName="org.eclipse.emf.ecore.EObject"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="EclipseResourceArray" instanceClassName="org.eclipse.core.resources.IResource[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="XmlDocument" instanceClassName="org.w3c.dom.Document"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaIOException" instanceClassName="java.io.IOException"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaList" instanceClassName="java.util.List"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="JavaBoolean" instanceClassName="java.lang.Boolean"/>
+  </eSubpackages>
+  <eSubpackages name="filter" nsURI="http:///org/eclipse/tptp/platform/analysis/util/filter.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.util.filter">
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractFilter">
+      <eOperations name="satisfies" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="obj" eType="#//types/JavaObject"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractMultiFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eOperations name="findFilter" eType="#//filter/AbstractFilter">
+        <eParameters name="name" eType="#//types/JavaString"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+          eType="#//filter/AbstractFilter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceName" eType="#//types/JavaString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InstanceOfFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clazz" eType="#//types/JavaClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExtensionFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="#//types/JavaString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReverseFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actualFilter" lowerBound="1"
+          eType="#//filter/AbstractFilter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AndFilter" eSuperTypes="#//filter/AbstractMultiFilter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrFilter" eSuperTypes="#//filter/AbstractMultiFilter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AdaptableFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actualFilter" lowerBound="1"
+          eType="#//filter/AbstractFilter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="adapter" lowerBound="1"
+          eType="#//filter/ObjectFilterAdapter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexOfFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="#//types/JavaString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectFilterAdapter">
+      <eOperations name="adapt" eType="#//types/JavaObject">
+        <eParameters name="obj" eType="#//types/JavaObject"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ToggleFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfiesIfOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actualFilter" lowerBound="1"
+          eType="#//filter/AbstractFilter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StartsWithFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="#//types/JavaString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EMFEqualsFilter" eSuperTypes="#//filter/AbstractFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eObject" eType="#//types/EMFObject"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="proxy" nsURI="http:///org/eclipse/tptp/platform/analysis/util/proxy.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.util.proxy">
+    <eClassifiers xsi:type="ecore:EClass" name="IPackageProxy" eSuperTypes="#//proxy/IJavaElementProxy">
+      <eOperations name="getPackage" eType="#//proxy/IPackageFragment"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeSubPackages" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="IPackageFragment" instanceClassName="org.eclipse.jdt.core.IPackageFragment"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IType" instanceClassName="org.eclipse.jdt.core.IType"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IMethod" instanceClassName="org.eclipse.jdt.core.IMethod"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IField" instanceClassName="org.eclipse.jdt.core.IField"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ITypeProxy" eSuperTypes="#//proxy/IJavaElementProxy">
+      <eOperations name="getFullName" eType="#//proxy/String"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayDimension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMethodProxy" eSuperTypes="#//proxy/IMemberProxy">
+      <eOperations name="getMethod" eType="#//proxy/IMethod"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="allMethodsWithName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="constructor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//proxy/ITypeProxy"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//proxy/ITypeProxy" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IFieldProxy" eSuperTypes="#//proxy/IMemberProxy">
+      <eOperations name="getField" eType="#//proxy/IField"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//proxy/ITypeProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IJavaElementProxy">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//proxy/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IClassProxy" eSuperTypes="#//proxy/IComponentTypeProxy"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IInterfaceProxy" eSuperTypes="#//proxy/IComponentTypeProxy"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IPrimitiveTypeProxy" eSuperTypes="#//proxy/ITypeProxy"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IComponentTypeProxy" eSuperTypes="#//proxy/ITypeProxy">
+      <eOperations name="getType" eType="#//proxy/IType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="packageProxy" eType="#//proxy/IPackageProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMemberProxy" eSuperTypes="#//proxy/IJavaElementProxy">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="componentProxy" eType="#//proxy/IComponentTypeProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IStaticInitializerProxy" eSuperTypes="#//proxy/IMemberProxy"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="Modifier">
+      <eLiterals name="PUBLIC"/>
+      <eLiterals name="PROTECTED" value="1"/>
+      <eLiterals name="PRIVATE" value="2"/>
+      <eLiterals name="PACKAGE" value="4"/>
+      <eLiterals name="ANY" value="-1"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="java" nsURI="http:///org/eclipse/tptp/platform/analysis/util/java.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.util.java">
+    <eSubpackages name="filter" nsURI="http:///org/eclipse/tptp/platform/analysis/util/java/filter.ecore"
+        nsPrefix="org.eclipse.tptp.platform.analysis.util.java.filter">
+      <eClassifiers xsi:type="ecore:EClass" name="ModifierFilter" eSuperTypes="#//filter/AbstractFilter">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

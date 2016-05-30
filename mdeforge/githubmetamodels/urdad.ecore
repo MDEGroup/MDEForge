@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="urdad"
+    nsURI="http://www.urdad.org/2010/urdad" nsPrefix="urdad">
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="author" value="fritz@solms.co.za"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="documentation" value="This is a ecore encoding of the URDAD meta-model. URDAD is a services-oriented&#xA;&#x9; analysis and design methodology which is meant for technology neutral analysis&#xA;&#x9; and design resulting in a PIM (platform-independent model) which can be used &#xA;&#x9; in the context of model-driven development (e.g. MDA)."/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Componentize meta-model"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="How to support componentized models?"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Should primitives be sourced from OCL?"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Should awaiting on signals be supported and if so, how?"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Persistence &amp; CRUD methods via entity manager. Problem: these are in model, not meta-model domain"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Basic data types"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Exception message construction perhaps via OCL to include context info"/>
+  </eAnnotations>
+  <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+    <details key="todo" value="Fully qualified names support in XText (it is in ECore, but not in default XText mapping - can be done in XText)"/>
+  </eAnnotations>
+  <eSubpackages name="core" nsURI="http://www.urdad.org/2010/urdad/core" nsPrefix="urdad">
+    <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+          eType="#//core/Annotation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementWithOptionalName" abstract="true"
+        eSuperTypes="#//core/Element">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//core/Element">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Stakeholder" abstract="true" eSuperTypes="#//core/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Annotation" eSuperTypes="#//core/ElementWithOptionalName">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityDomains"
+          upperBound="-1" eType="#//core/ResponsibilityDomain" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityDomain" eSuperTypes="#//core/Stakeholder">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityDomains"
+          upperBound="-1" eType="#//core/ResponsibilityDomain" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dataTypes" upperBound="-1"
+          eType="#//data/DataType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
+          eType="#//process/Constant" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//constraint/Constraint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="servicesContracts" upperBound="-1"
+          eType="#//contract/ServiceContract" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+          eType="#//process/Service" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//core/ElementWithOptionalName">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="expressionString" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="constraint" nsURI="http://www.urdad.org/2010/urdad/constraint"
+      nsPrefix="urdad">
+    <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true" eSuperTypes="#//core/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExpressionBasedConstraint" eSuperTypes="#//constraint/Constraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraintExpression"
+          eType="#//core/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StructuredConstraint" abstract="true"
+        eSuperTypes="#//constraint/Constraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BinaryOperandConstraint" abstract="true"
+        eSuperTypes="#//constraint/StructuredConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" lowerBound="1"
+          eType="#//constraint/Constraint"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperand" lowerBound="1"
+          eType="#//constraint/Constraint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InverseConstraint" eSuperTypes="#//constraint/StructuredConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operand" lowerBound="1"
+          eType="#//constraint/Constraint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AndConstraint" eSuperTypes="#//constraint/BinaryOperandConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrConstraint" eSuperTypes="#//constraint/BinaryOperandConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="XorConstraint" eSuperTypes="#//constraint/BinaryOperandConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="QualityConstraint" eSuperTypes="#//constraint/ExpressionBasedConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StateConstraint" eSuperTypes="#//constraint/Constraint">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="A state constraint evaluates to true if all its constraints hold true and false otherwise."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//process/Variable"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameterDataStructure"
+          eType="#//data/DataStructure" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stateAssessmentProcess"
+          eType="#//process/Activity" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//constraint/ExpressionBasedConstraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StateConstraintReference" eSuperTypes="#//constraint/Constraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameterConstructionProcess"
+          eType="#//process/Activity" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//process/Assignable"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//constraint/Constraint"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="data" nsURI="http://www.urdad.org/2010/urdad/data" nsPrefix="urdad">
+    <eClassifiers xsi:type="ecore:EClass" name="MultiplicityConstraint" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RangeMultiplicity" eSuperTypes="#//data/MultiplicityConstraint">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minOccurs" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+          defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxOccurs" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+          defaultValueLiteral="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Many" eSuperTypes="#//data/MultiplicityConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//constraint/ExpressionBasedConstraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BasicDataType" eSuperTypes="#//data/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DataStructure" eSuperTypes="#//data/DataType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="superTypes" upperBound="-1"
+          eType="#//data/DataStructure"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+          eType="#//data/Feature" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="multiplicityConstraint"
+          eType="#//data/MultiplicityConstraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//data/Feature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//data/BasicDataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Identification" eSuperTypes="#//data/Feature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relatedElement" lowerBound="1"
+          eType="#//core/NamedElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Association" eSuperTypes="#//data/Identification"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Aggregation" eSuperTypes="#//data/Association"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Composition" eSuperTypes="#//data/Aggregation"/>
+  </eSubpackages>
+  <eSubpackages name="contract" nsURI="http://www.urdad.org/2010/urdad/contract" nsPrefix="urdad">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Exception" eSuperTypes="#//data/DataStructure"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Requirement" abstract="true" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredBy" lowerBound="1"
+          upperBound="-1" eType="#//core/Stakeholder"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="QualityRequirement" eSuperTypes="#//contract/Requirement">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="A quality requirement is a non-functional requirement around quality of service. &#xA;&#x9;&#x9;Typical examples of quality requirements include scalability, reliability, &#xA; performance, security and auditability."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="qualityConstraint" eType="#//constraint/QualityConstraint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionalRequirement" abstract="true"
+        eSuperTypes="#//contract/Requirement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stateConstraintReference"
+          eType="#//constraint/StateConstraintReference" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResultRequirement" eSuperTypes="#//contract/FunctionalRequirement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraintExpression"
+          eType="#//core/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PreCondition" eSuperTypes="#//contract/FunctionalRequirement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exception" lowerBound="1"
+          eType="#//contract/Exception"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PostCondition" eSuperTypes="#//contract/FunctionalRequirement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionalRequirements" eSuperTypes="#//core/Element">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requestVariable" eType="#//process/Variable"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resultVariable" eType="#//process/Variable"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="preConditions" upperBound="-1"
+          eType="#//contract/PreCondition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="postConditions" upperBound="-1"
+          eType="#//contract/PostCondition" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceContract" eSuperTypes="#//core/NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="requestClassNameEqualsServiceNamePlusRequest resultClassNameEqualsServiceNamePlusResult"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="A requirement for a service."/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="Pre and post-conditions composed in service because constraint definitions are context specific"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="requestClassNameEqualsServiceNamePlusRequest" value="&#xA;&#x9;&#x9;&#x9;  (self.request.name.substring(self.request.name.size()-6,self.request.name.size()) = 'Request')&#xA;&#x9;&#x9;&#x9;  and&#xA;&#x9;&#x9;&#x9;  (self.request.name.substring(1,self.name.size()) = self.name.substring(1,1).toUpperCase().concat&#xA;&#x9;&#x9;&#x9;  (self.name.substring(2,self.name.size())))"/>
+        <details key="resultClassNameEqualsServiceNamePlusResult" value="&#xA;&#x9;&#x9;&#x9;  (self.request.name.substring(self.request.name.size()-5,self.request.name.size()) = 'Result')&#xA;&#x9;&#x9;&#x9;  and&#xA;&#x9;&#x9;&#x9;  (self.request.name.substring(1,self.name.size()) = self.name.substring(1,1).toUpperCase().concat&#xA;&#x9;&#x9;&#x9;  (self.name.substring(2,self.name.size())))"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="request" lowerBound="1"
+          eType="#//data/DataStructure" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="result" lowerBound="1"
+          eType="#//data/DataStructure" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="qualityRequirements"
+          upperBound="-1" eType="#//contract/QualityRequirement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="functionalRequirements"
+          eType="#//contract/FunctionalRequirements" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inverseService" eType="#//contract/ServiceContract"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="process" nsURI="http://www.urdad.org/2010/urdad/process" nsPrefix="urdad">
+    <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//core/Stakeholder">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requestVariable" lowerBound="15"
+          upperBound="15" eType="#//process/Variable" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="realizedContract" eType="#//contract/ServiceContract"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceRequirements"
+          upperBound="-1" eType="#//process/ServiceRequirement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//process/Activity"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceRequirement" eSuperTypes="#//core/ElementWithOptionalName">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="The condition is the condition under which the functionality is required."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredService" eType="#//contract/ServiceContract"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//constraint/Constraint"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usedToAddress" upperBound="-1"
+          eType="#//contract/FunctionalRequirement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Assignable" abstract="true" eSuperTypes="#//core/ElementWithOptionalName"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//process/Assignable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="queryExpression" eType="#//core/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//process/Assignable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableReference" eSuperTypes="#//process/Assignable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+          eType="#//process/Variable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Activity" abstract="true" eSuperTypes="#//core/ElementWithOptionalName"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ActivitySequence" eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="activities" lowerBound="2"
+          upperBound="-1" eType="#//process/Activity" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContainerActivity" abstract="true"
+        eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="activity" eType="#//process/Activity"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConcurrentActivity" eSuperTypes="#//process/ContainerActivity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="blocking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Concurrency" eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concurrentActivities"
+          lowerBound="2" upperBound="-1" eType="#//process/Activity" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalActivity" abstract="true"
+        eSuperTypes="#//process/ContainerActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+          eType="#//constraint/Constraint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="blocking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="If" eSuperTypes="#//process/ConditionalActivity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalActivities"
+          lowerBound="1" upperBound="-1" eType="#//process/ConditionalActivity" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elseActivity" eType="#//process/Activity"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Wait" eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="until" lowerBound="1"
+          eType="#//constraint/Constraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//data/DataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableProduction" abstract="true"
+        eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="producedVariable" lowerBound="1"
+          eType="#//process/Variable" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Create" eSuperTypes="#//process/VariableProduction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ManipulateVariable" abstract="true"
+        eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//process/Assignable" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//process/Query" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Assign" eSuperTypes="#//process/ManipulateVariable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Add" eSuperTypes="#//process/ManipulateVariable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Remove" eSuperTypes="#//process/Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//process/Query" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="While" eSuperTypes="#//process/ContainerActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+          eType="#//constraint/Constraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForAll" eSuperTypes="#//process/ContainerActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//process/Query"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="concurrent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExceptionHandler" eSuperTypes="#//process/ContainerActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exception" lowerBound="1"
+          eType="#//contract/Exception"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RequestService" eSuperTypes="#//process/VariableProduction">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="documentation" value="The name of the request activity uniquely identifies the service request&#xA;&#x9;&#x9;and can be used to identify the result of a particular service request"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requestedService" lowerBound="1"
+          eType="#//contract/ServiceContract"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requestVariable" lowerBound="1"
+          eType="#//process/Variable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exceptionHandlers" upperBound="-1"
+          eType="#//process/ExceptionHandler" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TerminalActivity" abstract="true"
+        eSuperTypes="#//process/Activity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RaiseException" eSuperTypes="#//process/TerminalActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exception" lowerBound="1"
+          eType="#//contract/Exception"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exceptionVariable" eType="#//process/Variable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReturnResult" eSuperTypes="#//process/TerminalActivity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resultVariable" eType="#//process/Variable"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

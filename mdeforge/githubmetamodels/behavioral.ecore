@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="behavioral"
+    nsURI="http:///behavioral.ecore" nsPrefix="behavioral">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Processes, workflows and events. This is where BPEL and BPMN should be positioned and mapped to our infrastructures. But also the Process Agent Framework and BTM has to end up here."/>
+  </eAnnotations>
+  <eSubpackages name="bpdm" nsURI="http:///behavioral/bpdm.ecore" nsPrefix="behavioral.bpdm">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Dummy"/>
+  </eSubpackages>
+  <eSubpackages name="businesstasks" nsURI="http:///behavioral/businesstasks.ecore"
+      nsPrefix="behavioral.businesstasks">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="If it turns out to be beneficial, elements in this package cover the creation and management of BTM-related objects, such as creating a business task, assigning it to specific users or roles, etc."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="TaskAgent"/>
+  </eSubpackages>
+  <eSubpackages name="actions" nsURI="http:///behavioral/actions.ecore" nsPrefix="behavioral.actions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Some action language that talks in the concepts of BOs, BONodes, invoking services, sending messages, explicitly declaring that an event occurred, triggering actions, evaluating rules, ...&#xD;&#xA;&#xD;&#xA;The language can be used, e.g., to specify the behavior of an action (part of a BO or BONode) or a service implementation."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//actions/StatementWithArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The argument tells the value to be assigned to the variable."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="AssignmentCompatibility" value="self.argument.getType().conformsTo(self.assignTo.getType())"/>
+        <details key="MustHaveArgument" value="self.argument->notEmpty()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="AssignmentCompatibility MustHaveArgument"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignTo" lowerBound="1"
+          eType="#//actions/Variable" eOpposite="#//actions/Variable/assignments"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" eSuperTypes="data.ecore#//classes/InScope">
+      <eOperations name="getOutermostBlock" ordered="false" unique="false" lowerBound="1"
+          eType="#//actions/Block">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.block.getOutermostBlock()"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="isSideEffectFree" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="not self.oclIsKindOf(AddLink) and&#xA;  not self.oclIsKindOf(RemoveLink) and&#xA;  not self.oclIsKindOf(Assignment) and&#xA;  (self.oclIsKindOf(IfElse) implies self.oclAsType(IfElse).condition.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(WhileLoop) implies self.oclAsType(WhileLoop).condition.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(ExpressionStatement) implies self.oclAsType(ExpressionStatement).expression.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(StatementWithArgument) implies (self.oclAsType(StatementWithArgument).argument->notEmpty() implies self.oclAsType(StatementWithArgument).argument.isSideEffectFree())) and&#xA;  (self.oclIsKindOf(StatementWithNestedBlocks) implies self.oclAsType(StatementWithNestedBlocks).nestedBlocks->forAll(b|b.isSideEffectFree()))"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A statement is said to be side effect free if it does not modify any variable declared outside the scope of the block owning the statement and if it does not modify any object's state and if it does not modify any association's link set.&#xD;&#xA;&#xD;&#xA;TODO We need a more context-sensitive definition of sideEffectFree. While assigning to a local variable disallows statement reordering within the block, the block can still overall be side effect free such that its invocation may be reordered. There seem to be at least two notions of side effect freeness: one within the block in which it occurs (and variable assignment in this context counts as a side effect because it will disallow reordering), and another one regarding side effects observable outside the block; those are all modifications that can &quot;escape&quot; from the block, including changing the state of an object that is reachable outside the block (even if created in the block but then returned from the block), or changing the contents of a link container visible outside the block."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="isSideEffectFreeForBlock" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="not self.oclIsKindOf(AddLink) and&#xA;  not self.oclIsKindOf(RemoveLink) and&#xA;  (self.oclIsKindOf(Assignment) implies self.oclAsType(Assignment).assignTo.owner &lt;> block) and&#xA;  (self.oclIsKindOf(IfElse) implies self.oclAsType(IfElse).condition.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(WhileLoop) implies self.oclAsType(WhileLoop).condition.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(ExpressionStatement) implies self.oclAsType(ExpressionStatement).expression.isSideEffectFree()) and&#xA;  (self.oclIsKindOf(StatementWithArgument) implies (self.oclAsType(StatementWithArgument).argument->notEmpty() implies self.oclAsType(StatementWithArgument).argument.isSideEffectFree())) and&#xA;  (self.oclIsKindOf(StatementWithNestedBlocks) implies self.oclAsType(StatementWithNestedBlocks).nestedBlocks->forAll(b|b.isSideEffectFree()))"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Assignment statements to block-local variables do not imply a side effect w.r.t the block"/>
+        </eAnnotations>
+        <eParameters name="block" ordered="false" unique="false" lowerBound="1" eType="#//actions/Block"/>
+      </eOperations>
+      <eOperations name="getNamedValuesInScope" ordered="false" upperBound="-1" eType="ecore:EClass data.ecore#//classes/NamedValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="-- collect all NamedValue declarations introduced by statements in this statement's owning block, prior to this statement.&#xA;  let pos:Integer = self.block.statements->indexOf(self) in&#xA;  if pos > 1 then&#xA;    self.addNamedValuesWithNewNames(&#xA;    if self.block.statements->at(-1+pos).oclIsKindOf(NamedValueDeclaration) then&#xA;      self.block.statements->at(-1+pos).oclAsType(NamedValueDeclaration).namedValue->asSet()&#xA;    else&#xA;      Set{}&#xA;    endif,&#xA;    self.block.statements->at(-1+pos).getNamedValuesInScope())&#xA;  else&#xA;    -- first statement in block; consider block itself&#xA;    self.block.getNamedValuesInScope()&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getOwningClass" ordered="false" unique="false" eType="ecore:EClass data.ecore#//classes/SapClass">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.block.getOwningClass()"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" lowerBound="1"
+          eType="#//actions/Block" transient="true" eOpposite="#//actions/Block/statements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="data.ecore#//classes/FunctionSignatureImplementation data.ecore#//classes/InScope">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A block contains statements and provides a scope, e.g., for block-local variables. Such a scope can be used for mapping to and from an operation's signature. A block accepts a number of values for a set of variables and as such is parameterizable. Additional variables can be introduced in the block that will not be provided to the block by its surrounding context. Those are considered the block's &quot;local variables.&quot;&#xD;&#xA;&#xD;&#xA;A block can be executed like in SmallTalk, dynamically binding its arguments at runtime.&#xD;&#xA;&#xD;&#xA;With this, an operation is only a very thin wrapper around a Block.&#xD;&#xA;&#xD;&#xA;The parameters of a block are always defined by the signature that is implemented by the block."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="DoesNotOwnIterators" value="self.variables->select(i|i.oclIsKindOf(Iterator))->isEmpty()"/>
+        <details key="IsSideEffectFreeIfImplementsSideEffectFreeSignature" value="self.implements_->notEmpty() implies&#xD;&#xA;    (self.implements_.sideEffectFree implies self.isSideEffectFree())"/>
+        <details key="DistinctNamedValueNames" value="self.variables->forAll( i, j | i &lt;> j implies i.name &lt;> j.name )"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="DoesNotOwnIterators IsSideEffectFreeIfImplementsSideEffectFreeSignature DistinctNamedValueNames"/>
+      </eAnnotations>
+      <eOperations name="getOutermostBlock" ordered="false" unique="false" lowerBound="1"
+          eType="#//actions/Block">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.owningStatement->notEmpty() then&#xA;    self.owningStatement.block.getOutermostBlock()&#xA;  else&#xA;    self&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Walks up the owningStatement/nestedBlocks association to find owning statements and their owning blocks transitively until it arrives at a block that is not owned by a statement. That block is then returned. Usually, such a block would be the implementation of either a function or a method signature."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="localIsSideEffectFree" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.statements->forAll(s|s.isSideEffectFreeForBlock(self))"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getNamedValuesInScope" ordered="false" upperBound="-1" eType="ecore:EClass data.ecore#//classes/NamedValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="  self.addNamedValuesWithNewNames(&#xD;&#xA;  -- Handle Foreach&#xD;&#xA;  let s:Set(data::classes::NamedValue)=Set{} in&#xD;&#xA;  s->union(if owningStatement.oclIsKindOf(Foreach) and owningStatement->notEmpty() then&#xD;&#xA;    owningStatement.oclAsType(Foreach).forVariable.oclAsType(data::classes::NamedValue)->asSet()&#xD;&#xA;  else&#xD;&#xA;    Set{}&#xD;&#xA;  endif)->union(&#xD;&#xA;  -- add parameters for those blocks that are used as a signature implementation&#xD;&#xA;  functionSignature->collect(input->iterate(i; rslt:Set(data::classes::NamedValue)=Set{} | rslt->including(i)))&#xD;&#xA;  )->union(&#xD;&#xA;  implements_->collect(input->iterate(i; rslt:Set(data::classes::NamedValue)=Set{}| rslt->including(i)))&#xD;&#xA;  )->asSet(),&#xD;&#xA;  -- then ascend the block composition hierarchy and add all NamedValues defined in parent blocks before the occurrence of the statement with the nested block&#xD;&#xA;  if owningStatement->notEmpty() then&#xD;&#xA;    owningStatement.getNamedValuesInScope()&#xD;&#xA;  else&#xD;&#xA;    -- add formal object parameters from owning class&#xD;&#xA;    let oc:data::classes::SapClass = self.getOwningClass() in&#xD;&#xA;    if oc->notEmpty() then&#xD;&#xA;      oc.formalObjectParameters->iterate(i; rslt:Set(data::classes::NamedValue)=Set{} | rslt->including(i))&#xD;&#xA;    else&#xD;&#xA;      let es:Set(data::classes::NamedValue) = Set{} in es&#xD;&#xA;    endif&#xD;&#xA;  endif)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Determines all NamedValues that are in scope for all statements of this block. For example, in the block of a Foreach statement, the Foreach Iterator is in scope for all contained statements. If the block is nested in a statement (such as for an &quot;if&quot; statement), the NamedValues in scope for the containing statement are added as well. Additionally, if the block occurs as a signature implementation, the signature parameters are added. If this block occurs in an object-parameterized class, the formal object parameters are also added.&#xD;&#xA;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getOwningClass" ordered="false" unique="false" eType="ecore:EClass data.ecore#//classes/SapClass">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="let outermost:Block = self.getOutermostBlock() in&#xA;  let implementedSignature:data::classes::Signature = outermost.getImplementedSignature() in&#xA;  if implementedSignature->notEmpty() then&#xA;    implementedSignature.getOwningClass()&#xA;  else&#xA;    null&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//actions/Statement" containment="true" eOpposite="#//actions/Statement/block"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+          eType="ecore:EClass data.ecore#//classes/NamedValue" containment="true"
+          eOpposite="data.ecore#//classes/NamedValue/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owningStatement" eType="#//actions/StatementWithNestedBlocks"
+          transient="true" eOpposite="#//actions/StatementWithNestedBlocks/nestedBlocks"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IfElse" eSuperTypes="#//actions/ConditionalStatement #//actions/StatementWithNestedBlocks">
+      <eOperations name="getIfBlock" ordered="false" unique="false" lowerBound="1"
+          eType="#//actions/Block">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.nestedBlocks->at(1)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getElseBlock" ordered="false" unique="false" lowerBound="1"
+          eType="#//actions/Block">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.nestedBlocks->size() > 1 then&#xA;    self.nestedBlocks->at(2)&#xA;  else&#xA;    null&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WhileLoop" eSuperTypes="#//actions/ConditionalStatement #//actions/SingleBlockStatement">
+      <eOperations name="getLoopBody" ordered="false" unique="false" lowerBound="1"
+          eType="#//actions/Block">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.nestedBlocks->at(1)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Foreach" eSuperTypes="#//actions/SingleBlockStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="We may not need a Foreach statement if we use internal iterators in collections together with blocks. However, how would a collection class implement the internal iterator without a for statement? Could this work with a WhileLoop only?"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="VariableOwnedByRightBlock" value="self.forVariable.owner = self.nestedBlocks->at(1)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="VariableOwnedByRightBlock"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="parallel" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collection" lowerBound="1"
+          eType="ecore:EClass dataaccess.ecore#//expressions/Expression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forVariable" lowerBound="1"
+          eType="#//actions/Iterator" containment="true" eOpposite="#//actions/Iterator/boundToFor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Return" eSuperTypes="#//actions/StatementWithArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a value from a block. Must be the last statement of a block."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ReturnMustBeLastInBlock" value="self = self.block.statements->last()"/>
+        <details key="ReturnTypeMustMatch" value="self.argument.getType().conformsTo(self.getOutermostBlock().getImplementedSignature().output)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ReturnMustBeLastInBlock ReturnTypeMustMatch"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddLink" eSuperTypes="#//actions/LinkManipulationStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds a link to an association. As opposed to, e.g., MOF 1.4 semantics, if a link would violate an upper multiplicity of 1 by adding a second link to an object, the existing link will implicitly be replaced by this AddLink statement.&#xD;&#xA;&#xD;&#xA;When *at* is unspecified for an ordered association, the link will be added at the &quot;end.&quot;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RemoveLink" eSuperTypes="#//actions/LinkManipulationStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Removes the link if it exists, from the association specified.&#xD;&#xA;&#xD;&#xA;If no *at* position is specified for an association with one ordered end, one occurrence of the link specified by the two *objects* will be removed at random."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LinkManipulationStatement" abstract="true"
+        eSuperTypes="#//actions/Statement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ObjectsMustConformToEndTypes" value="Sequence{1..self.objects->size()}->forAll(i:Integer |&#xD;&#xA;    objects->at(i).getType().conformsTo(association.ends->at(i).type))"/>
+        <details key="BlockMustNotImplementSideEffectFreeSignature" value="self.block.getImplementedSignature()->notEmpty() implies&#xD;&#xA;  not self.block.getImplementedSignature().sideEffectFree"/>
+        <details key="NoValueMustBeModified" value="self.association.ends->forAll(ae:data::classes::AssociationEnd |&#xD;&#xA;    ae.type.clazz.valueType implies not ae.contributesToEquality)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ObjectsMustConformToEndTypes BlockMustNotImplementSideEffectFreeSignature NoValueMustBeModified"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="at" ordered="false" unique="false"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="An optional position specification which will be ignored for associations with no ordered ends. If not set for an association with ordered ends, a reasonable default will be chosen."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="association" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/Association"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="objects" lowerBound="2"
+          upperBound="2" eType="ecore:EClass dataaccess.ecore#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExpressionStatement" eSuperTypes="#//actions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="ecore:EClass dataaccess.ecore#//expressions/Expression" containment="true"
+          eOpposite="dataaccess.ecore#//expressions/Expression/expressionStatement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sort"/>
+    <eClassifiers xsi:type="ecore:EClass" name="QueryInvocation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//actions/NamedValueWithOptionalInitExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A constant always has an initial value defined and cannot be changed after that initial assignment anymore.&#xD;&#xA;&#xD;&#xA;If a constant has no initExpression assigned, it's type needs to support a lower multiplicity of 0, and the value of the constant will be an empty multi-object."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="InitExpressionTypeMustMatchVariableType" value="self.initExpression->notEmpty() implies self.initExpression.getType().conformsTo(self.getType())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="InitExpressionTypeMustMatchVariableType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterate" eType="ecore:EClass dataaccess.ecore#//expressions/collectionexpressions/Iterate"
+          transient="true" eOpposite="dataaccess.ecore#//expressions/collectionexpressions/Iterate/accumulator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//actions/NamedValueWithOptionalInitExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="As opposed to a Constant, a Variable can be used in an Assignment.&#xD;&#xA;&#xD;&#xA;If a variable has no initExpression assigned, it's type needs to support a lower multiplicity of 0, and the value of the variable will be an empty multi-object."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="InitExpressionTypeMustMatchVariableType" value="self.initExpression->notEmpty() implies self.initExpression.getType().conformsTo(self.getType())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="InitExpressionTypeMustMatchVariableType"/>
+      </eAnnotations>
+      <eOperations name="getCommonTypeOfAssignments" ordered="false" unique="false"
+          lowerBound="1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
+          eType="#//actions/Assignment" eOpposite="#//actions/Assignment/assignTo"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Iterator" eSuperTypes="data.ecore#//classes/NamedValue">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A named value that can neither be assigned nor needs an initialization expression. It obtains its value by an iterator statement implicitly."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundToFor" eType="#//actions/Foreach"
+          transient="true" eOpposite="#//actions/Foreach/forVariable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterate" eType="ecore:EClass dataaccess.ecore#//expressions/collectionexpressions/Iterate"
+          transient="true" eOpposite="dataaccess.ecore#//expressions/collectionexpressions/Iterate/iterators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selection" eType="ecore:EClass dataaccess.ecore#//query/Selection"
+          transient="true" eOpposite="dataaccess.ecore#//query/Selection/iterator"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fromClause" eType="ecore:EClass dataaccess.ecore#//query/FromClause"
+          transient="true" eOpposite="dataaccess.ecore#//query/FromClause/alias"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="factOfGroupBy" eType="ecore:EClass dataaccess.ecore#//analytics/GroupBy"
+          transient="true" eOpposite="dataaccess.ecore#//analytics/GroupBy/fact"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dimension" eType="ecore:EClass dataaccess.ecore#//analytics/DimensionDefinition"
+          transient="true" eOpposite="dataaccess.ecore#//analytics/DimensionDefinition/iterator"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groupedFactsOfGroupBy"
+          eType="ecore:EClass dataaccess.ecore#//analytics/GroupBy" transient="true"
+          eOpposite="dataaccess.ecore#//analytics/GroupBy/groupedFacts"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedValueDeclaration" eSuperTypes="#//actions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namedValue" lowerBound="1"
+          eType="#//actions/NamedValueWithOptionalInitExpression" eOpposite="#//actions/NamedValueWithOptionalInitExpression/namedValueDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StatementWithNestedBlocks" eSuperTypes="#//actions/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nestedBlocks" lowerBound="1"
+          upperBound="2" eType="#//actions/Block" containment="true" eOpposite="#//actions/Block/owningStatement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SingleBlockStatement" eSuperTypes="#//actions/StatementWithNestedBlocks">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Constrains the number of blocks that this statement can own to 1."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="OwnsExactlyOneBlock" value="self.nestedBlocks->size() = 1"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="OwnsExactlyOneBlock"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StatementWithArgument" abstract="true"
+        eSuperTypes="#//actions/Statement dataaccess.ecore#//expressions/WithArgument"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedValueWithOptionalInitExpression"
+        abstract="true" eSuperTypes="data.ecore#//classes/NamedValue">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="AssignmentCompatibility" value="self.initExpression->forAll(ie | ie.getType().conformsTo(self.getType()))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="AssignmentCompatibility"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="ecore:EClass dataaccess.ecore#//expressions/Expression"
+          containment="true" eOpposite="dataaccess.ecore#//expressions/Expression/initExpressionFor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namedValueDeclaration"
+          eType="#//actions/NamedValueDeclaration" eOpposite="#//actions/NamedValueDeclaration/namedValue"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalStatement" abstract="true"
+        eSuperTypes="dataaccess.ecore#//expressions/Conditional #//actions/Statement"/>
+  </eSubpackages>
+  <eSubpackages name="rules" nsURI="http:///behavioral/rules.ecore" nsPrefix="behavioral.rules">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A declarative rules language that uses the structural concepts (see package structural) to form expressions and conditions. Conditions may, e.g., be used to define when an event listener wants to be notified about the occurrence of specific events.&#xD;&#xA;&#xD;&#xA;Consider FDT and other expression languages."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Dummy"/>
+  </eSubpackages>
+  <eSubpackages name="events" nsURI="http:///behavioral/events.ecore" nsPrefix="behavioral.events">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Talks about types of (business) events that may occur, may need to be communicated / signalled and which can be consumed by event listeners (which most likely should be an action with suitable signature). Rules (see rules package) may be used to filter for relevant events.&#xD;&#xA;&#xD;&#xA;From Holger's slides:&#xD;&#xA;&#xD;&#xA;Business Event:&#xD;&#xA;A meaningful change of the state of the enterprise (inside or outside)&#xD;&#xA;A key source of business events are business objects; there are other sources like unstructured documents, analytical sources, RSS feeds, embedded software etc.&#xD;&#xA;The term “business event” is often used interchangeably to refer to both the specification (type) of the event, and each individual occurrence (instance) of the event&#xD;&#xA;Characterized by its type, modeled in Enterprise Repository*:&#xD;&#xA;Name and/or significance&#xD;&#xA;The data that is provided with each occurrence (aka attributes or context)&#xD;&#xA;Modeled as data type&#xD;&#xA;Relationship to other event types (to be clarified)&#xD;&#xA;Like causality or aggregation&#xD;&#xA;Can carry additional pre-defined data at execution time&#xD;&#xA;Like unique occurance ID, timestamp, identification of event producer&#xD;&#xA;Must be interpretable outside the “local processing context” that produced it&#xD;&#xA;Logically self-contained in representing all the information pertinent to the situation causing the event&#xD;&#xA;May either directly contain relevant details or may enable consumers to access the relevant details (via links or subsequent service calls or other means)&#xD;&#xA;Even if it contains relevant details that doesn’t rule out the need for accessing additional data, business rules, etc. for the purposes of processing and acting upon the event&#xD;&#xA;&#xD;&#xA;"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Subscription" eSuperTypes="modelmanagement.ecore#//NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents an EventConsumer's interest in being notified about occurrences of events produced by one or more EventProducers. The subscription can specify rules that constrain which events the consumer is interested in. It is then the event infrastructure's task to optimize the event forwarding to the consumers appropriately."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="SubscribingClassMatchProducer" value="self.producer.notificationSignatures->forAll(ms:data::classes::MethodSignature |&#xD;&#xA;    self.subscribingClass.allSignatures()->exists(s:data::classes::MethodSignature|s.conformsTo(ms)))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="SubscribingClassMatchProducer"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="producer" lowerBound="1"
+          eType="#//events/EventProducer" eOpposite="#//events/EventProducer/subscriptions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+          eType="#//events/EventFilter" containment="true" eOpposite="#//events/EventFilter/subscription"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subscribingClass" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass" transient="true" eOpposite="data.ecore#//classes/SapClass/subscription"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EventProducer" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subscriptions" upperBound="-1"
+          eType="#//events/Subscription" eOpposite="#//events/Subscription/producer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="notificationSignatures"
+          upperBound="-1" eType="ecore:EClass data.ecore#//classes/MethodSignature"
+          containment="true" eOpposite="data.ecore#//classes/MethodSignature/producer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EventFilter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="From Holger's slides:&#xD;&#xA;&#xD;&#xA;Event Patterns:&#xD;&#xA;An event pattern is a decision rule that describes how to match a certain set of events&#xD;&#xA;Each match is a (partially ordered) set of events that is an instance of the event pattern constructed by replacing variables in the pattern with values&#xD;&#xA;It is similar to mathematical language for logical expressions&#xD;&#xA;The main features of an event pattern language are (in order of complexity):&#xD;&#xA;Basic event patterns to express patterns that match single event types&#xD;&#xA;Content-based event matching in terms of the event type’s attributes&#xD;&#xA;Pattern operators for expressing relationships between events&#xD;&#xA;Like logical operators, set operators, structural operators (causes, is independent of, before)&#xD;&#xA;Context that restricts matches of patterns to specific contexts in which events are observed&#xD;&#xA;Context refers to information outside the events&#xD;&#xA;Temporal operators to specify the timing of events that match a pattern, or when a pattern should or should not match&#xD;&#xA;Like “at”, “after”, “during”&#xD;&#xA;"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="FilterBlockSignatureMatchNotificationSignature" value="self.subscription.producer.notificationSignatures->exists(ms:data::classes::MethodSignature |&#xD;&#xA;    ms.conformsTo(self.test.getImplementedSignature()))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="FilterBlockSignatureMatchNotificationSignature"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subscription" lowerBound="1"
+          eType="#//events/Subscription" transient="true" eOpposite="#//events/Subscription/filters"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="test" lowerBound="1"
+          eType="#//actions/Block" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="filter"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="transactions" nsURI="http:///behavioral/transactions.ecore"
+      nsPrefix="behavioral.transactions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Allows modelers / developers to specify transactional boundaries, tentative updates, compensation strategies etc.&#xD;&#xA;&#xD;&#xA;Also, mark in the models how pieces of data-modifying functionality can share transactional scopes with other pieces. Make the distinction between shared transactions and compensation explicit."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Dummy"/>
+  </eSubpackages>
+  <eSubpackages name="status_and_action_old" nsURI="http:///behavioral/status_and_action_old.ecore"
+      nsPrefix="behavioral.status_and_action_old">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Status and Action Modeling. Must be closely related to the businessobjects package and the behavioral/actions package. Decide whether this should be under behavioral or structural."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAgentAction" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessObjectNode" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass" transient="true" eOpposite="data.ecore#//classes/SapClass/samActions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaActions" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaAction" eOpposite="#//status_and_action_old/SAMSchemaAction/samAction"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMStatusVariable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAgentVariable" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessObjectNode" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass" transient="true" eOpposite="data.ecore#//classes/SapClass/samStatusVariables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusValues" upperBound="-1"
+          eType="#//status_and_action_old/SAMStatusValue" containment="true" eOpposite="#//status_and_action_old/SAMStatusValue/samStatusVariable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaVariables" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaVariable" eOpposite="#//status_and_action_old/SAMSchemaVariable/samSchemaValue"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMDerivator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" ordered="false"
+          unique="false" lowerBound="1" eType="#//status_and_action_old/SAMDerivatorKindEnum"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessObject" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass" transient="true" eOpposite="data.ecore#//classes/SapClass/samDerivators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaDerivators"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaDerivator" eOpposite="#//status_and_action_old/SAMSchemaDerivator/samDerivator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMStatusValue">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusVariable" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusVariable" transient="true" eOpposite="#//status_and_action_old/SAMStatusVariable/samStatusValues"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMStatusSchema">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessObjectNode" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass" transient="true" eOpposite="data.ecore#//classes/SapClass/samStatusSchema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samOperators" upperBound="-1"
+          eType="#//status_and_action_old/SAMOperator" containment="true" eOpposite="#//status_and_action_old/SAMOperator/samStatusSchema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaVariables" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaVariable" containment="true" eOpposite="#//status_and_action_old/SAMSchemaVariable/samStatusSchema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaActions" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaAction" containment="true" eOpposite="#//status_and_action_old/SAMSchemaAction/samStatusSchema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaDerivators"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaDerivator" containment="true"
+          eOpposite="#//status_and_action_old/SAMSchemaDerivator/samStatusSchema"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMOperator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" ordered="false"
+          unique="false" lowerBound="1" eType="#//status_and_action_old/SAMOperatorKindEnum"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusSchema" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusSchema" transient="true" eOpposite="#//status_and_action_old/SAMStatusSchema/samOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaValues" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaValue" eOpposite="#//status_and_action_old/SAMSchemaValue/samOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSourceOperators" upperBound="-1"
+          eType="#//status_and_action_old/SAMOperator" eOpposite="#//status_and_action_old/SAMOperator/samTargetOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samTargetOperators" upperBound="-1"
+          eType="#//status_and_action_old/SAMOperator" eOpposite="#//status_and_action_old/SAMOperator/samSourceOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaActions" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaAction" eOpposite="#//status_and_action_old/SAMSchemaAction/samSchemaOperators"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMSchemaVariable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasStateGuard" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusSchema" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusSchema" transient="true" eOpposite="#//status_and_action_old/SAMStatusSchema/samSchemaVariables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaValues" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaValue" containment="true" eOpposite="#//status_and_action_old/SAMSchemaValue/samSchemaVariable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaValue" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusVariable" eOpposite="#//status_and_action_old/SAMStatusVariable/samSchemaVariables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samTargetSchemaDerivators"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaDerivator" eOpposite="#//status_and_action_old/SAMSchemaDerivator/samSourceSchemaVariables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSourceSchemaDerivators"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaDerivator" eOpposite="#//status_and_action_old/SAMSchemaDerivator/samTargetSchemaVariable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMSchemaValue">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInhibiting" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaVariable" lowerBound="1"
+          eType="#//status_and_action_old/SAMSchemaVariable" transient="true" eOpposite="#//status_and_action_old/SAMSchemaVariable/samSchemaValues"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSourceSchemaActions"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaAction" eOpposite="#//status_and_action_old/SAMSchemaAction/samTargetSchemaValues"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSourceSchemaValues"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaValue" eOpposite="#//status_and_action_old/SAMSchemaValue/samTargetSchemaValues"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samTargetSchemaValues"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaValue" eOpposite="#//status_and_action_old/SAMSchemaValue/samSourceSchemaValues"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samOperators" upperBound="-1"
+          eType="#//status_and_action_old/SAMOperator" eOpposite="#//status_and_action_old/SAMOperator/samSchemaValues"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaActions" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaAction" eOpposite="#//status_and_action_old/SAMSchemaAction/samSchemaValues"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMSchemaAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusSchema" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusSchema" transient="true" eOpposite="#//status_and_action_old/SAMStatusSchema/samSchemaActions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samAction" lowerBound="1"
+          eType="#//status_and_action_old/SAMAction" eOpposite="#//status_and_action_old/SAMAction/samSchemaActions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samTargetSchemaValues"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaValue" eOpposite="#//status_and_action_old/SAMSchemaValue/samSourceSchemaActions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaValues" upperBound="-1"
+          eType="#//status_and_action_old/SAMSchemaValue" eOpposite="#//status_and_action_old/SAMSchemaValue/samSchemaActions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSchemaOperators" upperBound="-1"
+          eType="#//status_and_action_old/SAMOperator" eOpposite="#//status_and_action_old/SAMOperator/samSchemaActions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="SAMOperatorKindEnum">
+      <eLiterals name="OR"/>
+      <eLiterals name="AND" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SAMSchemaDerivator">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samDerivator" lowerBound="1"
+          eType="#//status_and_action_old/SAMDerivator" eOpposite="#//status_and_action_old/SAMDerivator/samSchemaDerivators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samStatusSchema" lowerBound="1"
+          eType="#//status_and_action_old/SAMStatusSchema" transient="true" eOpposite="#//status_and_action_old/SAMStatusSchema/samSchemaDerivators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samSourceSchemaVariables"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaVariable" eOpposite="#//status_and_action_old/SAMSchemaVariable/samTargetSchemaDerivators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="samTargetSchemaVariable"
+          upperBound="-1" eType="#//status_and_action_old/SAMSchemaVariable" eOpposite="#//status_and_action_old/SAMSchemaVariable/samSourceSchemaDerivators"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="SAMDerivatorKindEnum">
+      <eLiterals name="POPULATION"/>
+      <eLiterals name="AGGREGATION" value="1"/>
+      <eLiterals name="OVERALL" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PreconditionKindEnum">
+      <eLiterals name="ENABLE"/>
+      <eLiterals name="REQUIRED" value="1"/>
+      <eLiterals name="INHIBIT" value="2"/>
+      <eLiterals name="NEUTEAL" value="3"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="status_and_action" nsURI="http:///behavioral/status_and_action.ecore"
+      nsPrefix="behavioral.status_and_action">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="S&amp;AM is mostly about pre- and post-conditions for invocation of signatures. The abstraction that S&amp;AM adds over simple pre/post constraints is that it groups parts of an object's state into what is called a status variable. Status variables furthermore are expected to have a finite set of possible values.&#xD;&#xA;&#xD;&#xA;Synchronizers are used to set the status of a status variable. This means that for those status variables (if they are implemented only by a signature) there must be a writing signature that allows for setting the value. Conceptually, synchronizers seem a bit like an event subscription with the condition that a status variable assumes a certain value, and the event listener sets the value of another status variable to a given value.&#xD;&#xA;&#xD;&#xA;Status population also does a setting of status variables. Viewn from the other side, this looks like a status variable is derived from the values of other status variables. Again, this could be expressed as a signature with a corresponding implementation that acts as a status variable signature. Impact analysis could be performed for the implementation to determine when the value changes.&#xD;&#xA;&#xD;&#xA;Given a full-blown boolean expression algebra, only a subset of the expressions can be modeled in S&amp;AM. Also, if the type of a status variable has an infinite (or very large) value set, modeling with the S&amp;AM notation gets unwieldy.&#xD;&#xA;&#xD;&#xA;From a distance, it seems that S&amp;AM is a graphical notation for a specific subset of pre/post constraints over &quot;status functions&quot; and invocable signatures.&#xD;&#xA;&#xD;&#xA;S&amp;AM could be regarded a view on other constraint and event registration metadata, but that would be difficult to bring, e.g., into a graphical notation."/>
+    </eAnnotations>
+    <eSubpackages name="design" nsURI="http:///behavioral/status_and_action/design.ecore"
+        nsPrefix="behavioral.status_and_action.design">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      </eAnnotations>
+      <eClassifiers xsi:type="ecore:EClass" name="BusinessObject">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+            eType="#//status_and_action/design/BusinessObjectNode" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="businessObject"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BusinessObjectNode" eSuperTypes="modelmanagement.ecore#//NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+            eType="#//status_and_action/design/StatusVariable" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="node"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+            eType="#//status_and_action/design/Action" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="node"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="StatusVariable" eSuperTypes="#//status_and_action/design/AbstractStatusVariable"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StatusValue" eSuperTypes="#//status_and_action/design/AbstractStatusValue"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//status_and_action/design/AbstractAction"/>
+      <eClassifiers xsi:type="ecore:EClass" name="AbstractStatusVariable" abstract="true"
+          eSuperTypes="modelmanagement.ecore#//NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAgent" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStateGuarded" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+            eType="#//status_and_action/design/AbstractStatusValue" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="variable"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AbstractStatusValue" abstract="true"
+          eSuperTypes="modelmanagement.ecore#//NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInhibiting" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStateGuarded" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AbstractAction" abstract="true"
+          eSuperTypes="modelmanagement.ecore#//NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAgent" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPreconditionFixed"
+            ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="assembly" nsURI="http:///behavioral/status_and_action/assembly.ecore"
+        nsPrefix="behavioral.status_and_action.assembly">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      </eAnnotations>
+      <eClassifiers xsi:type="ecore:EClass" name="StatusSchema" eSuperTypes="modelmanagement.ecore#//NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="ecore:EClass data.ecore#//classes/SapClass"
+            eOpposite="data.ecore#//classes/SapClass/behaviouralModel"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+            eType="#//status_and_action/assembly/SchemaElement" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="schema"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Connector" abstract="true" eSuperTypes="#//status_and_action/assembly/SchemaElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+            eType="#//status_and_action/assembly/ConnectableElement">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="outgoing"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+            eType="#//status_and_action/assembly/ConnectableElement">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="incoming"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Operator" eSuperTypes="#//status_and_action/assembly/ConnectableElement"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConnectableElement" abstract="true"
+          eSuperTypes="#//status_and_action/assembly/SchemaElement"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ActionProxy" eSuperTypes="#//status_and_action/design/AbstractAction #//status_and_action/design/Action #//status_and_action/assembly/ConnectableElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="ecore:EClass data.ecore#//classes/Signature">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="proxy"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="StatusValueProxy" eSuperTypes="#//status_and_action/design/AbstractStatusValue #//status_and_action/design/StatusValue #//status_and_action/assembly/ConnectableElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//status_and_action/design/StatusValue">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="proxy"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//status_and_action/assembly/Connector"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Synchroniser" eSuperTypes="#//status_and_action/assembly/Connector"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Precondition" eSuperTypes="#//status_and_action/assembly/Connector">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="strategy" lowerBound="1"
+            eType="#//status_and_action/assembly/Strategy">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="owner"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="StatusVariableProxy" eSuperTypes="#//status_and_action/design/AbstractStatusVariable #//status_and_action/design/StatusVariable #//status_and_action/assembly/ConnectableElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//status_and_action/design/StatusVariable">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="proxy"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AndOperator" eSuperTypes="#//status_and_action/assembly/Operator"/>
+      <eClassifiers xsi:type="ecore:EClass" name="OrOperator" eSuperTypes="#//status_and_action/assembly/Operator"/>
+      <eClassifiers xsi:type="ecore:EClass" name="RequiredStrategy" eSuperTypes="#//status_and_action/assembly/Strategy"/>
+      <eClassifiers xsi:type="ecore:EClass" name="NeutralStrategy" eSuperTypes="#//status_and_action/assembly/Strategy"/>
+      <eClassifiers xsi:type="ecore:EClass" name="EnablingStrategy" eSuperTypes="#//status_and_action/assembly/Strategy"/>
+      <eClassifiers xsi:type="ecore:EClass" name="InhibitingStrategy" eSuperTypes="#//status_and_action/assembly/Strategy"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Strategy" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SchemaElement" abstract="true" eSuperTypes="modelmanagement.ecore#//NamedElement"/>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

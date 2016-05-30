@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © 4 janv. 2010 RealTime-at-Work.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+ 
+  Contributors:
+    Loïc Fejoz - initial API and implementation and/or initial documentation
+-->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="quizz"
+    nsURI="http://schema.rtaw.fr/quizz" nsPrefix="quizz">
+  <eClassifiers xsi:type="ecore:EClass" name="Question">
+    <eOperations name="isTrueFalse" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textFormat" lowerBound="1"
+        eType="#//TextFormat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="answer" upperBound="-1"
+        eType="#//Answer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="category" eType="#//Category"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Answer">
+    <eOperations name="isTrueFalse" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feedback" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="correct" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TextFormat">
+    <eLiterals name="plain"/>
+    <eLiterals name="html" value="1"/>
+    <eLiterals name="markdown" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subCategory" upperBound="-1"
+        eType="#//Category" containment="true" eOpposite="#//Category/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//Category"
+        eOpposite="#//Category/subCategory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Quizz">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="question" upperBound="-1"
+        eType="#//Question" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

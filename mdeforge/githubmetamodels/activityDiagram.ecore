@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="activityDiagram"
+    nsURI="http://activityDiagram/0.1" nsPrefix="activityDiagram">
+  <eClassifiers xsi:type="ecore:EClass" name="activityDiagramContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activities" eType="#//Activity"
+        containment="true" eOpposite="#//Activity/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//activityDiagramContainer"
+        eOpposite="#//activityDiagramContainer/activities"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" eType="#//Element"
+        containment="true" eOpposite="#//ControlFlow/activity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activity" eType="#//Activity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlFlow" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activity" eType="#//Activity"
+        eOpposite="#//Activity/elements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoings" upperBound="-1"
+        eType="#//ControlFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MergeNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomings" upperBound="-1"
+        eType="#//ControlFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DecisionNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoings" upperBound="-1"
+        eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" eType="#//ControlFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomings" upperBound="-1"
+        eType="#//ControlFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" eType="#//ControlFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" eType="#//ControlFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EndNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" eType="#//ControlFlow"/>
+  </eClassifiers>
+</ecore:EPackage>

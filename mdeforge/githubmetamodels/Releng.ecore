@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="releng"
+    nsURI="http://releng/1.0" nsPrefix="releng">
+  <eClassifiers xsi:type="ecore:EClass" name="Server">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildJobs" upperBound="-1"
+        eType="#//BuildJob" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
+        eType="#//Repository" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildJob">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceBranch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buckminsterComponent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="types" lowerBound="1" upperBound="-1"
+        eType="#//BuildType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" lowerBound="1"
+        eType="#//Repository" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="promotions" upperBound="-1"
+        eType="#//Promotion" containment="true" eOpposite="#//Promotion/build"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BuildType">
+    <eLiterals name="N"/>
+    <eLiterals name="I" value="1"/>
+    <eLiterals name="S" value="2"/>
+    <eLiterals name="R" value="3"/>
+    <eLiterals name="M" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Promotion">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="build" eType="#//BuildJob"
+        eOpposite="#//BuildJob/promotions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buildType" eType="#//BuildType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Repository"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="criteria" upperBound="-1"
+        eType="#//Criterion" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Criterion">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Repository">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeRepository" eSuperTypes="#//Repository">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" lowerBound="1"
+        upperBound="-1" eType="#//Repository"/>
+  </eClassifiers>
+</ecore:EPackage>

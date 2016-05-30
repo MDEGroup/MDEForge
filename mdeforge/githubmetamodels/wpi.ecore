@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wpi"
+    nsURI="http://ca.uwaterloo.gsd/wpi" nsPrefix="wpi">
+  <eClassifiers xsi:type="ecore:EClass" name="WorkbenchPartInteractions" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Model">
+    <eAnnotations source="project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="projectName"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//Part" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectionProviders" upperBound="-1"
+        eType="#//SelectionProvider" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectionListeners" upperBound="-1"
+        eType="#//SelectionListener" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partListeners" upperBound="-1"
+        eType="#//PartListener" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterProviders" upperBound="-1"
+        eType="#//AdapterProvider" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterRequestors" upperBound="-1"
+        eType="#//AdapterRequestor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Part" abstract="true" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="className"/>
+      <eAnnotations source="key"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="package" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="qualifier"/>
+      <eAnnotations source="key"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="isLocal"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewPart" eSuperTypes="#//Part">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="viewPartId"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implementsIViewPart" lowerBound="1"
+        eType="#//ImplementsIViewPart" containment="true">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="implementsInterface">
+        <details key="name" value="org.eclipse.ui.IViewPart"/>
+        <details key="concrete" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="subsumedBy">
+        <details key="feature" value="extendsViewPart/"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImplementsIViewPart" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendsViewPart" eType="#//ExtendsViewPart"
+        containment="true">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.ViewPart"/>
+      </eAnnotations>
+      <eAnnotations source="subsumedBy">
+        <details key="feature" value="extendsPageBookView"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtendsViewPart">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extendsPageBookView" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.PageBookView"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditorPart" eSuperTypes="#//Part">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="editorPartId"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributor" eType="#//Contributor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implementsIEditorPart"
+        lowerBound="1" eType="#//ImplementsIEditorPart" containment="true">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="implementsInterface">
+        <details key="name" value="org.eclipse.ui.IEditorPart"/>
+        <details key="concrete" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="subsumedBy">
+        <details key="feature" value="extendsEditorPart/"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Contributor" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contributor" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="editorContributor"/>
+      <eAnnotations source="key"/>
+      <eAnnotations source="fullyQualifiedName"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendsEditorActionBarContributor"
+        lowerBound="1" eType="#//ExtendsEditorActionBarContributor" containment="true">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.EditorActionBarContributor"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtendsEditorActionBarContributor" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extendsMultiPageEditorActionBarContributor"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.MultiPageEditorActionBarContributor"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImplementsIEditorPart" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendsEditorPart" eType="#//ExtendsEditorPart"
+        containment="true">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.EditorPart"/>
+      </eAnnotations>
+      <eAnnotations source="subsumedBy">
+        <details key="feature" value="extendsMultiPageEditorPart"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtendsEditorPart" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extendsMultiPageEditorPart"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false">
+      <eAnnotations source="extendsClass">
+        <details key="name" value="org.eclipse.ui.part.MultiPageEditorPart"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectionProvider" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="key"/>
+      <eAnnotations source="baseConcept"/>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registers" lowerBound="1"
+        upperBound="-1" eType="#//RegistersAsSelectionProvider" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.IWorkbenchSite"/>
+        <details key="name" value="setSelectionProvider"/>
+        <details key="signature" value="(Lorg.eclipse.jface.viewers.ISelectionProvider;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistersAsSelectionProvider" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="indexKey"/>
+    <eAnnotations source="featureGroup">
+      <details key="lowerBound" value="1"/>
+      <details key="upperBound" value="1"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registersThis" eType="#//ThisSelectionProvider"
+        containment="true">
+      <eAnnotations source="argumentIsThis">
+        <details key="index" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registersHelper" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="argumentIsNew">
+        <details key="index" value="1"/>
+        <details key="class" value="org.eclipse.jface.viewers.ISelectionProvider"/>
+        <details key="signature" value="()V"/>
+      </eAnnotations>
+      <eAnnotations source="key"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registersVariable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="argumentIsVariable">
+        <details key="index" value="1"/>
+        <details key="class" value="org.eclipse.jface.viewers.ISelectionProvider"/>
+        <details key="signature" value="()V"/>
+      </eAnnotations>
+      <eAnnotations source="key"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registersField" eType="#//FieldSelectionProvider"
+        containment="true">
+      <eAnnotations source="argumentIsField">
+        <details key="index" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThisSelectionProvider" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementsISelectionProvider"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="implementsInterface">
+        <details key="name" value="org.eclipse.jface.viewers.ISelectionProvider"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldSelectionProvider" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="field"/>
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="key"/>
+      <eAnnotations source="fieldName"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typedISelectionProvider"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="typedWith">
+        <details key="name" value="org.eclipse.jface.viewers.ISelectionProvider"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialized" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
+      <eAnnotations source="assignedWithNew">
+        <details key="class" value="org.eclipse.jface.viewers.ISelectionProvider"/>
+        <details key="signature" value="()V"/>
+        <details key="initializer" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectionListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="listener" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="key"/>
+      <eAnnotations source="baseConcept"/>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registersAs" lowerBound="1"
+        eType="#//RegistersAs" containment="true">
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistersAs" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="featureGroup">
+      <details key="lowerBound" value="1"/>
+      <details key="upperBound" value="3"/>
+      <details key="essential" value="true"/>
+    </eAnnotations>
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalSelectionListener"
+        upperBound="-1" eType="#//GlobalSelectionListener" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="addSelectionListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalPostSelectionListener"
+        upperBound="-1" eType="#//GlobalPostSelectionListener" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="addPostSelectionListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specificSelectionListener"
+        upperBound="-1" eType="#//SpecificSelectionListener" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="addSelectionListener"/>
+        <details key="signature" value="(Ljava.lang.String;Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalSelectionListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregisters" lowerBound="1"
+        upperBound="-1" eType="#//Deregisters" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="removeSelectionListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="dispose"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalPostSelectionListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregisters" lowerBound="1"
+        upperBound="-1" eType="#//Deregisters" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="removePostSelectionListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="dispose"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpecificSelectionListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registrationPartId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="key"/>
+      <eAnnotations source="essential"/>
+      <eAnnotations source="argumentValue">
+        <details key="index" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="where">
+        <details key="attribute" value="partId"/>
+        <details key="equalsTo" value="../registrationPartId"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerName" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        volatile="true" transient="true" unsettable="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregisters" lowerBound="1"
+        upperBound="-1" eType="#//DeregistersSamePartId" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.ISelectionService"/>
+        <details key="name" value="removeSelectionListener"/>
+        <details key="signature" value="(Ljava.lang.String;Lorg.eclipse.ui.ISelectionListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="dispose"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeregistersSamePartId" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deregistrationPartId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="key"/>
+      <eAnnotations source="essential"/>
+      <eAnnotations source="argumentValue">
+        <details key="index" value="1"/>
+      </eAnnotations>
+      <eAnnotations source="valueEqualsTo">
+        <details key="attribute" value="../../registrationPartId"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregistersSameObject"
+        lowerBound="1" eType="#//DeregistersSameObject" containment="true">
+      <eAnnotations source="argument">
+        <details key="argument" value="2"/>
+        <details key="ofMethodCall" value="../../"/>
+        <details key="sameAsArg" value="2"/>
+        <details key="ofCall" value="../"/>
+      </eAnnotations>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PartListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="listener" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="key"/>
+      <eAnnotations source="baseConcept"/>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registersAPartListener"
+        lowerBound="1" eType="#//RegistersAPartListener" containment="true">
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistersAPartListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="featureGroup">
+      <details key="lowerBound" value="1"/>
+      <details key="upperBound" value="2"/>
+      <details key="essential" value="true"/>
+    </eAnnotations>
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registers" upperBound="-1"
+        eType="#//RegistersAsPartListener" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.IPartService"/>
+        <details key="name" value="addPartListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.IPartListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registers2" upperBound="-1"
+        eType="#//RegistersAsPartListener2" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.IPartService"/>
+        <details key="name" value="addPartListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.IPartListener2;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="createPartControl"/>
+        <details key="locationSig" value="(Lorg.eclipse.swt.widgets.Composite;)V"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistersAsPartListener" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregisters" lowerBound="1"
+        upperBound="-1" eType="#//Deregisters" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.IPartService"/>
+        <details key="name" value="removePartListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.IPartListener;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="dispose"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistersAsPartListener2" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregisters" lowerBound="1"
+        upperBound="-1" eType="#//Deregisters" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.ui.IPartService"/>
+        <details key="name" value="removePartListener"/>
+        <details key="signature" value="(Lorg.eclipse.ui.IPartListener2;)V;"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="dispose"/>
+        <details key="receiverExpr" value="getSite().getPage()"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Deregisters" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deregistersSameObject"
+        lowerBound="1" eType="#//DeregistersSameObject" containment="true">
+      <eAnnotations source="argument">
+        <details key="argument" value="1"/>
+        <details key="ofMethodCall" value="../../"/>
+        <details key="sameAsArg" value="1"/>
+        <details key="ofCall" value="../"/>
+      </eAnnotations>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeregistersSameObject" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registersBeforeDeregisters"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="methodCall">
+        <details key="call" value="../../../"/>
+        <details key="before" value="../../"/>
+        <details key="givenCallbackSeq" value="init createPartControl dispose"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterProvider" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterProvider" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="key"/>
+      <eAnnotations source="essential"/>
+      <eAnnotations source="baseConcept"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providesAdapter" lowerBound="1"
+        eType="#//ProvidesAdapter" containment="true">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="methods">
+        <details key="name" value="getAdapter"/>
+        <details key="signature" value="(Ljava.lang.Class;)Ljava.lang.Object;"/>
+        <details key="inherited" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProvidesAdapter" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="method"/>
+    <eAnnotations source="parentKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapters" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="true">
+      <eAnnotations source="essential"/>
+      <eAnnotations source="typesOfReturnedObjects" references="#//RequestsAdapter/adapter">
+        <details key="anonymous" value="true"/>
+        <details key="ifkey" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdapterRequestor" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterRequestor" lowerBound="1"
+        eType="#//Part">
+      <eAnnotations source="baseConcept"/>
+      <eAnnotations source="key"/>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requestsAdapter" lowerBound="1"
+        upperBound="-1" eType="#//RequestsAdapter" containment="true">
+      <eAnnotations source="methodCalls">
+        <details key="class" value="org.eclipse.core.runtime.IAdaptable"/>
+        <details key="name" value="getAdapter"/>
+        <details key="signature" value="(Ljava.lang.Class;)Ljava.lang.Object;"/>
+        <details key="receiver" value="org.eclipse.ui.IWorkbenchPart"/>
+        <details key="in" value="hierarchy"/>
+        <details key="locationName" value="requestAdapters"/>
+        <details key="locationSig" value="(Lorg.eclipse.ui.IWorkbenchPart;)V"/>
+        <details key="receiverExpr" value="iWorkbenchPart"/>
+        <details key="position" value="after"/>
+      </eAnnotations>
+      <eAnnotations source="essential"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequestsAdapter" eSuperTypes="platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Concept">
+    <eAnnotations source="methodCall"/>
+    <eAnnotations source="parentKey"/>
+    <eAnnotations source="indexKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adapter" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="key"/>
+      <eAnnotations source="argumentValue">
+        <details key="index" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterProvider" upperBound="-1"
+        eType="#//AdapterProvider">
+      <eAnnotations source="where">
+        <details key="attribute" value="providesAdapter/adapters"/>
+        <details key="contains" value="../adapter"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

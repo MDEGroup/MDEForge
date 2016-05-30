@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="defs"
+    nsURI="http://www.eclipse.org/NET4J/util/defs/1.0.0" nsPrefix="net4j.util.defs">
+  <eClassifiers xsi:type="ecore:EClass" name="DefContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definitions" lowerBound="1"
+        upperBound="-1" eType="#//Def" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultDefinition" eType="#//Def"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Def" abstract="true">
+    <eOperations name="getInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eOperations name="unsetInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutorServiceDef" abstract="true"
+      eSuperTypes="#//Def"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ThreadPoolDef" eSuperTypes="#//ExecutorServiceDef"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RandomizerDef" eSuperTypes="#//Def">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithmName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"
+        unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserManagerDef" eSuperTypes="#//Def">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="user" lowerBound="1" upperBound="-1"
+        eType="#//User" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PasswordCredentialsProviderDef" eSuperTypes="#//CredentialsProviderDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CredentialsProviderDef" abstract="true"
+      eSuperTypes="#//Def">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NegotiatorDef" abstract="true" eSuperTypes="#//Def"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponseNegotiatorDef" eSuperTypes="#//NegotiatorDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="credentialsProvider" eType="#//CredentialsProviderDef"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChallengeNegotiatorDef" eSuperTypes="#//NegotiatorDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userManager" eType="#//UserManagerDef"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="randomizer" eType="#//RandomizerDef"/>
+  </eClassifiers>
+</ecore:EPackage>

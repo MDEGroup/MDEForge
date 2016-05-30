@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ui" nsURI="http://www.soluvas.org/schema/ui/1.0" nsPrefix="ui">
+  <eClassifiers xsi:type="ecore:EClass" name="BlockDef" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//BlockDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//PlanDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Abstract means the layout has no presenters. The layout is meant to be extended, not presented."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//Part" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RendererDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" lowerBound="1" eType="#//BlockDef"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="platform" lowerBound="1"
+        eType="#//Platform"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//BlockDef"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LayoutDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1"
+        eType="#//Region" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//LayoutDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Theme"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PresenterDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//PresenterDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layout" lowerBound="1"
+        eType="#//PlanDef"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="platform" lowerBound="1"
+        eType="#//Platform"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivityDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//ActivityDef"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" lowerBound="1" eType="#//BlockDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UiCatalog">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layouts" upperBound="-1"
+        eType="#//LayoutDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="presenters" upperBound="-1"
+        eType="#//PresenterDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renderers" upperBound="-1"
+        eType="#//RendererDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="platforms" upperBound="-1"
+        eType="#//Platform" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plans" upperBound="-1"
+        eType="#//PlanDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//BlockDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activities" upperBound="-1"
+        eType="#//ActivityDef" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Platform">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Part">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanBlock" eSuperTypes="#//BlockDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plan" lowerBound="1" eType="#//PlanDef"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LayoutBlock" eSuperTypes="#//BlockDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layout" lowerBound="1"
+        eType="#//LayoutDef"/>
+  </eClassifiers>
+</ecore:EPackage>

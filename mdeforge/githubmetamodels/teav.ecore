@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="teav"
+    nsURI="teav" nsPrefix="teav">
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code_name" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type_class" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value_class" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeValue" abstract="true">
+    <eOperations name="getValue">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="abstract"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type">
+    <eOperations name="getManager" lowerBound="1" eType="#//TypeManager"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AttributesDefinitions"
+        upperBound="-1" eType="#//AttributeDefinition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Instances" upperBound="-1"
+        eType="#//Entity" containment="true" eOpposite="#//Entity/Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code_name" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+    <eOperations name="getValue">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return $this->get('ValueObject')->getValue();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return $this->get('DefinitionObject')->getType();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTypeObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return $this->get('DefinitionObject')->get('TypeObject');"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getManager" lowerBound="1" eType="#//AttributeManager"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DefinitionObject" lowerBound="1"
+        eType="#//AttributeDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ValueObject" lowerBound="1"
+        eType="#//AttributeValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity">
+    <eOperations name="getAttributes"/>
+    <eOperations name="getManager" lowerBound="1" eType="#//EntityManager"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Type" lowerBound="1" eType="#//Type"
+        eOpposite="#//Type/Instances"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manager"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataAttributeType" eSuperTypes="#//AttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DataAttributeValue" eSuperTypes="#//AttributeValue">
+    <eOperations name="getValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringDataAttributeType" eSuperTypes="#//DataAttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringDataAttributeValue" eSuperTypes="#//DataAttributeValue">
+    <eOperations name="getValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerDataAttributeType" eSuperTypes="#//DataAttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerDataAttributeValue" eSuperTypes="#//DataAttributeValue">
+    <eOperations name="getValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationAttributeType" eSuperTypes="#//AttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationAttributeValue" eSuperTypes="#//AttributeValue">
+    <eOperations name="getValue"/>
+    <eOperations name="getRelatedType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeObject" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComposition" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToOneRelationAttributeType" eSuperTypes="#//RelationAttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToOneRelationAttributeValue" eSuperTypes="#//RelationAttributeValue">
+    <eOperations name="getRelatedObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relatedObject" eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToManyRelationAttributeValue" eSuperTypes="#//RelationAttributeValue">
+    <eOperations name="getRelatedObjects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToManyRelationAttributeType" eSuperTypes="#//RelationAttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinition">
+    <eOperations name="getType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return $this->get('TypeObject')->get('code_name');"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TypeObject" lowerBound="1"
+        eType="#//AttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code_name" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeManager">
+    <eOperations name="fetchForEntityOrCreate" eType="#//Attribute">
+      <eParameters name="$entity" eType="#//Entity"/>
+      <eParameters name="$attributeDefinition" eType="#//AttributeDefinition"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityManager">
+    <eOperations name="load" eType="#//Entity">
+      <eParameters name="$type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="$id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeManager">
+    <eOperations name="load" eType="#//Type">
+      <eParameters name="$name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="create" lowerBound="1" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManyToManyRelationAttributeType" eSuperTypes="#//RelationAttributeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationAttributeValue" eSuperTypes="#//AttributeValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToOneRelationAttributeValue" eSuperTypes="#//RelationAttributeValue.1"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OneToManyRelationAttributeValue" eSuperTypes="#//RelationAttributeValue.1"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManyToManyRelationAttributeValue" eSuperTypes="#//RelationAttributeValue.1"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatDataAttributeValue" eSuperTypes="#//DataAttributeValue">
+    <eOperations name="getValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatDataAttributeType" eSuperTypes="#//DataAttributeType"/>
+</ecore:EPackage>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="bootstrap"
+    nsURI="http://www.obeonetwork.org/2012/bootstrap" nsPrefix="bootstrap">
+  <eClassifiers xsi:type="ecore:EClass" name="Site">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" upperBound="-1"
+        eType="#//Page" containment="true" eOpposite="#//Page/site"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainPage" lowerBound="1"
+        eType="#//MainPage" containment="true" eOpposite="#//MainPage/site"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" lowerBound="1"
+        upperBound="-1" eType="#//Section" containment="true" eOpposite="#//Section/page"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="site" lowerBound="1" eType="#//Site"
+        eOpposite="#//Site/pages"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MainPage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="site" lowerBound="1" eType="#//Site"
+        eOpposite="#//Site/mainPage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="widgets" lowerBound="1"
+        upperBound="-1" eType="#//Widget" containment="true" eOpposite="#//Widget/section"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="page" lowerBound="1" eType="#//Page"
+        eOpposite="#//Page/sections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Widget" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="section" lowerBound="1"
+        eType="#//Section" eOpposite="#//Section/widgets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Form" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formWidgets" lowerBound="1"
+        upperBound="-1" eType="#//FormWidget" containment="true" eOpposite="#//FormWidget/form"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNames" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="striped" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bordered" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Video" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gallery" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imagesPath" unique="false"
+        lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImagesBlock" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imagesPath" unique="false"
+        lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormWidget" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="#//Form"
+        eOpposite="#//Form/formWidgets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextArea" eSuperTypes="#//FormWidget"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Spinner" eSuperTypes="#//FormWidget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckBox" eSuperTypes="#//FormWidget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="notation"
+    nsURI="http://www.flower-platform.com/xmi/FlowerDiagramNotation_1.0.0" nsPrefix="flowerNotation">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="View" abstract="true" eSuperTypes="#//ModelElement">
+    <eOperations name="getAllChildren" upperBound="-1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistentChildren" upperBound="-1"
+        eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewDetails" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagrammableElement" eType="#//IDiagrammableElement"
+        eOpposite="#//IDiagrammableElement/views"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layoutConstraint" eType="#//LayoutConstraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LayoutConstraint" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//LayoutConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Bounds" eSuperTypes="#//Location">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Note" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CodeSyncElement" eSuperTypes="#//IDiagrammableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directCodeSyncRootParent"
+        eType="#//CodeSyncRoot" eOpposite="#//CodeSyncRoot/members"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="astCacheElement" eType="#//AstCacheElement"
+        eOpposite="#//AstCacheElement/codeSyncElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//CodeSyncElement" containment="true" eOpposite="#//CodeSyncElement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//CodeSyncElement"
+        eOpposite="#//CodeSyncElement/children"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstCacheElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directAstCacheRootParent"
+        eType="#//AstCacheRoot" eOpposite="#//AstCacheRoot/members"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="codeSyncElement" eType="#//CodeSyncElement"
+        eOpposite="#//CodeSyncElement/astCacheElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//AstCacheElement #//ISourceFileMember #//IClassMember #//IDocumentableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//IClassMember" containment="true" eOpposite="#//IClassMember/directParentClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//PackageableElement" containment="true" eOpposite="#//PackageableElement/directPackageParent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceFile" eSuperTypes="#//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//ISourceFileMember" containment="true" eOpposite="#//ISourceFileMember/directSourceFileParent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceDirectory" eSuperTypes="#//Package"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" abstract="true"
+      eSuperTypes="#//AstCacheElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directPackageParent" eType="#//Package"
+        eOpposite="#//Package/members"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//AstCacheElement #//ISourceFileMember #//IClassMember #//IDocumentableElement #//ITypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//IClassMember #//ISourceFileMember #//AstCacheElement #//ITypedElement #//IDocumentableElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IClassMember" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directParentClass" eType="#//Class"
+        eOpposite="#//Class/members"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISourceFileMember" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directSourceFileParent"
+        eType="#//SourceFile" eOpposite="#//SourceFile/members"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstCacheRoot">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="technology" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//AstCacheElement" containment="true" eOpposite="#//AstCacheElement/directAstCacheRootParent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CodeSyncRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//CodeSyncElement" containment="true" eOpposite="#//CodeSyncElement/directCodeSyncRootParent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="technology" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDocumentableElement" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypedElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDiagrammableElement" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
+        eType="#//View" eOpposite="#//View/diagrammableElement"/>
+  </eClassifiers>
+</ecore:EPackage>

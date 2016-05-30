@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="toe"
+    nsURI="http://www.eclipse.org/examples/gmf/ocldriven/table-of-organization-and-equipment"
+    nsPrefix="toe">
+  <eClassifiers xsi:type="ecore:EClass" name="AllHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="all" upperBound="-1" eType="#//AllBase"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllBase" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee" eSuperTypes="#//AllBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" eOpposite="#//Project/projectTeam"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="department" eType="#//Department"
+        eOpposite="#//Department/employees"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributions" upperBound="-1"
+        eType="#//Contribution" eOpposite="#//Contribution/employee"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Manager" eSuperTypes="#//Employee">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leads" upperBound="-1"
+        eType="#//Project" eOpposite="#//Project/lead"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="managedDepartment" eType="#//Department"
+        eOpposite="#//Department/manager"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Contribution" eSuperTypes="#//AllBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employee" eType="#//Employee"
+        eOpposite="#//Employee/contributions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/contributions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Department" eSuperTypes="#//AllBase">
+    <eOperations name="allSubDepartments" upperBound="-1" eType="#//Department"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subDepartments" upperBound="-1"
+        eType="#//Department" containment="true" eOpposite="#//Department/parentDepartment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1"
+        eType="#//Employee" containment="true" eOpposite="#//Employee/department"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentDepartment" eType="#//Department"
+        eOpposite="#//Department/subDepartments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manager" lowerBound="1"
+        eType="#//Manager" eOpposite="#//Manager/managedDepartment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//AllBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="departmentWide" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projectTeam" upperBound="-1"
+        eType="#//Employee" eOpposite="#//Employee/projects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lead" eType="#//Manager"
+        eOpposite="#//Manager/leads"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributions" upperBound="-1"
+        eType="#//Contribution" eOpposite="#//Contribution/project"/>
+  </eClassifiers>
+</ecore:EPackage>

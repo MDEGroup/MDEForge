@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gradingsystem" nsURI="http://gradingsystem.me12.big.tuwien.ac.at/1.0"
+    nsPrefix="gradingsystem">
+  <eClassifiers xsi:type="ecore:EClass" name="GradingSystem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="courses" upperBound="-1"
+        eType="#//Course" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Course">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gradings" upperBound="-1"
+        eType="#//Grading" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="minRequirement" eType="#//MinRequirement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConcreteTask" eSuperTypes="#//Task">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskGroup" eSuperTypes="#//Task">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contains" lowerBound="1"
+        upperBound="-1" eType="#//Task" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MinRequirement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MinRequirementsType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MinRequirementsType">
+    <eLiterals name="Percentage" literal="PERCENTAGE"/>
+    <eLiterals name="Absolute" value="1" literal="ABSOLUTE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GradingScheme">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grades" lowerBound="1"
+        upperBound="-1" eType="#//Grade" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="minRequirementNotFulfilledGrade"
+        lowerBound="1" eType="#//Grade"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Grade">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requiredPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Grading">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" lowerBound="1" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gradingScheme" lowerBound="1"
+        eType="#//GradingScheme" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="semester" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

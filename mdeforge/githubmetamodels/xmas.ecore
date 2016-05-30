@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="xmas" nsURI="xmas" nsPrefix="">
+  <eClassifiers xsi:type="ecore:EClass" name="Xmas">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="continents" upperBound="-1"
+        eType="#//Continent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//Object" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Continent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="locations" upperBound="-1"
+        eType="#//Location" containment="true" eOpposite="#//Location/continent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="continent" lowerBound="1"
+        eType="#//Continent" eOpposite="#//Continent/locations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/location"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Object" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" lowerBound="1"
+        eType="#//Location" eOpposite="#//Location/objects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="age" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beenGood" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mood" eType="#//Mood"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gift" lowerBound="1" eType="#//Gift"
+        eOpposite="#//Gift/receipients"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reindeer" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gift" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receipients" upperBound="-1"
+        eType="#//Person" eOpposite="#//Person/gift"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Mood">
+    <eLiterals name="Happy"/>
+    <eLiterals name="Sad" value="1"/>
+    <eLiterals name="Furious" value="2"/>
+    <eLiterals name="Drunk" value="3"/>
+    <eLiterals name="Excited" value="4"/>
+    <eLiterals name="Worried" value="5"/>
+  </eClassifiers>
+</ecore:EPackage>

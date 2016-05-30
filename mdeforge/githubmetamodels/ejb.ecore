@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ejb"
+    nsURI="ejb.xmi" nsPrefix="org.eclipse.jst.j2ee.ejb">
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerManagedEntity" eSuperTypes="#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="2.x">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the version of an entity bean with container-managed persistence.&#xD;&#xA;&#xD;&#xA;@invariant The cmp-version element must be one of the two following: 1.x , 2.x&#xD;&#xA;@default 2.x&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstractSchemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The abstract-schema-name element specifies the name of the abstract schema type of an entity bean with cmp-version 2.x. It is used in EJB QL queries.&#xD;&#xA;&#xD;&#xA;For example, the abstract-schema-name for an entity bean whose local interface is com.acme.commerce.Order might be Order.&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistentAttributes" upperBound="-1"
+        eType="#//CMPAttribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyAttributes" upperBound="-1"
+        eType="#//CMPAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queries" upperBound="-1"
+        eType="#//Query" containment="true" eOpposite="#//Query/entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 moved from CME&#xD;&#xA;The optional query elements must be present if the persistence-type is Container and the cmp-version is 2.x and query methods other than findByPrimaryKey have been defined for the entity bean.&#xD;&#xA;&#xD;&#xA;@invariant see description&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="CMPAttribute" upperBound="-1"
+        eType="#//CMPAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primKeyField" eType="#//CMPAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodPermission" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The method-permission element specifies that one or more security roles are allowed to invoke one or more enterprise bean methods. The method-permission element consists of an optional description, a list of security role names, and a list of method elements.  The security roles used in the method-permission element must be defined in the security-role element of the deployment descriptor, and the methods must be methods defined in the enterprise bean's remote and/or home interfaces."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description element is used by the ejb-jar file producer to provide text describing the parent element.  The description element should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the parent element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unchecked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyDescriptor" lowerBound="1"
+        eType="#//AssemblyDescriptor" transient="true" eOpposite="#//AssemblyDescriptor/methodPermissions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" lowerBound="1" upperBound="-1"
+        eType="ecore:EClass common.ecore#//SecurityRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodElements" lowerBound="1"
+        upperBound="-1" eType="#//MethodElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssemblyDescriptor" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The assembly-descriptor element contains application-assembly information.  The application-assembly information consists of the following parts: the definition of security roles, the definition of method permissions, and the definition of transaction attributes for enterprise beans with container-managed transaction demarcation. All the parts are optional in the sense that they are omitted if the lists represented by them are empty. Providing an assembly-descriptor in the deployment descriptor is optional for the ejb-jar file producer."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodPermissions" upperBound="-1"
+        eType="#//MethodPermission" containment="true" eOpposite="#//MethodPermission/assemblyDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodTransactions" upperBound="-1"
+        eType="#//MethodTransaction" containment="true" eOpposite="#//MethodTransaction/assemblyDescriptor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies how the container must manage transaction scopes for the enterprise bean's method invocations.  The element consists of an optional description, a list of method elements, and a transaction attribute.The transaction attribute is to be applied to all the specified methods."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ejbJar" eType="#//EJBJar"
+        transient="true" eOpposite="#//EJBJar/assemblyDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="securityRoles" upperBound="-1"
+        eType="ecore:EClass common.ecore#//SecurityRole" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="excludeList" eType="#//ExcludeList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageDestinations" upperBound="-1"
+        eType="ecore:EClass common.ecore#//MessageDestination" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodTransaction" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Specifies how the container must manage transaction scopes for the enterprise bean's method invocations.  It consists of an optional description, a list of method elements, and a transaction attribute.The transaction attribute is to be applied to all the specified methods."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionAttribute" eType="#//TransactionAttributeType"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The trans-attribute element specifies how the container must manage the transaction boundaries when delegating a method invocation to an enterprise bean's business method.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description element is used by the ejb-jar file producer to provide text describing the parent element.  The description element should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the parent element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyDescriptor" lowerBound="1"
+        eType="#//AssemblyDescriptor" transient="true" eOpposite="#//AssemblyDescriptor/methodTransactions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodElements" lowerBound="1"
+        upperBound="-1" eType="#//MethodElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Session" eSuperTypes="#//EnterpriseBean">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The session-beanType declares an session bean. The&#xD;&#xA;declaration consists of:&#xD;&#xA;&#xD;&#xA;    - an optional description&#xD;&#xA;    - an optional display name&#xD;&#xA;    - an optional icon element that contains a small and a large&#xD;&#xA;      icon file name&#xD;&#xA;    - a name assigned to the enterprise bean&#xD;&#xA;      in the deployment description&#xD;&#xA;    - the names of the session bean's remote home and&#xD;&#xA;      remote interfaces, if any&#xD;&#xA;    - the names of the session bean's local home and&#xD;&#xA;      local interfaces, if any&#xD;&#xA;    - the name of the session bean's web service endpoint&#xD;&#xA;      interface, if any&#xD;&#xA;    - the session bean's implementation class&#xD;&#xA;    - the session bean's state management type&#xD;&#xA;    - the session bean's transaction management type&#xD;&#xA;    - an optional declaration of the bean's&#xD;&#xA;      environment entries&#xD;&#xA;    - an optional declaration of the bean's EJB references&#xD;&#xA;    - an optional declaration of the bean's local&#xD;&#xA;      EJB references&#xD;&#xA;    - an optional declaration of the bean's web&#xD;&#xA;      service references&#xD;&#xA;    - an optional declaration of the security role&#xD;&#xA;      references&#xD;&#xA;    - an optional declaration of the security identity&#xD;&#xA;      to be used for the execution of the bean's methods&#xD;&#xA;    - an optional declaration of the bean's resource&#xD;&#xA;      manager connection factory references&#xD;&#xA;    - an optional declaration of the bean's resource&#xD;&#xA;      environment references.&#xD;&#xA;    - an optional declaration of the bean's message&#xD;&#xA;      destination references&#xD;&#xA;&#xD;&#xA;The elements that are optional are &quot;optional&quot; in the sense&#xD;&#xA;that they are omitted when if lists represented by them are&#xD;&#xA;empty.&#xD;&#xA;&#xD;&#xA;Either both the local-home and the local elements or both&#xD;&#xA;the home and the remote elements must be specified for the&#xD;&#xA;session bean.&#xD;&#xA;&#xD;&#xA;The service-endpoint element may only be specified if the&#xD;&#xA;bean is a stateless session bean."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionType" eType="#//TransactionType"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The transaction-type element specifies an enterprise bean's transaction management type.&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sessionType" eType="#//SessionType"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceEndpoint" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4&#xD;&#xA;The service-endpoint element contains the&#xD;&#xA;        fully-qualified name of the enterprise bean's web&#xD;&#xA;        service endpoint interface. The service-endpoint&#xD;&#xA;        element may only be specified for a stateless&#xD;&#xA;        session bean. The specified interface must be a&#xD;&#xA;        valid JAX-RPC service endpoint interface."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//EnterpriseBean">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The entity element declares an entity bean. The declaration consists of: an optional description; optional display name; optional small icon file name; optional large icon file name; a unique name assigned to the enterprise bean in the deployment descriptor; the names of the entity bean’s home and remote interfaces, if any; the names of the entity bean’s local home and local interface, if any; the entity bean’s implementation class; the entity bean’s persistence management type; the entity bean’s primary key class name; an indication of the entity bean’s reentrancy; an optional specification of the entity bean’s cmp-version; an optional specification of the entity bean’s abstract schema name; an optional list of container-managed fields; an optional specification of the primary key field; an optional declaration of the bean’s environment entries; an optional declaration of the bean’s EJB references; an optional declaration of the bean’s local EJB references; an optional declaration of the security role references; an optional declaration of the security identity to be used for the execution of the bean’s methods; an optional declaration of the bean’s resource manager connection factory references; an optional declaration of the bean’s resource environment references; an optional set of query declarations for finder and select methods for an entity bean with cmp-version 2.x.&#xD;&#xA;The optional abstract-schema-name element must be specified for an entity bean with container managed persistence and cmp-version 2.x. The optional primkey-field may be present in the descriptor if the entity’s persistence-type is Container. The optional cmp-version element may be present in the descriptor if the entity’s persistence-type is Container. If the persistence-type is Container and the cmp-version element is not specified, its value defaults to 2.x.&#xD;&#xA;The optional home and remote elements must be specified if the entity bean cmp-version is 1.x.&#xD;&#xA;The optional local-home and local elements must be specified if the entity bean has a local home and local interface.&#xD;&#xA;The optional query elements must be present if the persistence-type is Container and the cmp-version is 2.x and query methods other than findByPrimaryKey have been defined for the entity bean.&#xD;&#xA;The other elements that are optional are &quot;optional&quot; in the sense that they are omitted if the lists represented by them are empty. At least one cmp-field element must be present in the descriptor if&#xD;&#xA;the entity’s persistence-type is Container and the cmp-version is 1.x, and none must not be present if the entity’s persistence-type is Bean."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reentrant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The reentrant element specifies whether an entity bean is reentrant or not.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryKey" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The primkey-field element is used to specify the name of the primary key field for an entity with container-managed persistence.  The primkey-field must be one of the fields declared in the cmp-field&#xD;&#xA;element, and the type of the field must be the same as the primary key type.  The primkey-field element is not used if the primary key maps to multiple container-managed fields (i.e. the key is a compound key). In this case, the fields of the primary key class must be public, and their names must correspond to the field names of the entity bean class that comprise the key.&#xD;&#xA;Examples:&lt;prim-key-class>java.lang.String&lt;/prim-key-class>&#xD;&#xA;&#x9;&lt;prim-key-class>com.wombat.empl.EmployeeID&lt;/prim-key-class>&#xD;&#xA;&#x9;&lt;prim-key-class>java.lang.Object&lt;/prim-key-class>&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnterpriseBean" abstract="true" eSuperTypes="common.ecore#//JNDIEnvRefsGroup">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="EnterpriseJavaBean is a class.  It can have instances, someone could write an &#xD;&#xA;instance document containing Departments and Employees.  It also has &#xD;&#xA;attributes, operations, and associations.  These are actually derived/filtered &#xD;&#xA;from its implementation classes and interfaces.  For mapping and browsing &#xD;&#xA;purposes, though, you would like the EJB to appear as a class.  &#xD;&#xA;&#xD;&#xA;In this light, even Session Beans can have associations and properties &#xD;&#xA;implemented by their bean.  For example, it would be meaningful to describe &#xD;&#xA;associations from a Session to the Entities which it uses to perform its work.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="securityRoleRefs" upperBound="-1"
+        eType="ecore:EClass common.ecore#//SecurityRoleRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ejbClass" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="homeInterface" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remoteInterface" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ejbJar" lowerBound="1"
+        eType="#//EJBJar" transient="true" eOpposite="#//EJBJar/enterpriseBeans"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="securityIdentity" eType="ecore:EClass common.ecore#//SecurityIdentity"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The security-identity element specifies whether the caller's security identity is to be used for the execution of the methods of the enterprise bean or whether a specific run-as identity is to be used. It&#xD;&#xA;contains an optional description and a specification of the security identity to be used."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localHomeInterface" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localInterface" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransactionAttributeType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="NotSupported=1&#xD;&#xA;Supports=2&#xD;&#xA;Required=3&#xD;&#xA;RequiresNew=4&#xD;&#xA;Mandatory=5&#xD;&#xA;Never=6&#xD;&#xA;"/>
+    </eAnnotations>
+    <eLiterals name="NotSupported"/>
+    <eLiterals name="Supports" value="1"/>
+    <eLiterals name="Required" value="2"/>
+    <eLiterals name="RequiresNew" value="3"/>
+    <eLiterals name="Mandatory" value="4"/>
+    <eLiterals name="Never" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransactionType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Bean=1&#xD;&#xA;Container=2"/>
+    </eAnnotations>
+    <eLiterals name="Bean"/>
+    <eLiterals name="Container" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SessionType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Stateful=1&#xD;&#xA;Stateless=2"/>
+    </eAnnotations>
+    <eLiterals name="Stateful"/>
+    <eLiterals name="Stateless" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBMethodCategory" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The valid EJB method category names are: EJBHOMEMETHOD, EJBCREATEMETHOD, EJBFINDERMETHOD, EJBREMOTEMETHOD."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBJar" eSuperTypes="common.ecore#//CompatibilityDescriptionGroup">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The root element of the EJB deployment descriptor. It contains an optional description of the ejb-jar file; optional display name; optional small icon file name; optional large icon file&#xD;&#xA;name; mandatory structural information about all included enterprise beans; a descriptor for container managed relationships, if any; an optional application-assembly descriptor; and an optional name of an ejb-client-jar file for the ejb-jar."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ejbClientJar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The optional ejb-client-jar element specifies a JAR file that contains the class files necessary for a client program to access the enterprise beans in the ejb-jar file. The Deployer should make the ejb-client JAR file accessible to the client's class-loader.  Example:&lt;ejb-client-jar>employee_service_client.jar&lt;/ejb-client-jar>&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4&#xD;&#xA;The version specifies the version of the&#xD;&#xA;    EJB specification that the instance document must&#xD;&#xA;    comply with. This information enables deployment tools&#xD;&#xA;    to validate a particular EJB Deployment&#xD;&#xA;    Descriptor with respect to a specific version of the EJB&#xD;&#xA;    schema."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assemblyDescriptor" eType="#//AssemblyDescriptor"
+        containment="true" eOpposite="#//AssemblyDescriptor/ejbJar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enterpriseBeans" lowerBound="1"
+        upperBound="-1" eType="#//EnterpriseBean" containment="true" eOpposite="#//EnterpriseBean/ejbJar">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The enterprise-beans element contains the declarations of one or more enterprise beans."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationshipList" eType="#//Relationships"
+        containment="true" eOpposite="#//Relationships/ejbJar">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The relationships collection describes the relationships in which container managed persistence entity beans and dependent objects participate. The relationships element contains an optional description; a list of ejb-entity-ref elements (references to entity beans that participate in container managed relationships but whose abstract persistence schemas are not included in the ejb-jar file);&#xD;&#xA;and a list of ejb-relation elements, which specify the container managed relationships."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodElement" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The method element is used to denote a method of an enterprise bean's&#xD;&#xA;home or remote interface, or a set of methods. The ejb-name element&#xD;&#xA;must be the name of one of the enterprise beans in declared in the&#xD;&#xA;deployment descriptor; the optional method-intf element allows to&#xD;&#xA;distinguish between a method with the same signature that is defined in&#xD;&#xA;both the home and remote interface; the method-name element specifies&#xD;&#xA;the method name; and the optional method-params elements identify a&#xD;&#xA;single method among multiple methods with an overloaded method name.&#xD;&#xA;&#xD;&#xA;There are three possible styles of the method element syntax:&#xD;&#xA;&#xD;&#xA;1. &#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&lt;ejb-name>EJBNAME&lt;/ejb-name>&#xD;&#xA;   &#x9;&#x9;&lt;method-name>*&lt;/method-name>&#xD;&#xA;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;   This style is used to refer to all the methods of the specified&#xD;&#xA;   enterprise bean's home and remote interfaces.&#xD;&#xA;&#xD;&#xA;2. &#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&lt;ejb-name>EJBNAME&lt;/ejb-name>&#xD;&#xA;   &#x9;&#x9;&lt;method-name>METHOD&lt;/method-name>&#xD;&#xA;&#x9;&lt;/method>>&#xD;&#xA;&#xD;&#xA;   This style is used to refer to the specified method of the&#xD;&#xA;   specified enterprise bean. If there are multiple methods with&#xD;&#xA;   the same overloaded name, the element of this style refers to&#xD;&#xA;   all the methods with the overloaded name.&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;3. &#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&lt;ejb-name>EJBNAME&lt;/ejb-name>&#xD;&#xA;   &#x9;&#x9;&lt;method-name>METHOD&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&lt;method-params>&#xD;&#xA;   &#x9;&#x9;&#x9;&lt;method-param>PARAM-1&lt;/method-param>&#xD;&#xA;   &#x9;&#x9;&#x9;&lt;method-param>PARAM-2&lt;/method-param>&#xD;&#xA;          &#x9;&#x9;&#x9;...&#xD;&#xA;   &#x9;&#x9;&#x9;&lt;method-param>PARAM-n&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&lt;/method-params>&#xD;&#xA;&#x9;&lt;method>&#x9;&#xD;&#xA;&#xD;&#xA;   This style is used to refer to a single method within a set of&#xD;&#xA;   methods with an overloaded name. PARAM-1 through PARAM-n are the&#xD;&#xA;   fully-qualified Java types of the method's input parameters (if&#xD;&#xA;   the method has no input arguments, the method-params element&#xD;&#xA;   contains no method-param elements). Arrays are specified by the&#xD;&#xA;   array element's type, followed by one or more pair of square&#xD;&#xA;   brackets (e.g. int[][]).&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;Used in: method-permission and container-transaction&#xD;&#xA;&#xD;&#xA;Examples:&#xD;&#xA;&#xD;&#xA;    Style 1: The following method element refers to all the methods of&#xD;&#xA;&#x9;&#x9;the EmployeeService bean's home and remote interfaces:&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>*&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;&#x9;Style 2: The following method element refers to all the create&#xD;&#xA;&#x9;&#x9;methods of the EmployeeService bean's home interface:&#xD;&#xA;&#xD;&#xA;    &#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>create&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;&#x9;Style 3: The following method element refers to the&#xD;&#xA;&#x9;&#x9;create(String firstName, String LastName) method of the&#xD;&#xA;&#x9; &#x9;EmployeeService bean's home interface.&#xD;&#xA;&#xD;&#xA;    &#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>create&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-params>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;/method-params>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;The following example illustrates a Style 3 element with&#xD;&#xA;&#x9;more complex parameter types. The method&#xD;&#xA;&#x9;&#x9;&#x9;foobar(char s, int i, int[] iar, mypackage.MyClass mycl,&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;mypackage.MyClass[][] myclaar)&#xD;&#xA;        would be specified as:&#xD;&#xA;&#xD;&#xA;    &#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>foobar&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-params>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>char&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>int&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>int[]&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>mypackage.MyClass&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>mypackage.MyClass[][]&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;/method-params>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;&#x9;The optional method-intf element can be used when it becomes&#xD;&#xA;   necessary to differentiate between a method defined in the home&#xD;&#xA;   interface and a method with the same name and signature that is&#xD;&#xA;   defined in the remote interface.&#xD;&#xA;&#xD;&#xA;&#x9;For example, the method element&#xD;&#xA;&#xD;&#xA;   &#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-intf>Remote&lt;/method-intf>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>create&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-params>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;/method-params>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;&#xD;&#xA;&#x9;can be used to differentiate the create(String, String) method&#xD;&#xA;   defined in the remote interface from the create(String, String)&#xD;&#xA;   method defined in the home interface, which would be defined as&#xD;&#xA;&#xD;&#xA;   &#x9;&#x9;&lt;method>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;ejb-name>EmployeeService&lt;/ejb-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-intf>Home&lt;/method-intf>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-name>create&lt;/method-name>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;method-params>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&lt;method-param>java.lang.String&lt;/method-param>&#xD;&#xA;&#x9;&#x9;&#x9;&lt;/method-params>&#xD;&#xA;&#x9;&#x9;&lt;/method>&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The method-name element contains a name of an enterprise bean method,&#xD;&#xA;or the asterisk (*) character. The asterisk is used when the element&#xD;&#xA;denotes all the methods of an enterprise bean's remote and home&#xD;&#xA;interfaces.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parms" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The method-params element contains a list of the fully-qualified Java type names of the method parameters.  In the current implementation this is a space delimitted String.  A null string indicates a generic method element that can apply to multiple methods with the same name.  An empty string indicates a method with zero parameters.  In future implementations (post V5), this field will be deprecated and migrated to use the multi-valued params field and the isZeroParams flag.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MethodElementKind"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description element is used by the ejb-jar file producer to provide text describing the parent element.  The description element should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the parent element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enterpriseBean" lowerBound="1"
+        eType="#//EnterpriseBean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MethodElementKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.4 added ServiceEndpoint&#xD;&#xA;Unspecified=0&#xD;&#xA;Remote=1&#xD;&#xA;Home=2&#xD;&#xA;Local=3&#xD;&#xA;LocalHome=4&#xD;&#xA;ServiceEndpoint=5"/>
+    </eAnnotations>
+    <eLiterals name="Unspecified"/>
+    <eLiterals name="Remote" value="1"/>
+    <eLiterals name="Home" value="2"/>
+    <eLiterals name="Local" value="3"/>
+    <eLiterals name="LocalHome" value="4"/>
+    <eLiterals name="ServiceEndpoint" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CMPAttribute" eSuperTypes="common.ecore#//J2EEEAttribute">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Describes a container-managed field. The field element includes an optional description of the field, and the name of the field.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description is used by the ejb-jar file producer to provide text describing the cmr field.&#xD;&#xA;&#xD;&#xA;The description should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the list of dependents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationships" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The relationships describes the relationships in which entity beans with container managed persistence participate. The relationships element contains an optional description; and a list of ejb-relation elements, which specify the container managed relationships."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description is used by the ejb-jar file producer to provide text describing the collection of relationships.&#xD;&#xA;&#xD;&#xA;The description should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the list of dependents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ejbJar" lowerBound="1"
+        eType="#//EJBJar" transient="true" eOpposite="#//EJBJar/relationshipList"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ejbRelations" upperBound="-1"
+        eType="#//EJBRelation" containment="true" eOpposite="#//EJBRelation/relationshipList">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A list of ejb-relation elements, which specify the container managed relationships."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The query element is used to specify a finder or select query. It contains an optional description of the query; the specification of the finder or select method it is used by; a specification of the return type mapping, if any, if the query is for a select method; and the EJB QL query string that defines the query. Queries that are expressible in EJB QL must use the ejb-ql element to specify the query. If a query&#xD;&#xA;is not expressible in EJB QL, the description element should be used to describe the semantics of the query and the ejb-ql element should be empty."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description is used by the ejb-jar file producer to provide text describing the query.&#xD;&#xA;&#xD;&#xA;The description should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the list of dependents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ejbQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Contains the EJB QL query string that defines a finder or select query. This element is defined within the scope of a query element whose contents specify the finder or the select method that uses the query. The content must be a valid EJB QL query string for the entity bean for which the query is specified. The ejb-ql element must be specified for all queries that are expressible in EJB QL.&#xD;&#xA;&#xD;&#xA;@invariant The value must be a valid EJB QL query string for the entity bean or dependent object class for which the query is specified.&#xD;&#xA;@invariant The ejb-ql element must be specified for all queries that are expressible in EJB QL.&#xD;&#xA;&#xD;&#xA;Example:&#xD;&#xA;&lt;query>&#xD;&#xA;&lt;query-method>&#xD;&#xA;&lt;method-name>ejbSelectPendingLineitems&lt;/method-name>&#xD;&#xA;&lt;method-params/>&#xD;&#xA;&lt;/query-method>&#xD;&#xA;&lt;ejb-ql>SELECT ENTITY(l)&#xD;&#xA;FROM LineItems l&#xD;&#xA;WHERE l.shipped is FALSE&#xD;&#xA;&lt;/ejb-ql>&#xD;&#xA;&lt;/query>"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnTypeMapping" eType="#//ReturnTypeMapping"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The return-type-mapping element is used in the query element to specify whether an abstract schema type that is returned by a query for a select method is to be mapped to an EJBLocalObject or EJBObject type.  The value of the return-type-mapping element, if specified must be one of the following."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryMethod" lowerBound="1"
+        eType="#//QueryMethod" containment="true" eOpposite="#//QueryMethod/query">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query-method element is used to specify the method (DB/SR/CM-&quot;on the home&quot;) for a finder or&#xD;&#xA;select query.&#xD;&#xA;&#xD;&#xA;The method-name element specifies the name of a finder or select&#xD;&#xA;method in the entity bean's implementation class or a select method in&#xD;&#xA;the dependent object class.&#xD;&#xA;&#xD;&#xA;Each method-param must be defined for a query-method using the&#xD;&#xA;method-params element.&#xD;&#xA;&#xD;&#xA;Used in: query&#xD;&#xA;&#xD;&#xA;Example:&#xD;&#xA;&#xD;&#xA;Example:&#xD;&#xA;&lt;query>&#xD;&#xA;  &lt;description>Method finds large orders&lt;/description>&#xD;&#xA;  &lt;query-method>&#xD;&#xA;    &lt;method-name>findLargeOrders&lt;/method-name>&#xD;&#xA;    &lt;method-params>&lt;/method-params>&#xD;&#xA;  &lt;/query-method>&#xD;&#xA;  &lt;ejb-ql>SELECT ENTITY(o) FROM Order o WHERE o.amount &amp;gt; 1000&lt;/ejb-ql>&#xD;&#xA;&lt;/query>"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="#//ContainerManagedEntity"
+        transient="true" eOpposite="#//ContainerManagedEntity/queries"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBRelation" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.3&#xD;&#xA;The ejb-relation element describes a relationship between two entity beans with container managed persistence. An ejb-relation element contains a description; an optional ejb-relation-name element; and exactly two relationship role declarations, defined by the ejb-relationship-roles. The name of the relationship, if specified, is unique within the ejb-jar file.&#xD;&#xA;&#xD;&#xA;@invariant The name of the relationship, if specified, is unique within the ejb-jar file.&#xD;&#xA;@invariant self.relationshipRoles.size == 2&#xD;&#xA;@invariant self.relationshipRoles[0].name != self.relationshipRoles[1].name&#xD;&#xA;&#xD;&#xA;@migration EJB1.1 Moved from ejbext::EjbRelationshipRole contained under ejbext::EJBJarExtension&#xD;&#xA;@migration EJB1.1 added optional attribute, description:String&#xD;&#xA;@migration EJB1.1 added optional attribute, name:String (May have been inherited from RefBaseObject previously)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description is used by the ejb-jar file producer to provide text describing the ejb relation.&#xD;&#xA;&#xD;&#xA;The description should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the list of dependents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the relationship. If specified, must be unique within the ejb-jar file.&#xD;&#xA;@invariant self.name unique within Set&lt;collect(ejbJar.ejbRelations.name)>"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationshipList" eType="#//Relationships"
+        transient="true" eOpposite="#//Relationships/ejbRelations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationshipRoles" lowerBound="2"
+        upperBound="2" eType="#//EJBRelationshipRole" containment="true" eOpposite="#//EJBRelationshipRole/relationship">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A collection containing exactly two relationship roles.&#xD;&#xA;&#xD;&#xA;@migration EJB1.1 Containment used to be by reference on relation--now by value.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBRelationshipRole" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.3&#xD;&#xA;The ejb-relationship-role element describes a role within a relationship.&#xD;&#xA;There are two roles in each relationship. The ejb-relationship-role element contains an optional description; an optional name for the relationship role; a specification of the multiplicity of the role; an optional specification of cascade-delete functionality for the role; the role source; and a declaration of the cmr-field, if any, by means of which the other side of the relationship is accessed from the perspective of the role source. The multiplicity and relationship-role-source element are mandatory. The relationship-role-source element designates an entity-bean by means of an ejb-name element. For bidirectional relationships, both roles of a relationship must declare a relationship-role-source element that specifies a cmr-field in terms of which the relationship is accessed. The lack of a cmr-field element in an ejb-relationship-role specifies that the relationship is unidirectional in navigability and that entity bean that participates in the relationship is &quot;not aware&quot; of the relationship.&#xD;&#xA;&#xD;&#xA;@invariant multiplicity != null&#xD;&#xA;@invariant roleSource != null&#xD;&#xA;@invariant Cascade delete can only be specified in an EJBRelationshipRole element in which the roleSource element specifies a dependent object class. &#xD;&#xA;@invariant Cascade delete can only be specified for an EJBRelationshipRole contained in an EJBrelation in which the other EJBRelationshipRole element specifies a multiplicity of One.&#xD;&#xA;&#xD;&#xA;Example:&#xD;&#xA;&lt;ejb-relation>&#xD;&#xA;  &lt;ejb-relation-name>Product-LineItem&lt;/ejb-relation-name>&#xD;&#xA;  &lt;ejb-relationship-role>&#xD;&#xA;    &lt;ejb-relationship-role-name>product-has-lineitems&lt;/ejb-relationship-role-name>&#xD;&#xA;    &lt;multiplicity>One&lt;/multiplicity>&#xD;&#xA;    &lt;relationship-role-source>&#xD;&#xA;      &lt;ejb-name>ProductEJB&lt;/ejb-name>&#xD;&#xA;    &lt;/relationship-role-source>&#xD;&#xA;  &lt;/ejb-relationship-role>&#xD;&#xA;..."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions&#xD;&#xA;The description is used by the ejb-jar file producer to provide text describing the ejb relationship role.&#xD;&#xA;&#xD;&#xA;The description should include any information that the ejb-jar file producer wants to provide to the consumer of the ejb-jar file (i.e. to the Deployer). Typically, the tools used by the ejb-jar file consumer will display the description when processing the list of dependents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Defines a name for a role that is unique within an ejb-relation. Different relationships can use the same name for a role.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" eType="#//MultiplicityKind"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Describes the multiplicity of the role that participates in a relation.&#xD;&#xA;&#xD;&#xA;The multiplicity element must be one of the two following:&#xD;&#xA;     One&#xD;&#xA;     Many&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascadeDelete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies that, within a particular relationship, the lifetime of one or more entity beans is dependent upon the lifetime of another entity bean. The cascade-delete element can Cascade delete can only be specified for an EJBRelationshipRole contained in an EJBrelation in which the other EJBRelationshipRole element specifies a multiplicity of One.&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationship" lowerBound="1"
+        eType="#//EJBRelation" transient="true" eOpposite="#//EJBRelation/relationshipRoles"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//RoleSource" containment="true" eOpposite="#//RoleSource/role">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Designates the source of a role that participates in a relationship. A relationship-role-source element uniquely identifies an entity bean.&#xD;&#xA;@migration EJB1.1: was ibmejbext::EjbRelationshipRole::sourceEJBName, but that may not be sufficient, as this can now refer to dependent class names or ejb refs"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cmrField" lowerBound="1"
+        eType="#//CMRField" containment="true" eOpposite="#//CMRField/role">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A declaration of the CMRField, if any, by means of which the other side of the relationship is accessed from the perspective of the role source&#xD;&#xA;&#xD;&#xA;@migration EJB1.1: Used to be handled via ibmejbext::EjbRole::attributes list"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoleSource" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Designates the source of a role that participates in a relationship. A relationship-role-source element uniquely identifies an entity bean.&#xD;&#xA;@invariant The content of each role-source element shall refer to an existing entity bean, entity bean reference."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" lowerBound="1" eType="#//EJBRelationshipRole"
+        transient="true" eOpposite="#//EJBRelationshipRole/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityBean" lowerBound="1"
+        eType="#//ContainerManagedEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CMRField" eSuperTypes="#//CMPAttribute">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.3&#xD;&#xA;Describes the bean provider's view of a relationship. It consists of an optional description, and the name and the class type of a field in the source of a role of a relationship. The CMRField::name element corresponds to the name used for the get and set accessor methods for the relationship. The CMRField::type element is used only for collection-valued CMRFields. It specifies the type of the collection that is used (a java class name).&#xD;&#xA;&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" eType="#//EJBRelationshipRole"
+        transient="true" eOpposite="#//EJBRelationshipRole/cmrField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collectionType" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageDriven" eSuperTypes="#//EnterpriseBean">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The message-driven element declares a message-driven&#xD;&#xA;bean. The declaration consists of:&#xD;&#xA;&#xD;&#xA;    - an optional description&#xD;&#xA;    - an optional display name&#xD;&#xA;    - an optional icon element that contains a small and a large&#xD;&#xA;      icon file name.&#xD;&#xA;    - a name assigned to the enterprise bean in&#xD;&#xA;      the deployment descriptor&#xD;&#xA;    - the message-driven bean's implementation class&#xD;&#xA;    - an optional declaration of the bean's messaging&#xD;&#xA;      type&#xD;&#xA;    - the message-driven bean's transaction management type&#xD;&#xA;    - an optional declaration of the bean's&#xD;&#xA;      message-destination-type&#xD;&#xA;    - an optional declaration of the bean's&#xD;&#xA;      message-destination-link&#xD;&#xA;    - an optional declaration of the message-driven bean's&#xD;&#xA;      activation configuration properties&#xD;&#xA;    - an optional declaration of the bean's environment&#xD;&#xA;      entries&#xD;&#xA;    - an optional declaration of the bean's EJB references&#xD;&#xA;    - an optional declaration of the bean's local EJB&#xD;&#xA;      references&#xD;&#xA;    - an optional declaration of the bean's web service&#xD;&#xA;      references&#xD;&#xA;    - an optional declaration of the security&#xD;&#xA;      identity to be used for the execution of the bean's&#xD;&#xA;      methods&#xD;&#xA;    - an optional declaration of the bean's&#xD;&#xA;      resource manager connection factory&#xD;&#xA;      references&#xD;&#xA;    - an optional declaration of the bean's resource&#xD;&#xA;      environment references.&#xD;&#xA;    - an optional declaration of the bean's message&#xD;&#xA;      destination references"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionType" eType="#//TransactionType"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The transaction-type element specifies an enterprise bean's transaction management type.&#xD;&#xA;&#xD;&#xA;The transaction-type element must be one of the two following: Bean, Container"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageSelector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The message-selector element is used to specify the JMS message&#xD;&#xA;selector to be used in determining which messages a message-driven&#xD;&#xA;bean is to receive.&#xD;&#xA;&#xD;&#xA;Example value: &#xD;&#xA;JMSType = `car' AND color = `blue' AND weight > 2500&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acknowledgeMode" eType="#//AcknowledgeMode"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="an optional declaration of the acknowledgment mode for the message-driven bean if bean-managed transaction demarcation is used (ie. self.transactionType = Bean)&#xD;&#xA;&#xD;&#xA;The acknowledge-mode specifies whether JMS AUTO_ACKNOWLEDGE or DUPS_OK_ACKNOWLEDGE message acknowledgment semantics should be used for the onMessage message of a message-driven bean that uses bean managed transaction demarcation.&#xD;&#xA;&#xD;&#xA;The acknowledge-mode must be one of the two following:  Auto-acknowledge, Dups-ok-acknowledge&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="link" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value=" - an optional declaration of the bean's&#xD;&#xA;&#x9;      message-destination-link&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//MessageDrivenDestination"
+        containment="true" eOpposite="#//MessageDrivenDestination/bean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes activationConfig&#xD;&#xA;An optional declaration of the intended destination type of the message-driven bean"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activationConfig" eType="#//ActivationConfig"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageDestination" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messagingType" eType="ecore:EClass ../../org.eclipse.jem/model/java.ecore#//JavaClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4&#xD;&#xA;The messaging-type element specifies the message&#xD;&#xA;        listener interface of the message-driven bean. If&#xD;&#xA;        the messaging-type element is not specified, it is&#xD;&#xA;        assumed to be javax.jms.MessageListener."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageDrivenDestination" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The message-driven-destination element provides advice to the Deployer as to whether a message-driven bean is intended for a Queue or a Topic. The declaration consists of: the type of the message-driven bean's intended destination and an optional declaration of whether a durable or non-durable subscription should be used if the destination-type is javax.jms.Topic."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DestinationType"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The destination-type element specifies the type of the JMS destination. The type is specified by the Java interface expected to be implemented by the destination.&#xD;&#xA;&#xD;&#xA;The destination-type element must be one of the two following: javax.jms.Queue, javax.jms.Topic"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subscriptionDurability"
+        eType="#//SubscriptionDurabilityKind" unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The subscription-durability element specifies whether a JMS topic subscription is intended to be durable or nondurable.&#xD;&#xA;&#xD;&#xA;The subscription-durability element must be one of the two following:  Durable, NonDurable&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bean" lowerBound="1" eType="#//MessageDriven"
+        transient="true" eOpposite="#//MessageDriven/destination"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AcknowledgeMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Auto-acknowledge=0&#xD;&#xA;Dups-ok-acknowledge=1"/>
+    </eAnnotations>
+    <eLiterals name="AutoAcknowledge"/>
+    <eLiterals name="DupsOkAcknowledge" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SubscriptionDurabilityKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Durable=0&#xD;&#xA;NonDurable=1"/>
+    </eAnnotations>
+    <eLiterals name="Durable"/>
+    <eLiterals name="NonDurable" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReturnTypeMapping">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Local=0&#xD;&#xA;Remote=1"/>
+    </eAnnotations>
+    <eLiterals name="Local"/>
+    <eLiterals name="Remote" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExcludeList" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The exclude list element defines a set of methods which the Assembler marks to be uncallable. It contains one or more methods.&#xD;&#xA;&#xD;&#xA;If the method permission relation contains methods that are in the exclude list, the Deployer must consider those methods to be uncallable.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4 deprecated, becomes descriptions"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodElements" lowerBound="1"
+        upperBound="-1" eType="#//MethodElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@version J2EE1.4"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DestinationType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Queue=0&#xD;&#xA;Topic=1"/>
+    </eAnnotations>
+    <eLiterals name="Queue"/>
+    <eLiterals name="Topic" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryMethod" eSuperTypes="#//MethodElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="#//Query"
+        transient="true" eOpposite="#//Query/queryMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MultiplicityKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One=0&#xD;&#xA;Many=1"/>
+    </eAnnotations>
+    <eLiterals name="One"/>
+    <eLiterals name="Many" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivationConfigProperty" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.4&#xD;&#xA;The activation-config-propertyType contains a name/value&#xD;&#xA;configuration property pair for a message-driven bean.&#xD;&#xA;&#xD;&#xA;The properties that are recognized for a particular&#xD;&#xA;message-driven bean are determined by the messaging type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The activation-config-property-value element&#xD;&#xA;        contains the value for an activation configuration&#xD;&#xA;        property of a message-driven bean."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The activation-config-property-name element contains&#xD;&#xA;        the name for an activation configuration property of&#xD;&#xA;        a message-driven bean.&#xD;&#xA;&#xD;&#xA;        For JMS message-driven beans, the following property&#xD;&#xA;        names are recognized: acknowledgeMode,&#xD;&#xA;        messageSelector, destinationType, subscriptionDurability"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivationConfig" eSuperTypes="common.ecore#//J2EEEObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@version J2EE1.4&#xD;&#xA;The activation-configType defines information about the&#xD;&#xA;expected configuration properties of the message-driven bean&#xD;&#xA;in its operational environment. This may include information&#xD;&#xA;about message acknowledgement, message selector, expected&#xD;&#xA;destination type, etc.&#xD;&#xA;&#xD;&#xA;The configuration information is expressed in terms of&#xD;&#xA;name/value configuration properties.&#xD;&#xA;&#xD;&#xA;The properties that are recognized for a particular&#xD;&#xA;message-driven bean are determined by the messaging type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configProperties" lowerBound="1"
+        upperBound="-1" eType="#//ActivationConfigProperty" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+        eType="ecore:EClass common.ecore#//Description" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dependency"
+    nsURI="http://kieler.cs.cau.de/dependency/0.1.0" nsPrefix="dependency">
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" eType="ecore:EClass ../../de.cau.cs.kieler.synccharts/model/synccharts.ecore#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceNode" lowerBound="1"
+        eType="#//Node" eOpposite="#//Node/outgoingDependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetNode" lowerBound="1"
+        eType="#//Node" eOpposite="#//Node/incomingDependencies"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SignalDependency" eSuperTypes="#//Dependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchyDependency" eSuperTypes="#//Dependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlflowDependency" eSuperTypes="#//Dependency">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="immediate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionDependency" eSuperTypes="#//Dependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependencies">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//Dependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependencyType">
+    <eLiterals name="STRONG"/>
+    <eLiterals name="WEAK" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DependencyType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" eType="ecore:EClass ../../de.cau.cs.kieler.synccharts/model/synccharts.ecore#//Transition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingDependencies" upperBound="-1"
+        eType="#//Dependency" eOpposite="#//Dependency/sourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingDependencies" upperBound="-1"
+        eType="#//Dependency" eOpposite="#//Dependency/targetNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" eType="ecore:EClass ../../de.cau.cs.kieler.synccharts/model/synccharts.ecore#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

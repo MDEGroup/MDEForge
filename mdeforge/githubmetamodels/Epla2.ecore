@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+	name="epla2" nsURI="http://www.paranor.ch/Epla2" nsPrefix="ch.paranor.epla2">
+	<eClassifiers xsi:type="ecore:EClass" name="Structure"
+		abstract="true">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="name"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Workspace"
+		eSuperTypes="#//Structure">
+		<eOperations name="findProject" eType="#//Project">
+			<eParameters name="id"
+				eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		</eOperations>
+		<eOperations name="findBric" eType="#//Bric">
+			<eParameters name="id"
+				eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		</eOperations>
+		<eOperations name="findTarget" eType="#//Target">
+			<eParameters name="id"
+				eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		</eOperations>
+		<eOperations name="getBrics" upperBound="-1" eType="#//Bric" />
+		<eOperations name="getTargets" upperBound="-1" eType="#//Target" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="projects" upperBound="-1" eType="#//Project" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="developers" upperBound="-1" eType="#//Developer" containment="true"
+			resolveProxies="false" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="location"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="exportLocation"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Project"
+		eSuperTypes="#//Structure">
+		<eOperations name="getId"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="brics" upperBound="-1" eType="#//Bric" eOpposite="#//Bric/project" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Bric"
+		eSuperTypes="#//Structure">
+		<eOperations name="getId"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="project" lowerBound="1" eType="#//Project" eOpposite="#//Project/brics" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="maintainer" eType="#//Developer" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="targets" upperBound="-1" eType="#//Target" containment="true"
+			resolveProxies="false" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Target"
+		eSuperTypes="#//Structure">
+		<eOperations name="getId"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="dependencies" upperBound="-1" eType="#//Target" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="builder" lowerBound="1" eType="#//BuildSpec" containment="true"
+			resolveProxies="false" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="BuildSpec"
+		abstract="true" />
+	<eClassifiers xsi:type="ecore:EClass" name="CommandBuildSpec"
+		eSuperTypes="#//BuildSpec">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="exe" lowerBound="1"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="args" unique="false"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Developer">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="name"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="email"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="AdaBuildSpec"
+		eSuperTypes="#//BuildSpec" />
+	<eClassifiers xsi:type="ecore:EDataType" name="URI"
+		instanceClassName="org.eclipse.emf.common.util.URI" />
+</ecore:EPackage>

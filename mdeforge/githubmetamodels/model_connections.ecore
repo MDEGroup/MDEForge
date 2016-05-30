@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="connections"
+    nsURI="http://unw.design.connections/1.0" nsPrefix="unw.design.connections">
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionDirectives">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="model" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EModelDB"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//ConnectionDirective" containment="true" eOpposite="#//ConnectionDirective/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionDirective" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ConnectionDirectives"
+        eOpposite="#//ConnectionDirectives/connections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectPointToPoint" eSuperTypes="#//ConnectionDirective">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="srcPort" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EPortDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="srcInst" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EInstanceDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dstInst" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EInstanceDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dstPort" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EPortDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="srcRegex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dstRegex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="createPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectPointToPointDefault" eSuperTypes="#//ConnectPointToPoint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectPointToPointDefaultDevice" eSuperTypes="#//ConnectPointToPointDefault"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionNetworkPin" eSuperTypes="#//ConnectionNetworkData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pin" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EIPortDB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionNetworkDirective" eSuperTypes="#//ConnectionDirective">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="src" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EIPortDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dsts" upperBound="-1" eType="#//ConnectionNetworkData"
+        containment="true" eOpposite="#//ConnectionNetworkData/src"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionNetworkData" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" eType="#//ConnectionNetworkDirective"
+        eOpposite="#//ConnectionNetworkDirective/dsts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionNetworkSubNet" eSuperTypes="#//ConnectionNetworkData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instance" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EInstanceDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="network" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionNetworkPinExpr" eSuperTypes="#//ConnectionNetworkData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectNetworkPinTag" eSuperTypes="#//ConnectionNetworkPinExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TagClassAbstract" abstract="true" eSuperTypes="#//ConnectionDirective">
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        containment="true" eOpposite="#//Tag/tagClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagUser" eSuperTypes="#//TagClassAbstract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagItemAbstract" abstract="true">
+    <eOperations name="getElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tag" eType="#//Tag" eOpposite="#//Tag/items"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagItemModule" eSuperTypes="#//TagItemAbstract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="module" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EIModuleDB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagItemPin" eSuperTypes="#//TagItemAbstract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pin" eType="ecore:EDataType ../../unw.design.model.emf/model/db2emf.ecore#//EPinDB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagClock" eSuperTypes="#//TagClassAbstract"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="TAG_TYPES">
+    <eLiterals name="CLOCK"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//TagItemAbstract" containment="true" eOpposite="#//TagItemAbstract/tag"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tagClass" eType="#//TagClassAbstract"
+        eOpposite="#//TagClassAbstract/tags"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0"
+  xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="statistical"
+    nsURI="http://www.eclipse.org/hyades/models/statistical.xmi" nsPrefix="Statistical">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Internal package, please do not extend or use.&#xD;&#xA;This package is intended to describe structured and dynamically typed statistical data."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="SDDescriptor" eSuperTypes="../../../org.eclipse.tptp.platform.models.hierarchy/src-hierarchy/model/hierarchy.ecore#//AbstractTRCDescription">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the base class for all the desciptors on the model. This class provides the ability to structure the descriptor data in a tree (parent/child relationship).  &#xD;&#xA;&#xD;&#xA;This class, and its subclasses, does not hold any data fields proper, but rather contain all the metadata that describe the counters, statistics, etc. that can be collected from an agent instance. "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//SDDescriptor" containment="true" eOpposite="#//SDDescriptor/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//SDDescriptor"
+        transient="true" eOpposite="#//SDDescriptor/children"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDMemberDescriptor" abstract="true"
+      eSuperTypes="#//SDDescriptor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the abstract class that all descriptor types need to relaize.  Specializations of this class represent the different types of data that are collected."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="representation" lowerBound="1"
+        eType="#//SDRepresentation" containment="true" eOpposite="#//SDRepresentation/memberDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="snapshotObservation" upperBound="-1"
+        eType="#//SDSnapshotObservation" eOpposite="#//SDSnapshotObservation/memberDescriptor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDGaugeRepresentation" eSuperTypes="#//SDRangeRepresentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Observations of this type has a certain range and a maximum and minimum threshold.  These threshold havles can be set by the UI and stored here.  It is then possible to observe the model as it is built and provide notification actions and the like.  "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minThreshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDSampleDescriptor" eSuperTypes="#//SDMemberDescriptor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a descriptor type for statistical data.  Statistical data is data that is not necessarily updated all the time but rather is updated in the agent only periodically at some freqency."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateFrequencey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDView" eSuperTypes="../../../org.eclipse.tptp.platform.models.hierarchy/src-hierarchy/model/hierarchy.ecore#//AbstractTRCView">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The view is a named collection of windows.  The view allows you to navigate the windows so that data can be propogated through the windows if that behaviour is desired.&#xD;&#xA;For example data may be collected at 1 minute intervals and used to populate a widow which contains the most recent 1 hour of data. There may be a second window that contains a set of data point that summarize each of the previous 23 hours plus the hour represented in the first window. A third window may reflect the data for a given week, and so on.&#xD;&#xA;A view associates these windows of related data and provides a mechanism to manage the cascading of data across these windows over the data."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="window" upperBound="-1"
+        eType="#//SDSampleWindow" containment="true" eOpposite="#//SDSampleWindow/view"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDSampleWindow">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a window of data.  Windows contain a fixed number of snapshots that typically represent some period of time.  &#xD;&#xA;&#xD;&#xA;This class can be specialized to describe processing of the observations for a particular use-case."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="view" eType="#//SDView"
+        transient="true" eOpposite="#//SDView/window"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="observations" upperBound="-1"
+        eType="#//SDSnapshotObservation" containment="true" eOpposite="#//SDSnapshotObservation/window"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDSnapshotObservation" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="All observations are specializations of this class.  The individual observation values reside in the specialization instances.  "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validityMask" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByte">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This is a bitmask for the indices of the observation instance array fields.  It is possoble for a counter to become active/inactive at any point during a window.  This mask allows a means of marking whether a particular field contains a valid value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberDescriptor" lowerBound="1"
+        eType="#//SDMemberDescriptor" eOpposite="#//SDMemberDescriptor/snapshotObservation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="window" lowerBound="1"
+        eType="#//SDSampleWindow" transient="true" eOpposite="#//SDSampleWindow/observations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDDiscreteObservation" eSuperTypes="#//SDSnapshotObservation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The collection of descrete values associated with a counter during a sample window."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" unique="false" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDContiguousObservation" eSuperTypes="#//SDSnapshotObservation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The collection of contiguous values associated with a counter during a sample window."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" unique="false" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDTextObservation" eSuperTypes="#//SDSnapshotObservation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The collection of text values associated with a counter during a sample window."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textValue" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDRangeRepresentation" eSuperTypes="#//SDDiscreteRepresentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Observations of this type have a value within a certain range"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDCounterDescriptor" eSuperTypes="#//SDMemberDescriptor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class is a descriptor for a counter that is constantly updated.  Observations of this type are considered to be up to the moment values. "/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDRepresentation" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the root of all the metadata types that describe how to render a observation.  The intention of the representation class is to provide a description of observations so that a generic veiwer can be provided for the observations with the same representation specialization"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberDescriptor" lowerBound="1"
+        eType="#//SDMemberDescriptor" transient="true" eOpposite="#//SDMemberDescriptor/representation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDTextRepresentation" eSuperTypes="#//SDRepresentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represent observations of this type as text values. "/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDDiscreteRepresentation" eSuperTypes="#//SDRepresentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Observations of this type have descrite values (integers).  "/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDContiguousRepresentation" eSuperTypes="#//SDRepresentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Observations of this type have contiguous values (float)."/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

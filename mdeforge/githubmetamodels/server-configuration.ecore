@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cfg"
+    nsURI="http://schmeedy.com/pdt/joomla/server" nsPrefix="jscfg">
+  <eClassifiers xsi:type="ecore:EClass" name="AvailableServers">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="servers" upperBound="-1"
+        eType="#//LocalJoomlaServer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalJoomlaServer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="teamId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="majorVersion" eType="#//MajorJoomlaVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exactVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="installDir" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adminUserCredentials" eType="#//UserCredentials"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MajorJoomlaVersion">
+    <eLiterals name="ONE_FIVE" literal="1.5.x"/>
+    <eLiterals name="ONE_SIX" value="1" literal="1.6.x"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserCredentials">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeploymentDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runtimes" lowerBound="1"
+        upperBound="-1" eType="#//DeploymentRuntime" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeploymentRuntime">
+    <eOperations name="getDestination" eType="#//File">
+      <eParameters name="resource" eType="ecore:EClass project-model.ecore#//ExtensionResource"/>
+    </eOperations>
+    <eOperations name="supports" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="extension" eType="ecore:EClass project-model.ecore#//BasicExtensionModel"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="server" lowerBound="1"
+        eType="#//LocalJoomlaServer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deployedExtensions" upperBound="-1"
+        eType="#//JoomlaExtensionDeployment" containment="true" eOpposite="#//JoomlaExtensionDeployment/runtime"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="httpSession" lowerBound="1"
+        eType="#//IJoomlaHttpSession" changeable="false" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JoomlaExtensionDeployment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runtime" lowerBound="1"
+        eType="#//DeploymentRuntime" eOpposite="#//DeploymentRuntime/deployedExtensions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extension" lowerBound="1"
+        eType="ecore:EClass project-model.ecore#//BasicExtensionModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IJoomlaHttpSession" instanceClassName="com.schmeedy.pdt.joomla.core.server.IJoomlaHttpSession"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="File" instanceClassName="java.io.File"/>
+</ecore:EPackage>

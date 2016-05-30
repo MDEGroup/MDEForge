@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://mmocore.ru/model/1.0.0" nsPrefix="mmocore-model">
+  <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://mmocore.ru/model/1.0/indexing"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://mmocore.ru/model/1.0/indexing"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tags" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://mmocore.ru/model/1.0/indexing"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" abstract="true" eSuperTypes="#//Identifiable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UrlResource" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Version" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uniqueId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" abstract="true" eSuperTypes="#//Version #//Decorate #//PreferencesContributor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugins" upperBound="-1"
+        eType="#//PluginDependence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//i18nString" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Decorate" abstract="true" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="icon" eType="#//ImageResource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImageResource" abstract="true" eSuperTypes="#//UrlResource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PluginDependence">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="plugin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextResource" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToStringMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PreferencesNode" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//PreferencesNode"
+        eOpposite="#//PreferencesNode/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//PreferencesNode" containment="true" eOpposite="#//PreferencesNode/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//StringToStringMap" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PreferencesContributor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferences" eType="#//PreferencesNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BeanContributor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beanName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertiesContributor" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//StringToStringMap" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="i18nString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//StringToStringMap" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

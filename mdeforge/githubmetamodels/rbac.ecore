@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rbac" nsURI="http://www.tudresden.de/rbac" nsPrefix="rbac">
+  <eClassifiers xsi:type="ecore:EClass" name="AccessControlModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="featureModels" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass ../../../../org.js.model.feature/src/main/model/feature.ecore#//FeatureModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Role" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subjects" upperBound="-1"
+        eType="#//Subject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accessControlModels" upperBound="-1"
+        eType="#//AccessControlModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//Group" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permissions" upperBound="-1"
+        eType="#//Permission" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permission" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Nameable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Role"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subject" eSuperTypes="#//Nameable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/subjects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//Nameable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRoles" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/childRoles"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childRoles" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/parentRoles"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subjects" upperBound="-1"
+        eType="#//Subject" eOpposite="#//Subject/roles"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permissions" upperBound="-1"
+        eType="#//Permission"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nameable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureOperation" eSuperTypes="#//ConfigurationOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="ecore:EClass ../../../../org.js.model.feature/src/main/model/feature.ecore#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ConfigurationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeOperation" eSuperTypes="#//ConfigurationOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueOperations" upperBound="-1"
+        eType="#//DomainValueOperation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass ../../../../org.js.model.feature/src/main/model/feature.ecore#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="ecore:EClass ../../../../org.js.model.feature/src/main/model/feature.ecore#//Feature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainValueOperation" eSuperTypes="#//ConfigurationOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ConfigurationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Nameable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationOperation" abstract="true"
+      eSuperTypes="#//Permission"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConfigurationType">
+    <eLiterals name="select"/>
+    <eLiterals name="deselect" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ModificationType">
+    <eLiterals name="hide"/>
+    <eLiterals name="view" value="1"/>
+    <eLiterals name="modify" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VisibilityRestriction" eSuperTypes="#//Permission">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
+        eType="#//ModificationType"/>
+  </eClassifiers>
+</ecore:EPackage>

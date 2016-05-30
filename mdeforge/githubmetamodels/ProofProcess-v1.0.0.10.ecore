@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="proofprocess" nsURI="http://org/ai4fm/proofprocess/v1.0.0.10"
+    nsPrefix="proof">
+  <eClassifiers xsi:type="ecore:EClass" name="Intent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Loc" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Trace" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inGoals" lowerBound="1"
+        upperBound="-1" eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outGoals" upperBound="-1"
+        eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Loc"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trace" lowerBound="1" eType="#//Trace"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofInfo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intent" eType="#//Intent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="narrative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inFeatures" upperBound="-1"
+        eType="#//ProofFeature" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outFeatures" upperBound="-1"
+        eType="#//ProofFeature" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofFeatureDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ProofFeatureType">
+    <eLiterals name="USER" literal="USER"/>
+    <eLiterals name="INFERRED" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" lowerBound="1" eType="#//ProofFeatureDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ProofFeatureType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" lowerBound="1"
+        upperBound="-1" eType="#//Term" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofElem" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="info" lowerBound="1" eType="#//ProofInfo"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofEntry" eSuperTypes="#//ProofElem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="proofStep" lowerBound="1"
+        eType="#//ProofStep" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofSeq" eSuperTypes="#//ProofElem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" lowerBound="1"
+        upperBound="-1" eType="#//ProofElem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofParallel" eSuperTypes="#//ProofElem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//ProofElem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//ProofEntry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofDecor" eSuperTypes="#//ProofElem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" lowerBound="1" eType="#//ProofElem"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attempt">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="proof" lowerBound="1" eType="#//ProofElem"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Proof">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goals" lowerBound="1" upperBound="-1"
+        eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attempts" lowerBound="1"
+        upperBound="-1" eType="#//Attempt" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProofStore">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="proofs" upperBound="-1"
+        eType="#//Proof" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intents" ordered="false"
+        upperBound="-1" eType="#//Intent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" ordered="false"
+        upperBound="-1" eType="#//ProofFeatureDef" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

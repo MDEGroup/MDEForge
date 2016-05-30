@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cp3model" nsURI="http://inf.mit.bme.hu/donat/incquery-deps/cp3model"
+    nsPrefix="cp3">
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Dep">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EShort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//CP3AbstractItem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//CP3AbstractItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Repo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deps" upperBound="-1" eType="#//CP3Dep"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//CP3AbstractItem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Project" eSuperTypes="#//CP3AbstractItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//CP3Class" eOpposite="#//CP3Class/projects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Class" eSuperTypes="#//CP3AbstractItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//CP3Project" eOpposite="#//CP3Project/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//CP3Method" eOpposite="#//CP3Method/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//CP3Field" eOpposite="#//CP3Field/classes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3AbstractItem" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Method" eSuperTypes="#//CP3AbstractItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//CP3Class" eOpposite="#//CP3Class/methods"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CP3Field" eSuperTypes="#//CP3AbstractItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//CP3Class" eOpposite="#//CP3Class/fields"/>
+  </eClassifiers>
+</ecore:EPackage>

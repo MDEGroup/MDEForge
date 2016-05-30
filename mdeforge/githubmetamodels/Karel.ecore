@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="karel"
+    nsURI="http://www.mcj.org/karel/Karel" nsPrefix="karel">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initSection" eType="#//InitSection"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userDefinedCommands" upperBound="-1"
+        eType="#//UserDefinedCommand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="main" eType="#//Main" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitSection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initCommands" upperBound="-1"
+        eType="#//InitCommand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitCommand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InitPositionCommand" eSuperTypes="#//InitCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitHeadingCommand" eSuperTypes="#//InitCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="heading" eType="#//HeadingKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitBoardSizeCommand" eSuperTypes="#//InitCommand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HeadingKind">
+    <eLiterals name="NORTH" literal="NORTH"/>
+    <eLiterals name="SOUTH" value="1" literal="SOUTH"/>
+    <eLiterals name="WEST" value="2" literal="WEST"/>
+    <eLiterals name="EAST" value="3" literal="EAST"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedCommand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doc" eType="#//DocumentationComment"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Main">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedCommandStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" eType="#//UserDefinedCommand"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//ConditionExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseStatements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IterateStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="times" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WhileStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//ConditionExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentationComment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//CommandKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CommandKind">
+    <eLiterals name="MOVE" literal="move"/>
+    <eLiterals name="TURNLEFT" value="1" literal="turn"/>
+    <eLiterals name="TURNON" value="2" literal="turnOn"/>
+    <eLiterals name="TURNOFF" value="3" literal="turnOff"/>
+    <eLiterals name="PUT" value="4" literal="put"/>
+    <eLiterals name="GET" value="5" literal="get"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expr" eType="#//ConditionKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConditionKind">
+    <eLiterals name="WALL_AHEAD" literal="WALL_AHEAD"/>
+    <eLiterals name="MARKED_PLACE" value="1" literal="MARKED_PLACE"/>
+  </eClassifiers>
+</ecore:EPackage>

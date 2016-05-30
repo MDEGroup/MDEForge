@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parallelj"
+    nsURI="http://www.parallelj.org/0.5.0" nsPrefix="parallelj">
+  <eClassifiers xsi:type="ecore:EClass" name="Program" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputCondition" lowerBound="1"
+        eType="#//InputCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputCondition" lowerBound="1"
+        eType="#//OutputCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
+        eType="#//Predicate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" upperBound="-1" eType="#//Data"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="programs" upperBound="-1"
+        eType="#//Program" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaInformationContainer"
+        eType="#//MetaInformationContainer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputCondition" eSuperTypes="#//Condition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputCondition" eSuperTypes="#//Condition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Predicate" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" eType="#//Predicate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//Element" eOpposite="#//Element/inputLinks"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputLinks" upperBound="-1"
+        eType="#//Link" eOpposite="#//Link/destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputLinks" upperBound="-1"
+        eType="#//Link" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Procedure" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="#//JoinType"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="split" eType="#//SplitType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForEachLoop" eSuperTypes="#//Procedure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterable" lowerBound="1"
+        eType="#//Data"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WhileLoop" eSuperTypes="#//Procedure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Data" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaInformationContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaInformation" upperBound="-1"
+        eType="#//MetaInformation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaInformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Handler" eSuperTypes="#//Procedure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedures" upperBound="-1"
+        eType="#//Procedure"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SplitType">
+    <eLiterals name="AND"/>
+    <eLiterals name="OR" value="1"/>
+    <eLiterals name="XOR" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
+    <eLiterals name="AND"/>
+    <eLiterals name="OR" value="1"/>
+    <eLiterals name="XOR" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pipeline" eSuperTypes="#//Procedure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedures" upperBound="-1"
+        eType="#//Procedure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterable" lowerBound="1"
+        eType="#//Data"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BusinessProcedure" eSuperTypes="#//Procedure"/>
+</ecore:EPackage>

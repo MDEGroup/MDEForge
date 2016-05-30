@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="lnxpacker"
+    nsURI="http://torusfw.org/org.torusfw.tools.linux/packager.ecore" nsPrefix="LnxPacker">
+  <eClassifiers xsi:type="ecore:EClass" name="PackageDescriptor">
+    <eOperations name="getFieldFromType" eType="#//DescriptionField">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( DescriptionField f : getFields() )&#xA;{&#xA;&#x9;if ( ( f.getType() != null ) &amp;&amp; ( f.getType() == type ) )&#xA;&#x9;{&#xA;&#x9;&#x9;return f;&#xA;&#x9;}&#xA;}&#xA;return null;"/>
+        <details key="documentation" value="Gets a field entry from its type."/>
+      </eAnnotations>
+      <eParameters name="type" eType="#//FieldType"/>
+    </eOperations>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFieldValueFromType ( FieldType.PACKAGE );"/>
+        <details key="documentation" value="Package name accessor."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFieldValueFromType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="DescriptionField f = getFieldFromType ( type );&#xA;if ( f != null )&#xA;{&#xA;&#x9;return f.getValue();&#xA;}&#xA;return null;"/>
+        <details key="documentation" value="Gets a field value from its type."/>
+      </eAnnotations>
+      <eParameters name="type" eType="#//FieldType"/>
+    </eOperations>
+    <eOperations name="getVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFieldValueFromType ( FieldType.VERSION );"/>
+        <details key="documentation" value="Package version accessor."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getArchitecture" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFieldValueFromType ( FieldType.ARCHITECTURE );"/>
+        <details key="documentation" value="Package architecture accessor."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getShortDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFieldValueFromType ( FieldType.DESCRIPTION );"/>
+        <details key="documentation" value="Package short description accessor."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getLongDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getFieldValueFromType ( FieldType.FULLDESCRIPTION );"/>
+        <details key="documentation" value="Package full description accessor."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//DescriptionField" containment="true" eOpposite="#//DescriptionField/package"
+        eKeys="#//DescriptionField/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DescriptionField">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//FieldType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//PackageDescriptor"
+        eOpposite="#//PackageDescriptor/fields"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FieldType">
+    <eLiterals name="unknown" value="-1" literal="Unknown"/>
+    <eLiterals name="package" literal="Package"/>
+    <eLiterals name="version" value="1" literal="Version"/>
+    <eLiterals name="architecture" value="2" literal="Architecture"/>
+    <eLiterals name="maintainer" value="3" literal="Maintainer"/>
+    <eLiterals name="description" value="4" literal="Description"/>
+    <eLiterals name="fulldescription" value="5" literal="FullDescription"/>
+    <eLiterals name="section" value="6" literal="Section"/>
+    <eLiterals name="priority" value="7" literal="Priority"/>
+    <eLiterals name="homepage" value="8" literal="Homepage"/>
+    <eLiterals name="installedsize" value="9" literal="Installed-Size"/>
+    <eLiterals name="depends" value="10" literal="Depends"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageComponent" eSuperTypes="../../org.torusfw.buckytools.core/model/component.ecore#//Component">
+    <eOperations name="buildSpec" eExceptions="ecore:EDataType ../../org.torusfw.buckytools.core/model/component.ecore#//SpecBuildingException">
+      <eParameters name="specBuilder" eType="ecore:EDataType ../../org.torusfw.buckytools.core/model/component.ecore#//CSpecBuilder"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" eType="#//PackageDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debFileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="deb file name accessor."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

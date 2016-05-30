@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="M2TWeaving" nsURI="http://melanee.org/M2TWeaving" nsPrefix="M2TWeaving">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="WeavingModel">
+    <eOperations name="findLinkForPLMElement" upperBound="-1" eType="#//WeavingLink">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Search the weaving link of a given model element"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="WeavingLink.allInstances()->select(l | l.modelElement = element)->asOrderedSet()"/>
+      </eAnnotations>
+      <eParameters name="element" lowerBound="1" eType="ecore:EClass ../../org.melanee.core.models.plm/model/PLM.ecore#//Element"/>
+    </eOperations>
+    <eOperations name="findTextElementForOffset" upperBound="-1" eType="#//TextElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds the weving linkt that starts closest before the given offset"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let allTextElements:Set(TextElement) =&#xD;&#xA;&#x9;TextElement.allInstances()&#xD;&#xA;in&#xD;&#xA;let closestDistance:Integer = &#xD;&#xA;&#x9;allTextElements->collect(e | offset - e.offset)->select(n | n >= 0)->min()&#xD;&#xA;in&#xD;&#xA;allTextElements->select(e | &#xD;&#xA;&#x9;&#x9;(&#x9;((offset - e.offset) = closestDistance)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;or&#xD;&#xA;&#x9;&#x9;&#x9;(&#xD;&#xA;&#x9;&#x9;&#x9;&#x9; (closestDistance = 0)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9; and &#xD;&#xA;&#x9;&#x9;&#x9;&#x9;( offset - (e.offset + e.length) ) = closestDistance)&#xD;&#xA;&#x9;&#x9;&#x9;)&#xD;&#xA;&#x9;&#x9;)->asOrderedSet()->sortedBy(t | t.offset)"/>
+      </eAnnotations>
+      <eParameters name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="findTextElementForOffset" upperBound="-1" eType="#//TextElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds the weving linkt that starts closest before the given offset. The search strategy specifies how the algorith behaves in case a model element with distance 0 is found. For example it can be configured to always return an editable elemen, e.g. attribute."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let textElements:OrderedSet(TextElement) =&#xD;&#xA;&#x9;self.findTextElementForOffset(offset)&#xD;&#xA;in&#xD;&#xA;-- If the closes distance is not 0 there is no decision to take&#xD;&#xA;if (textElements->size() &lt;= 1) then&#xD;&#xA;&#x9;textElements&#xD;&#xA;else&#xD;&#xA;&#x9;--Hit an Attribute and want Attributes -> everything is fine&#xD;&#xA;&#x9;if (self.findTextElementForOffset(offset)->select(t | t.oclAsType(ecore::EObject).eContainer().oclAsType(WeavingLink).modelElement.oclIsTypeOf(PLM::Attribute))->size() > 0 and strategy = SearchStrategy::AttributePreffered) then&#xD;&#xA;&#x9;&#x9;self.findTextElementForOffset(offset)->select(t | t.oclAsType(ecore::EObject).eContainer().oclAsType(WeavingLink).modelElement.oclIsTypeOf(PLM::Attribute))&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;--Hit an Entity and want an Entity -> everything is fine&#xD;&#xA;&#x9;&#x9;if (self.findTextElementForOffset(offset)->select(t | t.oclAsType(ecore::EObject).eContainer().oclAsType(WeavingLink).modelElement.oclIsTypeOf(PLM::Entity))->size() > 0 and strategy = SearchStrategy::EntityPreffered) then&#xD;&#xA;&#x9;&#x9;&#x9;self.findTextElementForOffset(offset)->select(t | t.oclAsType(ecore::EObject).eContainer().oclAsType(WeavingLink).modelElement.oclIsTypeOf(PLM::Entity))&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;--Bad luck&#xD;&#xA;&#x9;&#x9;&#x9;textElements&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eParameters name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eParameters name="strategy" eType="#//SearchStrategy"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//WeavingLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WeavingModelContent" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WeavingLink" eSuperTypes="#//WeavingModelContent">
+    <eOperations name="calculateOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Calculates the offset for this model element by taking the contained weaving links and text elements into account."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let firstChild:WeavingModelContent = &#xD;&#xA;&#x9;self.children->first()&#xD;&#xA;in&#xD;&#xA;&#x9;if (firstChild.oclIsUndefined()) then&#xD;&#xA;&#x9;&#x9;-1&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;if (firstChild.oclIsTypeOf(TextElement)) then&#xD;&#xA;&#x9;&#x9;&#x9;firstChild.oclAsType(TextElement).offset&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;firstChild.oclAsType(WeavingLink).calculateOffset()&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif "/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="calculateLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Calculates the length for this model element by taking the contained weaving links and text elements into account."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let lastChild:WeavingModelContent = &#xD;&#xA;&#x9;self.children->last()&#xD;&#xA;in&#xD;&#xA;&#x9;if (lastChild.oclIsUndefined()) then&#xD;&#xA;&#x9;&#x9;-1&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;if (lastChild.oclIsTypeOf(TextElement)) then&#xD;&#xA;&#x9;&#x9;&#x9;(lastChild.oclAsType(TextElement).offset + lastChild.oclAsType(TextElement).length) - self.calculateOffset()&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;lastChild.oclAsType(WeavingLink).calculateLength()&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif "/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElement" eType="ecore:EClass ../../org.melanee.core.models.plm/model/PLM.ecore#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//WeavingModelContent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextElement" eSuperTypes="#//WeavingModelContent">
+    <eOperations name="getLengthTrimmed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the size of the trimmed string. In some cases it is important to get this string because TextElements containing whitespace only can have more length than in the Literal they have been created from."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.text.trim().size()"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SearchStrategy">
+    <eLiterals name="AttributePreffered"/>
+    <eLiterals name="EntityPreffered" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

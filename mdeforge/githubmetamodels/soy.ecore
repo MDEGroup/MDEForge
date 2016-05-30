@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="soy"
+    nsURI="http://eclipselabs.org/mlang/soy" nsPrefix="org.eclipselabs.mlang">
+  <eClassifiers xsi:type="ecore:EClass" name="Tag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tagName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Tag"
+        eOpposite="#//Tag/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Tag" eOpposite="#//Tag/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openLocation" eType="ecore:EClass common.ecore#//Location"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="closeLocation" eType="ecore:EClass common.ecore#//Location"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="ecore:EClass common.ecore#//Location"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateTag" eSuperTypes="#//Tag #//NamedTag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doclet" eType="#//Doclet"
+        eOpposite="#//Doclet/template"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfTag" eSuperTypes="#//Tag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseLocation" eType="ecore:EClass common.ecore#//Location"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Doclet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="ecore:EClass common.ecore#//Location"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//Param" eOpposite="#//Param/doclet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" eType="#//TemplateTag"
+        eOpposite="#//TemplateTag/doclet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Param" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doclet" eType="#//Doclet"
+        eOpposite="#//Doclet/params"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedTag" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

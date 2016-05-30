@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="playtrd"
+    nsURI="http://playtrd.no/v10/playtrd.ecore" nsPrefix="playtrd">
+  <eClassifiers xsi:type="ecore:EDataType" name="GlobePosition" instanceClassName="org.jscience.geography.coordinates.LatLong"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectPosition" eSuperTypes="#//Scripted">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="globePosition" eType="#//GlobePosition">
+      <eAnnotations source="http://playtrd.no/v10/playtrd.ecore">
+        <details key="positionFeature" value="GlobePosition"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="positioned" eType="#//Positioned"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Player" eSuperTypes="#//Positioned">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Playtrd" eSuperTypes="#//Scripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1"
+        eType="#//Region" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="communities" upperBound="-1"
+        eType="#//Community" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="games" upperBound="-1"
+        eType="#//Game" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uis" upperBound="-1" containment="true">
+      <eGenericType eClassifier="ecore:EClass ../../org.eclipse.e4.tm/model/tm/widgets.ecore#//AbstractComposite">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="POI" eSuperTypes="#//Positioned">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pois" upperBound="-1" eType="#//POI"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Game" eSuperTypes="#//Scripted">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//PlayerState"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="players" upperBound="-1"
+        eType="#//PlayerState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachine" eType="ecore:EClass platform:/plugin/no.hal.scxml.scxmlxt/model/scxmlxt.ecore#//StateMachine"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentStates" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/no.hal.scxml.scxmlxt/model/scxmlxt.ecore#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlayerState" eSuperTypes="#//Scripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="#//Player"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Community">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="players" upperBound="-1"
+        eType="#//Player" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositionService" eSuperTypes="#//Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectPositions" upperBound="-1"
+        eType="#//ObjectPosition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Positioned" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageService" eSuperTypes="#//Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//PlayerMessage" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlayerMessage" eSuperTypes="#//Scripted">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="#//Player"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//Scripted"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Scripted" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scriptSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/e4/emf/ecore/javascript/scriptSourceFeature">
+        <details key="js" value="eval, listen"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocationService" eSuperTypes="#//Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectLocations" upperBound="-1"
+        eType="#//ObjectLocation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectLocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="positioned" eType="#//Positioned"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Positioned"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" eSuperTypes="#//Positioned #//MoneyValued"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Wallet" eSuperTypes="#//Item"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Store" eSuperTypes="#//Owner"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Owner" eSuperTypes="#//Inventory"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Trade" eSuperTypes="#//MoneyValued">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="buyerIsNonNull sellerIsNonNull buyerWalletIsNonNull sellerOwnsSellerItems buyerOwnsBuyerItems moneyValueDefined walletHasMoneyValue"/>
+    </eAnnotations>
+    <eOperations name="perform"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="seller" eType="#//Owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyer" eType="#//Owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellerWallet" eType="#//Wallet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sellerItems" upperBound="-1"
+        eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyerItems" upperBound="-1"
+        eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyerWallet" eType="#//Wallet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Money" instanceTypeName="javax.measure.Measurable&lt;org.jscience.economics.money.Money>"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MoneyValued">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="moneyValue" eType="#//Money"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inventory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedItems" upperBound="-1"
+        eType="#//Item" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Properties"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TagService">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaData" upperBound="-1"
+        eType="#//TagData" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagData">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="poi" eType="#//POI"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//TagEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TagEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColocationService" eSuperTypes="#//Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectColocations" upperBound="-1"
+        eType="#//ObjectColocation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectColocation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="positioned" eType="#//Positioned"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//Positioned"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IEditingDomainProvider" instanceClassName="org.eclipse.emf.edit.domain.IEditingDomainProvider"/>
+</ecore:EPackage>

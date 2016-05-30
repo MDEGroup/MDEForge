@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="RDBMS" name="RDBMS" nsURI="RDBMS" nsPrefix="rdbms">
+  <eClassifiers xsi:type="ecore:EClass" name="Scheme">
+    <eOperations name="setName">
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addTable">
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="remTable">
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="New"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+        eType="#//Table" containment="true" eOpposite="#//Table/scheme"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eAnnotations source="echo/Gen">
+      <details key="gen_linear" value="self.columns->one(x | true)"/>
+      <details key="gen_linear" value="self.columns->forAll(x | x.name = self.name)"/>
+    </eAnnotations>
+    <eOperations name="setName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="post_a" value="self.name = n"/>
+      </eAnnotations>
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addColumn">
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="remColumn">
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass #//Column"
+        containment="true" eOpposite="#//Column/table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scheme" lowerBound="1"
+        eType="ecore:EClass #//Scheme" eOpposite="#//Scheme/tables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eOperations name="setName">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="post_a" value="self.name = n"/>
+      </eAnnotations>
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setTable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="post_a" value="self.table.name = n"/>
+      </eAnnotations>
+      <eParameters name="n" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1" eType="ecore:EClass #//Table"
+        eOpposite="#//Table/columns"/>
+  </eClassifiers>
+</ecore:EPackage>

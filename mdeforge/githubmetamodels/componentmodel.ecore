@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="componentmodel" nsURI="http://componentmodel/1.0" nsPrefix="componentmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Component" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" lowerBound="1" upperBound="-1"
+        eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//Port"
+        containment="true" eKeys="/org.discode.task.m2t/bin/componentModel.ecore#//Port/name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorEmail" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveComponent" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//Property"
+        containment="true" eKeys="/org.discode.task.m2t/bin/componentModel.ecore#//Property/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeComponent" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//Component"
+        containment="true" eKeys="/org.discode.task.m2t/bin/componentModel.ecore#//Component/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InPort" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delegatesTo" upperBound="-1"
+        eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//InPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//InPort/delegatesFrom"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//OutPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//OutPort/sink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delegatesFrom" eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//InPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//InPort/delegatesTo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutPort" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propagatesFrom" eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//OutPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//OutPort/propagatesTo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sink" upperBound="-1" eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//InPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//InPort/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propagatesTo" upperBound="-1"
+        eType="ecore:EClass /org.discode.task.m2t/bin/componentModel.ecore#//OutPort"
+        eOpposite="/org.discode.task.m2t/bin/componentModel.ecore#//OutPort/propagatesFrom"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typePackage" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericProperty" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumProperty" eSuperTypes="/org.discode.task.m2t/bin/componentModel.ecore#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literalValue" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

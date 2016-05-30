@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rif12"
+    nsURI="http://automotive-his.de/200807/rif" nsPrefix="rif">
+  <eSubpackages name="ExchangeFile" nsURI="http://automotive-his.de/200807/rif/ef"
+      nsPrefix="rif">
+    <eClassifiers xsi:type="ecore:EClass" name="SpecHierarchyRoot" eSuperTypes="#//ExchangeFile/SpecElementWithUserDefinedAttributes">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Klärt, ob Haupt-Kapitel modifiziert werden dürfen und ob der Name der Hierachie geändert werden kann.&#xA;Vererbt an die Haupt-Kapitel und an die Attribute der Hierarchie.&#xA;&#xA;Bezieht sich NICHT auf die inhalte der Anforderungen und deren Attribute in der Gruppe."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//ExchangeFile/SpecHierarchy" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecElementWithUserDefinedAttributes"
+        abstract="true" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/SpecType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/AttributeValue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="desc" ordered="false"
+          eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/ID"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastChange" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/dateTime"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="longName" ordered="false"
+          eType="#//ExchangeFile/DataTypes/string"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecType" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Name des SpecTypes.&#xA;Attribut-Definitionen hinzufügen oder löschen.&#xA;Vererbt an die AttributeDefinitions."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specAttributes" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/AttributeDefinition" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinition" abstract="true"
+        eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Name des Attributs.&#xA;Zuordnung des Datentyps zum Attribut, aber NICHT die Datentypdefinition selbst.&#xA;Default-Wert.&#xA;&#xA;&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValue" abstract="true" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Inhalt der Eigenschaft (Wert) bzw. die Referenz bei verknüpften Inhalten.&#xA;&#xA;Formal eigentlich auch die Zuordnung zur AttributeDefinition, aber das macht praktisch eigentlich keinen Sinn."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecHierarchy" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Dient dazu, für Unterkapitel zu kennzeichnen, ob innerhalb dieses Unterkapitels umstrukturiert und ergänzt bzw. gelöscht werden darf.&#xA;Hat aber nichts mit den Inhalten der SpecObjekte und deren Eigenschaften zu tun, nur mit der Kapitelstruktur als solches!&#xA;Vorsicht: Dadurch können aus Knoten (Überschriften) Blätter (Anforderungen) gemacht werden und umgekehrt.&#xA;Vererbt rekursiv an die Unter-Unter-Kapitel."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/SpecObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/AttributeValue"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//ExchangeFile/SpecHierarchy" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecObject" eSuperTypes="#//ExchangeFile/SpecElementWithUserDefinedAttributes">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Darf die Anforderung umbenannt werden (falls wir den LongName aus Identifiable überhaupt benutzen wollen)?&#xA;Darf der SpecType der Anforderung verändert werden?&#xA;&#xA;Vererbt an die Attribute-Values.&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecGroup" eSuperTypes="#//ExchangeFile/SpecElementWithUserDefinedAttributes">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Darf die Gruppe umbenannt werden?&#xA;Darf der SpecType der Gruppe verändert werden?&#xA;Dürfen der Gruppe neue Anforderungen hinzugefügt oder daraus gelöscht werden?&#xA;Vererbt an die Gruppen-Attribute.&#xA;Vererbt an die RelationGroups.&#xA;&#xA;Bezieht sich NICHT auf die inhalte der Anforderungen und deren Attribute in der Gruppe."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relationGroups" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/RelationGroup" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RelationGroup" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Insbesondere wird hier festgelegt, wer neue Relationen anlegen darf, die zu dieser RelationGroup gehören sollen. Damit kann eingeschränkt werden, wer Traces erzeugen soll, die von den Objekten der Eltern SpecGroup ausgehen.&#xA;Bezieht sich auch auf die Auswahl der TargetGroup und des vorgesehenen SpecType der SpecRelation Objekte in der RelationGroup."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecRelation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relationType" ordered="false"
+          unique="false" eType="#//ExchangeFile/SpecType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecRelation" eSuperTypes="#//ExchangeFile/SpecElementWithUserDefinedAttributes">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Darf die einzelne Relation umbenannt werden (falls wir den LongName aus Identifiable dafür überhaupt benutzen wollen)?&#xA;Darf der SpecType der Relation verändert werden?&#xA;Dürfen Source- und Target der Relation verändert werden?&#xA;Vererbt an die AttributeValues.&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/SpecObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/SpecObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinition" abstract="true"
+        eSuperTypes="#//ExchangeFile/Identifiable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Name des Datentyps.&#xA;Definition des Datentyps.&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AccessPolicy" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessMode" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/AccessPolicyAccessModeEnum"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specGroupHierarchyRoots"
+          ordered="false" upperBound="-1" eType="#//ExchangeFile/SpecGroupHierarchyRoot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specGroups" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecGroup"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDefinitions"
+          ordered="false" unique="false" upperBound="-1" eType="#//ExchangeFile/AttributeDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relationGroups" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/RelationGroup"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="datatypeDefinitions"
+          ordered="false" unique="false" upperBound="-1" eType="#//ExchangeFile/DatatypeDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecRelation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValues" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/AttributeValue"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specTypes" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specHierarchies" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecHierarchy"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specHierarchyRoots" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/SpecHierarchyRoot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecGroupHierarchyRoot" eSuperTypes="#//ExchangeFile/SpecElementWithUserDefinedAttributes">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecGroupHierarchy" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecGroupHierarchy" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="group" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/SpecGroup"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionComplex" eSuperTypes="#//ExchangeFile/AttributeDefinition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DatatypeDefinitionComplex"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+          unique="false" eType="#//ExchangeFile/AttributeValueComplex" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionComplex" abstract="true"
+        eSuperTypes="#//ExchangeFile/DatatypeDefinition">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="embedded" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueComplex" abstract="true"
+        eSuperTypes="#//ExchangeFile/AttributeValue"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionEnumeration" eSuperTypes="#//ExchangeFile/AttributeDefinition">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiValued" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/boolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DatatypeDefinitionEnumeration"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+          unique="false" eType="#//ExchangeFile/AttributeValueEnumeration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionEnumeration" eSuperTypes="#//ExchangeFile/DatatypeDefinition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specifiedValues" upperBound="-1"
+          eType="#//ExchangeFile/EnumValue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EnumValue" eSuperTypes="#//ExchangeFile/Identifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/EmbeddedValue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EmbeddedValue">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/integer"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="otherContent" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEnumeration" eSuperTypes="#//ExchangeFile/AttributeValue">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" ordered="false"
+          unique="false" upperBound="-1" eType="#//ExchangeFile/EnumValue"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" lowerBound="1"
+          eType="#//ExchangeFile/AttributeDefinitionEnumeration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionSimple" eSuperTypes="#//ExchangeFile/AttributeDefinition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DatatypeDefinitionSimple"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+          unique="false" eType="#//ExchangeFile/AttributeValueSimple" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionSimple" abstract="true"
+        eSuperTypes="#//ExchangeFile/DatatypeDefinition"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueSimple" eSuperTypes="#//ExchangeFile/AttributeValue">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="theValue" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" lowerBound="1"
+          eType="#//ExchangeFile/AttributeDefinitionSimple"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEmbeddedDocument" eSuperTypes="#//ExchangeFile/AttributeValueComplex">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/AttributeDefinitionComplex"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="xhtmlContent" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DataTypes/XhtmlContent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEmbeddedFile" eSuperTypes="#//ExchangeFile/AttributeValueComplex">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/AttributeDefinitionComplex"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="binaryContent" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DataTypes/BinaryContent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueFileReference" eSuperTypes="#//ExchangeFile/AttributeValueComplex">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pathToFile" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/AttributeDefinitionComplex"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeValueXmlData" eSuperTypes="#//ExchangeFile/AttributeValueComplex">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/AttributeDefinitionComplex"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="xmlContent" ordered="false"
+          unique="false" lowerBound="1" eType="#//ExchangeFile/DataTypes/XmlContent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionBinaryFile" eSuperTypes="#//ExchangeFile/DatatypeDefinitionComplex">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filenameSuffix" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="formatName" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mimeType" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionBoolean" eSuperTypes="#//ExchangeFile/DatatypeDefinitionSimple"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionDate" eSuperTypes="#//ExchangeFile/DatatypeDefinitionSimple">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" lowerBound="1"
+          eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/DatatypeDefinitionDateFormatEnum"
+          unsettable="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionDocument" eSuperTypes="#//ExchangeFile/DatatypeDefinitionComplex"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionInteger" eSuperTypes="#//ExchangeFile/DatatypeDefinitionSimple">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/integer"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/integer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionReal" eSuperTypes="#//ExchangeFile/DatatypeDefinitionSimple">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="accuracy" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/integer"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/float"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/float"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionString" eSuperTypes="#//ExchangeFile/DatatypeDefinitionSimple">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/integer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionXmlData" eSuperTypes="#//ExchangeFile/DatatypeDefinitionComplex">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameSpaceURI" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaLocation" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RIF">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="header" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/RIFHeader" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="coreContent" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/RIFContent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="toolExtensions" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/RIFToolExtension" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RIFHeader">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" ordered="false"
+          eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/dateTime"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" ordered="false"
+          lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/ID"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceToolId" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" ordered="false"
+          lowerBound="1" eType="#//ExchangeFile/DataTypes/string"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RIFContent">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessPolicies" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/AccessPolicy" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="datatypes" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/DatatypeDefinition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="SpecHierarchyRoots" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecHierarchyRoot" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecObject" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specGroups" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecGroup" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="SpecGroupHierarchyRoots"
+          ordered="false" upperBound="-1" eType="#//ExchangeFile/SpecGroupHierarchyRoot"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specTypes" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+          upperBound="-1" eType="#//ExchangeFile/SpecRelation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RIFToolExtension"/>
+    <eSubpackages name="DataTypes" nsURI="http://automotive-his.de/200807/rif/dt"
+        nsPrefix="rif">
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryContent"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="ID" instanceClassName="java.lang.String"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="UnlimitedNatural" instanceClassName="java.math.BigInteger"/>
+      <eClassifiers xsi:type="ecore:EClass" name="XhtmlContent"/>
+      <eClassifiers xsi:type="ecore:EClass" name="XmlContent"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="boolean" instanceClassName="java.lang.Boolean"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="dateTime" instanceClassName="javax.xml.datatype.XMLGregorianCalendar"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="float" instanceClassName="java.lang.Double"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="integer" instanceClassName="java.math.BigInteger"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="string" instanceClassName="java.lang.String"/>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="EA_PrimitiveTypes_Package" nsURI="http://automotive-his.de/200706/rif/epp"
+      nsPrefix="rif">
+    <eSubpackages name="EA_AUTOSARM2_Types_Package" nsURI="http://automotive-his.de/200706/rif/eatp"
+        nsPrefix="rif">
+      <eClassifiers xsi:type="ecore:EDataType" name="string" instanceClassName="java.lang.String"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="integer" instanceClassName="java.math.BigInteger"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="dateTime" instanceClassName="javax.xml.datatype.XMLGregorianCalendar"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="ID" instanceClassName="java.lang.String"/>
+      <eClassifiers xsi:type="ecore:EEnum" name="AccessPolicyAccessModeEnum">
+        <eLiterals name="EDIT"/>
+        <eLiterals name="DELETE" value="1"/>
+        <eLiterals name="CREATE" value="2"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="DatatypeDefinitionDateFormatEnum">
+        <eLiterals name="W3C"/>
+        <eLiterals name="CUSTOM" value="1"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="UMLStandardProfile" nsURI="http:///EA_Model/UMLStandardProfile.ecore"
+      nsPrefix="EA_Model.UMLStandardProfile">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="UML Standard Profile contains several popular stereotypes, tag definitions and constraints described in UML  2 Specifications."/>
+    </eAnnotations>
+  </eSubpackages>
+</ecore:EPackage>

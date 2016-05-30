@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="manager"
+    nsURI="http://torusfw.org/xpl/manager.ecore" nsPrefix="XplManager">
+  <eClassifiers xsi:type="ecore:EClass" name="XplManager">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This xPL Manager API can be accessed thanks to the singleton instance provided by this interface."/>
+    </eAnnotations>
+    <eOperations name="connect">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Asks for xPL network connection.&lt;br>&#xA;Connection request will be effective only if xPL network is currently detached."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="disconnect">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Asks for xPL network disconnection.&lt;br>&#xA;Disconnection request will be effective only if xPL network is currently attached."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="addNetworkStateListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds provided listener to network state events listeners list."/>
+        <details key="body" value="getNetworkStateListeners().add(listener);"/>
+      </eAnnotations>
+      <eParameters name="listener" eType="#//IXplNetworkStateListener"/>
+    </eOperations>
+    <eOperations name="removeNetworkStateListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Removes provided listener from network state events listeners list."/>
+        <details key="body" value="getNetworkStateListeners().remove(listener);"/>
+      </eAnnotations>
+      <eParameters name="listener" eType="#//IXplNetworkStateListener"/>
+    </eOperations>
+    <eOperations name="addDeviceDiscoveryListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds provided listener to device discovery listeners list."/>
+        <details key="body" value="getDeviceDiscoveryListeners().add(listener);"/>
+      </eAnnotations>
+      <eParameters name="listener" eType="#//IXplDeviceDiscoveryListener"/>
+    </eOperations>
+    <eOperations name="removeDeviceDiscoveryListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Removes provided listener from device discovery listeners list."/>
+        <details key="body" value="getDeviceDiscoveryListeners().remove(listener);"/>
+      </eAnnotations>
+      <eParameters name="listener" eType="#//IXplDeviceDiscoveryListener"/>
+    </eOperations>
+    <eOperations name="discoverDevices">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Asks for xPL network browsing in order to discover devices.&lt;br>&#xA;Discovery request will be effective only if xPL network is currently attached."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="networkState" eType="#//XplNetworkState"
+        changeable="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Provides the current xPL network state seen by the manager."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="networkStateListeners"
+        upperBound="-1" eType="#//IXplNetworkStateListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This network event listeners list can also be modified through {@link #addNetworkStateListener}&#xA;and {@link #removeNetworkStateListener} methods."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="networkAddress" eType="#//InetAddress"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Network IP address to which the manager will try to reach the xPL network.&lt;br>&#xA;This can be configured before calling {@ #connect()} method.&lt;br>&#xA;Default value will be automatically configured to the LAN IP address (if any, or to loopback interface in the worst case)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deviceDiscoveryListeners"
+        upperBound="-1" eType="#//IXplDeviceDiscoveryListener">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This device discovery listeners list can also be modified through {@link #addDeviceDiscoveryListener}&#xA;and {@link #removeDeviceDiscoveryListener} methods."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="discoveredDevices" changeable="false"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Discovered devices map, for the current network.&lt;br>&#xA;This map will be filled automatically with discovered devices, as soon as the xPL network is connected.&lt;br>&#xA;Modifications to this map can be listened by handling an {@link IXplDeviceDiscoveryListener} listener."/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="#//XplDiscoveredDevice"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XplNetworkState">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Enumerated the xPL network possible states."/>
+    </eAnnotations>
+    <eLiterals name="detached" literal="Detached">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Detached state. xPL system has not been activated, or has been shutdown."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="attached" value="1" literal="Attached">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Attached state. xPL system is up and running."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="connecting" value="2" literal="Connecting">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connecting state: a connection request is pending."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="disconnecting" value="3" literal="Disconnecting">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Disconnecting state: a disconnection request is pending."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IXplNetworkStateListener" abstract="true"
+      interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="xPL network state listener interface."/>
+    </eAnnotations>
+    <eOperations name="onNetworkStateChange">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL network state change notification method.&lt;br>&#xA;This method will be called each time the xPL network state changes."/>
+      </eAnnotations>
+      <eParameters name="previousState" eType="#//XplNetworkState"/>
+      <eParameters name="newState" eType="#//XplNetworkState"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="InetAddress" instanceClassName="java.net.InetAddress"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IXplDeviceDiscoveryListener" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="xPL device discovery listener interface."/>
+    </eAnnotations>
+    <eOperations name="onDeviceDiscovered">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device discovery notification method.&lt;br>&#xA;This method will be called each time a device is newly discovered."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="onDeviceShutdown">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device shutdown notification method.&lt;br>&#xA;This method will be called each time a discovered device shutdowns."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="onDeviceHeartbeat">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device heartbeat notification method.&lt;br>&#xA;This method will be called each time a discovered device sends its heartbeat message."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="onDeviceTimeout">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device timeout notification method.&lt;br>&#xA;This method will be called each time a discovered device didn't sent its heartbeat message for too long."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="device" eType="#//XplDiscoveredDevice">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Concerned device instance for this notification."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XplDeviceIdentity" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="xPL device identifier.&lt;br>&#xA;Such objects can be used to represent xPL device identifiers"/>
+    </eAnnotations>
+    <eOperations name="getID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL complete device identifier (vendor-device.instance)"/>
+        <details key="body" value="return getVendorID()+&quot;-&quot;+getDeviceID()+&quot;.&quot;+getInstanceID();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendorID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device identifier vendor ID (8 chars max)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deviceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL device identifier device ID (8 chars max)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="xPL instance identifier device ID (16 chars max)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XplDiscoveredDevice" eSuperTypes="#//XplDeviceIdentity">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Objects used to represent xPL discovered device on the network."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="discoveryTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Local timestamp (in milliseconds) when the device was discovered."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastHeartbeatTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Local timestamp (in milliseconds) of the last received heartbeat message."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timedout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Boolean flag indicating if device timed out (no heartbeat messages received for a while...)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

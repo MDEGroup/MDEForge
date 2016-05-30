@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cal" nsURI="http://www.caltoopia.org/frontend/Cal" nsPrefix="cal">
+  <eClassifiers xsi:type="ecore:EClass" name="AstTop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstPackage" eSuperTypes="#//AstTop"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstNamespace" eSuperTypes="#//AstTop #//AstPackage #//AstUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
+        eType="#//AstEntity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
+        eType="#//AstUnit" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//AstFunction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externals" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedefs" upperBound="-1"
+        eType="#//AstTypeName" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespaces" upperBound="-1"
+        eType="#//AstNamespace" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" eType="#//AstAbstractActor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstAbstractActor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//AstPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//AstPort" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstNetwork" eSuperTypes="#//AstAbstractActor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//AstActorVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structure" eType="#//AstStructure"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstActorVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstAssignParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstAssignParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStructure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//AstConnection" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstConnection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//AstActorVariableReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//AstActorVariableReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//AstConnectionAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstActorVariableReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//AstActorVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstConnectionAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensions" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTypeName">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstTypeDefinitionParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructor" upperBound="-1"
+        eType="#//AstFunction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTypeDefinitionParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstTypeName"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstFunction" eSuperTypes="#//AstExternalFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstActor" eSuperTypes="#//AstAbstractActor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//AstFunction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedures" upperBound="-1"
+        eType="#//AstProcedure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//AstAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initializes" upperBound="-1"
+        eType="#//AstAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateVariables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedules" upperBound="-1"
+        eType="#//AstSchedule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="priorities" upperBound="-1"
+        eType="#//AstPriority" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstPort">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExternalFunction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstProcedure" eSuperTypes="#//AstExternalProcedure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//AstStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExternalProcedure"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTag">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifiers" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExternalActor" eSuperTypes="#//AstAbstractActor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstInequality">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//AstTag"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstPriority">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inequalities" upperBound="-1"
+        eType="#//AstInequality" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstSchedule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" eType="#//AstState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//AstTransition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTransition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//AstState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//AstTag"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//AstState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//AstAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tag" eType="#//AstTag"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//AstInputPattern" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//AstOutputPattern" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guards" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//AstStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstInputPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//AstPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repeat" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstOutputPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//AstPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repeat" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementAssign" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//AstVariableReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" upperBound="-1"
+        eType="#//AstMemberAccess" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementCall" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedure" eType="#//AstProcedure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementForeach" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generators" upperBound="-1"
+        eType="#//AstForeachGenerator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//AstStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstForeachGenerator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//AstVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementBlock" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//AstStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementIf" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" upperBound="-1" eType="#//AstStatement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" upperBound="-1" eType="#//AstStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatementWhile" eSuperTypes="#//AstStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//AstStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionCall" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" eType="#//AstFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionIf" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionList" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generators" upperBound="-1"
+        eType="#//AstGenerator" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstGenerator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//AstVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionVariable" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstVariableReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" upperBound="-1"
+        eType="#//AstMemberAccess" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionLiteral" eSuperTypes="#//AstExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionBoolean" eSuperTypes="#//AstExpressionLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionFloat" eSuperTypes="#//AstExpressionLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionInteger" eSuperTypes="#//AstExpressionLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionString" eSuperTypes="#//AstExpressionLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="builtin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeParams" eType="#//AstTypeParameterList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimensions" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//AstTypeName"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domain" upperBound="-1"
+        eType="#//AstType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="codomain" upperBound="-1"
+        eType="#//AstType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//AstVariable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTypeParameterList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//AstTypeParam" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstTypeParam">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AstType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstVariableReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//AstVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstMemberAccess">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="memberIndex" upperBound="-1"
+        eType="#//AstExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//AstAnnotationArgument" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstAnnotationArgument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstInitialize" eSuperTypes="#//AstAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionBinary" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//AstExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AstExpressionUnary" eSuperTypes="#//AstExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unaryOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//AstExpression"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

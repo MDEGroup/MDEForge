@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="statemachine_mk2"
+    nsURI="http://statemachine_mk2/1.0" nsPrefix="statemachine_mk2">
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="simple_states" upperBound="-1"
+        eType="#//SimpleState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initial_state" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="final_states" eType="#//Final_state"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composite_states" eType="#//Composite_state"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/target"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//State" eOpposite="#//State/incoming"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Final_state" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="possible_states" upperBound="-1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="causes" upperBound="-1"
+        eType="#//Transition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Composite_state" eSuperTypes="#//State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="substates" upperBound="-1"
+        eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleState" eSuperTypes="#//State"/>
+</ecore:EPackage>

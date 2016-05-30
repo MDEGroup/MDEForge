@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="svgd"
+    nsURI="http://devtool.sourceforge.net/language/svgd" nsPrefix="svgd">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Form" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Rechteck" eSuperTypes="#//Form">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hoehe" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="breite" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineprops" lowerBound="1"
+        eType="#//LinienStil" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="areaprops" lowerBound="1"
+        eType="#//FlaechenStil" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Kreis" eSuperTypes="#//Form">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="radius" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineprops" lowerBound="1"
+        eType="#//LinienStil" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="areaprops" lowerBound="1"
+        eType="#//FlaechenStil" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SVGModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" lowerBound="1"
+        upperBound="-1" eType="#//Form" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hoehe" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="breite" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" eType="#//Import"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Linie" eSuperTypes="#//Form">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineprops" lowerBound="1"
+        eType="#//LinienStil" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Linienart">
+    <eLiterals name="durchgezogen" literal="durchgezogen"/>
+    <eLiterals name="gestrichelt" value="1" literal="gestrichelt"/>
+    <eLiterals name="gepunktet" value="2" literal="gepunktet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Figure" eSuperTypes="#//Form">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forms" lowerBound="1" upperBound="-1"
+        eType="#//EmbedForm" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedRessource" lowerBound="1"
+        upperBound="-1" eType="#//SVGModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmbedForm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="#//Form"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinienStil">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zug" eType="#//Linienart"
+        defaultValueLiteral="durchgezogen"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dicke" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farbe" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="black"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlaechenStil">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fuellung" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="muster" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

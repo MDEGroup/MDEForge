@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="compose" nsURI="http://www.soluvas.org/schema/web.compose/1.0"
+    nsPrefix="compose">
+  <eClassifiers xsi:type="ecore:EClass" name="Placeholder" eSuperTypes="#//Target">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Declares a parent component that can be contributed with children."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Contributor" abstract="true" interface="true"
+      eSuperTypes="../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//BundleAware ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//ResourceAware ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//Positionable">
+    <eOperations name="createLive" lowerBound="1" eType="#//LiveContributor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageClassName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Class name of the page that hosts this."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetPath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveTarget" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageClass" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Note that since bundles that provide a Page and/or ComponentFactory can come and go, a LinkedContributor can be gone at any time as well."/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+        <eTypeArguments eClassifier="#//Page"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveContributor" abstract="true" interface="true"
+      eSuperTypes="#//Contributor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Runtime state, if state is resolved then it is resolved with actual Page class and Factory instance.&#xA;Otherwise it may be unresolved or partially resolved."/>
+    </eAnnotations>
+    <eOperations name="resolve">
+      <eParameters name="placeholders">
+        <eGenericType eClassifier="#//Collection">
+          <eTypeArguments eClassifier="#//LivePlaceholder"/>
+        </eGenericType>
+      </eParameters>
+      <eParameters name="slaves">
+        <eGenericType eClassifier="#//Collection">
+          <eTypeArguments eClassifier="#//LiveSlave"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="targetRemoved">
+      <eParameters name="target" eType="#//LiveTarget"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" lowerBound="1" eType="#//ContributorState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="liveBundle" lowerBound="1"
+        eType="#//Bundle" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ComponentFactory" instanceClassName="org.soluvas.web.site.ComponentFactory"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HideContributor" eSuperTypes="#//Contributor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentContributor" abstract="true"
+      interface="true" eSuperTypes="#//Contributor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The factory will be instantiated to create the component will be named {className}Factory in the same package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="factoryBean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationMode" eType="#//CreationMode"
+        defaultValueLiteral="constructor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChildContributor" eSuperTypes="#//ComponentContributor ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//Positionable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveChildContributor" eSuperTypes="#//ChildContributor #//LiveComponentContributor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" eType="#//LivePlaceholder"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveReplaceContributor" eSuperTypes="#//ReplaceContributor #//LiveComponentContributor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slave" eType="#//LiveSlave"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReplaceContributor" eSuperTypes="#//ComponentContributor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveComponentContributor" eSuperTypes="#//LiveContributor #//ComponentContributor">
+    <eOperations name="getFactory" eType="#//ComponentFactory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveHideContributor" eSuperTypes="#//LiveContributor #//HideContributor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//LiveTarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComposeCatalog" eSuperTypes="#//SlaveCollection #//PlaceholderCollection #//ContributorCollection ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//ResourceAware ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//BundleAware"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContributorState">
+    <eLiterals name="unresolved">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Means the mentioned Bundle is not available."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="failed" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Means the bundle is available, but either the Page or the LiveTarget is not found. (LiveTarget must exist for Page class to be found)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="resolved" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Bundle" instanceClassName="org.osgi.framework.Bundle"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Slave" eSuperTypes="#//Target">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Replaceable component."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Target" eSuperTypes="../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//ResourceAware ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//BundleAware">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pageClassName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Path of the Component IDs from the Page."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This model will be passed to the Contributor Factory to create the Component.&#xA;&#xA;If it is null, that means the target IModel type is unknown, this can happen when it's a 'hide' contributor,&#xA;Target EObject is created dynamically based on runtime reflection."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceholderCollection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholders" upperBound="-1"
+        eType="#//Placeholder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlaveCollection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slaves" upperBound="-1"
+        eType="#//Slave" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LivePlaceholder" eSuperTypes="#//LiveTarget #//Placeholder"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveSlave" eSuperTypes="#//LiveTarget #//Slave"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LiveContributorCollection">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Used to inspect the live state of contributors."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="liveContributors" upperBound="-1"
+        eType="#//LiveContributor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContributorCollection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributors" upperBound="-1"
+        eType="#//Contributor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Page" instanceClassName="org.apache.wicket.Page"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Collection" instanceClassName="java.util.Collection">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CreationMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="How to create ComponentContributor."/>
+    </eAnnotations>
+    <eLiterals name="constructor"/>
+    <eLiterals name="factory_class" value="1"/>
+    <eLiterals name="factory_bean" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

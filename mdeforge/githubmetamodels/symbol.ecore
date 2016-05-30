@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="symbol"
+    nsURI="http:///org/eclipse/jst/jsf/context/symbol.ecore" nsPrefix="org.eclipse.jst.jsf.context.symbol">
+  <eClassifiers xsi:type="ecore:EClass" name="IBeanInstanceSymbol" eSuperTypes="#//IInstanceSymbol #//IDescribedInDetail">
+    <eOperations name="getJavaTypeDescriptor" eType="#//IJavaTypeDescriptor2"/>
+    <eOperations name="setJavaTypeDescriptor">
+      <eParameters name="newTypeDescriptor" eType="#//IJavaTypeDescriptor2"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//IBeanPropertySymbol" changeable="false" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//IBeanMethodSymbol" changeable="false" volatile="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBeanPropertySymbol" eSuperTypes="#//IPropertySymbol #//IDescribedInDetail">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//IJavaTypeDescriptor2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IInstanceSymbol" eSuperTypes="#//IObjectSymbol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeResolved" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeSource" eType="#//ERuntimeSource"
+        defaultValueLiteral="TAG_INSTANTIATED_SYMBOL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IJavaSymbol" eSuperTypes="#//ISymbol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaElement" eType="#//IJavaElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISymbol" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypeDescriptor" abstract="true">
+    <eOperations name="instanceOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="isArray" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getArrayElement" eType="#//IObjectSymbol"/>
+    <eOperations name="resolveType" eType="#//IType">
+      <eParameters name="resolvedTypeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="calculateSyntheticCall" eType="#//ISymbol">
+      <eParameters name="methodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="methodArgs" upperBound="-1" eType="#//ValueType"/>
+      <eParameters name="symbolName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//IPropertySymbol" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="superTypeSignatures" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceTypeSignatures"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeSignatureDelegate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//IMethodSymbol" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeParameterSignatures"
+        unique="false" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jdtContext" eType="#//IJavaElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enumType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IType" instanceClassName="org.eclipse.jdt.core.IType"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IJavaElement" instanceClassName="org.eclipse.jdt.core.IJavaElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IDescribedInDetail" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IJavaTypeDescriptor2" eSuperTypes="#//ITypeDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//IType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="beanProperties" upperBound="-1"
+        eType="#//IBeanPropertySymbol" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="beanMethods" upperBound="-1"
+        eType="#//IBeanPropertySymbol" volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBeanMethodSymbol" eSuperTypes="#//IDescribedInDetail #//IMethodSymbol">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//IJavaTypeDescriptor2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IComponentSymbol" eSuperTypes="#//IInstanceSymbol #//IDescribedInDetail"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPropertySymbol" eSuperTypes="#//IObjectSymbol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intermediate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMapTypeDescriptor" eSuperTypes="#//ITypeDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mapSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="immutable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ERuntimeSource">
+    <eLiterals name="BUILT_IN_SYMBOL" literal="BUILT_IN_SYMBOL"/>
+    <eLiterals name="MANAGED_BEAN_SYMBOL" value="1"/>
+    <eLiterals name="TAG_INSTANTIATED_SYMBOL" value="2"/>
+    <eLiterals name="OTHER" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMethodSymbol" eSuperTypes="#//ISymbol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IObjectSymbol" abstract="true" interface="true"
+      eSuperTypes="#//ISymbol">
+    <eOperations name="supportsCoercion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="coerce" eType="#//ITypeDescriptor">
+      <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="call" eType="#//ISymbol">
+      <eParameters name="methodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="methodArguments" upperBound="-1" eType="#//ValueType"/>
+      <eParameters name="symbolName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeDescriptor" eType="#//ITypeDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBoundedTypeDescriptor" abstract="true"
+      interface="true" eSuperTypes="#//ITypeDescriptor">
+    <eOperations name="isUnboundedForType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getUnboundedProperty" eType="#//ISymbol">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBoundedMapTypeDescriptor" eSuperTypes="#//IMapTypeDescriptor #//IBoundedTypeDescriptor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IBoundedJavaTypeDescriptor" eSuperTypes="#//IJavaTypeDescriptor2 #//IBoundedTypeDescriptor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IListTypeDescriptor" eSuperTypes="#//ITypeDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="listSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBoundedListTypeDescriptor" eSuperTypes="#//IListTypeDescriptor #//IBoundedTypeDescriptor"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ValueType" instanceClassName="org.eclipse.jst.jsf.common.internal.types.ValueType"/>
+  <eSubpackages name="symbol" nsURI="http:///org/eclipse/jst/jsf/context/symbol.ecore"
+      nsPrefix="org.eclipse.jst.jsf.context.symbol">
+    <eClassifiers xsi:type="ecore:EDataType" name="ValueType" instanceClassName="org.eclipse.jst.jsf.common.internal.types.ValueType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IBoundedListTypeDescriptor" eSuperTypes="#//symbol/IListTypeDescriptor #//symbol/IBoundedTypeDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IListTypeDescriptor" eSuperTypes="#//symbol/ITypeDescriptor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="listSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList"
+          transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IBoundedJavaTypeDescriptor" eSuperTypes="#//symbol/IJavaTypeDescriptor2 #//symbol/IBoundedTypeDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IBoundedMapTypeDescriptor" eSuperTypes="#//symbol/IMapTypeDescriptor #//symbol/IBoundedTypeDescriptor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IBoundedTypeDescriptor" abstract="true"
+        interface="true" eSuperTypes="#//symbol/ITypeDescriptor">
+      <eOperations name="getUnboundedProperty" eType="#//symbol/ISymbol">
+        <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      </eOperations>
+      <eOperations name="isUnboundedForType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IObjectSymbol" abstract="true" interface="true"
+        eSuperTypes="#//symbol/ISymbol">
+      <eOperations name="call" eType="#//symbol/ISymbol">
+        <eParameters name="symbolName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="methodArguments" upperBound="-1" eType="#//symbol/ValueType"/>
+        <eParameters name="methodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="coerce" eType="#//symbol/ITypeDescriptor">
+        <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="supportsCoercion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="readable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="typeDescriptor" eType="#//symbol/ITypeDescriptor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMethodSymbol" eSuperTypes="#//symbol/ISymbol">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ERuntimeSource">
+      <eLiterals name="OTHER" value="3"/>
+      <eLiterals name="TAG_INSTANTIATED_SYMBOL" value="2"/>
+      <eLiterals name="MANAGED_BEAN_SYMBOL" value="1"/>
+      <eLiterals name="BUILT_IN_SYMBOL" literal="BUILT_IN_SYMBOL"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMapTypeDescriptor" eSuperTypes="#//symbol/ITypeDescriptor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="immutable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mapSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap"
+          transient="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IPropertySymbol" eSuperTypes="#//symbol/IObjectSymbol">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="intermediate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IComponentSymbol" eSuperTypes="#//symbol/IInstanceSymbol #//symbol/IDescribedInDetail"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IBeanMethodSymbol" eSuperTypes="#//symbol/IDescribedInDetail #//symbol/IMethodSymbol">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//symbol/IJavaTypeDescriptor2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IJavaTypeDescriptor2" eSuperTypes="#//symbol/ITypeDescriptor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="beanMethods" upperBound="-1"
+          eType="#//symbol/IBeanPropertySymbol" volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="beanProperties" upperBound="-1"
+          eType="#//symbol/IBeanPropertySymbol" volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//symbol/IType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IDescribedInDetail" abstract="true"
+        interface="true"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IJavaElement" instanceClassName="org.eclipse.jdt.core.IJavaElement"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IType" instanceClassName="org.eclipse.jdt.core.IType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ITypeDescriptor" abstract="true">
+      <eOperations name="calculateSyntheticCall" eType="#//symbol/ISymbol">
+        <eParameters name="symbolName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="methodArgs" upperBound="-1" eType="#//symbol/ValueType"/>
+        <eParameters name="methodName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="resolveType" eType="#//symbol/IType">
+        <eParameters name="resolvedTypeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getArrayElement" eType="#//symbol/IObjectSymbol"/>
+      <eOperations name="isArray" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eOperations name="instanceOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="jdtContext" eType="#//symbol/IJavaElement"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeParameterSignatures"
+          unique="false" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          transient="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+          eType="#//symbol/IMethodSymbol" volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeSignatureDelegate"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceTypeSignatures"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="superTypeSignatures"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeSignature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          changeable="false" volatile="true" defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//symbol/IPropertySymbol" volatile="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ISymbol" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IJavaSymbol" eSuperTypes="#//symbol/ISymbol">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaElement" eType="#//symbol/IJavaElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IInstanceSymbol" eSuperTypes="#//symbol/IObjectSymbol">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeSource" eType="#//symbol/ERuntimeSource"
+          defaultValueLiteral="TAG_INSTANTIATED_SYMBOL"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeResolved" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          changeable="false" volatile="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IBeanPropertySymbol" eSuperTypes="#//symbol/IPropertySymbol #//symbol/IDescribedInDetail">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//symbol/IJavaTypeDescriptor2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IBeanInstanceSymbol" eSuperTypes="#//symbol/IInstanceSymbol #//symbol/IDescribedInDetail">
+      <eOperations name="setJavaTypeDescriptor">
+        <eParameters name="newTypeDescriptor" eType="#//symbol/IJavaTypeDescriptor2"/>
+      </eOperations>
+      <eOperations name="getJavaTypeDescriptor" eType="#//symbol/IJavaTypeDescriptor2"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+          eType="#//symbol/IBeanMethodSymbol" changeable="false" volatile="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//symbol/IBeanPropertySymbol" changeable="false" volatile="true"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

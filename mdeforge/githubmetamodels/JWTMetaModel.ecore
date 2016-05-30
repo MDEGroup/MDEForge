@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="org.eclipse.jwt" nsPrefix="">
+  <eSubpackages name="core" nsURI="org.eclipse.jwt/core" nsPrefix="core">
+    <eClassifiers xsi:type="ecore:EClass" name="ModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" upperBound="-1"
+          eType="#//core/Comment" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//core/GraphicalElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" eSuperTypes="#//core/ModelElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subpackages" upperBound="-1"
+          eType="#//core/Package" containment="true" eOpposite="#//core/Package/superpackage"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="superpackage" eType="#//core/Package"
+          eOpposite="#//core/Package/subpackages"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//core/PackageableElement" containment="true" eOpposite="#//core/PackageableElement/package"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//core/Package"
+          eOpposite="#//core/Package/elements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferenceableElement" eSuperTypes="#//core/PackageableElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//core/Package">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileversion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GraphicalElement" eSuperTypes="#//core/ModelElement"/>
+  </eSubpackages>
+  <eSubpackages name="processes" nsURI="org.eclipse.jwt/processes" nsPrefix="processes">
+    <eClassifiers xsi:type="ecore:EClass" name="Scope" eSuperTypes="#//core/ModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+          eType="#//processes/ActivityNode" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+          eType="#//processes/ActivityEdge" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//core/PackageableElement #//processes/Scope">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eventHandler" eType="#//events/EventHandler"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalexecutiontime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StructuredActivityNode" eSuperTypes="#//processes/Scope #//processes/ExecutableNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ActivityNode" eSuperTypes="#//core/NamedElement #//core/GraphicalElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="in" upperBound="-1" eType="#//processes/ActivityEdge"
+          eOpposite="#//processes/ActivityEdge/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="out" upperBound="-1"
+          eType="#//processes/ActivityEdge" eOpposite="#//processes/ActivityEdge/source"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActivityEdge" eSuperTypes="#//core/ModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//processes/ActivityNode" eOpposite="#//processes/ActivityNode/out"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//processes/ActivityNode" eOpposite="#//processes/ActivityNode/in"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//processes/Guard"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GuardSpecification">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="data" lowerBound="1"
+          eType="#//data/Data"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
+          eType="#//processes/OperationType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subSpecification" upperBound="-1"
+          eType="#//processes/GuardSpecification" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="subSpecificationConnector"
+          eType="#//processes/BooleanConnector"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="OperationType">
+      <eLiterals name="Equals" literal="=="/>
+      <eLiterals name="Lower" value="1" literal="&lt;"/>
+      <eLiterals name="LowerEquals" value="2" literal="&lt;="/>
+      <eLiterals name="Greater" value="3" literal=">"/>
+      <eLiterals name="GreateEquals" value="4" literal=">="/>
+      <eLiterals name="UnEquals" value="5" literal="!="/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExecutableNode" eSuperTypes="#//processes/ActivityNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//processes/ExecutableNode">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="performedBy" eType="#//organisations/Role"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="executedBy" eType="#//application/Application"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="realizes" eType="#//functions/Function"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+          eType="#//data/Data"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+          eType="#//data/Data"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+          eType="#//data/DataMapping" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetexecutiontime"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ControlNode" eSuperTypes="#//processes/ActivityNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="InitialNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MergeNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DecisionNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FinalNode" eSuperTypes="#//processes/ControlNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Guard" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="textualdescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortdescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailedSpecification"
+          eType="#//processes/GuardSpecification" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BooleanConnector">
+      <eLiterals name="AND" literal="&amp;&amp;"/>
+      <eLiterals name="XOR" value="1" literal="||"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActivityLinkNode" eSuperTypes="#//processes/ExecutableNode">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="linksto" lowerBound="1"
+          eType="#//processes/Activity"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uses" lowerBound="1"
+          upperBound="-1" eType="#//data/ParameterMapping" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="events" nsURI="org.eclipse.jwt/events" nsPrefix="events">
+    <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//processes/ExecutableNode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EventHandler" eSuperTypes="#//core/NamedElement"/>
+  </eSubpackages>
+  <eSubpackages name="primitiveTypes" nsURI="org.eclipse.jwt/primitiveTypes" nsPrefix="primitiveTypes">
+    <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//core/PackageableElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//primitiveTypes/PrimitiveType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IntegerType" eSuperTypes="#//primitiveTypes/PrimitiveType"/>
+  </eSubpackages>
+  <eSubpackages name="functions" nsURI="org.eclipse.jwt/functions" nsPrefix="functions">
+    <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//core/PackageableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subfunctions" upperBound="-1"
+          eType="#//functions/Function" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="organisations" nsURI="org.eclipse.jwt/organisations" nsPrefix="organisations">
+    <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//core/ReferenceableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="performedBy" upperBound="-1"
+          eType="#//organisations/OrganisationUnit"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OrganisationUnit" eSuperTypes="#//core/PackageableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subUnit" upperBound="-1"
+          eType="#//organisations/OrganisationUnit" eOpposite="#//organisations/OrganisationUnit/belongsTo"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="belongsTo" upperBound="-1"
+          eType="#//organisations/OrganisationUnit" eOpposite="#//organisations/OrganisationUnit/subUnit"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="application" nsURI="org.eclipse.jwt/application" nsPrefix="application">
+    <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//core/ReferenceableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//application/ApplicationType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="jarArchive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="method" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+          eType="#//data/InputParameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="output" upperBound="-1"
+          eType="#//data/OutputParameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApplicationType" eSuperTypes="#//core/PackageableElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WebServiceApplication" eSuperTypes="#//application/Application">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Interface" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="data" nsURI="org.eclipse.jwt/data" nsPrefix="data">
+    <eClassifiers xsi:type="ecore:EClass" name="Data" eSuperTypes="#//core/ReferenceableElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1"
+          eType="#//data/DataType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="informationType" lowerBound="1"
+          eType="#//data/InformationType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//data/Parameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//core/PackageableElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//core/PackageableElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataMapping" eSuperTypes="#//core/PackageableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundParameter" lowerBound="1"
+          eType="#//data/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+          eType="#//data/Parameter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InformationType" eSuperTypes="#//core/PackageableElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="InputParameter" eSuperTypes="#//data/Parameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OutputParameter" eSuperTypes="#//data/Parameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ParameterMapping" eSuperTypes="#//core/PackageableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//core/PackageableElement"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//core/PackageableElement"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

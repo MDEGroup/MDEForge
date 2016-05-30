@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tao"
+    nsURI="http://eclectic.org/frontend/taoL" nsPrefix="ec_frontend_taoL">
+  <eClassifiers xsi:type="ecore:EClass" name="TaoTransformation" eSuperTypes="#//dep/TransformationDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templates" upperBound="-1"
+        eType="#//Template" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateParameter" eSuperTypes="#//dep/Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//dep/ClassUse"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectInstantiation" eSuperTypes="#//dep/Variable #//dep/Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//dep/ClassUse"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assigments" upperBound="-1"
+        eType="#//Assignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateRootObject" eSuperTypes="#//ObjectInstantiation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Template" eSuperTypes="#//dep/NamedElement #//dep/LocatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//TemplateParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roots" upperBound="-1"
+        eType="#//TemplateRootObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" abstract="true" eSuperTypes="#//dep/Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeAssigment" eSuperTypes="#//Assignment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetFeature" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1" eType="#//SourceExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceExpression" abstract="true" eSuperTypes="#//dep/LocatedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WithOptionalVariableExpression" eSuperTypes="#//SourceExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//ObjectSourceVariable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1" eType="#//dep/Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectSourceVariable" eSuperTypes="#//dep/Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceAssignment" abstract="true"
+      eSuperTypes="#//Assignment #//dep/Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetFeature" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//SourceExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multivalued" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectSyntax" eSuperTypes="#//ReferenceAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="#//ObjectInstantiation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Invocation" eSuperTypes="#//ReferenceAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" lowerBound="1"
+        eType="#//Template"/>
+  </eClassifiers>
+  <eSubpackages name="dep" nsURI="http://eclectic.org/frontend/dep" nsPrefix="ec_frontend_dep">
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TransformationDefinition"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TransformationDefinitionParameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LocatedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassUse"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Expression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Statement"/>
+  </eSubpackages>
+</ecore:EPackage>

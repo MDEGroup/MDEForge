@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="primitives"
+    nsURI="http:///ch/postfinance/zvis/model/primitives.ecore" nsPrefix="ch.postfinance.zvis.model.primitives">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parents" upperBound="-1"
+        eType="#//AbstractType" eOpposite="#//AbstractType/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//AbstractType" eOpposite="#//AbstractType/parents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaEnumerate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pos" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaEnumeration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumerates" upperBound="-1"
+        eType="#//AdaEnumerate" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaTypeDef" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtTypeDef" eSuperTypes="#//AdaTypeDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Mode">
+    <eLiterals name="in" literal="IN"/>
+    <eLiterals name="out" value="1" literal="OUT"/>
+    <eLiterals name="inout" value="2" literal="IN_OUT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//AdaTypeDef"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AdaTypeDef"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="#//Mode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimModel">
+    <eOperations name="findPackage" eType="#//PrimPackage">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="findAbstractType" eType="#//AbstractType">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="findType" eType="#//PrimType">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllTypes" upperBound="-1" eType="#//PrimType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" upperBound="-1"
+        eType="#//PrimPackage" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractTypes" upperBound="-1"
+        eType="#//AbstractType" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimPackage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//PrimType" containment="true" resolveProxies="false" eOpposite="#//PrimType/package"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimType">
+    <eOperations name="getOperations" upperBound="-1" eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//PrimPackage"
+        eOpposite="#//PrimPackage/types"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractType" eType="#//AbstractType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" eType="#//AdaEnumeration"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludedOpNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StdTypeDef" eSuperTypes="#//AdaTypeDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//AdaTypeDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="#//AbstractType"/>
+  </eClassifiers>
+</ecore:EPackage>

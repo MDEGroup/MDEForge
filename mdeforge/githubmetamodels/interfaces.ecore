@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="interfaces"
+    nsURI="http:///it/unibo/droneMission/interfaces.ecore" nsPrefix="it.unibo.droneMission.interfaces">
+  <eClassifiers xsi:type="ecore:EClass" name="IControlDashboard">
+    <eOperations name="startMission"/>
+    <eOperations name="stopMission"/>
+    <eOperations name="setSpeed">
+      <eParameters name="s" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="incSpeed"/>
+    <eOperations name="decSpeed"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDisplay" eSuperTypes="#//Observer">
+    <eOperations name="update">
+      <eParameters name="val" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="curVal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IFuelometer" eSuperTypes="#//IGaugeMonotonic"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IGauge">
+    <eOperations name="addObserver">
+      <eParameters name="o" eType="#//Observer"/>
+    </eOperations>
+    <eOperations name="deleteObserver">
+      <eParameters name="o" eType="#//Observer"/>
+    </eOperations>
+    <eOperations name="setCurValRepDisplayed">
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setVal">
+      <eParameters name="value" eType="#//IGaugeValue"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="curValRepDisplayed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="val" eType="#//IGaugeValue"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeAnalogicDisplay" eSuperTypes="#//IGaugeDisplay"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeDigitalDisplay" eSuperTypes="#//IGaugeDisplay"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeDisplay" eSuperTypes="#//IDisplay">
+    <eOperations name="update">
+      <eParameters name="v" eType="#//IGaugeValue"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayedVal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeMonotonic" eSuperTypes="#//IGauge">
+    <eOperations name="update" eExceptions="#//Exception"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IGaugeVariant" eSuperTypes="#//IGauge">
+    <eOperations name="update" eExceptions="#//Exception"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ILocTracker" eSuperTypes="#//IGaugeVariant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IOdometer" eSuperTypes="#//IGaugeMonotonic"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ISpeedometer" eSuperTypes="#//IGaugeVariant"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Observer" instanceClassName="java.util.Observer"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
+</ecore:EPackage>

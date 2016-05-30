@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spray"
+    nsURI="http://code.google.com/a/eclipselabs.org/p/spray" nsPrefix="spray">
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//SprayElement #//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaClasses" upperBound="-1"
+        eType="#//MetaClass" containment="true" eOpposite="#//MetaClass/diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviourGroups" upperBound="-1"
+        eType="#//BehaviourGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Shape" abstract="true" eSuperTypes="#//SprayElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="represents" eType="#//MetaClass"
+        eOpposite="#//MetaClass/representedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layout" eType="#//Layout"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Layout">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rounded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cornerHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="10"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cornerWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="10"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="figure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Rectangle" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="italic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lineColor" eType="#//Color"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="textColor" eType="#//Color"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fillColor" eType="#//Color"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rectangle" eSuperTypes="#//Shape"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" eSuperTypes="#//Shape">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//SprayElement" containment="true" eOpposite="#//SprayElement/container"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="list" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizontal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//Shape">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass platform:/resource/org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+        transient="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SprayElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Container"
+        eOpposite="#//Container/parts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//Shape">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="ecore:EClass platform:/resource/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="ecore:EClass platform:/resource/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromLabel" eType="#//Text"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toLabel" eType="#//Text"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectionLabel" eType="#//Text"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaClass" eSuperTypes="#//SprayElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="representedBy" eType="#//Shape"
+        containment="true" eOpposite="#//Shape/represents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" eType="#//Diagram"
+        eOpposite="#//Diagram/metaClasses"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//MetaReference" containment="true" eOpposite="#//MetaReference/metaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviours" upperBound="-1"
+        eType="#//Behaviour" containment="true" eOpposite="#//Behaviour/metaClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviourGroups" upperBound="-1"
+        eType="#//BehaviourGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass platform:/resource/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaReference" eSuperTypes="#//SprayElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="representedBy" eType="#//Connection"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaClass" eType="#//MetaClass"
+        eOpposite="#//MetaClass/references"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="text" eType="#//Text"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" lowerBound="1"
+        eType="ecore:EClass platform:/resource/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="labelProperty" eType="ecore:EClass platform:/resource/org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaAttribute" eSuperTypes="#//SprayElement #//SprayString">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pathsegments" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Line" eSuperTypes="#//Shape"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VisibleElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//SprayString #//SprayElement #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SprayString" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Figure"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Behaviour" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaClass" eType="#//MetaClass"
+        eOpposite="#//MetaClass/behaviours"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//BehaviourType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paletteCompartment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="QualifiedName" instanceTypeName="qualifiedname"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StandardBehaviour" eSuperTypes="#//Behaviour"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomBehaviour" eSuperTypes="#//Behaviour"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="BehaviourType">
+    <eLiterals name="EMPTY_BEHAVIOUR"/>
+    <eLiterals name="CREATE_BEHAVIOUR" value="1"/>
+    <eLiterals name="CUSTOM_BEHAVIOUR" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviourGroup" eSuperTypes="#//SprayElement #//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviours" upperBound="-1"
+        eType="#//Behaviour" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColorConstantRef" eSuperTypes="#//Color">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../org.eclipse.xtext.common.types/model/JavaVMTypes.ecore#//JvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" eType="ecore:EClass ../../org.eclipse.xtext.common.types/model/JavaVMTypes.ecore#//JvmField"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Color" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RGBColor" eSuperTypes="#//Color">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="red" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="green" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

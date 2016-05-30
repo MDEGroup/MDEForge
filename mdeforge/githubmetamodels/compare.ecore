@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="compare" nsURI="http://www.eclipse.org/emf/compare" nsPrefix="compare">
+  <eClassifiers xsi:type="ecore:EClass" name="Comparison">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This will act as the &quot;root&quot; of a comparison. It will reference one match for every root of the input models, along with the differences detected for each of them."/>
+    </eAnnotations>
+    <eOperations name="getDifferences" upperBound="-1" eType="#//Diff">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all differences contained by this Comparison and its children."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDifferences" upperBound="-1" eType="#//Diff">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all differences that reference the given EObject (for instance, all ReferenceChanges that reference the given EObject through the &quot;value&quot; EReference). &#xA;&lt;p>&#xA;To get differences detected on the given EObject or one of its counterpart in left, right or origin, you should call the following code:&#xA;&lt;pre>&#xA;Match match = getMatch(eObject);&#xA;if (match != null) {&#xA;    differences = match.getDifferences();&#xA;}&#xA;&lt;/pre>"/>
+      </eAnnotations>
+      <eParameters name="element" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The EObject for which we seek all related differences."/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getMatch" eType="#//Match">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds and return the Match for the given EObject."/>
+      </eAnnotations>
+      <eParameters name="element" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The EObject for which we seek the match."/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getEqualityHelper" eType="#//IEqualityHelper"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matchedResources" upperBound="-1"
+        eType="#//MatchResource" containment="true" eOpposite="#//MatchResource/comparison">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This contains the mappings for each compared Resource."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matches" upperBound="-1"
+        eType="#//Match" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This contains the match tree &quot;mimicking&quot; the input models' hierarchy."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conflicts" upperBound="-1"
+        eType="#//Conflict" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If we detected any conflict during the comparison process, this will contain them."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="equivalences" upperBound="-1"
+        eType="#//Equivalence" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If we detected any equivalence between diffs during the comparison process, this will contain them."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="threeWay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="diagnostic" eType="#//Diagnostic"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchResource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A MatchResource element represents the mapping between two or three resources : left, right, and their optional common ancestor. The resource will be identified through its URI."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leftURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Cannot be null. Represents the URI of the left resource of this mapping."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rightURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Cannot be null. Represents the URI of the right resource of this mapping."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be null in the case of two-way comparisons. If assigned, it will represent the URI of the origin resource for this mapping; the common ancestor of both others."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="left" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EResource"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keeps a reference towards the left Resource of this Match. Might be null if this is a Comparison we have re-loaded from its serialized form and the left EResource could not be loaded."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="right" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EResource"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keeps a reference towards the right Resource of this Match. Might be null if this is a Comparison we have re-loaded from its serialized form and the right EResource could not be loaded."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EResource"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Keeps a reference towards the origin Resource of this Match. Might be null if this is a Comparison we have re-loaded from its serialized form and the origin EResource could not be loaded."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comparison" eType="#//Comparison"
+        eOpposite="#//Comparison/matchedResources"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Match">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A MatchElement describes the mapping between the EObjects of two or three resources. This will reference all three of left, right and origin resources. However, note that instances of this class will also represent unmatched elements, in which case only one of either &quot;left&quot; or &quot;right&quot; will be assigned."/>
+    </eAnnotations>
+    <eOperations name="getComparison" eType="#//Comparison">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds and return the Comparison containing this Match."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAllSubmatches">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds and returns all matches contained in this Match and its children, recursively."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//EIterable">
+        <eTypeArguments eClassifier="#//Match"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getAllDifferences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Finds and returns all differences contained in this Match and its children, recursively."/>
+      </eAnnotations>
+      <eGenericType eClassifier="#//EIterable">
+        <eTypeArguments eClassifier="#//Diff"/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="submatches" upperBound="-1"
+        eType="#//Match" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The MatchElements will &quot;mimic&quot; the hierarchy of the input model(s). This containment feature will serve that purpose."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="differences" upperBound="-1"
+        eType="#//Diff" containment="true" eOpposite="#//Diff/match">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will contain the list of all differences pertaining to this mapping, if any."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be null in the case of unmatched elements in the right model. In all other cases, it will reference the left element of this mapping."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be null in the case of unmatched elements in the left model. In all other cases, it will reference the right element of this mapping."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be null in the case of two-way comparisons, or unmatched elements that are only located in either left or right, i.e an element that was added since the origin, either in the left copy or the right one. In any other course of event, this will reference the origin element of this mapping."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diff">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A DiffElement describes a difference related to the EObjects mapped by its parent MatchElement."/>
+    </eAnnotations>
+    <eOperations name="copyRightToLeft">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will merge the diff from left to right."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="copyLeftToRight">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will merge the diff from right to left."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="discard">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will remove the diff from the model, effectively &quot;forgetting&quot; about it."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" lowerBound="1" eType="#//Match"
+        eOpposite="#//Match/differences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Back-reference towards this difference's parent match, it points towards the mapping on which this difference has been detected."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/requiredBy">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will reference all differences that should be merged before this one."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredBy" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/requires">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will reference all differences that depend on this one for their merging."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implies" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/impliedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="impliedBy" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/implies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refines" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/refinedBy">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be used to create &quot;high level&quot; differences to regroup one or more diffs in a common &quot;container&quot;. For example, this could be used to regroup &lt;i>n&lt;/i> technical differences into one single semantic difference, such as the differences &quot;profile application added&quot; and &quot;reference to stereotype added&quot; that can actually be regrouped under a single, more understandable &quot;stereotype application added&quot;."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refinedBy" upperBound="-1"
+        eType="#//Diff" eOpposite="#//Diff/refines">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will reference the higher-level difference that shadows this one, if any."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//DifferenceKind">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Describes the kind of this difference, whether it is an addition, deletion, change, or move."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" lowerBound="1"
+        eType="#//DifferenceSource">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the source of this diff, either one of DifferenceSource.LEFT (for two-way comparisons or differences detected between the left and origin elements) or DifferenceSource.RIGHT (for differences between the right and origin elements)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" lowerBound="1" eType="#//DifferenceState">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the current state of this diff, either one of DifferenceState.UNRESOLVED (Diff is still in its initial state), DifferenceState.MERGED when the Diff has been merged or DifferenceState.DISCARDED if the user chose to ignore this difference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="equivalence" eType="#//Equivalence"
+        eOpposite="#//Equivalence/differences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If this diff is equivalent to another, we will reference the equivalence from here. For example, if a reference has an eOpposite, we will detect one diff for each side of the bidirectional reference, yet merging one of these diffs is enough. We consider them equivalent."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conflict" eType="#//Conflict"
+        eOpposite="#//Conflict/differences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If this element is in conflict with one (or more) other differences, this will reference the Conflict association."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceAttachmentChange" eSuperTypes="#//Diff">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This particular kind of difference describes the fragmentation (or un-fragmentation) of a model element in its own (or back in its parent's) resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="URI of the resource in which the parent mapping's element is now located."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceChange" eSuperTypes="#//Diff">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This particular kind of difference will be used to describe changes within a reference, whether the feature is multi-valued or not. In the case of a MOVE difference, this could actually mean two things : either the value has been moved from one index to another (moving the value at another position of the same reference), or the value has been moved from one container to another. This second case will only happen with containment references."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The reference in which &quot;something&quot; changed. If this difference is a MOVE from one reference to another, this will point towards the left reference."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References the actual value on which a difference has been detected."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeChange" eSuperTypes="#//Diff">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This particular kind of difference will be used to describe changes within an attribute, whether the feature is multi-valued or not."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The attribute in which &quot;something&quot; changed."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References the actual value on which a difference has been detected."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Conflict">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Instances of this class describe conflicts between one or more differences in the left model as compared to differences in the right model. Conflicts can only happen in the case of three-way comparisons, when we have a common ancestor of both sides."/>
+    </eAnnotations>
+    <eOperations name="getLeftDifferences" lowerBound="1" upperBound="-1" eType="#//Diff">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be used to retrieve the list of differences that were made in the left element."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getRightDifferences" lowerBound="1" upperBound="-1" eType="#//Diff">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This can be used to retrieve the list of differences that were made in the right element."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//ConflictKind">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Describes the kind of this conflict, whether it is a real conflict or a pseudo-conflict."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="differences" lowerBound="2"
+        upperBound="-1" eType="#//Diff" eOpposite="#//Diff/conflict">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This will reference all differences that are related to this conflict. The number of elements contained in this list is &lt;u>at least&lt;/u> two."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Equivalence">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Diffs are considered equivalent if merging one is enough to resolve both differences. For example, if a reference has an eOpposite, we will detect one diff for each side of the bidirectional reference, yet merging one of these diffs will automatically update the model in such a way that the second diff is &quot;merged&quot;."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="differences" lowerBound="2"
+        upperBound="-1" eType="#//Diff" eOpposite="#//Diff/equivalence">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References the &lt;i>n&lt;/i> diffs composing this equivalence. There are &lt;u>at least&lt;/u> two diffs in this list."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DifferenceKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The differences detected through EMF Compare can be of 4 general types.&#xD;&#xA;&lt;ul>&#xD;&#xA;&#x9;&lt;li>ADD represent addition of model element or feature values,&lt;/li>&#xD;&#xA;&#x9;&lt;li>DELETE represent suppression of model element or feature values,&lt;/li>&#xD;&#xA;&#x9;&lt;li>CHANGE represent the modification of a feature value,&lt;/li>&#xD;&#xA;&#x9;&lt;li>MOVE will be used for difference on the containment feature of a model element, or differences on the order of a feature's values.&lt;/li>&#xD;&#xA;&lt;/ul>"/>
+    </eAnnotations>
+    <eLiterals name="ADD">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents the addition of model elements or feature values."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="DELETE" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents the suppression of model elements or feature values."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="CHANGE" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents the modification of a feature value."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MOVE" value="3">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Describes a difference on the containment feature of a model element, or differences on the order of a feature's values."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DifferenceSource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This will be used to represent the source of a detected diff.&#xD;&#xA;&lt;ul>&#xD;&#xA;&#x9;&lt;li>LEFT if the difference has been detected between the left element and its origin,&lt;/li>&#xD;&#xA;&#x9;&lt;li>RIGHT if the difference has been detected between the right element and its origin.&lt;/li>&#xD;&#xA;&lt;/ul>&#xD;&#xA;&lt;b>Note&lt;/b> that differences detected during two-way comparisons will only be LEFT."/>
+    </eAnnotations>
+    <eLiterals name="LEFT">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Will be used if the difference has been detected between the left element and its origin. Differences detected during two-way comparisons will always have this has their source."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="RIGHT" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Will be used if the difference has been detected between the right element and its origin."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DifferenceState">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This will be used to represent the state of a detected diff.&#xD;&#xA;&lt;ul>&#xD;&#xA;&#x9;&lt;li>UNRESOLVED if the Diff is still in its initial state and the two sides differ,&lt;/li>&#xD;&#xA;&#x9;&lt;li>MERGED if the Diff has already been merged by the user,&lt;/li>&#xD;&#xA;&#x9;&lt;li>DISCARDED if the user chose to ignore this Diff.&lt;/li>&#xD;&#xA;&lt;/ul>"/>
+    </eAnnotations>
+    <eLiterals name="UNRESOLVED" literal="UNRESOLVED">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Indicates that the Diff is still in its initial state."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MERGED" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Indicates that the Diff has already been merged by the user."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="DISCARDED" value="2" literal="DISCARDED">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Indicates that the user chose to ignore this Diff."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConflictKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Conflicts detected through EMF Compare can be of a number of different types.&#xD;&#xA;&lt;ul>&#xD;&#xA;&#x9;&lt;li>REAL are the conflicts that cannot be merged automatically,&lt;/li>&#xD;&#xA;&#x9;&lt;li>PSEUDO are the &quot;conflicts&quot; that represent the same change made on the two sides, which can thus be automatically merged.&lt;/li>&#xD;&#xA;&lt;/ul>"/>
+    </eAnnotations>
+    <eLiterals name="REAL">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="conflicts that cannot be merged automatically as they represent incompatible differences on the two sides."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="PSEUDO" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If the same change has been made on the two sides since the common ancestor, these changes will be marked as &quot;pseudo-conflicting&quot; changes : there are changes, but they can be merged automatically."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="EIterable" instanceClassName="java.lang.Iterable">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IEqualityHelper" instanceClassName="org.eclipse.emf.compare.utils.IEqualityHelper"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Diagnostic" instanceClassName="org.eclipse.emf.common.util.Diagnostic"
+      serializable="false"/>
+</ecore:EPackage>

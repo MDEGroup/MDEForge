@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dataaccess"
+    nsURI="http:///dataaccess.ecore" nsPrefix="dataaccess">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eSubpackages name="expressions" nsURI="http:///dataaccess/expressions.ecore" nsPrefix="dataaccess.expressions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Specifies an expression language that allows its users for form expressions over objects and values, producing other objects and values."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="data.ecore#//classes/TypedElement data.ecore#//classes/InScope">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An expression that evaluates to an object."/>
+      </eAnnotations>
+      <eOperations name="isSideEffectFree" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="let parametersAndSignatureAreSideEffectFree:Boolean =&#xA;    self.oclIsKindOf(SignatureCallExpression) implies&#xA;      (self.oclAsType(SignatureCallExpression).parameters->forAll(p|p.isSideEffectFree())&#xA;       and self.oclAsType(SignatureCallExpression).getSignature().sideEffectFree)&#xA;  in&#xA;  if self.oclIsKindOf(ObjectBasedExpression) then&#xA;    self.oclAsType(ObjectBasedExpression).object.isSideEffectFree() and&#xA;    if self.oclIsKindOf(SignatureCallExpression) then&#xA;      parametersAndSignatureAreSideEffectFree&#xA;    else&#xA;      if self.oclIsKindOf(Replace) then&#xA;        self.oclAsType(Replace).with.isSideEffectFree()&#xA;      else&#xA;        if self.oclIsKindOf(ExpressionWithArgument) and self.oclAsType(ExpressionWithArgument).argument->notEmpty() then&#xA;          self.oclAsType(ExpressionWithArgument).argument.isSideEffectFree()&#xA;        else&#xA;          true&#xA;        endif&#xA;      endif&#xA;    endif&#xA;  else if self.oclIsKindOf(FunctionCallExpression) then&#xA;    parametersAndSignatureAreSideEffectFree and self.oclAsType(FunctionCallExpression).calledBlock.isSideEffectFree()&#xA;  else if self.oclIsKindOf(Equals) then&#xA;    self.oclAsType(Equals).left.isSideEffectFree() and self.oclAsType(Equals).right.isSideEffectFree()&#xA;  else if self.oclIsKindOf(ObjectCreationExpression) then&#xA;    self.oclAsType(ObjectCreationExpression).classToInstantiate.valueType&#xA;  else if self.oclIsKindOf(dataaccess::analytics::DimensionExpression) then&#xA;    self.oclAsType(dataaccess::analytics::DimensionExpression).dimensionParameter.ownerSignature.sideEffectFree&#xA;  else if self.oclIsKindOf(Ternary) then&#xA;    self.oclAsType(Ternary).condition.isSideEffectFree() and&#xA;    self.oclAsType(Ternary).trueExpr.isSideEffectFree() and&#xA;    self.oclAsType(Ternary).falseExpr.isSideEffectFree()&#xA;  else if self.oclIsKindOf(dataaccess::expressions::collectionexpressions::CollectionExpression) then&#xA;    self.oclAsType(dataaccess::expressions::collectionexpressions::CollectionExpression).source.isSideEffectFree() and&#xA;    if self.oclIsKindOf(dataaccess::expressions::collectionexpressions::Iterate) then&#xA;      (self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).accumulator.initExpression->notEmpty() implies&#xA;         self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).accumulator.initExpression.isSideEffectFree()) and&#xA;      self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).iteratorExpression.isSideEffectFree()&#xA;    else&#xA;      true&#xA;    endif&#xA;  else if self.oclIsKindOf(dataaccess::expressions::literals::ObjectLiteral) then&#xA;    self.oclAsType(dataaccess::expressions::literals::ObjectLiteral).propertyValues.value->forAll(v|v.isSideEffectFree())&#xA;  else if self.oclIsKindOf(persistence::expressions::All) or self.oclIsKindOf(Replace) or self.oclIsKindOf(This) or self.oclIsKindOf(VariableExpression) or&#xA;  self.oclIsKindOf(dataaccess::expressions::literals::Literal) or self.oclIsKindOf(dataaccess::expressions::fp::AnonymousFunctionExpr) then&#xA;    true&#xA;  else if self.oclIsKindOf(dataaccess::query::Selection) then&#xA;    self.oclAsType(dataaccess::query::Selection).object.isSideEffectFree()&#xA;  else&#xA;    false&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Tells if this expression is side effect-free. An expression has a side effect if it invokes a method or a function that is not described as side effect-free. It is important to note that this has to be checked recursively for nested expressions."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="evaluatesToEqualAs" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self=e then&#xA;    true&#xA;  else&#xA;  if self.oclIsKindOf(dataaccess::expressions::literals::NumberLiteral) and e.oclIsKindOf(dataaccess::expressions::literals::NumberLiteral) then&#xA;    self.oclAsType(dataaccess::expressions::literals::NumberLiteral).literal=e.oclAsType(dataaccess::expressions::literals::NumberLiteral).literal&#xA;  else&#xA;    if self.oclIsKindOf(dataaccess::expressions::literals::StringLiteral) and e.oclIsKindOf(dataaccess::expressions::literals::StringLiteral) then&#xA;      self.oclAsType(dataaccess::expressions::literals::StringLiteral).literal=e.oclAsType(dataaccess::expressions::literals::StringLiteral).literal&#xA;    else&#xA;      if self.oclIsKindOf(dataaccess::expressions::literals::ObjectLiteral) and e.oclIsKindOf(dataaccess::expressions::literals::ObjectLiteral) then&#xA;        self.oclAsType(dataaccess::expressions::literals::ObjectLiteral).isEqualTo(e.oclAsType(dataaccess::expressions::literals::ObjectLiteral))&#xA;      else&#xA;        if self.oclIsKindOf(VariableExpression) and e.oclIsKindOf(VariableExpression) then&#xA;          self.oclAsType(VariableExpression).variable = e.oclAsType(VariableExpression).variable&#xA;        else&#xA;          false&#xA;        endif&#xA;      endif&#xA;    endif&#xA;  endif&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A conservative estimation that returns true if provably this and the passed expression will evaluate to equal objects. false means that the two expressions may evaluate to different results, not excluding that they can still have equal results; it's just not (yet) provable here."/>
+        </eAnnotations>
+        <eParameters name="e" ordered="false" unique="false" lowerBound="1" eType="#//expressions/Expression"/>
+      </eOperations>
+      <eOperations name="getUsedAliases" ordered="false" upperBound="-1" eType="ecore:EClass behavioral.ecore#//actions/Iterator">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.oclIsKindOf(VariableExpression) then&#xA;    if self.oclAsType(VariableExpression).variable.oclIsKindOf(behavioral::actions::Iterator) then&#xA;      self.oclAsType(VariableExpression).variable.oclAsType(behavioral::actions::Iterator)->select(i | i.fromClause->notEmpty())->asSet()&#xA;    else&#xA;      Set{}&#xA;    endif&#xA;  else&#xA;    if self.oclIsKindOf(Replace) then&#xA;      self.oclAsType(Replace).object.getUsedAliases()->union(&#xA;      self.oclAsType(Replace).steps.filterFunction.getUsedAliases()->flatten()->asSet())->union(&#xA;      self.oclAsType(Replace).with.getUsedAliases())&#xA;    else&#xA;      if self.oclIsKindOf(dataaccess::query::Selection) then&#xA;        self.oclAsType(dataaccess::query::Selection).object.getUsedAliases()->union(&#xA;        self.oclAsType(dataaccess::query::Selection).selectionExpr.getUsedAliases())&#xA;      else&#xA;        if self.oclIsKindOf(ObjectBasedExpression) then&#xA;          let objectAliases:Set(behavioral::actions::Iterator) = self.oclAsType(ObjectBasedExpression).object.getUsedAliases() in&#xA;          if self.oclIsKindOf(MethodCallExpression) then&#xA;            objectAliases->union(self.oclAsType(MethodCallExpression).parameters.getUsedAliases()->flatten()->asSet())&#xA;          else&#xA;            objectAliases&#xA;          endif&#xA;        else&#xA;          if self.oclIsKindOf(Equals) then&#xA;            self.oclAsType(Equals).left.getUsedAliases()->union(self.oclAsType(Equals).right.getUsedAliases())&#xA;          else&#xA;            if self.oclIsKindOf(FunctionCallExpression) then&#xA;              self.oclAsType(FunctionCallExpression).calledBlock.getUsedAliases()->union(&#xA;                           self.oclAsType(FunctionCallExpression).parameters.getUsedAliases()->flatten()->asSet())&#xA;            else&#xA;              if self.oclIsKindOf(Ternary) then&#xA;                let sat:Ternary = self.oclAsType(Ternary) in&#xA;                sat.condition.getUsedAliases()->union(sat.trueExpr.getUsedAliases())->union(sat.falseExpr.getUsedAliases())&#xA;             else&#xA;                 if self.oclIsKindOf(dataaccess::expressions::collectionexpressions::CollectionExpressionWithArgument) then&#xA;                  self.oclAsType(dataaccess::expressions::collectionexpressions::CollectionExpressionWithArgument).argument.getUsedAliases()->union(&#xA;                  self.oclAsType(dataaccess::expressions::collectionexpressions::CollectionExpressionWithArgument).source.getUsedAliases())&#xA;                else&#xA;                  if self.oclIsKindOf(dataaccess::expressions::collectionexpressions::Iterate) then&#xA;                    self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).iteratorExpression.getUsedAliases()->union(&#xA;                    self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).accumulator.initExpression.getUsedAliases())->union(&#xA;                    self.oclAsType(dataaccess::expressions::collectionexpressions::Iterate).source.getUsedAliases())&#xA;                  else&#xA;                    if self.oclIsKindOf(dataaccess::query::OqlQuery) then&#xA;                      self.oclAsType(dataaccess::query::OqlQuery).fromClauses.fromExpression.getUsedAliases()->flatten()->asSet()->union(&#xA;                      self.oclAsType(dataaccess::query::OqlQuery).condition.getUsedAliases())&#xA;                    else&#xA;                      Set{}&#xA;                    endif&#xA;                  endif&#xA;                endif&#xA;              endif&#xA;            endif&#xA;          endif&#xA;        endif&#xA;      endif&#xA;    endif&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Computes the Iterator objects that are defined by a FromClause of an OqlQuery and that are used in a VariableExpression somewhere inside this expression. Needs to handle all side effect-free expression types. By the current definition, this excludes, e.g., ObjectCreationExpression and therefore its initializers method call expressions."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getNamedValuesInScope" ordered="false" upperBound="-1" eType="ecore:EClass data.ecore#//classes/NamedValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.addNamedValuesWithNewNames(&#xA;&#xA;  -- First, collect those NamedValues defined immediately for this expression:&#xA;  -- an iterate's body expression sees the iterators and the accumulator&#xA;  let accumulator:Set(data::classes::NamedValue)=self.inIterator.accumulator->asSet() in&#xA;  let iterators:Set(data::classes::NamedValue)=self.inIterator.iterators->asSet() in&#xA;  -- an OQL &quot;from&quot; clause sees all aliases left of it&#xA;  let oqlAliases:Set(data::classes::NamedValue)=(if self.fromClause->notEmpty() then&#xA;    let fromClauses:OrderedSet(dataaccess::query::FromClause) = self.fromClause.fromClauseOfOqlQuery.fromClauses in&#xA;    let fcIndex:Integer = fromClauses->indexOf(self.fromClause) in&#xA;      Sequence{1..-1+fcIndex}->collect(i | fromClauses->at(i).alias)->asSet()&#xA;  else&#xA;    Set{}&#xA;  endif)->union(&#xA;  -- an OQL &quot;where&quot; clause sees all aliases defined by any of the OQL expression's &quot;from&quot; entries&#xA;  self.conditionOfOqlQuery.fromClauses.alias->asSet()) in&#xA;  -- a Selection defines an implicit iterator for its filter expression&#xA;  let selectionIterator:Set(data::classes::NamedValue)=self.selection.iterator->asSet() in&#xA;  -- a GroupBy's mapExpression sees all dimension iterators and the groupedFacts iterator&#xA;  let groupByMapExpressionIterators:Set(data::classes::NamedValue)=self.mapExpressionOfGroupBy.groupedFacts->asSet()->union(&#xA;                                                    self.mapExpressionOfGroupBy.dimensions.iterator->asSet()) in&#xA;  -- a GroupBy's dimension expression sees the facts iterator&#xA;  let groupByDimensionFactIterator:Set(data::classes::NamedValue)=self.dimension.groupBy.fact->asSet() in&#xA;&#xA;  accumulator->union(iterators)->union(oqlAliases)->union(selectionIterator)->union(groupByMapExpressionIterators)->&#xA;  union(groupByDimensionFactIterator),&#xA;&#xA;  -- Then, add those defined by owning structures such as owning statements or owning expressions&#xA;  -- an expression that is used by an ExpressionStatement or as condition in a Conditional sees all named values that the statement sees&#xA;  if self.actualObjectParameter.owningClassTypeDefinition->notEmpty() then&#xA;    self.actualObjectParameter.owningClassTypeDefinition.getNamedValuesInScope()&#xA;  else&#xA;    if self.initExpressionFor.namedValueDeclaration->notEmpty() then&#xA;      self.initExpressionFor.namedValueDeclaration.getNamedValuesInScope()&#xA;    else&#xA;      if self.expressionStatement->notEmpty() then&#xA;        self.expressionStatement.getNamedValuesInScope()&#xA;      else&#xA;        if self.conditional->notEmpty() then&#xA;          if self.conditional.oclIsKindOf(behavioral::actions::ConditionalStatement) then&#xA;            self.conditional.oclAsType(behavioral::actions::ConditionalStatement).getNamedValuesInScope()&#xA;          else&#xA;            self.conditional.oclAsType(ConditionalExpression).getNamedValuesInScope()&#xA;          endif&#xA;        else&#xA;          if self.argumentOf->notEmpty() and self.argumentOf.oclIsKindOf(behavioral::actions::StatementWithArgument) then&#xA;            self.argumentOf.oclAsType(behavioral::actions::StatementWithArgument).getNamedValuesInScope()&#xA;          else&#xA;            -- add all variables in scope for owning expressions&#xA;            let oe:Expression = self.getOwningExpression() in&#xA;              if oe->isEmpty() then&#xA;                Set{}&#xA;              else&#xA;                oe.getNamedValuesInScope()&#xA;              endif&#xA;          endif&#xA;        endif&#xA;      endif&#xA;    endif&#xA;  endif&#xA;  )"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getOwningExpression" ordered="false" unique="false" eType="#//expressions/Expression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="let objectBasedExpressions:Set(Expression)=self.objectBasedExpression->asSet() in&#xA;  let argumentsOf:Set(Expression)=self.argumentOf->select(ao | ao.oclIsKindOf(Expression)).oclAsType(ExpressionWithArgument)->asSet() in&#xA;  let equals:Set(Expression)=self.leftOfEquals->asSet()->union(self.rightOfEquals->asSet()) in&#xA;  let blocksOfFunctionCallExpression:Set(Expression)=self.blockOfFunctionCallExpression->asSet() in&#xA;  let signatureCalls:Set(Expression)=self.usedAsArgumentInSignatureCall->asSet() in&#xA;  let creationExpression:Set(Expression)=if self.oclIsKindOf(MethodCallExpression) then&#xA;    self.oclAsType(MethodCallExpression).creationExpression->asSet()&#xA;  else&#xA;    Set{}&#xA;  endif in&#xA;  let ternary:Set(Expression)=self.trueOfTernary->asSet()->union(self.falseOfTernary->asSet()) in&#xA;  let conditional:Set(Expression)=if self.conditional->notEmpty() and self.conditional.oclIsKindOf(ConditionalExpression) then&#xA;    self.conditional.oclAsType(ConditionalExpression)->asSet()&#xA;  else&#xA;    Set{}&#xA;  endif in&#xA;  let replace:Set(Expression)=self.withOfReplace->asSet()->union(self.navigationStep.replace->asSet()) in&#xA;  let oqlQuery:Set(Expression)=self.conditionOfOqlQuery->asSet()->union(self.fromClause.fromClauseOfOqlQuery->asSet()) in&#xA;  let selection:Set(Expression)=self.selection->asSet() in&#xA;  let objectLiteral:Set(Expression)=self.valueInit.objectLiteral->asSet() in&#xA;  let iterator:Set(Expression)=self.inIterator->asSet() in&#xA;  let collectionExpression:Set(Expression)=self.collectionExpression->asSet() in&#xA;  let all:Set(Expression)=self.all->asSet() in&#xA;  let valueInitInObjectLiteral:Set(Expression)=self.valueInit.objectLiteral->asSet() in&#xA;  let dimensionExpression:Set(Expression)=self.cellSetOfDimensionExpression->asSet()->union(&#xA;                                                                   self.factsOfDimensionExpression->asSet()) in&#xA;  let groupByExpression:Set(Expression)=self.dimension.groupBy->asSet()->union(&#xA;                                                                   self.mapExpressionOfGroupBy->asSet()) in&#xA;&#xA;  objectBasedExpressions->union(argumentsOf)->union(equals)->union(blocksOfFunctionCallExpression)->union(&#xA;  signatureCalls)->union(creationExpression)->union(ternary)->union(conditional)->union(replace)->union(&#xA;  oqlQuery)->union(selection)->union(objectLiteral)->union(iterator)->union(collectionExpression)->union(&#xA;  all)->union(valueInitInObjectLiteral)->union(dimensionExpression)->union(groupByExpression)->any(true)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If this expression is composed by another expression, determines the composing expression. Otherwise, an empty result is returned.&#xD;&#xA;&#xD;&#xA;The issue with this operation is that each time a new inbound composite relatioship is added to Expression, this operation needs to be extended accordingly."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getOwningClass" ordered="false" unique="false" eType="ecore:EClass data.ecore#//classes/SapClass">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="let oe:Expression = self.getOwningExpression() in&#xA;  if oe->notEmpty() then&#xA;    oe.getOwningClass()&#xA;  else&#xA;    if self.expressionStatement->notEmpty() then&#xA;      self.expressionStatement.getOwningClass()&#xA;    else&#xA;      if self.conditional->notEmpty() and self.conditional.oclIsKindOf(behavioral::actions::Statement) then&#xA;        self.conditional.oclAsType(behavioral::actions::ConditionalStatement).getOwningClass()&#xA;      else&#xA;        if self.argumentOf->notEmpty() and self.argumentOf.oclIsKindOf(behavioral::actions::StatementWithArgument) then&#xA;          self.argumentOf.oclAsType(behavioral::actions::StatementWithArgument).getOwningClass()&#xA;        else&#xA;          if self.initExpressionFor.namedValueDeclaration->notEmpty() then&#xA;            self.initExpressionFor.namedValueDeclaration.getOwningClass()&#xA;          else&#xA;            null&#xA;          endif&#xA;        endif&#xA;      endif&#xA;    endif&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressionStatement"
+          eType="ecore:EClass behavioral.ecore#//actions/ExpressionStatement" transient="true"
+          eOpposite="behavioral.ecore#//actions/ExpressionStatement/expression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initExpressionFor" eType="ecore:EClass behavioral.ecore#//actions/NamedValueWithOptionalInitExpression"
+          transient="true" eOpposite="behavioral.ecore#//actions/NamedValueWithOptionalInitExpression/initExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actualObjectParameter"
+          eType="ecore:EClass data.ecore#//classes/ActualObjectParameter" transient="true"
+          eOpposite="data.ecore#//classes/ActualObjectParameter/value"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="objectBasedExpression"
+          eType="#//expressions/ObjectBasedExpression" transient="true" eOpposite="#//expressions/ObjectBasedExpression/object"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argumentOf" eType="#//expressions/WithArgument"
+          transient="true" eOpposite="#//expressions/WithArgument/argument"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="blockOfFunctionCallExpression"
+          eType="#//expressions/FunctionCallExpression" transient="true" eOpposite="#//expressions/FunctionCallExpression/calledBlock"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftOfEquals" eType="#//expressions/Equals"
+          transient="true" eOpposite="#//expressions/Equals/left"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usedAsArgumentInSignatureCall"
+          eType="#//expressions/SignatureCallExpression" transient="true" eOpposite="#//expressions/SignatureCallExpression/parameters"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightOfEquals" eType="#//expressions/Equals"
+          transient="true" eOpposite="#//expressions/Equals/right"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditional" eType="#//expressions/Conditional"
+          transient="true" eOpposite="#//expressions/Conditional/condition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collectionExpression"
+          eType="#//expressions/collectionexpressions/CollectionExpression" transient="true"
+          eOpposite="#//expressions/collectionexpressions/CollectionExpression/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inIterator" eType="#//expressions/collectionexpressions/Iterate"
+          transient="true" eOpposite="#//expressions/collectionexpressions/Iterate/iteratorExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionOfOqlQuery"
+          eType="#//query/OqlQuery" transient="true" eOpposite="#//query/OqlQuery/condition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fromClause" eType="#//query/FromClause"
+          transient="true" eOpposite="#//query/FromClause/fromExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cellSetOfDimensionExpression"
+          eType="#//analytics/DimensionExpression" transient="true" eOpposite="#//analytics/DimensionExpression/cellSet"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="factsOfDimensionExpression"
+          eType="#//analytics/DimensionExpression" transient="true" eOpposite="#//analytics/DimensionExpression/facts"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dimension" eType="#//analytics/DimensionDefinition"
+          transient="true" eOpposite="#//analytics/DimensionDefinition/expression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mapExpressionOfGroupBy"
+          eType="#//analytics/GroupBy" transient="true" eOpposite="#//analytics/GroupBy/mapExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="template" eType="ecore:EClass ui.ecore#//templates/StringTemplate"
+          transient="true" eOpposite="ui.ecore#//templates/StringTemplate/expressions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="all" eType="ecore:EClass persistence.ecore#//expressions/All"
+          transient="true" eOpposite="persistence.ecore#//expressions/All/snapshotIdentifier"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableExpression" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The variable referenced by this type of expression must be visible within the scope where this expression occurs.&#xD;&#xA;&#xD;&#xA;TODO: How to determine the block containing this VariableExpression? This will be important to determine if the variable is visible."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="VariableExpressionType" value="self.getType().conformsTo(self.variable.getType())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="VariableExpressionType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/NamedValue"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MethodCallExpression" eSuperTypes="#//expressions/ObjectBasedExpression #//expressions/SignatureCallExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The MethodCallExpression executes an implementation of the signature using the &quot;parameters&quot; expressions as arguments on the object evaluated by the &quot;object&quot; expression. For that, first the &quot;object&quot; expression is evaluated. the parameter expressions (if provided) are evaluated and then passed to the implementation.&#xD;&#xA;&#xD;&#xA;The object expression must evaluate to a single value, i.e., a TypeDefinition with upperMultiplicity = 1."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ObjectMustSupportOperation" value="self.object.getType().getInnermost().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.object.getType().getInnermost().oclAsType(data::classes::ClassTypeDefinition).clazz.conformsTo(self.methodSignature.owner.oclAsType(data::classes::SapClass))"/>
+        <details key="OutputMultiplicities" value="(self.object.getType().isMany() implies (self.getType().isMany() and not self.getType().unique)) and&#xD;&#xA;  (self.object.getType().lowerMultiplicity = 0 implies (self.getType()->isEmpty() or self.getType().lowerMultiplicity = 0))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ObjectMustSupportOperation OutputMultiplicities"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="asynchronous" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="An operation may be invoked asynchronously. If the operation returns a value, it is ignored, as are any exceptions raised by the operation. An OperationExpression with this attribute set to true has itself no type and therefore cannot reasonably be used in a side effect-free expression but only as a statement."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methodSignature" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/MethodSignature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="creationExpression" eType="#//expressions/ObjectCreationExpression"
+          transient="true" eOpposite="#//expressions/ObjectCreationExpression/initializers"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectBasedExpression" abstract="true"
+        eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A specific type of expression that is evaluated in the context of a specific object. Another expression is used to determine this object. An example for such an expression would be association navigation, where the object where the navigation starts has to be specified by the &quot;object&quot; expression."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/objectBasedExpression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectCreationExpression" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="CannotInstantiateAbstractClass" value="not self.classToInstantiate.isAbstract()"/>
+        <details key="ExpressionType" value="self.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.getType().oclAsType(data::classes::ClassTypeDefinition).clazz = self.classToInstantiate and&#xD;&#xA;  self.getType().lowerMultiplicity = 1 and&#xD;&#xA;  self.getType().upperMultiplicity = 1"/>
+        <details key="HasToOwnTypeDefinition" value="self.ownedTypeDefinition->notEmpty()"/>
+        <details key="CannotInstantiateValueClass" value="not self.classToInstantiate.valueType"/>
+        <details key="NoDuplicateInitializers" value="self.initializers->forAll( a, b | a &lt;> b implies a.methodSignature &lt;> b.methodSignature )"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="CannotInstantiateAbstractClass ExpressionType HasToOwnTypeDefinition CannotInstantiateValueClass NoDuplicateInitializers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classToInstantiate" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initializers" upperBound="-1"
+          eType="#//expressions/MethodCallExpression" containment="true" eOpposite="#//expressions/MethodCallExpression/creationExpression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionCallExpression" eSuperTypes="#//expressions/SignatureCallExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An expression that is computed by first evaluating &quot;calledBlock&quot; and invoking the resulting block passing the &quot;argument&quot; expression. The value returned by the block constitutes the value of this expression. If the block terminates with a fault, the evaluation of this expression terminates with this fault.&#xD;&#xA;&#xD;&#xA;The type of the object computed by the &quot;parameters&quot; expression must conform to the input parameter types of the signature called.&#xD;&#xA;&#xD;&#xA;If the calledBock evaluates to more than one callable function, all functions will be called. Invocation ordering depends on the side effect-freeness of the signatures called."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ResultType" value="let fstd:data::classes::FunctionSignatureTypeDefinition = self.calledBlock.getType().getInnermost().oclAsType(data::classes::FunctionSignatureTypeDefinition) in&#xD;&#xA;&#xD;&#xA;  if fstd.isMany() then&#xD;&#xA;    -- calling multiple functions; test is somewhat fuzzy because it doesn't test condormance of nesting structure exactly&#xD;&#xA;    self.getType().isMany() and not self.getType().unique and&#xD;&#xA;    fstd.signature.output.getInnermost().conformsTo(self.getType().getInnermost()) and&#xD;&#xA;    (fstd.lowerMultiplicity = 0 implies (self.getType()->isEmpty() or self.getType().lowerMultiplicity = 0))&#xD;&#xA;  else&#xD;&#xA;    -- calling a single function&#xD;&#xA;    fstd.signature.output.conformsTo(self.getType()) and &#xD;&#xA;    (fstd.lowerMultiplicity = 0 implies (self.getType()->isEmpty() or self.getType().lowerMultiplicity = 0))&#xD;&#xA;  endif"/>
+        <details key="CalledBlockMustBeFunction" value="self.calledBlock.getType().getInnermost().oclIsKindOf(data::classes::FunctionSignatureTypeDefinition)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ResultType CalledBlockMustBeFunction"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="calledBlock" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/blockOfFunctionCallExpression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WithArgument" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//expressions/Expression"
+          containment="true" eOpposite="#//expressions/Expression/argumentOf"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="This" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Statically, the This expression has the type that owns its occurrence. This means, in order to determine this, the getType implementation needs to ascend the composition hierarchy until it finds a Class somewhere. The problem, again, is that an OCL expression cannot manufacture the result required becauce currently TypeDefinition is still an &quot;entity type,&quot; meaning a MOF class whose instances have ID and an explicit life cycle.&#xD;&#xA;&#xD;&#xA;Therefore, currently This has to own its type definition, unfortunately."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Equals" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="compares two or more values/objects. Entity type instances are compared based on their identity. Value type instances are compared by their value. The type of an Equals expression is Boolean.&#xD;&#xA;&#xD;&#xA;The getType() implementation can only infer the type once TypeDefinition is a value type, values of which can be constructed in an OCL expression."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ConformaceOneWayOrAnother" value="self.left.getType().conformsTo(self.right.getType()) or&#xD;&#xA;  self.right.getType().conformsTo(self.left.getType())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ConformaceOneWayOrAnother"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/leftOfEquals"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/rightOfEquals"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssociationEndNavigationExpression"
+        eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Navigates from the &quot;object&quot; across the &quot;toEnd&quot;'s association to the &quot;toEnd&quot;. The expression evaluates to the objects at the &quot;toEnd&quot; that are associated with the &quot;object&quot; based on the end's association."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ObjectTypeMustMatch" value="self.object.getType().conformsToIgnoringMultiplicity(self.toEnd.otherEnd().type)"/>
+        <details key="ResultType" value="self.getType() = self.toEnd.type"/>
+        <details key="EndMustBeNavigable" value="self.toEnd.navigable"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ObjectTypeMustMatch ResultType EndMustBeNavigable"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="toEnd" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/AssociationEnd"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SignatureCallExpression" abstract="true"
+        eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ParametersTypesMustMatchSignatureParametersTypes" value="let numberOfMandatoryParameters:Integer =&#xD;&#xA;    self.getSignature().input->select(p|p.defaultValue->isEmpty())->size()&#xD;&#xA;  in&#xD;&#xA;  self.parameters->size() >= numberOfMandatoryParameters and&#xD;&#xA;  self.parameters->size() &lt;= self.getSignature().input->size() and&#xD;&#xA;  self.parameters->forAll(parameter |&#xD;&#xA;    parameter.getType().conformsTo(self.getSignature().input->at(self.parameters->indexOf(parameter)).getType()) )"/>
+        <details key="CallTypeMustMatchSignatureOutput" value="if self.getSignature().output.oclIsUndefined() then&#xD;&#xA;        self.getType().oclIsUndefined()&#xD;&#xA;    else &#xD;&#xA;        if self.getMultiplicityOfCallTarget().isMany() and self.getSignature().output.isMany() then&#xD;&#xA;            let ntd:data::classes::NestedTypeDefinition = self.getType().oclAsType(data::classes::NestedTypeDefinition) in&#xD;&#xA;                self.getType().oclIsKindOf(data::classes::NestedTypeDefinition) and &#xD;&#xA;                ntd.unique = false and&#xD;&#xA;                ntd.ordered = self.getMultiplicityOfCallTarget().ordered and&#xD;&#xA;                ntd.lowerMultiplicity = self.getMultiplicityOfCallTarget().lowerMultiplicity and&#xD;&#xA;                ntd.upperMultiplicity = self.getMultiplicityOfCallTarget().upperMultiplicity and&#xD;&#xA;                self.getSignature().output.conformsTo(ntd.type)&#xD;&#xA;        else&#xD;&#xA;            let target:data::classes::Multiplicity = self.getMultiplicityOfCallTarget() in&#xD;&#xA;            let output:data::classes::TypeDefinition = self.getSignature().output in &#xD;&#xA;                ( output.isMany() implies self.getType().unique = output.unique ) and&#xD;&#xA;                ( ( output.isMany() or target.isMany() ) implies ( self.getType().ordered = (output.ordered or target.ordered) ) ) and&#xD;&#xA;                ( self.getType().lowerMultiplicity = (output.lowerMultiplicity * target.lowerMultiplicity)) and&#xD;&#xA;                ( self.getType().upperMultiplicity = (if output.isMany() or target.isMany() then &#xD;&#xA;                                                        -1 &#xD;&#xA;                                                    else &#xD;&#xA;                                                        output.upperMultiplicity * target.upperMultiplicity &#xD;&#xA;                                                    endif)) and&#xD;&#xA;                self.getType().conformsToIgnoringMultiplicity(output)&#xD;&#xA;        endif&#xD;&#xA;    endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ParametersTypesMustMatchSignatureParametersTypes CallTypeMustMatchSignatureOutput"/>
+      </eAnnotations>
+      <eOperations name="getSignature" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/Signature">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.oclIsKindOf(FunctionCallExpression) then&#xD;&#xA;    self.oclAsType(FunctionCallExpression).calledBlock->collect(getType().getInnermost().oclAsType(data::classes::FunctionSignatureTypeDefinition).signature)->any(true)&#xD;&#xA;  else&#xD;&#xA;    self.oclAsType(MethodCallExpression).methodSignature&#xD;&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="For FunctionCallExpression, this retrieves the signature from the type of the calledBlock expression which is required to be a FunctionSignatureTypeDefinition. For MethodCallExpression, it obtains the signature by navigating to the methodSignature role."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="getMultiplicityOfCallTarget" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EClass data.ecore#//classes/Multiplicity">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.oclIsKindOf(FunctionCallExpression) then&#xA;      self.oclAsType(FunctionCallExpression).calledBlock.getType()&#xA;  else&#xA;      self.oclAsType(MethodCallExpression).object.getType()&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/usedAsArgumentInSignatureCall"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectCount" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Computes the Number 1 for single objects, and the number of objects in a multi-valued object otherwise.&#xD;&#xA;&#xD;&#xA;Type inference in getType() can be done once TypeDefinition is a value type that can be constructed in OCL."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="TypeIsNumber" value="self.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name = 'Number'"/>
+        <details key="MultiplicityIsOne" value="self.getType().upperMultiplicity = 1 and&#xD;&#xA;  self.getType().lowerMultiplicity = 1"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="TypeIsNumber MultiplicityIsOne"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Replace" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An abstract-syntactical convenience to construct a value from an existing one, replacing a component somewhere in the possibly deep structure that the value has.&#xD;&#xA;&#xD;&#xA;The replacement always produces a value of the same type as the source value. It can provide a navigation path, following associations, staying withing values, with the last path component being allowed to end at an entity or a value class. Each path segment may add a constraint which makes sense specifically for multiplicities greater than one."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="SourceObjectIsOfValueType" value="self.object.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.object.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.valueType"/>
+        <details key="WithTypeConformsToLastStepsType" value="self.with.getType().conformsTo(self.steps->at(self.steps->size()).to.type)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="SourceObjectIsOfValueType WithTypeConformsToLastStepsType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="steps" lowerBound="1"
+          upperBound="-1" eType="#//expressions/NavigationStep" containment="true"
+          eOpposite="#//expressions/NavigationStep/replace"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="with" lowerBound="1"
+          eType="#//expressions/Expression" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="withOfReplace"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationStep">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="FromEndAttachesToOutputOfPreviousStep" value="let i:Integer = self.replace.steps->indexOf(self) in&#xD;&#xA;  let t:data::classes::ClassTypeDefinition = if i=1 then&#xD;&#xA;      self.replace.object.getType().oclAsType(data::classes::ClassTypeDefinition)&#xD;&#xA;    else&#xD;&#xA;      self.replace.steps->at(-1 + i).to.type&#xD;&#xA;    endif&#xD;&#xA;  in&#xD;&#xA;&#xD;&#xA;  self.to.otherEnd().type.clazz.conformsTo(t.clazz)"/>
+        <details key="FilterFunctionExpressionHasFunctionType" value="self.filterFunction->notEmpty() implies self.filterFunction.getType().oclIsKindOf(data::classes::FunctionSignatureTypeDefinition)"/>
+        <details key="FromEndMustBeEqualityRelevant" value="to.otherEnd().contributesToEquality"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="FromEndAttachesToOutputOfPreviousStep FilterFunctionExpressionHasFunctionType FromEndMustBeEqualityRelevant"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="replace" lowerBound="1"
+          eType="#//expressions/Replace" transient="true" eOpposite="#//expressions/Replace/steps"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="ecore:EClass data.ecore#//classes/AssociationEnd"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filterFunction" eType="#//expressions/Expression"
+          containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="navigationStep"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Head" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="IsOrdered" value="self.object.getType().ordered"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="IsOrdered"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Tail" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="IsOrdered" value="self.object.getType().ordered"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="IsOrdered"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AsList" eSuperTypes="#//expressions/ObjectBasedExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Conditional" abstract="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Some statement depending on a Boolean expression"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ConditionMustBeBoolean" value="self.condition.getType().upperMultiplicity = 1 and&#xD;&#xA;  self.condition.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.condition.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name = 'Boolean'"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ConditionMustBeBoolean"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/conditional"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Ternary" eSuperTypes="#//expressions/ConditionalExpression #//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="TrueAndFalseExprsConformToResultType" value="self.trueExpr.getType().conformsTo(self.getType()) or&#xD;&#xA;  self.falseExpr.getType().conformsTo(self.getType())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="TrueAndFalseExprsConformToResultType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="falseExpr" lowerBound="1"
+          eType="#//expressions/Expression" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="falseOfTernary"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="trueExpr" lowerBound="1"
+          eType="#//expressions/Expression" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="trueOfTernary"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContentEquals" eSuperTypes="#//expressions/Equals">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Compares two entity objects by the content of those associations marked as equality relevant for the entity."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ContentEqualsOnlyForEntities" value="self.left.getType().getInnermost().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.right.getType().getInnermost().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  not self.left.getType().getInnermost().oclAsType(data::classes::ClassTypeDefinition).clazz.valueType and&#xD;&#xA;  not self.right.getType().getInnermost().oclAsType(data::classes::ClassTypeDefinition).clazz.valueType"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ContentEqualsOnlyForEntities"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExpressionWithArgument" abstract="true"
+        eSuperTypes="#//expressions/Expression #//expressions/WithArgument"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalExpression" abstract="true"
+        eSuperTypes="#//expressions/Expression #//expressions/Conditional"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Map" eSuperTypes="#//expressions/ExpressionWithArgument #//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A map expression operates on a (multi-)object (therefore it is an ObjectBaseExpression) and subjects each element of this (multi-)object as argument to the function expected as argument (therefore, it is an ExpressionWithArgument). The single multiplicity of the object expression must conform to the single input argument of the function signature of the FunctionSignatureTypeDefinition defining the type of the argument."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ObjectTypeMustConformToFunctionArgument" value="let fstd:data::classes::TypeDefinition = self.argument.getType() in&#xD;&#xA;  let sig:data::classes::Signature = fstd.oclAsType(data::classes::FunctionSignatureTypeDefinition).signature in&#xD;&#xA;  let t:data::classes::TypeDefinition = self.object.getType() in&#xD;&#xA;  let argT:data::classes::TypeDefinition = sig.input->at(1).getType() in&#xD;&#xA;  -- if multiplicities match including multiplicities, that's ok&#xD;&#xA;  t.conformsTo(argT) or&#xD;&#xA;  -- otherwise, pick single multiplicity from object and try again&#xD;&#xA;  t.conformsToIgnoringMultiplicity(argT) or&#xD;&#xA;  (t.oclIsKindOf(data::classes::NestedTypeDefinition) and t.oclAsType(data::classes::NestedTypeDefinition).type.conformsTo(argT))"/>
+        <details key="ArgumentMustBeSingleArgumentFunctionWithNonVoidOutput" value="let fstd:data::classes::TypeDefinition = self.argument.getType() in&#xD;&#xA;  fstd.oclIsKindOf(data::classes::FunctionSignatureTypeDefinition) and&#xD;&#xA;  (let sig:data::classes::Signature = fstd.oclAsType(data::classes::FunctionSignatureTypeDefinition).signature in&#xD;&#xA;  (sig.output->notEmpty() and&#xD;&#xA;  sig.input->size() = 1))"/>
+        <details key="MapFunctionMustBeSideEffectFree" value="self.argument.getType().oclAsType(data::classes::FunctionSignatureTypeDefinition).signature.sideEffectFree"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ObjectTypeMustConformToFunctionArgument ArgumentMustBeSingleArgumentFunctionWithNonVoidOutput MapFunctionMustBeSideEffectFree"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eSubpackages name="literals" nsURI="http:///dataaccess/expressions/literals.ecore"
+        nsPrefix="dataaccess.expressions.literals">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      </eAnnotations>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//expressions/Expression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A literal of any primitive type, such as &quot;This is a string&quot; or 123 or an enumeration literal or a literal denoting a value of an implicit anonymous class, or a block, or a literal that denotes a (potentially anonymous) class.&#xD;&#xA;&#xD;&#xA;The exact type of a literal may not always be possible to decide completely, particularly when it comes to constrained types over primitive types. This can only come in through &quot;post types&quot; and type inference, e.g., in an assignment statement where the type of the lvalue is known."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Represents the value of this literal as a string. Final interpretation has to happen by the type of the literal expression. For string literals this is particularly straightforward. For numbers and dates, specific formats as defined by the respective types may apply."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryLiteral" eSuperTypes="#//expressions/literals/Literal"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//expressions/literals/Literal"/>
+      <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//expressions/literals/Literal"/>
+      <eClassifiers xsi:type="ecore:EClass" name="TimePointLiteral" eSuperTypes="#//expressions/literals/Literal"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//expressions/literals/Literal"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ObjectLiteral" eSuperTypes="#//expressions/Expression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="ObjectLiteralsForValueClassesOnly" value="self.valueClass.valueType"/>
+          <details key="ObjectLiteralPropertiesOnRightClass" value="self.propertyValues->forAll(vi|vi.forEnd.otherEnd().type.clazz = self.valueClass)"/>
+          <details key="ValuesMustBeProvidedForAllMandatoryProperties" value="self.valueClass.getEqualityRelevantAssociationEnds()->select(ae | ae.otherEnd().type.lowerMultiplicity > 0)->forAll(ae |&#xD;&#xA;      self.propertyValues->exists(pv | pv.forEnd.otherEnd() = ae))"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="ObjectLiteralsForValueClassesOnly ObjectLiteralPropertiesOnRightClass ValuesMustBeProvidedForAllMandatoryProperties"/>
+        </eAnnotations>
+        <eOperations name="isEqualTo" ordered="false" unique="false" lowerBound="1"
+            eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+            <details key="body" value="self.valueClass = o.valueClass and&#xA;  self.propertyValues->size() = o.propertyValues->size() and&#xA;  self.propertyValues->forAll(pv | o.propertyValues->exists(opv | opv.forEnd = pv.forEnd and opv.value.evaluatesToEqualAs(pv.value)))"/>
+          </eAnnotations>
+          <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+            <details key="constraints" value="body"/>
+          </eAnnotations>
+          <eParameters name="o" ordered="false" unique="false" lowerBound="1" eType="#//expressions/literals/ObjectLiteral"/>
+        </eOperations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="valueClass" lowerBound="1"
+            eType="ecore:EClass data.ecore#//classes/SapClass">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="objectLiteral"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="propertyValues" upperBound="-1"
+            eType="#//expressions/literals/ValueInit" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="objectLiteral"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueInit">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Provides an initialization value for an association end whose other end is attached to a value class. The expression's type must conform to the association end's type."/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="ValueInitTypeConforms" value="self.value.getType().conformsTo(self.forEnd.type)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="ValueInitTypeConforms"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="forEnd" lowerBound="1"
+            eType="ecore:EClass data.ecore#//classes/AssociationEnd">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="valueInit"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//expressions/Expression" containment="true">
+          <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+            <details key="Property.oppositeRoleName" value="valueInit"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="collectionexpressions" nsURI="http:///dataaccess/expressions/collectionexpressions.ecore"
+        nsPrefix="dataaccess.expressions.collectionexpressions">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      </eAnnotations>
+      <eClassifiers xsi:type="ecore:EClass" name="Including" eSuperTypes="#//expressions/collectionexpressions/CollectionExpressionWithArgument">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Produces a new value which includes the *argument* object. If the *argument* object was already included in the *source* and the multiplicity of the *source* has the *unique* attribute set to *true*, the *what* object will not be added a second time and the resulting expression will be equal to the *source* expression's value.&#xD;&#xA;&#xD;&#xA;If the *source* expression had multiplicity 1, the resulting expression's multiplicity is *, regardless of whether an object actually gets added."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Excluding" eSuperTypes="#//expressions/collectionexpressions/CollectionExpressionWithArgument">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Produces a new value which includes one less occurrence of the *argument* object than *source* or no occurrence if *source* did not contain an occurrence.&#xD;&#xA;&#xD;&#xA;If the *source* expression had multiplicity a..b, the resulting expression's multiplicity is Max(a-1, 0)..b, regardless of whether an object actually gets removed."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IncludingAt" eSuperTypes="#//expressions/collectionexpressions/Including #//expressions/collectionexpressions/WithPosition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Like Including, produced a new value based on the *source* value that includes the *argument* object. In addition, *IncludingAt* specifies the position where to include the *argument* object. The multiplicity of source and resulting value have ordered=true. If *source* already includes an object equal to *argument* and the *source* multiplicity has unique=true, that element will afterwards be at the requested position or at the end of the resulting value if the *at* position is greater or equal the *source*'s cardinality."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Iterate" eSuperTypes="#//expressions/collectionexpressions/CollectionExpression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Given the number of iterators variables, assigns all possible tuples of values from the source expression to the iterators (combinatorial product). In particular, if only only one iterator variable is provided, this variable will &quot;loop&quot; through the values in the source expression. If the source expression has an ordered multiplicity, the iteration order corresponds with that order. Otherwise, iteration order is arbitrary and undefined.&#xD;&#xA;&#xD;&#xA;For each combination of iterator variable values, the iteratorExpression will be evaluated. The result of each evaluation is assigned to the accumulator variable.&#xD;&#xA;&#xD;&#xA;The iteratorExpression can use all iterators variables as well as the accumulator if one is declared, and of course all other variables in scope as well (block variables, etc.). If an accumulator is declared, an initial value must be provided for it.&#xD;&#xA;&#xD;&#xA;The result of the Iterate expression is the value that the accumulator has when the iteration terminates or the value of the last iteratorExpression evaluation if no accumulator has been provided. By this rationale, the type of the Iterate expression equals the type of the iteratorExpression."/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="AccumulatorTypeEqualsExpressionType" value="self.accumulator->notEmpty() implies&#xD;&#xA;  (self.accumulator.ownedTypeDefinition->notEmpty() implies&#xD;&#xA;     self.accumulator.ownedTypeDefinition.conformsTo(self.iteratorExpression.getType()))"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="AccumulatorTypeEqualsExpressionType"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="iterators" lowerBound="1"
+            upperBound="-1" eType="ecore:EClass behavioral.ecore#//actions/Iterator"
+            containment="true" eOpposite="behavioral.ecore#//actions/Iterator/iterate"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="accumulator" eType="ecore:EClass behavioral.ecore#//actions/Constant"
+            containment="true" eOpposite="behavioral.ecore#//actions/Constant/iterate"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="iteratorExpression"
+            lowerBound="1" eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/inIterator"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="CollectionExpression" abstract="true"
+          eSuperTypes="#//expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+            eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/collectionExpression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ExcludingAt" eSuperTypes="#//expressions/collectionexpressions/Excluding #//expressions/collectionexpressions/WithPosition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Like Excluding, but useful if multiple occurrences of the *argument* value exist. This expression removes the occurrence at the position specified by *at*. For this purpose, the argument value must have ordered=true, and so will the resulting value. If at position *at* there is no object that equals *argument* or the *at* position is outside the valid bounds, the resulting expression equals the *source* expression.&#xD;&#xA;&#xD;&#xA;If the argument is a multi-object (cardinality > 1), it needs to be ordered, and the argument's object sequence needs to exist at the position specified by *at*. If only a subsequence prefix is matched at position *at*, only that subsequence prefix will be excluded."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="WithPosition" abstract="true" eSuperTypes="#//expressions/ExpressionWithArgument">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="SourceMustBeOrdered" value="self.argument.getType().ordered"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="SourceMustBeOrdered"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="at" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="a position in an object with upper multiplicity >1 and ordered=true."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="CollectionExpressionWithArgument"
+          abstract="true" eSuperTypes="#//expressions/collectionexpressions/CollectionExpression #//expressions/ExpressionWithArgument">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="ArgumentTypeMustConformToCollectionExpressionType" value="let snl : Integer = source.getType().getNestingLevel() in let anl : Integer = argument.getType().getNestingLevel() in&#xD;&#xA;    if snl = anl then&#xD;&#xA;      source.getType().conformsToIgnoringMultiplicity(argument.getType())&#xD;&#xA;    else&#xD;&#xA;      if snl = (anl + 1) then&#xD;&#xA;        source.getType().oclAsType(data::classes::NestedTypeDefinition).type.conformsToIgnoringMultiplicity(argument.getType())&#xD;&#xA;      else&#xD;&#xA;        if (snl + 1) = anl then&#xD;&#xA;          source.getType().conformsToIgnoringMultiplicity(argument.getType().oclAsType(data::classes::NestedTypeDefinition).type)&#xD;&#xA;        else&#xD;&#xA;          false&#xD;&#xA;        endif&#xD;&#xA;      endif&#xD;&#xA;    endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="ArgumentTypeMustConformToCollectionExpressionType"/>
+        </eAnnotations>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="fp" nsURI="http:///dataaccess/expressions/fp.ecore" nsPrefix="dataaccess.expressions.fp">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+        <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      </eAnnotations>
+      <eClassifiers xsi:type="ecore:EClass" name="AnonymousFunctionExpr" eSuperTypes="#//expressions/Expression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The type of expression of this type is a FunctionSignatureTypeDefinition. The value of this expression can be invoked which results in an invocation of the assoicated block.&#xD;&#xA;&#xD;&#xA;The expression must own a FunctionSignatureTypeDefinition in the role ownedTypeDefinition that has a valid implementation for its FunctionSignature.&#xD;&#xA;&#xD;&#xA;Note that there can be other expressions that evaluate to a function, such as an access to a variable that has a FunctionSignatureTypeDefinition as its type. AnonymousFunctionExpr really is the constructor for a function with implementation. This expression may then, e.g., be bound to variables or passed as parameter or returned by a method or function."/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="TypeMustBeSignatureTypeDefinitionWithImplementation" value="self.getType().oclIsKindOf(data::classes::FunctionSignatureTypeDefinition) and&#xD;&#xA;  self.getType().oclAsType(data::classes::FunctionSignatureTypeDefinition).signature.oclAsType(data::classes::FunctionSignature).implementation->notEmpty()"/>
+          <details key="HasToOwnSignatureTypeDefinition" value="self.ownedTypeDefinition->notEmpty()"/>
+          <details key="SignatureMustBeFunctionSignature" value="self.ownedTypeDefinition.oclAsType(data::classes::FunctionSignatureTypeDefinition).signature.oclIsKindOf(data::classes::FunctionSignature)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="TypeMustBeSignatureTypeDefinitionWithImplementation HasToOwnSignatureTypeDefinition SignatureMustBeFunctionSignature"/>
+        </eAnnotations>
+        <eOperations name="getImplementation" ordered="false" unique="false" lowerBound="1"
+            eType="ecore:EClass data.ecore#//classes/FunctionSignatureImplementation">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+            <details key="body" value="self.ownedTypeDefinition.oclAsType(data::classes::FunctionSignatureTypeDefinition).signature.oclAsType(data::classes::FunctionSignature).implementation"/>
+          </eAnnotations>
+          <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+            <details key="constraints" value="body"/>
+          </eAnnotations>
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Determines the Block implementing the function to which this expression evaluates by navigating to the FunctionSignatureTypeDefinition that tells this expression's type, and from there obtaining the signature's implementation."/>
+          </eAnnotations>
+        </eOperations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FunctionFromMethodExpr" eSuperTypes="#//expressions/ObjectBasedExpression">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The getType() implementation for this expression type could infer the function type definition from the method signature. However, this would require constructing such a value from within OCL."/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="SignatureAvailableOnObjectsClass" value="self.object.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.object.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.conformsTo(self.method.owner.oclAsType(data::classes::SapClass))"/>
+          <details key="MethodSignatureConformsToFunctionSignature" value="self.getType().oclIsKindOf(data::classes::FunctionSignatureTypeDefinition) and&#xD;&#xA;    self.method.conformsTo(self.getType().oclAsType(data::classes::FunctionSignatureTypeDefinition).signature)"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="SignatureAvailableOnObjectsClass MethodSignatureConformsToFunctionSignature"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+            eType="ecore:EClass data.ecore#//classes/MethodSignature"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="query" nsURI="http:///dataaccess/query.ecore" nsPrefix="dataaccess.query">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A query language (overlap with rules package?) based on the structural package (BO, BONodes, associations, attributes). The language is independent of the mapping to the persistence layer but can be mapped to efficient queries in the persistence layer for those BOs that have a declared persistence mapping. Look closely at FSI, its query and view builder and how they have structured their metadata.&#xD;&#xA;&#xD;&#xA;Should this be a subset of the expression language?&#xD;&#xA;Note the particular issues around *retrieval* (as opposed to just querying IDs) as mentioned by Maic Wintel. Modeling of aspects to retrieve by a query?&#xD;&#xA;&#xD;&#xA;What about regular expressions?&#xD;&#xA;&#xD;&#xA;TODO: Most queries by means of their projection (SELECT) clause will implicitly define a tuple type, and the value returned by the query is a multi-object of that tuple type. We need to think about what these types exactly are (currently we don't support tuple types). Are they classes that are implicitly defined by the query? Or does a class explicitly have to be defined whose associations then can assume the values of the individual columns? Can that class somehow be referenced otherwise? What happens when the result of a query is assigned to a variable that uses type inference? I would hope that the implicit result class of the query is used as the variable's type. But is there / should there also be explicit ways of referencing this type?"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Selection" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Filters the (multi-)object based on the &quot;condition&quot; predicate. The expression can assume an implicit iterator variable &quot;self&quot; to be in scope which holds a single element of the (multi-)object from which to select. self's basic type is the same as that of &quot;object&quot; but with single multiplicity.&#xD;&#xA;&#xD;&#xA;The expression's type must be Boolean. If the expression evaluates to true, the single object is part of the resulting object, otherwise not.&#xD;&#xA;&#xD;&#xA;The Selection expression's result type is the same as object's type."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ConditionMustBeSideEffectFree" value="self.selectionExpr.isSideEffectFree()"/>
+        <details key="ConditionMustBeBooleanOrNumeric" value="self.selectionExpr.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA; (&#xD;&#xA;    (&#xD;&#xA;      self.selectionExpr.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name = 'Boolean' and&#xD;&#xA;      self.selectionExpr.getType().upperMultiplicity = 1&#xD;&#xA;    )&#xD;&#xA;    or&#xD;&#xA;    (&#xD;&#xA;      self.selectionExpr.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name = 'Number' &#xD;&#xA;      and &#xD;&#xA;      self.object.getType().ordered&#xD;&#xA;    )&#xD;&#xA;  )"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ConditionMustBeSideEffectFree ConditionMustBeBooleanOrNumeric"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterator" lowerBound="1"
+          eType="ecore:EClass behavioral.ecore#//actions/Iterator" containment="true"
+          eOpposite="behavioral.ecore#//actions/Iterator/selection"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selectionExpr" lowerBound="1"
+          eType="#//expressions/Expression" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="selection"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OqlQuery" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ConditionMustBeBoolean" value="self.condition->notEmpty() implies&#xD;&#xA;    (self.condition.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;     self.condition.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name='Boolean')"/>
+        <details key="WhereClauseMustBeSideEffectFree" value="self.condition->forAll(c | c.isSideEffectFree())"/>
+        <details key="HasValueType" value="self.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and self.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.valueType"/>
+        <details key="SelectedIteratorsMustHaveClassTypeDefinitionAsType" value="self.selected->forAll(i | i.getType().oclIsKindOf(data::classes::ClassTypeDefinition))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ConditionMustBeBoolean WhereClauseMustBeSideEffectFree HasValueType SelectedIteratorsMustHaveClassTypeDefinitionAsType"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//expressions/Expression"
+          containment="true" eOpposite="#//expressions/Expression/conditionOfOqlQuery"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fromClauses" lowerBound="1"
+          upperBound="-1" eType="#//query/FromClause" containment="true" eOpposite="#//query/FromClause/fromClauseOfOqlQuery"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selected" lowerBound="1"
+          upperBound="-1" eType="ecore:EClass behavioral.ecore#//actions/Iterator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FromClause">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="FromClausesMustBeSideEffectFree" value="self.fromExpression.isSideEffectFree()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="FromClausesMustBeSideEffectFree"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fromClauseOfOqlQuery"
+          eType="#//query/OqlQuery" transient="true" eOpposite="#//query/OqlQuery/fromClauses"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fromExpression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/fromClause"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="alias" lowerBound="1"
+          eType="ecore:EClass behavioral.ecore#//actions/Iterator" containment="true"
+          eOpposite="behavioral.ecore#//actions/Iterator/fromClause"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="analytics" nsURI="http:///dataaccess/analytics.ecore" nsPrefix="dataaccess.analytics">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the home for the definitions of what InfoObjects, InfoCubes, extractors, queries and views are."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Dimension" eSuperTypes="modelmanagement.ecore#//NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Dimensions define characteristics of the elements in a cell set according to which they may be grouped. A dimension defines a block that receives a value from the cell set's domain (its &quot;facts&quot; expression) and that determines the characteristic for that value in this dimension.&#xD;&#xA;&#xD;&#xA;For example, if a cell set's domain is the set of all SalesOrderItems, one dimension could be the Product, and therefore the product dimension's block would determine the product of the SalesOrderItem."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="BlockSignatureMustMatch" value="self.characteristicFunction.input->size() = 1 and &#xD;&#xA;  self.cellSet.factsType.conformsToIgnoringMultiplicity(self.characteristicFunction.input->at(1).getType())&#xD;&#xA;    -- Add the following again once we have NestedTypeDefinitions under control...&#xD;&#xA;    -- and  self.characteristicFunction.input->at(1).getType().upperMultiplicity = 1"/>
+        <details key="CharacteristicFunctionMustNotBeAbstract" value="not self.characteristicFunction.isAbstract()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="BlockSignatureMustMatch CharacteristicFunctionMustNotBeAbstract"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cellSet" lowerBound="1"
+          eType="#//analytics/CellSet" transient="true" eOpposite="#//analytics/CellSet/dimensions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="characteristicFunction"
+          lowerBound="1" eType="ecore:EClass data.ecore#//classes/FunctionSignature"
+          containment="true" eOpposite="data.ecore#//classes/FunctionSignature/dimension"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CellSet" eSuperTypes="data.ecore#//classes/FunctionSignatureImplementation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A cell set computes an aggregated view on a domain of values, aggregated according to the different values for the different dimensions, using the aggregation function defined by the cell set. The domain (fact base) type is specified by factsType.&#xD;&#xA;&#xD;&#xA;It subclasses FunctionSignatureImplementation. The function signature that a CellSet implements takes as its first argument a value whose type conforms to factsType, furthermore one argument per dimension and returns the aggregated cell value for the coordinate specified by the parameters. Therefore, the aggregationFunction's output type must conform to the CellSet's function signature's output type."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ValueFunctionSignatureMustMatch" value="self.valueFunction->notEmpty() implies&#xD;&#xA;    (self.valueFunction.input->size() = 1 and&#xD;&#xA;     self.factsType.conformsToIgnoringMultiplicity(self.valueFunction.input->at(1).getType())&#xD;&#xA;    -- Add the following again once we have NestedTypeDefinitions under control...&#xD;&#xA;    -- and  self.valueFunction.input->at(1).getType().upperMultiplicity = 1&#xD;&#xA;    )"/>
+        <details key="AggregationFunctionSignatureMustMatch" value="self.aggregationFunction.input->size() = 1 and &#xD;&#xA;  self.keyFigureType().conformsTo(self.aggregationFunction.input->at(1).getType())"/>
+        <details key="AggregationFunctionMustNotBeAbstract" value="not self.aggregationFunction.isAbstract()"/>
+        <details key="ValueFunctionMustNotBeAbstract" value="self.valueFunction->forAll(vf | not vf.isAbstract())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ValueFunctionSignatureMustMatch AggregationFunctionSignatureMustMatch AggregationFunctionMustNotBeAbstract ValueFunctionMustNotBeAbstract"/>
+      </eAnnotations>
+      <eOperations name="keyFigureType" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/TypeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="if self.valueFunction->isEmpty() then&#xA;    self.factsType&#xA;  else&#xA;    self.valueFunction.output&#xA;  endif"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Determines the type over which to aggregate. If no valueFunction is provided, this is the type of the cell set's elements. Otherwise, this is the type output by the valueFunction."/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="cellType" ordered="false" unique="false" lowerBound="1" eType="ecore:EClass data.ecore#//classes/TypeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.aggregationFunction.output"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eOperations name="localIsSideEffectFree" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.dimensions->forAll(d|d.characteristicFunction.sideEffectFree) and&#xA;  (self.valueFunction->notEmpty() implies self.valueFunction.sideEffectFree) and&#xA;  self.aggregationFunction.sideEffectFree"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dimensions" lowerBound="1"
+          upperBound="-1" eType="#//analytics/Dimension" containment="true" eOpposite="#//analytics/Dimension/cellSet"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="valueFunction" eType="ecore:EClass data.ecore#//classes/FunctionSignature"
+          containment="true" eOpposite="data.ecore#//classes/FunctionSignature/cellSetForValueFunction"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aggregationFunction"
+          lowerBound="1" eType="ecore:EClass data.ecore#//classes/FunctionSignature"
+          containment="true" eOpposite="data.ecore#//classes/FunctionSignature/cellSetForAggregationFunction"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="factsType" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/TypeDefinition" containment="true">
+        <eAnnotations source="http://schema.omg.org/spec/MOF/2.0/emof.xml">
+          <details key="Property.oppositeRoleName" value="cellSet"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DimensionExpression" eSuperTypes="#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="For the given cell set, obtain all distinct characteristic values of the given dimension. For example, for a CellSet based on SalesOrderItem with one Dimension being Product, yield all products for which a SalesOrderItem exists in the CellSet.&#xD;&#xA;&#xD;&#xA;The type of this DimensionExpression is Set&lt;self.dimension.type>"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="FactsTypeConformsToFirstFunctionParameterType" value="self.facts.getType().conformsTo(self.dimensionParameter.ownerSignature.input->at(1).getType())"/>
+        <details key="CellSetExpressionMustHaveFunctionSignatureType" value="self.cellSet.getType().oclIsKindOf(data::classes::FunctionSignatureTypeDefinition)"/>
+        <details key="DimensionParameterIsNotFirst" value="self.dimensionParameter.ownerSignature.input->indexOf(self.dimensionParameter) > 1"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="FactsTypeConformsToFirstFunctionParameterType CellSetExpressionMustHaveFunctionSignatureType DimensionParameterIsNotFirst"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cellSet" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/cellSetOfDimensionExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dimensionParameter" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="facts" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/factsOfDimensionExpression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GroupBy" eSuperTypes="#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Groups the &quot;object&quot; expression's evaluation result by assigning each of its objects to the &quot;fact&quot; iterator, then evaluating all dimensions' expressions. Those objects having equal dimension results for all dimensions are put into one group. If no mapExpression is provided, the collection of those groups is the result of the GroupBy expression.&#xD;&#xA;&#xD;&#xA;If a mapExpression is provided, each group is assigned to the groupedFacts iterator, all dimension values for the respective group are assigned to their iterator and the mapExpression is evaluated with all these iterators in scope. The map expression's output type is raised in multiplicity by one &quot;level&quot;. However, the GroupBy's type always has non-unique multiplicity."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="GroupedFactsIteratorMustExistIfMapExpressionExists" value="self.mapExpression->notEmpty() implies self.groupedFacts->notEmpty()"/>
+        <details key="MapExpressionMustBeSideEffectFree" value="if self.mapExpression->notEmpty() then&#xD;&#xA;    self.mapExpression.isSideEffectFree()&#xD;&#xA;  else&#xD;&#xA;    true&#xD;&#xA;  endif"/>
+        <details key="GroupByIteratorsMustHaveDistinctNames" value="self.dimensions.iterator->asSet()->union(self.groupedFacts->asSet())->union(self.fact->asSet())->forAll(i, j | i&lt;>j implies i.name&lt;>j.name)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="GroupedFactsIteratorMustExistIfMapExpressionExists MapExpressionMustBeSideEffectFree GroupByIteratorsMustHaveDistinctNames"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dimensions" lowerBound="1"
+          upperBound="-1" eType="#//analytics/DimensionDefinition" containment="true"
+          eOpposite="#//analytics/DimensionDefinition/groupBy"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fact" lowerBound="1"
+          eType="ecore:EClass behavioral.ecore#//actions/Iterator" containment="true"
+          eOpposite="behavioral.ecore#//actions/Iterator/factOfGroupBy"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mapExpression" eType="#//expressions/Expression"
+          containment="true" eOpposite="#//expressions/Expression/mapExpressionOfGroupBy"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groupedFacts" eType="ecore:EClass behavioral.ecore#//actions/Iterator"
+          containment="true" eOpposite="behavioral.ecore#//actions/Iterator/groupedFactsOfGroupBy"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DimensionDefinition">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A dimension definition is not named. It owns a named iterator that can be used by the mapExpression."/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="DimensionExpressionMustBeSideEffectFree" value="self.expression.isSideEffectFree()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="DimensionExpressionMustBeSideEffectFree"/>
+      </eAnnotations>
+      <eOperations name="getName" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+          <details key="body" value="self.iterator.name"/>
+        </eAnnotations>
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+          <details key="constraints" value="body"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groupBy" lowerBound="1"
+          eType="#//analytics/GroupBy" transient="true" eOpposite="#//analytics/GroupBy/dimensions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true" eOpposite="#//expressions/Expression/dimension"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterator" lowerBound="1"
+          eType="ecore:EClass behavioral.ecore#//actions/Iterator" containment="true"
+          eOpposite="behavioral.ecore#//actions/Iterator/dimension"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

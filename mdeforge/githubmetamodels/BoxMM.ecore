@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="BoxMM"
+    nsURI="http://senac.es/boxmm" nsPrefix="com.senac.box">
+  <eClassifiers xsi:type="ecore:EClass" name="Box" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="settings" upperBound="-1"
+        eType="#//SettingSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//InputSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//OutputSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//BoxInstance" containment="true" eOpposite="#//BoxInstance/box"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//Connection" containment="true" eOpposite="#//Connection/box"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Package"
+        eOpposite="#//Package/boxes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
+        eType="#//ProcessSlot" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Slot" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InputSlot" eSuperTypes="#//Slot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputSlot" eSuperTypes="#//Slot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SettingSlot" eSuperTypes="#//Slot"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BoxInstance" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Box"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="box" lowerBound="1" eType="#//Box"
+        eOpposite="#//Box/instances"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//SlotInstance"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+        eType="#//SlotInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="box" lowerBound="1" eType="#//Box"
+        eOpposite="#//Box/connections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlotInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="box" eType="#//BoxInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1" eType="#//Slot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boxes" upperBound="-1"
+        eType="#//Box" containment="true" eOpposite="#//Box/container"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Package"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessSlot" eSuperTypes="#//Slot"/>
+</ecore:EPackage>

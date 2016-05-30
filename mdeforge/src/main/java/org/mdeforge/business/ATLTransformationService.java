@@ -23,7 +23,7 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 	ResponseGrid<ATLTransformation> findAllPaginated(RequestGrid requestGrid)  throws BusinessException;
 	String inject(ATLTransformation atlTransformation) throws BusinessException;
 	List<Relation> getModelsInfo(GridFileMedia gfm) throws BusinessException;
-	List<ATLTransformationError> anATLyzer(ATLTransformation transformation_id) throws BusinessException;
+	List<ATLTransformationError> anATLyzer(ATLTransformation transformation) throws BusinessException;
 	List<ATLTransformationTestServiceError> testServices(String transfString) throws ATLTransformationCompilationError, transException;
 	EMFModel injectATLModel(ATLTransformation atlTransformation)
 			throws BusinessException;
@@ -31,6 +31,6 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 			throws BusinessException;
 	List<EcoreMetamodel> getPossibleMetamodel(ATLTransformation atl) throws BusinessException;
 	List<ATLTransformationTestServiceError> testServices(
-			ATLTransformation transformation_id)
+			ATLTransformation transformation)
 			throws ATLTransformationCompilationError, transException;
 }

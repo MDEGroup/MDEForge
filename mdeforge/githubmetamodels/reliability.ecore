@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="system"
+    nsURI="system.reliability.model" nsPrefix="gn">
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Transition"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="failureState" unique="false"
+        lowerBound="1" eType="#//Failure" containment="true" eOpposite="#//Failure/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" unique="false" eType="#//TransitionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//GeneralizedNet"
+        eOpposite="#//GeneralizedNet/transitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Position" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionMatrixElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oppositePosition" unique="false"
+        lowerBound="1" eType="#//Position"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="necessity" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="possibility" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneralizedNet">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="GeneralizedNet"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="positions" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PositionType">
+    <eLiterals name="INTERNAL" literal="Internal"/>
+    <eLiterals name="SYSTEM_INPUT" value="1" literal="systemInput"/>
+    <eLiterals name="FINAL" value="2" literal="final"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransitionType">
+    <eLiterals name="COMPONENT" literal="Component"/>
+    <eLiterals name="CONNECTOR" value="1" literal="Connector"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//Position">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitionRow" upperBound="-1"
+        eType="#//TransitionMatrixElement" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="description" value="Fuzzy predicates describing transition conditions"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" unique="false" eType="#//PositionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//GeneralizedNet"
+        eOpposite="#//GeneralizedNet/positions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Failure" eSuperTypes="#//Position">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//Transition"
+        eOpposite="#//Transition/failureState"/>
+  </eClassifiers>
+</ecore:EPackage>

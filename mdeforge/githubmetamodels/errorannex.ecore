@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="errorannex"
+    nsURI="http://AADL/errorannex" nsPrefix="errorannex">
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorModelType" eSuperTypes="#//ErrorModelClassifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" lowerBound="1"
+        upperBound="-1" eType="#//ErrorModelFeature" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorModelFeature" abstract="true" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//NamedElement">
+    <eAnnotations source="http:///aadl/OSATE">
+      <details key="isProxy" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occurrenceProperty" eType="#//OccurrenceProperty"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorEvent" eSuperTypes="#//ErrorModelFeature #//ErrorEventOrPropagation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorState" eSuperTypes="#//ErrorModelFeature #//ErrorStateOrPropagation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inactive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorPropagation" eSuperTypes="#//ErrorModelFeature #//ErrorStateOrPropagation #//ErrorEventOrPropagation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="in" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="out" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorModelImplementation" eSuperTypes="#//ErrorModelClassifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorModelType" lowerBound="1"
+        eType="#//ErrorModelType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorTransitions" eType="#//ErrorTransitions"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorProperties" eType="#//ErrorProperties"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorTransition" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" lowerBound="1"
+        upperBound="-1" eType="#//ErrorState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//ErrorState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitionAction" upperBound="-1"
+        eType="#//ErrorPropagation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activationTrigger" upperBound="2"
+        eType="#//TriggerType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitionTrigger" upperBound="-1"
+        eType="#//ErrorEventOrPropagation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originName" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="destinationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitionActionName" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitionTriggerName"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanErrorExpression" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedExpressions" upperBound="-1"
+        eType="#//BooleanErrorExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//BooleanExpressionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorSourceName" eType="#//ErrorSourceName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numericLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DistributionName">
+    <eLiterals name="poisson"/>
+    <eLiterals name="fixed" value="1"/>
+    <eLiterals name="nonstandard" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorAnnexLibrary" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//AnnexLibrary">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorModelClassifier" upperBound="-1"
+        eType="#//ErrorModelClassifier" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorAnnexSubClause" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//AnnexSubclause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorModelProperty" upperBound="-1"
+        eType="#//ErrorModelProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorPropagationRule" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorExpression" eType="#//BooleanErrorExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorPropagationIdentifier"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorPropagation" eType="#//ErrorPropagation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OccurrenceProperty" eSuperTypes="#//ErrorModelProperty ../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DistributionName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nonStandardId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterList" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventOrPropagationName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliesToErrorEventOrPropagation"
+        eType="#//ErrorEventOrPropagation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentErrorModelProperty" eSuperTypes="#//ErrorModelProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageIdentifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorModelTypeIdentifier"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorModelImplementationIdentifier"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorModelClassifier" eType="#//ErrorModelClassifier"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inplaceErrorModelType"
+        eType="#//ErrorModelType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReportErrorProperty" eSuperTypes="#//ErrorModelProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateAndPropagationList"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorStateOrPropagation"
+        upperBound="-1" eType="#//ErrorStateOrPropagation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InErrorPropagationGuard" eSuperTypes="#//ErrorGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorPropagationRule" lowerBound="1"
+        upperBound="-1" eType="#//ErrorPropagationRule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortEventGuard" eSuperTypes="#//ErrorGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorExpression" eType="#//BooleanErrorExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BooleanExpressionType">
+    <eLiterals name="not"/>
+    <eLiterals name="and" value="1"/>
+    <eLiterals name="or" value="2"/>
+    <eLiterals name="ormore" value="3"/>
+    <eLiterals name="orless" value="4"/>
+    <eLiterals name="others" value="5"/>
+    <eLiterals name="errorsourcename" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorSourceName" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentNameOrFeatureName"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorStateOrPropagationName"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorStateOrPropagation"
+        upperBound="-1" eType="#//ErrorStateOrPropagation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcomponentOrFeature"
+        eType="ecore:EClass ../../org.osate.aadl2/model/aadl2.ecore#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subcomponentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextSubcomponent" eType="ecore:EClass ../../org.osate.aadl2/model/aadl2.ecore#//NamedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DerivedErrorStateMappingGuard" eSuperTypes="#//ErrorModelProperty">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorStateMappingRule"
+        lowerBound="1" upperBound="-1" eType="#//ErrorStateMappingRule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorStateMappingRule" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentErrorStateIdentifier"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorExpression" eType="#//BooleanErrorExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorState" eType="#//ErrorState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorStateOrPropagation" abstract="true"
+      eSuperTypes="#//ErrorModelFeature">
+    <eAnnotations source="http:///aadl/OSATE">
+      <details key="isProxy" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TriggerType">
+    <eLiterals name="Activate"/>
+    <eLiterals name="Deactivate" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorTransitions" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorTransition" upperBound="-1"
+        eType="#//ErrorTransition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorProperties" eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occurrenceProperty" upperBound="-1"
+        eType="#//OccurrenceProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelHierarchyProperty" eSuperTypes="#//ErrorModelProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorModelSelection" eType="#//ModelSelectionType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorModelProperty" abstract="true"
+      eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eAnnotations source="http:///aadl/OSATE">
+      <details key="isProxy" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliesTo" upperBound="-1"
+        eType="ecore:EClass ../../org.osate.aadl2/model/aadl2.ecore#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="appliesToName" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModeTransitionGuard" eSuperTypes="#//ErrorGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorExpression" eType="#//BooleanErrorExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="appliesToFeatureContextName"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliesToModeTransition"
+        eType="ecore:EClass ../../org.osate.aadl2/model/aadl2.ecore#//ModeTransition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ModelSelectionType">
+    <eLiterals name="Abstract"/>
+    <eLiterals name="Derived" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorModelClassifier" abstract="true"
+      eSuperTypes="../../org.osate.aadl2/model/aadl2.ecore#//NamedElement">
+    <eAnnotations source="http:///aadl/OSATE">
+      <details key="isProxy" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutErrorPropagationGuard" eSuperTypes="#//ErrorGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorPropagationRule" upperBound="-1"
+        eType="#//ErrorPropagationRule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorEventOrPropagation" abstract="true"
+      eSuperTypes="#//ErrorModelFeature">
+    <eAnnotations source="http:///aadl/OSATE">
+      <details key="isProxy" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorGuard" abstract="true" eSuperTypes="#//ErrorModelProperty ../../org.osate.aadl2/model/aadl2.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="appliesToFeatureName" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliesToFeature" upperBound="-1"
+        eType="ecore:EClass ../../org.osate.aadl2/model/aadl2.ecore#//Feature"/>
+  </eClassifiers>
+</ecore:EPackage>

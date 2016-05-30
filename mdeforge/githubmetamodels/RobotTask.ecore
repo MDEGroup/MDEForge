@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="task" nsURI="http://www.efxclipse.org/rrobot/task/1.0" nsPrefix="task">
+  <eClassifiers xsi:type="ecore:EClass" name="RobotTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//Resource" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="excludeExpression" eType="#//BooleanExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" abstract="true" eSuperTypes="#//ExcludeableElementMixin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Folder" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Resource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="File" abstract="true" eSuperTypes="#//Resource">
+    <eOperations name="getContent" eType="#//InputStream" eExceptions="#//IOException">
+      <eParameters name="progressMonitor" eType="#//IProgressMonitor"/>
+      <eParameters name="data">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplatedFile" eSuperTypes="#//File">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatorType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataFile" eSuperTypes="#//File">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="URLFile" eSuperTypes="#//File">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicFile" eSuperTypes="#//File">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IOException" instanceClassName="java.io.IOException"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProgressMonitor" instanceClassName="org.eclipse.core.runtime.IProgressMonitor"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="InputStream" instanceClassName="java.io.InputStream"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Generator" instanceClassName="at.bestsolution.efxclipse.tooling.rrobot.model.task.Generator">
+    <eTypeParameters name="F"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" abstract="true" interface="true">
+    <eOperations name="execute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="data">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferencingBooleanExpression" eSuperTypes="#//BooleanExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InlineBooleanExpression" eSuperTypes="#//BooleanExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Type">
+    <eLiterals name="STRING"/>
+    <eLiterals name="INT" value="1"/>
+    <eLiterals name="DOUBLE" value="2"/>
+    <eLiterals name="BOOLEAN" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JDTProject" eSuperTypes="#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceFragments" upperBound="-1"
+        eType="#//SourceFragment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilationUnits" upperBound="-1"
+        eType="#//CompilationUnit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceFragment" eSuperTypes="#//ExcludeableElementMixin">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folder" eType="#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompilationUnit" eSuperTypes="#//ExcludeableElementMixin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packagename" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="file" eType="#//File" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourcefragment" eType="#//SourceFragment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExcludeableElementMixin" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="excludeExpression" eType="#//BooleanExpression"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adaptiveSystem"
+    nsURI="adaptiveSystem" nsPrefix="adaptiveSystem">
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptiveSystem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oclets" upperBound="-1"
+        eType="#//Oclet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adaptiveProcess" lowerBound="1"
+        eType="#//AdaptiveProcess" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="setWellformednessToOclets"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Oclet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="orientation" lowerBound="1"
+        eType="#//Orientation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantor" lowerBound="1"
+        eType="#//Quantor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preNet" lowerBound="1"
+        eType="#//PreNet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doNet" lowerBound="1" eType="#//DoNet"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wellFormed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OccurrenceNet" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arcs" upperBound="-1" eType="#//Arc"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DoNet" eSuperTypes="#//OccurrenceNet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PreNet" eSuperTypes="#//OccurrenceNet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markedConditions" upperBound="-1"
+        eType="#//Condition" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdaptiveProcess" eSuperTypes="#//OccurrenceNet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markedConditions" upperBound="-1"
+        eType="#//Condition" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temp" unique="false" lowerBound="1"
+        eType="#//Temp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabledByAntiOclet" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabledByConflict" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preEvents" upperBound="-1"
+        eType="#//Event" eOpposite="#//Event/postConditions">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postEvents" upperBound="-1"
+        eType="#//Event" eOpposite="#//Event/preConditions">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="token" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marked" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral="true"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximal" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" unsettable="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" changeable="false"
+        volatile="true" transient="true" defaultValueLiteral="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//ArcToCondition" eOpposite="#//ArcToCondition/destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//ArcToEvent" eOpposite="#//ArcToEvent/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preConditions" upperBound="-1"
+        eType="#//Condition" eOpposite="#//Condition/postEvents">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postConditions" upperBound="-1"
+        eType="#//Condition" eOpposite="#//Condition/preEvents">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="saturated" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" changeable="false"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//ArcToEvent" eOpposite="#//ArcToEvent/destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//ArcToCondition" eOpposite="#//ArcToCondition/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Arc">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArcToEvent" eSuperTypes="#//Arc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" unique="false"
+        eType="#//Condition" eOpposite="#//Condition/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//Event"
+        eOpposite="#//Event/incoming"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArcToCondition" eSuperTypes="#//Arc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Event"
+        eOpposite="#//Event/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//Condition"
+        eOpposite="#//Condition/incoming"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Orientation">
+    <eLiterals name="normal" literal="normal"/>
+    <eLiterals name="anti" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Quantor">
+    <eLiterals name="universal" literal="universal"/>
+    <eLiterals name="existencial" value="1" literal="existencial"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Temp">
+    <eLiterals name="cold" literal="-"/>
+    <eLiterals name="without" value="1" literal=""/>
+    <eLiterals name="hot" value="2" literal="+"/>
+  </eClassifiers>
+</ecore:EPackage>

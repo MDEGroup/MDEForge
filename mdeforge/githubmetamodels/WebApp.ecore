@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="webapp"
+    nsURI="http://www.eclipse.org/acceleo/tutorial/webapp" nsPrefix="webapp">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="router" lowerBound="1"
+        eType="#//Router" containment="true" eOpposite="#//Router/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collections" upperBound="-1"
+        eType="#//Collection" containment="true" eOpposite="#//Collection/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
+        eType="#//AbstractView" containment="true" eOpposite="#//AbstractView/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
+        eType="#//Model" containment="true" eOpposite="#//Model/application"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//Reference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/models"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reference" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Model"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Collection" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/collections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Router" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" lowerBound="1"
+        upperBound="-1" eType="#//RouterMapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/router"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RouterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="view" lowerBound="1" eType="#//AbstractView"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractView" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/views"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelView" eSuperTypes="#//AbstractView">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" lowerBound="1"
+        eType="#//Collection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticView" eSuperTypes="#//AbstractView">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" lowerBound="1"
+        upperBound="-1" eType="#//Section" containment="true" eOpposite="#//Section/view"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="widgets" lowerBound="1"
+        upperBound="-1" eType="#//Widget" containment="true" eOpposite="#//Widget/section"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="view" lowerBound="1" eType="#//StaticView"
+        eOpposite="#//StaticView/sections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Widget" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="section" lowerBound="1"
+        eType="#//Section" eOpposite="#//Section/widgets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Form" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formWidgets" lowerBound="1"
+        upperBound="-1" eType="#//FormWidget" containment="true" eOpposite="#//FormWidget/form"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNames" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="striped" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bordered" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Video" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gallery" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imagesPath" unique="false"
+        lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImagesBlock" eSuperTypes="#//Widget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imagesPath" unique="false"
+        lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormWidget" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="#//Form"
+        eOpposite="#//Form/formWidgets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextArea" eSuperTypes="#//FormWidget"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Spinner" eSuperTypes="#//FormWidget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckBox" eSuperTypes="#//FormWidget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

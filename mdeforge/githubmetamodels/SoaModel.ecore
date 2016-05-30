@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="soamodel"
+    nsURI="http://soamodel/1.0" nsPrefix="soamodel">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceComponent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueServiceMethodSignatures LivingComponent UniqueSCURINamespace"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueServiceMethodSignatures" value="self.methods->forAll(m1 : ServiceMethod, m2 : ServiceMethod | (m1.name &lt;> m2.name or m1 = m2)) and self.methods->forAll(m : ServiceMethod | m.parameters->forAll(p1 : Parameter, p2 : Parameter | (p1.parameterType &lt;> p2.parameterType or p1 = p2)))"/>
+      <details key="LivingComponent" value="ServiceOrientedArchitecture.allInstances()->exists(a : ServiceOrientedArchitecture | a.components->exists(c : ServiceComponent | c = self))"/>
+      <details key="UniqueSCURINamespace" value="ServiceComponent.allInstances()->forAll(SC1 : ServiceComponent, SC2 : ServiceComponent | SC1.URI &lt;> SC2.URI and SC1.namespace &lt;> SC2.namespace or SC1 = SC2)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//ServiceMethod" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectsTo" upperBound="-1"
+        eType="#//ServiceComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persists" upperBound="-1"
+        eType="#//Entity" eOpposite="#//Entity/persistedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inArchitecture" lowerBound="1"
+        eType="#//ServiceOrientedArchitecture" eOpposite="#//ServiceOrientedArchitecture/components"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CSharpComponent" eSuperTypes="#//ServiceComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JEEComponent" eSuperTypes="#//ServiceComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceMethod">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="FilledMethodDescription OnlyRestMethods DifferentParameternames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="FilledMethodDescription" value="self.description.size() > 0"/>
+      <details key="OnlyRestMethods" value="RestMethod.allInstances()->includes(self)"/>
+      <details key="DifferentParameternames" value="self.parameters->forAll(p1 : Parameter, p2 : Parameter | p1.name &lt;> p2.name or p1 = p2)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postconditions" upperBound="-1"
+        eType="#//OCLPostcondition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preconditions" upperBound="-1"
+        eType="#//OCLPrecondition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterType" lowerBound="1"
+        eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedBy" eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//DataType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueEntityNames singleAttributeNameInEntity InternalIDAttribute"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueEntityNames" value="not Entity.allInstances()->exists(e1 : Entity, e2 : Entity | (e1.name = e2.name and e1 &lt;> e2))"/>
+      <details key="singleAttributeNameInEntity" value="self.attributes->forAll(a1 : Attribute, a2 : Attribute | a1.name &lt;> a2.name or a1 = a2)"/>
+      <details key="InternalIDAttribute" value="self.ID.attributeOf = self"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true" eOpposite="#//Attribute/attributeOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oclConstraints" upperBound="-1"
+        eType="#//OCLDataConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistedBy" eType="#//ServiceComponent"
+        eOpposite="#//ServiceComponent/persists"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatedID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ID" lowerBound="1" eType="#//Attribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuiltInDataType" eSuperTypes="#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionType" eSuperTypes="#//DataType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="existingCollectionItem UniqueItemType"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="existingCollectionItem" value="DataType.allInstances()->exists(d : DataType | self.itemType = d)"/>
+      <details key="UniqueItemType" value="CollectionType.allInstances()->forAll(C1 : CollectionType, C2 : CollectionType | C1.itemType &lt;> C2.itemType or C1 = C2)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemType" lowerBound="1"
+        eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeType" lowerBound="1"
+        eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeOf" lowerBound="1"
+        eType="#//Entity" eOpposite="#//Entity/attributes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceOrientedArchitecture">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueDatatypeNames uniqueComponentNames"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="uniqueDatatypeNames" value="self.dataTypes->forAll(t1 : DataType, t2 : DataType | t1.name &lt;> t2.name or t1 = t2)"/>
+      <details key="uniqueComponentNames" value="self.components->forAll(s1 : ServiceComponent, s2 : ServiceComponent | s1.name &lt;> s2.name or s1 = s2)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ServiceComponent" containment="true" eOpposite="#//ServiceComponent/inArchitecture">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="dataTypes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataTypes" upperBound="-1"
+        eType="#//DataType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLConstraint" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="FilledOCLDescription"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="FilledOCLDescription" value="self.description.size() > 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraint" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enum" eSuperTypes="#//DataType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueLiteralNames LivingDataType UniqueLiteralValues"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueLiteralNames" value="self.literals->forAll(L1 : EnumLiteral, L2 : EnumLiteral | L1.name &lt;> L2.name or L1 = L2)"/>
+      <details key="LivingDataType" value="ServiceOrientedArchitecture.allInstances()->exists(a : ServiceOrientedArchitecture | a.dataTypes->exists(c : DataType | c = self))"/>
+      <details key="UniqueLiteralValues" value="self.literals->forAll(l1 : EnumLiteral, l2 : EnumLiteral | l1.value &lt;> l2.value or l1 = l2)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" lowerBound="1"
+        upperBound="-1" eType="#//EnumLiteral" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OSGiComponent" eSuperTypes="#//ServiceComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLPostcondition" eSuperTypes="#//OCLConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLDataConstraint" eSuperTypes="#//OCLConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLPrecondition" eSuperTypes="#//OCLConstraint"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="HttpMethod">
+    <eLiterals name="GET"/>
+    <eLiterals name="POST" value="1"/>
+    <eLiterals name="PUT" value="2"/>
+    <eLiterals name="DELETE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RestMethod" eSuperTypes="#//ServiceMethod">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="httpMethod" lowerBound="1"
+        eType="#//HttpMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

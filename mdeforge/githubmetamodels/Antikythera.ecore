@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="antikythera" nsURI="http://antikythera/1.0" nsPrefix="antikythera">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="now" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eOperations>
+    <eOperations name="load" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="save" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operators" upperBound="-1"
+        eType="#//Operator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
+        eType="#//Constant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="now" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//Operand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
+        eType="#//Result" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="#//Sequence"
+        eOpposite="#//Sequence/operands"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByte"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flag_limit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flag_extend" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="flag_single" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//Operand" eOpposite="#//Operand/sequence"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EShortObject"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Result">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
+        eOpposite="#//Value/result"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByte"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Circle" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Color" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Display" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Line" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Math" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Point" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Root" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Select" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Signal" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Sequence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Sequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//Result"
+        eOpposite="#//Result/value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Buffer" eSuperTypes="#//Operator"/>
+</ecore:EPackage>

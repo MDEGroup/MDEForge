@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="qvticgmodel" nsURI="http://www.eclipse.org/qvti/1.0.0/CG" nsPrefix="qvticg">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="The CGModel provides a Code Generation friendly form of the OCL Pivot model, with distinct classes&#xA;such as LibraryPropertyCallExp and EcorePropertyCallExp for distinct purposes. Additional classes&#xA;such as BoxExpr, CatchExpr and CastParameter support rewrite optimizations.&#xA;&lt;p>&#xA;References to the Pivot model are expressed as attributes with datatype values in order to avoid&#xA;confusion as to whether the new or old pivot mosdel is in use while code generating the pivot model."/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore#/"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcorePropertyAssignment" eSuperTypes="#//CGPropertyAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eStructuralFeature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGEcoreRealizedVariable" eSuperTypes="#//CGRealizedVariable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eClassifier" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGFunction" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGFunctionCallExp" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGOperationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+        eType="#//CGFunction" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGFunctionParameter" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+        eType="#//CGFunction" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGGuardVariable" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGParameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" lowerBound="1"
+        eType="#//CGMapping" resolveProxies="false" eOpposite="#//CGMapping/freeVariables"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedModel" lowerBound="1"
+        eType="#//CGTypedModel" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMapping" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="freeVariables" ordered="false"
+        upperBound="-1" eType="#//CGGuardVariable" containment="true" resolveProxies="false"
+        eOpposite="#//CGGuardVariable/mapping">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The parameters of this operation, with 'self' as the first parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//CGTransformation" resolveProxies="false" eOpposite="#//CGTransformation/mappings"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMappingCall" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingExp" lowerBound="1"
+        eType="#//CGMappingExp" resolveProxies="false" eOpposite="#//CGMappingExp/mappingCalls"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingCallBindings" upperBound="-1"
+        eType="#//CGMappingCallBinding" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMappingCallBinding" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueOrValues" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loop" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMappingExp" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
+        eType="#//CGPropertyAssignment" containment="true" resolveProxies="false"
+        eOpposite="#//CGPropertyAssignment/mappingExp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" lowerBound="1"
+        eType="#//CGMapping" volatile="true" transient="true" derived="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingCalls" upperBound="-1"
+        eType="#//CGMappingCall" containment="true" resolveProxies="false" eOpposite="#//CGMappingCall/mappingExp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
+        eType="#//CGPredicate" containment="true" resolveProxies="false" eOpposite="#//CGPredicate/mappingExp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="realizedVariables" upperBound="-1"
+        eType="#//CGRealizedVariable" containment="true" resolveProxies="false" eOpposite="#//CGRealizedVariable/mappingExp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMiddlePropertyAssignment" eSuperTypes="#//CGEcorePropertyAssignment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGMiddlePropertyCallExp" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGPropertyCallExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CGPredicate" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditionExpression" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingExp" lowerBound="1"
+        eType="#//CGMappingExp" resolveProxies="false" eOpposite="#//CGMappingExp/predicates"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpression" eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGPropertyAssignment" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingExp" lowerBound="1"
+        eType="#//CGMappingExp" resolveProxies="false" eOpposite="#//CGMappingExp/assignments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotValue" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referredProperty" lowerBound="1"
+        eType="ecore:EDataType ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initValue" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGValuedElement"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorProperty" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGExecutorProperty"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGRealizedVariable" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGVariable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executorType" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGExecutorType"
+        resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The shared type."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingExp" lowerBound="1"
+        eType="#//CGMappingExp" resolveProxies="false" eOpposite="#//CGMappingExp/realizedVariables"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedModel" lowerBound="1"
+        eType="#//CGTypedModel" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTransformation" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGClass">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" lowerBound="1"
+        upperBound="-1" eType="#//CGMapping" containment="true" resolveProxies="false"
+        eOpposite="#//CGMapping/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedModels" upperBound="-1"
+        eType="#//CGTypedModel" containment="true" resolveProxies="false" eOpposite="#//CGTypedModel/transformation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGTypedModel" eSuperTypes="../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//CGTransformation" resolveProxies="false" eOpposite="#//CGTransformation/typedModels"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CGVariablePredicate" eSuperTypes="#//CGPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicateVariable" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.ocl.examples.codegen/model/cgmodel.ecore#//CGVariable"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+</ecore:EPackage>

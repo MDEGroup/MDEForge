@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dsl15926" nsURI="http://agentlab.ru/models/dsl15926/2012/08"
+    nsPrefix="iso15926">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractObject" abstract="true" eSuperTypes="#//Thing"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Template" eSuperTypes="#//AbstractObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//TemplateRole" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//TemplateInstance" eOpposite="#//TemplateInstance/template"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="#//Repository"
+        eOpposite="#//Repository/templates"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateRole" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedCardinality" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//TemplateRoleInstance" eOpposite="#//TemplateRoleInstance/templateRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityType" eType="#//AbstractObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Repository">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//Class" containment="true" eOpposite="#//Class/repository"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templates" upperBound="-1"
+        eType="#//Template" containment="true" eOpposite="#//Template/repository"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imports" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="individuals" upperBound="-1"
+        eType="#//Individual" containment="true" eOpposite="#//Individual/repository"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateInstances" upperBound="-1"
+        eType="#//TemplateInstance" containment="true" eOpposite="#//TemplateInstance/repository"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classifications" upperBound="-1"
+        eType="#//Classification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializations" upperBound="-1"
+        eType="#//Specialization" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lang" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Individual" eSuperTypes="#//Thing">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="#//Repository"
+        eOpposite="#//Repository/individuals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//AbstractObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="individuals" upperBound="-1"
+        eType="#//Thing" eOpposite="#//Thing/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="#//Repository"
+        eOpposite="#//Repository/classes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" eType="#//Template"
+        eOpposite="#//Template/instances"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//TemplateRoleInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" eType="#//Repository"
+        eOpposite="#//Repository/templateInstances"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateRoleInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateRole" eType="#//TemplateRole"
+        eOpposite="#//TemplateRole/instances"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyInstance" lowerBound="1"
+        eType="#//Thing"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Thing" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//Class" eOpposite="#//Class/individuals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Classification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classified" eType="#//Thing"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specialization">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" eType="#//AbstractObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subClass" eType="#//AbstractObject"/>
+  </eClassifiers>
+</ecore:EPackage>

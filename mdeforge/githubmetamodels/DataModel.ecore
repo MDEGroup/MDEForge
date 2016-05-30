@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="datamodel" nsURI="http://datamodel/1.0" nsPrefix="datamodel">
+  <eClassifiers xsi:type="ecore:EClass" name="tag">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="item_tag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fkey_" eType="#//tag"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tag_fkey" lowerBound="1"
+        eType="#//tag"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bill_item_fkey" lowerBound="1"
+        eType="#//bill_item"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="bill">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="place"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="creator_fkey" lowerBound="1"
+        eType="#//Account"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyer_fkey" lowerBound="1"
+        eType="#//person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="bill_item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bill_fkey" lowerBound="1"
+        eType="#//bill"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product_fkey" lowerBound="1"
+        eType="#//product"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preis_fkey" eType="#//price"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gloescht"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="item_pimple">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bill_item_fkey" lowerBound="1"
+        eType="#//bill_item"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pimple_fkey" lowerBound="1"
+        eType="#//person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewed"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="payed"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="amount"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="creator_fkey" lowerBound="1"
+        eType="#//Account"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="account_mapping_fkey" eType="#//Account"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Account">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="product">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="barcode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="price">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="shoppinglist">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="creator_fkey" lowerBound="1"
+        eType="#//Account"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="shoppinglist_item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product_fkey" lowerBound="1"
+        eType="#//product"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pkey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="purchased"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preis_fkey" eType="#//price"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="einkaufszettel_fkey" lowerBound="1"
+        eType="#//shoppinglist"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="purchase_date"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="shoppinglist_buyer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="einkaufszettel_fkey" lowerBound="1"
+        eType="#//shoppinglist"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buyer_fkey" lowerBound="1"
+        eType="#//person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="dauerauftrag"/>
+</ecore:EPackage>

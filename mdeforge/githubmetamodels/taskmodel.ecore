@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="taskmodel"
+    nsURI="http://kr.re.etri.tpl/taskmodel" nsPrefix="tpl">
+  <eClassifiers xsi:type="ecore:EEnum" name="LineStyle">
+    <eLiterals name="LINE_SOLID" value="1"/>
+    <eLiterals name="LINE_DASH" value="2"/>
+    <eLiterals name="LINE_DOT" value="3"/>
+    <eLiterals name="LINE_DASHDOT" value="4"/>
+    <eLiterals name="LINE_DASHDOTDOT" value="5"/>
+    <eLiterals name="LINE_CUSTOM" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LineEndPoint">
+    <eLiterals name="NONE"/>
+    <eLiterals name="OPENED_ARROW" value="1"/>
+    <eLiterals name="OPENED_TRIANGLE" value="2" literal=""/>
+    <eLiterals name="OPENED_SQUARE" value="3"/>
+    <eLiterals name="OPENED_CIRCLE" value="4"/>
+    <eLiterals name="CLOSED_TRIANGLE" value="5"/>
+    <eLiterals name="CLOSED_SQUARE" value="6"/>
+    <eLiterals name="CLOSED_CIRCLE" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationShip">
+    <eLiterals name="Transition" literal="Transition"/>
+    <eLiterals name="TaskCall" value="1"/>
+    <eLiterals name="ActionCall" value="2"/>
+    <eLiterals name="Include" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateAttribute">
+    <eLiterals name="normal" literal=""/>
+    <eLiterals name="initial" value="1"/>
+    <eLiterals name="target" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateActionType">
+    <eLiterals name="Entry" literal="entry"/>
+    <eLiterals name="Stay" value="1" literal="stay"/>
+    <eLiterals name="Exit" value="2" literal="exit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eLiterals name="in" literal="in"/>
+    <eLiterals name="out" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FloatingLiteral">
+    <eLiterals name="stateTime"/>
+    <eLiterals name="taskTime" value="1"/>
+    <eLiterals name="RealFloatLiteral" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BooleanLiteral">
+    <eLiterals name="false"/>
+    <eLiterals name="true" value="1"/>
+    <eLiterals name="isSubTaskFinal" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReferAttribute">
+    <eLiterals name="normal"/>
+    <eLiterals name="external" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StructType">
+    <eLiterals name="construct"/>
+    <eLiterals name="run" value="1"/>
+    <eLiterals name="destruct" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JoinType">
+    <eLiterals name="andjoin" literal="andjoin"/>
+    <eLiterals name="orjoin" value="1" literal="orjoin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConnectorType">
+    <eLiterals name="conexer"/>
+    <eLiterals name="seqexer" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ItemElement">
+    <eOperations name="isIncluded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ItemElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subDiagram" eType="#//SubDiagram"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//ReferElement" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemState" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShapeElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="5" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="5" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="70"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collapsed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="5"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width2" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="100"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height2" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="70"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkedElement" eSuperTypes="#//ShapeElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceConnections" upperBound="-1"
+        eType="#//ConnectionElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetConnections" upperBound="-1"
+        eType="#//ConnectionElement" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LineElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineStyle" lowerBound="1"
+        eType="#//LineStyle" defaultValueLiteral="1" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceEndPoint" lowerBound="1"
+        eType="#//LineEndPoint" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetEndPoint" lowerBound="1"
+        eType="#//LineEndPoint" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bendPoints" upperBound="-1"
+        eType="#//Point" defaultValueLiteral="" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionElement" eSuperTypes="#//LineElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//LinkedElement"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//LinkedElement"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source2" eType="#//LinkedElement"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target2" eType="#//LinkedElement"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relationship" lowerBound="1"
+        eType="#//RelationShip" defaultValueLiteral="0" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkerElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialTask" eType="#//ItemElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ItemElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialize" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalize" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="run" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statements" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//Parameter" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//StateElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" eType="#//StateElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="construct" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destruct" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bifurcates" upperBound="-1"
+        eType="#//ExpandTransElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="#//StateAttribute"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" eType="#//StateAction"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stay" lowerBound="1" eType="#//StateAction"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" eType="#//StateAction"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bifurcates" upperBound="-1"
+        eType="#//ExpandTransElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//Parameter" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateAction" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateActionType" eType="#//StateActionType"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Symbol" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//Direction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//Parameter" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symbols" upperBound="-1"
+        eType="#//Symbol" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
+        eType="#//Constant" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//Function" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
+        eType="#//ModelElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelDiagram" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ItemElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="includeItems" upperBound="-1"
+        eType="#//IncludedElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="script" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IncludedElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ItemElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumItem" upperBound="-1"
+        eType="#//EnumItemElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumItemElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferElement" eSuperTypes="#//LinkedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="realModel" eType="#//ItemElement"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ItemElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="#//ReferAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubDiagram" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//ReferElement" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectorElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//Parameter" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="withs" upperBound="-1"
+        eType="#//WithElement" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" eType="#//JoinType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conType" eType="#//ConnectorType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="construct" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destruct" eType="#//StructBlockElement"
+        derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exercise" eType="#//StructBlockElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WithElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cycle" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructBlockElement" eSuperTypes="#//ItemElement #//BlockElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="structType" eType="#//StructType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpandTransElement" eSuperTypes="#//ItemElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//LinkedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expand" eType="#//LinkedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trans" eType="#//LinkedElement"/>
+  </eClassifiers>
+</ecore:EPackage>

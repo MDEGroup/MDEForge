@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsdl"
+    nsURI="http://www.eclipse.org/wsdl/2003/WSDL" nsPrefix="wsdl">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="The WSDL model contains classes for the Web Services Description Language (WSDL).&#xD;&#xA;&#xD;&#xA;WSDL describes network services as sets of endpoints operating on messages. The operations and messages are described abstractly, and then bound to a concrete network protocol and message format to define an endpoint.&#xD;&#xA;&#xD;&#xA;WSDL describes the formats of the messages exchanged by the services, and supports the XML Schemas specification as its canonical type system. This package uses an XML Schema Infoset model package (see the XSD package) to describe the abstract message formats.&#xD;&#xA;&#xD;&#xA;The model contains the following diagrams, named after the corresponding chapters in the WSDL 1.1 specification (http://www.w3.org/TR/2001/NOTE-wsdl-20010315)&#xD;&#xA;- 2.1 Definition, shows the WSDL definition element and the WSDL document structure&#xD;&#xA;- 2.1.1 Naming and Linking, shows the namespace and import mechanism&#xD;&#xA;- 2.1.3 Extensibility, shows the WSDL extensibility mechanism&#xD;&#xA;- 2.2 Types, shows the use of XML Schema types in WSDL&#xD;&#xA;- 2.3 Messages, 2.4 PortTypes, 2.5 Bindings and 2.7 Services, show the major WSDL elements and their relations.&#xD;&#xA;&#xD;&#xA;The WSDL classes extend the javax.wsdl interfaces defined by JSR 110. Classes with interface and datatype stereotypes are used to represent these non-MOF interfaces."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="WSDLElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL language element."/>
+    </eAnnotations>
+    <eOperations name="getEnclosingDefinition" eType="#//Definition"/>
+    <eOperations name="setEnclosingDefinition">
+      <eParameters name="definition" eType="#//Definition"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentationElement" eType="#//DOMElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="element" eType="#//DOMElement"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortType" eSuperTypes="#//ExtensibleElement #//IPortType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL portType element of the WSDL specification version 1.1 and an Interface component of the WSDL specification version 1.2. A port type or Interface is a named set of abstract operations and the abstract messages involved."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOperations" upperBound="-1"
+        eType="#//Operation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//ExtensibleElement #//IOperation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL operation element. A WSDL operation is an abstract description of an action supported by a service."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="#//OperationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eInput" eType="#//Input"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOutput" eType="#//Output"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eFaults" upperBound="-1"
+        eType="#//Fault" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eParameterOrdering" upperBound="-1"
+        eType="#//Part"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Message" eSuperTypes="#//ExtensibleElement #//IMessage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL message element. A WSDL message is an abstract, typed definition of the data being communicated."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eParts" upperBound="-1"
+        eType="#//Part" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Part" eSuperTypes="#//ExtensibleElement #//IPart">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL part element. Parts describe the logical abstract content of a message. Each part is associated with a type from some type system. "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeDefinition" eType="ecore:EClass XSD.ecore#//XSDTypeDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementDeclaration" eType="ecore:EClass XSD.ecore#//XSDElementDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eMessage" eType="#//Message"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Binding" eSuperTypes="#//ExtensibleElement #//IBinding">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL binding element. A binding defines message format and protocol details for operations and messages defined by a particular portType. There may be any number of bindings for a given portType."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ePortType" lowerBound="1"
+        eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBindingOperations" upperBound="-1"
+        eType="#//BindingOperation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingOperation" eSuperTypes="#//ExtensibleElement #//IBindingOperation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL operation element within a binding. An operation element within a binding specifies binding information for the operation with the same name within the binding's portType. "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOperation" lowerBound="1"
+        eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBindingInput" eType="#//BindingInput"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBindingOutput" eType="#//BindingOutput"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBindingFaults" upperBound="-1"
+        eType="#//BindingFault" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//ExtensibleElement #//IService">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL service element. A service groups a set of related ports together."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="undefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ePorts" upperBound="-1"
+        eType="#//Port" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//ExtensibleElement #//IPort">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL port element. A port defines an individual endpoint by specifying a single address for a binding"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBinding" lowerBound="1"
+        eType="#//Binding"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensibilityElement" eSuperTypes="#//WSDLElement #//IExtensibilityElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL extensibility element. WSDL allows extensibility elements representing a specific technology under various elements defined by WSDL."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="required" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementType" eType="#//QName"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Definition" eSuperTypes="#//ExtensibleElement #//IDefinition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL definitions element. The WSDL definitions element is the root element of a WSDL document."/>
+    </eAnnotations>
+    <eOperations name="getDocument" eType="#//DOMDocument"/>
+    <eOperations name="setDocument">
+      <eParameters name="document" eType="#//DOMDocument"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qName" eType="#//QName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eImports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eTypes" eType="#//Types"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eMessages" upperBound="-1"
+        eType="#//Message" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ePortTypes" upperBound="-1"
+        eType="#//PortType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eBindings" upperBound="-1"
+        eType="#//Binding" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eServices" upperBound="-1"
+        eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eNamespaces" upperBound="-1"
+        eType="#//Namespace" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import" eSuperTypes="#//ExtensibleElement #//IImport">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents WSDL import element. WSDL allows associating a namespace with a document location using an import element."/>
+    </eAnnotations>
+    <eOperations name="getSchema" eType="ecore:EClass XSD.ecore#//XSDSchema"/>
+    <eOperations name="setSchema">
+      <eParameters name="schema" eType="ecore:EClass XSD.ecore#//XSDSchema"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespaceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locationURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eDefinition" eType="#//Definition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eSchema" eType="ecore:EClass XSD.ecore#//XSDSchema"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensibleElement" abstract="true" eSuperTypes="#//WSDLElement #//IElementExtensible #//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value=" WSDL allows elements representing a specific technology (referred to here as extensibility elements) under various elements defined by WSDL. This class represents a WSDL point of extensibility."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eExtensibilityElements"
+        upperBound="-1" eType="#//ExtensibilityElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Input" eSuperTypes="#//MessageReference #//IInput">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL input element. An input element specifies the abstract message format for the input of the operation."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Output" eSuperTypes="#//MessageReference #//IOutput">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL output element. An output element specifies the abstract message format for the output of the operation."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fault" eSuperTypes="#//MessageReference #//IFault">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL fault element. Fault elements specify the abstract message format for any error messages that may be output as the result of the operation "/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingInput" eSuperTypes="#//ExtensibleElement #//IBindingInput">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL input element within a operation within a binding. An input element within an operation within a binding specifies binding information for the input of the operation. "/>
+    </eAnnotations>
+    <eOperations name="getInput" eType="#//IInput"/>
+    <eOperations name="setInput">
+      <eParameters name="input" eType="#//IInput"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eInput" lowerBound="1"
+        eType="#//Input"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingOutput" eSuperTypes="#//ExtensibleElement #//IBindingOutput">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL output element within a operation within a binding. An output element within an operation within a binding specifies binding information for the output of the operation. "/>
+    </eAnnotations>
+    <eOperations name="getOutput" eType="#//IOutput"/>
+    <eOperations name="setOutput">
+      <eParameters name="output" eType="#//IOutput"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eOutput" lowerBound="1"
+        eType="#//Output"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingFault" eSuperTypes="#//ExtensibleElement #//IBindingFault">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL fault element within a operation within a binding. A fault element within an operation within a binding specifies binding information for the fault with the same name. "/>
+    </eAnnotations>
+    <eOperations name="getFault" eType="#//IFault"/>
+    <eOperations name="setFault">
+      <eParameters name="fault" eType="#//IFault"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eFault" lowerBound="1"
+        eType="#//Fault"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="QName" instanceClassName="javax.xml.namespace.QName">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.QName class. A QName is a fully qualified name."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a namespace and the corresponding namespace prefix used in a WSDL document."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="OperationType" instanceClassName="javax.wsdl.OperationType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ONE_WAY=1&#xD;&#xA;REQUEST_RESPONSE=2&#xD;&#xA;SOLICIT_RESPONSE=3&#xD;&#xA;NOTIFICATION=4"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPortType" instanceClassName="javax.wsdl.PortType"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.PortType non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addOperation">
+      <eParameters name="operation" eType="#//IOperation"/>
+    </eOperations>
+    <eOperations name="getOperation" eType="#//IOperation">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="inputName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="outputName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOperations" eType="#//IList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IOperation" instanceClassName="javax.wsdl.Operation"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Operation non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addFault">
+      <eParameters name="fault" eType="#//IFault"/>
+    </eOperations>
+    <eOperations name="getFault" eType="#//IFault">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getFaults" eType="#//IMap"/>
+    <eOperations name="getParameterOrdering" eType="#//IList"/>
+    <eOperations name="setParameterOrdering">
+      <eParameters name="parameterOrder" eType="#//IList"/>
+    </eOperations>
+    <eOperations name="getInput" eType="#//IInput"/>
+    <eOperations name="setInput">
+      <eParameters name="input" eType="#//IInput"/>
+    </eOperations>
+    <eOperations name="getOutput" eType="#//IOutput"/>
+    <eOperations name="setOutput">
+      <eParameters name="output" eType="#//IOutput"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IInput" instanceClassName="javax.wsdl.Input"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Input non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="getMessage" eType="#//IMessage"/>
+    <eOperations name="setMessage">
+      <eParameters name="message" eType="#//IMessage"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IOutput" instanceClassName="javax.wsdl.Output"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Output non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="getMessage" eType="#//IMessage"/>
+    <eOperations name="setMessage">
+      <eParameters name="message" eType="#//IMessage"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IFault" instanceClassName="javax.wsdl.Fault"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Fault non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="getMessage" eType="#//IMessage"/>
+    <eOperations name="setMessage">
+      <eParameters name="message" eType="#//IMessage"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMessage" instanceClassName="javax.wsdl.Message"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Message non-MOF interface"/>
+    </eAnnotations>
+    <eOperations name="addPart">
+      <eParameters name="part" eType="#//IPart"/>
+    </eOperations>
+    <eOperations name="getPart" eType="#//IPart">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getParts" eType="#//IMap"/>
+    <eOperations name="getOrderedParts" eType="#//IList">
+      <eParameters name="partOrder" eType="#//IList"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPart" instanceClassName="javax.wsdl.Part"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Part non-MOF interface"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IService" instanceClassName="javax.wsdl.Service"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Service non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addPort">
+      <eParameters name="port" eType="#//IPort"/>
+    </eOperations>
+    <eOperations name="getPorts" eType="#//IMap"/>
+    <eOperations name="getPort" eType="#//IPort">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPort" instanceClassName="javax.wsdl.Port"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Port non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="getBinding" eType="#//IBinding"/>
+    <eOperations name="setBinding">
+      <eParameters name="binding" eType="#//IBinding"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBinding" instanceClassName="javax.wsdl.Binding"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Binding non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addBindingOperation">
+      <eParameters name="bindingOperation" eType="#//IBindingOperation"/>
+    </eOperations>
+    <eOperations name="getBindingOperation" eType="#//IBindingOperation">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="inputName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="outputName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getBindingOperations" eType="#//IList"/>
+    <eOperations name="getPortType" eType="#//IPortType"/>
+    <eOperations name="setPortType">
+      <eParameters name="portType" eType="#//IPortType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBindingOperation" instanceClassName="javax.wsdl.BindingOperation"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.BindingOperation non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addBindingFault">
+      <eParameters name="bindingFault" eType="#//IBindingFault"/>
+    </eOperations>
+    <eOperations name="getBindingFault" eType="#//IBindingFault">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getBindingFaults" eType="#//IMap"/>
+    <eOperations name="getOperation" eType="#//IOperation"/>
+    <eOperations name="setOperation">
+      <eParameters name="operation" eType="#//IOperation"/>
+    </eOperations>
+    <eOperations name="getBindingInput" eType="#//IBindingInput"/>
+    <eOperations name="setBindingInput">
+      <eParameters name="bindingInput" eType="#//IBindingInput"/>
+    </eOperations>
+    <eOperations name="getBindingOutput" eType="#//IBindingOutput"/>
+    <eOperations name="setBindingOutput">
+      <eParameters name="bindingOutput" eType="#//IBindingOutput"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBindingInput" instanceClassName="javax.wsdl.BindingInput"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.BindingInput non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBindingOutput" instanceClassName="javax.wsdl.BindingOutput"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.BindingOutput non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBindingFault" instanceClassName="javax.wsdl.BindingFault"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.BindingFault non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DOMElement" instanceClassName="org.w3c.dom.Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the org.w3c.dom.Element non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IExtensibilityElement" instanceClassName="javax.wsdl.extensions.ExtensibilityElement"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.ExtensibilityElement non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDefinition" instanceClassName="javax.wsdl.Definition"
+      abstract="true" interface="true" eSuperTypes="#//IElementExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Definition non-MOF interface."/>
+    </eAnnotations>
+    <eOperations name="addBinding">
+      <eParameters name="binding" eType="#//IBinding"/>
+    </eOperations>
+    <eOperations name="addImport">
+      <eParameters name="importDef" eType="#//IImport"/>
+    </eOperations>
+    <eOperations name="addMessage">
+      <eParameters name="message" eType="#//IMessage"/>
+    </eOperations>
+    <eOperations name="addNamespace">
+      <eParameters name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="namespaceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addPortType">
+      <eParameters name="portType" eType="#//IPortType"/>
+    </eOperations>
+    <eOperations name="addService">
+      <eParameters name="service" eType="#//IService"/>
+    </eOperations>
+    <eOperations name="createBindingFault" eType="#//IBindingFault"/>
+    <eOperations name="createBindingInput" eType="#//IBindingInput"/>
+    <eOperations name="createBindingOutput" eType="#//IBindingOutput"/>
+    <eOperations name="createBindingOperation" eType="#//IBindingOperation"/>
+    <eOperations name="createBinding" eType="#//IBinding"/>
+    <eOperations name="createFault" eType="#//IFault"/>
+    <eOperations name="createImport" eType="#//IImport"/>
+    <eOperations name="createInput" eType="#//IInput"/>
+    <eOperations name="createMessage" eType="#//IMessage"/>
+    <eOperations name="createOperation" eType="#//IOperation"/>
+    <eOperations name="createOutput" eType="#//IOutput"/>
+    <eOperations name="createPart" eType="#//IPart"/>
+    <eOperations name="createPort" eType="#//IPort"/>
+    <eOperations name="createPortType" eType="#//IPortType"/>
+    <eOperations name="createService" eType="#//IService"/>
+    <eOperations name="getBinding" eType="#//IBinding">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="getBindings" eType="#//IMap"/>
+    <eOperations name="getImports" eType="#//IMap"/>
+    <eOperations name="getImports" eType="#//IList">
+      <eParameters name="namespaceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getMessage" eType="#//IMessage">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="getMessages" eType="#//IMap"/>
+    <eOperations name="getNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getNamespaces" eType="#//IMap"/>
+    <eOperations name="getPortType" eType="#//IPortType">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="getPortTypes" eType="#//IMap"/>
+    <eOperations name="getPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="namespaceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getService" eType="#//IService">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="getServices" eType="#//IMap"/>
+    <eOperations name="getExtensionRegistry" eType="#//IExtensionRegistry"/>
+    <eOperations name="setExtensionRegistry">
+      <eParameters name="extensionRegistry" eType="#//IExtensionRegistry"/>
+    </eOperations>
+    <eOperations name="getDocumentBaseURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="setDocumentBaseURI">
+      <eParameters name="documentBase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="createTypes" eType="#//ITypes"/>
+    <eOperations name="removeService" eType="#//IService">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="removeBinding" eType="#//IBinding">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="removePortType" eType="#//IPortType">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="removeMessage" eType="#//IMessage">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="getTypes" eType="#//ITypes"/>
+    <eOperations name="setTypes">
+      <eParameters name="types" eType="#//ITypes"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IImport" instanceClassName="javax.wsdl.Import"
+      abstract="true" interface="true" eSuperTypes="#//IAttributeExtensible">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Import non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IList" instanceClassName="java.util.List"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the non-MOF java.util.List interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMap" instanceClassName="java.util.Map"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the non-MOF java.util.Map interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IURL" instanceClassName="java.net.URL"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the non-MOF java.net.URL interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IExtensionRegistry" instanceClassName="javax.wsdl.extensions.ExtensionRegistry"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the non-MOF javax.wsdl.extensions.ExtensionRegistry interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Types" eSuperTypes="#//ExtensibleElement #//ITypes">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents a WSDL types element. The types element encloses data type definitions that are relevant for the exchanged messages."/>
+    </eAnnotations>
+    <eOperations name="getSchemas" eType="#//IList"/>
+    <eOperations name="getSchemas" eType="#//IList">
+      <eParameters name="namespaceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IIterator" instanceClassName="java.util.Iterator"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the non-MOF java.util.Iterator interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="WSDLException" instanceClassName="javax.wsdl.WSDLException">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Exception class."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypes" instanceClassName="javax.wsdl.Types"
+      abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the javax.wsdl.Types non-MOF interface"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnknownExtensibilityElement" eSuperTypes="#//ExtensibilityElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//UnknownExtensibilityElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XSDSchemaExtensibilityElement" eSuperTypes="#//ExtensibilityElement #//ISchema">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentBaseURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schema" eType="ecore:EClass XSD.ecore#//XSDSchema"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DOMDocument" instanceClassName="org.w3c.dom.Document">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class represents the org.w3c.dom.Document non-MOF interface."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageReference" abstract="true" eSuperTypes="#//ExtensibleElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eMessage" lowerBound="1"
+        eType="#//Message"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IElementExtensible" instanceClassName="javax.wsdl.extensions.ElementExtensible"
+      abstract="true" interface="true">
+    <eOperations name="getExtensibilityElements" eType="#//IList"/>
+    <eOperations name="addExtensibilityElement">
+      <eParameters name="extElement" eType="#//IExtensibilityElement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IAttributeExtensible" instanceClassName="javax.wsdl.extensions.AttributeExtensible"
+      abstract="true" interface="true">
+    <eOperations name="getExtensionAttribute" eType="#//IObject">
+      <eParameters name="name" eType="#//QName"/>
+    </eOperations>
+    <eOperations name="setExtensionAttribute">
+      <eParameters name="name" eType="#//QName"/>
+      <eParameters name="value" eType="#//IObject"/>
+    </eOperations>
+    <eOperations name="getExtensionAttributes" eType="#//IMap"/>
+    <eOperations name="getNativeAttributeNames" eType="#//IList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IObject" instanceClassName="java.lang.Object"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ISchema" instanceClassName="javax.wsdl.extensions.schema.Schema"
+      abstract="true" interface="true" eSuperTypes="#//IExtensibilityElement"/>
+</ecore:EPackage>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cst"
+    nsURI="http://www.eclipse.org/acceleo/mtl/cst/3.0" nsPrefix="cst">
+  <eClassifiers xsi:type="ecore:EClass" name="CSTNode" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startPosition" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endPosition" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EPackage #//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" upperBound="-1"
+        eType="#//TypedModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedModuleElement" lowerBound="1"
+        upperBound="-1" eType="#//ModuleElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" upperBound="-1"
+        eType="#//ModuleExtendsValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//ModuleImportsValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" eType="#//Documentation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleExtendsValue" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleImportsValue" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedModel" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="takesTypesFrom" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleElement" abstract="true" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" lowerBound="1"
+        eType="#//VisibilityKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VisibilityKind">
+    <eLiterals name="Private"/>
+    <eLiterals name="Protected" value="1"/>
+    <eLiterals name="Public" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//ModuleElement #//TemplateExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Template" eSuperTypes="#//Block #//ModuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="overrides" upperBound="-1"
+        eType="#//TemplateOverridesValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="post" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateOverridesValue" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateExpression" eSuperTypes="#//CSTNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelExpression" eSuperTypes="#//TemplateExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="before" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="each" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="after" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextExpression" eSuperTypes="#//TemplateExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//TemplateExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" eType="#//InitSection"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" upperBound="-1" eType="#//TemplateExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitSection" eSuperTypes="#//CSTNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        upperBound="-1" eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProtectedAreaBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="marker" lowerBound="1"
+        eType="#//ModelExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loopVariable" lowerBound="1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterSet" lowerBound="1"
+        eType="#//ModelExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="before" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="each" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="after" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ifExpr" lowerBound="1"
+        eType="#//ModelExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Block"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseIf" upperBound="-1"
+        eType="#//IfBlock" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LetBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseLet" upperBound="-1"
+        eType="#//LetBlock" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Block"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="letVariable" lowerBound="1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="openMode" lowerBound="1"
+        eType="#//OpenModeKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileUrl" lowerBound="1"
+        eType="#//ModelExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uniqId" eType="#//ModelExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charset" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OpenModeKind">
+    <eLiterals name="Append"/>
+    <eLiterals name="OverWrite" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceBlock" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElement" lowerBound="1"
+        eType="#//ModelExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Macro" eSuperTypes="#//Block #//ModuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//ModuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//ModelExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Documentation" eSuperTypes="#//Comment"/>
+</ecore:EPackage>

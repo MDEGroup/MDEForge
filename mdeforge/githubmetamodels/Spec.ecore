@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ssl"
+    nsURI="ssl" nsPrefix="ssl">
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testcases" upperBound="-1"
+        eType="#//Testcase" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Testcase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="given" eType="#//Given"
+        containment="true" eOpposite="#//Given/testcase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="#//When" containment="true"
+        eOpposite="#//When/testcase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//Then"
+        containment="true" eOpposite="#//Then/testcase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Given">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testcase" lowerBound="1"
+        eType="#//Testcase" eOpposite="#//Testcase/given"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" lowerBound="1"
+        upperBound="-1" eType="#//Condition" containment="true" eOpposite="#//Condition/given"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="When">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testcase" lowerBound="1"
+        eType="#//Testcase" eOpposite="#//Testcase/when"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" lowerBound="1"
+        upperBound="-1" eType="#//Action" containment="true" eOpposite="#//Action/when"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Then">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testcase" lowerBound="1"
+        eType="#//Testcase" eOpposite="#//Testcase/then"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="observations" lowerBound="1"
+        upperBound="-1" eType="#//Observation" containment="true" eOpposite="#//Observation/then"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="given" lowerBound="1" eType="#//Given"
+        eOpposite="#//Given/conditions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckVariableEqualsVariable" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstVariableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondVariableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckVariableEqualsTime" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstVariableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckMode" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckLabel" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelType" lowerBound="1"
+        eType="#//LabelType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="when" lowerBound="1" eType="#//When"
+        eOpposite="#//When/actions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntersMode" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PressButton" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="button" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Observation" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//Then"
+        eOpposite="#//Then/observations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveMode" eSuperTypes="#//Observation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveButton" eSuperTypes="#//Observation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="button" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveOutput" abstract="true" eSuperTypes="#//Observation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelType" lowerBound="1"
+        eType="#//LabelType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveLabelValue" eSuperTypes="#//ObserveOutput">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveLabelVariable" eSuperTypes="#//ObserveOutput">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveVariableChange" eSuperTypes="#//Observation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="#//UnitOfTime"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserveRing" eSuperTypes="#//Observation"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="LabelType">
+    <eLiterals name="display"/>
+    <eLiterals name="indicator" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UnitOfTime">
+    <eLiterals name="hour"/>
+    <eLiterals name="minute" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

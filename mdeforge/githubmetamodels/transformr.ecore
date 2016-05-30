@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="transformr" nsURI="http://www.transformr.org" nsPrefix="transformr">
+  <eClassifiers xsi:type="ecore:EClass" name="Graph" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//GraphElement">
+    <eOperations name="setEType">
+      <eParameters name="eclass" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//Edge" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Edge" eSuperTypes="#//GraphElement">
+    <eOperations name="setEType">
+      <eParameters name="ereference" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+    </eOperations>
+    <eOperations name="getSource" eType="#//Node"/>
+    <eOperations name="setSource">
+      <eParameters name="source" eType="#//Node"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pattern" eSuperTypes="#//Graph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule" eSuperTypes="#//Pattern #//Executable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="creations" upperBound="-1"
+        eType="#//GraphElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deletions" upperBound="-1"
+        eType="#//GraphElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
+        eType="#//Assignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true" interface="true"
+      eSuperTypes="#//TypedElement #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TypedElement #//NamedElement">
+    <eOperations name="setEType">
+      <eParameters name="eattribute" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternConstraint" abstract="true" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subpattern" eType="#//Pattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="And" eSuperTypes="#//BinaryConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Or" eSuperTypes="#//BinaryConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Not" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exists" eSuperTypes="#//PatternConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ForAll" eSuperTypes="#//PatternConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryConstraint" abstract="true" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetAttribute" lowerBound="1"
+        eType="#//Attribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="involvedVariables" upperBound="-1"
+        eType="#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableConstraint" eSuperTypes="#//Expression #//Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetVariable" lowerBound="1"
+        eType="#//Variable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Executable" abstract="true" interface="true"
+      eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Branch" eSuperTypes="#//Executable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="#//Pattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//Executable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" lowerBound="1" eType="#//Executable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//Executable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Executable"/>
+  </eClassifiers>
+</ecore:EPackage>

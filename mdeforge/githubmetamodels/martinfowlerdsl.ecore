@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="martinfowlerdsl"
+    nsURI="http://www.emftext.org/language/martinfowlerdsl" nsPrefix="martinfowlerdsl">
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+        upperBound="-1" eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" lowerBound="1" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//AbstractEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Command"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Command" eSuperTypes="#//AbstractEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//AbstractEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resetting" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractEvent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//State" eOpposite="#//State/transitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" lowerBound="1"
+        eType="#//Event"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="caltrop" nsURI="http://www.ptolemy.org/caltrop" nsPrefix="caltrop">
+  <eClassifiers xsi:type="ecore:EClass" name="CaltropActorImpl">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="ecore:EClass actor.ecore#//AbstractIOPort"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+        eType="#//StateVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//ReAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initActions" upperBound="-1"
+        eType="#//OutputAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//FunctionDeclaration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" eType="#//Schedule"
+        containment="true"/>
+    <eGenericSuperTypes eClassifier="ecore:EClass actor.ecore#//AtomicActorImpl">
+      <eTypeArguments eTypeParameter="#//CaltropActorImpl/P"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActorParameter" eSuperTypes="actor.ecore#//Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedInputPort" eSuperTypes="actor.ecore#//AbstractTypedIOPort"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedOutputPort" eSuperTypes="actor.ecore#//AbstractTypedIOPort"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StateVariable" eSuperTypes="actor.ecore#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FireAction" eSuperTypes="#//ReAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPatterns" upperBound="-1"
+        eType="#//InputPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReAction" eSuperTypes="#//OutputAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputAction" eSuperTypes="kernel.ecore#//NamedObj">
+    <eOperations name="getInputPatterns" upperBound="-1" eType="#//InputPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guardExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPatterns" upperBound="-1"
+        eType="#//OutputPattern" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="updateExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delayExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortPattern" abstract="true">
+    <eOperations name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repeatExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channels" eType="#//ChannelSelector"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portRef" eType="ecore:EClass kernel.ecore#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guardExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionPattern">
+    <eOperations name="getPatternVariables" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getGuardExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputPattern" eSuperTypes="#//PortPattern #//ActionPattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variables" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputPattern" eSuperTypes="#//PortPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueExpressions" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChannelSelector" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionChannelSelector" eSuperTypes="#//ChannelSelector">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="many" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyExpressions" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeywordChannelSelector" eSuperTypes="#//ChannelSelector">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyword" eType="#//ChannelSelectorKeyword"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ChannelSelectorKeyword">
+    <eLiterals name="ALL" value="-1"/>
+    <eLiterals name="ANY" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionDeclaration" eSuperTypes="actor.ecore#//JvmTypedObj">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="ecore:EClass actor.ecore#//JvmTypedObj" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="throwables" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/xtext/common/JavaVMTypes#//JvmTypeReference"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Schedule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initial" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true" eOpposite="#//State/schedule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="kernel.ecore#//NamedObj">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" eType="#//Schedule"
+        eOpposite="#//Schedule/states"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//State"
+        eOpposite="#//State/transitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tags" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventAction" eSuperTypes="#//ReAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPatterns" upperBound="-1"
+        eType="#//EventPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventPattern" eSuperTypes="#//ActionPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varRef" eType="#//StateVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variables" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guardExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConversionRelation" eSuperTypes="kernel.ecore#//Relation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueVar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conversionExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guardExpression" eType="ecore:EClass http://www.eclipse.org/xtext/xbase/Xbase#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

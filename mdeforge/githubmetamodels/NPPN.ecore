@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="org.k1s.nppn" nsPrefix="org.k1s.nppn">
+  <eClassifiers xsi:type="ecore:EClass" name="Arc" eSuperTypes="graphics.ecore#//HasGraphics #//HLArcAddin">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Node" eOpposite="#//Node/sourceArc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Node" eOpposite="#//Node/targetArc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="page" lowerBound="1" eType="#//Page"
+        transient="true" eOpposite="#//Page/arc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HLAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HLArcAddin" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hlinscription" eType="#//HLAnnotation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HasLabel" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" upperBound="-1"
+        eType="#//Label" containment="true" resolveProxies="false" eOpposite="#//Label/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HasName" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//Name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instance" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subPageID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true">
+    <eOperations name="asString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//HasLabel" eOpposite="#//HasLabel/label"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Name" eSuperTypes="#//HLAnnotation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceArc" upperBound="-1"
+        eType="#//Arc" eOpposite="#//Arc/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetArc" upperBound="-1"
+        eType="#//Arc" eOpposite="#//Arc/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pragmatics" upperBound="-1"
+        eType="#//Pragmatic" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Object" abstract="true" eSuperTypes="graphics.ecore#//HasGraphics #//HasLabel #//HasName">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="page" lowerBound="1" eType="#//Page"
+        transient="true" eOpposite="#//Page/object"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="#//HasName #//HasLabel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="petriNet" lowerBound="1"
+        eType="#//PetriNet" eOpposite="#//PetriNet/page"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" upperBound="-1"
+        eType="#//Object" containment="true" resolveProxies="false" eOpposite="#//Object/page"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arc" upperBound="-1" eType="#//Arc"
+        containment="true" resolveProxies="false" eOpposite="#//Arc/page"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PetriNet" eSuperTypes="#//HasLabel #//HasName">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="page" lowerBound="1" upperBound="-1"
+        eType="#//Page" containment="true" resolveProxies="false" eOpposite="#//Page/petriNet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitors" upperBound="-1"
+        eType="ecore:EClass monitors.ecore#//Monitor" containment="true" resolveProxies="false"
+        eOpposite="monitors.ecore#//Monitor/petriNet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeType" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Place" eSuperTypes="#//PlaceNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//RefPlace" eOpposite="#//RefPlace/ref"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceNode" abstract="true" eSuperTypes="#//Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RefPlace" eSuperTypes="#//PlaceNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" lowerBound="1" eType="#//Place"
+        eOpposite="#//Place/references"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RefTrans" eSuperTypes="#//TransitionNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" lowerBound="1" eType="#//TransitionNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//TransitionNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionNode" abstract="true" eSuperTypes="#//Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Pragmatic">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//PlacementConstraints" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Derived" eSuperTypes="#//Pragmatic">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patterns" upperBound="-1"
+        eType="#//PNPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Explicit" eSuperTypes="#//Pragmatic"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PNPattern"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomDerivedPragmatics" eSuperTypes="#//Derived #//CustomPragmatics"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomExplicitPragmatics" eSuperTypes="#//Explicit #//CustomPragmatics"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomPragmatics" eSuperTypes="#//Pragmatic"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlacementConstraints"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTemplateTree">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Principal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Principal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="principal" lowerBound="1"
+        eType="#//Instance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Service" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" lowerBound="1"
+        eType="#//Instance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Block" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//PlaceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//PlaceNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Atomic" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" lowerBound="1"
+        eType="#//Transition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Block" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Binding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pragmatic" lowerBound="1"
+        eType="#//Pragmatic"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="template" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Bindings">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//Binding" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loop" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Conditional" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Loop" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Conditinoal" eSuperTypes="#//Container"/>
+</ecore:EPackage>

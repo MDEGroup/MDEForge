@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sd"
+    nsURI="sd" nsPrefix="sd">
+  <eClassifiers xsi:type="ecore:EClass" name="SdNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdAbstractVariable" abstract="true"
+      eSuperTypes="#//SdGeneratable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toElement" upperBound="-1"
+        eType="#//SdConnector" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//SdModel"
+        eOpposite="#//SdModel/abstractVariables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdEquationVariable" abstract="true"
+      eSuperTypes="#//SdAbstractVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="equation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="return 0;"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdModel" eSuperTypes="#//SdGeneratable ../../../../../../../org.eclipse.amp.amf.acore/src/model/metaabm.ecore#//IAgentChild">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractVariables" upperBound="-1"
+        eType="#//SdAbstractVariable" containment="true" eOpposite="#//SdAbstractVariable/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdAuxVariable" eSuperTypes="#//SdEquationVariable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SdStockVariable" eSuperTypes="#//SdAbstractVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integral" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="return 0;"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="return 0;"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdFlowVariable" eSuperTypes="#//SdEquationVariable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SdConnector" eSuperTypes="#//SdGeneratable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toElement" lowerBound="1"
+        eType="#//SdAbstractVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SdGeneratable" abstract="true" eSuperTypes="#//SdNamedElement"/>
+</ecore:EPackage>

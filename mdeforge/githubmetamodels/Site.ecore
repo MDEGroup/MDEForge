@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="site" nsURI="http://www.soluvas.org/schema/web.site/1.0" nsPrefix="site">
+  <eClassifiers xsi:type="ecore:EClass" name="Section">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A large division of web application.&#xA;&#xA;For example, Bippo Mall is divided into 4 sections: sys, mall, shop, and pub."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" upperBound="-1"
+        eType="#//Page" containment="true" eOpposite="#//Page/section"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SiteCatalog" eSuperTypes="#//SectionCollection">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The site catalog is used to define all *logical* sections and pages in a site.&#xA;&#xA;It is used in 2 ways:&#xA;1. at generation time, to generate concrete page classes, Wicket HTML markup, and JS files.&#xA;2. at runtime, to inspect *logical* sections and pages in the site.&#xA;&#xA;Note that information about actual concrete page classes etc. are not visible here, and if needed, then it should be described using another schema."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SectionCollection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" upperBound="-1"
+        eType="#//Section" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" abstract="true" interface="true">
+    <eOperations name="getClassSimpleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the class simple name, which is simply the name + &quot;Page&quot; suffix."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The resulting simple name of the Wicket Page subclass, e.g. &quot;ProductSysTable&quot;, without the &quot;Page&quot; suffix."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mountPoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Where the page is mounted, relative to application root, e.g. /product/sys, or a URI template with parameters: /product/sys/show/${productId}&#xA;&#xA;mountPoint is highly recommended for SEO and easy URI typing, but not mandatory."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//PageParam" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="section" eType="#//Section"
+        eOpposite="#//Section/pages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A page that that specifies the literal Wicket page class name"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RawEntityTablePage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Lists raw entities in a page using Backbone and jQuery DataTables.&#xA;&#xA;For normal entities see EntityTablePage.&#xA;&#xA;Entities can be added, shown, and deleted.&#xA;&#xA;Features:&#xA;* client-side paging support&#xA;* client-side quick search&#xA;* client-side table column sorting&#xA;&#xA;TODO: support push for dynamic add/remove and show status."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityTablePage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Lists normal entities in a page using Backbone and jQuery DataTables.&#xA;&#xA;For raw entities see RawEntity TablePage.&#xA;&#xA;Supported folders:&#xA;1. Published (virtual; published only)&#xA;2. All Items (virtual; except deleted)&#xA;3. Drafts (virtual)&#xA;4. Trash (virtual)&#xA;&#xA;Actions on entities:&#xA;1. add&#xA;2. show&#xA;3. delete&#xA;4. undelete&#xA;5. publish (draft->published)&#xA;6. unpublish (published->draft; some entities may not support this)&#xA;&#xA;Features:&#xA;* client-side paging support&#xA;* client-side quick search&#xA;* client-side table column sorting&#xA;&#xA;TODO: support push for dynamic add/remove and show status."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityEditPage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Edit page for normal entities"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RawEntityEditPage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Edit page for raw entities"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RawEntityNewPage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="New normal entity page"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityNewPage" eSuperTypes="#//Page #//EntityPage">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="New raw entity page"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContentPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Contains static but editable HTML content."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DashboardPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A page that can be customized by admin.&#xA;&#xA;Typically used for homepage.&#xA;&#xA;The layout is a bit different than other pages because it has a header and a slider/carousel after the header.&#xA;The sidebar is below the header and the carousel."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PageParam">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Parameter name for the page, e.g. &quot;productId&quot;."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoginPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Login page, that also serves as a SSO register page for Facebook, Twitter, Google, etc."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registerPage" eType="#//RegisterPage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resetPasswordPage" eType="#//ResetPasswordPage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisterPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Register as user via email."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResetPasswordPage" eSuperTypes="#//Page">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Used to reset password if user forgets the password."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityPage" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityClass" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Full name of the class that represents the entity.&#xA;&#xA;This is required for:&#xA;1. Getting the EntityRepository for the entity, scoped to the active tenant&#xA;2. Getting the EntityDescriptor which provides metadata about the entity, scoped to the active tenant&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PermalinkCatalog">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permalinks" upperBound="-1"
+        eType="#//Permalink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permalink">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Permalink configuration for an entity."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="e.g. person, shop, etc."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="template" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Recognized values are:&#xA;&#xA;&lt;ol>&#xA;&lt;li>baseUri (from WebAddress, automatically chosen whether relative ('/'), absolute plain HTTP, or absolute HTTPS),&#xA;including scheme and port, and trailing slash.&lt;/li>&#xA;&lt;li>slugPath&lt;/li>&#xA;&lt;/ol>&#xA;&#xA;&lt;p>Reference: https://github.com/damnhandy/Handy-URI-Templates"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PermalinkManager">
+    <eOperations name="relative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get permalink URI relative to current website."/>
+      </eAnnotations>
+      <eParameters name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="slugPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="absolute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get absolute permalink URI, considering plain HTTP vs secure HTTPS."/>
+      </eAnnotations>
+      <eParameters name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="slugPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="unsecureAbsolute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get absolute permalink URI, plain HTTP only."/>
+      </eAnnotations>
+      <eParameters name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="slugPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="secureAbsolute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get absolute permalink URI, secure HTTPS."/>
+      </eAnnotations>
+      <eParameters name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="slugPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JavaScriptMode">
+    <eLiterals name="development">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Use original JS."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="minified" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Use minified JS."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="aggregated_minified" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Aggregate all JavaScript, then minify it."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequireManager">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaScriptMode" lowerBound="1"
+        eType="#//JavaScriptMode" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheBust" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A string used to bust CDN cache, e.g. &quot;2013-02-16 18:43:22+07:00&quot;.&#xA;&#xA;This will be appended as a query string to &quot;relative&quot; js, skin, and img URIs. Relative here in reference to webAddres URIs. Absolute URIs won't be cache-busted."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

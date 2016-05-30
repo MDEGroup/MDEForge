@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="storedscript" nsURI="http://storedscript/1.0" nsPrefix="storedscript">
+  <eClassifiers xsi:type="ecore:EClass" name="StoredScriptRegistry">
+    <eOperations name="processNewOrChangedScript" lowerBound="1" eType="#//IStoredScript">
+      <eParameters name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeStoreScript">
+      <eParameters name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getStoredScript" lowerBound="1" eType="#//IStoredScript">
+      <eParameters name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getScriptType" eType="#//ScriptType">
+      <eParameters name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scripts" upperBound="-1"
+        eType="#//IStoredScript" containment="true" eOpposite="#//IStoredScript/registry"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scriptTypes" upperBound="-1"
+        eType="#//ScriptType" containment="true" eOpposite="#//ScriptType/registry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IStoredScript" abstract="true" interface="true">
+    <eAnnotations source=" http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="@implements org.eclipse.escriptmonkey.scripting.storedscript.IContentProvider"/>
+    </eAnnotations>
+    <eOperations name="getMetadata" eType="#//ScriptMetadata">
+      <eParameters name="metadataName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metadatas" upperBound="-1"
+        eType="#//ScriptMetadata" containment="true" eOpposite="#//ScriptMetadata/script"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scriptType" lowerBound="1"
+        eType="#//ScriptType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registry" lowerBound="1"
+        eType="#//StoredScriptRegistry" eOpposite="#//StoredScriptRegistry/scripts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StoredScript" eSuperTypes="#//IStoredScript"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptMetadata">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="script" lowerBound="1"
+        eType="#//IStoredScript" eOpposite="#//IStoredScript/metadatas"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registry" lowerBound="1"
+        eType="#//StoredScriptRegistry" eOpposite="#//StoredScriptRegistry/scriptTypes"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="netModel" nsURI="http://www.robotoworks.com/mechanoid/net/NetModel"
+    nsPrefix="netModel">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+        eType="#//Declaration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Declaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Client" eSuperTypes="#//Declaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//ClientBlock" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClientBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HeaderBlock" eSuperTypes="#//ClientBlock #//HttpMethodBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="headers" upperBound="-1"
+        eType="#//Header" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Header">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HttpMethod" eSuperTypes="#//ClientBlock">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//HttpMethodType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="path" eType="#//Path" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//HttpMethodBlock" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HttpMethodBlock"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="HttpMethodType">
+    <eLiterals name="get" literal="get"/>
+    <eLiterals name="put" value="1" literal="put"/>
+    <eLiterals name="post" value="2" literal="post"/>
+    <eLiterals name="delete" value="3" literal="delete"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Path">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//SimpleMemberAssignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParamsBlock" eSuperTypes="#//ClientBlock #//HttpMethodBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//SimpleMemberAssignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleMemberAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" eType="#//SimpleMember"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//Literal"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BodyBlock" eSuperTypes="#//HttpMethodBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//BlockType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponseBlock" eSuperTypes="#//HttpMethodBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//ComplexTypeDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//BlockType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Member">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedMember" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SkipMember" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literal" eType="#//ComplexTypeLiteral"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleMember">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//IntrinsicType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//BlockType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericListType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" eType="#//Type"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declaration" eType="#//UserTypeDeclaration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserTypeDeclaration" eSuperTypes="#//Declaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nogen" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeDeclaration" eSuperTypes="#//UserTypeDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literal" eType="#//ComplexTypeLiteral"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumTypeDeclaration" eSuperTypes="#//UserTypeDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//IntegerType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literal" eType="#//EnumTypeLiteral"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumTypeLiteral">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//EnumMember" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumMember">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="assignment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeLiteral" eSuperTypes="#//BlockType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntrinsicType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//IntrinsicType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanType" eSuperTypes="#//IntrinsicType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericType" eSuperTypes="#//IntrinsicType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerType" eSuperTypes="#//NumericType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LongType" eSuperTypes="#//NumericType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleType" eSuperTypes="#//NumericType"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="BooleanValue">
+    <eLiterals name="true" literal="true"/>
+    <eLiterals name="false" value="1" literal="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="#//BooleanValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+  </eClassifiers>
+</ecore:EPackage>

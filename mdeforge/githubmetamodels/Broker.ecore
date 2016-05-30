@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="brokermodel" nsURI="http://nam.ece.upatras.gr/broker" nsPrefix="gr.upatras.ece.nam.broker">
+  <eClassifiers xsi:type="ecore:EEnum" name="ScenarioStatus">
+    <eLiterals name="NEW"/>
+    <eLiterals name="REQUESTED" value="1"/>
+    <eLiterals name="SCHEDULED_PROVISIONING" value="2" literal="SCHEDULED_PROVISIONING"/>
+    <eLiterals name="MODIFIED" value="3"/>
+    <eLiterals name="REJECTED" value="4"/>
+    <eLiterals name="RUNNING" value="5" literal="RUNNING"/>
+    <eLiterals name="PROVISIONING" value="6" literal="PROVISIONING"/>
+    <eLiterals name="SHUT_DOWN" value="7" literal="SHUT_DOWN"/>
+    <eLiterals name="DELETED" value="8" literal="DELETED"/>
+    <eLiterals name="SHUTTING_DOWN" value="9" literal="SHUTTING_DOWN"/>
+    <eLiterals name="SCHEDULED_SHUT_DOWN" value="10" literal="SCHEDULED_SHUT_DOWN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Broker" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The class representing a resource/service broker. Usually will be a singleton class&#xD;&#xA;It could be also from NDL: Administrative Domain, the organization that actually controls and provisions the resources, such as network resources and computing resources. "/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registeredUsers" upperBound="-1"
+        eType="#//users/BrokerUser" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributedTaxonomies"
+        upperBound="-1" eType="#//services/Taxonomy" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offeredServices" upperBound="-1"
+        eType="#//services/OfferedService" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availableFederationScenarios"
+        upperBound="-1" eType="#//federationscenarios/RequestedFederationScenario"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offeredServiceCompositions"
+        upperBound="-1" eType="#//services/ServiceComposition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ResourceServiceContracts"
+        upperBound="-1" eType="#//availabilityContract/ResourceServiceContract" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SLAs" upperBound="-1" eType="#//slareservations/SLA"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="APIGateway" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uniqueID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eSubpackages name="users" nsURI="http://nam.ece.upatras.gr/broker/model/users"
+      nsPrefix="gr.upatras.ece.nam.broker.model.users">
+    <eClassifiers xsi:type="ecore:EClass" name="Account" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="authorizationKey" eType="#//fcielements/AuthorizationKey"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourcesProvider" eSuperTypes="#//users/BrokerUser">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="offeredSiteList" upperBound="-1"
+          eType="#//providersite/Site" containment="true" eOpposite="#//providersite/Site/belongsToProvider"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TestbedDesigner" eSuperTypes="#//users/BrokerUser">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="designsVirtualTestbeds"
+          upperBound="-1" eType="#//federationscenarios/RequestedFederationScenario">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Admin" eSuperTypes="#//users/BrokerPersonel"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BrokerCustomer" eSuperTypes="#//users/BrokerUser">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="utilizesVirtualTestbed"
+          upperBound="-1" eType="#//federationscenarios/RequestedFederationScenario"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasTestbedDesigner" eType="#//users/TestbedDesigner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BrokerUser" abstract="true" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasAccount" eType="#//users/Account"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="organization" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="telephone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BrokerPersonel" eSuperTypes="#//users/BrokerUser"/>
+  </eSubpackages>
+  <eSubpackages name="resources" nsURI="http://nam.ece.upatras.gr/broker/model/resources"
+      nsPrefix="gr.upatras.ece.nam.broker.model.resources">
+    <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//NamedElement">
+      <eOperations name="getFullQualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resourceSettings" upperBound="-1"
+          eType="#//resources/ResourceSetting" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contributesToCategories"
+          upperBound="-1" eType="#//resources/ResourceCategory" eOpposite="#//resources/ResourceCategory/resourcelist"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiresResources" upperBound="-1"
+          eType="#//resources/Resource">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A resource requires another resources Rb to be present in the scenario in order to be able to operate"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OfferedResource" eSuperTypes="#//resources/Resource">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceType" eType="#//resources/ResourceType"
+          defaultValueLiteral="SINGLETON">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="resourceType can be SINGLETON or MULTITON"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="belongsToSite" eType="#//providersite/Site"
+          eOpposite="#//providersite/Site/offeredResourcesList"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implOfferedService" eType="#//services/Service"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="multitonMaxOccur" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="-1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If MULTITON type then this value has a meaning. For example&#xD;&#xA;suppose that UoP has a Dynamic Resource that can offer until 20 Virtual Machines. So this Offered Resource might be instantiated until 20 times&#xD;&#xA;Default will be -1 which means unlimited instances"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="geocoords" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceSetting" eSuperTypes="#//services/AbstractSetting">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="OnlyConfiguredByResources"
+          upperBound="-1" eType="#//resources/Resource">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="OnlyConfiguredByResources shows that this ResourceSetting can be configured by only other ResourceSetting  of the OnlyConfiguredByResources  list"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implServiceSetting" eType="#//services/ServiceSetting"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceCategory" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resourcelist" upperBound="-1"
+          eType="#//resources/Resource" eOpposite="#//resources/Resource/contributesToCategories"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ResourceType">
+      <eLiterals name="SINGLETON">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Singleton Resource:&#xD;&#xA;One VT can use it each time; &#xD;&#xA;CAN be reserved; &#xD;&#xA;installation fee + rent fee&#xD;&#xA;For example Asterisk server of UoP &#xD;&#xA;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="MULTITON" value="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Multiton resource:&#xD;&#xA;Many testbeds can &quot;instantiate&quot; the same resource, but when instantiated each instance is unique; &#xD;&#xA;CANNOT be reserved; Although availability might be affected by multitonMaxOccur &#xD;&#xA;optional installation fee  +  optional rent fee&#xD;&#xA;For example VOIP_UA , or a resource which installs a software on a machine which can be anywhere just given only ie ssh access"/>
+        </eAnnotations>
+      </eLiterals>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="networkelements" nsURI="http://nam.ece.upatras.gr/broker/model/networkelements"
+      nsPrefix="gr.upatras.ece.nam.broker.model.networkelements">
+    <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//networkelements/NetworkElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Device, a physical network device. &#xD;&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NetworkElement" eSuperTypes="#//NamedElement"/>
+  </eSubpackages>
+  <eSubpackages name="providersite" nsURI="http://nam.ece.upatras.gr/broker/model/providersite"
+      nsPrefix="gr.upatras.ece.nam.broker.model.providersite">
+    <eClassifiers xsi:type="ecore:EClass" name="DomainManager" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="IP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="belongsToSite" eType="#//providersite/Site"
+          eOpposite="#//providersite/Site/domainManager"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Site" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="domainManager" lowerBound="1"
+          eType="#//providersite/DomainManager" containment="true" eOpposite="#//providersite/DomainManager/belongsToSite"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="locatedAt" lowerBound="1"
+          eType="#//providersite/SiteLocation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="offeredResourcesList"
+          upperBound="-1" eType="#//resources/OfferedResource" containment="true"
+          eOpposite="#//resources/OfferedResource/belongsToSite"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="belongsToProvider" eType="#//users/ResourcesProvider"
+          eOpposite="#//users/ResourcesProvider/offeredSiteList"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SiteLocation" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="geocoords" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="slareservations" nsURI="http://nam.ece.upatras.gr/broker/model/slareservations"
+      nsPrefix="gr.upatras.ece.nam.broker.model.slareservations">
+    <eClassifiers xsi:type="ecore:EClass" name="SLA" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ReservedRsources" upperBound="-1"
+          eType="#//slareservations/ReservedResourceContract" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forVT" eType="#//federationscenarios/RequestedFederationScenario"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidUntil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReservedResourceContract" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forResource" eType="#//resources/OfferedResource"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidUntil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="federationscenarios" nsURI="http://nam.ece.upatras.gr/broker/model/federationscenarios"
+      nsPrefix="gr.upatras.ece.nam.broker.model.federationscenarios">
+    <eClassifiers xsi:type="ecore:EClass" name="RequestedFederationScenario" eSuperTypes="#//NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Just an offering of the broker. A collection of VT that  VT designers can implement but always the broker owns"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isShared" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//ScenarioStatus"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="VTCredentials" eType="#//federationscenarios/Credentials"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="servicesRequest" eType="#//federationscenarios/ServicesRequest"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="infrastructureRequest"
+          eType="#//federationscenarios/InfrastructureRequest" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="scheduledPlan" eType="#//federationscenarios/ScheduledPlan"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+          eType="#//federationscenarios/Import" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="runtimeInfo" eType="#//experimentRuntime/RuntimeElement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceRequest" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refService" lowerBound="1"
+          eType="#//services/Service">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="namespace" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="OfferedByProviders" eType="#//users/ResourcesProvider"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reqServiceSettings" upperBound="-1"
+          eType="#//federationscenarios/ServiceSettingInstance" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numOfServices" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceRequest" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refOfferedResource" lowerBound="1"
+          eType="#//resources/OfferedResource"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reqResourceSettings"
+          upperBound="-1" eType="#//federationscenarios/ResourceSettingInstance" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="runtimeInfo" eType="#//experimentRuntime/RuntimeElement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SettingInstance" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="staticValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignSetting" upperBound="-1"
+          eType="#//federationscenarios/SettingInstance">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Assignments work differently from VCT tool. in vct tool the arrows are references.. where in us assign means that the assignedSetting value is the source and the current element Setting is the consumer target&#xD;&#xA;This allows us to assign in a Setting Instance many source Setting values from other Services/Resource&#xD;&#xA;For example: Assume That we have a Setting of a Service that accepts an arbitrary list of IPs. Then we can have&#xD;&#xA;Setting &quot;myIPList&quot;: myIPlist assign  &quot;machine1.IP&quot;, &quot;machine2.IP&quot;, &quot;machine3.IP&quot;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceSettingInstance" eSuperTypes="#//federationscenarios/SettingInstance">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refServiceSetting" lowerBound="1"
+          eType="#//services/ServiceSetting"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceSettingInstance" eSuperTypes="#//federationscenarios/SettingInstance">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refResourceSetting" lowerBound="1"
+          eType="#//resources/ResourceSetting"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Credentials" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServicesRequest" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceRequestList" upperBound="-1"
+          eType="#//federationscenarios/ServiceRequest" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InfrastructureRequest" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reqOfferedResources"
+          upperBound="-1" eType="#//federationscenarios/ResourceRequest" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resourceGroups" upperBound="-1"
+          eType="#//federationscenarios/ResourceGroup" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ScheduledPlan">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidUntil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Import">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="importURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceGroup" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groupedResources" upperBound="-1"
+          eType="#//federationscenarios/ResourceRequest"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="services" nsURI="http://nam.ece.upatras.gr/broker/model/services"
+      nsPrefix="gr.upatras.ece.nam.broker.model.services">
+    <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Representing services &#xD;&#xA;e.g. a MySQL server. The MySQL server might be &quot;providedByResources&quot; by &quot;any one&quot; of  uopMySQL, FokusMySQL, etc&#xD;&#xA;Bettet to inherit this class and live services even maybe unimplemented. (not abstract yet thoug)"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceSettings" upperBound="-1"
+          eType="#//services/ServiceSetting" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiresServices" upperBound="-1"
+          eType="#//services/Service">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A service Sa requires another service Sb to be present in the scenario in order to be able to operate"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceSetting" eSuperTypes="#//services/AbstractSetting">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Service setting that a service has.&#xD;&#xA;For example &quot;MySQLserver&quot; service has a setting &quot;mUser&quot;.&#xD;&#xA;This setting later can be mapped to another Offered resource's setting.&#xD;&#xA;Example:&#xD;&#xA;The &quot;MySQLserver&quot; service might be &quot;providedByResources&quot; (anyone of) uopMySQL, FokusMySQL, etc&#xD;&#xA;So if uopMySQL offeredResource, has a setting &quot;uopMyUser&quot; then&quot;mUser&quot; is mapped to &quot;uopMyUser&quot; of uopMySQL.&#xD;&#xA;Also  if FokusMySQL offeredResource, has a setting &quot;fokusMyUser&quot; then&quot;mUser&quot; is mapped to &quot;fokusMyUser&quot; of FokusMySQL.&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mappedToResourceSettings"
+          upperBound="-1" eType="#//resources/ResourceSetting"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="providedByResources"
+          upperBound="-1" eType="#//resources/Resource"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OfferedService" eSuperTypes="#//services/Service">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Representing Offered services by the broker.&#xD;&#xA;e.g. a MySQL server. The MySQL server might be &quot;providedByResources&quot; by &quot;any one&quot; of  uopMySQL, FokusMySQL, etc&#xD;&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceComposition" eSuperTypes="#//NamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Representing Offered ready composed services by the broker.&#xD;&#xA;e.g. an IMS network and services. The IMS has a list of services like an HSS , presence server, etc. &#xD;&#xA;When a user asks for an IMS service, the fed will locate any of each service (HSS , presence server) even on different provider locations although might give priority on an IMS ServiceComposition from a single provide to enhance speed, provisioning, etc&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasServices" upperBound="-1"
+          eType="#//services/Service"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SettingType" abstract="true" eSuperTypes="#//NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="brTypeString" eSuperTypes="#//services/SettingType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="brTypeEnum" eSuperTypes="#//services/SettingType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tideEnumlist" upperBound="-1"
+          eType="#//services/brTypeEnumItem" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//services/brTypeEnumItem"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="brTypeList" eSuperTypes="#//services/SettingType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ContainsElementsOf" eType="#//NamedElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="brTypeEnumItem">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="brTypeTideElement" eSuperTypes="#//services/SettingType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ofTideElement" eType="#//NamedElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Taxonomy" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="taxonomies" upperBound="-1"
+          eType="#//services/Taxonomy" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+          eType="#//resources/ResourceCategory" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasScenarios" upperBound="-1"
+          eType="#//federationscenarios/RequestedFederationScenario"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasServices" upperBound="-1"
+          eType="#//services/Service"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractSetting" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="settingType" eType="#//services/SettingType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="userExposed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="userEditable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="canBePublished" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Readable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="settingConstraints" upperBound="-1"
+          eType="#//services/SettingConstraint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiresParams" upperBound="-1"
+          eType="#//services/AbstractSetting">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="-&#x9;A parameter Pa of a resource/service Ra requires a parameter(s) Pb of another Resource/Service Rb"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SettingConstraint" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ForOperation" eType="#//services/ServiceResourceOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="AvailableAfterOperation"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="-&#x9;if set A parameter is available only after a certain CRUD operation"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="RequiredBeforeOperation"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="-&#x9;If set A parameter must be present, must have a not null value before a CRUD operation"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ServiceResourceOperation">
+      <eLiterals name="OP_CREATE"/>
+      <eLiterals name="OP_READ" value="1"/>
+      <eLiterals name="OP_UPDATE" value="2"/>
+      <eLiterals name="OP_DELETE" value="3"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="settingdependencies" nsURI="http://nam.ece.upatras.gr/broker/model/settingdependencies"
+      nsPrefix="gr.upatras.ece.nam.broker.model.settingdependencies"/>
+  <eSubpackages name="availabilityContract" nsURI="http://nam.ece.upatras.gr/broker/model/availabilitycontract"
+      nsPrefix="gr.upatras.ece.nam.broker.model.availabilitycontract">
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceServiceContract" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forOfferedService" lowerBound="1"
+          eType="#//services/Service"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forOfferedResource" lowerBound="1"
+          eType="#//resources/OfferedResource"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="StartDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="EndDate" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="availability" eType="#//availabilityContract/Availability"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Availability">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="FromTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ToTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cost" eType="#//availabilityContract/Cost"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="FromDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ToDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Repeatability" eType="#//availabilityContract/RepatabilityScheme"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Repeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="RepeatUntil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Cost">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="perUnit" eType="#//availabilityContract/costUnit"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="Amount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="costUnit">
+      <eLiterals name="MIN"/>
+      <eLiterals name="HOUR" value="1"/>
+      <eLiterals name="DAY" value="2"/>
+      <eLiterals name="USAGE" value="3"/>
+      <eLiterals name="OTHER" value="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RepatabilityScheme">
+      <eLiterals name="DAILY"/>
+      <eLiterals name="WEEKLY" value="1"/>
+      <eLiterals name="MONTHLY" value="2"/>
+      <eLiterals name="YEARLY" value="3"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="uiObjects" nsURI="http://nam.ece.upatras.gr/broker/model/uiObjects"
+      nsPrefix="gr.upatras.ece.nam.broker.model.uiObjects">
+    <eClassifiers xsi:type="ecore:EClass" name="ui_TaxonomyTreeItem">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentNode" eType="#//uiObjects/ui_TaxonomyTreeItem"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="DisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="childNodes" upperBound="-1"
+          eType="#//uiObjects/ui_TaxonomyTreeItem" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="brokerElement" eType="#//NamedElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BrokerManager">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="brokersRef" upperBound="-1"
+          eType="#//Broker"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="experimentRuntime" nsURI="http://nam.ece.upatras.gr/broker/model/experimentRuntime"
+      nsPrefix="gr.upatras.ece.nam.broker.model.experimentRuntime">
+    <eClassifiers xsi:type="ecore:EClass" name="RuntimeElement" eSuperTypes="#//NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//experimentRuntime/RuntimeElementStatus"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="GUID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RuntimeElementStatus">
+      <eLiterals name="NOT_EXISTS"/>
+      <eLiterals name="ONLINE" value="1"/>
+      <eLiterals name="OFFLINE" value="2"/>
+      <eLiterals name="STARTING" value="3"/>
+      <eLiterals name="STOPPING" value="4"/>
+      <eLiterals name="UPDATING" value="5"/>
+      <eLiterals name="ERROR" value="6"/>
+      <eLiterals name="UNKNOWN" value="7"/>
+      <eLiterals name="INITIALIZING" value="8" literal="INITIALIZING"/>
+      <eLiterals name="WAITING" value="9" literal="WAITING"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RunningScenarios">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requestedScenarios" upperBound="-1"
+          eType="#//federationscenarios/RequestedFederationScenario"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="extensionInterfaces" nsURI="http://nam.ece.upatras.gr/broker/model/extensionInterfaces"
+      nsPrefix="gr.upatras.ece.nam.broker.model.extensionInterfaces">
+    <eClassifiers xsi:type="ecore:EClass" name="IBrokerRepository" abstract="true"
+        interface="true">
+      <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="LoadScenario">
+        <eParameters name="fedScenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+      </eOperations>
+      <eOperations name="registerBrokerRepositoryListener">
+        <eParameters name="listener" eType="#//extensionInterfaces/IBrokerRepositoryListener"/>
+      </eOperations>
+      <eOperations name="loadBrokers" upperBound="-1" eType="#//Broker"/>
+      <eOperations name="getBrokers" upperBound="-1" eType="#//Broker"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IBrokerRepositoryListener" abstract="true"
+        interface="true">
+      <eOperations name="RepositoryChanged"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IProvisionResource" abstract="true"
+        interface="true">
+      <eOperations name="provisionResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="brokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="supportsBroker" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="brokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getSupportedBrokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="deleteResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="brokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="updateResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="brokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+        <eParameters name="assignedSetting" upperBound="-1" eType="#//federationscenarios/ResourceSettingInstance"/>
+      </eOperations>
+      <eOperations name="readResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="brokerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+        <eParameters name="assignedSetting" eType="#//federationscenarios/ResourceSettingInstance"/>
+        <eParameters name="forceUpdate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IWorkflowEngine" abstract="true" interface="true">
+      <eOperations name="getEngineName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="getRunningScenarios" eType="#//experimentRuntime/RunningScenarios"/>
+      <eOperations name="ScheduleScenario">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+      </eOperations>
+      <eOperations name="ShutDownScenario">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+      </eOperations>
+      <eOperations name="DeletePermanentlyScenario">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+      </eOperations>
+      <eOperations name="ShutDownResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="UpdateResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+        <eParameters name="assignedSetting" upperBound="-1" eType="#//federationscenarios/ResourceSettingInstance"/>
+      </eOperations>
+      <eOperations name="ReadResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+        <eParameters name="assignedSetting" eType="#//federationscenarios/ResourceSettingInstance"/>
+        <eParameters name="forceUpdate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IProvisioningJobListener" abstract="true"
+        interface="true">
+      <eOperations name="initialize">
+        <eParameters name="source" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </eOperations>
+      <eOperations name="eventOccured">
+        <eParameters name="event" eType="#//extensionInterfaces/IProvisioningJobEvent"/>
+      </eOperations>
+      <eOperations name="terminate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IProvisioningJobEvent" abstract="true"
+        interface="true">
+      <eOperations name="statusChangedOnScenario" eType="#//federationscenarios/RequestedFederationScenario"/>
+      <eOperations name="statusChangedOnResource" eType="#//federationscenarios/ResourceRequest"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="fcielements" nsURI="http://nam.ece.upatras.gr/broker/model/FCIElements"
+      nsPrefix="gr.upatras.ece.nam.broker.model.FCIElements">
+    <eClassifiers xsi:type="ecore:EClass" name="IFCIService" abstract="true" interface="true">
+      <eOperations name="getBroker" eType="#//Broker">
+        <eParameters name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="forceRefresh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="CreateResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="providerAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceTypeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="UpdateResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="providerAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceTypeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="runtimeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="DeleteResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="providerAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceTypeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="runtimeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="resourceReq" eType="#//federationscenarios/ResourceRequest"/>
+      </eOperations>
+      <eOperations name="getParameterValueOfResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="providerAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="runtimeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="paramName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getBroker" eType="#//Broker">
+        <eParameters name="authorizationKey" eType="#//fcielements/AuthorizationKey"/>
+        <eParameters name="forceRefresh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="broker" eType="#//Broker"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FCICredentials">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="credoptions" upperBound="-1"
+          eType="#//fcielements/StringToStringMap" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AuthorizationKey">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="credentials" eType="#//fcielements/FCICredentials"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringToStringMap" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

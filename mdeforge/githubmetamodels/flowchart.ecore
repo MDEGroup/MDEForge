@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="flowcharts"
+    nsURI="http://hu-berlin.de/flowchart" nsPrefix="flow">
+  <eClassifiers xsi:type="ecore:EClass" name="WorkflowDiagram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagramNodes" upperBound="-1"
+        eType="#//DiagramNode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startNode" lowerBound="1"
+        eType="#//StartNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endNode" lowerBound="1"
+        eType="#//Endnode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processOutput" upperBound="-1"
+        eType="#//ResourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processOutputOpt" upperBound="-1"
+        eType="#//ResourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagramArcs" upperBound="-1"
+        eType="#//DiagramArc" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processInput" upperBound="-1"
+        eType="#//ResourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processInputOpt" upperBound="-1"
+        eType="#//ResourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processCalls" upperBound="-1"
+        eType="#//Subprocess" eOpposite="#//Subprocess/subprocess"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramNode" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//DiagramArc" eOpposite="#//DiagramArc/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//DiagramArc" eOpposite="#//DiagramArc/src"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlFlowNode" abstract="true" eSuperTypes="#//DiagramNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivityNode" abstract="true" eSuperTypes="#//DiagramNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activityOutput" upperBound="-1"
+        eType="#//ResourceNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activityOutputOpt" upperBound="-1"
+        eType="#//ResourceNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activityInputOpt" upperBound="-1"
+        eType="#//ResourceNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activityInput" upperBound="-1"
+        eType="#//ResourceNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1.0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceNode" abstract="true" eSuperTypes="#//DiagramNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StartNode" eSuperTypes="#//SimpleNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Endnode" eSuperTypes="#//SimpleNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleNode" abstract="true" eSuperTypes="#//ControlFlowNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuredNode" abstract="true" eSuperTypes="#//ControlFlowNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childNodes" lowerBound="1"
+        upperBound="-1" eType="#//DiagramNode" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SplitNode" eSuperTypes="#//SimpleNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MergeNode" eSuperTypes="#//SimpleNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Flow" eSuperTypes="#//StructuredNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startNode" lowerBound="1"
+        upperBound="-1" eType="#//StartNode" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endNode" lowerBound="1"
+        upperBound="-1" eType="#//Endnode" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleActivity" eSuperTypes="#//ActivityNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Subprocess" eSuperTypes="#//ActivityNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subprocess" lowerBound="1"
+        eType="#//WorkflowDiagram" eOpposite="#//WorkflowDiagram/processCalls"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Workflow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
+        eType="#//WorkflowDiagram" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PersistentResource" eSuperTypes="#//ResourceNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TransientResource" eSuperTypes="#//ResourceNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="#//ResourceNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//ActivityNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramArc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" lowerBound="1" eType="#//DiagramNode"
+        eOpposite="#//DiagramNode/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//DiagramNode" eOpposite="#//DiagramNode/incoming"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1.0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+</ecore:EPackage>

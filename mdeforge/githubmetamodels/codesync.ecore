@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="codesync"
+    nsURI="http://www.flower-platform.com/xmi/codesync_1.0.0" nsPrefix="codesync">
+  <eClassifiers xsi:type="ecore:EClass" name="CodeSyncElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synchronized" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="childrenSynchronized" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="added" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statusFlags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="astCacheElement" eType="#//AstCacheElement"
+        eOpposite="#//AstCacheElement/codeSyncElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//CodeSyncElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="featureChanges" upperBound="-1"
+        eType="#//EStructuralFeatureToFeatureChangeEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStructuralFeatureToFeatureChangeEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FeatureChange"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureChange">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValueAsString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldValueAsContainmentList"
+        upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValueAsString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newValueAsContainmentList"
+        upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CodeSyncRoot" eSuperTypes="#//CodeSyncElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AstCacheElement" abstract="true" eSuperTypes="#//Serializable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="codeSyncElement" eType="#//CodeSyncElement"
+        eOpposite="#//CodeSyncElement/astCacheElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Serializable" instanceClassName="java.io.Serializable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScenarioElement" eSuperTypes="#//CodeSyncElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interaction" eType="#//CodeSyncElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindMapElement" eSuperTypes="#//CodeSyncElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icons" unique="false" upperBound="-1"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindMapRoot" eSuperTypes="#//CodeSyncRoot #//MindMapElement"/>
+</ecore:EPackage>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="flow" nsURI="http://www.obeo.fr/dsl/designer/sample/flow" nsPrefix="flow">
+  <eAnnotations source="Tags">
+    <details key="test"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="StateProcessor" eSuperTypes="#//Processor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//ComputationResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//AbstractState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="current" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="first" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fork">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" lowerBound="1" upperBound="-1"
+        eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractState" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Processor" eSuperTypes="#//FlowTarget #//CapacityBound #//FlowSource #//Powered">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="2"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="10"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fan" eSuperTypes="#//FlowElement #//Powered">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="speed" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1000"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Physical"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeProcessor" eSuperTypes="#//System #//FlowTarget #//CapacityBound #//FlowSource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DataFlow" eSuperTypes="#//CapacityBound">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//FlowTarget" eOpposite="#//FlowTarget/incomingFlows"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//FlowSource" eOpposite="#//FlowSource/outgoingFlows"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CapacityBound" eSuperTypes="#//FlowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="10"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="load" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="System" eSuperTypes="#//Powered">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="flows" upperBound="-1"
+        eType="#//DataFlow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//FlowElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temperature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerOutputs" upperBound="-1"
+        eType="#//PowerOutput" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerInputs" upperBound="-1"
+        eType="#//PowerInput" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerOutput">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1000"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//PowerLink" containment="true" eOpposite="#//PowerLink/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Powered" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="powerStatus" lowerBound="1"
+        eType="#//PoweredStatus"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PoweredStatus">
+    <eLiterals name="none"/>
+    <eLiterals name="low" value="1"/>
+    <eLiterals name="ok" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerInput"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerLink">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//PowerInput"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//PowerOutput"
+        eOpposite="#//PowerOutput/links"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowSource" abstract="true" eSuperTypes="#//FlowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingFlows" upperBound="-1"
+        eType="#//DataFlow" containment="true" eOpposite="#//DataFlow/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowTarget" abstract="true" eSuperTypes="#//FlowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingFlows" upperBound="-1"
+        eType="#//DataFlow" eOpposite="#//DataFlow/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataSource" eSuperTypes="#//FlowSource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="2"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//AbstractState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="catches" upperBound="-1"
+        eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="execute" upperBound="-1"
+        eType="#//Operation" eOpposite="#//Operation/calledBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" lowerBound="1" eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComputationResult" eSuperTypes="#//FlowSource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" lowerBound="1" eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+        eType="#//ComputationResult"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calledBy" upperBound="-1"
+        eType="#//State" eOpposite="#//State/execute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" lowerBound="1"
+        eType="#//FlowElementStatus" defaultValueLiteral="active"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usage" lowerBound="1" eType="#//FlowElementUsage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FlowElementStatus">
+    <eLiterals name="inactive"/>
+    <eLiterals name="active" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FlowElementUsage">
+    <eLiterals name="unused" literal="unused"/>
+    <eLiterals name="low" value="1" literal="low"/>
+    <eLiterals name="standard" value="2" literal="standard"/>
+    <eLiterals name="high" value="3" literal="high"/>
+    <eLiterals name="over" value="4" literal="over"/>
+  </eClassifiers>
+</ecore:EPackage>

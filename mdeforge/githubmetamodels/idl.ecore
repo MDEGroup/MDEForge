@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="idl"
+    nsURI="http:///gov/redhawk/eclipsecorba/idl.ecore" nsPrefix="idl">
+  <eClassifiers xsi:type="ecore:EClass" name="FileRegion" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startLine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endLine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endColumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true">
+    <eOperations name="setFullId">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral=""
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" transient="true" derived="true" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification" eSuperTypes="#//DefinitionContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Definition" abstract="true" eSuperTypes="#//Element #//Commentable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionContainer" abstract="true"
+      eSuperTypes="#//FileRegion">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definitions" upperBound="-1"
+        eType="#//Definition" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//Identifiable #//FileRegion"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Declarator" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayDeclarator" eSuperTypes="#//Declarator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySizeExpressions" upperBound="-1"
+        eType="ecore:EClass expressions.ecore#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//Element #//Typed"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Typed" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//IdlType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="#//Definition #//DefinitionContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" eType="#//Module"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdlConstDcl" eSuperTypes="#//TypedElement #//Definition #//Export">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass expressions.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdlException" eSuperTypes="#//Definition #//Export #//MemberContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Member" eSuperTypes="#//TypedElement #//Commentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarators" upperBound="-1"
+        eType="#//Declarator" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MemberContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForwardDcl" eSuperTypes="#//IdlTypeDcl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implementation" eType="#//IdlInterfaceDcl"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdlInterfaceDcl" eSuperTypes="#//IdlTypeDcl #//DefinitionContainer #//ExportContainer">
+    <eOperations name="isInstance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Determines if the specified &lt;code>IdlTypeDcl&lt;/code> is assignment-compatible&#xA;with the object represented by this &lt;code>IdlInterfaceDcl&lt;/code>.  This method is&#xA;the dynamic equivalent of the Java language &lt;code>instanceof&lt;/code>&#xA;operator. The method returns &lt;code>true&lt;/code> if the specified&#xA;&lt;code>IdlTypeDcl&lt;/code> argument is non-null and can be cast to the&#xA;reference type represented by this &lt;code>IdlInterfaceDcl&lt;/code> object without&#xA;raising a &lt;code>ClassCastException.&lt;/code> It returns &lt;code>false&lt;/code>&#xA;otherwise.&#xA;&#xA;&lt;p> Specifically, if this &lt;code>IdlInterfaceDcl&lt;/code> this method returns &lt;code>true&lt;/code> if the&#xA;interface or any superinterface of the specified &lt;code>IdlTypeDcl&lt;/code> argument&#xA;implements this interface; it returns &lt;code>false&lt;/code> otherwise.&#xA;&#xA;@return  true if &lt;code>obj&lt;/code> is an instance of this class&#xA;&#xA;@since 2.0"/>
+      </eAnnotations>
+      <eParameters name="obj" eType="#//IdlTypeDcl">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="obj the object to check"/>
+        </eAnnotations>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedInterfaces" upperBound="-1"
+        eType="#//IdlInterfaceDcl"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forwardDcl" eType="#//ForwardDcl"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Export" abstract="true" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IdlType" abstract="true" eSuperTypes="#//FileRegion"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IdlTypeDcl" abstract="true" eSuperTypes="#//Definition #//IdlType #//Export"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Commentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comment" eType="#//Comment"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExportContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" upperBound="-1" eType="#//Export"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" abstract="true" eSuperTypes="#//FileRegion">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockComment" eSuperTypes="#//Comment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LineComment" eSuperTypes="#//Comment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NativeTypeDcl" eSuperTypes="#//IdlTypeDcl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarator" eType="#//Declarator"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueType" eSuperTypes="#//FileRegion"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueTypeDcl" eSuperTypes="#//Definition #//ValueType #//Export"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueForwardDcl" eSuperTypes="#//ValueTypeDcl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ValueDcl"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueDcl" eSuperTypes="#//ValueTypeDcl #//ExportContainer #//DefinitionContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedValues" upperBound="-1"
+        eType="#//ValueDcl"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supportsInterface" upperBound="-1"
+        eType="#//IdlInterfaceDcl"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="custom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forwardDcl" eType="#//ValueForwardDcl"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueBoxDcl" eSuperTypes="#//ValueTypeDcl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeSpec" eType="#//IdlType"/>
+  </eClassifiers>
+</ecore:EPackage>

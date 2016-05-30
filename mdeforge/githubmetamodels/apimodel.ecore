@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="apimodel"
+    nsURI="com.sysfera.codegen.apimodel" nsPrefix="">
+  <eClassifiers xsi:type="ecore:EClass" name="API">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//Module" containment="true" eOpposite="#//Module/api"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="envVariableList" eType="#//EnvVariableList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jobEnvVariableList" eType="#//JobEnvVariableList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeList" eType="#//TypeList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="api" eType="#//API" eOpposite="#//API/modules"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true" eOpposite="#//Service/module"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeList" eType="#//TypeList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultCodeList" eType="#//ResultCodeList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" eType="#//Module"
+        eOpposite="#//Module/services"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/service"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adminOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCommand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFunction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies that this service is part of the programmatic API as a function"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultCodes" upperBound="-1"
+        eType="#//ResultCode" eKeys="#//ResultCode/value"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedServices" upperBound="-1"
+        eType="#//Service" eOpposite="#//Service/usedByServices"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedByServices" upperBound="-1"
+        eType="#//Service" eOpposite="#//Service/usedServices"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="details" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStringToStringMapEntry"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useJobEnv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies that this service is part of the programmatic API as a function"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" eType="#//Service"
+        eOpposite="#//Service/ports"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//portDirection"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usage" eType="#//APIUsage"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortOptionLetter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="longOptionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="envOption" eType="#//EnvVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="details" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStringToStringMapEntry"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isUserOption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvVariableList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="envVariables" upperBound="-1"
+        eType="#//EnvVariable" containment="true" eKeys="#//EnvVariable/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JobEnvVariableList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="envVariables" upperBound="-1"
+        eType="#//EnvVariable" containment="true" eKeys="#//EnvVariable/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResultCode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usage" eType="#//APIUsage"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="diagnostic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResultCodeList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultCodes" upperBound="-1"
+        eType="#//ResultCode" containment="true" eKeys="#//ResultCode/value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ECoreType" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClassifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//Type" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eTypes" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClassifier"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="portDirection">
+    <eLiterals name="IN" literal="IN"/>
+    <eLiterals name="OUT" value="1" literal="OUT"/>
+    <eLiterals name="INOUT" value="2" literal="INOUT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="APIUsage">
+    <eLiterals name="ALL" literal="ALL"/>
+    <eLiterals name="API_ONLY" value="1"/>
+    <eLiterals name="CLI_ONLY" value="2"/>
+    <eLiterals name="WS_ONLY" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

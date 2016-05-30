@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="predicate"
+    nsURI="http:///org/eclipse/stem/core/predicate.ecore" nsPrefix="org.eclipse.stem.core.predicate">
+  <eClassifiers xsi:type="ecore:EClass" name="And" eSuperTypes="#//NaryBooleanOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" abstract="true" eSuperTypes="#//Predicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanOperator" abstract="true" eSuperTypes="#//BooleanExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="False" eSuperTypes="#//Test"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NaryBooleanOperator" abstract="true"
+      eSuperTypes="#//BooleanOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//Predicate" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Not" eSuperTypes="#//UnaryBooleanOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Or" eSuperTypes="#//NaryBooleanOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Predicate" abstract="true">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="time" eType="ecore:EClass model.ecore#//STEMTime"/>
+      <eParameters name="timerPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eParameters name="action" eType="ecore:EClass model.ecore#//Decorator"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PredicateReference" eSuperTypes="#//Predicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" eType="#//Predicate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Test" abstract="true" eSuperTypes="#//Predicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="True" eSuperTypes="#//Test"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UnaryBooleanOperator" abstract="true"
+      eSuperTypes="#//BooleanOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//Predicate"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PredicateExpression" eSuperTypes="#//BooleanExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" eType="#//Predicate"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiablePredicate" abstract="true"
+      eSuperTypes="common.ecore#//Identifiable #//Predicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiablePredicateExpression" eSuperTypes="#//IdentifiablePredicate #//PredicateExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiableTest" abstract="true" eSuperTypes="#//IdentifiablePredicate #//Test"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeTest" abstract="true" eSuperTypes="#//Test"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbsoluteTimeTest" eSuperTypes="#//TimeTest">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="time" eType="ecore:EClass model.ecore#//STEMTime"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElapsedTimeTest" eSuperTypes="#//TimeTest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceTimeValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elapsedMilliseconds" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        changeable="false" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberofDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceTime" eType="ecore:EClass model.ecore#//STEMTime"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+</ecore:EPackage>

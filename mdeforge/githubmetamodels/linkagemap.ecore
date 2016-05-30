@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="linkagemap"
+    nsURI="http:///org/generationcp/model/data/genotype/linkagemap.ecore" nsPrefix="org.generationcp.model.data.genotype.linkagemap">
+  <eClassifiers xsi:type="ecore:EClass" name="Chromosome" eSuperTypes="#//LinkageMap"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelatedLinkageMapSet" eSuperTypes="map.ecore#//CorrelatedMapSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consensusMap" eType="#//LinkageMap"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CytogeneticMap" eSuperTypes="#//PhysicalMap"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Gene" eSuperTypes="#//GenomicFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="geneProduct" upperBound="-1"
+        eType="ecore:EClass expression.ecore#//GeneProduct" eOpposite="expression.ecore#//GeneProduct/gene"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneticMap" eSuperTypes="#//LinkageMap"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicFeature" eSuperTypes="map.ecore#//MapFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="genomicFeatureVariants"
+        lowerBound="1" upperBound="-1" eType="ecore:EClass genotype.ecore#//GenomicFeatureVariant"
+        eOpposite="genotype.ecore#//GenomicFeatureVariant/genomicFeature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicMapStudy" eSuperTypes="genotype.ecore#//GenotypeStudy">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappedGermplasm" eType="ecore:EClass germplasm.ecore#//GermplasmSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkageMaps" lowerBound="1"
+        upperBound="-1" eType="#//LinkageMap" eOpposite="#//LinkageMap/mapStudy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HapMap" eSuperTypes="#//LinkageMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="haplotypeBlocks" lowerBound="1"
+        upperBound="-1" eType="#//HaplotypeBlock" eOpposite="#//HaplotypeBlock/hapMap"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HaplotypeBlock" eSuperTypes="#//LinkageMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hapMap" lowerBound="1"
+        eType="#//HapMap" eOpposite="#//HapMap/haplotypeBlocks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="haplotypeSet" eType="ecore:EClass genotype.ecore#//HaplotypeSet"
+        eOpposite="genotype.ecore#//HaplotypeSet/haplotypeBlock"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkageMap" eSuperTypes="map.ecore#//Map">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="chromosome" lowerBound="1"
+        eType="#//Chromosome" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="length" lowerBound="1"
+        eType="ecore:EClass feature.ecore#//Feature" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapStudy" lowerBound="1"
+        eType="#//GenomicMapStudy" eOpposite="#//GenomicMapStudy/linkageMaps"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappedSpecies" eSuperTypes="germplasm.ecore#//Species">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapStudies" upperBound="-1"
+        eType="#//GenomicMapStudy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalMap" eSuperTypes="#//LinkageMap"/>
+</ecore:EPackage>

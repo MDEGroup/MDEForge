@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="SmartHouse" nsURI="http://dsg.cs.tcd.ie/smarthouse" nsPrefix="SmartHouse">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="House">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="TooExpensiveToUseThemTogether SuperExpensiveNotUseAnything WatchDog NoWindowOpenWhenSecOn User__VeryNotSafe"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="TooExpensiveToUseThemTogether" value="eprice > 15 implies ev->forAll(e : EV | e.charging = false) or not wh.on or room.heating->flatten()->forAll(e : Heating | e.level &lt; 3)"/>
+      <details key="SuperExpensiveNotUseAnything" value="eprice > 20 implies ev->forAll(e : EV | e.charging = false) and not wh.on and room.heating->flatten()->forAll(e : Heating | e.level = 0)"/>
+      <details key="WatchDog" value="gate.outlocked implies sec.on"/>
+      <details key="NoWindowOpenWhenSecOn" value="sec.on implies room->select(e : Room | e.name = 'liv').window->flatten()->forAll(e : Window | e.opened = false)"/>
+      <details key="User__VeryNotSafe" value="gate.outlocked implies sec.on = true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eprice" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outtemp" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" ordered="false" upperBound="-1"
+        eType="#//Room" containment="true" eOpposite="#//Room/house"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false"
+        upperBound="-1" eType="#//Person" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wh" ordered="false" eType="#//WaterHeater"
+        containment="true" eOpposite="#//WaterHeater/house"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ev" ordered="false" upperBound="-1"
+        eType="#//EV" containment="true" eOpposite="#//EV/house"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gate" ordered="false" eType="#//Gate"
+        containment="true" eOpposite="#//Gate/house"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sec" ordered="false" eType="#//Security"
+        containment="true" eOpposite="#//Security/house"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outlocked" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="house" ordered="false"
+        lowerBound="1" eType="#//House" eOpposite="#//House/gate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Security">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="house" ordered="false"
+        lowerBound="1" eType="#//House" eOpposite="#//House/sec"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WaterHeater">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="DoNotHeatItForever ColdWaterNeedHeating INeedHotWaterInTheMorning User__HotWaterAlways"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="DoNotHeatItForever" value="temp &lt; 50 or not on"/>
+      <details key="ColdWaterNeedHeating" value="temp &lt; 30 implies on"/>
+      <details key="INeedHotWaterInTheMorning" value="house.time &lt; 2 or house.time > 8 or on"/>
+      <details key="User__HotWaterAlways" value="temp &lt; 30 and (house.time &lt; 2 or house.time > 8) implies on = true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temp" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boost" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="house" ordered="false"
+        lowerBound="1" eType="#//House" eOpposite="#//House/wh"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EV">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="LowLeveNeedCharge LowPricePleaseCharge"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="LowLeveNeedCharge" value="if pluged then level &lt; 30 implies charging else true endif"/>
+      <details key="LowPricePleaseCharge" value="if pluged then house.eprice &lt; 10 implies charging else true endif"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pluged" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charging" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="house" ordered="false"
+        lowerBound="1" eType="#//House" eOpposite="#//House/ev"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Room">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="TooColdNeedHeating ExtremelyColdNeedMoreHeating NoWindowOpenWhenHeating NoWindowOpenWhenHeating NoHeatingAndCoolingTogether TooLateNoShouting ProjectingInDarkness INeedFreshAir TooColdToOpenWindow User__AlwaysOpenWindow User__AlwaysTurnOnFirstHeating User__ILoveCurtains"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="TooColdNeedHeating" value="temp &lt; 18 implies heating->exists(e : Heating | e.level > 0)"/>
+      <details key="ExtremelyColdNeedMoreHeating" value="temp &lt; 10 implies heating.level->sum() > 3 * heating->size()"/>
+      <details key="NoWindowOpenWhenHeating" value="window->forAll(e : Window | e.opened = false) or ac->forAll(e : AirConditioner | e.level = 0)"/>
+      <details key="NoHeatingAndCoolingTogether" value="heating->forAll(e : Heating | e.level = 0) or ac->forAll(e : AirConditioner | e.level = 0)"/>
+      <details key="TooLateNoShouting" value="house.time > 22 implies projector.volume &lt; 4"/>
+      <details key="ProjectingInDarkness" value="projector.on and bright > 500 implies light->forAll(e : Light | e.level = 0) and window->forAll(e : Window | e.curtainOn)"/>
+      <details key="INeedFreshAir" value="air > 5 implies window->exists(e : Window | e.opened)"/>
+      <details key="TooColdToOpenWindow" value="house.outtemp > 5 or window->forAll(e : Window | not e.opened)"/>
+      <details key="User__AlwaysOpenWindow" value="air > 6 and house.outtemp >= 10 implies window->asSequence()->first().opened = true"/>
+      <details key="User__AlwaysTurnOnFirstHeating" value="temp &lt; 10 and house.eprice &lt; 20 implies heating->asSequence()->first().level = 10"/>
+      <details key="User__ILoveCurtains" value="projector.on implies window->asSequence()->first().curtainOn = true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temp" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bright" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="air" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="house" ordered="false"
+        eType="#//House" eOpposite="#//House/room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="window" ordered="false"
+        upperBound="-1" eType="#//Window" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="heating" ordered="false"
+        upperBound="-1" eType="#//Heating" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="light" ordered="false"
+        upperBound="-1" eType="#//Light" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ac" ordered="false" upperBound="-1"
+        eType="#//AirConditioner" containment="true" eOpposite="#//AirConditioner/room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occupied" ordered="false"
+        upperBound="-1" eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensor" ordered="false"
+        upperBound="-1" eType="#//Sensor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projector" ordered="false"
+        lowerBound="1" eType="#//Projector" containment="true" eOpposite="#//Projector/room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cooker" ordered="false"
+        eType="#//Cooker" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wm" ordered="false" eType="#//WashingMachine"
+        containment="true" eOpposite="#//WashingMachine/room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cm" ordered="false" eType="#//CoffeeMaker"
+        containment="true" eOpposite="#//CoffeeMaker/room"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Heating">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Window">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="curtainOn" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opened" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AirConditioner">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="TooHotOpenAC CodeNoAC HotOutside User__HotOutside"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="TooHotOpenAC" value="room.temp > 28 implies level > 5"/>
+      <details key="CodeNoAC" value="room.temp &lt; 23 implies level = 0"/>
+      <details key="HotOutside" value="room.house.outtemp > 30 implies level > 5"/>
+      <details key="User__HotOutside" value="level > 0 implies level = 9"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="freshAir" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" ordered="false" lowerBound="1"
+        eType="#//Room" eOpposite="#//Room/ac"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Light">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="User__LightWideOpen"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="User__LightWideOpen" value="level &lt;> 0 implies level = 5"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Projector">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="TooNoisyToWatchTVWhenWashing"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="TooNoisyToWatchTVWhenWashing" value="if room.wm &lt;> null then not room.wm.on or not on else true endif"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brightness" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volume" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" ordered="false" lowerBound="1"
+        eType="#//Room" eOpposite="#//Room/projector"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WashingMachine">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="OnWhenLoaded User__WashImmediately"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="OnWhenLoaded" value="loaded implies on"/>
+      <details key="User__WashImmediately" value="loaded implies on = true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loaded" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" ordered="false" lowerBound="1"
+        eType="#//Room" eOpposite="#//Room/wm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="RunningOutOfPower"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="RunningOutOfPower" value="battery &lt; 20 implies circle &lt; 30"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="temp" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="air" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="brightness" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="battery" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="circle" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal">
+      <eAnnotations source="config">
+        <details key="domain" value="0..10"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cooker">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoffeeMaker">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="MakeCoffeeForMeInTheMorning NoCarNoCoffee KeepItWarm KeepItWarm User__IWantWarmed"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="MakeCoffeeForMeInTheMorning" value="room.house.time = 7 and loaded implies on"/>
+      <details key="NoCarNoCoffee" value="room.house.ev->exists(e : EV | e.pluged) or on"/>
+      <details key="KeepItWarm" value="room.temp > 20 implies not warming"/>
+      <details key="User__IWantWarmed" value="loaded implies warming = true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loaded" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="warming" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="config"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" ordered="false" lowerBound="1"
+        eType="#//Room" eOpposite="#//Room/cm"/>
+  </eClassifiers>
+</ecore:EPackage>

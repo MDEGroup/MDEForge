@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="genotype"
+    nsURI="http:///org/generationcp/model/data/genotype.ecore" nsPrefix="org.generationcp.model.data.genotype">
+  <eClassifiers xsi:type="ecore:EClass" name="DetectedVariant" eSuperTypes="#//MolecularVariant">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="detector" lowerBound="1"
+        eType="#//GenomicFeatureDetector" eOpposite="#//GenomicFeatureDetector/detectedVariants"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assayData" upperBound="-1"
+        eType="#//NormalizedAssayData" eOpposite="#//NormalizedAssayData/alleleCall"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fingerprint" eSuperTypes="#//MolecularVariantSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicFeatureAssay" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="detector" eType="#//GenomicFeatureDetector"
+        eOpposite="#//GenomicFeatureDetector/assays"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="protocol" eType="#//GenomicFeatureDetectionProtocol"
+        eOpposite="#//GenomicFeatureDetectionProtocol/assays"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicFeatureDetectionProtocol" eSuperTypes="publication.ecore#//Protocol">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assays" upperBound="-1"
+        eType="#//GenomicFeatureAssay" eOpposite="#//GenomicFeatureAssay/protocol"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicFeatureDetector" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assays" upperBound="-1"
+        eType="#//GenomicFeatureAssay" eOpposite="#//GenomicFeatureAssay/detector"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="detectedVariants" lowerBound="1"
+        upperBound="-1" eType="#//DetectedVariant" eOpposite="#//DetectedVariant/detector"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenomicFeatureVariant" eSuperTypes="#//DetectedVariant">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="genomicFeature" lowerBound="1"
+        eType="ecore:EClass linkagemap.ecore#//GenomicFeature" eOpposite="linkagemap.ecore#//GenomicFeature/genomicFeatureVariants"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenotypeStudy" eSuperTypes="experiment.ecore#//LaboratoryGermplasmStudy">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="markers" upperBound="-1"
+        eType="#//GenomicFeatureAssay"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Haplotype" eSuperTypes="#//MolecularVariantSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="haplotypeSet" eType="#//HaplotypeSet"
+        eOpposite="#//HaplotypeSet/haplotypes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HaplotypeSet" eSuperTypes="feature.ecore#//SimpleFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="haplotypeBlock" eType="ecore:EClass linkagemap.ecore#//HaplotypeBlock"
+        eOpposite="linkagemap.ecore#//HaplotypeBlock/haplotypeSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="haplotypes" lowerBound="1"
+        upperBound="-1" eType="#//Haplotype" eOpposite="#//Haplotype/haplotypeSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MolecularVariant" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="ecore:EClass sequence.ecore#//Sequence"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MolecularVariantIdentifier" eSuperTypes="identification.ecore#//SimpleIdentifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MolecularVariantSet" eSuperTypes="feature.ecore#//SimpleFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="molecularVariants" upperBound="-1"
+        eType="#//MolecularVariantIdentifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormalizedAssayData" eSuperTypes="study.ecore#//Variate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rawData" lowerBound="1"
+        eType="#//RawAssayData" eOpposite="#//RawAssayData/normalizedData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alleleCall" eType="#//DetectedVariant"
+        eOpposite="#//DetectedVariant/assayData"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RawAssayData" eSuperTypes="study.ecore#//Variate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="normalizedData" lowerBound="1"
+        eType="#//NormalizedAssayData" eOpposite="#//NormalizedAssayData/rawData"/>
+  </eClassifiers>
+</ecore:EPackage>

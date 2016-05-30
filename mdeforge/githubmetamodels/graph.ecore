@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="egt"
+    nsURI="http:///pl/zgora/uz/egt.ecore" nsPrefix="pl.zgora.uz.egt">
+  <eClassifiers xsi:type="ecore:EClass" name="Vertex">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//Colors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//Edge" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Image" instanceClassName="org.eclipse.swt.graphics.Image"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ColorRegistry">
+    <eOperations name="init"/>
+    <eOperations name="dispose">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// TODO"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="images" upperBound="5"
+        eType="#//Image"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Colors">
+    <eLiterals name="clean"/>
+    <eLiterals name="touched" value="1"/>
+    <eLiterals name="performed" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Edge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentVertex" eType="#//Vertex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//Colors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiEdge" eSuperTypes="#//Edge"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vertexes" upperBound="-1"
+        eType="#//Vertex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colorRegistry" eType="#//ColorRegistry"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleEdge" eSuperTypes="#//Edge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" eType="#//SingleEdge"/>
+  </eClassifiers>
+</ecore:EPackage>

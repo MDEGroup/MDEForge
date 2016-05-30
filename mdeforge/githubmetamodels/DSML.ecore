@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dsml" nsURI="com.car.dsml" nsPrefix="dsml">
+  <eSubpackages name="web" nsURI="dsml.web" nsPrefix="dsml">
+    <eClassifiers xsi:type="ecore:EClass" name="Website">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Pages" lowerBound="1"
+          upperBound="-1" eType="#//web/Page" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Page">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Form" eType="#//web/Form"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Texts" upperBound="-1"
+          eType="#//web/Text" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Links" upperBound="-1"
+          eType="#//web/Link" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Field" abstract="true" interface="true"
+        eSuperTypes="#//web/FormElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Validator" upperBound="-1"
+          eType="#//web/Validator" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TextField" eSuperTypes="#//web/Field">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxlength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PasswordField" eSuperTypes="#//web/Field">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxlength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Label" eSuperTypes="#//web/FormElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Button" abstract="true" interface="true"
+        eSuperTypes="#//web/FormElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RadioButton" eSuperTypes="#//web/ListField"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckBox" eSuperTypes="#//web/FormElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SubmitButton" eSuperTypes="#//web/Button"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CancelButton" eSuperTypes="#//web/Button"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Item">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Select" eSuperTypes="#//web/ListField">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ListField" abstract="true" interface="true"
+        eSuperTypes="#//web/FormElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Items" upperBound="-1"
+          eType="#//web/Item" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TextArea" eSuperTypes="#//web/Field">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rows" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResetButton" eSuperTypes="#//web/Button"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Link">
+      <eOperations name="accept" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="visitor" eType="#//visitor/Visitor"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="LinkedPage" eType="#//web/Page"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FormElement" abstract="true" interface="true">
+      <eOperations name="accept" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="visitor.treatElement(this);"/>
+        <eParameters name="visitor" eType="#//visitor/Visitor"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Hidden" eSuperTypes="#//web/FormElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Form">
+      <eOperations name="accept" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="visitor" eType="#//visitor/Visitor"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="FormElements" upperBound="-1"
+          eType="#//web/FormElement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Success" eType="#//web/Success"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Error" eType="#//web/Error"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Text">
+      <eOperations name="accept" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="visitor" eType="#//visitor/Visitor"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Validator" abstract="true" interface="true">
+      <eOperations name="accept" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="visitor" eType="#//visitor/Visitor"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DateValidator" eSuperTypes="#//web/Validator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EmailValidator" eSuperTypes="#//web/Validator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Required" eSuperTypes="#//web/Validator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeValidator" eSuperTypes="#//web/Validator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="URLValidator" eSuperTypes="#//web/Validator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TypeValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//web/Type"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GreaterThanValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LessThanValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BetweenValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueG" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RegexValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="regex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringLengthValidator" eSuperTypes="#//web/Validator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Type">
+      <eLiterals name="int"/>
+      <eLiterals name="float" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Success">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="SuccessPage" eType="#//web/Page"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Error">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ErrorPage" eType="#//web/Page"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="visitor" nsURI="dsml.visitor" nsPrefix="visitor">
+    <eClassifiers xsi:type="ecore:EClass" name="JSPVisitor" eSuperTypes="#//visitor/Visitor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Visitor" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceVisitor" eSuperTypes="#//visitor/Visitor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="POJOVisitor" eSuperTypes="#//visitor/Visitor"/>
+  </eSubpackages>
+</ecore:EPackage>

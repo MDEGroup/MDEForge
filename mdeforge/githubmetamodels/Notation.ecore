@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="notation"
+    nsURI="http://www.flower-platform.com/xmi/notation_1.0.0" nsPrefix="notation">
+  <eClassifiers xsi:type="ecore:EClass" name="NotationElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idBeforeRemoval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="View" abstract="true" eSuperTypes="#//NotationElement">
+    <eOperations name="getAllChildren" upperBound="-1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistentChildren" upperBound="-1"
+        eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewDetails" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagrammableElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEdges" upperBound="-1"
+        eType="#//Edge" eOpposite="#//Edge/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetEdges" upperBound="-1"
+        eType="#//Edge" eOpposite="#//Edge/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layoutConstraint" eType="#//Bounds"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Edge" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//View"
+        eOpposite="#//View/sourceEdges"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//View"
+        eOpposite="#//View/targetEdges"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//View">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistentEdges" upperBound="-1"
+        eType="#//Edge" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LayoutConstraint" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//NotationElement #//LayoutConstraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Bounds" eSuperTypes="#//Location">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Note" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindMapNode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expanded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasChildren" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="side" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

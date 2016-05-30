@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="timingd"
+    nsURI="http://www.eclipse.org/mdt/uml2tools/timing-diagram/1.0" nsPrefix="uml2t.timingd">
+  <eClassifiers xsi:type="ecore:EClass" name="DFrameContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pakkage" eType="#//UMLPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frames" upperBound="-1"
+        eType="#//DFrame" containment="true" eOpposite="#//DFrame/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DFrame">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//DFrameContainer"
+        eOpposite="#//DFrameContainer/frames"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interaction" lowerBound="1"
+        eType="#//UMLInteraction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" lowerBound="1"
+        upperBound="-1" eType="#//DBlock" containment="true" eOpposite="#//DBlock/frame"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intervals" upperBound="-1"
+        eType="#//DInterval" containment="true" eOpposite="#//DInterval/frame"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//DMessage" containment="true" eOpposite="#//DMessage/frame"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lifeline" eType="#//UMLLifeline"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frame" eType="#//DFrame"
+        eOpposite="#//DFrame/blocks"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//DValueLine" containment="true" eOpposite="#//DValueLine/block"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="switches" upperBound="-1"
+        eType="#//DStateSwitch" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" upperBound="-1"
+        eType="#//DPointConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ticks" upperBound="-1"
+        eType="#//DTick" containment="true" eOpposite="#//DTick/block"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DValueLine">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//DBlock"
+        eOpposite="#//DBlock/states"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariantTemplate" eType="#//UMLConstraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segments" upperBound="-1"
+        eType="#//DSegment" containment="true" eOpposite="#//DSegment/state"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSegment">
+    <eOperations name="isClosedSegment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="#//DValueLine"
+        eOpposite="#//DValueLine/segments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//DSegmentStart"
+        containment="true" eOpposite="#//DSegmentStart/segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//DSegmentEnd"
+        containment="true" eOpposite="#//DSegmentEnd/segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="middlePoints" upperBound="-1"
+        eType="#//DSegmentMiddlePoint" containment="true" eOpposite="#//DSegmentMiddlePoint/segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endSwitch" eType="#//DStateSwitch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startOccurrence" eType="#//UMLOccurrenceSpecification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSegmentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occurrence" eType="#//UMLOccurrenceSpecification"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debugId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tick" eType="#//DTick"
+        eOpposite="#//DTick/subject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSegmentMiddlePoint" eSuperTypes="#//DSegmentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segment" eType="#//DSegment"
+        eOpposite="#//DSegment/middlePoints"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSegmentStart" eSuperTypes="#//DSegmentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateInvariant" eType="#//UMLStateInvariant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segment" eType="#//DSegment"
+        eOpposite="#//DSegment/start"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingSwitch" eType="#//DStateSwitch"
+        eOpposite="#//DStateSwitch/toSegmentStart"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DSegmentEnd" eSuperTypes="#//DSegmentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segment" eType="#//DSegment"
+        eOpposite="#//DSegment/end"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="switch" eType="#//DStateSwitch"
+        eOpposite="#//DStateSwitch/fromSegmentEnd"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DStateSwitch">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromSegmentEnd" eType="#//DSegmentEnd"
+        eOpposite="#//DSegmentEnd/switch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toSegmentStart" eType="#//DSegmentStart"
+        eOpposite="#//DSegmentStart/incomingSwitch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromSegment" eType="#//DSegment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toSegment" eType="#//DSegment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromValueLine" eType="#//DValueLine"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toValueLine" eType="#//DValueLine"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DMessage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="umlMessage" eType="#//UMLMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frame" eType="#//DFrame"
+        eOpposite="#//DFrame/messages"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageSource" eType="#//DSegmentElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageTarget" eType="#//DSegmentElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DInterval">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="durationConstraint" eType="#//UMLDurationConstraint"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frame" eType="#//DFrame"
+        eOpposite="#//DFrame/intervals"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromTick" eType="#//DTick"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toTick" eType="#//DTick"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DPointConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//UMLConstraint"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintedSegmentElement"
+        eType="#//DSegmentElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTick">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occurrence" eType="#//UMLOccurrenceSpecification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//DBlock"
+        eOpposite="#//DBlock/ticks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" eType="#//DSegmentElement"
+        eOpposite="#//DSegmentElement/tick"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLConstraint" instanceClassName="org.eclipse.uml2.uml.Constraint"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLStateInvariant" instanceClassName="org.eclipse.uml2.uml.StateInvariant"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLInteraction" instanceClassName="org.eclipse.uml2.uml.Interaction"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLPackage" instanceClassName="org.eclipse.uml2.uml.Package"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLLifeline" instanceClassName="org.eclipse.uml2.uml.Lifeline"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLOccurrenceSpecification" instanceClassName="org.eclipse.uml2.uml.OccurrenceSpecification"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLMessage" instanceClassName="org.eclipse.uml2.uml.Message"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UMLDurationConstraint" instanceClassName="org.eclipse.uml2.uml.DurationConstraint"
+      abstract="true" interface="true"/>
+</ecore:EPackage>

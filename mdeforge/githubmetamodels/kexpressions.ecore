@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="kexpressions"
+    nsURI="http://kieler.cs.cau.de/kexpressions/0.1.2" nsPrefix="kexpressions">
+  <eClassifiers xsi:type="ecore:EEnum" name="CombineOperator">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Built-in operators that can be used as Signal combine operators."/>
+    </eAnnotations>
+    <eLiterals name="NONE" literal="NONE">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies that no combine operator is given. "/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="ADD" value="1" literal="+">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic addition."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MULT" value="2" literal="*">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic multiplication.&#xA;"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MAX" value="5" literal="max">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The maximum function. Takes the greater of the given two."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MIN" value="6" literal="min">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The minimum function. Takes the lesser of the given two."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="OR" value="4" literal="or">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Logical or function for boolean valued signals."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="AND" value="3" literal="and">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Logical and for boolean valued signals."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="HOST" literal="host">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies that no built-in combine operator should be used &#xA;but the operator given in the hostCombineOperator field given as a String and &#xA;referencing some function of the host language (maybe C or Java, etc. ) ."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexExpression" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A ComplexExpression is an Expression that contains a list of sub expressions.&#xA;This does make sense mainly for it subtypes. It does not carry an operator&#xA;or something similar itself, because sub expressions make also sense in some&#xA;contexts without an operator, e.g. for SignalReferences."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subExpressions" upperBound="-1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Expression is the supertype of all kinds of Expressions over Signals, Variables or Values. &#xA;It is used as a simple common entry point. In this metamodel there are no more specializations avaliable&#xA;according to return value of the Expressions (e.g. BooleanExpression or ValuedExpression). These&#xA;might be provided by more specialized textual grammars for this metamodel."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextualCode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="TextualCode carries an arbitrary String. It is used as an escape to external host languages&#xA;such as C or Java. A type String can be used to specify what kind of language is represented&#xA;by the code String.&#xA;Subclasses such as TextExpression or TextEffect (synccharts metamodel) can be used to employ it in the&#xA;corresponding context. &#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OperatorType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="OperatorTypes are used for OperatorExpressions. &#xA;The types may reference any corresponding&#xA;operator or function that may make use of&#xA;an arbitrary number of subExpressions. Hence it&#xA;contains unary and binary operators."/>
+    </eAnnotations>
+    <eLiterals name="EQ" value="1" literal="=">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Equals operator"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="LT" value="2" literal="&lt;">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Less than operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="LEQ" value="3" literal="&lt;=">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Less or Equal operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="GT" value="12" literal=">">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Greater than operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="GEQ" value="10" literal=">=">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Greater or Equal operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NOT" literal="not">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Logical Negation operator (unary)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="VAL" value="15" literal="?">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Value operator. Returns the value of a Signal referenced by a SignalReference."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="PRE" value="11" literal="pre">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Pre operator, returns the previous state of a Signal referenced by a SignalReference."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NE" value="14" literal="&lt;>">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Not Equal operator.&#xA;"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="AND" value="4" literal="and">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Logical AND operator.&#xA;"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="OR" value="5" literal="or">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Logical OR operator."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="ADD" value="6" literal="+">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic addition operator."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="SUB" value="7" literal="-">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic subtraction operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MULT" value="8" literal="*">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic multiplication operator."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="DIV" value="9" literal="/">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Aithmetic division operator. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MOD" value="13" literal="mod">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Arithmetic modulo operation. (Not commutative!)"/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Signal" eSuperTypes="#//ValuedObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Signal is the first-class data object in synchronous languages used for communication.&#xA;Signals extend ValuedObject and therefore have a name and may carry a value. A Signal can&#xA;be part of a module's interface and therefore be an input, an output (or even both). If a Signal&#xA;is neither input nor output, it is considered to be a local signal with a limited scope not visible&#xA;to the outside.&#xA;&lt;p>&#xA;As the value of a Signal is unique in one tick, the interpreter needs to know how to handle &#xA;multiple emissions of the same Signal in a tick. Therefore a combineOperator can be set. Such &#xA;operator needs to be commutative. It can be chosen from a pre-defined enumeration or by&#xA;a String referencing a function in the target language (e.g. a C or Java function name that &#xA;has exactly two parameters and produces one combined result of the corresponding data type).&#xA;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOutput" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="combineOperator" lowerBound="1"
+        eType="#//CombineOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hostCombineOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValuedObject" eSuperTypes="annotations.ecore#//Annotatable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Base Class for Variables and Signals. A ValuedObject has a name and may carry a value. &#xA;Therefore the class has a type attribute which specifies the type of the value. &#xA;The type might either be given from a predefined list of internal (primitive) types or by the hostType String that &#xA;references some type in the target language, e.g. a Type in C or Java. An initial value can be given in String format.&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ValueType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hostType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ValueType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Possible built-in types for values (e.g. for Varibales or Signals).&#xA;&lt;p>&#xA;Default value is the PURE type which means that the&#xA;ValuedObject does not contain any value at all (only&#xA;makes sense for Signals).&#xA;&lt;p>&#xA;HOST means that no actual type is given but the&#xA;type in the hostType attribute should be used &#xA;instead."/>
+    </eAnnotations>
+    <eLiterals name="PURE" literal="pure">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Default value is the PURE type which means that the&#xA;ValuedObject does not contain any value at all (only&#xA;makes sense for Signals)."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="BOOL" value="1" literal="bool"/>
+    <eLiterals name="UNSIGNED" value="2" literal="unsigned"/>
+    <eLiterals name="INT" value="3" literal="int"/>
+    <eLiterals name="FLOAT" value="4" literal="float"/>
+    <eLiterals name="HOST" value="7" literal="host">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="HOST means that no actual type is given but the&#xA;type in the hostType attribute should be used &#xA;instead."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="DOUBLE" value="5" literal="double"/>
+    <eLiterals name="STRING" value="6" literal="string"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//ValuedObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Variable is a data object that may be used for internal calculations. It is not directly&#xA;intended for communication with concurrent program parts. Variables may be overridden&#xA;multiple times within one synchronous tick. Hence writing a signal in concurrent program parts&#xA;is not allowed. Therefore Variables, unlike Signals, do not need a combine strategy.&#xA;&lt;p>&#xA;A Variable always carries a value and therefore needs a proper type. A Variable may be&#xA;tagged to be a constant by the const attribute and then the value is given by the&#xA;initialValue.&#xA;&lt;p>&#xA;Due to the restrictions in broadcast communication, the usage of Variables is discouraged&#xA;everywhere where Signals could be used instead.&#xA;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="const" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValuedObjectReference" eSuperTypes="#//ComplexExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A ValuedObjectReference has a reference to a ValuedObject and is a ComplexExpression.&#xA;Therefore such reference may have subExpressions. Those can be used to &#xA;address a specific value. E.g. the ValuedObject could carry an array&#xA;value and a subExpression could be an IntValue that points to a special entry in &#xA;that array. &#xA;&lt;p>&#xA;The distinction between a Variable and a VariableReference is mainly due to containment&#xA;relations. A Variable is usually defined exactly once and therefore contained by some &#xA;scope element. A reference to that Variable may be required multiple times where&#xA;such reference need to be contained at the places where the reference is used.&#xA;Hence we need this distinction."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valuedObject" lowerBound="1"
+        eType="#//ValuedObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Expression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Interface representing values, e.g. Integers, Floats or Booleans. Subclasses should contain a field with the value.&#xA;Values may be used as Expressions, e.g. used as subExpressions in OperatorExpressions.&#xA;"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntValue" eSuperTypes="#//Value">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Integer value object."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatValue" eSuperTypes="#//Value">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Real value object represented by a float."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanValue" eSuperTypes="#//Value">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Boolean value object."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperatorExpression" eSuperTypes="#//ComplexExpression">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An OperatorExpression is the most obvious ComplexExpression containing&#xA;an operator and a list of subExpressions. The meaning is that the operator &#xA;should be applied to all elements of the ordered subExpression list.&#xA;Note that some pre-defined operators are not commutative, hence the&#xA;order of the subExpressions list is of importance."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//OperatorType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextExpression" eSuperTypes="#//ComplexExpression #//TextualCode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A TextExpression is an Expression containing arbitrary text. It is used to&#xA;escape to a host language such as C or Java. This way arbitrary host code&#xA;can be used as parameters for operators, other functions or values."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceDeclaration"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceSignalDecl" eSuperTypes="#//InterfaceDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="#//ISignal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISignal" eSuperTypes="#//Signal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channelDescr" eType="#//ChannelDescription"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChannelDescription">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TypeIdentifier"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ValueType"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//CombineOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceVariableDecl" eSuperTypes="#//InterfaceDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varDecls" upperBound="-1"
+        eType="#//VariableDecl" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableDecl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//IVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TypeIdentifier"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Input" eSuperTypes="#//InterfaceSignalDecl"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Output" eSuperTypes="#//InterfaceSignalDecl"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InputOutput" eSuperTypes="#//InterfaceSignalDecl"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Return" eSuperTypes="#//InterfaceSignalDecl"/>
+</ecore:EPackage>

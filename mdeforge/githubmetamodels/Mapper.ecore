@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mapper"
+    nsURI="http://www.talend.org/mapper" nsPrefix="">
+  <eClassifiers xsi:type="ecore:EClass" name="MapperData" eSuperTypes="TalendFile.ecore#//AbstractExternalData">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uiProperties" eType="#//UiProperties"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="varTables" upperBound="-1"
+        eType="#//VarTable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputTables" upperBound="-1"
+        eType="#//OutputTable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputTables" upperBound="-1"
+        eType="#//InputTable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MapperTableEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDataMapTable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sizeState" eType="#//SizeState"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimized" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapperTableEntries" upperBound="-1"
+        eType="#//MapperTableEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractInOutTable" abstract="true"
+      eSuperTypes="#//AbstractDataMapTable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expressionFilter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activateExpressionFilter"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activateCondensedTool"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UiProperties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shellMaximized" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarTable" eSuperTypes="#//AbstractDataMapTable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputTable" eSuperTypes="#//AbstractInOutTable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rejectInnerJoin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isErrorRejectTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isJoinTableOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputTable" eSuperTypes="#//AbstractInOutTable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matchingMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lookupMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalMapKeysValues" upperBound="-1"
+        eType="#//MapperTableEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="innerJoin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SizeState">
+    <eLiterals name="MINIMIZED" literal="MINIMIZED"/>
+    <eLiterals name="INTERMEDIATE" value="1" literal="INTERMEDIATE"/>
+    <eLiterals name="MAXIMIZED" value="2" literal="MAXIMIZED"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Operator">
+    <eLiterals name="Equals" literal="="/>
+    <eLiterals name="Not_equals" value="1" literal="&lt;>"/>
+    <eLiterals name="Lower" value="2" literal="&lt;"/>
+    <eLiterals name="Lower_or_equals" value="3" literal="&lt;="/>
+    <eLiterals name="Greater" value="4" literal=">"/>
+    <eLiterals name="Greater_or_equals" value="5" literal=">="/>
+  </eClassifiers>
+</ecore:EPackage>

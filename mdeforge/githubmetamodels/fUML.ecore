@@ -1,0 +1,1465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fUML" nsURI="http://www.modelexecution.org/fuml" nsPrefix="fuml">
+  <eSubpackages name="Syntax" nsURI="http://www.modelexecution.org/fuml/syntax" nsPrefix="fUML.Syntax">
+    <eSubpackages name="CommonBehaviors" nsURI="http://www.modelexecution.org/fuml/syntax/commonbehaviors"
+        nsPrefix="fUML.Syntax.CommonBehaviors">
+      <eSubpackages name="BasicBehaviors" nsURI="http://www.modelexecution.org/fuml/syntax/commonbehaviors/basicbehaviors"
+          nsPrefix="fUML.Syntax.CommonBehaviors.BasicBehaviors">
+        <eClassifiers xsi:type="ecore:EClass" name="OpaqueBehavior" eSuperTypes="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" unique="false"
+              upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" upperBound="-1"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Behavior" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/Class">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="specification" ordered="false"
+              eType="#//Syntax/Classes/Kernel/BehavioralFeature" eOpposite="#//Syntax/Classes/Kernel/BehavioralFeature/method">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Designates a behavioral feature that the behavior implements. The behavioral&#xA;                  feature must be owned by the classifier that owns the behavior or be inherited by&#xA;                  it. The parameters of the behavioral feature and the implementing behavior must&#xA;                  match. If a behavior does not have a specification, it is directly associated with&#xA;                  a classifier (i.e., it is the behavior of the classifier as a whole)."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="reentrant" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Tells whether the behavior can be invoked while it is still executing from a&#xA;                  previous invocation."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Parameter" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References a list of parameters to the behavior which describes the order and&#xA;                  type of arguments that can be given when the behavior is invoked and of the values&#xA;                  which will be returned when the behavior completes its execution. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="context" ordered="false"
+              eType="#//Syntax/CommonBehaviors/BasicBehaviors/BehavioredClassifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The classifier that is the context for the execution of the behavior. If the&#xA;                  behavior is owned by a BehavioredClassifier, that classifier is the context.&#xA;                  Otherwise, the context is the first BehavioredClassifier reached by following the&#xA;                  chain of owner relationships. For example, following this algorithm, the context&#xA;                  of an entry action in a state machine is the classifier that owns the state&#xA;                  machine. The features of the context classifier as well as the elements visible to&#xA;                  the context classifier are visible to the behavior."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EEnum" name="CallConcurrencyKind">
+          <eLiterals name="sequential"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="BehavioredClassifier" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/Classifier">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBehavior" ordered="false"
+              upperBound="-1" eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior"
+              containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References behavior specifications owned by a classifier."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="classifierBehavior"
+              ordered="false" eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A behavior specification that specifies the behavior of the classifier&#xA;                itself."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="FunctionBehavior" eSuperTypes="#//Syntax/CommonBehaviors/BasicBehaviors/OpaqueBehavior"/>
+      </eSubpackages>
+      <eSubpackages name="Communications" nsURI="http://www.modelexecution.org/fuml/syntax/commonbehaviors/communications"
+          nsPrefix="fUML.Syntax.CommonBehaviors.Communications">
+        <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//Syntax/Classes/Kernel/NamedElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="event" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/Communications/Event">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The event that causes the trigger."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Event" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/PackageableElement"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Signal" eSuperTypes="#//Syntax/Classes/Kernel/Classifier">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Property" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The attributes owned by the signal."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="SignalEvent" eSuperTypes="#//Syntax/CommonBehaviors/Communications/MessageEvent">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="signal" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/Communications/Signal">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specific signal that is associated with this event."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="MessageEvent" abstract="true"
+            eSuperTypes="#//Syntax/CommonBehaviors/Communications/Event"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Reception" eSuperTypes="#//Syntax/Classes/Kernel/BehavioralFeature">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A reception may not be abstract."/>
+          </eAnnotations>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="signal" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/Communications/Signal">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The signal that this reception handles."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="Classes" nsURI="http://www.modelexecution.org/fuml/syntax/classes"
+        nsPrefix="fUML.Syntax.Classes">
+      <eSubpackages name="Kernel" nsURI="http://www.modelexecution.org/fuml/syntax/classes/kernel"
+          nsPrefix="fUML.Syntax.Classes.Kernel">
+        <eClassifiers xsi:type="ecore:EClass" name="ValueSpecification" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/TypedElement"/>
+        <eClassifiers xsi:type="ecore:EClass" name="TypedElement" eSuperTypes="#//Syntax/Classes/Kernel/NamedElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Type">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;The type of the TypedElement."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The name of the NamedElement."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" ordered="false"
+              eType="#//Syntax/Classes/Kernel/VisibilityKind">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Determines where the NamedElement appears within different Namespaces within&#xA;                  the overall model, and its accessibility."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A name which allows the NamedElement to be identified within a hierarchy of&#xA;                  nested Namespaces. It is constructed from the names of the containing namespaces&#xA;                  starting at the root of the hierarchy and ending with the name of the NamedElement&#xA;                  itself."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="namespace" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Namespace" eOpposite="#//Syntax/Classes/Kernel/Namespace/ownedMember"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElement" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Element" eOpposite="#//Syntax/Classes/Kernel/Element/owner">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The Elements owned by this element."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="owner" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Element" eOpposite="#//Syntax/Classes/Kernel/Element/ownedElement">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The Element that owns this element."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Comment" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Comment">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="annotatedElement"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/Element"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EEnum" name="VisibilityKind">
+          <eLiterals name="public"/>
+          <eLiterals name="private" value="1"/>
+          <eLiterals name="protected" value="2"/>
+          <eLiterals name="package" value="3"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Namespace" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/NamedElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="member" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/NamedElement"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="elementImport" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/ElementImport" containment="true"
+              eOpposite="#//Syntax/Classes/Kernel/ElementImport/importingNamespace"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="packageImport" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/PackageImport" containment="true"
+              eOpposite="#//Syntax/Classes/Kernel/PackageImport/importingNamespace"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="importedMember" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/PackageableElement"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMember" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/NamedElement" eOpposite="#//Syntax/Classes/Kernel/NamedElement/namespace"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ElementImport" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/VisibilityKind"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="importedElement"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/PackageableElement"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="importingNamespace"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/Namespace"
+              eOpposite="#//Syntax/Classes/Kernel/Namespace/elementImport"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/NamedElement"/>
+        <eClassifiers xsi:type="ecore:EClass" name="PackageImport" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/VisibilityKind"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="importedPackage"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/Package"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="importingNamespace"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/Namespace"
+              eOpposite="#//Syntax/Classes/Kernel/Namespace/packageImport"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//Syntax/Classes/Kernel/Namespace #//Syntax/Classes/Kernel/PackageableElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="packagedElement"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/PackageableElement"
+              containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedType" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Type" eOpposite="#//Syntax/Classes/Kernel/Type/package"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Package" eOpposite="#//Syntax/Classes/Kernel/Package/nestingPackage"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Package" eOpposite="#//Syntax/Classes/Kernel/Package/nestedPackage"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/PackageableElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="package" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Package" eOpposite="#//Syntax/Classes/Kernel/Package/ownedType"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="StructuralFeature" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/Feature #//Syntax/Classes/Kernel/MultiplicityElement #//Syntax/Classes/Kernel/TypedElement">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="States whether the feature's value may be modified by a client."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/RedefinableElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="featuringClassifier"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier"
+              eOpposite="#//Syntax/Classes/Kernel/Classifier/feature">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding association in Abstractions.&#xA;The Classifiers that have this Feature as a feature."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether this feature characterizes individual instances classified&#xA;                  by the classifier (false) or the classifier itself (true)."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="RedefinableElement" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/NamedElement">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="leaf" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates whether it is possible to further specialize a RedefinableElement.&#xA;                  If the value is true, then it is not possible to further specialize the&#xA;                  RedefinableElement."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="redefinedElement"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/RedefinableElement">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The redefinable element that is being redefined by this element."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="redefinitionContext"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the contexts that this element may be redefined from."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Classifier" abstract="true" eSuperTypes="#//Syntax/Classes/Kernel/Namespace #//Syntax/Classes/Kernel/Type">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, the Classifier does not provide a complete declaration and can&#xA;                  typically not be instantiated. An abstract classifier is intended to be used by&#xA;                  other classifiers e.g. as the target of general metarelationships or&#xA;                  generalization relationships. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="generalization" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Generalization" containment="true"
+              eOpposite="#//Syntax/Classes/Kernel/Generalization/specific">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the Generalization relationships for this Classifier. These&#xA;                  Generalizations navigaten to more general classifiers in the generalization&#xA;                  hierarchy."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="feature" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Feature" eOpposite="#//Syntax/Classes/Kernel/Feature/featuringClassifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding association in Abstractions. Note that there may&#xA;                  be members of the Classifier that are of the type Feature but are not included in&#xA;                  this association, e.g. inherited features.&#xA;Specifies each feature defined in the classifier."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedMember"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/NamedElement">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies all elements inherited by this classifier from the general&#xA;                  classifiers."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Property">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Refers to all of the Properties that are direct (i.e. not inherited or import&#xA;                  fUML.Syntax.d) attributes of the classifier."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="general" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="finalSpecialization"
+              ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Generalization" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="substitutable" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates whether the specific classifier can be used wherever the general&#xA;                  classifier can be used. If true, the execution traces of the specific classifier&#xA;                  will be a superset of the execution traces of the general classifier."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="general" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the general classifier in the Generalization relationship."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="specific" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Classifier" eOpposite="#//Syntax/Classes/Kernel/Classifier/generalization">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the specializing classifier in the Generalization&#xA;                relationship."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Syntax/Classes/Kernel/StructuralFeature">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="derived" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If isDerived is true, the value of the attribute is derived from information&#xA;                  elsewhere.&#xA;Specifies whether the Property is derived, i.e., whether its value or values&#xA;                  can be computed from other information."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="derivedUnion" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether the property is derived as the union of all of the&#xA;                  properties that are constrained to subset it."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="aggregation" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/AggregationKind">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the kind of aggregation that applies to the Property."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="composite" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If isComposite is true, the object containing the attribute is a container for&#xA;                  the object or value contained in the attribute.&#xA;This is a derived value, indicating whether the aggregation of the Property is&#xA;                  composite or not."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="owningAssociation"
+              ordered="false" eType="#//Syntax/Classes/Kernel/Association" eOpposite="#//Syntax/Classes/Kernel/Association/ownedEnd">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the owning association of this property, if any.&#xA;References the owning association of this property."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="association" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Association" eOpposite="#//Syntax/Classes/Kernel/Association/memberEnd">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the association of which this property is a member, if any."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="datatype" ordered="false"
+              eType="#//Syntax/Classes/Kernel/DataType" eOpposite="#//Syntax/Classes/Kernel/DataType/ownedAttribute">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The DataType that owns this Operation.&#xA;The DataType that owns this Property. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="class" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Class" eOpposite="#//Syntax/Classes/Kernel/Class/ownedAttribute"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Property"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EEnum" name="AggregationKind">
+          <eLiterals name="none">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that the property has no aggregation."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="shared" value="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that the property has a shared aggregation."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="composite" value="2">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that the property is aggregated compositely, i.e., the composite&#xA;                  object has responsibility for the existence and storage of the composed objects&#xA;                  (parts)."/>
+            </eAnnotations>
+          </eLiterals>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Association" eSuperTypes="#//Syntax/Classes/Kernel/Classifier">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="derived" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether the association is derived from other model elements such as&#xA;                  other associations or constraints."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="endType" lowerBound="1"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Type">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the classifiers that are used as types of the ends of the&#xA;                  association."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="memberEnd" lowerBound="2"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Property" eOpposite="#//Syntax/Classes/Kernel/Property/association">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Each end represents participation of instances of the classifier connected to&#xA;                  the end in links of the association. This is an ordered association.&#xA;Each end represents participation of instances of the classifier connected to&#xA;                  the end in links of the association."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="navigableOwnedEnd"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/Property">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The navigable ends that are owned by the association itself."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedEnd" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Property" containment="true" eOpposite="#//Syntax/Classes/Kernel/Property/owningAssociation">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The ends that are owned by the association itself. This is an ordered&#xA;                  association.&#xA;The ends that are owned by the association itself."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//Syntax/Classes/Kernel/Classifier">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Property" containment="true" eOpposite="#//Syntax/Classes/Kernel/Property/datatype">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The Attributes owned by the DataType."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="MultiplicityElement" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordered" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="For a multivalued multiplicity, this attribute specifies whether the values in&#xA;                  an instantiation of this element are sequentially ordered..&#xA;For a multivalued multiplicity, this attribute specifies whether the values in&#xA;                  an instantiation of this element are sequentially ordered."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="For a multivalued multiplicity, this attributes specifies whether the values&#xA;                  in an instantiation of this element are unique."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the upper bound of the multiplicity interval.&#xA;Specifies the upper bound of the multiplicity interval, if it is expressed as&#xA;                  an unlimited natural."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the lower bound of the multiplicity interval.&#xA;Specifies the lower bound of the multiplicity interval, if it is expressed as&#xA;                  an integer."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="upperValue" ordered="false"
+              eType="#//Syntax/Classes/Kernel/ValueSpecification" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specification of the upper bound for this multiplicity."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="lowerValue" ordered="false"
+              eType="#//Syntax/Classes/Kernel/ValueSpecification" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specification of the lower bound for this multiplicity."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="BehavioralFeature" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/Feature">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Parameter" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the ordered set of formal parameters of this&#xA;                BehavioralFeature.&#xA;Specifies the ordered set of formal parameters owned by this&#xA;                  BehavioralFeature. The parameter direction can be 'in', 'inout', 'out', pr&#xA;                  'return' to specify input, output, or return parameters."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, then the behavioral feature does not have an implementation, and one&#xA;                  must be supplied by a more specific element. If false, the behavioral feature must&#xA;                  have an implementation in the classifier or one must be inherited from a more&#xA;                  general element."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="method" ordered="false"
+              upperBound="-1" eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior"
+              eOpposite="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior/specification">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A behavioral description that implements the behavioral feature. There may be&#xA;                  at most one behavior for a particular pairing of a classifier (as owner of the&#xA;                  behavior) and a behavioral feature (as specification of the behavior)."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="concurrency" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/BasicBehaviors/CallConcurrencyKind">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the semantics of concurrent calls to the same passive instance&#xA;                  (i.e., an instance originating from a class with isActive being false). Active&#xA;                  instances control access to their own behavioral features."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//Syntax/Classes/Kernel/MultiplicityElement #//Syntax/Classes/Kernel/TypedElement">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/ParameterDirectionKind">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates whether a parameter is being sent into or out of a behavioral&#xA;                  element."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EEnum" name="ParameterDirectionKind">
+          <eLiterals name="in">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that parameter values are passed into the behavioral element by the&#xA;                  caller."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="inout" value="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that parameter values are passed into a behavioral element by the&#xA;                  caller and then back out to the caller from the behavioral element."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="out" value="2">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that parameter values are passed from a behavioral element out to&#xA;                  the caller."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="return" value="3">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates that parameter values are passed as return values from a behavioral&#xA;                  element back to the caller."/>
+            </eAnnotations>
+          </eLiterals>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//Syntax/Classes/Kernel/BehavioralFeature">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether an execution of the BehavioralFeature leaves the state of&#xA;                  the system unchanged (isQuery=true) or whether side effects may occur&#xA;                  (isQuery=false)."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordered" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;Specifies whether the return parameter is ordered or not, if present."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;Specifies whether the return parameter is unique or not, if present."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;Specifies the lower multiplicity of the return parameter, if present."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;Specifies the upper multiplicity of the return parameter, if present."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="class" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Class" eOpposite="#//Syntax/Classes/Kernel/Class/ownedOperation">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The class that owns the operation.&#xA;The class that owns this operation."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="redefinedOperation"
+              ordered="false" upperBound="-1" eType="#//Syntax/Classes/Kernel/Operation">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="References the Operations that are redefined by this Operation."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Type">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Redefines the corresponding property from Basic to derive this information&#xA;                  from the return result for this Operation.&#xA;Specifies the return result of the operation, if present."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="InstanceSpecification" eSuperTypes="#//Syntax/Classes/Kernel/NamedElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The classifier or classifiers of the represented instance. If multiple&#xA;                  classifiers are specified, the instance is classified by all of them."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="slot" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Slot" containment="true"
+              eOpposite="#//Syntax/Classes/Kernel/Slot/owningInstance">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A slot giving the value or values of a structural feature of the instance. An&#xA;                  instance specification can have one slot per structural feature of its&#xA;                  classifiers, including inherited features. It is not necessary to model a slot for&#xA;                  each structural feature, in which case the instance specification is a partial&#xA;                  description."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Slot" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="definingFeature"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/StructuralFeature">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The structural feature that specifies the values that may be held by the&#xA;                slot."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/ValueSpecification" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The value or values corresponding to the defining feature for the owning&#xA;                  instance specification."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="owningInstance" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/InstanceSpecification"
+              eOpposite="#//Syntax/Classes/Kernel/InstanceSpecification/slot">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The instance specification that owns this slot."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="InstanceValue" eSuperTypes="#//Syntax/Classes/Kernel/ValueSpecification">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="instance" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/InstanceSpecification">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The instance that is the specified value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralBoolean" eSuperTypes="#//Syntax/Classes/Kernel/LiteralSpecification">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specified Boolean value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralSpecification" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/ValueSpecification"/>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralInteger" eSuperTypes="#//Syntax/Classes/Kernel/LiteralSpecification">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specified Integer value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralNull" eSuperTypes="#//Syntax/Classes/Kernel/LiteralSpecification"/>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralString" eSuperTypes="#//Syntax/Classes/Kernel/LiteralSpecification">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+              eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specified String value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LiteralUnlimitedNatural" eSuperTypes="#//Syntax/Classes/Kernel/LiteralSpecification">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The specified UnlimitedNatural value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//Syntax/Classes/Kernel/DataType"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//Syntax/Classes/Kernel/DataType">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLiteral" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/EnumerationLiteral" containment="true"
+              eOpposite="#//Syntax/Classes/Kernel/EnumerationLiteral/enumeration">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The ordered collection of literals for the enumeration.&#xA;The ordered set of literals for this Enumeration."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="EnumerationLiteral" eSuperTypes="#//Syntax/Classes/Kernel/InstanceSpecification">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Enumeration" eOpposite="#//Syntax/Classes/Kernel/Enumeration/ownedLiteral">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The enumeration that this literal belongs to.&#xA;The Enumeration that this EnumerationLiteral is a member of."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//Syntax/CommonBehaviors/BasicBehaviors/BehavioredClassifier">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Only an active class may specialize an active class.&#xA;Only an abstract class may have abstract behavioral features."/>
+          </eAnnotations>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Property" containment="true" eOpposite="#//Syntax/Classes/Kernel/Property/class"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperation" upperBound="-1"
+              eType="#//Syntax/Classes/Kernel/Operation" containment="true" eOpposite="#//Syntax/Classes/Kernel/Operation/class">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The operations owned by the class."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Class">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="This gives the superclasses of a class."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Determines whether an object specified by this class is active or not. If&#xA;                  true, then the owning class is referred to as an active class. If false, then such&#xA;                  a class is referred to as a passive class."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="ownedReception" ordered="false"
+              upperBound="-1" eType="#//Syntax/CommonBehaviors/Communications/Reception"
+              containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Receptions that objects of this class are willing to accept."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="nestedClassifier"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier" containment="true"/>
+        </eClassifiers>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="Activities" nsURI="http://www.modelexecution.org/fuml/syntax/activities"
+        nsPrefix="fUML.Syntax.Activities">
+      <eSubpackages name="IntermediateActivities" nsURI="http://www.modelexecution.org/fuml/syntax/activities/intermediateactivities"
+          nsPrefix="fUML.Syntax.Activities.IntermediateActivities">
+        <eClassifiers xsi:type="ecore:EClass" name="ObjectFlow" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ActivityEdge"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ActivityEdge" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/RedefinableElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="activity" ordered="false"
+              eType="#//Syntax/Activities/IntermediateActivities/Activity" eOpposite="#//Syntax/Activities/IntermediateActivities/Activity/edge">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Activity containing the edge."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+              lowerBound="1" eType="#//Syntax/Activities/IntermediateActivities/ActivityNode"
+              eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityNode/outgoing">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Node from which tokens are taken when they traverse the edge."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+              lowerBound="1" eType="#//Syntax/Activities/IntermediateActivities/ActivityNode"
+              eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityNode/incoming">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Node to which tokens are put when they traverse the edge."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="inStructuredNode"
+              ordered="false" eType="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode"
+              eOpposite="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode/edge">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Structured activity node containing the edge."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="guard" ordered="false"
+              eType="#//Syntax/Classes/Kernel/ValueSpecification" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specification evaluated at runtime to determine if the edge can be&#xA;                traversed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="node" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityNode"
+              containment="true" eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityNode/activity">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Nodes coordinated by the activity."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, this activity must not make any changes to variables outside the&#xA;                  activity or to objects. (This is an assertion, not an executable property. It may&#xA;                  be used by an execution engine to optimize model execution. If the assertion is&#xA;                  violated by the action, then the model is ill-formed.) The default is false (an&#xA;                  activity may make nonlocal changes)."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="edge" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityEdge"
+              containment="true" eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityEdge/activity">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Edges expressing flow between nodes of the activity."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ActivityNode" abstract="true"
+            eSuperTypes="#//Syntax/Classes/Kernel/RedefinableElement">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="inStructuredNode"
+              ordered="false" eType="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode"
+              eOpposite="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode/node">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Structured activity node containing the node."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="activity" ordered="false"
+              eType="#//Syntax/Activities/IntermediateActivities/Activity" eOpposite="#//Syntax/Activities/IntermediateActivities/Activity/node">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Activity containing the node."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityEdge"
+              eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityEdge/source">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Edges that have the node as source."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityEdge"
+              eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityEdge/target">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Edges that have the node as target."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ObjectNode" abstract="true" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ActivityNode #//Syntax/Classes/Kernel/TypedElement"/>
+        <eClassifiers xsi:type="ecore:EClass" name="MergeNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ControlNode" abstract="true" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ActivityNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="InitialNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="FinalNode" abstract="true" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ControlFlow" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ActivityEdge"/>
+        <eClassifiers xsi:type="ecore:EClass" name="DecisionNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ControlNode">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="decisionInput" ordered="false"
+              eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Provides input to guard specifications on edges outgoing from the decision&#xA;                  node."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="decisionInputFlow"
+              ordered="false" eType="#//Syntax/Activities/IntermediateActivities/ObjectFlow"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ActivityFinalNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/FinalNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="ActivityParameterNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ObjectNode">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Parameter">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The parameter the object node will be accepting or providing values&#xA;                for."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+      </eSubpackages>
+      <eSubpackages name="CompleteStructuredActivities" nsURI="http://www.modelexecution.org/fuml/syntax/activities/completestructuredactivities"
+          nsPrefix="fUML.Syntax.Activities.CompleteStructuredActivities">
+        <eClassifiers xsi:type="ecore:EClass" name="LoopNode" eSuperTypes="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="testedFirst" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, the test is performed before the first execution of the body. If&#xA;                  false, the body is executed once before the test is performed. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="decider" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="An output pin within the test fragment the value of which is examined after&#xA;                  execution of the test to determine whether to execute the loop body."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="test" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The set of nodes, edges, and designated value that compute a Boolean value to&#xA;                  determine if another execution of the body will be performed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="bodyOutput" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A list of output pins within the body fragment the values of which are moved&#xA;                  to the loop variable pins after completion of execution of the body, before the&#xA;                  next iteration of the loop begins or before the loop exits."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="loopVariableInput"
+              upperBound="-1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A list of values that are moved into the loop variable pins before the first&#xA;                  iteration of the loop."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="bodyPart" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="loopVariable" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="setupPart" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ExecutableNode" abstract="true"
+            eSuperTypes="#//Syntax/Activities/IntermediateActivities/ActivityNode"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Clause" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="test" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A nested activity fragment with a designated output pin that specifies the&#xA;                  result of the test."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="body" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A nested activity fragment that is executed if the test evaluates to true and&#xA;                  the clause is chosen over any concurrent clauses that also evaluate to&#xA;                true."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="predecessorClause"
+              ordered="false" upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/Clause"
+              eOpposite="#//Syntax/Activities/CompleteStructuredActivities/Clause/successorClause">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A set of clauses whose tests must all evaluate false before the current clause&#xA;                  can be tested."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="successorClause"
+              ordered="false" upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/Clause"
+              eOpposite="#//Syntax/Activities/CompleteStructuredActivities/Clause/predecessorClause">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A set of clauses which may not be tested unless the current clause tests&#xA;                  false."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="decider" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="An output pin within the test fragment the value of which is examined after&#xA;                  execution of the test to determine whether the body should be executed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="bodyOutput" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A list of output pins within the body fragment whose values are moved to the&#xA;                  result pins of the containing conditional node after execution of the clause&#xA;                body."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ConditionalNode" eSuperTypes="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="determinate" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, the modeler asserts that at most one test will succeed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="assured" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, the modeler asserts that at least one test will succeed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="clause" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/Activities/CompleteStructuredActivities/Clause"
+              containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Set of clauses composing the conditional."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A list of output pins that constitute the data flow outputs of the&#xA;                  conditional."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="StructuredActivityNode" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="node" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityNode"
+              containment="true" eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityNode/inStructuredNode">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Nodes immediately contained in the group."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="mustIsolate" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, then the actions in the node execute in isolation from actions&#xA;                  outside the node."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="edge" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/IntermediateActivities/ActivityEdge"
+              containment="true" eOpposite="#//Syntax/Activities/IntermediateActivities/ActivityEdge/inStructuredNode">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Edges immediately contained in the structured node."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="structuredNodeOutput"
+              ordered="false" upperBound="-1" eType="#//Syntax/Actions/BasicActions/OutputPin"
+              containment="true"/>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="structuredNodeInput"
+              ordered="false" upperBound="-1" eType="#//Syntax/Actions/BasicActions/InputPin"
+              containment="true"/>
+        </eClassifiers>
+      </eSubpackages>
+      <eSubpackages name="ExtraStructuredActivities" nsURI="http://www.modelexecution.org/fuml/syntax/activities/extrastructuredactivities"
+          nsPrefix="fUML.Syntax.Activities.ExtraStructuredActivities">
+        <eClassifiers xsi:type="ecore:EEnum" name="ExpansionKind">
+          <eLiterals name="parallel">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The executions are independent. They may be executed concurrently."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="iterative" value="1">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The executions are dependent and must be executed one at a time, in order of&#xA;                  the collection elements."/>
+            </eAnnotations>
+          </eLiterals>
+          <eLiterals name="stream" value="2">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A stream of collection elements flows into a single execution, in order of the&#xA;                  collection elements."/>
+            </eAnnotations>
+          </eLiterals>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ExpansionNode" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ObjectNode">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="regionAsOutput" ordered="false"
+              eType="#//Syntax/Activities/ExtraStructuredActivities/ExpansionRegion"
+              eOpposite="#//Syntax/Activities/ExtraStructuredActivities/ExpansionRegion/outputElement">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The expansion region for which the node is an output."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="regionAsInput" ordered="false"
+              eType="#//Syntax/Activities/ExtraStructuredActivities/ExpansionRegion"
+              eOpposite="#//Syntax/Activities/ExtraStructuredActivities/ExpansionRegion/inputElement">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The expansion region for which the node is an input."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ExpansionRegion" eSuperTypes="#//Syntax/Activities/CompleteStructuredActivities/StructuredActivityNode">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" ordered="false"
+              lowerBound="1" eType="#//Syntax/Activities/ExtraStructuredActivities/ExpansionKind">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The way in which the executions interact: parallel: all interactions are&#xA;                  independent iterative: the interactions occur in order of the elements stream: a&#xA;                  stream of values flows into a single execution "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="inputElement" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/Activities/ExtraStructuredActivities/ExpansionNode"
+              eOpposite="#//Syntax/Activities/ExtraStructuredActivities/ExpansionNode/regionAsInput">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="An object node that holds a separate element of the input collection during&#xA;                  each of the multiple executions of the region."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="outputElement" ordered="false"
+              upperBound="-1" eType="#//Syntax/Activities/ExtraStructuredActivities/ExpansionNode"
+              eOpposite="#//Syntax/Activities/ExtraStructuredActivities/ExpansionNode/regionAsOutput">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="An object node that accepts a separate element of the output collection during&#xA;                  each of the multiple executions of the region. The values are formed into a&#xA;                  collection that is available when the execution of the region is complete."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="Actions" nsURI="http://www.modelexecution.org/fuml/syntax/actions"
+        nsPrefix="fUML.Syntax.Actions">
+      <eSubpackages name="IntermediateActions" nsURI="http://www.modelexecution.org/fuml/syntax/actions/intermediateactions"
+          nsPrefix="fUML.Syntax.Actions.IntermediateActions">
+        <eClassifiers xsi:type="ecore:EClass" name="StructuralFeatureAction" abstract="true"
+            eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="This abstract action class statically specifies the structural feature being&#xA;                accessed. The object to access is specified dynamically, by referring to an input&#xA;                pin on which the object will be placed at runtime. The type of the value of this pin&#xA;                is the classifier that owns the specified structural feature, and the value's&#xA;                multiplicity is 1..1."/>
+          </eAnnotations>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="structuralFeature"
+              ordered="false" lowerBound="1" eType="#//Syntax/Classes/Kernel/StructuralFeature">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Structural feature to be read."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the input pin from which the object whose structural feature is to be&#xA;                  read or written is obtained. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="TestIdentityAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="second" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the pin on which an object is placed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Tells whether the two input objects are identical."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="first" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the pin on which an object is placed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ValueSpecificationAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/ValueSpecification" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Value specification to be evaluated."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the output pin on which the result is put."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="WriteLinkAction" abstract="true"
+            eSuperTypes="#//Syntax/Actions/IntermediateActions/LinkAction"/>
+        <eClassifiers xsi:type="ecore:EClass" name="LinkAction" abstract="true" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="endData" ordered="false"
+              lowerBound="2" upperBound="-1" eType="#//Syntax/Actions/IntermediateActions/LinkEndData"
+              containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Data identifying one end of a link by the objects on its ends and&#xA;                qualifiers."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="inputValue" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/Actions/BasicActions/InputPin"
+              containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LinkEndData" eSuperTypes="#//Syntax/Classes/Kernel/Element">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Input pin that provides the specified object for the given end. This pin is&#xA;                  omitted if the link-end data specifies an 'open' end for reading."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="end" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Property">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Association end for which this link-end data specifies values."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="WriteStructuralFeatureAction"
+            abstract="true" eSuperTypes="#//Syntax/Actions/IntermediateActions/StructuralFeatureAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Value to be added or removed from the structural feature."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="RemoveStructuralFeatureValueAction"
+            eSuperTypes="#//Syntax/Actions/IntermediateActions/WriteStructuralFeatureAction">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="removeDuplicates"
+              ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether to remove duplicates of the value in nonunique structural&#xA;                  features."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="removeAt" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the position of an existing value to remove in ordered nonunique&#xA;                  structural features. The type of the pin is UnlimitedNatural, but the value cannot&#xA;                  be zero or unlimited."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReadLinkAction" eSuperTypes="#//Syntax/Actions/IntermediateActions/LinkAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The pin on which are put the objects participating in the association at the&#xA;                  end not specified by the inputs. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReadSelfAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the output pin on which the hosting object is placed. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReadStructuralFeatureAction" eSuperTypes="#//Syntax/Actions/IntermediateActions/StructuralFeatureAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the output pin on which the result is put."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LinkEndCreationData" eSuperTypes="#//Syntax/Actions/IntermediateActions/LinkEndData">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="replaceAll" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether the existing links emanating from the object on this end&#xA;                  should be destroyed before creating a new link."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="insertAt" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies where the new link should be inserted for ordered association ends,&#xA;                  or where an existing link should be moved to. The type of the input is&#xA;                  UnlimitedNatural, but the input cannot be zero. This pin is omitted for&#xA;                  association ends that are not ordered."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="LinkEndDestructionData" eSuperTypes="#//Syntax/Actions/IntermediateActions/LinkEndData">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="destroyDuplicates"
+              ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether to destroy duplicates of the value in nonunique association&#xA;                  ends."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="destroyAt" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies the position of an existing link to be destroyed in ordered&#xA;                  nonunique association ends. The type of the pin is UnlimitedNatural, but the value&#xA;                  cannot be zero or unlimited."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ClearAssociationAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="association" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Association">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Association to be cleared."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the input pin from which is obtained the object whose participation in&#xA;                  the association is to be cleared."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ClearStructuralFeatureAction"
+            eSuperTypes="#//Syntax/Actions/IntermediateActions/StructuralFeatureAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="CreateLinkAction" eSuperTypes="#//Syntax/Actions/IntermediateActions/WriteLinkAction"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CreateObjectAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the output pin on which the result is put."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Classifier to be instantiated."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="DestroyLinkAction" eSuperTypes="#//Syntax/Actions/IntermediateActions/WriteLinkAction"/>
+        <eClassifiers xsi:type="ecore:EClass" name="DestroyObjectAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="destroyLinks" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether links in which the object participates are destroyed along&#xA;                  with the object."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="destroyOwnedObjects"
+              ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether objects owned by the object are destroyed along with the&#xA;                  object."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The input pin providing the object to be destroyed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="AddStructuralFeatureValueAction"
+            eSuperTypes="#//Syntax/Actions/IntermediateActions/WriteStructuralFeatureAction">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="replaceAll" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether existing values of the structural feature of the object&#xA;                  should be removed before adding the new value."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="insertAt" ordered="false"
+              eType="#//Syntax/Actions/BasicActions/InputPin" containment="true"/>
+        </eClassifiers>
+      </eSubpackages>
+      <eSubpackages name="CompleteActions" nsURI="http://www.modelexecution.org/fuml/syntax/actions/completeactions"
+          nsPrefix="fUML.Syntax.Actions.CompleteActions">
+        <eClassifiers xsi:type="ecore:EClass" name="StartClassifierBehaviorAction"
+            eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Holds the object on which to start the owned behavior."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="StartObjectBehaviorAction" eSuperTypes="#//Syntax/Actions/BasicActions/CallAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReduceAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="reducer" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Behavior that is applied to two elements of the input collection to produce a&#xA;                  value that is the same type as elements of the collection."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Gives the output pin on which the result is put."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="collection" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The collection to be reduced."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordered" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Tells whether the order of the input collection should determine the order in&#xA;                  which the behavior is applied to its elements."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReadExtentAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The runtime instances of the classifier."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The classifier whose instances are to be retrieved."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReadIsClassifiedObjectAction"
+            eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="direct" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates whether the classifier must directly classify the input&#xA;                object."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="classifier" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The classifier against which the classification of the input object is&#xA;                tested."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="After termination of the action, will hold the result of the test."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Holds the object whose classification is to be tested."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="ReclassifyObjectAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="replaceAll" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Specifies whether existing classifiers should be removed before adding the new&#xA;                  classifiers."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="oldClassifier" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A set of classifiers to be removed from the classifiers of the object."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Holds the object to be reclassified."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="newClassifier" ordered="false"
+              upperBound="-1" eType="#//Syntax/Classes/Kernel/Classifier"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="AcceptEventAction" eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="unmarshall" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Indicates whether there is a single output pin for the event, or multiple&#xA;                  output pins for attributes of the event."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+              upperBound="-1" eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="Pins holding the received event objects or their attributes. Event objects may&#xA;                  be copied in transmission, so identity might not be preserved."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" ordered="false"
+              lowerBound="1" upperBound="-1" eType="#//Syntax/CommonBehaviors/Communications/Trigger"
+              containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The type of events accepted by the action, as specified by triggers. For&#xA;                  triggers with signal events, a signal of the specified type or any subtype of the&#xA;                  specified signal type is accepted."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+      </eSubpackages>
+      <eSubpackages name="BasicActions" nsURI="http://www.modelexecution.org/fuml/syntax/actions/basicactions"
+          nsPrefix="fUML.Syntax.Actions.BasicActions">
+        <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true" eSuperTypes="#//Syntax/Activities/CompleteStructuredActivities/ExecutableNode">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="output" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The ordered set of output pins connected to the Action. The action places its&#xA;                  results onto pins in this set."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="context" ordered="false"
+              eType="#//Syntax/Classes/Kernel/Classifier">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The classifier that owns the behavior of which this action is a part."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/InputPin"/>
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="locallyReentrant"
+              ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="InputPin" eSuperTypes="#//Syntax/Actions/BasicActions/Pin"/>
+        <eClassifiers xsi:type="ecore:EClass" name="Pin" abstract="true" eSuperTypes="#//Syntax/Activities/IntermediateActivities/ObjectNode #//Syntax/Classes/Kernel/MultiplicityElement"/>
+        <eClassifiers xsi:type="ecore:EClass" name="CallAction" abstract="true" eSuperTypes="#//Syntax/Actions/BasicActions/InvocationAction">
+          <eStructuralFeatures xsi:type="ecore:EAttribute" name="synchronous" ordered="false"
+              lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="If true, the call is synchronous and the caller waits for completion of the&#xA;                  invoked behavior. If false, the call is asynchronous and the caller proceeds&#xA;                  immediately and does not expect a return values. "/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="result" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/OutputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="A list of output pins where the results of performing the invocation are&#xA;                  placed."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="InvocationAction" abstract="true"
+            eSuperTypes="#//Syntax/Actions/BasicActions/Action">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+              eType="#//Syntax/Actions/BasicActions/InputPin" containment="true"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="SendSignalAction" eSuperTypes="#//Syntax/Actions/BasicActions/InvocationAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The target object to which the signal is sent."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="signal" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/Communications/Signal">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The type of signal transmitted to the target object."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="CallBehaviorAction" eSuperTypes="#//Syntax/Actions/BasicActions/CallAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" ordered="false"
+              lowerBound="1" eType="#//Syntax/CommonBehaviors/BasicBehaviors/Behavior">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The invoked behavior. It must be capable of accepting and returning&#xA;                control."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="CallOperationAction" eSuperTypes="#//Syntax/Actions/BasicActions/CallAction">
+          <eStructuralFeatures xsi:type="ecore:EReference" name="operation" ordered="false"
+              lowerBound="1" eType="#//Syntax/Classes/Kernel/Operation">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The operation to be invoked by the action execution."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+          <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+              lowerBound="1" eType="#//Syntax/Actions/BasicActions/InputPin" containment="true">
+            <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+              <details key="documentation" value="The target object to which the request is sent. The classifier of the target&#xA;                  object is used to dynamically determine a behavior to invoke. This object&#xA;                  constitutes the context of the execution of the operation."/>
+            </eAnnotations>
+          </eStructuralFeatures>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="OutputPin" eSuperTypes="#//Syntax/Actions/BasicActions/Pin"/>
+      </eSubpackages>
+    </eSubpackages>
+    <eSubpackages name="L1" nsURI="http://www.modelexecution.org/fuml/syntax/l1" nsPrefix="fUML.Syntax.L1"/>
+    <eSubpackages name="L2" nsURI="http://www.modelexecution.org/fuml/syntax/l2" nsPrefix="fUML.Syntax.L2"/>
+    <eSubpackages name="L3" nsURI="http://www.modelexecution.org/fuml/syntax/l3" nsPrefix="fUML.Syntax.L3"/>
+  </eSubpackages>
+</ecore:EPackage>

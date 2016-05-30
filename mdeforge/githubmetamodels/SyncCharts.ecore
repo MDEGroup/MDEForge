@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="synccharts"
+    nsURI="http://kieler.cs.cau.de/synccharts" nsPrefix="synccharts">
+  <eClassifiers xsi:type="ecore:EClass" name="Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effects" upperBound="-1"
+        eType="#//Effect" containment="true" eOpposite="#//Effect/parentEAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" eType="#//Expression"
+        containment="true" eOpposite="#//Expression/parentAction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="triggersAndEffects" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentStateEntryAction"
+        eType="#//State" eOpposite="#//State/entryActions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentStateInnerAction"
+        eType="#//State" eOpposite="#//State/innerActions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentStateExitAction"
+        eType="#//State" eOpposite="#//State/exitActions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isImmediate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentStateSuspension"
+        eType="#//State" eOpposite="#//State/suspensionTrigger"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//Effect">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//Expression" containment="true" eOpposite="#//Expression/parentAssignment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CombineOperator">
+    <eLiterals name="NONE" literal="NONE"/>
+    <eLiterals name="ADD" value="1" literal="+"/>
+    <eLiterals name="MULT" value="2" literal="*"/>
+    <eLiterals name="MAX" value="5" literal="max"/>
+    <eLiterals name="MIN" value="6" literal="min"/>
+    <eLiterals name="OR" value="4" literal="or"/>
+    <eLiterals name="AND" value="3" literal="and"/>
+    <eLiterals name="HOST" literal="host"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subExpressions" lowerBound="1"
+        upperBound="-1" eType="#//Expression" containment="true" eOpposite="#//Expression/parentExpression"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+        eType="#//OperatorType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Effect" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentEAction" lowerBound="1"
+        eType="#//Action" eOpposite="#//Action/effects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Emission" eSuperTypes="#//Effect">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" lowerBound="1"
+        eType="#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newValue" eType="#//Expression"
+        containment="true" eOpposite="#//Expression/parentEmisson"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAction" eType="#//Action"
+        eOpposite="#//Action/trigger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentEmisson" eType="#//Emission"
+        eOpposite="#//Emission/newValue"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAssignment" eType="#//Assignment"
+        eOpposite="#//Assignment/expression"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentExpression" eType="#//ComplexExpression"
+        eOpposite="#//ComplexExpression/subExpressions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HostCode" eSuperTypes="#//Effect #//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OperatorType">
+    <eLiterals name="EQ" value="1" literal="="/>
+    <eLiterals name="LT" value="2" literal="&lt;"/>
+    <eLiterals name="LEQ" value="3" literal="&lt;="/>
+    <eLiterals name="GT" value="12" literal=">"/>
+    <eLiterals name="GEQ" value="10" literal=">="/>
+    <eLiterals name="NOT" literal="not"/>
+    <eLiterals name="VAL" literal="?"/>
+    <eLiterals name="PRE" value="11" literal="pre"/>
+    <eLiterals name="AND" value="4" literal="and"/>
+    <eLiterals name="OR" value="5" literal="or"/>
+    <eLiterals name="ADD" value="6" literal="+"/>
+    <eLiterals name="SUB" value="7" literal="-"/>
+    <eLiterals name="MULT" value="8" literal="*"/>
+    <eLiterals name="DIV" value="9" literal="/"/>
+    <eLiterals name="MOD" value="13" literal="mod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerStates" upperBound="-1"
+        eType="#//State" containment="true" eOpposite="#//State/parentRegion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentState" eType="#//State"
+        eOpposite="#//State/regions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true" eOpposite="#//Variable/parentRegion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="#//Signal" containment="true" eOpposite="#//Signal/parentRegion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Signal" eSuperTypes="#//ValuedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentState" eType="#//State"
+        eOpposite="#//State/signals"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInput" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOutput" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="combineOperator" lowerBound="1"
+        eType="#//CombineOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hostCombineOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRegion" eType="#//Region"
+        eOpposite="#//Region/signals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SignalReference" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" lowerBound="1"
+        eType="#//Signal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Renaming">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/renamings"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a State GenModel Doc comment."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//StateType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="#//Signal" containment="true" eOpposite="#//Signal/parentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1"
+        eType="#//Region" containment="true" eOpposite="#//Region/parentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryActions" upperBound="-1"
+        eType="#//Action" containment="true" eOpposite="#//Action/parentStateEntryAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerActions" upperBound="-1"
+        eType="#//Action" containment="true" eOpposite="#//Action/parentStateInnerAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exitActions" upperBound="-1"
+        eType="#//Action" containment="true" eOpposite="#//Action/parentStateExitAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renamings" upperBound="-1"
+        eType="#//Renaming" containment="true" eOpposite="#//Renaming/parentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suspensionTrigger" eType="#//Action"
+        containment="true" eOpposite="#//Action/parentStateSuspension"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/sourceState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRegion" lowerBound="1"
+        eType="#//Region" eOpposite="#//Region/innerStates"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bodyText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateType">
+    <eLiterals name="NORMAL"/>
+    <eLiterals name="CONDITIONAL" value="1"/>
+    <eLiterals name="REFERENCE"/>
+    <eLiterals name="TEXTUAL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//TransitionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outgoingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHistory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransitionType">
+    <eLiterals name="WEAKABORT" literal="WEAKABORT"/>
+    <eLiterals name="STRONGABORT" value="1"/>
+    <eLiterals name="NORMALTERMINATION" value="2" literal="NORMALTERMINATION"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValuedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ValueType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hostType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ValueType">
+    <eLiterals name="PURE"/>
+    <eLiterals name="BOOL" value="1"/>
+    <eLiterals name="UNSIGNED" value="2"/>
+    <eLiterals name="INTEGER" value="3"/>
+    <eLiterals name="FLOAT" value="4"/>
+    <eLiterals name="HOST"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//ValuedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRegion" eType="#//Region"
+        eOpposite="#//Region/variables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableReference" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="#//Variable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntValue" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatValue" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanValue" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+</ecore:EPackage>

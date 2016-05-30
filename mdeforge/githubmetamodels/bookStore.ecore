@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="bookstorepackage"
+    nsURI="http://de.uni_koblenz.gremf/bookstore" nsPrefix="bookstore">
+  <eClassifiers xsi:type="ecore:EClass" name="BookStore" eSuperTypes="#//abstracttypespackage/Store">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#//Book" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Book" eSuperTypes="#//abstracttypespackage/Goods">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="authors" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isbn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0000000000000"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="#//Category"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ratings" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="chapters" lowerBound="1"
+        upperBound="-1" eType="#//ContainsChapter" containment="true" eOpposite="#//ContainsChapter/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Chapter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pages" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1" eType="#//ContainsChapter"
+        eOpposite="#//ContainsChapter/containee"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Category">
+    <eLiterals literal="SciFi"/>
+    <eLiterals literal="Thriller"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainsChapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//Book" eOpposite="#//Book/chapters"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containee" lowerBound="1"
+        eType="#//Chapter" containment="true" eOpposite="#//Chapter/book"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startPage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eSubpackages name="abstracttypespackage" nsURI="http://de.uni_koblenz.gremf/bookstore/abstracttypes"
+      nsPrefix="abstracttypes">
+    <eClassifiers xsi:type="ecore:EClass" name="Seller" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Goods"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Store" abstract="true" eSuperTypes="#//abstracttypespackage/Seller">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="goods" lowerBound="1"
+          upperBound="-1" eType="#//abstracttypespackage/Sells" eOpposite="#//abstracttypespackage/Sells/sellsSubject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sells">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sellsSubject" lowerBound="1"
+          eType="#//abstracttypespackage/Store" eOpposite="#//abstracttypespackage/Store/goods"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sellsObject" lowerBound="1"
+          eType="#//abstracttypespackage/Goods"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

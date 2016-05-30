@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="editormodel"
+    nsURI="http:///org/isistan/flabot/edit/editormodel.ecore" nsPrefix="org.isistan.flabot.edit.editormodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" abstract="true" eSuperTypes="coremodel.ecore#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreModel" eType="ecore:EClass coremodel.ecore#//CoreModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notes" upperBound="-1"
+        eType="ecore:EClass coremodel.ecore#//Note" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//VisualModel" containment="true" resolveProxies="false" eOpposite="#//VisualModel/diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folder" eType="#//Folder"
+        eOpposite="#//Folder/diagrams"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="snapToGeometryEnabled"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlabotFileModel" eSuperTypes="coremodel.ecore#//ExtensibleElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="InterfaceLinkMappedToPathGeneral ComponentUniqueName"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreModel" eType="ecore:EClass coremodel.ecore#//CoreModel"
+        containment="true" resolveProxies="false" eOpposite="coremodel.ecore#//CoreModel/file"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagrams" upperBound="-1"
+        eType="#//Diagram" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedFiles" upperBound="-1"
+        eType="#//FlabotFileModel" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0.0.1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="provider" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folder" eType="#//Folder"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openDiagrams" upperBound="-1"
+        eType="#//Diagram"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VisualModel" eSuperTypes="#//Adapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//VisualModel" containment="true" resolveProxies="false" eOpposite="#//VisualModel/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//VisualModel"
+        transient="true" eOpposite="#//VisualModel/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="semanticModel" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//Point"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="size" eType="#//Dimension"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" eType="#//Diagram"
+        transient="true" eOpposite="#//Diagram/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColor" eType="#//Color"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="foregroundColor" eType="#//Color"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="detailLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Adapter" instanceClassName="org.eclipse.emf.common.notify.Adapter"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionBendpoint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="firstRelativeDimension"
+        eType="#//Dimension" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="secondRelativeDimension"
+        eType="#//Dimension" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="0.5f"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionVisualModel" eSuperTypes="#//NodeVisualModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceTerminal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetTerminal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bendpoints" upperBound="-1"
+        eType="#//ConnectionBendpoint" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//NodeVisualModel"
+        transient="true" eOpposite="#//NodeVisualModel/sourceConnections"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//NodeVisualModel"
+        eOpposite="#//NodeVisualModel/targetConnections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeVisualModel" eSuperTypes="#//VisualModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceConnections" upperBound="-1"
+        eType="#//ConnectionVisualModel" containment="true" resolveProxies="false"
+        eOpposite="#//ConnectionVisualModel/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetConnections" upperBound="-1"
+        eType="#//ConnectionVisualModel" eOpposite="#//ConnectionVisualModel/target"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Folder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folders" upperBound="-1"
+        eType="#//Folder" containment="true" resolveProxies="false" eOpposite="#//Folder/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagrams" upperBound="-1"
+        eType="#//Diagram" eOpposite="#//Diagram/folder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Folder"
+        transient="true" eOpposite="#//Folder/folders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileModel" eType="#//FlabotFileModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Color">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="red" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="green" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dimension">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Point">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEObjectMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VisualDiagramJump" eSuperTypes="#//NodeVisualModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceDiagram" eType="#//Diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetDiagram" eType="#//Diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetVisualNode" eType="#//NodeVisualModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+</ecore:EPackage>

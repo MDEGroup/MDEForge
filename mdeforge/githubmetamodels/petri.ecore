@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="petri" nsURI="petri" nsPrefix="petri">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Place">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="nameExists nameUnique tokPositive notUnconnected"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="nameExists" value="name &lt;> null"/>
+      <details key="nameUnique" value="Place.allInstances()->isUnique(name)"/>
+      <details key="tokPositive" value="tokens >= 0"/>
+      <details key="notUnconnected" value="connection->isEmpty() implies Transition.allInstances()->select(p : Transition | p.connection->exists(t : Place | t.name = self.name))->notEmpty()"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tokens" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" upperBound="-1"
+        eType="#//Transition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="nameExists nameUnique notUnconnected"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="nameExists" value="name &lt;> null"/>
+      <details key="nameUnique" value="Place.allInstances()->isUnique(name)"/>
+      <details key="notUnconnected" value="connection->isEmpty() implies Place.allInstances()->select(p : Place | p.connection->exists(t : Transition | t.name = self.name))->notEmpty()"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" upperBound="-1"
+        eType="#//Place"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RedPetri">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iniPlace" upperBound="-1"
+        eType="#//Place" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iniTrans" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

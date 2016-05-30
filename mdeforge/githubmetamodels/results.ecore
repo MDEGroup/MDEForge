@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="results"
+    nsURI="http://de.hub.clickwatch.analysis.results" nsPrefix="results">
+  <eClassifiers xsi:type="ecore:EClass" name="Chart" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//ChartType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueSpecs" upperBound="-1"
+        eType="#//ValueSpec" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChartType" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueSpec" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Axis" eSuperTypes="#//ValueSpec">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Series" eSuperTypes="#//ValueSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//ValueSpec"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Result" abstract="true" eSuperTypes="#//NamedElement">
+    <eOperations name="exportCSV">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XY" eSuperTypes="#//ChartType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BoxAndWhiskers" eSuperTypes="#//ChartType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Bar" eSuperTypes="#//ChartType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Results" eSuperTypes="#//Chart">
+    <eOperations name="createNewNumericalResult" eType="#//NumericalResult">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="createNewGroup" eType="#//Results">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getResult" eType="#//Result">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getGroup" eType="#//Results">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="exportCSV">
+      <eParameters name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="createNewGraphResult" eType="#//GraphResult">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
+        eType="#//Result" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//Results" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EqualsConstraint" eSuperTypes="#//Constraint">
+    <eOperations name="getValues" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="entry" eType="#//DataEntry"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Or" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ops" upperBound="-1" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DataSet" instanceClassName="de.hub.clickwatch.analysis.results.DataSet"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="DataEntry" instanceClassName="de.hub.clickwatch.analysis.results.DataEntry"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericalResult" eSuperTypes="#//Result">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charts" upperBound="-1"
+        eType="#//Chart" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" eType="#//DataSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataResultSet" eType="#//DataResultSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphResult" eSuperTypes="#//Result">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//GraphNode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//GraphLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphNode" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//GraphLink" eOpposite="#//GraphLink/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//GraphLink" eOpposite="#//GraphLink/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphLink" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//GraphNode"
+        eOpposite="#//GraphNode/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//GraphNode"
+        eOpposite="#//GraphNode/incoming"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataResultSet" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="XYDataResultSet" eSuperTypes="#//DataResultSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xValues" upperBound="-1"
+        eType="#//DataResultValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="yValues" upperBound="-1"
+        eType="#//DataResultValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleDataResultValue" eSuperTypes="#//DataResultValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataResultValue" abstract="true"/>
+</ecore:EPackage>

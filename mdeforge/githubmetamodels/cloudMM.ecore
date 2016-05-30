@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cloud" nsURI="http://cloud" nsPrefix="cloud">
+  <eClassifiers xsi:type="ecore:EClass" name="Cloud">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clusters" upperBound="-1"
+        eType="#//Cluster" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="MManager" eType="#//MManager"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pmManager" eType="#//PmManager"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceTypes" upperBound="-1"
+        eType="#//ServiceType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricTypes" upperBound="-1"
+        eType="#//MetricType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slas" upperBound="-1" eType="#//Sla"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elasticityMechanisms" upperBound="-1"
+        eType="#//ElasticityMechanismType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elasticityMechanismTypes"
+        upperBound="-1" eType="#//ElasticityMechanismType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Nodes" upperBound="-1"
+        eType="#//Node.1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elasticityMechanism" lowerBound="1"
+        eType="#//ElasticityMechanism" containment="true" eOpposite="#//ElasticityMechanism/cluster"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cluster" lowerBound="1"
+        eType="#//Cluster" eOpposite="#//Cluster/Nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="physicalMachines" upperBound="-1"
+        eType="#//Node.1" eOpposite="#//Node.1/virtualMachines"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Metrics" upperBound="-1"
+        eType="#//Metric"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CPU"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="virtualMachines" upperBound="-1"
+        eType="#//Node.1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" eOpposite="#//Service/customer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sla" lowerBound="1" eType="#//Sla"
+        eOpposite="#//Sla/customer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sla">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer" eOpposite="#//Customer/sla"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agreements" upperBound="-1"
+        eType="#//Constraints" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reports" upperBound="-1"
+        eType="#//QosReport"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraints">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" lowerBound="1"
+        eType="#//Service"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricType" lowerBound="1"
+        eType="#//MetricType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricLimit" lowerBound="1"
+        eType="#//MetricLimit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetricType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Metric">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metricType" lowerBound="1"
+        eType="#//MetricType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetricLimit" abstract="true">
+    <eOperations name="isValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="currentMetric" eType="#//Metric"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Equal" eSuperTypes="#//MetricLimit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//Metric"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nequal" eSuperTypes="#//MetricLimit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//Metric"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaxValue" eSuperTypes="#//MetricLimit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//Metric"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MinValue" eSuperTypes="#//MetricLimit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//Metric"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BoundedValue" eSuperTypes="#//MetricLimit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="minBound" lowerBound="1"
+        eType="#//Metric" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maxBound" lowerBound="1"
+        eType="#//Metric" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Nodes" upperBound="-1"
+        eType="#//Node.1" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="physicalMachines" upperBound="-1"
+        eType="#//Node.1" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PmManager"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Metrics" upperBound="-1"
+        eType="#//Metric" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serviceType" lowerBound="1"
+        eType="#//ServiceType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Metrics" upperBound="-1"
+        eType="#//Metric" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer" eOpposite="#//Customer/services"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElasticityMechanismType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Metrics" upperBound="-1"
+        eType="#//Metric"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElasticityMechanism">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mechanismType" lowerBound="1"
+        eType="#//ElasticityMechanismType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cluster" lowerBound="1"
+        eType="#//Cluster" eOpposite="#//Cluster/elasticityMechanism"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reports" upperBound="-1"
+        eType="#//QosReport" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QosReport">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sla" lowerBound="1" eType="#//Sla"/>
+  </eClassifiers>
+</ecore:EPackage>

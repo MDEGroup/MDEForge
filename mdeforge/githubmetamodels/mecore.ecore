@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mecore" nsURI="http://www.emftext.org/language/mecore" nsPrefix="mecore">
+  <eClassifiers xsi:type="ecore:EClass" name="MModelElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//MAnnotation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MNamedElement" abstract="true" eSuperTypes="#//MModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MType" abstract="true" eSuperTypes="#//MModelElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypedElement" eSuperTypes="#//MTypeArgumentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//MTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multiplicity" eType="#//MMultiplicity"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MPackage" eSuperTypes="#//MNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//MImport" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//MClassifier" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationDefinitions"
+        upperBound="-1" eType="#//MAnnotationDefinition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MImport">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" lowerBound="1"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedPackage" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MClassifier" abstract="true" eSuperTypes="#//MType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//MOperation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MClass" eSuperTypes="#//MNamedElement #//MClassifier #//MTypeParametrizable #//MCommentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//MFeature" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interface" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superTypeReferences" upperBound="-1"
+        eType="#//MTypeReference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MEnum" eSuperTypes="#//MNamedElement #//MClassifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" upperBound="-1"
+        eType="#//MEnumLiteral" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MEnumLiteral" eSuperTypes="#//MNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literal" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MFeature" eSuperTypes="#//MNamedElement #//MTypedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ncReference" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//MFeature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MMultiplicity" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MSimpleMultiplicity" eSuperTypes="#//MMultiplicity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//MSimpleMultiplicityValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MSimpleMultiplicityValue">
+    <eLiterals name="star"/>
+    <eLiterals name="plus" value="1"/>
+    <eLiterals name="optional" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MComplexMultiplicity" eSuperTypes="#//MMultiplicity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MDataType" eSuperTypes="#//MType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eDataType" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EDataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MEcoreType" eSuperTypes="#//MType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ecoreType" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClassifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MOperation" eSuperTypes="#//MNamedElement #//MTypedElement #//MTypeParametrizable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//MParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MParameter" eSuperTypes="#//MNamedElement #//MTypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypeParameter" eSuperTypes="#//MType #//MNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lowerBound" eType="#//MTypeReference"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypeParametrizable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeParameters" upperBound="-1"
+        eType="#//MTypeParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypeArgumentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeArguments" upperBound="-1"
+        eType="#//MTypeArgument" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypeArgument"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MTypeReference" eSuperTypes="#//MModelElement #//MTypeArgument #//MTypeArgumentable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//MType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MCommentable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//MAnnotationEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationDefinition" lowerBound="1"
+        eType="#//MAnnotationDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAnnotationEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MAnnotationDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" lowerBound="1"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MWildcard" eSuperTypes="#//MTypeArgument"/>
+</ecore:EPackage>

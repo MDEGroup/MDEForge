@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="architecture"
+    nsURI="http://architecture/1.0" nsPrefix="architecture">
+  <eClassifiers xsi:type="ecore:EClass" name="ISpielProvider" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The ISpielProvider instance is the central place for getting the actual game."/>
+    </eAnnotations>
+    <eOperations name="getSpiel" lowerBound="1" eType="ecore:EClass ../../RaumschachModell/model/raumschachmodell.ecore#//Spiel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get the game&#xD;&#xA;@return The game."/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IStateAnalyzer" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The IStateAnalyzer instance is responsible for generating the statistics about the game."/>
+    </eAnnotations>
+    <eOperations name="analyzeStrength" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Counts the number of controlled fields for both {@link Farbe}n and returns the corresponding number.&#xD;&#xA;&#xD;&#xA;@return The strength for the two {@link Farbe}n. The key for the  {@link Map} is the {@link Farbe} and the value is the strength."/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDataBaseWrapper" abstract="true" interface="true">
+    <eOperations name="getNameForActualPlayer" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Retrieves the actual name of the player based on the ip from the database.&#xD;&#xA;@return The name of the player."/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDisplayProvider" abstract="true" interface="true">
+    <eOperations name="getAllDisplays" upperBound="-1" eType="#//EDisplay">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Allows access to all displays registered. This is useful if you want to show for example messages to &lt;b>all&lt;/b> players.&#xD;&#xA;&#xD;&#xA;@return A {@link EList} of {@link Display}s"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDisplay" lowerBound="1" eType="#//EDisplay">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Allows access to a {@link Display}.&#xD;&#xA;&#xD;&#xA;@param id  The {@link HttpSession#getId()}.&#xD;&#xA;@return The {@link Display} belonging to the {@link HttpSession} with the given id.&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addDisplay">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Maps a given {@link Display} to a given {@link HttpSession#getId()}.&#xD;&#xA;&#xD;&#xA;@param string The {@link HttpSession#getId()}.&#xD;&#xA;@param disp The {@link Display}.&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="display" eType="#//EDisplay"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="EDisplay" instanceClassName="org.eclipse.swt.widgets.Display"/>
+</ecore:EPackage>

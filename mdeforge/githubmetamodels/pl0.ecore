@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pl0" nsURI="http://www.emftext.org/language/pl0" nsPrefix="pl0">
+  <eClassifiers xsi:type="ecore:EClass" name="Program" eSuperTypes="#//BlockOwner">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//VarDeclaration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constants" upperBound="-1"
+        eType="#//ConstDeclaration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedures" upperBound="-1"
+        eType="#//ProcedureDeclaration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="#//Body"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//BlockOwner"
+        eOpposite="#//BlockOwner/block"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allOwners" upperBound="-1"
+        eType="#//BlockOwner" changeable="false" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarDeclaration" eSuperTypes="#//Declaration"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstDeclaration" eSuperTypes="#//Declaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcedureDeclaration" eSuperTypes="#//BlockOwner">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Declaration" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CallStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedure" lowerBound="1"
+        eType="#//ProcedureDeclaration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//Body"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Body" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WhileStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="do" lowerBound="1" eType="#//Body"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//VarDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OddCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//RelationalOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TermExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obligatory" lowerBound="1"
+        eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="optional" upperBound="-1"
+        eType="#//OptionalTerm" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//PlusMinusOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obligatory" lowerBound="1"
+        eType="#//Factor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="optional" upperBound="-1"
+        eType="#//OptionalFactor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="#//Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//PlusMinusOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Factor" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalFactor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="factor" lowerBound="1"
+        eType="#//Factor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" lowerBound="1" eType="#//MulDivOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentReference" eSuperTypes="#//Factor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ident" lowerBound="1" eType="#//Declaration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Number" eSuperTypes="#//Factor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionFactor" eSuperTypes="#//Factor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PlusMinusOperator">
+    <eLiterals name="PLUS" literal="+"/>
+    <eLiterals name="MINUS" value="1" literal="-"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MulDivOperator">
+    <eLiterals name="MULTIPLY" literal="*"/>
+    <eLiterals name="DIVIDE" value="1" literal="/"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperator">
+    <eLiterals name="EQUAL" literal="="/>
+    <eLiterals name="UNEQUAL" value="1" literal="#"/>
+    <eLiterals name="LESS" value="2" literal="&lt;"/>
+    <eLiterals name="LESS_EQUAL" value="3" literal="&lt;="/>
+    <eLiterals name="GREATER" value="4" literal=">"/>
+    <eLiterals name="GREATER_EQUAL" value="5" literal=">="/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Body">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockOwner" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" lowerBound="1" eType="#//Block"
+        containment="true" eOpposite="#//Block/owner"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="XBNF" nsURI="http://www.eclipse.org/ocl/XBNF" nsPrefix="xbnf">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRule" eType="#//AbstractRule"
+        resolveProxies="false" eOpposite="#//AbstractRule/element"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//AbstractElement" containment="true" eOpposite="#//AbstractElement/parentRule"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionAssignment" eSuperTypes="#//Assignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" abstract="true" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharacterRange" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="left" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="right" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Conjunction" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" unique="false"
+        lowerBound="1" upperBound="-1" eType="#//AbstractElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Disjunction" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conjunctions" unique="false"
+        lowerBound="1" upperBound="-1" eType="#//Conjunction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EOF" eSuperTypes="#//AbstractElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Epsilon" eSuperTypes="#//AbstractElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Grammar">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="syntax" ordered="false"
+        lowerBound="1" eType="#//Syntax" resolveProxies="false" eOpposite="#//Syntax/grammars"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goals" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//TypedRule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//TypedRule" containment="true" eOpposite="#//TypedRule/grammar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Keyword" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeywordAssignment" eSuperTypes="#//Assignment #//Keyword"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LexerGrammar" eSuperTypes="#//Grammar"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NegatedToken" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terminal" ordered="false"
+        lowerBound="1" eType="#//AbstractElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParserGrammar" eSuperTypes="#//Grammar"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParserRule" eSuperTypes="#//TypedRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleCall" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredRule" ordered="false"
+        lowerBound="1" eType="#//AbstractRule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleCallAssignment" eSuperTypes="#//Assignment #//RuleCall"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Syntax">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grammars" upperBound="-1"
+        eType="#//Grammar" containment="true" eOpposite="#//Grammar/syntax"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminalRule" eSuperTypes="#//TypedRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedRule" abstract="true" eSuperTypes="#//AbstractRule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subrules" ordered="false"
+        upperBound="-1" eType="#//UntypedRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grammar" lowerBound="1"
+        eType="#//Grammar" eOpposite="#//Grammar/rules"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UntilToken" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terminal" ordered="false"
+        lowerBound="1" eType="#//AbstractElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UntypedRule" eSuperTypes="#//AbstractRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Wildcard" eSuperTypes="#//AbstractElement"/>
+</ecore:EPackage>

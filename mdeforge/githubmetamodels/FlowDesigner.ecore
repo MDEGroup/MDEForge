@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="FlowDesigner"
+    nsURI="http://piece-framework.com/piece-ide/flowdesigner/1.0" nsPrefix="FlowDesigner">
+  <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="#//Source">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialize" eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finalize" eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionState" eSuperTypes="#//NamedState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewState" eSuperTypes="#//NamedState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="view" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextState" lowerBound="1"
+        eType="#//Target"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guard" eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Source" abstract="true" interface="true">
+    <eOperations name="canBeSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="target" eType="#//Target"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true" eKeys="#//Event/event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Target" abstract="true" interface="true">
+    <eOperations name="canBeTarget" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="source" eType="#//Source"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedState" abstract="true" eSuperTypes="#//Source #//Target">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activity" eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exit" eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entry" eType="#//Action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Flow">
+    <eOperations name="findStateByName" eType="#//NamedState">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="hasLastState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+        eType="#//InitialState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//NamedState" containment="true" eKeys="#//NamedState/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalState" eType="#//FinalState"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Action" instanceClassName="java.lang.String"/>
+</ecore:EPackage>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="runtimemodel" nsURI="http://runtimemetadata/1.0" nsPrefix="cz.cuni.mff.d3s.deeco.core.model.runtime">
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
+        eType="#//ComponentProcess" containment="true" eOpposite="#//ComponentProcess/component"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KnowledgeType" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clazz" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentProcess" eSuperTypes="#//Invocable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//Component" eOpposite="#//Component/processes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" lowerBound="1"
+        eType="#//Schedule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Schedule" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuredKnowledgeValueType" eSuperTypes="#//KnowledgeType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//NestedKnowledgeDefinition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListValueType" eSuperTypes="#//KnowledgeType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" lowerBound="1"
+        eType="#//KnowledgeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MapValueType" eSuperTypes="#//KnowledgeType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueType" eType="#//KnowledgeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnstructuredValueType" eSuperTypes="#//KnowledgeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//KnowledgeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
+        eType="#//ParameterDirection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="knowledgePath" lowerBound="1"
+        eType="#//KnowledgePath" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Invocable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="method" lowerBound="1"
+        eType="#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PeriodicSchedule" eSuperTypes="#//Schedule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SchedulingType">
+    <eLiterals name="PERIODIC"/>
+    <eLiterals name="TRIGGERED" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TriggeredSchedule" eSuperTypes="#//Schedule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" lowerBound="1"
+        upperBound="-1" eType="#//Trigger" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KnowledgeChangedTrigger" eSuperTypes="#//Trigger">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="knowledgePath" lowerBound="1"
+        eType="#//KnowledgePath" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ensemble">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="membership" lowerBound="1"
+        eType="#//Condition" containment="true" eOpposite="#//Condition/ensemble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="knowledgeExchange" lowerBound="1"
+        eType="#//Exchange" containment="true" eOpposite="#//Exchange/ensemble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" lowerBound="1"
+        eType="#//Schedule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//Invocable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ensemble" lowerBound="1"
+        eType="#//Ensemble" eOpposite="#//Ensemble/membership"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exchange" eSuperTypes="#//Invocable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ensemble" lowerBound="1"
+        eType="#//Ensemble" eOpposite="#//Ensemble/knowledgeExchange"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuntimeMetadata">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ensembles" upperBound="-1"
+        eType="#//Ensemble" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="knowledgeTypes" upperBound="-1"
+        eType="#//KnowledgeType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//ComponentInstance" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KnowledgePath">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1" upperBound="-1"
+        eType="#//PathNode" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialKnowledge" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lockingMode" lowerBound="1"
+        eType="#//LockingMode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParameterDirection">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="baseType" value="http://www.eclipse.org/emf/2002/Ecore#EString"/>
+    </eAnnotations>
+    <eLiterals name="IN"/>
+    <eLiterals name="INOUT" value="1"/>
+    <eLiterals name="OUT" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PathNode" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Method" instanceClassName="java.lang.reflect.Method"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PathNodeField" eSuperTypes="#//PathNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PathNodeMapKey" eSuperTypes="#//PathNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyPath" lowerBound="1"
+        eType="#//KnowledgePath" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NestedKnowledgeDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLocal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//KnowledgeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LockingMode">
+    <eLiterals name="WEAK"/>
+    <eLiterals name="STRONG" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutWrapperValueType" eSuperTypes="#//KnowledgeType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wrappedType" lowerBound="1"
+        eType="#//KnowledgeType"/>
+  </eClassifiers>
+</ecore:EPackage>

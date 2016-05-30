@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="as3"
+    nsURI="http://axdt.org/uri/As3" nsPrefix="as3">
+  <eClassifiers xsi:type="ecore:EClass" name="IDirective" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPackageDirective" abstract="true" interface="true"
+      eSuperTypes="#//IDirective"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypeDirective" abstract="true" interface="true"
+      eSuperTypes="#//IPackageDirective"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IBlockDirective" abstract="true" interface="true"
+      eSuperTypes="#//ITypeDirective #//ICaseElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IStatement" abstract="true" interface="true"
+      eSuperTypes="#//IBlockDirective"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IExpression" abstract="true">
+    <eOperations name="resolveType" eType="#//AvmTypeAccess"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IAssignmentExpression" abstract="true"
+      interface="true" eSuperTypes="#//IExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IConditionalExpression" abstract="true"
+      interface="true" eSuperTypes="#//IAssignmentExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ILogicalExpression" abstract="true"
+      interface="true" eSuperTypes="#//IConditionalExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IBitwiseExpression" abstract="true"
+      interface="true" eSuperTypes="#//ILogicalExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IEqualityExpression" abstract="true"
+      interface="true" eSuperTypes="#//IBitwiseExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IRelationalExpression" abstract="true"
+      interface="true" eSuperTypes="#//IEqualityExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IArithmeticExpression" abstract="true"
+      interface="true" eSuperTypes="#//IRelationalExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IUnaryExpression" abstract="true" interface="true"
+      eSuperTypes="#//IArithmeticExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPostfixExpression" abstract="true"
+      interface="true" eSuperTypes="#//IUnaryExpression #//IForInInit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPrimaryExpression" abstract="true"
+      interface="true" eSuperTypes="#//IPostfixExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IIdentifier" abstract="true" interface="true"
+      eSuperTypes="#//IPrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ILiteral" abstract="true" interface="true"
+      eSuperTypes="#//IPrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ILiteralFieldName" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ICaseElement" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="INonAttributeIdentifier" abstract="true"
+      interface="true" eSuperTypes="#//IIdentifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IAttribute" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IForInit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IForInInit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Element" abstract="true" eSuperTypes="../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Identifiable" abstract="true" eSuperTypes="#//As3Element ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmIdentifiable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Definition" abstract="true" eSuperTypes="#//As3Identifiable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" eType="#//As3Attributes"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Member" abstract="true" eSuperTypes="#//As3Definition ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmMember #//ITypeDirective"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Executable" abstract="true" interface="true"
+      eSuperTypes="../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmExecutable">
+    <eOperations name="getDeclarations">
+      <eGenericType eClassifier="#//Iterable">
+        <eTypeArguments eClassifier="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmReferable"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getDirectives">
+      <eGenericType eClassifier="#//Iterable">
+        <eTypeArguments eClassifier="#//IDirective"/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//As3Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Program" eSuperTypes="#//As3Element ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmDefinitionContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//As3Package"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//IDirective" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Import" eSuperTypes="#//IDirective ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ImportList" eSuperTypes="#//IBlockDirective">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//As3Import" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Include" eSuperTypes="#//IBlockDirective">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Use" eSuperTypes="#//IBlockDirective">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Package" eSuperTypes="#//As3Identifiable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmPackage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//IDirective" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canonicalName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Type" abstract="true" eSuperTypes="#//As3Definition ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmDeclaredType #//IPackageDirective">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedInterfaces" upperBound="-1"
+        eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//IDirective" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Class" eSuperTypes="#//As3Type ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmClass">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedClass" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Interface" eSuperTypes="#//As3Type ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmInterface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Namespace" eSuperTypes="#//As3Member ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmNamespace #//IBlockDirective">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Variable" eSuperTypes="#//As3Identifiable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmVariable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3VariableAssign" eSuperTypes="#//As3Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3VariableDefinition" eSuperTypes="#//IStatement #//IForInit #//IForInInit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//As3Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Parameter" abstract="true" eSuperTypes="#//As3Variable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ParameterAssign" eSuperTypes="#//As3Parameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ParameterRest" eSuperTypes="#//As3Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3FieldBinding" eSuperTypes="#//As3Member ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmField">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3FieldDefinition" eSuperTypes="#//ITypeDirective">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//As3FieldBinding" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" eType="#//As3Attributes"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Operation" eSuperTypes="#//As3Member #//As3Executable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="setter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//As3Block"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Constructor" eSuperTypes="#//As3Member #//As3Executable ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmConstructor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//As3Block"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3MetadataTag" eSuperTypes="#//IAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//As3MetadataParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3MetadataParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ILiteral"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3AttributeExpression" abstract="true"
+      eSuperTypes="#//IAttribute"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SimpleAttributeExpression" eSuperTypes="#//As3AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ident" eType="#//IIdentifier"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3QualifiedAttributeExpression" eSuperTypes="#//As3AttributeExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" eType="#//As3AttributeExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//IIdentifier"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3DefaultXmlNamespaceStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3TryStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//As3Block"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="catches" upperBound="-1"
+        eType="#//As3CatchClause" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalBlock" eType="#//As3Block"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3CatchClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="error" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmParameter"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//As3Block"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ThrowStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ReturnStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3WithStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//As3ExpressionList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//IStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3BreakStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" eType="#//As3LabeledStatement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ContinueStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" eType="#//As3LabeledStatement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3IterationStatement" abstract="true"
+      eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//IStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ConditionalIterationStatement" abstract="true"
+      eSuperTypes="#//As3IterationStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3DoStatement" eSuperTypes="#//As3ConditionalIterationStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3WhileStatement" eSuperTypes="#//As3ConditionalIterationStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ForStatement" eSuperTypes="#//As3ConditionalIterationStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" eType="#//IForInit"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iter" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ForInStatement" eSuperTypes="#//As3IterationStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//As3ExpressionList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="init" eType="#//IForInInit"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forEach" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ConditionalStatement" abstract="true"
+      eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SwitchStatement" eSuperTypes="#//As3ConditionalStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
+        eType="#//ICaseElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3CaseLabel" abstract="true" eSuperTypes="#//ICaseElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3DefaultCase" eSuperTypes="#//As3CaseLabel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ExpressionCase" eSuperTypes="#//As3CaseLabel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3IfStatement" eSuperTypes="#//As3ConditionalStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//IStatement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseStatement" eType="#//IStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3LabeledStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//IStatement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Block" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//IDirective" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SuperStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ExpressionStatement" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//IExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3EmptyStatement" eSuperTypes="#//IStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ExpressionList" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//IExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ListExpression" eSuperTypes="#//As3ExpressionList #//IForInit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Arguments" eSuperTypes="#//As3ExpressionList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3AssignmentExpression" eSuperTypes="#//As3BinaryExpression #//IAssignmentExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ConditionalExpression" eSuperTypes="#//IConditionalExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//ILogicalExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//IExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseStatement" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3BinaryExpression" abstract="true"
+      eSuperTypes="#//IExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//IExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3LogicalExpression" eSuperTypes="#//As3BinaryExpression #//ILogicalExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3BitwiseExpression" eSuperTypes="#//As3BinaryExpression #//IBitwiseExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3EqualityExpression" eSuperTypes="#//As3BinaryExpression #//IEqualityExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3RelationalExpression" eSuperTypes="#//As3BinaryExpression #//IRelationalExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ShiftExpression" eSuperTypes="#//As3BinaryExpression #//IArithmeticExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3AdditiveExpression" eSuperTypes="#//As3BinaryExpression #//IArithmeticExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3MultiplicativeExpression" eSuperTypes="#//As3BinaryExpression #//IArithmeticExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3UnaryExpression" abstract="true"
+      eSuperTypes="#//IUnaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IUnaryExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3DeleteExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3VoidExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3TypeOfExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PreIncrementExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PreDecrementExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3UnaryPlusExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3UnaryMinusExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3BitwiseNotExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3LogicalNotExpression" eSuperTypes="#//As3UnaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PostfixExpression" abstract="true"
+      eSuperTypes="#//IPostfixExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IPostfixExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PostIncrementExpression" eSuperTypes="#//As3PostfixExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PostDecrementExpression" eSuperTypes="#//As3PostfixExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3InvocationExpression" eSuperTypes="#//As3PostfixExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3AccessExpression" eSuperTypes="#//As3PostfixExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operator" eType="#//As3PropertyOperator"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3QueryExpression" eSuperTypes="#//As3PostfixExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operator" eType="#//As3QueryOperator"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PostfixOperator" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//IIdentifier"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" eType="#//As3ExpressionList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PropertyOperator" eSuperTypes="#//As3PostfixOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3QueryOperator" eSuperTypes="#//As3PostfixOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SimpleIdentifier" abstract="true"
+      eSuperTypes="#//INonAttributeIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmReferable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3PropertyIdentifier" eSuperTypes="#//As3SimpleIdentifier #//ILiteralFieldName"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3QualifiedIdentifier" abstract="true"
+      eSuperTypes="#//IIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" eType="#//As3ExpressionList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//IIdentifier"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3AttributeQualifiedIdentifier" eSuperTypes="#//As3QualifiedIdentifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3NonAttributeQualifiedIdentifier"
+      abstract="true" eSuperTypes="#//As3QualifiedIdentifier #//INonAttributeIdentifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SimpleQualifiedIdentifier" eSuperTypes="#//As3NonAttributeQualifiedIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ExpressionQualifiedIdentifier" eSuperTypes="#//As3NonAttributeQualifiedIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ThisExpression" eSuperTypes="#//IPrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3SuperExpression" eSuperTypes="#//IPrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ParenListExpression" eSuperTypes="#//As3ExpressionList #//IPrimaryExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3FunctionExpression" eSuperTypes="#//IPrimaryExpression #//As3Executable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmTypeReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//As3Block"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3NewExpression" eSuperTypes="#//IPrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//IPostfixExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ArrayInitializer" eSuperTypes="#//IPrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//As3ArrayElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ArrayElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ObjectInitializer" eSuperTypes="#//IPrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//As3LiteralField" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3LiteralField">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//ILiteralFieldName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//IExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3XmlInitializer" eSuperTypes="#//IPrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3NullLiteral" eSuperTypes="#//ILiteral"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3BooleanLiteral" eSuperTypes="#//ILiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3NumberLiteral" eSuperTypes="#//ILiteral #//ILiteralFieldName">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3StringLiteral" eSuperTypes="#//ILiteral #//ILiteralFieldName">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3RegexLiteral" eSuperTypes="#//ILiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
+    <eTypeParameters name="E"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ConditionalBlock" eSuperTypes="#//IStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//IIdentifier"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//As3Block"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3ReservedAttribute" eSuperTypes="#//IAttribute">
+    <eOperations name="isVisibility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="ecore:EEnum ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmVisibility"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="override" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="final" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="native" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3Attributes">
+    <eOperations name="isDynamic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getVisibility" eType="ecore:EEnum ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmVisibility"/>
+    <eOperations name="isStatic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isNative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isOverride" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//IAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="AvmTypeAccess" instanceClassName="org.axdt.as3.util.AvmTypeAccess"/>
+  <eClassifiers xsi:type="ecore:EClass" name="As3NewVectorExpression" eSuperTypes="#//IPrimaryExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" eType="#//As3ArrayInitializer"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="As3TypeParameter" eSuperTypes="#//As3PostfixExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="ecore:EClass ../../../../org.axdt.avm.runtime/src/main/ecore/Avm.ecore#//AvmType"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="todolistdiag"
+    nsURI="http://todolistdiag/1.0" nsPrefix="todolistdiag">
+  <eClassifiers xsi:type="ecore:EClass" name="Task">
+    <eOperations name="statusNotStarted" lowerBound="1"/>
+    <eOperations name="statusInProgress" lowerBound="1"/>
+    <eOperations name="statusDone" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" lowerBound="1"
+        eType="#//Status"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importanceLevel" lowerBound="1"
+        eType="#//Importance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentFolders" lowerBound="1"
+        upperBound="-1" eType="#//Folder" eOpposite="#//Folder/tasks"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        changeable="false" iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Status">
+    <eLiterals name="NOT_STARTED"/>
+    <eLiterals name="IN_PROGRESS" value="1"/>
+    <eLiterals name="DONE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Importance">
+    <eLiterals name="LOW"/>
+    <eLiterals name="MEDIUM" value="1"/>
+    <eLiterals name="HIGH" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Folder">
+    <eOperations name="hasSubFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="setAsParent">
+      <eParameters name="parentFolder" eType="#//Folder"/>
+    </eOperations>
+    <eOperations name="setAsChild">
+      <eParameters name="childFolder" eType="#//Folder"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" eOpposite="#//Task/parentFolders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subFolders" upperBound="-1"
+        eType="#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="namespace" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        changeable="false" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Folder"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToDoListManager">
+    <eOperations name="createTask" lowerBound="1" eType="#//Task"/>
+    <eOperations name="editTask">
+      <eParameters name="task" eType="#//Task"/>
+    </eOperations>
+    <eOperations name="deleteTask">
+      <eParameters name="task" eType="#//Task"/>
+    </eOperations>
+    <eOperations name="addFolderManagerListener">
+      <eParameters name="listener" eType="#//FolderManagerListener"/>
+    </eOperations>
+    <eOperations name="removeFolderManagerListener">
+      <eParameters name="listener" eType="#//FolderManagerListener"/>
+    </eOperations>
+    <eOperations name="createFolder" lowerBound="1" eType="#//Folder"/>
+    <eOperations name="editFolder" lowerBound="1">
+      <eParameters name="folder" eType="#//Folder"/>
+    </eOperations>
+    <eOperations name="deleteFolder">
+      <eParameters name="folder" eType="#//Folder"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootFolder" lowerBound="1"
+        eType="#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folderManagerListener"
+        upperBound="-1" eType="#//FolderManagerListener"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="folders" lowerBound="1"
+        upperBound="-1" eType="#//Folder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FolderManagerListener" abstract="true"
+      interface="true">
+    <eOperations name="folderAdded">
+      <eParameters name="event" eType="#//FolderManagerEvent"/>
+    </eOperations>
+    <eOperations name="folderDeleted">
+      <eParameters name="event" eType="#//FolderManagerEvent"/>
+    </eOperations>
+    <eOperations name="folderModified">
+      <eParameters name="event" eType="#//FolderManagerEvent"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="FolderManagerEvent" instanceClassName="java.util.Event"/>
+</ecore:EPackage>

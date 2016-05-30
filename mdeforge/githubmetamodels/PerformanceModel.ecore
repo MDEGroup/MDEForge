@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	ArchE
+	Copyright (c) 2012 Carnegie Mellon University.
+	All Rights Reserved.
+
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
+
+	1. Redistributions of source code must retain the above copyright notice,
+	this list of conditions and the following acknowledgments and disclaimers.
+
+	2. Redistributions in binary form must reproduce the above copyright notice,
+	this list of conditions and the following disclaimer in the documentation
+	and/or other materials provided with the distribution.
+
+	3. All advertising materials for third-party software mentioning features or
+	use of this software must display the following disclaimer:
+
+	“Neither Carnegie Mellon University nor its Software Engineering Institute
+	have reviewed or endorsed this software”
+
+	4. The names “Carnegie Mellon University,” and/or “Software Engineering
+	Institute" shall not be used to endorse or promote products derived from
+	this software without prior written permission. For written permission,
+	please contact permission@sei.cmu.edu.
+
+	5. Redistributions of any form whatsoever must retain the following
+	acknowledgment:
+
+	Copyright 2012 Carnegie Mellon University.
+
+	This material is based upon work funded and supported by the United States
+	Department of Defense under Contract No. FA8721-05-C-0003 with Carnegie
+	Mellon University for the operation of the Software Engineering Institute, a
+	federally funded research and development center.
+
+	NO WARRANTY
+
+	THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING INSTITUTE MATERIAL
+	IS FURNISHED ON AN “AS-IS” BASIS. CARNEGIE MELLON UNIVERSITY MAKES NO
+	WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED, AS TO ANY MATTER
+	INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR PURPOSE OR
+	MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF THE MATERIAL.
+	CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF ANY KIND WITH
+	RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT INFRINGEMENT.
+-->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http://edu.cmu.sei.pacc.perf.model" nsPrefix="edu.cmu.sei.pacc.perf.model">
+  <eClassifiers xsi:type="ecore:EClass" name="Task" abstract="true">
+    <eOperations name="getComputedExecutionMean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="getEffectiveDeadline" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="taskId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subtasks" upperBound="-1"
+        eType="#//Subtask" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadline" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PeriodicTask" eSuperTypes="#//Task">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AperiodicTask" eSuperTypes="#//Task">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interarrivalDistribution"
+        lowerBound="1" eType="#//Distribution" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subtask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retAnchorUsed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activationSynchronous"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="execTimeDistribution" lowerBound="1"
+        eType="#//Distribution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bypass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="downsamplingFactor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="callingThreadPriority"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mutexes" upperBound="-1"
+        eType="#//Mutex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pinId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Distribution" abstract="true">
+    <eOperations name="add">
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+    <eOperations name="getComputedMean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eOperations name="toString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exponential" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Uniform" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Unknown" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Normal" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stdDev" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PerformanceModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mutexes" upperBound="-1"
+        eType="#//Mutex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SSTask" eSuperTypes="#//AperiodicTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="budget" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="replenishmentPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundPriority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mutex">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

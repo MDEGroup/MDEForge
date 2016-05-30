@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="SemanticResourceDB"
+    nsURI="http://www.eclipse.org/core/2009/resources/semantic" nsPrefix="SemanticResourceDB">
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceTreeNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ResourceTreeNode" containment="true" eOpposite="#//ResourceTreeNode/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ResourceTreeNode"
+        eOpposite="#//ResourceTreeNode/children"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exists" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="templateID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistentProperties" eType="#//PersistentProperties"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//TreeNodeType"
+        defaultValueLiteral="FILE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sessionProperties" eType="#//SessionProperties"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryPart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicContentProviderID"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SemanticDB">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roots" upperBound="-1"
+        eType="#//TreeRoot" containment="true" eOpposite="#//TreeRoot/parentDB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TreeRoot" eSuperTypes="#//ResourceTreeNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentDB" eType="#//SemanticDB"
+        eOpposite="#//SemanticDB/roots"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="PersistentProperties" instanceTypeName="java.util.HashMap&lt;java.lang.String, java.lang.String>"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="TreeNodeType">
+    <eLiterals name="FOLDER" value="2"/>
+    <eLiterals name="FILE" value="1"/>
+    <eLiterals name="PROJECT" value="3"/>
+    <eLiterals name="UNKNOWN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="SessionProperties" instanceTypeName="java.util.HashMap&lt;org.eclipse.core.runtime.QualifiedName, java.lang.Object>"/>
+</ecore:EPackage>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2013 Flux IT.
+  
+  This file is part of JQA (http://github.com/fluxitsoft/jqa).
+  
+  JQA is free software: you can redistribute it and/or modify it 
+  under the terms of the GNU Lesser General Public License as 
+  published by the Free Software Foundation, either version 3 of 
+  the License, or (at your option) any later version.
+  
+  JQA is distributed in the hope that it will be useful, but WITHOUT 
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+  or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General 
+  Public License for more details.
+  
+  You should have received a copy of the GNU Lesser General Public 
+  License along with JQA. If not, see <http://www.gnu.org/licenses/>.
+-->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="jqa"
+    nsURI="http://www.fluxit.com.ar/jqa/schema/ruleset" nsPrefix="jqa">
+  <eClassifiers xsi:type="ecore:EClass" name="Ruleset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="1" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filterPredicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="checkPredicate" lowerBound="1"
+        eType="#//CheckPredicate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Predicate" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContextProvidedPredicate" eSuperTypes="#//Predicate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="predicateName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractionPredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstractionType" lowerBound="1"
+        eType="#//AbstractionType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AbstractionType">
+    <eLiterals name="ABSTRACT"/>
+    <eLiterals name="INTERFACE" value="1"/>
+    <eLiterals name="CONCRETE" value="2"/>
+    <eLiterals name="CLASS" value="3" literal="CLASS"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AllocationPredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamingPredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namePattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThrowingPredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypingPredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UsagePredicate" eSuperTypes="#//CheckPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarArgsLogicPredicate" abstract="true"
+      eSuperTypes="#//Predicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        upperBound="-1" eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndPredicate" eSuperTypes="#//VarArgsLogicPredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FalsePredicate" eSuperTypes="#//Predicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NotPredicate" eSuperTypes="#//Predicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrPredicate" eSuperTypes="#//VarArgsLogicPredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TruePredicate" eSuperTypes="#//Predicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="XORPredicate" eSuperTypes="#//VarArgsLogicPredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckPredicate" abstract="true" interface="true"
+      eSuperTypes="#//Predicate"/>
+</ecore:EPackage>

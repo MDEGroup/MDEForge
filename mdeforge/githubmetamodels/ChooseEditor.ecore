@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="chooseeditor" nsURI="http://chooseeditor/1.0" nsPrefix="chooseeditor">
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Goals" upperBound="-1"
+        eType="#//Goal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Refinements" upperBound="-1"
+        eType="#//Refinement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Actors" upperBound="-1"
+        eType="#//ActorContainer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Objects" upperBound="-1"
+        eType="#//Object" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Operations" upperBound="-1"
+        eType="#//OperationContainer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Goal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Conflicts" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/Conflicted"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Conflicted" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/Conflicts"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AssignedTo" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/Assignments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="WishedBy" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/Wishes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OperationalizedBy" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Operationalizes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ConcernsObjects" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/ConcernsGoals"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Or" upperBound="-1" eType="#//Refinement"
+        eOpposite="#//Refinement/Supergoal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="And" upperBound="-1" eType="#//Refinement"
+        eOpposite="#//Refinement/Subgoals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Refinement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Supergoal" lowerBound="1"
+        eType="#//Goal" eOpposite="#//Goal/Or"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Subgoals" lowerBound="1"
+        upperBound="-1" eType="#//Goal" eOpposite="#//Goal/And"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActorContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Assignments" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/AssignedTo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Wishes" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/WishedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Includes" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/PartOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PartOf" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/Includes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ResponsibleFor" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Responsible"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AccountableFor" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Accountable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ConsultedFor" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Consult"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InformedFor" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Inform"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Controls" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/ControlledBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Monitors" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/MonitoredBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Operationalizes" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/OperationalizedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Responsible" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/ResponsibleFor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Accountable" lowerBound="1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/AccountableFor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Consult" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/ConsultedFor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Inform" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/InformedFor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Input" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/InputFor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Output" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/OutputOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PartOf" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Includes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Includes" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/PartOf"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Object">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ConcernsGoals" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/ConcernsObjects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ControlledBy" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/Controls"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="MonitoredBy" upperBound="-1"
+        eType="#//ActorContainer" eOpposite="#//ActorContainer/Monitors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InputFor" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Input"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OutputOf" upperBound="-1"
+        eType="#//OperationContainer" eOpposite="#//OperationContainer/Output"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Associates" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/Associated"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Associated" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/Associates"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Specialization" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/SpecializedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SpecializedBy" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/Specialization"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Includes" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/PartOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PartOf" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/Includes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//ActorContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HumanActor" eSuperTypes="#//ActorContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Supervisees" upperBound="-1"
+        eType="#//HumanActor" eOpposite="#//HumanActor/Supervisors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Supervisors" upperBound="-1"
+        eType="#//HumanActor" eOpposite="#//HumanActor/Supervisees"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Performs" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/PerformedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//ActorContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PerformedBy" upperBound="-1"
+        eType="#//HumanActor" eOpposite="#//HumanActor/Performs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Device" eSuperTypes="#//ActorContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SoftwareActor" eSuperTypes="#//ActorContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//OperationContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//OperationContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//OperationContainer"/>
+</ecore:EPackage>

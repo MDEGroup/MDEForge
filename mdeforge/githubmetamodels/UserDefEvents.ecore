@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="userdefevents"
+    nsURI="http://userdefevents/1.0" nsPrefix="userdefevents">
+  <eClassifiers xsi:type="ecore:EClass" name="TriggerEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ops" lowerBound="1" upperBound="-1"
+        eType="#//UserDefinedOperation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedOperation" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompareOperation" eSuperTypes="#//UserDefinedOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhop" lowerBound="1" eType="#//TraceValue"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhop" lowerBound="1" eType="#//TraceValue"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//COMPARE_OP"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalOperation" eSuperTypes="#//UserDefinedOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhop" lowerBound="1" eType="#//UserDefinedOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhop" lowerBound="1" eType="#//UserDefinedOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//LOGICAL_OP"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MathValue" abstract="true" eSuperTypes="#//TraceValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhop" lowerBound="1" eType="#//TraceValue"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhop" lowerBound="1" eType="#//TraceValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceValue" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActualTraceValue" eSuperTypes="#//TraceValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refers_to" lowerBound="1"
+        eType="#//DndmVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbsoluteTraceValue" eSuperTypes="#//TraceValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refers_to" lowerBound="1"
+        eType="#//DndmVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstValue" eSuperTypes="#//TraceValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DndmVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique_id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LOGICAL_OP">
+    <eLiterals name="AND"/>
+    <eLiterals name="OR" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="COMPARE_OP">
+    <eLiterals name="LESS_THAN"/>
+    <eLiterals name="GREATER_THAN" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DNDM">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//DndmVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//TriggerEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//TraceValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Addition" eSuperTypes="#//TraceValue #//MathValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Subtraction" eSuperTypes="#//MathValue #//TraceValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Division" eSuperTypes="#//MathValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplication" eSuperTypes="#//MathValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sqrt" eSuperTypes="#//MathValue"/>
+</ecore:EPackage>

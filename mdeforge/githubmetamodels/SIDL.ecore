@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sidl" nsURI="http://www.earthsystemcurator.org/cupid/sidl" nsPrefix="sidl">
+  <eClassifiers xsi:type="ecore:EClass" name="Class">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" upperBound="-1"
+        eType="#//Method" containment="true" eOpposite="#//Method/class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentInterface" upperBound="-1"
+        eType="#//Interface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" lowerBound="1"
+        eType="#//Package" eOpposite="#//Package/class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" upperBound="-1"
+        eType="#//Package" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" upperBound="-1"
+        eType="#//Method" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentInterface" upperBound="-1"
+        eType="#//Interface"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//Class" containment="true" eOpposite="#//Class/package"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interface" upperBound="-1"
+        eType="#//Interface" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//SIDLType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+        eType="#//Argument" containment="true" eOpposite="#//Argument/method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//Class"
+        eOpposite="#//Class/method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Argument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" lowerBound="1" eType="#//ModeEnum"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//SIDLType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+        eType="#//Method" eOpposite="#//Method/argument"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SIDLType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//SIDLType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dim" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//SIDLType"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//SIDLType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simpleType" lowerBound="1"
+        eType="#//SimpleTypeEnum"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SimpleTypeEnum">
+    <eLiterals name="double" value="1"/>
+    <eLiterals name="void"/>
+    <eLiterals name="int" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ModeEnum">
+    <eLiterals name="in" literal="in"/>
+    <eLiterals name="out" value="1"/>
+    <eLiterals name="inout" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

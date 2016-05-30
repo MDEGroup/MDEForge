@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="component" nsURI="http://torusfw.org/org.torusfw.buckytools.repository/repo.ecore"
+    nsPrefix="Component">
+  <eClassifiers xsi:type="ecore:EClass" name="RepoComponent" abstract="true" eSuperTypes="../../org.torusfw.buckytools.core/model/component.ecore#//Component">
+    <eOperations name="addRepoPublisherAction" eType="ecore:EDataType ../../org.torusfw.buckytools.core/model/component.ecore#//ActionBuilder"
+        eExceptions="ecore:EDataType ../../org.torusfw.buckytools.core/model/component.ecore#//SpecBuildingException">
+      <eParameters name="actionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="productBaseOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="prerequisite" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getRepoOutputPath" eType="ecore:EDataType platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArchiveRepoComponent" eSuperTypes="#//RepoComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="archiveURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="archiveName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="archiveOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="p2Repository" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localArchiveURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleArchiveRepoComponent" eSuperTypes="#//ArchiveRepoComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SiteArchiveRepoComponent" eSuperTypes="#//ArchiveRepoComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RepoManager">
+    <eOperations name="loadRepo" eType="#//RepoComponent" eExceptions="ecore:EDataType ../../org.torusfw.buckytools.core/model/component.ecore#//SpecBuildingException">
+      <eParameters name="input" eType="ecore:EDataType platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//Properties"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BundlesListRepoComponent" eSuperTypes="#//RepoComponent">
+    <eOperations name="getData" eType="#//BundleData">
+      <eParameters name="bundle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bundles" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bundleData" upperBound="-1"
+        eType="#//BundleData" eKeys="#//BundleData/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeRepoComponent" eSuperTypes="#//RepoComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entries" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BundleData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalRepoComponent" eSuperTypes="#//RepoComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repoOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MirrorRepoComponent" eSuperTypes="#//RepoComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repoSource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iuList" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

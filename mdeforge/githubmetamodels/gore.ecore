@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gore"
+    nsURI="http://zanshin.disi.unitn.it/1.0/core" nsPrefix="it.unitn.disi.zanshin.model">
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" eSuperTypes="LTL.ecore#//OclAny">
+    <eOperations name="findGoalModel" eType="#//GoalModel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="GoalModel model = null;&#xA;&#xA;// If it's the root goal, return the goal model.&#xA;if (it.unitn.disi.zanshin.model.gore.GorePackage.eINSTANCE.getGoal().isInstance(this))&#xA;&#x9;model = ((it.unitn.disi.zanshin.model.gore.Goal) this).getGoalModel();&#xA;&#xA;// If the model is not found in the root goal, move up the requirement tree looking for the root goal.&#xA;if ((model == null) &amp;&amp; (getParent() != null))&#xA;&#x9;model = getParent().findGoalModel();&#xA;&#xA;// Returns the found model, or null if no model has been found.&#xA;return model;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getChildrenStateCount" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Counts the number of children in each state and the number of defineable children.&#xA;int[] stateCount = new int[it.unitn.disi.zanshin.model.gore.DefinableRequirementState.VALUES.size()];&#xA;int defChildrenCount = 0;&#xA;for (it.unitn.disi.zanshin.model.gore.Requirement child : getChildren()) {&#xA;&#x9;if (child instanceof DefinableRequirement) {&#xA;&#x9;&#x9;defChildrenCount++;&#xA;&#x9;&#x9;stateCount[((DefinableRequirement) child).getState().getValue()]++;&#xA;&#x9;}&#xA;}&#xA;&#xA;// Converts to EList so we can return, adding the total number of definable children to the last position.&#xA;EList&lt;Integer> stateCountList = new org.eclipse.emf.common.util.BasicEList&lt;>();&#xA;for (int count : stateCount)&#xA;&#x9;stateCountList.add(count);&#xA;stateCountList.add(defChildrenCount);&#xA;return stateCountList;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="replaceWith">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Cannot replace a requirement instance with null.&#xA;if (newRequirement == null) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Cannot replace a requirement instance with null. A proper requirement instance should be provided.&quot;); //$NON-NLS-1$&#xA;&#x9;throw new IllegalArgumentException();&#xA;}&#xA;&#xA;// Can only replace requirements of the same class.&#xA;if (! newRequirement.eClass().equals(eClass())) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Cannot replace a requirement instance of class {0} with one of class {1}. Instances should be of the same class.&quot;, eClass().getName(), newRequirement.eClass().getName()); //$NON-NLS-1$&#xA;&#x9;throw new IllegalArgumentException();&#xA;}&#xA;&#xA;// Changes the parent-child relationship (if there's no parent, we're setting null over null, so no harm). When&#xA;// elements have many-to-one bilateral associations, only the &quot;one&quot; side is manipulated. This is on purpose, as EMF&#xA;// generated code will handle the inverse association automatically.&#xA;Requirement parent = getParent();&#xA;setParent(null);&#xA;newRequirement.setParent(parent);&#xA;it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Replacing requirement instances of class {0} ({1} -> {2})&quot;, eClass().getName(), this, newRequirement); //$NON-NLS-1$&#xA;&#xA;// After a piece of the requirements tree gets replaced by new instances (with possible different states), check if&#xA;// the ancestors should also have their state reset. For instance, if a failed instance is replaced by a non-failing&#xA;// one in an AND-refinement, the parent should change from Failed to Started or Undefined. Navigate up the tree.&#xA;while (parent != null) {&#xA;&#x9;// This procedure only makes sense in definable requirements.&#xA;&#x9;if (parent instanceof DefinableRequirement) {&#xA;&#x9;&#x9;DefinableRequirement req = (DefinableRequirement) parent;&#xA;&#xA;&#x9;&#x9;// Counts the number of children in each state and the number of definable children.&#xA;&#x9;&#x9;EList&lt;Integer> stateCount = req.getChildrenStateCount();&#xA;&#x9;&#x9;int defChildrenCount = stateCount.get(stateCount.size() - 1);&#xA;&#x9;&#x9;boolean doReset = false;&#xA;&#xA;&#x9;&#x9;// Checks the type of the requirement.&#xA;&#x9;&#x9;switch (req.getRefinementType()) {&#xA;&#x9;&#x9;case AND:&#xA;&#x9;&#x9;&#x9;// For failed AND-refined requirements, if none of its children failed, reset its state.&#xA;&#x9;&#x9;&#x9;doReset = (req.getState() == it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED) &amp;&amp; (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED_VALUE) == 0);&#xA;&#x9;&#x9;&#x9;break;&#xA;&#x9;&#x9;case OR:&#xA;&#x9;&#x9;&#x9;// For failed OR-refined requirements, if at least one of its children didn't fail, reset its state.&#xA;&#x9;&#x9;&#x9;doReset = (req.getState() == it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED) &amp;&amp; (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED_VALUE) &lt; defChildrenCount);&#xA;&#x9;&#x9;&#x9;break;&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;&#xA;&#x9;&#x9;// Checks if a reset is in order.&#xA;&#x9;&#x9;if (doReset) {&#xA;&#x9;&#x9;&#x9;// If no children have yet started, set the requirement also as Undefined.&#xA;&#x9;&#x9;&#x9;if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.UNDEFINED_VALUE) == defChildrenCount)&#xA;&#x9;&#x9;&#x9;&#x9;req.setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.UNDEFINED);&#xA;&#xA;&#x9;&#x9;&#x9;// Otherwise, if at least one child has started, set it also as Started.&#xA;&#x9;&#x9;&#x9;else req.setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.STARTED);&#xA;&#xA;&#x9;&#x9;&#x9;// Log what has just happened.&#xA;&#x9;&#x9;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;The status of {0} has been reset to {1}&quot;, req.eClass().getName(), req.getState()); //$NON-NLS-1$&#xA;&#x9;&#x9;}&#xA;&#x9;}&#xA;&#xA;&#x9;// Next ancestor.&#xA;&#x9;parent = parent.getParent();&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="newRequirement" eType="#//Requirement"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refinementType" eType="#//RefinementType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Requirement" containment="true" eOpposite="#//Requirement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Requirement"
+        eOpposite="#//Requirement/children"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinableRequirement" eSuperTypes="#//Requirement">
+    <eOperations name="start">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Requirement started: &quot; + eClass().getName() + &quot; (&quot; + this + &quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.STARTED);&#xA;it.unitn.disi.zanshin.model.gore.Requirement parent = getParent();&#xA;if ((parent != null) &amp;&amp; (parent instanceof DefinableRequirement) &amp;&amp; (((DefinableRequirement) parent).getState() == it.unitn.disi.zanshin.model.gore.DefinableRequirementState.UNDEFINED))&#xA;&#x9;((DefinableRequirement) parent).start();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="end">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Requirement ended: &quot; + eClass().getName() + &quot; (&quot; + this + &quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="success">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Requirement succeeded: &quot; + eClass().getName() + &quot; (&quot; + this + &quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.SUCCEEDED);&#xA;end();&#xA;it.unitn.disi.zanshin.model.gore.Requirement parent = getParent();&#xA;if ((parent != null) &amp;&amp; (parent instanceof DefinableRequirement)) {&#xA;&#x9;if (parent.getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.OR) ((DefinableRequirement) parent).success();&#xA;&#x9;else ((DefinableRequirement)parent).checkState();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="fail">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Requirement failed: &quot; + eClass().getName() + &quot; (&quot; + this + &quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED);&#xA;end();&#xA;it.unitn.disi.zanshin.model.gore.Requirement parent = getParent();&#xA;if ((parent != null) &amp;&amp; (parent instanceof DefinableRequirement)) {&#xA;&#x9;if (parent.getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.AND) ((DefinableRequirement) parent).fail();&#xA;&#x9;else ((DefinableRequirement)parent).checkState();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="checkState">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Counts the number of children in each state and the number of definable children.&#xA;org.eclipse.emf.common.util.EList&lt;Integer> stateCount = getChildrenStateCount();&#xA;int defChildrenCount = stateCount.get(stateCount.size() - 1);&#xA;&#xA;// For AND-refined requirements, checks if all children have SUCCEEDED.&#xA;if (getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.AND) {&#xA;&#x9;if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.SUCCEEDED_VALUE) == defChildrenCount) success();&#xA;}&#xA;&#xA;// For OR-refined requirements, checks if all children have FAILED.&#xA;else {&#xA;&#x9;if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED_VALUE) == defChildrenCount) fail();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//DefinableRequirementState"
+        defaultValueLiteral="undefined"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Softgoal" eSuperTypes="#//Requirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//QualityConstraint" eOpposite="#//QualityConstraint/softgoal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PerformativeRequirement" eSuperTypes="#//DefinableRequirement">
+    <eOperations name="cancel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Only process the cancellation if the requirement has not yet been canceled.&#xA;if (getState() != it.unitn.disi.zanshin.model.gore.DefinableRequirementState.CANCELED) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.debug(&quot;Requirement canceled: &quot; + eClass().getName() + &quot; (&quot; + this + &quot;)&quot;); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$&#xA;&#x9;setState(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.CANCELED);&#xA;&#x9;end();&#xA;&#x9;&#xA;&#x9;// Propagate the cancellation to the parent, depending if its definable/performative, and/or-refined.&#xA;&#x9;it.unitn.disi.zanshin.model.gore.Requirement parent = getParent();&#xA;&#x9;if ((parent != null) &amp;&amp; (parent instanceof it.unitn.disi.zanshin.model.gore.DefinableRequirement)) {&#xA;&#x9;&#x9;if (parent.getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.OR) ((it.unitn.disi.zanshin.model.gore.DefinableRequirement)parent).checkState();&#xA;&#x9;&#x9;else if (parent instanceof PerformativeRequirement) ((PerformativeRequirement) parent).cancel();&#xA;&#x9;&#x9;else ((it.unitn.disi.zanshin.model.gore.DefinableRequirement)parent).fail();&#xA;&#x9;}&#xA;&#x9;&#xA;&#x9;// Also propagate the cancellation to the children if and-refined and the children are performative.&#xA;&#x9;if (getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.AND)&#xA;&#x9;&#x9;for (it.unitn.disi.zanshin.model.gore.Requirement child : getChildren())&#xA;&#x9;&#x9;&#x9;if (child instanceof PerformativeRequirement) ((PerformativeRequirement) child).cancel();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="checkState">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Counts the number of children in each state and the number of definable children.&#xA;org.eclipse.emf.common.util.EList&lt;Integer> stateCount = getChildrenStateCount();&#xA;int defChildrenCount = stateCount.get(stateCount.size() - 1);&#xA;&#xA;// For AND-refined requirements, checks if all children have SUCCEEDED.&#xA;if (getRefinementType() == it.unitn.disi.zanshin.model.gore.RefinementType.AND) {&#xA;&#x9;if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.SUCCEEDED_VALUE) == defChildrenCount) success();&#xA;}&#xA;&#xA;// For OR-refined requirements, checks if all children have FAILED or have been CANCELED.&#xA;else {&#xA;&#x9;if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.FAILED_VALUE) == defChildrenCount) fail();&#xA;&#x9;else if (stateCount.get(it.unitn.disi.zanshin.model.gore.DefinableRequirementState.CANCELED_VALUE) == defChildrenCount) cancel();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QualityConstraint" eSuperTypes="#//DefinableRequirement">
+    <eOperations name="replaceWith">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Performs the replacement as a normal requirement first.&#xA;super.replaceWith(newRequirement);&#xA;&#xA;// Then, replace the relationship quality constraints have with softgoals.&#xA;it.unitn.disi.zanshin.model.gore.Softgoal softgoal = getSoftgoal();&#xA;setSoftgoal(null);&#xA;((QualityConstraint) newRequirement).setSoftgoal(softgoal);"/>
+      </eAnnotations>
+      <eParameters name="newRequirement" eType="#//Requirement"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="softgoal" lowerBound="1"
+        eType="#//Softgoal" eOpposite="#//Softgoal/constraints"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AwReq" eSuperTypes="#//DefinableRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="otherTargets" upperBound="-1"
+        eType="#//DefinableRequirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//DefinableRequirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="incrementCoefficient" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainAssumption" eSuperTypes="#//DefinableRequirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Goal" eSuperTypes="#//PerformativeRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goalModel" eType="#//GoalModel"
+        eOpposite="#//GoalModel/rootGoal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//PerformativeRequirement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="AggregationLevel">
+    <eLiterals name="INSTANCE" literal="instance-level"/>
+    <eLiterals name="CLASS" value="1" literal="class-level"/>
+    <eLiterals name="BOTH" value="2" literal="both-levels"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DefinableRequirementState">
+    <eLiterals name="UNDEFINED" literal="undefined"/>
+    <eLiterals name="STARTED" value="1" literal="started"/>
+    <eLiterals name="SUCCEEDED" value="2" literal="succeeded"/>
+    <eLiterals name="FAILED" value="3" literal="failed"/>
+    <eLiterals name="CANCELED" value="4" literal="canceled"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DifferentialRelationOperator">
+    <eLiterals name="GREATER_THAN" literal="gt"/>
+    <eLiterals name="FEWER_THAN" literal="ft"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MonitorableMethod">
+    <eLiterals name="START" literal="start"/>
+    <eLiterals name="END" value="1" literal="end"/>
+    <eLiterals name="SUCCESS" value="2" literal="success"/>
+    <eLiterals name="FAIL" value="3" literal="fail"/>
+    <eLiterals name="CANCEL" value="4" literal="cancel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParameterMetric">
+    <eLiterals name="ENUMERATED" literal="enumerated"/>
+    <eLiterals name="INTEGER" value="1" literal="integer"/>
+    <eLiterals name="REAL" value="2" literal="real"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParameterType">
+    <eLiterals name="VARIATION_POINT" literal="vp"/>
+    <eLiterals name="ENUMERATED_CONTROL_VARIABLE" value="1" literal="ecv"/>
+    <eLiterals name="NUMERIC_CONTROL_VARIABLE" value="2" literal="ncv"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RefinementType">
+    <eLiterals name="AND" literal="and"/>
+    <eLiterals name="OR" value="1" literal="or"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goalModel" eType="#//GoalModel"
+        eOpposite="#//GoalModel/actors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true" eOpposite="#//Parameter/configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goalModel" eType="#//GoalModel"
+        eOpposite="#//GoalModel/configuration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DifferentialRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indicator" eType="#//AwReq"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//DifferentialRelationOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GoalModel">
+    <eOperations name="getId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (internalId == null) internalId = System.currentTimeMillis();&#xA;return internalId;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="filterRelations" upperBound="-1" eType="#//DifferentialRelation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Returns a list of relations associated with the given indicator.&#xA;EList&lt;DifferentialRelation> filteredRelations = new org.eclipse.emf.common.util.BasicEList&lt;>();&#xA;if (indicator != null)&#xA;&#x9;for (DifferentialRelation relation : relations) {&#xA;&#x9;&#x9;AwReq relationIndicator = relation.getIndicator(); &#xA;&#x9;&#x9;if ((relationIndicator != null) &amp;&amp; (relationIndicator.eClass().equals(indicator.eClass())))&#xA;&#x9;&#x9;&#x9;filteredRelations.add(relation);&#xA;&#x9;}&#xA;return filteredRelations;"/>
+      </eAnnotations>
+      <eParameters name="indicator" eType="#//AwReq"/>
+    </eOperations>
+    <eOperations name="filterRelations" upperBound="-1" eType="#//DifferentialRelation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Returns a list of relations associated with the given parameter.&#xA;EList&lt;DifferentialRelation> filteredRelations = new org.eclipse.emf.common.util.BasicEList&lt;>();&#xA;if (parameter != null)&#xA;&#x9;for (DifferentialRelation relation : relations) {&#xA;&#x9;&#x9;Parameter relationParameter = relation.getParameter(); &#xA;&#x9;&#x9;if ((relationParameter != null) &amp;&amp; (relationParameter.eClass().equals(parameter.eClass())))&#xA;&#x9;&#x9;&#x9;filteredRelations.add(relation);&#xA;&#x9;}&#xA;return filteredRelations;"/>
+      </eAnnotations>
+      <eParameters name="parameter" eType="#//Parameter"/>
+    </eOperations>
+    <eOperations name="filterRelations" upperBound="-1" eType="#//DifferentialRelation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Returns a list of relations associated with the given indicator and the given parameter.&#xA;EList&lt;DifferentialRelation> filteredRelations = new org.eclipse.emf.common.util.BasicEList&lt;>();&#xA;if ((indicator != null) &amp;&amp; (parameter != null))&#xA;&#x9;for (DifferentialRelation relation : relations) {&#xA;&#x9;&#x9;AwReq relationIndicator = relation.getIndicator();&#xA;&#x9;&#x9;Parameter relationParameter = relation.getParameter();&#xA;&#x9;&#x9;if ((relationIndicator != null) &amp;&amp; (relationIndicator.eClass().equals(indicator.eClass())) &amp;&amp; (relationParameter != null) &amp;&amp; (relationParameter.eClass().equals(parameter.eClass())))&#xA;&#x9;&#x9;&#x9;filteredRelations.add(relation);&#xA;&#x9;}&#xA;return filteredRelations;"/>
+      </eAnnotations>
+      <eParameters name="indicator" eType="#//AwReq"/>
+      <eParameters name="parameter" eType="#//Parameter"/>
+    </eOperations>
+    <eOperations name="filterRelations" eType="#//DifferentialRelation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Filters the relations by indicator and parameter.&#xA;EList&lt;DifferentialRelation> filteredRelations = filterRelations(indicator, parameter);&#xA;&#xA;// Creates a fake parameter for the value comparison.&#xA;it.unitn.disi.zanshin.model.gore.Parameter param = parameter.createCopy();&#xA;param.setValue(value);&#xA;&#xA;// Looks for a relation in which value is within bounds. Returns the first one found.&#xA;for (DifferentialRelation relation : filteredRelations) &#xA;&#x9;if (param.withinBoundsOf(relation))&#xA;&#x9;&#x9;return relation;&#xA;&#xA;// If not found, return null.&#xA;return null;"/>
+      </eAnnotations>
+      <eParameters name="indicator" eType="#//AwReq"/>
+      <eParameters name="parameter" eType="#//Parameter"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootGoal" lowerBound="1"
+        eType="#//Goal" containment="true" eOpposite="#//Goal/goalModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actors" upperBound="-1"
+        eType="#//Actor" containment="true" eOpposite="#//Actor/goalModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"
+        changeable="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedGetVisibility" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="suppressedSetVisibility" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        containment="true" eOpposite="#//Configuration/goalModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relations" upperBound="-1"
+        eType="#//DifferentialRelation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eOperations name="greaterThan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="Boolean result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and compare as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.compareTo(b) > 0;&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="fewerThan" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="Boolean result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and compare as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.compareTo(b) &lt; 0;&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="equalTo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="Boolean result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and compare as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.compareTo(b) == 0;&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addedTo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and add as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.add(b).toPlainString();&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="multipliedBy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and multiply as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.multiply(b).toPlainString();&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="subtractedFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String result = null;&#xA;&#xA;// Checks the metric of the parameter to know how to compare.&#xA;try {&#xA;&#x9;switch (metric) {&#xA;&#x9;// FIXME: implement enumerated parameters.&#xA;&#x9;case ENUMERATED:&#xA;&#x9;&#x9;break;&#xA;&#x9;&#x9;&#xA;&#x9;// If the parameter is numeric, parses it and add as numbers.&#xA;&#x9;case INTEGER:&#xA;&#x9;case REAL:&#xA;&#x9;&#x9;java.math.BigDecimal a = new java.math.BigDecimal(this.value);&#xA;&#x9;&#x9;java.math.BigDecimal b = new java.math.BigDecimal(value);&#xA;&#x9;&#x9;return a.subtract(b).toPlainString();&#xA;&#x9;}&#xA;}&#xA;&#xA;// In case there are parsing errors (badly formatted numbers in the model), logs an error and returns null.&#xA;catch (NumberFormatException e) {&#xA;&#x9;it.unitn.disi.zanshin.core.CoreUtils.log.error(&quot;Error during string->number conversion, either the parameter value ({0}) or the value to compare ({1}) are not numbers.&quot;, e, this.value, value); //$NON-NLS-1$&#xA;}&#xA;&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="withinBoundsOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String lowerBound = relation.getLowerBound();&#xA;String upperBound = relation.getUpperBound();&#xA;&#xA;// Checks for null comparisons.&#xA;Boolean lowerCmp = greaterThan(lowerBound);&#xA;Boolean upperCmp = fewerThan(upperBound);&#xA;if ((lowerBound != null) &amp;&amp; (lowerCmp == null)) return null;&#xA;if ((upperBound != null) &amp;&amp; (upperCmp == null)) return null;&#xA;&#xA;// Does the comparisons, but only if needed. When the bounds are null, they mean infinity.&#xA;return (((lowerBound == null) || lowerCmp) &amp;&amp; ((upperBound == null) || upperCmp));"/>
+      </eAnnotations>
+      <eParameters name="relation" eType="#//DifferentialRelation"/>
+    </eOperations>
+    <eOperations name="incrementableIn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Creates a fake parameter and increments it by a unit.&#xA;Parameter param = createCopy();&#xA;param.increment(relation, unit);&#xA;&#xA;// Checks if the fake param, i.e., the param incremented by a unit, is still within boundaries.&#xA;return param.withinBoundsOf(relation);"/>
+      </eAnnotations>
+      <eParameters name="relation" eType="#//DifferentialRelation"/>
+    </eOperations>
+    <eOperations name="createCopy" eType="#//Parameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.emf.ecore.util.EcoreUtil.Copier copier = new org.eclipse.emf.ecore.util.EcoreUtil.Copier();&#xA;Parameter copy = (Parameter) copier.copy(this);&#xA;return copy;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="increment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="// Obtains the operator from the differential relation to check the increment direction.&#xA;String newValue = null;&#xA;switch (relation.getOperator()) {&#xA;case FEWER_THAN:&#xA;&#x9;newValue = subtractedFrom(value);&#xA;&#x9;break;&#xA;case GREATER_THAN:&#xA;&#x9;newValue = addedTo(value);&#xA;&#x9;break;&#xA;}&#xA;&#xA;// Changes the parameter's value to the new value.&#xA;if (newValue != null)&#xA;&#x9;setValue(newValue);"/>
+      </eAnnotations>
+      <eParameters name="relation" eType="#//DifferentialRelation"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        eOpposite="#//Configuration/parameters"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ParameterType"
+        defaultValueLiteral="vp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metric" lowerBound="1"
+        eType="#//ParameterMetric" defaultValueLiteral="enumerated"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="doc" nsURI="urn:openscada:doc" nsPrefix="doc">
+  <eClassifiers xsi:type="ecore:EClass" name="Test"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="NumberingStyle">
+    <eLiterals name="ARABIC"/>
+    <eLiterals name="ROMAN" value="1"/>
+    <eLiterals name="LATIN" value="2"/>
+  </eClassifiers>
+  <eSubpackages name="map" nsURI="urn:openscada:doc:map" nsPrefix="map">
+    <eClassifiers xsi:type="ecore:EClass" name="Map" eSuperTypes="#//map/MapContainer">
+      <eOperations name="visit">
+        <eParameters name="visitor" eType="#//map/Visitor"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="extensionMappings" upperBound="-1"
+          eType="#//map/ExtensionMappingEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Import" abstract="true" interface="true"
+        eSuperTypes="#//map/MapElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="#//map/Import">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MapSection" eSuperTypes="#//map/MapContainer #//map/MapElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Visitor" instanceClassName="org.openscada.doc.model.doc.map.Visitor"
+        serializable="false"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MapElement" abstract="true" interface="true">
+      <eOperations name="visit">
+        <eParameters name="visitor" eType="#//map/Visitor"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//map/Import">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureId" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="createSection" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fileNameRules" upperBound="-1"
+          eType="#//map/NameRule" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Pattern" instanceClassName="java.util.regex.Pattern"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NameRule" abstract="true" interface="true">
+      <eOperations name="checkRule" eType="#//map/RuleResult">
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PatternRule" abstract="true" eSuperTypes="#//map/NameRule">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
+          eType="#//map/Pattern"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IncludePatternRule" eSuperTypes="#//map/PatternRule">
+      <eOperations name="checkRule" eType="#//map/RuleResult">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return pattern.matcher ( name ).matches () ? RuleResult.ACCEPT : null;"/>
+        </eAnnotations>
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExcludePatternRule" eSuperTypes="#//map/PatternRule">
+      <eOperations name="checkRule" eType="#//map/RuleResult">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return pattern.matcher ( name ).matches () ? RuleResult.REJECT : null;"/>
+        </eAnnotations>
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RuleResult">
+      <eLiterals name="ACCEPT"/>
+      <eLiterals name="REJECT" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceFactory">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExtensionMappingEntry">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="factory" lowerBound="1"
+          eType="#//map/ResourceFactory" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContentGenerator" abstract="true"
+        eSuperTypes="#//map/MapElement #//fragment/Content"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MapContainer" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//map/MapElement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberingStyle" lowerBound="1"
+          eType="#//NumberingStyle">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Defines the numbering style for all contained sections."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="fragment" nsURI="urn:openscada:doc:fragment" nsPrefix="fragment">
+    <eClassifiers xsi:type="ecore:EClass" name="Fragment" eSuperTypes="#//fragment/Container">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="fragment"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Section" abstract="true" interface="true"
+        eSuperTypes="#//fragment/Container">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="section"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="kind" value="group"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true" interface="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="elementOnly"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" unique="false"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFeatureMapEntry">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="name" value="group:0"/>
+          <details key="kind" value="group"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="anyContent" upperBound="-1"
+          eType="#//fragment/Content" volatile="true" transient="true" derived="true"
+          containment="true" resolveProxies="false">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="kind" value="element"/>
+          <details key="namespace" value="##targetNamespace"/>
+          <details key="name" value="anyContent"/>
+          <details key="group" value="#group:0"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="section" upperBound="-1"
+          eType="#//fragment/Section" volatile="true" transient="true" derived="true"
+          containment="true" resolveProxies="false">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="namespace" value="##targetNamespace"/>
+          <details key="name" value="section"/>
+          <details key="group" value="#group:0"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlainTextContent" eSuperTypes="#//fragment/Content">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="simple"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="name" value=":0"/>
+          <details key="kind" value="simple"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Content" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Author">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ref" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Copyright">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+          upperBound="-1" eType="#//fragment/Author"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="book" nsURI="urn:openscada:doc:book" nsPrefix="book">
+    <eClassifiers xsi:type="ecore:EClass" name="Book" eSuperTypes="#//book/BookContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="authors" upperBound="-1"
+          eType="#//fragment/Author" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="copyright" upperBound="-1"
+          eType="#//fragment/Copyright" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="copyrightMarker" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="copyrightText" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BookSection" eSuperTypes="#//book/BookContainer">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullNumber" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BookContainer" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+          eType="#//fragment/Content" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sections" upperBound="-1"
+          eType="#//book/BookSection" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberingStyle" lowerBound="1"
+          eType="#//NumberingStyle"/>
+    </eClassifiers>
+    <eSubpackages name="builder" nsURI="urn:openscada:doc:book:builder" nsPrefix="builder">
+      <eClassifiers xsi:type="ecore:EClass" name="BookBuilder" eSuperTypes="#//map/Map">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="authors" upperBound="-1"
+            eType="#//fragment/Author" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="license" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="copyright" upperBound="-1"
+            eType="#//fragment/Copyright" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="copyrightMarker" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+            eType="#//book/builder/PropertyEntry" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PropertyEntry">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" unique="false"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dtmc"
+    nsURI="http://klaper.sourceforge.net/metamodels/dtmc/1.0" nsPrefix="dtmc">
+  <eClassifiers xsi:type="ecore:EClass" name="Dtmc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" lowerBound="1"
+        upperBound="-1" eType="#//Module" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+        eType="#//Module" eOpposite="#//Module/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/_from"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/_to"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="probability" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="_from" eType="#//Node"
+        eOpposite="#//Node/outTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="_to" eType="#//Node" eOpposite="#//Node/inTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+        eType="#//Module" eOpposite="#//Module/transitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SynchronizedTransition" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="syncWith" lowerBound="1"
+        upperBound="-1" eType="#//SynchronizedTransition" eOpposite="#//SynchronizedTransition/synchedWith"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="synchedWith" lowerBound="1"
+        upperBound="-1" eType="#//SynchronizedTransition" eOpposite="#//SynchronizedTransition/syncWith"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1" upperBound="-1"
+        eType="#//Node" containment="true" eOpposite="#//Node/module"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/module"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAutonomous" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallTransition" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invokedTransition" lowerBound="1"
+        eType="#//InvokedTransition" eOpposite="#//InvokedTransition/callTransition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InvokedTransition" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callTransition" lowerBound="1"
+        eType="#//CallTransition" eOpposite="#//CallTransition/invokedTransition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StandardTransition" eSuperTypes="#//Transition"/>
+</ecore:EPackage>

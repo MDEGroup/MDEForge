@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="persistence"
+    nsURI="http:///persistence.ecore" nsPrefix="persistence">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Persistence modeling cronstructs. This can primarily be used to tell whether an entity class shall have persistence support or not. Specific mark-up may be provided for associations.&#xD;&#xA;&#xD;&#xA;The package also will allow developers to specify concurrency control aspects, such as the locking style to use for a transaction or an entity class. Developers also need to be able to specify how persistent data is to be &quot;partitioned&quot; in the sense of defining the granularity for locking and fetching data.&#xD;&#xA;&#xD;&#xA;Furthermore, this package may contribute specific actions to make entity objects persistent and delete persistent objects.&#xD;&#xA;&#xD;&#xA;The package also has to define the semantics of persistence in the first place, such as how persistence affects the semantics of queries.&#xD;&#xA;&#xD;&#xA;TODO Does marking an entity class as persistent mean that there is this kind of &quot;virtual&quot; top-level &quot;collection&quot; of instances of this class which then can be queried and referred to by name? Is it like the topmost container that guarantees reachability and therefore allows for a garbage collection semantics &quot;by reachability?&quot;&#xD;&#xA;&#xD;&#xA;TODO Perhaps this package should be separated out into an own top-level metamodel package because it has dependencies on behavioral/actions and dataaccess/expressions."/>
+  </eAnnotations>
+  <eSubpackages name="actions" nsURI="http:///persistence/actions.ecore" nsPrefix="persistence.actions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Store" eSuperTypes="#//actions/StatementWithEntityArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Marks an entity object or multi-object as persistent. It will be stored in the repository, producing a new snapshot on calling commit. &#xD;&#xA;Together with the object(s) produced by the *argument* expression, all their composite children are stored by this statement, too, and so are all links attached to any of these objects as well as all value objects that are relevant for the equality of any of the objects stored.&#xD;&#xA;&#xD;&#xA;TODO clarify the storing of deletions"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Delete" eSuperTypes="#//actions/StatementWithEntityArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Deletes the one or multiple entity objects from the repository including its composite children and all attaching links."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StatementWithEntityArgument" eSuperTypes="behavioral.ecore#//actions/StatementWithArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="CanStoreOnlyEntities" value="if self.argument.getType().oclIsKindOf(data::classes::ClassTypeDefinition) then&#xD;&#xA;    not self.argument.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.valueType&#xD;&#xA;  else&#xD;&#xA;    false&#xD;&#xA;  endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="CanStoreOnlyEntities"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Rollback" eSuperTypes="behavioral.ecore#//actions/Statement"/>
+  </eSubpackages>
+  <eSubpackages name="expressions" nsURI="http:///persistence/expressions.ecore" nsPrefix="persistence.expressions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="All" eSuperTypes="dataaccess.ecore#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="MustBeEntityClass" value="not self.ofClass.valueType"/>
+        <details key="ExpressionMustBeSnapshotOrTimePoint" value="if self.snapshot = SnapshotSelection::SPECIFIED then&#xD;&#xA;    self.snapshotIdentifier.getType().upperMultiplicity = 1 and&#xD;&#xA;    self.snapshotIdentifier.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;   Set{'Snapshot', 'TimePoint'}->includes(self.snapshotIdentifier.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name)&#xD;&#xA;  else&#xD;&#xA;    true&#xD;&#xA;  endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="MustBeEntityClass ExpressionMustBeSnapshotOrTimePoint"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="snapshot" ordered="false"
+          unique="false" lowerBound="1" eType="#//expressions/SnapshotSelection">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="A selector for the snapshot to read. If DEFAULT, the entities will be read from the current session's default snapshot. If ALL is specified, all copies of instances in all snapshots is returned. If DATE, the lastSnapshotBeforeIsoTimestamp has to be set and all snapshots before that date are selected for which no successor exists that still lies before the timestamp specified. This means that the entity will be returned from all snapshots on concurrent branches that existed at the given point in time."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ofClass" lowerBound="1"
+          eType="ecore:EClass data.ecore#//classes/SapClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="snapshotIdentifier" eType="ecore:EClass dataaccess.ecore#//expressions/Expression"
+          containment="true" eOpposite="dataaccess.ecore#//expressions/Expression/all"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="SnapshotSelection">
+      <eLiterals name="DEFAULT"/>
+      <eLiterals name="ALL" value="1"/>
+      <eLiterals name="CHANGED" value="2"/>
+      <eLiterals name="SPECIFIED" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Commit" eSuperTypes="dataaccess.ecore#//expressions/Expression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the Snapshot produced"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="ReturnsSnapshot" value="self.getType().oclIsKindOf(data::classes::ClassTypeDefinition) and&#xD;&#xA;  self.getType().oclAsType(data::classes::ClassTypeDefinition).clazz.name = 'Snapshot'"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="ReturnsSnapshot"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Snapshot" eSuperTypes="dataaccess.ecore#//expressions/ObjectBasedExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="SourceObjectIsOfClassType" value="self.object.getType().oclIsKindOf(data::classes::ClassTypeDefinition)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="SourceObjectIsOfClassType"/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

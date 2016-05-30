@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="evaluation">
+  <eClassifiers xsi:type="ecore:EClass" name="IEvaluationFactory" interface="true">
+    <eOperations name="getEvaluator" eType="#//IEvaluator">
+      <eParameters name="model" lowerBound="1" eType="ecore:EClass ../../../org.eclipse.featuremodel.metamodel/models/variantmodel.ecore#//VariantModel"/>
+    </eOperations>
+    <eOperations name="getVerifier" eType="#//IVerifier">
+      <eParameters name="result" lowerBound="1" eType="ecore:EClass ../../models/evaluationresult.ecore#//EvaluationResult"/>
+      <eParameters name="rule" lowerBound="1" eType="ecore:EClass ../../../org.eclipse.featuremodel.metamodel/models/featuremodel.ecore#//Rule"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluators" upperBound="-1"
+        eType="#//IEvaluator" unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="verifiers" upperBound="-1"
+        eType="#//IVerifier" unsettable="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractEvaluationFactory" abstract="true"
+      eSuperTypes="#//IEvaluationFactory"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EvaluationFactory" eSuperTypes="#//AbstractEvaluationFactory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+        eType="#//EvaluationFactory" unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="factories" upperBound="-1"
+        eType="#//IEvaluationFactory" unsettable="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEvaluator" interface="true">
+    <eOperations name="evaluate" lowerBound="1" eType="ecore:EClass ../../models/evaluationresult.ecore#//EvaluationResult">
+      <eParameters name="model" lowerBound="1" eType="ecore:EClass ../../../org.eclipse.featuremodel.metamodel/models/variantmodel.ecore#//VariantModel"/>
+      <eParameters name="properties" eType="#//Properties"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractEvaluator" abstract="true" eSuperTypes="#//IEvaluator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IVerifier" interface="true">
+    <eOperations name="verify" lowerBound="1" eType="ecore:EClass ../../models/verificationresult.ecore#//VerificationResult">
+      <eParameters name="result" lowerBound="1" eType="ecore:EClass ../../models/evaluationresult.ecore#//EvaluationResult"/>
+      <eParameters name="properties" eType="#//Properties"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractVerifier" abstract="true" eSuperTypes="#//IVerifier"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Properties" instanceClassName="java.util.Properties"/>
+</ecore:EPackage>

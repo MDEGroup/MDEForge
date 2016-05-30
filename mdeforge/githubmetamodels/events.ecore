@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="event"
+    nsURI="http://ict-alive.sourceforge.net/RunTime/events" nsPrefix="event">
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localKey" lowerBound="1"
+        eType="#//Key" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="asserter" lowerBound="1"
+        eType="#//Actor" eOpposite="#//Actor/emit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" lowerBound="1"
+        eType="ecore:EClass fact.ecore#//Content" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pointOfView" lowerBound="1"
+        eType="#//PointOfView" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provenance" upperBound="-1"
+        eType="#//Cause" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimized" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"
+        transient="true" defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Key">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PointOfView" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActorView" eSuperTypes="#//PointOfView"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ObserverView" eSuperTypes="#//PointOfView"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProxyView" eSuperTypes="#//PointOfView">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transmitter" eType="#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emit" upperBound="-1" eType="#//Event"
+        eOpposite="#//Event/asserter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/agents.ecore#//Agent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" lowerBound="1" eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ProvenanceType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ProvenanceType">
+    <eLiterals name="CAUSED_BY" literal="CAUSED-BY"/>
+    <eLiterals name="INTERPRETED_FROM" value="1" literal="INTERPRETED-FROM"/>
+  </eClassifiers>
+</ecore:EPackage>

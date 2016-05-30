@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="instancemodel"
+    nsURI="http://www.xtext.org/graphView/instancemodel" nsPrefix="instancemodel">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractInstance" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AbstractInstance"
+        eOpposite="#//AbstractInstance/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//AbstractInstance" containment="true" eOpposite="#//AbstractInstance/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="semanticElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="ecore:EClass ../../org.eclipse.xtext.graphview.map/src/org/eclipse/xtext/graphview/map/GraphViewMapping.ecore#//AbstractMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="#//Visibility"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramInstance" eSuperTypes="#//AbstractInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//EdgeInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="openNewDiagram" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeInstance" eSuperTypes="#//AbstractInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingEdges" upperBound="-1"
+        eType="#//EdgeInstance" eOpposite="#//EdgeInstance/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingEdges" upperBound="-1"
+        eType="#//EdgeInstance" eOpposite="#//EdgeInstance/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LabelInstance" eSuperTypes="#//AbstractInstance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EdgeInstance" eSuperTypes="#//AbstractInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//NodeInstance"
+        eOpposite="#//NodeInstance/outgoingEdges"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//NodeInstance"
+        eOpposite="#//NodeInstance/incomingEdges"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Visibility">
+    <eLiterals name="VISIBLE"/>
+    <eLiterals name="TRANSPARENT"/>
+    <eLiterals name="HIDDEN"/>
+  </eClassifiers>
+</ecore:EPackage>

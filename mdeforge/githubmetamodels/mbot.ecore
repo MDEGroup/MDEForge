@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modelingBot" nsURI="http://www.eclipse.org/emf/eef/mbot/1.0.0"
+    nsPrefix="eef-mbot">
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario" eSuperTypes="#//Sequence">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore" references="#//Scenario">
+      <details key="constraints" value="JavaTestExistsForScenarioConstraint"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true" eSuperTypes="#//DocumentedElement #//Processing"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" abstract="true" eSuperTypes="#//DocumentedElement #//Processing">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+        eType="#//Sequence" transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processings" upperBound="-1"
+        eType="#//Processing" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Wizard" eSuperTypes="#//Sequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceableObject" eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingBot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertiesEditionContext"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.components/model/components.ecore#//PropertiesEditionContext"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+        eType="#//Sequence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DetailsPage" eSuperTypes="#//Sequence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertiesView" eSuperTypes="#//Sequence">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Processing" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="SequenceType">
+    <eLiterals name="DETAILS_PAGE"/>
+    <eLiterals name="WIZARD" value="1"/>
+    <eLiterals name="PROPERTIES_VIEW" value="2"/>
+  </eClassifiers>
+  <eSubpackages name="EEFActions" nsURI="http://www.eclipse.org/emf/eef/test/EEFActions/1.0.0"
+      nsPrefix="eef-test">
+    <eClassifiers xsi:type="ecore:EClass" name="EEFAction" abstract="true" eSuperTypes="#//Action"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EditAction" abstract="true" eSuperTypes="#//EEFActions/EEFAction platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="propertiesEditionElement"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.components/model/components.ecore#//PropertiesEditionElement"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertiesEditionElementURI"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computedPropertiesEditionElement"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.components/model/components.ecore#//PropertiesEditionElement"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceableObject"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Add" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computedType" lowerBound="1"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eContainingFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eContainingFeatureURI"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computedEContainingFeature"
+          lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Remove" eSuperTypes="#//EEFActions/EditAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SetAttribute" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eContainingFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eContainingFeatureURI"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computedEContainingFeature"
+          lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UnsetAttribute" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1"
+          eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eContainingFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Unset" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Cancel" eSuperTypes="#//EEFActions/EEFAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processing" eType="#//Processing"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Check" eSuperTypes="#//EEFActions/EEFAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenEEFEditor" eSuperTypes="#//EEFActions/EEFAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="editorName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetReference" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eContainingFeature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UnsetReference" eSuperTypes="#//EEFActions/EditAction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MoveUp" eSuperTypes="#//EEFActions/EditAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MoveDown" eSuperTypes="#//EEFActions/EditAction"/>
+  </eSubpackages>
+  <eSubpackages name="EclipseActions" nsURI="http://www.eclipse.org/emf/eef/test/EclipseActions/1.0.0"
+      nsPrefix="eef-test">
+    <eClassifiers xsi:type="ecore:EClass" name="EclipseAction" abstract="true" eSuperTypes="#//Action"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateProject" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenPerspective" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloseProject" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Save" eSuperTypes="#//EclipseActions/EclipseAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Undo" eSuperTypes="#//EclipseActions/EclipseAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Redo" eSuperTypes="#//EclipseActions/EclipseAction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenProject" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RemoveProject" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloseEditor" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenEditor" eSuperTypes="#//EclipseActions/EclipseAction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="editorName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateModel" eSuperTypes="#//EclipseActions/EclipseAction platform:/plugin/org.eclipse.emf.eef.editor.model/model/extended.ecore#//editor/ReferenceableObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="computedRoot" lowerBound="1"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

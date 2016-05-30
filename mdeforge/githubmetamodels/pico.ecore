@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pico"
+    nsURI="http://www.emftext.org/language/pico" nsPrefix="pico">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" lowerBound="1"
+        eType="#//Declarations" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" lowerBound="1"
+        upperBound="-1" eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Declarations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="idTypes" lowerBound="1"
+        upperBound="-1" eType="#//IDType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IDType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="picoID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//Types"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Natural" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="String" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//IDType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" upperBound="-1" eType="#//Statement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" upperBound="-1" eType="#//Statement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WhileStatement" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" upperBound="-1" eType="#//Statement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableReference" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="#//IDType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NilLiteral" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Types">
+    <eLiterals name="natural"/>
+    <eLiterals name="string" value="1"/>
+    <eLiterals name="nil" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdditiveExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="plus" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultiplicativeExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="times" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparatorExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comparator" lowerBound="1"
+        eType="#//ComparatorType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComparatorType">
+    <eLiterals name="lowerThan"/>
+    <eLiterals name="greaterThan" value="1"/>
+    <eLiterals name="equals" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

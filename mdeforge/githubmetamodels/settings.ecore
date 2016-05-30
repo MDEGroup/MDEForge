@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="settings"
+    nsURI="http:///www.lab-sticc.fr/settings" nsPrefix="settings">
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingLanguageAssociations" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+        eType="#//SettingsSpecification" eOpposite="#//SettingsSpecification/languageAssociations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="language" lowerBound="1"
+        eType="#//ModelingLanguage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typesAssociations" upperBound="-1"
+        eType="#//PropertyToTypesAssociation" containment="true" eOpposite="#//PropertyToTypesAssociation/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SettingsSpecification" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="languages" lowerBound="1"
+        upperBound="-1" eType="#//ModelingLanguage" containment="true" eOpposite="#//ModelingLanguage/specification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="languageAssociations" upperBound="-1"
+        eType="#//ModelingLanguageAssociations" containment="true" eOpposite="#//ModelingLanguageAssociations/specification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categoryAssociations" upperBound="-1"
+        eType="#//PropertyToCategoriesAssociation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyToTypesAssociation" eSuperTypes="#//IdentifiedElement #//PropertyAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associatedTypes" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//ModelingLanguageAssociations" eOpposite="#//ModelingLanguageAssociations/typesAssociations"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containers" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="ecore:EClass ../../fr.labsticc.framework.constraints.model/model/constraints.ecore#//FormalLanguageExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingLanguage" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+        eType="#//SettingsSpecification" eOpposite="#//SettingsSpecification/languages"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileExtensions" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelInterface" eType="#//ServiceDescriptor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subCategories" upperBound="-1"
+        eType="#//Category" eOpposite="#//Category/parentCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentCategory" eType="#//Category"
+        eOpposite="#//Category/subCategories"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyToCategoriesAssociation" eSuperTypes="#//PropertyAssociation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associatedCategories" upperBound="-1"
+        eType="#//Category" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyAssociation" abstract="true"
+      eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="property" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceDescriptor" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceClass" lowerBound="1">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+        <eTypeArguments eClassifier="#//ModelInterface"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelInterface" abstract="true" eSuperTypes="#//ScopeProvider">
+    <eOperations name="getPropertyValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_component" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_property" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getPropertyValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_component" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_property" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getDefaultPropertyValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_property" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="setPropertyValue">
+      <eParameters name="p_component" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_property" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="isComponent" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="p_object" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="isPropertyValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="p_object" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getPropertyFromValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_propValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="componentTypes" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_component" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="selectedModelObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="p_editor" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="p_selection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="isModelResource" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="p_resource" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EResource"/>
+    </eOperations>
+    <eOperations name="getLanguageName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getCustomResourcet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EResourceSet"/>
+    <eOperations name="getElementName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="p_element" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getElementText" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="p_element" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="isModelElement" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="p_object" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScopeProvider" abstract="true" eSuperTypes="#//IdentifiedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Provides a scope of visible model elements from a specific model element. This is used in several contexts. For example, a query framework may uise this to compute elements from  constructs retrieving all instances in a given scope."/>
+    </eAnnotations>
+    <eOperations name="getScope" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a list of elements visible for the specified context. This scope is defined per modeling language."/>
+      </eAnnotations>
+      <eParameters name="context" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getElementFromScope" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="element" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>

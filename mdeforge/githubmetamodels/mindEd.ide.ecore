@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ide" nsURI="http://org.ow2.mindEd/ide.ecore/0.2.0" nsPrefix="mindEd.ide.ecore">
+  <eClassifiers xsi:type="ecore:EClass" name="MindRepo" eSuperTypes="#//MindObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootsrcs" upperBound="-1"
+        eType="#//MindRootSrc" containment="true" eOpposite="#//MindRootSrc/repoFromRootSrc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mindLibOrProjects" upperBound="-1"
+        eType="#//MindLibOrProject" containment="true" eOpposite="#//MindLibOrProject/repoFromLibOrProject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindRootSrc" eSuperTypes="#//MindObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" upperBound="-1"
+        eType="#//MindPackage" containment="true" eOpposite="#//MindPackage/rootsrc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//MindLibOrProject"
+        eOpposite="#//MindLibOrProject/rootsrcs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repoFromRootSrc" lowerBound="1"
+        eType="#//MindRepo" eOpposite="#//MindRepo/rootsrcs"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullpath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="folder" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//MindRootSrc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindPackage" eSuperTypes="#//MindObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="files" upperBound="-1"
+        eType="#//MindFile" containment="true" eOpposite="#//MindFile/package"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootsrc" lowerBound="1"
+        eType="#//MindRootSrc" eOpposite="#//MindRootSrc/packages"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullpath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindAdl" eSuperTypes="#//MindFile">
+    <eOperations name="setReferences">
+      <eParameters name="references" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ComponentKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindC" eSuperTypes="#//MindFile"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MindItf" eSuperTypes="#//MindFile"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MindH" eSuperTypes="#//MindFile"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MindIdf" eSuperTypes="#//MindFile"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MindFile" eSuperTypes="#//MindObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullpath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" lowerBound="1"
+        eType="#//MindPackage" eOpposite="#//MindPackage/files"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="#//URI"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindAllRepo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repos" upperBound="-1"
+        eType="#//MindRepo" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mindId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedMindPathEntries"
+        upperBound="-1" eType="#//MindPathEntry" eOpposite="#//MindPathEntry/resolvedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindProject" eSuperTypes="#//MindLibOrProject">
+    <eOperations name="setMindpath">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="change the mind path of this project"/>
+      </eAnnotations>
+      <eParameters name="mindpath" upperBound="-1" eType="#//MindPathEntry"/>
+    </eOperations>
+    <eOperations name="addMindPathProjectReferenceFromFile" eType="#//MindPathEntry">
+      <eParameters name="file" eType="#//MindFile"/>
+    </eOperations>
+    <eOperations name="addMindPathImportPackageFromFile" eType="#//MindPathEntry">
+      <eParameters name="file" eType="#//MindFile"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allsrc" upperBound="-1"
+        eType="#//MindRootSrc" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindPathEntry" eSuperTypes="#//MindObject">
+    <eOperations name="getResource" eType="#//IResource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownerProject" lowerBound="1"
+        eType="#//MindLibOrProject" eOpposite="#//MindLibOrProject/mindpathentries"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedBy" eType="#//MindObject"
+        eOpposite="#//MindObject/resolvedMindPathEntries"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entryKind" eType="#//MindPathKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetFilter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="MindPathKind">
+    <eLiterals name="LIBRARY" value="1" literal="LIBRARY"/>
+    <eLiterals name="PROJECT" value="2" literal="PROJECT"/>
+    <eLiterals name="SOURCE" value="3" literal="SOURCE"/>
+    <eLiterals name="IMPORT_PACKAGE" value="4"/>
+    <eLiterals name="REPO" value="5"/>
+    <eLiterals name="APPLI" value="6" literal="APPLI"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IResource" instanceClassName="org.eclipse.core.resources.IResource"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComponentKind">
+    <eLiterals name="unknown" literal="UNKNOWN"/>
+    <eLiterals name="primitive" value="1" literal="PRIMITIVE"/>
+    <eLiterals name="composite" value="2" literal="COMPOSITE"/>
+    <eLiterals name="type" value="3" literal="TYPE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="java.net.URI"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MindLibrary" eSuperTypes="#//MindLibOrProject #//MindRootSrc">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetFilter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullpathLib" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MindLibOrProject" abstract="true" eSuperTypes="#//MindObject">
+    <eOperations name="getRawMinpath" upperBound="-1" eType="#//MindPathEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Return a copy of the mind path of this project"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getResolvedMindpath" upperBound="-1" eType="#//MindPathEntry">
+      <eParameters name="ignoreUnresolvedEntry" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="resolveAdl" eType="#//MindAdl">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="La résolution du nom d'une référence de définition suit les règles suivantes :&#xA;- Si le nom contient au moins 2 identifiants, celui-ci est considéré comme un nom pleinement qualifié. Ainsi la définition référencée est la définition qui porte ce nom.- &#xA;- Si le nom ne contient qu'un seul identifiant ne correspondant pas à une paramètre générique de la définition englobante, chaque directive d'importation est évaluée dans l'ordre de déclaration. &#xA;- Si la directive d'importation est une directive d'importation directe et que le nom simple de la directive correspond au nom à résoudre, La définition référencée est la définition qui porte le nom pleinement qualifié de la directive d'importation.&#xA;- Si la directive d'importation est une directive d'importation à la demande et si une définition dont le nom pleinement qualifié est la concaténation du nom de paquetage importé et du nom à résoudre, existe, alors la définition référencée est cette définition.&#xA;- Si aucune des directives d'importation n'a permis de résoudre la définition référencée et si une définition dont le nom pleinement qualifié est la concaténation du nom de paquetage de la définition englobante et du nom à résoudre, existe, alors la définition référencée est cette définition.&#xA;- En dernier recours, si une définition dont le nom pleinement qualifié est le nom à résoudre (définition sans nom de paquetage), existe, alors la définition référencée est cette définition.&#xA;- Enfin si aucune définition n'a pu être trouvée, une erreur de compilation doit être relevée par l'outillage."/>
+      </eAnnotations>
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="defaultPackage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="imports" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleAdlInMindPath" upperBound="-1" eType="#//MindAdl">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return a list of possible mindAdl object correstponding of the simple name."/>
+      </eAnnotations>
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleAdlInPackage" upperBound="-1" eType="#//MindAdl">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="return a list of possible mindAdl object correstponding in the package."/>
+      </eAnnotations>
+      <eParameters name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleAdlInWorkspace" upperBound="-1" eType="#//MindAdl">
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolveItf" eType="#//MindItf">
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="defaultPackage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="imports" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleItfInMindPath" upperBound="-1" eType="#//MindItf">
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleItfInPackage" upperBound="-1" eType="#//MindItf">
+      <eParameters name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolvePossibleItfInWorkspace" upperBound="-1" eType="#//MindItf">
+      <eParameters name="componentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="findQualifiedComponent" eType="#//MindAdl">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Find the qualified component in the project's mind path. Retrun null if not found."/>
+      </eAnnotations>
+      <eParameters name="cn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllFiles" upperBound="-1" eType="#//MindFile"/>
+    <eOperations name="findMindFile" eType="#//MindFile">
+      <eParameters name="qualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="exists" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="obj" eType="#//MindFile"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mindpathentries" upperBound="-1"
+        eType="#//MindPathEntry" containment="true" eOpposite="#//MindPathEntry/ownerProject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repoFromLibOrProject" lowerBound="1"
+        eType="#//MindRepo" eOpposite="#//MindRepo/mindLibOrProjects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uses" upperBound="-1" eType="#//MindLibOrProject"
+        volatile="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootsrcs" upperBound="-1"
+        eType="#//MindRootSrc" eOpposite="#//MindRootSrc/project"/>
+  </eClassifiers>
+</ecore:EPackage>

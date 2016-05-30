@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="architecture" nsURI="http://www.tocea.com/codewatch/architecture/"
+    nsPrefix="architecture">
+  <eClassifiers xsi:type="ecore:EClass" name="AnalysedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingRelationships"
+        upperBound="-1" eType="#//Relationship" containment="true" eOpposite="#//Relationship/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingRelationships"
+        upperBound="-1" eType="#//Relationship" eOpposite="#//Relationship/target"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="idAnalyzedElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedElements" upperBound="-1"
+        eType="#//AnalysedElement" containment="true" eOpposite="#//AnalysedElement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="properties" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AnalysedElement"
+        eOpposite="#//AnalysedElement/containedElements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//AnalysedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="binary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArchitectureFile" eSuperTypes="#//AnalysedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//AnalysedElement" eOpposite="#//AnalysedElement/incomingRelationships"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//AnalysedElement" eOpposite="#//AnalysedElement/outgoingRelationships"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relationShipId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InheritanceDependency" eSuperTypes="#//Dependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceDependency" eSuperTypes="#//Dependency">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency" abstract="true" interface="true"
+      eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Library" eSuperTypes="#//AnalysedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RuntimeDependency" eSuperTypes="#//Dependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InjectionDependency" eSuperTypes="#//RuntimeDependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//AnalysedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldReferenceDependency" eSuperTypes="#//ReferenceDependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ImportReferenceDependency" eSuperTypes="#//ReferenceDependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//AnalysedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//AnalysedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnTypeRelationship" eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterRelationship" eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CallRelationship" eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" eSuperTypes="#//AnalysedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DeclaredType" eSuperTypes="#//Relationship"/>
+  <eSubpackages name="extension" nsURI="http://www.tocea.com/codewatch/architecture/extension"
+      nsPrefix="extension">
+    <eClassifiers xsi:type="ecore:EClass" name="Pattern" abstract="true" eSuperTypes="#//AnalysedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Role" abstract="true" eSuperTypes="#//AnalysedElement">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="attachedElement" lowerBound="1">
+        <eGenericType eTypeParameter="#//extension/Role/T"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RelationshipConstraint" abstract="true"
+        interface="true">
+      <eOperations name="check" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="relationship" eType="#//extension/ExtensionRelationship"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExtensionRelationship" eSuperTypes="#//Relationship">
+      <eOperations name="checkConstraint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleRelationship" eSuperTypes="#//Relationship">
+      <eOperations name="checkConstraint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eOperations name="getTarget">
+        <eGenericType eClassifier="#//extension/Role">
+          <eTypeArguments/>
+        </eGenericType>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PatternRelationship" eSuperTypes="#//Relationship">
+      <eOperations name="checkConstraint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eOperations name="getTarget">
+        <eGenericType eClassifier="#//extension/Role">
+          <eTypeArguments/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getSource" eType="#//extension/Pattern"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Bop">
+      <eGenericSuperTypes eClassifier="#//extension/Role">
+        <eTypeArguments eClassifier="#//AnalysedElement"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

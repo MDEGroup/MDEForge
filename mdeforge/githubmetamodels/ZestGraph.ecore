@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ZestGraph"
+    nsURI="http://irit.fr/zestgraph" nsPrefix="zestgraph">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ZestGraph" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//GraphItem" containment="true" eOpposite="#//GraphItem/graph"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containers" upperBound="-1"
+        eType="#//GraphContainer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphContainer" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//GraphNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphItem" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" eType="#//ZestGraph"
+        eOpposite="#//ZestGraph/items"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphNode" eSuperTypes="#//GraphItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shape" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//GraphConnection" eOpposite="#//GraphConnection/sourceNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ingoing" upperBound="-1"
+        eType="#//GraphConnection" eOpposite="#//GraphConnection/targetNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphConnection" eSuperTypes="#//GraphItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceNode" eType="#//GraphNode"
+        eOpposite="#//GraphNode/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetNode" eType="#//GraphNode"
+        eOpposite="#//GraphNode/ingoing"/>
+  </eClassifiers>
+</ecore:EPackage>

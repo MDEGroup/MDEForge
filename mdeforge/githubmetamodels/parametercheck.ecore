@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="parametercheck"
+    nsURI="http://deftproject.org/parametercheck" nsPrefix="pcheck">
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterCheckModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+        upperBound="-1" eType="#//Method" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//ParameterDecl" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="check" lowerBound="1" upperBound="-1"
+        eType="#//Check" containment="true" eOpposite="#//Check/parentmethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterDecl">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterUsage" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DeclaredParameter" eSuperTypes="#//ParameterUsage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//ParameterDecl"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="asString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//ParameterUsage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Check">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterusage" upperBound="-1"
+        eType="#//ParameterUsage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exception" lowerBound="1"
+        eType="#//Exception" containment="true" eOpposite="#//Exception/parentcheck"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exceptionIfTrue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentmethod" lowerBound="1"
+        eType="#//Method" eOpposite="#//Method/check"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exception">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="package" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterusage" upperBound="-1"
+        eType="#//ParameterUsage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentcheck" lowerBound="1"
+        eType="#//Check" eOpposite="#//Check/exception"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cplfm" nsURI="http://www.earthsystemcurator.org/cplfm" nsPrefix="cplfm">
+  <eClassifiers xsi:type="ecore:EClass" name="ConstituentModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//Grid"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parallel" eType="#//Parallel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" upperBound="-1"
+        eType="#//Field" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parallel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainDecomposition" lowerBound="1"
+        eType="#//DomainDecomposition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processList" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Grid" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuredGrid" abstract="true" eSuperTypes="#//Grid"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicallyRectangularGrid" eSuperTypes="#//StructuredGrid">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coordinates" eType="#//Coordinates"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnstructuredGrid" eSuperTypes="#//Grid"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Field">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Coordinates"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UniformCoordinates" eSuperTypes="#//Coordinates"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RectilinearCoordinates" eSuperTypes="#//Coordinates"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CurvilinearCoordinates" eSuperTypes="#//Coordinates"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainDecomposition" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SegmentDecomposition" eSuperTypes="#//DomainDecomposition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockDecomposition" eSuperTypes="#//DomainDecomposition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Coupler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connector" lowerBound="1"
+        eType="#//Connector" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constituentModel" upperBound="-1"
+        eType="#//ConstituentModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connector" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MemoryToMemoryConnector" eSuperTypes="#//Connector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MemoryToFileConnector" eSuperTypes="#//Connector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MPIConnector" eSuperTypes="#//Connector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InterconstituentTransformation" abstract="true"
+      eSuperTypes="#//Transformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CopyTransformation" eSuperTypes="#//InterconstituentTransformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RedistributeTransformation" eSuperTypes="#//InterconstituentTransformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RegridTransformation" abstract="true"
+      eSuperTypes="#//InterconstituentTransformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LinearRegridTransformation" eSuperTypes="#//RegridTransformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConservativeRegridTransformation" eSuperTypes="#//RegridTransformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntraconstituentTransformation" abstract="true"
+      eSuperTypes="#//Transformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeIntegrationTransformation" eSuperTypes="#//IntraconstituentTransformation"/>
+</ecore:EPackage>

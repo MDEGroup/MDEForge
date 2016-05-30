@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2010-2012 Marie Gouyette.
+  INRIA-IRISA- Triskell
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+  
+  Contributors:
+      INRIA-IRISA- Triskell
+      Marie Gouyette - initial API and implementation
+      contact marie.gouyette@gmail.com
+-->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="featureDiagram"
+    nsURI="http://www.kermeta.org/featureDiagram" nsPrefix="featureDiagram">
+  <eAnnotations source="TextualConstraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureDiagram" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graphTypeTree" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//Feature" containment="true" eOpposite="#//Feature/owningFeatureDiagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="root" lowerBound="1" eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintEdges" upperBound="-1"
+        eType="#//ConstraintEdge" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningFeatureDiagram" eType="#//FeatureDiagram"
+        eOpposite="#//FeatureDiagram/features"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operator" upperBound="-1"
+        eType="#//Operator" containment="true" eOpposite="#//Operator/owningFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selected" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true" eOpposite="#//Attribute/owningFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningOperator" upperBound="-1"
+        eType="#//Operator" eOpposite="#//Operator/features"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveFeature" eSuperTypes="#//Feature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstraintEdge" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true" eOpposite="#//Constraint/owningCE"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Feature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningFeature" eType="#//Feature"
+        eOpposite="#//Feature/operator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" lowerBound="1"
+        upperBound="-1" eType="#//Feature" eOpposite="#//Feature/owningOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Opt" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Mandatory" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Or" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Card" eSuperTypes="#//Operator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningCE" eType="#//ConstraintEdge"
+        eOpposite="#//ConstraintEdge/constraint"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Require" eSuperTypes="#//Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Mutex" eSuperTypes="#//Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//FeatureElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningFeature" eType="#//Feature"
+        eOpposite="#//Feature/attributes"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="PetriNet" nsURI="http://uam.es/PetriNets" nsPrefix="pnet">
+  <eAnnotations source="gmf">
+    <details key="foo" value="bar"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Net">
+    <eAnnotations source="gmf.diagram">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="places" upperBound="-1"
+        eType="#//Place" containment="true" eOpposite="#//Place/cnet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/cnet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Place" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="figure" value="ellipse"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postt" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/prep">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pret" upperBound="-1" eType="#//Transition"
+        eOpposite="#//Transition/postp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cnet" lowerBound="1" eType="#//Net"
+        eOpposite="#//Net/places"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="figure" value="rectangle"/>
+      <details key="color" value="0,0,0"/>
+      <details key="size" value="15,50"/>
+      <details key="label.placement" value="external"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prep" upperBound="-1" eType="#//Place"
+        eOpposite="#//Place/postt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postp" upperBound="-1"
+        eType="#//Place" eOpposite="#//Place/pret">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cnet" lowerBound="1" eType="#//Net"
+        eOpposite="#//Net/transitions"/>
+  </eClassifiers>
+</ecore:EPackage>

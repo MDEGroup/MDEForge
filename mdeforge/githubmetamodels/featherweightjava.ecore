@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="featherweightjava"
+    nsURI="http://www.emftext.org/language/featherweightjava" nsPrefix="featherweightjava">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superclass" lowerBound="1"
+        eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Member" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constructor" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialisations" upperBound="-1"
+        eType="#//FieldInitialisiation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldInitialisiation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//Field"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnValue" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
+        eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorCall" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldAccess" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//Field"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//FieldAccessChild" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldAccessChild" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterAccess" eSuperTypes="#//Expression #//FieldAccessChild">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="This" eSuperTypes="#//Expression #//FieldAccessChild"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodCall" eSuperTypes="#//Expression #//FieldAccessChild">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+        eType="#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cast" eSuperTypes="#//Expression #//FieldAccessChild">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

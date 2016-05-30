@@ -1,0 +1,977 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="vortex"
+    nsURI="http://model.vortex" nsPrefix="vortex.model">
+  <eClassifiers xsi:type="ecore:EEnum" name="Status">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="READY" value="1"/>
+    <eLiterals name="ACTIVE" value="2" literal="ACTIVE"/>
+    <eLiterals name="INACTIVE" value="3" literal="INACTIVE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateInfo" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IdleTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Idle Time of Device"/>
+        <details key="Description" value="The amount of time in seconds since the User last used Device."/>
+        <details key="Units" value="seconds"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LockTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="AutoLock Timeout"/>
+        <details key="Units" value="seconds"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="MobileProvider" eType="#//MobileProvider"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RadioSigStrength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Radio Signal Strength"/>
+        <details key="Units" value="percent"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PhoneNumber" eType="#//PhoneNumber"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="StorageAvail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="attr">
+        <details key="Label" value="Primary Storage Available"/>
+        <details key="Units" value="BYTES"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="BatChargeRemain" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Battery Charge Remaining"/>
+        <details key="Units" value="percent"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="BatCurrentVoltage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Battery Current Voltage"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MobileProvider" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PhoneNumber" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Full Number"/>
+        <details key="Description" value="The full phone number including country and area code."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CountryCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AreaCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LocalNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Local Portion"/>
+        <details key="Description" value="The location portion of the phone number.  The portion of the number without country or area code."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//PhoneNumType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemInfo" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OsName" eType="#//OsName">
+      <eAnnotations source="attr">
+        <details key="Label" value="OS Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OsVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="OS Version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevIdent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Identifier"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Config" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SIM" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IMEI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IMSI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DefaultEmailAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Default Email Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MobileRadioType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="GSM" value="1"/>
+    <eLiterals name="CDMA" value="2"/>
+    <eLiterals name="LTE" value="3"/>
+    <eLiterals name="UTMS" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OsName">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="BlackBerry" value="1"/>
+    <eLiterals name="Android" value="2"/>
+    <eLiterals name="iOS" value="3"/>
+    <eLiterals name="WindowsPhone" value="4"/>
+    <eLiterals name="AgentJava" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="WlanType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="WiFi" value="1"/>
+    <eLiterals name="WiFi11n" value="2"/>
+    <eLiterals name="WiFi11g" value="3"/>
+    <eLiterals name="BlueTooth" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Asset" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//AssetType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Status" eType="#//Status">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AssetTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Asset Tag"/>
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SystemInfo" eType="#//SystemInfo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Hardware" eType="#//Hardware"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="StateInfo" upperBound="-1"
+        eType="#//StateInfo">
+      <eAnnotations source="attr">
+        <details key="IsHistory" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="People" upperBound="-1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Apps" upperBound="-1" eType="#//App"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Locations" upperBound="-1"
+        eType="#//Location">
+      <eAnnotations source="attr">
+        <details key="IsHistory" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="Label" value="Purchase Date"/>
+        <details key="Description" value="The date the device was purchased.  This value typically must be manually entered."/>
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OwnerNameFromUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Owner Name Given by User"/>
+        <details key="Description" value="The Owner Name as specified by the user of the asset."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OwnerInfoFromUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Owner Info from User"/>
+        <details key="Description" value="The Owner Info as specified by the User of the asset"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Policies" upperBound="-1"
+        eType="#//Policy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Registration" eType="#//Registration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Agent" eType="#//Agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PrimaryAddress" eType="#//Address">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Hardware" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Serial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Serial Number"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevType" eType="#//DevType">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Type"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevVendorName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Vendor Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevModelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Model Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevProductId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Product ID"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevFwVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Device Firmware Version"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="HasCamera" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Has Camera"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="HasRmBat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Has Removable Battery"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="MobileRadioTypes" upperBound="-1"
+        eType="#//MobileRadioType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="NetInterfaces" upperBound="-1"
+        eType="#//NetIf"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CpuSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The maximum speed (frequency) the CPU is rated to run at by the manufacturer.  Value is in MHz."/>
+      </eAnnotations>
+      <eAnnotations source="attr">
+        <details key="Units" value="MHz"/>
+        <details key="Label" value="CPU Speed"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="BusSpeed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The maximum speed (frequency) the main bus of the device runs at.  Value is in MHz."/>
+      </eAnnotations>
+      <eAnnotations source="attr">
+        <details key="Units" value="MHz"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PrimaryStorageCapacity"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger">
+      <eAnnotations source="attr">
+        <details key="Label" value="Primary Storage Total Capacity"/>
+        <details key="Description" value="The total capacity (size) of the primary storage device."/>
+        <details key="Units" value="BYTES"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NetAddress" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//NetAddressType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="HostAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Host Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="HostName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Host Address Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="NetAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Network Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="NetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Network Address Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="NetMask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Network Mask"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="BroadAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Broadcast Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="GatewayAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Gateway Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="GatewayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Gateway Address Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NetAddressType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="INET4" value="1"/>
+    <eLiterals name="INET6" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DevType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Phone" value="1"/>
+    <eLiterals name="Tablet" value="2"/>
+    <eLiterals name="AirCard" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NetIf" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//WlanType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="Interface Name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="NetAddress" eType="#//NetAddress"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="MacAddr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="Label" value="MAC Address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//EntityType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="FirstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Department" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CompanyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="EmployeeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PhoneNumbers" upperBound="-1"
+        eType="#//PhoneNumber">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData"/>
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Addresses" upperBound="-1"
+        eType="#//Address">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EntityType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Owner" value="1"/>
+    <eLiterals name="User" value="2"/>
+    <eLiterals name="LeaseHolder" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PhoneNumType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Work" value="1" literal="WORK"/>
+    <eLiterals name="Home" value="2" literal="HOME"/>
+    <eLiterals name="Mobile" value="3" literal="MOBILE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="App" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsHidden" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="VendorName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="InstalledSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="InstallDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Category" eType="#//AppCategory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LatDeg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LatMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LatSec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LonDeg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LonMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LonSec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AssetType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Hardware" value="1"/>
+    <eLiterals name="Software" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Registration" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AuthCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AssetID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Asset" eType="#//Asset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RegistrationCode" eType="#//RegistrationCode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Creator" eType="#//User"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Policy" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Status" eType="#//Status">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PwdMinLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PwdHistory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PwdComplexity" eType="#//PasswordComplexity">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AutoLockEnforced" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AutoLockPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="WipeAfterFailureCount"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AllowAppStorePurchase"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AllowCamera" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AllowBluetooth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AllowWLAN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="EncryptSD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="EncryptMainStorage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AppBlackList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PasswordComplexity">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Simple" value="1"/>
+    <eLiterals name="Complex" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Level" eType="#//Level"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Host" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Service" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ServiceClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Category" eType="#//EventCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UserName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Level">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="ERROR" value="1"/>
+    <eLiterals name="WARN" value="2"/>
+    <eLiterals name="INFO" value="3"/>
+    <eLiterals name="DEBUG" value="4"/>
+    <eLiterals name="DEBUG2" value="5"/>
+    <eLiterals name="DEBUG3" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Origin" eType="#//Origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Status" eType="#//UserStatus">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastHostName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastPwdChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastLoginSuccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastLoginFailure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Expires" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LoginFailures" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Email" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AuthChallenges" upperBound="3"
+        eType="#//AuthChallenge" containment="true">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ForcePasswordChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Roles" upperBound="-1"
+        eType="#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Groups" upperBound="-1"
+        eType="#//Group"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Passwords" upperBound="-1"
+        eType="#//Password" containment="true">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Permissions" upperBound="-1"
+        eType="#//Permission">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Person" eType="#//Person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AuthChallenge" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Question" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Answer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Permissions" upperBound="-1"
+        eType="#//Permission">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SubRoles" upperBound="-1"
+        eType="#//Role">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Origin" eType="#//Origin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permission" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//PermType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Origin" eType="#//Origin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Owner" eType="#//User">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Roles" upperBound="-1"
+        eType="#//Role">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SubGroups" upperBound="-1"
+        eType="#//Group">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Origin" eType="#//Origin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UserStatus">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Disabled" value="1"/>
+    <eLiterals name="Locked" value="2"/>
+    <eLiterals name="Enabled" value="3"/>
+    <eLiterals name="Pseudo" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Password" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Hash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Salt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PermType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="CREATE" value="1"/>
+    <eLiterals name="REMOVE" value="6"/>
+    <eLiterals name="MODIFY" value="2"/>
+    <eLiterals name="READ" value="3"/>
+    <eLiterals name="OPERATE" value="4"/>
+    <eLiterals name="FULL" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Origin">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Builtin" value="1"/>
+    <eLiterals name="User" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Job" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//JobType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="AssetID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="State" eType="#//JobState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Status" eType="#//JobState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Source" eType="#//JobSource">
+      <eAnnotations source="attr">
+        <details key="Label" value="Source of Submission"/>
+        <details key="Description" value="The source of how the Job was submitted."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RunInterval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="Interval Between Runs"/>
+        <details key="Description" value="Interval between each run of the job."/>
+        <details key="Units" value="seconds"/>
+      </eAnnotations>
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="StartTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LastAttempt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Completed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JobType">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="PUTASSET" value="1"/>
+    <eLiterals name="GETASSET" value="2"/>
+    <eLiterals name="GETPOLICY" value="3"/>
+    <eLiterals name="PUTSTATEINFO" value="4"/>
+    <eLiterals name="PUTSYSTEMINFO" value="5"/>
+    <eLiterals name="PUTHARDWARE" value="6"/>
+    <eLiterals name="PUTLOCATION" value="7"/>
+    <eLiterals name="CHECKIN" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JobState">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="QUEUED" value="1"/>
+    <eLiterals name="RUNNING" value="2"/>
+    <eLiterals name="COMPLETE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JobStatus">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="PENDING" value="1"/>
+    <eLiterals name="SUCCEEDED" value="2"/>
+    <eLiterals name="FAILED" value="3"/>
+    <eLiterals name="TIMEOUT" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JobSource">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="BUILTIN" value="1"/>
+    <eLiterals name="USER" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegistrationCode" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PhoneNumber" eType="#//PhoneNumber"
+        containment="true">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Registrations" upperBound="-1"
+        eType="#//Registration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevType" eType="#//DevType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OsName" eType="#//OsName">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevVendorName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DevVendorModel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="MobileRadioType" eType="#//MobileRadioType">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Status" eType="#//RegCodeStatus">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValidUntil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Creator" eType="#//User"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UseCountMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RegCodeStatus">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Available" value="1"/>
+    <eLiterals name="Assigned" value="2"/>
+    <eLiterals name="Expired" value="3"/>
+    <eLiterals name="Invalid" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EventCategory">
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="SECURITY" value="1"/>
+    <eLiterals name="CONFIG" value="2"/>
+    <eLiterals name="DATABASE" value="3"/>
+    <eLiterals name="GENERAL" value="4"/>
+    <eLiterals name="ASSET" value="5"/>
+    <eLiterals name="MANAGEMENT" value="6"/>
+    <eLiterals name="SERVER" value="7"/>
+    <eLiterals name="REGISTRATION" value="8"/>
+    <eLiterals name="SESSION" value="9"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Agent" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Port" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="attr">
+        <details key="Label" value="TCP Port"/>
+        <details key="Description" value="TCP Port Agent listens on"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Installed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate">
+      <eAnnotations source="attr">
+        <details key="Label" value="Install Date"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="NetAddress" eType="#//NetAddress"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Session" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SessionKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UserName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Expires" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DbID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DbVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Address" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Country" eType="#//Country">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//AddressType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Address1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Address2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Address3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="City" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="State" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PostalCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="attr">
+        <details key="IsEditable" value="yes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Country" eSuperTypes="#//Identifiable">
+    <eAnnotations source="attr">
+      <details key="IsReadOnly" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DialCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AppCategory" eSuperTypes="#//Identifiable">
+    <eAnnotations source="attr">
+      <details key="IsReadOnly" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Origin" eType="#//Origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Updated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AddressType">
+    <eLiterals name="Work" value="1" literal="WORK"/>
+    <eLiterals name="NOTSET"/>
+    <eLiterals name="Home" value="2" literal="HOME"/>
+    <eLiterals name="Other" value="3" literal="OTHER"/>
+  </eClassifiers>
+</ecore:EPackage>

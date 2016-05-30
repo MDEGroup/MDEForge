@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adata"
+    nsURI="http://eclipse.org/amp/amf/AData" nsPrefix="adata">
+  <eClassifiers xsi:type="ecore:EClass" name="Run">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1" eType="ecore:EClass ../../org.eclipse.amp.amf.acore/src/model/metaabm.ecore#//SContext"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="started" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finished" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterSets" upperBound="-1"
+        eType="#//ParameterSet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measurements" upperBound="-1"
+        eType="#//Measurement" containment="true" eOpposite="#//Measurement/run"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass ../../org.eclipse.amp.amf.acore/src/model/metaabm.ecore#//SAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataPoint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measurement" lowerBound="1"
+        eType="#//Measurement" eOpposite="#//Measurement/entries"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Catalog">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runs" upperBound="-1" eType="#//Run"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measurement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" unique="false"
+        eType="#//ScaleType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass ../../org.eclipse.amp.amf.acore/src/model/metaabm.ecore#//IValue"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" ordered="false"
+        upperBound="-1" eType="#//DataPoint" containment="true" resolveProxies="false"
+        eOpposite="#//DataPoint/measurement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="run" lowerBound="1" eType="#//Run"
+        eOpposite="#//Run/measurements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ScaleType">
+    <eLiterals name="Individual" literal="INDIVIDUAL"/>
+    <eLiterals name="Count" value="1" literal="COUNT"/>
+    <eLiterals name="Sum" value="2" literal="SUM"/>
+    <eLiterals name="Average" value="3" literal="AVERAGE"/>
+    <eLiterals name="Minimum" value="4" literal="MINIMUM"/>
+    <eLiterals name="Maximum" value="5" literal="MAXIMUM"/>
+    <eLiterals name="StandardDeviation" value="6" literal="STAMDARD_DEVIATION"/>
+    <eLiterals name="Variance" value="7" literal="VARIANCE"/>
+    <eLiterals name="Custom" value="1000" literal="CUSTOM"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

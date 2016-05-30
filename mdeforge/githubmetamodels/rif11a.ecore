@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rif11a"
+    nsURI="http://automotive-his.de/200706/rif" nsPrefix="rif">
+  <eSubpackages name="rif" nsURI="http://automotive-his.de/200706/rif/rif" nsPrefix="rif">
+    <eSubpackages name="ExchangeFile" nsURI="http://automotive-his.de/200706/rif/rif/ef"
+        nsPrefix="rif">
+      <eClassifiers xsi:type="ecore:EClass" name="SpecHierarchyRoot" eSuperTypes="#//rif/ExchangeFile/SpecElementWithUserDefinedAttributes">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The root element of the tree that constitutes the structure of SpecObjects.&#xA;Klärt, ob Haupt-Kapitel modifiziert werden dürfen und ob der Name der Hierachie geändert werden kann.&#xA;Vererbt an die Haupt-Kapitel und an die Attribute der Hierarchie.&#xA;&#xA;Bezieht sich NICHT auf die inhalte der Anforderungen und deren Attribute in der Gruppe."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+            eType="#//rif/ExchangeFile/SpecHierarchy" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecElementWithUserDefinedAttributes"
+          abstract="true" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="An abstract super-class for those specification elements that can have user defined attributes (at the moment SpecGroup, SpecHierarchyRoot, SpecObject, SpecRelation).&#xA;&#xA;"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/SpecType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/AttributeValue" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="desc" ordered="false"
+            eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastChange" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/DateTime"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="longName" ordered="false"
+            eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecType" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Contains the type of the specification.&#xA;&#xA;Here, the set of requirement attributes together with their data types makes up the &quot;type of specification&quot;.&#xA;Name des SpecTypes.&#xA;Attribut-Definitionen hinzufügen oder löschen.&#xA;Vererbt an die AttributeDefinitions."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specAttributes" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/AttributeDefinition" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinition" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The abstract super-class for the different types of &quot;attribute definitions&quot;.&#xA;&#xA;The &quot;attribute definition&quot; is in priniciple the definition of an attribute column wihtin an RE/RM tool (but without concrete values).&#xA;Name des Attributs.&#xA;Zuordnung des Datentyps zum Attribut, aber NICHT die Datentypdefinition selbst.&#xA;Default-Wert.&#xA;&#xA;&#xA;"/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValue" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The abstract super-class for concrete values of the different data type.&#xA;Inhalt der Eigenschaft (Wert) bzw. die Referenz bei verknüpften Inhalten.&#xA;&#xA;Formal eigentlich auch die Zuordnung zur AttributeDefinition, aber das macht praktisch eigentlich keinen Sinn."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecHierarchy" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The nodes of the tree that constitutes the structure of SpecObjects.&#xA;&#xA;The tree is created by references of SpecHierarchy instances to other SpecHierarchy instances. Each node has additionally a reference to a SpecObject resulting in a hierarchical structure of SpecObjects.&#xA;Dient dazu, für Unterkapitel zu kennzeichnen, ob innerhalb dieses Unterkapitels umstrukturiert und ergänzt bzw. gelöscht werden darf.&#xA;Hat aber nichts mit den Inhalten der SpecObjekte und deren Eigenschaften zu tun, nur mit der Kapitelstruktur als solches!&#xA;Vorsicht: Dadurch können aus Knoten (Überschriften) Blätter (Anforderungen) gemacht werden und umgekehrt.&#xA;Vererbt rekursiv an die Unter-Unter-Kapitel."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="object" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/SpecObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+            eType="#//rif/ExchangeFile/SpecHierarchy" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecObject" eSuperTypes="#//rif/ExchangeFile/SpecElementWithUserDefinedAttributes">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The atomic specification object.&#xA;Darf die Anforderung umbenannt werden (falls wir den LongName aus Identifiable überhaupt benutzen wollen)?&#xA;Darf der SpecType der Anforderung verändert werden?&#xA;&#xA;Vererbt an die Attribute-Values.&#xA;"/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecGroup" eSuperTypes="#//rif/ExchangeFile/SpecElementWithUserDefinedAttributes">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Constitutes a group of SpecObjects that belong together.&#xA;A group of SpecObjects is a simple set, i.e. no structure or order is implicited by SpecGroup.&#xA;Darf die Gruppe umbenannt werden?&#xA;Darf der SpecType der Gruppe verändert werden?&#xA;Dürfen der Gruppe neue Anforderungen hinzugefügt oder daraus gelöscht werden?&#xA;Vererbt an die Gruppen-Attribute.&#xA;Vererbt an die RelationGroups.&#xA;&#xA;Bezieht sich NICHT auf die inhalte der Anforderungen und deren Attribute in der Gruppe."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="relationGroups" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/RelationGroup" containment="true"
+            eOpposite="#//rif/ExchangeFile/RelationGroup/sourceGroup"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="RelationGroup" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Specifies a relation type.&#xA;&#xA;Any relation between two SpecObjects must be of a certain type. I.e., any relation must belong to a RelationGroup which specifies the relation type.&#xA;Insbesondere wird hier festgelegt, wer neue Relationen anlegen darf, die zu dieser RelationGroup gehören sollen. Damit kann eingeschränkt werden, wer Traces erzeugen soll, die von den Objekten der Eltern SpecGroup ausgehen.&#xA;Bezieht sich auch auf die Auswahl der TargetGroup und des vorgesehenen SpecType der SpecRelation Objekte in der RelationGroup."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecRelation"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="relationType" ordered="false"
+            unique="false" eType="#//rif/ExchangeFile/SpecType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="sourceGroup" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/SpecGroup" eOpposite="#//rif/ExchangeFile/SpecGroup/relationGroups"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SpecRelation" eSuperTypes="#//rif/ExchangeFile/SpecElementWithUserDefinedAttributes">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Indicates a relation between two SpecObjects.&#xA;Darf die einzelne Relation umbenannt werden (falls wir den LongName aus Identifiable dafür überhaupt benutzen wollen)?&#xA;Darf der SpecType der Relation verändert werden?&#xA;Dürfen Source- und Target der Relation verändert werden?&#xA;Vererbt an die AttributeValues.&#xA;"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/SpecObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/SpecObject"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinition" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The abstract super-class for the different data types.&#xA;Name des Datentyps.&#xA;Definition des Datentyps.&#xA;"/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AccessPolicy" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessMode" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/AccessPolicyAccessModeEnum"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specGroups" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecGroup"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="attributeDefinitions"
+            ordered="false" unique="false" upperBound="-1" eType="#//rif/ExchangeFile/AttributeDefinition"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="relationGroups" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/RelationGroup"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datatypeDefinitions"
+            ordered="false" unique="false" upperBound="-1" eType="#//rif/ExchangeFile/DatatypeDefinition"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecRelation"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValues" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/AttributeValue"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specTypes" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specHierarchies" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecHierarchy"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specHierarchyRoots"
+            ordered="false" unique="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecHierarchyRoot"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionComplex" eSuperTypes="#//rif/ExchangeFile/AttributeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of a requirement attribute that is based on a complex data type.&#xA;&#xA;In principle, this element constitutes an attribute column that can contain &quot;complex&quot; values of a certain complex data type."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DatatypeDefinitionComplex"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+            unique="false" eType="#//rif/ExchangeFile/AttributeValueComplex" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionComplex" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/DatatypeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of a complex data type.&#xA;&#xA;&quot;Complex data&quot; contains either XML data that is validated against a different XML-Schema, or binary data."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="embedded" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Boolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueComplex" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/AttributeValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The abstract super-class for complex data."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionEnumeration"
+          eSuperTypes="#//rif/ExchangeFile/AttributeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of a requirement attribute that is based on an &quot;Enumeration&quot; data type.&#xA;&#xA;In principle, this element constitutes an attribute column that can contain enumeration values of a certain enumeration data type."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiValued" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Boolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DatatypeDefinitionEnumeration"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+            unique="false" eType="#//rif/ExchangeFile/AttributeValueEnumeration" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionEnumeration" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of an &quot;Enumeration&quot; data type.&#xA;&#xA;This definition is constituted by aggregating the possible enumeration values for the enumeration data type being defined."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specifiedValues" upperBound="-1"
+            eType="#//rif/ExchangeFile/EnumValue" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="EnumValue" eSuperTypes="#//rif/ExchangeFile/Identifiable">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of a possible enumeration value.&#xA;&#xA;An enumeration data type is constituted by a set of possible enumeration values.&#xA;&#xA;The enumeration value names are given in &quot;longName&quot; of the parent element &quot;Identifiable&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="properties" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/EmbeddedValue"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="EmbeddedValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Contains additional data for an enumeration value.&#xA;&#xA;Possible data is e.g. a key, a color."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Int"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="otherContent" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEnumeration" eSuperTypes="#//rif/ExchangeFile/AttributeValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Contains the concrete values of an &quot;Enumeration&quot; data type.&#xA;&#xA;Note that in case of &quot;multi value enumerations&quot;, a set of different enumeration values can be specified.&#xA;&#xA;The value is thus indicated by multiple references (&quot;values&quot;) to enumeration values that are contained in the associated enumeration data type."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" ordered="false"
+            unique="false" upperBound="-1" eType="#//rif/ExchangeFile/EnumValue"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionEnumeration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinitionSimple" eSuperTypes="#//rif/ExchangeFile/AttributeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of a requirement attribute that is based on a simple data type.&#xA;&#xA;In principle, this element constitutes an attribute column that can contain values of one of the data types &quot;Integer&quot;, &quot;Boolean&quot;, &quot;Real&quot; or &quot;String&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DatatypeDefinitionSimple"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" ordered="false"
+            unique="false" eType="#//rif/ExchangeFile/AttributeValueSimple" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionSimple" abstract="true"
+          eSuperTypes="#//rif/ExchangeFile/DatatypeDefinition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The abstract super-class for definition of the simple data types."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueSimple" eSuperTypes="#//rif/ExchangeFile/AttributeValue">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Contains the concrete value of a simple data type.&#xA;&#xA;The value is encoded as a string in &quot;theValue&quot;. No type checking is done by the resulting Schema. The importer of the tool has to verify the correct type of the value in &quot;theValue&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="theValue" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionSimple"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEmbeddedDocument"
+          eSuperTypes="#//rif/ExchangeFile/AttributeValueComplex">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionComplex"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="xhtmlContent" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DataTypes/XhtmlContent"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueEmbeddedFile" eSuperTypes="#//rif/ExchangeFile/AttributeValueComplex">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The complex data that is encoded and embedded in the XML file."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionComplex"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="binaryContent" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DataTypes/BinaryContent"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueFileReference" eSuperTypes="#//rif/ExchangeFile/AttributeValueComplex">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Reference to the complex data that is stored in an external file."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pathToFile" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionComplex"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AttributeValueXmlData" eSuperTypes="#//rif/ExchangeFile/AttributeValueComplex">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Wrapper for a different namespace (e.g. for XHTML)."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/AttributeDefinitionComplex"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="xmlContent" ordered="false"
+            unique="false" lowerBound="1" eType="#//rif/ExchangeFile/DataTypes/XmlContent"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionBinaryFile" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionComplex">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Defines a complex data type that is based on generic binary data.&#xA;&#xA;It contains further information on the file format, the associated application etc."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="filenameSuffix" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="formatName" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="mimeType" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionBoolean" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionSimple">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of the simple data type &quot;Boolean&quot;."/>
+        </eAnnotations>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionDate" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionSimple">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/DatatypeDefinitionDateFormatEnum"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionDocument" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionComplex"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionInteger" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionSimple">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of the simple data type &quot;Integer&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Int"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Int"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionReal" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionSimple">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of the simple data type &quot;Real&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="accuracy" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Int"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Float"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Float"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionString" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionSimple">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Definition of the simple data type &quot;String&quot;."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/Int"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DatatypeDefinitionXmlData" eSuperTypes="#//rif/ExchangeFile/DatatypeDefinitionComplex">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Defines a complex data type that is based on an XML-Schema.&#xA;&#xA;It contains the reference to the XML-Schema on which the complex data is based."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameSpaceURI" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaLocation" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="RIF">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="This is the root element.&#xA;&#xA;Instances of concrete elements must directly or indirectly be aggregated by the root element."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" ordered="false"
+            eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="countryCode" ordered="false"
+            eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/DateTime"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceToolId" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" ordered="false"
+            lowerBound="1" eType="#//EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package/String"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="accessPolicies" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/AccessPolicy" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="datatypes" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/DatatypeDefinition" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="SpecHierarchyRoots"
+            ordered="false" upperBound="-1" eType="#//rif/ExchangeFile/SpecHierarchyRoot"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specObjects" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/SpecObject" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specGroups" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/SpecGroup" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specTypes" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/SpecType" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="specRelations" ordered="false"
+            upperBound="-1" eType="#//rif/ExchangeFile/SpecRelation" containment="true"/>
+      </eClassifiers>
+      <eSubpackages name="DataTypes" nsURI="http://automotive-his.de/200706/rif/rif/dt"
+          nsPrefix="rif">
+        <eClassifiers xsi:type="ecore:EClass" name="BinaryContent"/>
+        <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="java.lang.Boolean">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A Boolean values denotes a logical condition that is either 'true' or 'false'."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="DateTime" instanceClassName="javax.xml.datatype.XMLGregorianCalendar">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="A datatype representing a timestamp. The smallest granularity is 1 second."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="Float" instanceClassName="java.lang.Double">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An instance of float is an element from the set of real numbers. The value must comply with IEEE 754."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="Identifier" instanceClassName="java.lang.String">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An Identifier is a string with a number of constraints on its appearance, satisfying the requirements typical programming languages define for their Identifiers: length must not exceed 32 characters, must begin with a letter, must then be followed by letter, digit or underscore."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.math.BigInteger">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An instance of Integer is an element in the (infinite) set of integers( ..., -2, -1, 0, 1, 2, ...). An allowed alias for Integer is Int."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An instance of String defines a sequence of characters. The used character set and encoding is not specified an depends on the system environment (e.g. the encoding of an XML document or the charset of a database)."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EDataType" name="UnlimitedNatural" instanceClassName="java.math.BigInteger">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="An instance of UnlimitedNatural is an element in the infinite set of naturals (0, 1, 2, ...). The value of infinity is shown as asterisk '*'."/>
+          </eAnnotations>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="XmlContent"/>
+        <eClassifiers xsi:type="ecore:EClass" name="XhtmlContent"/>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="EA_PrimitiveTypes_Package" nsURI="http:///EA_Model/EA_PrimitiveTypes_Package.ecore"
+      nsPrefix="EA_Model.EA_PrimitiveTypes_Package">
+    <eSubpackages name="EA_AUTOSARM2_Types_Package" nsURI="http:///EA_Model/EA_PrimitiveTypes_Package/EA_AUTOSARM2_Types_Package.ecore"
+        nsPrefix="EA_Model.EA_PrimitiveTypes_Package.EA_AUTOSARM2_Types_Package">
+      <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="java.lang.Boolean"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="enumerationW3CCustom" instanceClassName="int"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="Int" instanceClassName="java.math.BigInteger"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="Float" instanceClassName="java.lang.Double"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="Identifier" instanceClassName="java.lang.String"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="DateTime" instanceClassName="javax.xml.datatype.XMLGregorianCalendar"/>
+      <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+      <eClassifiers xsi:type="ecore:EEnum" name="AccessPolicyAccessModeEnum">
+        <eLiterals name="EDIT"/>
+        <eLiterals name="DELETE" value="1"/>
+        <eLiterals name="CREATE" value="2"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="DatatypeDefinitionDateFormatEnum">
+        <eLiterals name="W3C"/>
+        <eLiterals name="CUSTOM" value="1"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="UMLStandardProfile" nsURI="http:///EA_Model/UMLStandardProfile.ecore"
+      nsPrefix="EA_Model.UMLStandardProfile">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="UML Standard Profile contains several popular stereotypes, tag definitions and constraints described in UML  2 Specifications."/>
+    </eAnnotations>
+  </eSubpackages>
+</ecore:EPackage>

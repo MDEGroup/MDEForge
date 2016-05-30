@@ -1,0 +1,1135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="PLM" nsURI="http://melanee.org/PLM" nsPrefix="PLM">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eAnnotations source="http://melanee.org/PLM/Datatypes">
+    <details key="String" value=".*"/>
+    <details key="Real" value="-?\d*(\.\d*)?"/>
+    <details key="Integer" value="-?\d*"/>
+    <details key="Natrual" value="\d*"/>
+    <details key="boolean" value="true|false"/>
+    <details key="Character" value="."/>
+    <details key="Percent" value="\d{1,3}(\.\d*)?"/>
+    <details key="Probability" value="0?\.(\d*)?"/>
+    <details key="Money" value="-?\d*(\.\d{1,2})?"/>
+    <details key="void" value=""/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Domain">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the root model element usually containing an Ontology."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ontologies" upperBound="-1"
+        eType="#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domains" eType="#//Domain"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expressed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relevant" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visualizer" upperBound="-1"
+        eType="#//LMLVisualizer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fix" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainElement" abstract="true" eSuperTypes="#//OwnedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elided" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//Element #//Context">
+    <eOperations name="getAllGeneralizations" ordered="false" upperBound="-1" eType="#//Generalization">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(Generalization))->collect(g | g.oclAsType(Generalization))->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the generalizations present in the model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSetRelationships" ordered="false" upperBound="-1" eType="#//SetRelationship">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(SetRelationship))->collect(g | g.oclAsType(SetRelationship))->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the set relationships present in the model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClabjects" ordered="false" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(Clabject))->collect(g | g.oclAsType(Clabject))->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the clabjects present in the model, without recursive inclusion of clabjects contained in clabejcts"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEntities" upperBound="-1" eType="#//Entity">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(Entity))->collect(g | g.oclAsType(Entity))->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the entities present in the model, without recursive inclusion of entities contained in entities"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getConnections" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(Connection))->collect(g | g.oclAsType(Connection))->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the connections present in the model, without recursive inclusion of connections contained in clabjects"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassifications" ordered="false" upperBound="-1" eType="#//Classification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.content->select(e|e.oclIsKindOf(Classification))->collect(g | g.oclAsType(Classification))->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the classifications where the instance is in the model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOntology" ordered="false" eType="#//Ontology">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.oclAsType(ecore::EObject).eContainer().oclAsType(Ontology)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the containing ontology of the model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassifiedModel" ordered="false" eType="#//Model">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.getOntology().content->indexOf(self) = self.getOntology().content->size()) then&#xA;&#x9;null&#xA;else&#xA;&#x9;self.getOntology().content->at(self.getOntology().content->indexOf(self) + 1)&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model that is classified by the current model, i.e. one level below"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassifyingModel" ordered="false" eType="#//Model">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.getOntology().content->indexOf(self) = 1) then&#xA;&#x9;null&#xA;else&#xA;&#x9;self.getOntology().content->at(self.getOntology().content->indexOf(self) - 1)&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model that is classifying the current model, i.e. one level above"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getLevel" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getOntology().content->indexOf(self)-1"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the level of the model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isRootModel" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getOntology().content->indexOf(self) = 1"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the model is the topmost model"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isLeafModel" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getOntology().content->indexOf(self) = self.getOntology().content->size()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the model is the bottom model"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+        eType="#//OwnedElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ontology" eSuperTypes="#//Element #//Context">
+    <eOperations name="getModelAtLevel" ordered="false" eType="#//Model">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if level > 0 and level &lt; self.content->size() then&#xD;&#xA;&#x9;self.content->at(level)&#xD;&#xA;else&#xD;&#xA;&#x9;null&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model identified by the level"/>
+      </eAnnotations>
+      <eParameters name="level" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="getPrimitiveDatatypes" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.oclAsType(ecore::EObject).eClass().ePackage.getEAnnotation('http://melanee.org/PLM/Datatypes').details.key->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all primitive datatypes"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getRegexForPrimitiveDatatype" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.oclAsType(ecore::EObject).eClass().ePackage.getEAnnotation('http://melanee.org/PLM/Datatypes').details->select(e | e.key = type)->size() = 1) then&#xD;&#xA;&#x9;self.oclAsType(ecore::EObject).eClass().ePackage.getEAnnotation('http://melanee.org/PLM/Datatypes').details->select(e | e.key = type).value->first()&#xD;&#xA;else&#xD;&#xA;&#x9;null&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all primitive datatypes"/>
+      </eAnnotations>
+      <eParameters name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+        eType="#//Model" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumerations" upperBound="-1"
+        eType="#//Enumeration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwnedElement" abstract="true" eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Correlation" abstract="true" eSuperTypes="#//OwnedElement">
+    <eOperations name="getModel" ordered="false" lowerBound="1" eType="#//Model">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.oclAsType(ecore::EObject).eContainer().oclAsType(Model)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model that contains the logical element"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetRelationship" abstract="true" eSuperTypes="#//Correlation">
+    <eOperations name="getTarget" ordered="false" lowerBound="1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.oclIsTypeOf(Equality) then&#xD;&#xA;&#x9;self.oclAsType(Equality).equal&#xD;&#xA;else&#xD;&#xA;&#x9;if self.oclIsTypeOf(Complement) then&#xD;&#xA;&#x9;&#x9;self.oclAsType(Complement).complement&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;self.oclAsType(Inversion).inverse&#xD;&#xA;&#x9;endif&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the target clabject of the directed relationship"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="base" lowerBound="1" eType="#//Clabject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Equality" eSuperTypes="#//SetRelationship">
+    <eOperations name="getTarget" ordered="false" lowerBound="1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.equal"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the target clabject of the directed relationship"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="equal" lowerBound="1" eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="true" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="if true the two clabjects are &quot;two names for the same thing&quot;, if false they will spawn the same offspring"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inversion" eSuperTypes="#//SetRelationship">
+    <eOperations name="getTarget" ordered="false" lowerBound="1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.inverse"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the target clabject of the directed relationship"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inverse" lowerBound="1"
+        eType="#//Clabject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Complement" eSuperTypes="#//SetRelationship">
+    <eOperations name="getTarget" ordered="false" lowerBound="1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.complement"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the target clabject of the directed relationship"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="complement" lowerBound="1"
+        eType="#//Clabject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Generalization" eSuperTypes="#//Correlation">
+    <eOperations name="isDisjoint" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="not (self.disjoint.oclIsUndefined() or self.disjoint = false)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the generalization is disjoint, false otherwise"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isComplete" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="not (self.complete.oclIsUndefined() or self.complete = false)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the generalization is complete, false otherwise"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isIntersection" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="not (self.intersection.oclIsUndefined() or self.intersection = false)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the generalization is an intersection, false otherwise"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.name.oclIsUndefined() or self.name = '' then&#xD;&#xA;&#xD;&#xA;let superT : String = self.supertype->iterate(s:Clabject; res:String=''| &#xD;&#xA;&#x9;&#x9;res.concat(s.represent()).concat(',')&#xD;&#xA;&#x9;) &#xD;&#xA;in&#xD;&#xA;&#xD;&#xA;let subT : String = self.subtype->iterate(s:Clabject; res:String=''| &#xD;&#xA;&#x9;&#x9;res.concat(s.represent()).concat(',')&#xD;&#xA;&#x9;)&#xD;&#xA;in&#xD;&#xA;'['.concat(superT.substring(1,superT.size()-1))&#xD;&#xA;.concat(']&lt;-[').concat(subT.substring(1,subT.size()-1)).concat(']')&#xD;&#xA;&#xD;&#xA;else &#xD;&#xA;&#x9;self.name&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation of the generalization. If the name is set, the name is returned.&#xA;It the name is not set, a meaningful string is constructed from the defined inheritance."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supertype" lowerBound="1"
+        upperBound="-1" eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subtype" lowerBound="1"
+        upperBound="-1" eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disjoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="complete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intersection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Classification" eSuperTypes="#//Correlation">
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.instance.represent().concat('->').concat(self.type.represent())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable representation of the classification constructed from the names of the instance and the type as well as the kind of the classification."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+        eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//ClassificationKind"
+        defaultValueLiteral="instantiation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Clabject" abstract="true" eSuperTypes="#//DomainElement #//Context">
+    <eAnnotations source="Comment">
+      <details key="level derrived" value="Element container = (this.eContainer() instanceof Element) ? (Element)this.eContainer() : null;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;while ( (container != null) &amp;&amp; !(container instanceof Model) )&#xD;&#xA;&#x9;&#x9;&#x9;container = (container.eContainer() instanceof Element) ? (Element)container.eContainer() : null;&#xD;&#xA;&#x9;&#x9;if (container == null)&#xD;&#xA;&#x9;&#x9;&#x9;return -1;&#xD;&#xA;&#x9;&#x9;return (container.eContainer() instanceof Ontology) ? ((Ontology)container.eContainer()).getModels().indexOf(container) : -1;"/>
+    </eAnnotations>
+    <eOperations name="allInstancesFrom" ordered="false" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Classification.allInstances()->select(i | i.type = self).instance->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This is needed for ATL to be able to use ontological levels (models) as meta-model."/>
+      </eAnnotations>
+      <eParameters name="model" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getModel" ordered="false" eType="#//Model">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let parent:ecore::EObject = &#xD;&#xA;&#x9;self.oclAsType(ecore::EObject).eContainer()&#xD;&#xA;in&#xD;&#xA;&#x9;if (parent.oclIsUndefined()) then&#xD;&#xA;&#x9;&#x9;null&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;if (parent.oclIsTypeOf(Model)) then&#xD;&#xA;&#x9;&#x9;&#x9;parent.oclAsType(Model)&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;if (parent.oclIsKindOf(Clabject)) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;parent.oclAsType(Clabject).getModel()&#xD;&#xA;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;null&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model the clabject is contained in, recursing up the containment path if necessary."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOntology" ordered="false" eType="#//Ontology">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getModel().getOntology()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the ontology the clabject's model is contained in, recursing up the containment path if necessary."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSupertypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) =&#xD;&#xA;&#x9;self.getDirectSupertypes()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;--Start recursion&#xD;&#xA;directResult->iterate(c:Clabject; type:OrderedSet(Clabject) = directResult|&#xD;&#xA;&#x9;type->union(c.getSupertypes(directResult))->asOrderedSet()&#xD;&#xA;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects the clabject inherits properties from. A model supertype is a clabject reachable through generalization supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSupertypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) =&#xD;&#xA;&#x9;self.getDirectSupertypes()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;--Start recursion&#xD;&#xA;directResult->iterate(c:Clabject; type:OrderedSet(Clabject) = directResult|&#xD;&#xA;&#x9;if (immediateResult->includes(c)) then&#xD;&#xA;&#x9;&#x9;type&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;type->union(c.getSupertypes(immediateResult->union(directResult)->asOrderedSet()))->asOrderedSet()&#xD;&#xA;&#x9;endif&#xD;&#xA;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects the clabject inherits properties from. A model supertype is a clabject reachable through generalization supertypes."/>
+      </eAnnotations>
+      <eParameters name="immediateResult" upperBound="-1" eType="#//Clabject"/>
+    </eOperations>
+    <eOperations name="getDirectSupertypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Generalization.allInstances()->select(g | g.subtype->includes(self)).supertype->flatten()->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are supertypes in a generalization the current clabejct is a subtype in."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSubtypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) =&#xD;&#xA;&#x9;Generalization.allInstances()->select(g | g.supertype->includes(self)).subtype->flatten()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;--Start recursion&#xD;&#xA;directResult->iterate(c:Clabject; type:OrderedSet(Clabject) = directResult|&#xD;&#xA;&#x9;type->union(c.getSubtypes())->asOrderedSet()&#xD;&#xA;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects the clabject passes properties to. A model subtype is a clabject reachable through generalization subtypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getHollowSubtypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="getSubtypes()->select(st | st.feature->forAll(f | self.feature->one(selfF | selfF.name = f.name)))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects the clabject passes properties to. A model subtype is a clabject reachable through generalization subtypes. Shallow subtypes to not add additional features to a supertype."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getHollowSupertypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="getSupertypes()->select(st | self.feature->forAll(f | st.feature->one(selfF | selfF.name = f.name)))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects the clabject passes properties to. A model subtype is a clabject reachable through generalization subtypes. Shallow subtypes to not add additional features to a supertype."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassificationsAsInstance" ordered="false" upperBound="-1"
+        eType="#//Classification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Classification.allInstances()->select(i|i.instance = self)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the classifications the clabject is the instance of."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassificationsAsType" ordered="false" upperBound="-1" eType="#//Classification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Classification.allInstances()->select(i|i.type = self)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the classifications the clabject is the type of."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInstances" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let allTypes:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getSubtypes()->including(self)->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;allTypes.getClassificationsAsType().instance->union(allTypes.getClassificationsAsType().instance.getSubtypes())->asOrderedSet()&#xD;&#xA;&#xD;&#xA;--&#x9;allTypes->iterate(type:Clabject; instances:Set(Clabject) = Set(Clabject){}|&#xD;&#xA;--&#x9;&#x9;--Take all instances&#xD;&#xA;--&#x9;&#x9;instances->union(type.getClassificationsAsType().instance)&#xD;&#xA;&#x9;&#x9;--Union with subtypes of instances&#xD;&#xA;--&#x9;&#x9;->union(type.getClassificationsAsType().instance.getSubtypes())->asSet()&#xD;&#xA;--&#x9;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the clabjects that are an instance of the clabject based on classification elements.&#xA;A clabject i is a model instance of t if there exists a classification c with c.type = t or a subtype of t and c.instance = i or a supertype of i"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let allTypes:Set(Clabject) = &#xD;&#xA;&#x9;self.getSupertypes()->including(self)&#xD;&#xA;in&#xD;&#xA;allTypes.getClassificationsAsInstance().type->union(allTypes.getClassificationsAsInstance().type.getSupertypes())->asOrderedSet()&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;--allTypes->iterate(type:Clabject; instances:Set(Clabject) =Set(Clabject){}|&#xD;&#xA;&#x9;--&#x9;--Take all types&#xD;&#xA;&#x9;--&#x9;instances->union(type.getClassificationsAsInstance().type)&#xD;&#xA;&#x9;&#x9;--Union with supertypes of types&#xD;&#xA;&#x9;--&#x9;->union(type.getClassificationsAsInstance().type.getSupertypes())->asSet()&#xD;&#xA;&#x9;--)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the clabjects that are atype of the clabject based on classification elements.&#xA;A clabject t is a model type of i if there exists a classification c with c.type = t or a subtype of t and c.instance = i or a supertype of i"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDirectTypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsInstance().type->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the clabjects that are the type in a classification the current clabject is the instance of."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getModelTypes" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsInstance().type->union(self.getClassificationsAsInstance().type.getSupertypes())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the types and their supertypes of the clabject only. The clabject's inheritance hierarchy are not taken into account."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenClassificationTreeAsInstance" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getModelTypes()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;directResult->union(directResult.getTypes()->asOrderedSet())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects reachable from the clabject through classifications in the type direction. &#xD;&#xA;In other words, all the model instances recursively including their model instances.&#xD;&#xA;This does not take the clabject's own classification hierarchy into account.&#xD;&#xA;The clabject is root instance in this tree."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassificationTreeAsInstance" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getTypes()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;directResult->union(directResult.getTypes()->asOrderedSet())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects reachable from the clabject through classifications in the type direction.&#xD;&#xA;In other words, all the model instances recursively including their model instances."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDirectInstances" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsType().instance->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the clabjects that are the instances in a classification the current clabject is the type of."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenInstances" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsType().instance->union(self.getClassificationsAsType().instance.getSubtypes())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the instances and their subtypes of the clabject only. The clabject's inheritance hierarchy are not taken into account."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenClassificationTreeAsType" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getEigenInstances()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;directResult->union(directResult.getInstances()->asOrderedSet())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects reachable from the clabject through classifications in the instance direction. &#xD;&#xA;In other words, all the model instances recursively including their model instances.&#xD;&#xA;This does not take the clabject's own classification hierarchy into account.&#xD;&#xA;The clabject is root type in this tree."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassificationTreeAsType" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let directResult:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getInstances()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;directResult->union(directResult.getInstances()->asOrderedSet())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects reachable from the clabject through classifications in the instance direction. In other words, all the model instances recursively including their model instances."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAllFeatures" upperBound="-1" eType="#//Feature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let features:OrderedSet(Feature) =  &#xD;&#xA;&#x9;self.getSupertypes()->including(self).feature->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;features&#xD;&#xA;&#x9;&#x9;&#x9;->select(f | features&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;->excluding(f)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;->forAll(f2 | f.name = f2.name implies not f.getClabject().getSubtypes()->includes(f2.getClabject())))->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the features the clabject defines. That includes features inherited from supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAllAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getAllFeatures()->select(f | f.oclIsTypeOf(Attribute)).oclAsType(Attribute)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the attributes the clabject defines. That includes the attributes inherited from supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenAttributes" upperBound="-1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.feature->select(f | f.oclIsKindOf(Attribute)).oclAsType(Attribute)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the features the clabject defines. That includes features inherited from supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenAttributeByName" lowerBound="1" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.feature->select(f | f.oclIsKindOf(Attribute)).oclAsType(Attribute)->select(f | f.name = name)->first()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the feature with given name that is defined by the clabject"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllMethods" upperBound="-1" eType="#//Method">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getAllFeatures()->select(f | f.oclIsTypeOf(Method)).oclAsType(Method)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the methods the clabject defines. That includes the methods inherited from supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenMethods" upperBound="-1" eType="#//Feature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.feature->select(f | f.oclIsKindOf(Method))->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the features the clabject defines. That includes features inherited from supertypes."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isInstanceOf" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="type.getInstances()->includes(self)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if there is a classification connecting the clabject or a supertype to the type or a subtype.&#xA;In other words, if the clabject is in the model instances of the type."/>
+      </eAnnotations>
+      <eParameters name="type" lowerBound="1" eType="#//Clabject"/>
+    </eOperations>
+    <eOperations name="isTypeOf" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="instance.getTypes()->includes(self)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if there is a classification connecting the instance or a supertype to the clabject or a subtype.&#xA;In other words, if the clabject is in the model types of the instance."/>
+      </eAnnotations>
+      <eParameters name="instance" lowerBound="1" eType="#//Clabject"/>
+    </eOperations>
+    <eOperations name="getEigenConnections" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Participation.allInstances()->select(r | r.destination = self).connection->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the connections that have a participation where the clabject is the destination."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getConnections" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getInheritedConnections()->union(self.getEigenConnections())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the connections which have a participation where either the clabject or a supertype is the destination of."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInheritedConnections" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getSupertypes().getEigenConnections()->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the connections that have a participation where a supertype of the clabject is the destination of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getModelCompleteTypes" ordered="false" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsInstance()->select((kind= ClassificationKind::isonym) or (kind= ClassificationKind::instantiation)).type->asSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the types of classifications where the clabject is an instance of and the kind is isonym or instantiation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getModelIncompleteTypes" ordered="false" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the types of classifications where the clabject is an instance of and the kind is hyponym"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsInstance()->select(kind= ClassificationKind::hyponym).type->asSet()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBlueprint" ordered="false" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let blueprints:OrderedSet(Clabject) = &#xD;&#xA;&#x9;self.getClassificationsAsInstance()->select(c | c.kind= ClassificationKind::instantiation).type->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;&#x9;if blueprints->size() > 0 then &#xD;&#xA;&#x9;&#x9;blueprints->first() &#xD;&#xA;&#x9;else &#xD;&#xA;&#x9;&#x9;null &#xD;&#xA;&#x9;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the type of a classification the clabject is the instance of and the kind is instantiation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOffspring" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsType()->select(c | c.kind = ClassificationKind::instantiation).instance->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are the instance of classifications with kind instantiation and the clabject is the type of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIsonyms" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsType()->select(c | c.kind = ClassificationKind::isonym).instance->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are the instance of classifications with kind instantiation or isonym and the clabject is the type of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getHyponyms" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getClassificationsAsType()->select(c | c.kind = ClassificationKind::hyponym).instance->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are the instance of classifications with kind hyponym and the clabject is the type of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDomainForConnection" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="connection.getDomain(self)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the destinations of the participations of the connection that are not the clabject itself (i.e. the other participants of the connection)"/>
+      </eAnnotations>
+      <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
+    </eOperations>
+    <eOperations name="getPossibleDomainSpecificVisualizers" ordered="false" upperBound="-1"
+        eType="#//AbstractDSLVisualizer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="--At first we look if a visualization descriptor is directly attached&#xD;&#xA;let possibleVisualization:Set(AbstractDSLVisualizer) = &#xD;&#xA;&#x9;self.visualizer.dslVisualizer->asSet()&#xD;&#xA;in&#xD;&#xA;--Now look at the superTypes if nothing is directly found&#xD;&#xA;let possibleVisualizationOfModelSupertypes:Set(AbstractDSLVisualizer) =&#xD;&#xA;&#x9;if (possibleVisualization->size() = 0) then&#xD;&#xA;&#x9;&#x9;self.getSupertypes().visualizer.dslVisualizer->asSet()&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;possibleVisualization&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;--Look at the model types if nothing is found&#xD;&#xA;if (possibleVisualizationOfModelSupertypes->size() = 0) then&#xD;&#xA;&#x9;self.getTypes().getPossibleDomainSpecificVisualizers()->asSet()&#xD;&#xA;else&#xD;&#xA;&#x9;possibleVisualizationOfModelSupertypes&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="searches for domain specific visualizers that can be used for visualization"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getGeneralizationsAsSubtype" ordered="false" upperBound="-1"
+        eType="#//Generalization">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Generalization.allInstances()->select(g|g.subtype->includes(self))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the generalizations where the clabject is (one of) the subtype"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getGeneralizationsAsSupertype" ordered="false" upperBound="-1"
+        eType="#//Generalization">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Generalization.allInstances()->select(g|g.supertype->includes(self))"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the generalizations where the clabject is (one of) the supertype"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenNavigations" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let allConnections:OrderedSet(Connection)=&#xD;&#xA;Connection.allInstances()->select(c | c.getParticipants()->includes(self))->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;allConnections->collect(c| if c.participation->select(r|r.destination=self)->size() = 1 then &#xD;&#xA;&#x9;c.participation->reject(r|r.destination=self) else c.participation endif&#xD;&#xA;)->asOrderedSet()->sortedBy(r | r.participationName())"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the participations that define a navigation for the clabject. the result is ordered by the return value of getHumanReadableName invoked on the returned participations."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInheritedNavigations" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getSupertypes()->iterate(&#xA;super;&#xA;res : OrderedSet(Participation)= OrderedSet{} |&#xA;res->union(super.getEigenNavigations())->asOrderedSet()&#xA;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participations that define a navigation for a supertype of the clabject"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAllNavigations" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getEigenNavigations()->union(self.getInheritedNavigations())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the participations that define a navigation either for the clabject or one of its supertypes"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDomainParticipationNames" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getAllNavigations().participationName()->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participationNames the clabject can navigate by, i.e. the participationNames of the participations from allNavigations"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDomainForParticipationName" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getDirectSupertypes()->collect(getDomainForParticipationName(participationName))->asOrderedSet()->union(&#xD;&#xA;&#x9;self.getEigenNavigations()->select(r|r.participationName() = participationName).destination->asOrderedSet()&#xD;&#xA;)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="@deprecated"/>
+      </eAnnotations>
+      <eParameters name="participationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllNavigationsForParticipationName" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getAllNavigations()->select(r | r.participationName() = participationName)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participations the clabject can navigate by filtered for the participationName"/>
+      </eAnnotations>
+      <eParameters name="participationName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllNavigationsAsDestination" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getEigenNavigationsAsDestination()->union(self.getInheritedNavigationsAsDestination())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all the participations either the clabject or one of its supertypes is reachable by"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEigenNavigationsAsDestination" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Participation.allInstances()->select(destination = self)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all participations that the clabject is the destination of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInheritedNavigationsAsDestination" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="Participation.allInstances()->select(r| self.getSupertypes()->includes(r.destination))->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all participations that the one of the clabjects supertype is the destination of"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.oclIsTypeOf(Connection) then &#xA;&#x9;self.oclAsType(Connection).represent() &#xA;else &#xA;&#x9;self.oclAsType(Entity).represent() &#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFeatureForName" ordered="false" eType="#//Feature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.getAllFeatures()->select(f|f.name = name)->size() = 0 then &#xD;&#xA;&#x9;null&#xD;&#xA;else&#xD;&#xA;&#x9;self.getAllFeatures()->select(f|f.name = name)->asOrderedSet()->first()&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the feature with the matching name"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPotencyAsString" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.potency > 0) then OrderedSet{1000000, 10000, 1000, 100, 10, 1}->iterate(&#xD;&#xA;&#x9;denominator : Integer; s : String = ''|&#xD;&#xA;&#x9;&#x9;let numberAsString : String = &#xD;&#xA;&#x9;&#x9;&#x9;OrderedSet{'0','1','2','3','4','5','6','7','8','9'}->at(self.potency.div(denominator).mod(10) + 1)&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;if s='' and numberAsString = '0' then&#xD;&#xA;&#x9;&#x9;&#x9;s&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;s.concat(numberAsString)&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;)&#xD;&#xA;else&#xD;&#xA;&#x9;if (self.potency = 0) then&#xD;&#xA;&#x9;&#x9;'0'&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;'*'&#xD;&#xA;&#x9;endif&#xD;&#xA;endif&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDisjointSiblings" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let siblings:OrderedSet(Clabject) = &#xA;&#x9;--get all disjoint generalizations in which self participates&#xA;&#x9;self.getGeneralizationsAsSubtype()->reject(g | g.disjoint = null or not g.disjoint)&#xA;&#x9;--from these disjoint generalization get all subtypes except self&#xA;&#x9;.subtype->reject(s | s=self)->asOrderedSet()&#xA;&#xA;in &#xA;siblings->union(&#xA;&#x9;siblings->collect(s | s.getSubtypes())->asOrderedSet()&#xA;)->union(&#xA;&#x9;self.getSupertypes()->reject(super | super = self)->collect(super | super.getDisjointSiblings())->asOrderedSet()&#xA;)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects reachable from the clabject through classifications in the type direction.&#xD;&#xA;In other words, all the model instances recursively including their model instances."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getContainer" ordered="false" eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="--contained in model?&#xD;&#xA;if (self.oclAsType(ecore::EObject).eContainer().oclIsTypeOf(Model)) then&#xD;&#xA;&#x9;--yes! -> is this clabject connected via a composition?&#xD;&#xA;&#x9;let containers:OrderedSet(Clabject) =&#xD;&#xA;&#x9;&#x9;self.getConnections().participation->select(r | r.oclAsType(Participation).destination &lt;> self)->select(r | r.containment).destination->asOrderedSet()&#xD;&#xA;&#x9;in&#xD;&#xA;&#x9;&#x9;--yes! -> return the containing clabject&#xD;&#xA;&#x9;&#x9;if (containers->size() = 0) then&#xD;&#xA; &#x9;&#x9;&#x9;self.getModel()&#xD;&#xA;&#x9;&#x9;--no! -> return the containing model&#xD;&#xA;&#x9; &#x9;else&#xD;&#xA; &#x9;&#x9;&#x9;containers->first().oclAsType(Element)&#xD;&#xA; &#x9;&#x9;endif&#xD;&#xA;--no! -> return the containing model&#xD;&#xA; else&#xD;&#xA; &#x9;self.getModel()&#xD;&#xA; endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the model the clabject is contained in, recursing up the containment path if necessary."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAttributeByName" eType="#//Attribute">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let foundAttributes:OrderedSet(Attribute) =&#x9;&#xD;&#xA;&#x9;self.getAllAttributes()->select(a | a.name = name)&#xD;&#xA;in &#xD;&#xA;&#x9;if (foundAttributes->size() > 0) then &#xD;&#xA;&#x9;&#x9;foundAttributes->first()&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;null&#xD;&#xA;&#x9;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Searches for an Attribute with given name. Inherited attributes are considered if not overriden."/>
+      </eAnnotations>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="violatesMultiplicityConstraints" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="--Type-level connections are needed to check constrainsts againt&#xD;&#xA;let typeLevelConnections:OrderedSet(Connection) =&#xD;&#xA;&#x9;self.getDirectTypes().getConnections()->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;--Connections at instance levels are validated&#xD;&#xA;let instanceLevelConnections:OrderedSet(Connection) =&#xD;&#xA;&#x9;self.getConnections()&#xD;&#xA;in&#xD;&#xA;--All participations from which the context it self is not destination is interesting&#xD;&#xA;let instanceLevelParticipations:OrderedSet(Participation) =&#xD;&#xA;&#x9;instanceLevelConnections.participation->select(p : Participation | p.destination &lt;> self)->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;--If there is no connection at the type/instance level nothing can be violated&#xD;&#xA;if (typeLevelConnections->size() = 0 or instanceLevelConnections->size() = 0) then&#xD;&#xA;&#x9;false&#xD;&#xA;else&#xD;&#xA;&#x9;--For all connections at the type level constraints must be valid at instance level&#xD;&#xA;&#x9;typeLevelConnections->forAll(typeConnection : Connection | &#xD;&#xA;&#x9;&#x9;--All Connections that belong to checked type Connection&#xD;&#xA;&#x9;&#x9;let relevantInstanceLevelConnections:OrderedSet(Connection)=&#xD;&#xA;&#x9;&#x9;&#x9;instanceLevelConnections->select(c : Connection | c.getTypes()->includes(typeConnection))&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;--Get the participations connected to the instance connections&#xD;&#xA;&#x9;&#x9;let relevantInstanceParticipations:OrderedSet(Participation) = &#xD;&#xA;&#x9;&#x9;&#x9;instanceLevelParticipations->select(p : Participation | instanceLevelConnections.participation->includes(p))&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;--Get the right participations at the type level&#xD;&#xA;&#x9;&#x9;let relevantTypeParticipation:Participation =&#xD;&#xA;&#x9;&#x9;&#x9;typeConnection.participation->select(p : Participation | p.navigable = instanceLevelParticipations->first().navigable)->first()&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;--Get the sum of multiplicities from the the to the instance connections connected participations&#xD;&#xA;&#x9;&#x9;not (relevantTypeParticipation.upper = -1 or relevantInstanceParticipations.upper->sum() &lt;= relevantTypeParticipation.upper)&#xD;&#xA;&#x9;)&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Checks wether the clabjects violates multiplicity constraints defined on type level with its connections"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instantiable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="potency" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+        eType="#//Clabject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" upperBound="-1"
+        eType="#//Feature" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//DomainElement">
+    <eOperations name="getClabject" ordered="false" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.oclAsType(ecore::EObject).eContainer().oclAsType(Clabject)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabject that owns the feature"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDurabilityAsString" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.durability > 0) then OrderedSet{1000000, 10000, 1000, 100, 10, 1}&#xD;&#xA;&#x9;->iterate(denominator : Integer; s : String = ''|&#xD;&#xA;&#x9;&#x9;let numberAsString : String = &#xD;&#xA;&#x9;&#x9;&#x9;OrderedSet{'0','1','2','3','4','5','6','7','8','9'}->at(self.durability.div(denominator).mod(10) + 1)&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;if s='' and numberAsString = '0' then&#xD;&#xA;&#x9;&#x9;&#x9;s&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;s.concat(numberAsString)&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;)&#xD;&#xA;else&#xD;&#xA;&#x9;if (self.durability = 0) then&#xD;&#xA;&#x9;&#x9;'0'&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;'*'&#xD;&#xA;&#x9;endif&#xD;&#xA;endif&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.oclIsTypeOf(Attribute) then &#xD;&#xA;&#x9;self.oclAsType(Attribute).represent() &#xD;&#xA;else &#xD;&#xA;&#x9;self.oclAsType(Method).represent() &#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="durability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//Clabject">
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.name.oclIsUndefined() then '' else self.name endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//Clabject">
+    <eAnnotations source="Comment">
+      <details key="Unique Workaround" value="if (this.participant == null) {&#xD;&#xA;&#x9;&#x9;    this.participant = new EObjectResolvingEList&lt;Clabject>(Clabject.class, this,&#xD;&#xA;&#x9;&#x9;    &#x9;&#x9;PLMPackage.DOMAIN_CONNECTION__PARTICIPANT) {&#xD;&#xA;&#x9;&#x9;      @Override&#xD;&#xA;&#x9;&#x9;      protected boolean isUnique() {&#xD;&#xA;&#x9;&#x9;        return false;&#xD;&#xA;&#x9;&#x9;      }&#xD;&#xA;&#x9;&#x9;    };&#xD;&#xA;&#x9;&#x9;  }&#xD;&#xA;&#x9;&#x9;  return this.participant;"/>
+    </eAnnotations>
+    <eOperations name="getDomain" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.navigable).destination->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are reachable through this operation, i.e. the destinations of the navigable participations of the connection"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getNotDomain" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->reject(r | r.navigable).destination->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are participate in this connection, but are not navigable."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getHumanReadableName" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="--Works only on connections with two or more participants or has a name by itself&#xD;&#xA;if (not (self.participation->size() > 1)) then&#xD;&#xA;&#x9;if (not self.name.oclIsUndefined() or self.name &lt;> '') then&#xD;&#xA;&#x9;&#x9;self.name&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;else&#xD;&#xA;&#x9;if (not self.name.oclIsUndefined() and self.name.size() &lt;> 0) then&#xD;&#xA;&#x9;&#x9;self.name&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;let navigableParticipations:OrderedSet(Participation) =&#xD;&#xA;&#x9;&#x9;&#x9;self.participation->select(r | r.navigable)->asOrderedSet()&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;if (navigableParticipations->size() = 1) then&#xD;&#xA;&#x9;&#x9;&#x9;let domainParticipationName:String = &#xD;&#xA;&#x9;&#x9;&#x9;&#x9;navigableParticipations->first().getHumanReadableParticipationName()&#xD;&#xA;&#x9;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;&#x9;let notNavigableParticipations:OrderedSet(Participation)=&#x9;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;self.participation->reject(r | r.navigable)->asOrderedSet()&#xD;&#xA;&#x9;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;&#x9;if (notNavigableParticipations->size() = 0) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;navigableParticipations.destination->first().name.concat('.').concat(domainParticipationName)&#xD;&#xA;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;notNavigableParticipations->first().destination.name.concat('.').concat(domainParticipationName)&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;if (navigableParticipations->size() > 0) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;let connectionName:String = &#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;navigableParticipations->iterate(r:Participation; name:String = '' |&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;let participationNameToUpper:String = &#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;if (r.destination.name.size() = 0) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;''&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;r.destination.name.substring(1,1).toUpper().concat(if (r.destination.name.size() > 1) then r.destination.name.substring(2, r.destination.name.size()) else '' endif)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;if (r = navigableParticipations->last()) then&#x9;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;name.concat(participationNameToUpper)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;name.concat(participationNameToUpper).concat('And')&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;)&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;'Between'.concat(connectionName)&#xD;&#xA;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;''&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation constructed from the participations"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getParticipants" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getAllParticipations().destination->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participants of the connection, i.e. the destinations of all the participations"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getParticipationNames" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->collect(r|r.getHumanReadableParticipationName())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participationNames of the participations of the connection"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDomain" upperBound="-1" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.navigable and  r.destination &lt;> source).destination->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabjects that are in the domain of the connection and are not the source"/>
+      </eAnnotations>
+      <eParameters name="source" lowerBound="1" eType="#//Clabject"/>
+    </eOperations>
+    <eOperations name="getParticipationNamesForParticipant" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.destination = source)->collect(r|r.participationName())->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participationNames the source is reachable with through this connection"/>
+      </eAnnotations>
+      <eParameters name="source" lowerBound="1" eType="#//Clabject"/>
+    </eOperations>
+    <eOperations name="getLowerForParticipationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.participationName() = rN).lower->first()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the lower multiplicity of the participation identified by rN"/>
+      </eAnnotations>
+      <eParameters name="rN" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getUpperForParticipationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.participationName() = rN).upper->first()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the upper multiplicity of the participation identified by rN"/>
+      </eAnnotations>
+      <eParameters name="rN" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="isNavigableForParticipationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.participationName() = rN).navigable->first()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the navigability of the participation identified by rN"/>
+      </eAnnotations>
+      <eParameters name="rN" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOrder" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->size()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the number of participations in the connection"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInheritedParticipations" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.getDirectSupertypes()->iterate(&#xD;&#xA;&#x9;super;&#xD;&#xA;&#x9;r : OrderedSet(Participation)= OrderedSet{} |&#xD;&#xA;&#x9;r->union(super.oclAsType(Connection).getAllParticipations()->reject(rs|r->exists(rss|rss.participationName()=rs.participationName())))->asOrderedSet()&#xD;&#xA;)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participations that the connection inherits from its supertypes. a participation is inherited if the participationName is not already present in a participation defined with the connection itself"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAllParticipations" upperBound="-1" eType="#//Participation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->union(&#xD;&#xA;&#x9;self.getInheritedParticipations()->reject(r | self.participation->exists(rs | rs.participationName() = r.participationName() ) )&#xD;&#xA;)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all participations of the connection, including the inherited ones"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getParticipantForParticipationName" eType="#//Clabject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.participation->select(r | r.participationName() = rN).destination->first()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the clabject reachable through the connection via rN, i.e. the destination of the participation of the connection where the participationName is rN"/>
+      </eAnnotations>
+      <eParameters name="rN" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.name.oclIsUndefined() or self.name = '' then&#xA;&#x9;self.participation.represent()->iterate(&#xA;&#x9;&#x9;r:String; res:String='|'| res.concat(r).concat('|')&#xA;&#x9;)&#xA;else &#xA;&#x9;self.name&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participation" upperBound="-1"
+        eType="#//Participation" containment="true" eOpposite="#//Participation/connection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Participation">
+    <eOperations name="getHumanReadableParticipationName" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.hasDefaultParticipationName()) then&#xD;&#xA;&#x9;if (self.destination.name.size() > 0) then&#xD;&#xA;&#x9;&#x9;self.destination.name.substring(1,1).toLower().concat(if (self.destination.name.size() > 1) then self.destination.name.substring(2, self.destination.name.size()) else '' endif)&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;else&#xD;&#xA;&#x9;self.expressedParticipationName&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="constructs a readable participationName from the traits of the participation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="hasDefaultParticipationName" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.expressedParticipationName.oclIsUndefined() or self.expressedParticipationName = '') then&#xD;&#xA;&#x9;true&#xD;&#xA;else&#xD;&#xA;&#x9;false&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the participationName is not explicitly given but implicitly defined through the destination name"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let destinationName : String = &#xA;&#x9;if self.destination.name.oclIsUndefined() or self.destination.name.size() = 0 then&#xA;&#x9;&#x9;'_' else self.destination.name endif &#xA;in&#xA;self.participationName().concat('[').concat(&#xA;&#x9;self.representMultiplicity()&#xA;).concat(']').concat(&#xA;&#x9;if self.navigable then '->' else '-' endif&#xA;).concat(destinationName)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="participationName" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.hasDefaultParticipationName()) then&#xD;&#xA;&#x9;if (self.destination.name.size() > 0) then&#xD;&#xA;&#x9;&#x9;self.destination.name.substring(1,1).toLower().concat(if (self.destination.name.size() > 1) then self.destination.name.substring(2, self.destination.name.size()) else '' endif)&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;else&#xD;&#xA;&#x9;self.expressedParticipationName&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns the participationName identifying the participation with in the connection&#xD;&#xA;&#xD;&#xA;!!!crashes in case the participations destination has no name set and the expressed participation name is not set either!!!"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="representMultiplicity" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let lowerString:String = if (self.lower > 0) then OrderedSet{1000000, 10000, 1000, 100, 10, 1}->iterate(&#xD;&#xA;            denominator : Integer;&#xD;&#xA;            s : String = ''|&#xD;&#xA;            let numberAsString : String = OrderedSet{&#xD;&#xA;                    '0','1','2','3','4','5','6','7','8','9'&#xD;&#xA;                }->at(self.lower.div(denominator).mod(10) + 1)&#xD;&#xA;            in&#xD;&#xA;                if s='' and numberAsString = '0' then&#xD;&#xA;                    s&#xD;&#xA;                else&#xD;&#xA;                    s.concat(numberAsString)&#xD;&#xA;                endif&#xD;&#xA;        )&#xD;&#xA;&#x9;else &#xD;&#xA;&#x9;&#x9;if (self.lower = 0) then&#xD;&#xA;&#x9;&#x9;&#x9;'0'&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;'*'&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;&#xD;&#xA;let upperString:String = if (self.upper > 0) then OrderedSet{1000000, 10000, 1000, 100, 10, 1}->iterate(&#xD;&#xA;            denominator : Integer;&#xD;&#xA;            s : String = ''|&#xD;&#xA;            let numberAsString : String = OrderedSet{&#xD;&#xA;                    '0','1','2','3','4','5','6','7','8','9'&#xD;&#xA;                }->at(self.upper.div(denominator).mod(10) + 1)&#xD;&#xA;            in&#xD;&#xA;                if s='' and numberAsString = '0' then&#xD;&#xA;                    s&#xD;&#xA;                else&#xD;&#xA;                    s.concat(numberAsString)&#xD;&#xA;                endif&#xD;&#xA;        )&#xD;&#xA;&#x9;else &#xD;&#xA;&#x9;&#x9;if (self.upper = 0) then&#xD;&#xA;&#x9;&#x9;&#x9;'0'&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;'*'&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;&#xD;&#xA;if (self.lower = 0 and self.upper = -1) then&#xD;&#xA;&#x9;'*'&#xD;&#xA;else&#xD;&#xA;&#x9;if (self.lower = self.upper) then&#xD;&#xA;&#x9;&#x9;lowerString&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;lowerString.concat('..').concat(upperString)&#xD;&#xA;&#x9;endif&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a string representation of the lower and upper multiplicity, including special cases like '*'"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getName" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.represent()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="helper method to conform to the interface of elements"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="conforms" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let participationNameConforms:Boolean = &#xA;&#x9;(self.participationName() = participation.participationName()) or (self.hasDefaultParticipationName() and participation.hasDefaultParticipationName())&#xA;in&#xA;&#x9;participationNameConforms and ( self.navigable = participation.navigable)"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns true if the participation conforms to the other participation, i.e. if the participationNames and navigabilities match"/>
+      </eAnnotations>
+      <eParameters name="participation" lowerBound="1" eType="#//Participation"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="navigable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//Clabject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection"
+        eOpposite="#//Connection/participation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expressedParticipationName"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containment" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LMLVisualizer">
+    <eOperations name="getDefaultVisualizationValues" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let default:OrderedSet(String) = self.oclAsType(ecore::EObject).eContainer().eClass().eAllAttributes->collect(a | if a.name &lt;> 'level' then a.name.concat('= default') else a.name.concat('= noshow') endif)->asOrderedSet()&#xD;&#xA;in&#xD;&#xA;if (self.getContainingElement().oclIsTypeOf(Entity)) then&#xD;&#xA;&#x9;default->append('ProximityClassification= 1')&#xD;&#xA;&#x9;&#x9;->append('DSLRendering= false')&#xD;&#xA;&#x9;&#x9;->append('ProximityIndication= [](){0}')&#xD;&#xA;else&#xD;&#xA;&#x9;if (self.getContainingElement().oclIsTypeOf(Connection)) then&#xD;&#xA;&#x9;default->append('ProximityClassification= 1')&#xD;&#xA;&#x9;&#x9;->append('DSLRendering= false')&#xD;&#xA;&#x9;&#x9;->append('ProximityIndication= [](){0}')&#xD;&#xA;&#x9;&#x9;->append('collapsed= false')&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;if (self.getContainingElement().oclIsTypeOf(Generalization)&#xD;&#xA;&#x9;&#x9;&#x9;or self.getContainingElement().oclIsTypeOf(SetRelationship)) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;default->append('collapsed= false')&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;if (self.getContainingElement().oclIsTypeOf(Ontology)) then&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;default->append('showClassificationParticipationNames = false')&#xD;&#xA;&#x9;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;default&#xD;&#xA;&#x9;&#x9;&#x9;endif&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;endif&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the default visualization values depending on the containing model element."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getValueForKey" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let keyValueList : Sequence(String) =&#xD;&#xA;&#x9;self.attributes->select(a | a.size() > key.size())->select(a | a.substring(1, key.size()) = key)->asSequence()&#xD;&#xA;in&#xD;&#xA;let keyValue : String =&#xD;&#xA;&#x9;if (keyValueList->size() > 0) then&#xD;&#xA;&#x9;&#x9;keyValueList->first()&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;let indexOfEquals:Integer =&#xD;&#xA;&#x9;--Key not found?&#xD;&#xA;&#x9;if (keyValue &lt;> '') then&#xD;&#xA;&#x9;&#x9;Sequence{1 .. keyValue.size()}->iterate(i:Integer; index:Integer = -1 | &#xD;&#xA;&#x9;&#x9;&#x9;if (index = -1 and keyValue.substring(i,i) = '=') then i else index endif)&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;-1&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;let value:String =&#xD;&#xA;&#x9;--No Equals found in keyValue&#xD;&#xA;&#x9;if(indexOfEquals &lt;> -1) then&#xD;&#xA;&#x9;&#x9;keyValue.substring(indexOfEquals + 1, keyValue.size())&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;let valueWithoutLeadingSpace:String = &#xD;&#xA;&#x9;--No value found&#xD;&#xA;&#x9;if (value &lt;> '') then&#xD;&#xA;&#x9;&#x9;if (value.substring(1,1) = ' ' and value.size() > 1) then&#xD;&#xA;&#x9;&#x9;&#x9;value.substring(2, value.size())&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;value&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;''&#xD;&#xA;&#x9;endif&#xD;&#xA;in&#xD;&#xA;&#x9;valueWithoutLeadingSpace"/>
+      </eAnnotations>
+      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getContainingElement" eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.oclAsType(ecore::EObject).eContainer().oclAsType(Element)"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="EOperation0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributes" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="durability" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" eType="#//LMLVisualizer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dslVisualizer" upperBound="-1"
+        eType="#//AbstractDSLVisualizer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//Feature">
+    <eOperations name="getMutabilityAsString" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if (self.mutability > 0) then OrderedSet{1000000, 10000, 1000, 100, 10, 1}->iterate(&#xD;&#xA;&#x9;denominator : Integer;&#x9;s : String = ''|&#xD;&#xA;&#x9;&#x9;let numberAsString : String = &#xD;&#xA;&#x9;&#x9;&#x9;OrderedSet{'0','1','2','3','4','5','6','7','8','9'}->at(self.mutability.div(denominator).mod(10) + 1)&#xD;&#xA;&#x9;&#x9;in&#xD;&#xA;&#x9;&#x9;if s='' and numberAsString = '0' then&#xD;&#xA;&#x9;&#x9;&#x9;s&#xD;&#xA;&#x9;&#x9;else&#xD;&#xA;&#x9;&#x9;&#x9;s.concat(numberAsString)&#xD;&#xA;&#x9;&#x9;endif&#xD;&#xA;&#x9;)&#xD;&#xA;else&#xD;&#xA;&#x9;if (self.mutability = 0) then&#xD;&#xA;&#x9;&#x9;'0'&#xD;&#xA;&#x9;else&#xD;&#xA;&#x9;&#x9;'*'&#xD;&#xA;&#x9;endif&#xD;&#xA;endif&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="if self.datatype.oclIsUndefined() or self.datatype = '' then&#xD;&#xA;&#x9;self.name&#xD;&#xA;else&#xD;&#xA;&#x9;self.name.concat('[').concat(self.datatype).concat(']')&#xD;&#xA;endif"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isPrimitiveDatatypeAttribute" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="let primitiveDatatypes:Sequence(String) = &#xD;&#xA;&#x9;self.oclAsType(ecore::EObject).eClass().eAllAttributes->select(a | a.name = 'datatype').eAnnotations.details.key&#xD;&#xA;in&#xD;&#xA;let enumerationDatatypes:Sequence(String) =&#xD;&#xA;&#x9;self.getClabject().getOntology().enumerations.name&#xD;&#xA;in&#xD;&#xA; primitiveDatatypes->union(enumerationDatatypes)->asOrderedSet()"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns all possible datatypes"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mutability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datatype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Feature">
+    <eOperations name="represent" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.name.concat('(').concat(')')"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="returns a human readable string representation"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="literals" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Context" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="origin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="all"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visualizersShown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="none">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Supports ALL and NONE"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completness" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="elision"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ClassificationKind">
+    <eLiterals name="instance"/>
+    <eLiterals name="isonym" value="1" literal="isonym"/>
+    <eLiterals name="hyponym" value="2"/>
+    <eLiterals name="instantiation" value="3" literal="instantiation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDSLVisualizer" abstract="true"/>
+</ecore:EPackage>

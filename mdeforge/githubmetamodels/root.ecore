@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="org.torusfw.core"
+    nsURI="http://torusfw.org/core/root.ecore" nsPrefix="OrgTorusfwCore">
+  <eClassifiers xsi:type="ecore:EDataType" name="string" instanceTypeName="native type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="boolean" instanceTypeName="native type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="object" instanceTypeName="native type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="int" instanceTypeName="native type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="long" instanceTypeName="native type"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="map">
+    <eTypeParameters name="K"/>
+    <eTypeParameters name="V"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="UnsupportedOperationException"/>
+  <eSubpackages name="org.torusfw.core.root" nsPrefix="OrgTorusfwCoreRoot">
+    <eAnnotations source="org.torusfw.ide">
+      <details key="doc" value="The TORUS Framework project -- Licensed under EPL terms -- 2010-2011&#xD;&#xA;&#xD;&#xA;This package gathers root API definition for the TORUS Framework system, including the {@link IMetaFactory} system."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="IFactory" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link IFactory} interface represents the factory object which has to be provided by each registered service."/>
+      </eAnnotations>
+      <eOperations name="create" eType="#//object">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This is the generic instantiation method for the Factory objects."/>
+        </eAnnotations>
+        <eParameters name="objectID" eType="#//string"/>
+        <eParameters name="args" upperBound="-1" eType="#//object"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceID" eType="#//string"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This is the unique identifier of the service provided by this factory implementation."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="INode" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link INode} interface represents a generic node in the connected cloud.&lt;br>&#xD;&#xA;It also allows to access to all service factories ({@link IFactory} instances) registered in the node."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="#//string">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This is the identifier of the node implementation. This identifier is supposed to be unique in the whole cloud."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="#//boolean">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Flag stating if this node is a local or remote one."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="clouds" upperBound="-1"
+          eType="#//org.torusfw.core.root/ICloud" changeable="false" eOpposite="#//org.torusfw.core.root/ICloud/nodes"
+          eKeys="#//org.torusfw.core.root/INode/ID">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Containing clouds access (based on ID index)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceFactories" upperBound="-1"
+          eType="#//org.torusfw.core.root/IFactory" changeable="false" eKeys="#//org.torusfw.core.root/IFactory/serviceID">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Provided service factories access (based on ID index)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LocalNode" eSuperTypes="#//org.torusfw.core.root/INode">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="This is the {@link INode} singleton local implementation."/>
+        <details key="singleton" value="LocalNode"/>
+      </eAnnotations>
+      <eOperations name="registerServiceFactory" eExceptions="#//UnsupportedOperationException">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Allow to associate a given service factory ({@link IFactory} instance) with a provided service identifier.&lt;br>&#xD;&#xA;Such registered factories can be then accessed thanks to the {@link #getServiceFactory} method.&lt;br>&#xD;&#xD;&#xA;&lt;br>&#xD;&#xD;&#xA;@param factory The factory instance to be registered&#xD;&#xD;&#xA;@throws UnsupportedOperationException if the required service is already registered"/>
+        </eAnnotations>
+        <eParameters name="factory" eType="#//org.torusfw.core.root/IFactory"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ICloud" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link ICloud} interface represents a cloud of {@link INode} instances.&lt;br>&#xD;&#xA;This is a logical grouping of nodes and other clouds."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="#//string">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This is the identifier of the cloud. This identifier is supposed to be unique."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+          eType="#//org.torusfw.core.root/INode" changeable="false" eOpposite="#//org.torusfw.core.root/INode/clouds"
+          eKeys="#//org.torusfw.core.root/INode/ID">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Contained nodes access (based on ID index)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentClouds" upperBound="-1"
+          eType="#//org.torusfw.core.root/ICloud" changeable="false" eOpposite="#//org.torusfw.core.root/ICloud/childClouds"
+          eKeys="#//org.torusfw.core.root/INode/ID">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Containing clouds access (based on ID index)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="childClouds" upperBound="-1"
+          eType="#//org.torusfw.core.root/ICloud" changeable="false" eOpposite="#//org.torusfw.core.root/ICloud/parentClouds"
+          eKeys="#//org.torusfw.core.root/INode/ID">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Contained clouds access (based on ID index)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="org.torusfw.core.notif" nsPrefix="OrgTorusfwCoreNotif">
+    <eAnnotations source="org.torusfw.ide">
+      <details key="doc" value="The TORUS Framework project -- Licensed under EPL terms -- 2010-2011&#xD;&#xA;&#xD;&#xA;This package gathers listeners notification API definition for the TORUS Framework system"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="IListener" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link IListener} interface represents a generic listener&lt;br>&#xA;It's aimed to be associated to any observable object and notified on observed attribute change."/>
+      </eAnnotations>
+      <eOperations name="notifyChanged">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Notification method for listener objects.&lt;br>&#xA;Will be called on any change on the observed object/attribute.&#xA;&#xA;@param notif Instance representing the modification."/>
+        </eAnnotations>
+        <eParameters name="notif" eType="#//org.torusfw.core.notif/INotification"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="INotification" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link INotification} interface represents a modification on an observed object/attribute."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="object" eType="#//object"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="The observed object concerned by the notification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="#//string">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="The name of the attribute concerned by the notification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeID" eType="#//int">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="The ID of the attribute concerned by the notification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldValue" eType="#//object"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="The old value of the observed attribute before the modification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="newValue" eType="#//object"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="The new value of the observed attribute after the modification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Notification" eSuperTypes="#//org.torusfw.core.notif/INotification">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="Basic implementation of the {@link INotification} interface."/>
+        <details key="noFactory" value="true"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="INotifier" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link INotifier} interface represents handles mechanisms allowing to manage notifications."/>
+      </eAnnotations>
+      <eOperations name="notifyChanged">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Propagates a notification to all registered listener objects.&#xA;&#xA;@param notif Instance representing the modification."/>
+        </eAnnotations>
+        <eParameters name="notif" eType="#//org.torusfw.core.notif/INotification"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="listeners" upperBound="-1"
+          eType="#//org.torusfw.core.notif/IListener">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Events listener list, hold by this notifier instance."/>
+          <details key="adder.doc" value="Adds a listener instance to the managed ones.&lt;br>&#xA;Listener will be notified when new events occur.&lt;br>&#xA;Note: a same notifier instance can only be added one time (duplicates are ignored)."/>
+          <details key="remover.doc" value="Removes a listener instance to the managed ones.&lt;br>&#xA;Listener won't be notified anymore when new events occur."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Notifier" eSuperTypes="#//org.torusfw.core.notif/INotifier">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="Basic implementation of the {@link INotifier} interface."/>
+        <details key="noFactory" value="true"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IObservable" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link IObservable} interface can be used by all classes aiming to use the notification mechanism."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="notifier" eType="#//org.torusfw.core.notif/INotifier"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Notifier access for any observable object."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="org.torusfw.core.config" nsPrefix="OrgTorusfwCoreConfig">
+    <eAnnotations source="org.torusfw.ide">
+      <details key="doc" value="The TORUS Framework project -- Licensed under EPL terms -- 2010-2011&#xD;&#xA;&#xD;&#xA;This package gathers configuration/capabilities API definition for the TORUS Framework system"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="IParameter" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link IParameter} interface represents a generic parameter providing a name and a value."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//string">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Represents the parameter name."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//string">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Represents the parameter string value (the serialized one)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="#//boolean"
+          volatile="true" transient="true" derived="true">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Represents the parameter boolean value (parsed from string value)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="intValue" eType="#//int"
+          volatile="true" transient="true" derived="true">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Represents the parameter integer value (parsed from string value)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="longValue" eType="#//long"
+          volatile="true" transient="true" derived="true">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Represents the parameter long integer value (parsed from string value)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CapabilityStore">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link CapabilityStore} class represents a collection of capability parameters.&lt;br>&#xD;&#xA;This store aims to describe a given service's capabilities (regarding the current platform, or others).&lt;br>&#xD;&#xA;Capabilities are intrinsically read-only parameters, mainly provided to help service implementations behavior&#xD;&#xA;adaptation."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="capability" upperBound="-1"
+          eType="#//org.torusfw.core.config/IParameter" changeable="false" eKeys="#//org.torusfw.core.config/IParameter/name">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="Capabilities map accessor, following name index."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="org.torusfw.core.channels" nsPrefix="OrgTorusfwCoreChannels">
+    <eAnnotations source="org.torusfw.ide">
+      <details key="doc" value="The TORUS Framework project -- Licensed under EPL terms -- 2010-2011&#xD;&#xA;&#xD;&#xA;This package provides root API definition for data exchanges within the TORUS Framework system."/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="IChannel" abstract="true" interface="true">
+      <eAnnotations source="org.torusfw.ide">
+        <details key="doc" value="The {@link IChannel} interface represents a data bidirectional exchange channel abstraction."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="readable" eType="#//boolean"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This attribute indicates if the channel can be read."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="#//boolean"
+          changeable="false">
+        <eAnnotations source="org.torusfw.ide">
+          <details key="doc" value="This attribute indicates if the channel can be written."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

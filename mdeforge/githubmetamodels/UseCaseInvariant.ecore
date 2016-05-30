@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="usecaseinvariant"
+    nsURI="http://www.emftext.org/language/UseCaseInvariant" nsPrefix="usecaseinvariant">
+  <eClassifiers xsi:type="ecore:EClass" name="CounterActor" eSuperTypes="#//Actor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Value">
+    <eAnnotations source="OCL">
+      <details key="Value needs to go somewhere" value="if not asBefore.oclIsUndefined() and asBefore.oclIsKindOf(Actor)&#xD;then &#xD;   if asBefore.model.invariants->collect(i | i.valuesAfter)->flatten()&#xD;           ->exists(v | v.type = self.type and v.ID = self.ID)&#xD;   then ''&#xD;   else self.type&#xD;   endif&#xD;else ''&#xD;endif"/>
+      <details key="Value needs to come from somewhere" value="if not asAfter.oclIsUndefined() and asAfter.oclIsKindOf(Actor)&#xD;then &#xD;   if asAfter.model.invariants->collect(i | i.valuesBefore)->flatten()&#xD;           ->exists(v | v.type = self.type and v.ID = self.ID)&#xD;   then ''&#xD;   else self.type&#xD;   endif&#xD;else ''&#xD;endif"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="asBefore" eType="#//Actor"
+        eOpposite="#//Actor/valuesBefore"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="asAfter" eType="#//Actor"
+        eOpposite="#//Actor/valuesAfter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UseCaseModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariants" upperBound="-1"
+        eType="#//Actor" containment="true" eOpposite="#//Actor/model"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormalActor" eSuperTypes="#//Actor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valuesAfter" upperBound="-1"
+        eType="#//Value" containment="true" eOpposite="#//Value/asAfter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valuesBefore" upperBound="-1"
+        eType="#//Value" containment="true" eOpposite="#//Value/asBefore"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//UseCaseModel"
+        eOpposite="#//UseCaseModel/invariants"/>
+  </eClassifiers>
+</ecore:EPackage>

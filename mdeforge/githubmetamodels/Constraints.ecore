@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="constraints"
+    nsURI="http:///fr/labsticc/framework/constraints" nsPrefix="cst">
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstraintLanguagesSpecification" eSuperTypes="#//IdentifiedElement">
+    <eOperations name="languageById" eType="#//ConstraintLanguage">
+      <eParameters name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="languageByName" eType="#//ConstraintLanguage">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="languages" lowerBound="1"
+        upperBound="-1" eType="#//ConstraintLanguage" containment="true" eOpposite="#//ConstraintLanguage/specification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstraintLanguage" abstract="true"
+      eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+        eType="#//ConstraintLanguagesSpecification" eOpposite="#//ConstraintLanguagesSpecification/languages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalConstraintLanguage" eSuperTypes="#//ConstraintLanguage">
+    <eOperations name="libraryByName" eType="#//FormalLanguageLibrary">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="libraryById" eType="#//FormalLanguageLibrary">
+      <eParameters name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="libraries" upperBound="-1"
+        eType="#//FormalLanguageLibrary" containment="true" eOpposite="#//FormalLanguageLibrary/language"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interpreter" lowerBound="1"
+        eType="#//ServiceDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persister" eType="#//ServiceDescriptor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewer" eType="#//ServiceDescriptor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="libraryDirectory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NaturalConstraintLanguage" eSuperTypes="#//ConstraintLanguage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalLanguageLibrary" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="#//FormalLanguageExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="language" lowerBound="1"
+        eType="#//FormalConstraintLanguage" eOpposite="#//FormalConstraintLanguage/libraries"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="language" lowerBound="1"
+        eType="#//ConstraintLanguage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalLanguageExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedLibraries" upperBound="-1"
+        eType="#//FormalLanguageLibrary"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usedLibraryNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        volatile="true" transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usedLibraryIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        volatile="true" transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NaturalLanguageExpression" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceDescriptor" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceClass" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

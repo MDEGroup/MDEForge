@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="s" nsURI="http://www.cau.de/cs/kieler/s" nsPrefix="s">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Signal"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//Continuation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instructions" upperBound="-1"
+        eType="#//Instruction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Thread" eSuperTypes="#//Continuation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Continuation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Signal"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="continuation" eType="#//Continuation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prio" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trans" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fork" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thread" eType="#//Continuation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Pause" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Halt" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Emit" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Abort" eSuperTypes="#//Instruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="If" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instructions" upperBound="-1"
+        eType="#//Instruction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Await" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" eType="ecore:EClass ../../../../../../../de.cau.cs.kieler.core.kexpressions/model/kexpressions.ecore#//Signal"/>
+  </eClassifiers>
+</ecore:EPackage>

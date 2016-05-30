@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="traceeditor"
+    nsURI="http://traceeditor/1.0" nsPrefix="traceeditor">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="traceLinks" upperBound="-1"
+        eType="#//TraceLink" containment="true" eOpposite="#//TraceLink/transformation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceLink" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Artefact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//Artefact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//LinkType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="#//Transformation"
+        eOpposite="#//Transformation/traceLinks"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Artefact" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//TypeArtefact"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dashboard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceArtefacts" upperBound="-1"
+        eType="#//Artefact" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetArtefacts" upperBound="-1"
+        eType="#//Artefact" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="traceLinks" upperBound="-1"
+        eType="#//TraceLink" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformations" upperBound="-1"
+        eType="#//Transformation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceEditor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dashboard" eType="#//Dashboard"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeArtefact" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkType" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subTypes" upperBound="-1"
+        eType="#//LinkType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkTypes" upperBound="-1"
+        eType="#//LinkType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeArtefacts" upperBound="-1"
+        eType="#//TypeArtefact" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

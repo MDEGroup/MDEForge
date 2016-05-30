@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="graphEditor"
+    nsURI="http://de.broicher.factorgraph.graphEditor" nsPrefix="de.broicher.factorgraph.graphEditor">
+  <eClassifiers xsi:type="ecore:EClass" name="Graph">
+    <eOperations name="getGraphElement" lowerBound="1" eType="#//GraphElement">
+      <eParameters name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eOperations>
+    <eOperations name="getConnectingVariablenodes" upperBound="-1" eType="#//Variablenode">
+      <eParameters name="node" lowerBound="1" eType="#//Factornode"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//Edge" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//Message" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="result" eType="#//Table"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//GraphElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Factornode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//FunctionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="1"
+        eType="#//Table" defaultValueLiteral="null"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variablenode" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//VariableType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="2"
+        upperBound="2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isKnown" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Message" eSuperTypes="#//GraphElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//MessageType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Edge" eSuperTypes="#//GraphElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FunctionType">
+    <eLiterals name="Boolean"/>
+    <eLiterals name="Gausian" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableType">
+    <eLiterals name="Boolean"/>
+    <eLiterals name="Real" value="1"/>
+    <eLiterals name="Categorial" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MessageType">
+    <eLiterals name="MarginalEdge"/>
+    <eLiterals name="VariableToFactor" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Table" instanceClassName="double[][]"/>
+</ecore:EPackage>

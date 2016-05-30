@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="executionstate"
+    nsURI="http:///org/isistan/flabot/engine/executionstate.ecore" nsPrefix="org.isistan.flabot.engine.executionstate">
+  <eClassifiers xsi:type="ecore:EClass" name="BasicMappingBasedFilter" eSuperTypes="#//MappingBasedFilter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagnostic">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagnostician" eType="#//StateDeterminationStrategy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="additionalData" upperBound="-1"
+        eType="#//EStringToEJavaObjectMapEntry" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//ExecutionState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManualStateDeterminationStrategy" eSuperTypes="#//StateDeterminationStrategy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManualTraceInferenceStrategy" eSuperTypes="#//TraceInferenceStrategy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingBasedFilter" abstract="true"
+      eSuperTypes="../../../../../../org.isistan.flabot.trace/src/org/isistan/flabot/trace/config.ecore#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="ecore:EClass ../../../../../../org.isistan.flabot.mapping/src/org/isistan/flabot/mapping/mappingmodel.ecore#//Mapping"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logFilter" eType="ecore:EClass ../../../../../../org.isistan.flabot.launcher/src/org/isistan/flabot/launcher/filtermodel.ecore#//LogFilter"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleTraceInferenceStrategy" eSuperTypes="#//TraceInferenceStrategy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StateDeterminationStrategy" abstract="true"
+      eSuperTypes="../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//Registrable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibility" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//Responsibility"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateDeterminationStrategyRegistry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registry" upperBound="-1"
+        eType="#//ResponsibilityToStateDeterminationStrategyMapEntry" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceBasedStateDeterminationStrategy"
+      eSuperTypes="#//StateDeterminationStrategy">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="traceInferenceStrategy"
+        eType="#//TraceInferenceStrategy" containment="true" resolveProxies="false"
+        eOpposite="#//TraceInferenceStrategy/stateDeterminationStrategy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceInferenceStrategy" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateDeterminationStrategy"
+        eType="#//TraceBasedStateDeterminationStrategy" transient="true" eOpposite="#//TraceBasedStateDeterminationStrategy/traceInferenceStrategy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityToStateDeterminationStrategyMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//Responsibility"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//StateDeterminationStrategy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEJavaObjectMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateFromMappingStateDeterminationStrategy"
+      eSuperTypes="#//StateDeterminationStrategy"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ExecutionState">
+    <eLiterals name="Executed"/>
+    <eLiterals name="Faulty" value="1"/>
+    <eLiterals name="NotExecuted" value="2"/>
+    <eLiterals name="NoActionState" value="3"/>
+    <eLiterals name="FaultyCurrent" value="4"/>
+    <eLiterals name="FaultyConstrain" value="5"/>
+    <eLiterals name="FaultyPrevious" value="6"/>
+    <eLiterals name="FaultyPrecondition" value="7"/>
+    <eLiterals name="FaultyPath" value="8"/>
+    <eLiterals name="FaultyNextLevels" value="9"/>
+    <eLiterals name="FaultyConstraintStart" value="10"/>
+    <eLiterals name="ProbablyFaulty" value="11"/>
+    <eLiterals name="Uncertain" value="12"/>
+    <eLiterals name="MultipleErrors" value="13"/>
+    <eLiterals name="StateFromMapping" value="14"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrFilter" eSuperTypes="../../../../../../org.isistan.flabot.trace/src/org/isistan/flabot/trace/config.ecore#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="combinedFilters" upperBound="-1"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot.trace/src/org/isistan/flabot/trace/config.ecore#//Filter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrologProviderStrategy" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimplePrologProviderStrategy" eSuperTypes="#//PrologProviderStrategy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneralLogFilterStrategy" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleGeneralLogFilterStrategy" eSuperTypes="#//GeneralLogFilterStrategy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prologCodeText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

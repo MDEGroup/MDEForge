@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="arduino" nsURI="http://www.unibo.it/Arduino" nsPrefix="arduino">
+  <eClassifiers xsi:type="ecore:EClass" name="Sketch">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hardware" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="devices" upperBound="-1"
+        eType="#//AbstractDevice" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handlers" upperBound="-1"
+        eType="#//Handler" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interrupts" upperBound="-1"
+        eType="#//Interrupt" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pollings" upperBound="-1"
+        eType="#//Poll" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loop" upperBound="-1" eType="#//LoopItem"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defineSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemDefinition" eType="#//SystemDefinition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mydata" upperBound="-1"
+        eType="#//CommunicationParams" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" upperBound="-1"
+        eType="#//Message" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" upperBound="-1"
+        eType="#//HighLevelOperation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDevice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="#//Task"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="precondition" eType="#//Precondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interrupt">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interruptKind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensor" eType="#//Sensor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventKind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handler" eType="#//Handler"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Handler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Poll">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensor" eType="#//Sensor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="l" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="h" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handler" eType="#//Handler"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="external" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortProtocol"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PortTCP" eSuperTypes="#//PortProtocol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="info" eType="#//PortConnectionData"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortConnectionData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Precondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pre1" eType="#//Precondition1"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pre" eType="#//Precondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Precondition1">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pre" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyPrecondition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SensorValuePrecondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensor" eType="#//Sensor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cond" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actuator" eSuperTypes="#//AbstractDevice"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//AbstractDevice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="analog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pullup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IODevice" eSuperTypes="#//AbstractDevice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="analog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pullup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Message"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutOnlyMessage" eSuperTypes="#//Message"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutInMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dispatch" eSuperTypes="#//OutOnlyMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Request" eSuperTypes="#//OutInMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Invitation" eSuperTypes="#//OutInMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HighLevelOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutOperation" eSuperTypes="#//HighLevelOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InOperation" eSuperTypes="#//HighLevelOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InAcquireOperation" eSuperTypes="#//InOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//Task"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="support" eType="#//SupportSpecification"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DemandRequest" eSuperTypes="#//OutOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="demand" eType="#//Request"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" unique="false"
+        upperBound="-1" eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForwardDispatch" eSuperTypes="#//OutOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forward" eType="#//Dispatch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AskInvitation" eSuperTypes="#//OutOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ask" eType="#//Invitation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" unique="false"
+        upperBound="-1" eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GrantRequest" eSuperTypes="#//InAcquireOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grant" eType="#//Request"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServeDispatch" eSuperTypes="#//InAcquireOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="serve" eType="#//Dispatch"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AcceptInvitation" eSuperTypes="#//InAcquireOperation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accept" eType="#//Invitation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SupportSpecification">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="supportType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Serial" eSuperTypes="#//SupportSpecification"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TCP" eSuperTypes="#//SupportSpecification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="info" eType="#//SupportData"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SupportData"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExplicitSupportData" eSuperTypes="#//SupportData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationParams">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mac" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dns" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gateway" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subnet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baudrate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IP">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

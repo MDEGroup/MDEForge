@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pic" nsURI="http://hu.modembed/pic" nsPrefix="pic">
+  <eClassifiers xsi:type="ecore:EClass" name="PICConfigurationModel" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/RootElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configWords" upperBound="-1"
+        eType="#//ConfigWord" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigWord" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//ConfigField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implMask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigField" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" upperBound="-1"
+        eType="#//ConfigLiteral" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigLiteral" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PICConfigurationValueModel" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/RootElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//ConfigurationSelection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definition" eType="#//PICConfigurationModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationSelection" eSuperTypes="../../hu.modembed.model/model/modembed.ecore#//infrastructure/MODembedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ConfigField">
+      <eAnnotations source="reference">
+        <details key="scope" value="../definition/configWords/fields"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selection" eType="#//ConfigLiteral">
+      <eAnnotations source="reference">
+        <details key="scope" value="field/literals"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

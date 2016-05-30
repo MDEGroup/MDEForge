@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="nexus" nsURI="http://nexus/1.0" nsPrefix="nexus">
+  <eClassifiers xsi:type="ecore:EClass" name="ebene" eSuperTypes="#//positioniert">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" lowerBound="1"
+        eType="#//ebenenstatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farbe" lowerBound="1" eType="#//ebenenfarbe"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="gestalt" eSuperTypes="#//positioniert">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="spieler" eType="#//Spieler"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weite" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="eins" eSuperTypes="#//gestalt"/>
+  <eClassifiers xsi:type="ecore:EClass" name="zwei" eSuperTypes="#//gestalt"/>
+  <eClassifiers xsi:type="ecore:EClass" name="drei" eSuperTypes="#//gestalt"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ebenenfarbe">
+    <eLiterals name="orange"/>
+    <eLiterals name="rot" value="1"/>
+    <eLiterals name="gruen" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="schatten" eSuperTypes="#//eins"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ebenenstatus">
+    <eLiterals name="voll"/>
+    <eLiterals name="leer" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="positioniert">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="spiel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="turnPlayedByAllPlayers"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The turnPlayedByAllPlayers attribute indicates the number of turns played by all players."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ebenen" upperBound="-1"
+        eType="#//ebene" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="beteiligteSpieler" upperBound="-1"
+        eType="#//Spieler" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zuege" upperBound="-1"
+        eType="#//Zug" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Spieler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="turnPlayedByThisPlayer"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The turnPlayedByThisPlayer attribute indicates the number of turns played by this special player. This can be up to 1 more than played by others. If this is the case, this player has to wait until the others finish their turns."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//spielerStates"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nexus" eSuperTypes="#//gestalt"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="awtColor" instanceClassName="java.awt.Color"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="spielerStates">
+    <eLiterals name="canMoveFigure"/>
+    <eLiterals name="assignResources" value="1"/>
+    <eLiterals name="waitingForNextTurn" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zug">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="turn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gestalt" lowerBound="1"
+        eType="#//gestalt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ziel" lowerBound="1" eType="#//ebene"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zugliste">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zuege" upperBound="-1"
+        eType="#//Zug"/>
+  </eClassifiers>
+</ecore:EPackage>

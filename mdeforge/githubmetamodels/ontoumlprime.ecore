@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ontoumlprime" nsURI="ontoumlprime" nsPrefix="ontoumlprime">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="*&#xA;This file specifies the OntoUMLPrime metamodel.&#xA;&#xA;The purpose of this is to reimplement a metamodel for OntoUML that is independent of the UML.&#xA;The previous OntoUML metamodel implementation by Carraretto was based on the UML 2.0 implementation&#xA;in Eclipse. This means that it is too polluted with UML constraints. Strictly speaking this is not&#xA;UML anymore (so OntoUMLPrime is strictly speaking a misnomer).&#xA;&#xA;We have used the Xcore syntax. If you want to export a genmodel and ecore model from it, this can be done by following the steps in:&#xA;http://wiki.eclipse.org/Xcore#Converting_an_Xcore_Model_to_a_GenModel&#xA;This is not necessary if you just want to create dynamic instances of the model, and if you want to generate code, as it is generated&#xA;automatically when you save the xcore file. However, this is necessary to use the OCL constraints in ontoumlprime.ocl, as that refers&#xA;to the ecore and not the xcore file.&#xA;&#xA;History:&#xA;created by João Paulo A. Almeida"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" ordered="false"
+        upperBound="-1" eType="#//PackageableElement" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" abstract="true"
+      eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" ordered="false"
+        upperBound="-1" eType="#//PackageableElement" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Universal" abstract="true" eSuperTypes="#//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isSpecializedVia" ordered="false"
+        upperBound="-1" eType="#//GeneralizationSet" eOpposite="#//GeneralizationSet/specializedUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializesVia" ordered="false"
+        upperBound="-1" eType="#//GeneralizationSet" eOpposite="#//GeneralizationSet/specializingUniversals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneralizationSet" eSuperTypes="#//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCovering" unique="false"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializedUniversal" lowerBound="1"
+        eType="#//Universal" eOpposite="#//Universal/isSpecializedVia"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specializingUniversals"
+        ordered="false" lowerBound="1" upperBound="-1" eType="#//Universal" eOpposite="#//Universal/specializesVia"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true" eSuperTypes="#//NamedElement #//PackageableElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveDataType" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="_type" unique="false" lowerBound="1"
+        eType="#//PrimitiveDataTypeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PrimitiveDataTypeType">
+    <eLiterals name="Boolean"/>
+    <eLiterals name="String"/>
+    <eLiterals name="Real"/>
+    <eLiterals name="UnlimitedNatural"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedDataType" abstract="true"
+      eSuperTypes="#//DataType #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexDataType" eSuperTypes="#//UserDefinedDataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" ordered="false"
+        lowerBound="2" upperBound="-1" eType="#//DataTypeAttribute" containment="true"
+        resolveProxies="false" eOpposite="#//DataTypeAttribute/complexDataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataTypeAttribute" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isOfType" lowerBound="1"
+        eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="complexDataType" lowerBound="1"
+        eType="#//ComplexDataType" eOpposite="#//ComplexDataType/attributes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//UserDefinedDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enumerationLiterals" unique="false"
+        lowerBound="2" upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeronymicRelation" eSuperTypes="#//PackageableElement #//BinaryDirectedRelationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whole" lowerBound="1" eType="#//SubstantialUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" lowerBound="1" eType="#//SubstantialUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partIsEssential" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partIsInseparable" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partIsShareable" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partIsImmutable" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentOfRelation" eSuperTypes="#//MeronymicRelation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MembershipRelation" eSuperTypes="#//MeronymicRelation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubCollectionRelation" eSuperTypes="#//MeronymicRelation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubQuantityRelation" eSuperTypes="#//MeronymicRelation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EndurantUniversal" abstract="true" eSuperTypes="#//Universal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="characterizedBy" ordered="false"
+        upperBound="-1" eType="#//Characterization" containment="true" resolveProxies="false"
+        eOpposite="#//Characterization/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubstantialUniversal" abstract="true"
+      eSuperTypes="#//EndurantUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SortalUniversal" abstract="true" eSuperTypes="#//SubstantialUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RigidSortalUniversal" abstract="true"
+      eSuperTypes="#//SortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntiRigidSortalUniversal" abstract="true"
+      eSuperTypes="#//SortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubstanceSortalUniversal" abstract="true"
+      eSuperTypes="#//RigidSortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Kind" eSuperTypes="#//SubstanceSortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QuantityUniversal" eSuperTypes="#//SubstanceSortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectiveUniversal" eSuperTypes="#//SubstanceSortalUniversal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isExtensional" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubKind" eSuperTypes="#//RigidSortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//AntiRigidSortalUniversal #//ExternallyDependentUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Phase" eSuperTypes="#//AntiRigidSortalUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MixinUniversal" abstract="true" eSuperTypes="#//Universal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RigidMixinUniversal" abstract="true"
+      eSuperTypes="#//MixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//RigidMixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NonRigidMixinUniversal" abstract="true"
+      eSuperTypes="#//MixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SemiRigidMixinUniversal" abstract="true"
+      eSuperTypes="#//NonRigidMixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Mixin" eSuperTypes="#//SemiRigidMixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AntiRigidMixinUniversal" abstract="true"
+      eSuperTypes="#//NonRigidMixinUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RoleMixin" eSuperTypes="#//AntiRigidMixinUniversal #//ExternallyDependentUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternallyDependentUniversal" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mediation" lowerBound="1"
+        eType="#//Mediation" eOpposite="#//Mediation/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MomentUniversal" abstract="true" eSuperTypes="#//EndurantUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelatorUniversal" eSuperTypes="#//MomentUniversal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mediations" ordered="false"
+        lowerBound="2" upperBound="-1" eType="#//Mediation" containment="true" resolveProxies="false"
+        eOpposite="#//Mediation/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryDirectedRelationship" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceEndName" unique="false"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetEndName" unique="false"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceLowerBound" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceUpperBound" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetLowerBound" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetUpperBound" unique="false"
+        lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryMaterialRelation" eSuperTypes="#//BinaryDirectedRelationship #//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivedFrom" lowerBound="1"
+        eType="#//RelatorUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ExternallyDependentUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ExternallyDependentUniversal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryFormalRelation" eSuperTypes="#//BinaryDirectedRelationship #//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Universal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Universal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mediation" eSuperTypes="#//BinaryDirectedRelationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//RelatorUniversal" eOpposite="#//RelatorUniversal/mediations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ExternallyDependentUniversal" eOpposite="#//ExternallyDependentUniversal/mediation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Characterization" eSuperTypes="#//BinaryDirectedRelationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//EndurantUniversal" eOpposite="#//EndurantUniversal/characterizedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//IntrinsicMomentUniversal" eOpposite="#//IntrinsicMomentUniversal/characterization"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntrinsicMomentUniversal" abstract="true"
+      eSuperTypes="#//MomentUniversal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="characterization" lowerBound="1"
+        eType="#//Characterization" eOpposite="#//Characterization/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModeUniversal" eSuperTypes="#//IntrinsicMomentUniversal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QualityUniversal" eSuperTypes="#//IntrinsicMomentUniversal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datatypes" ordered="false"
+        upperBound="-1" eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="nAryMaterialRelation" eSuperTypes="#//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivedFrom" lowerBound="1"
+        eType="#//RelatorUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetRelata" upperBound="-1"
+        eType="#//ExternallyDependentUniversal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetEndNames" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceLowerBound" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceUpperBound" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="nAryFormalRelation" eSuperTypes="#//NamedElement #//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetRelata" upperBound="-1"
+        eType="#//Universal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetEndNames" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceLowerBound" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceUpperBound" unique="false"
+        upperBound="-1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

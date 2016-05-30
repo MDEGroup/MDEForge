@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="typeconfiguration" nsURI="http://www.org.eclipse.reqcycle/typeconfiguration/1.0"
+    nsPrefix="typeconf">
+  <eClassifiers xsi:type="ecore:EClass" name="TypeConfigContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//Type" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurations" upperBound="-1"
+        eType="#//Configuration" containment="true" eOpposite="#//Configuration/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultConfiguration" eType="#//Configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//RelationsPredicatesMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type">
+    <eOperations name="getIType" eType="#//IType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoings" upperBound="-1"
+        eType="#//Relation" eOpposite="#//Relation/upstreamType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomings" upperBound="-1"
+        eType="#//Relation" eOpposite="#//Relation/downstreamType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isExtensible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation">
+    <eOperations name="getAgregated" upperBound="-1" eType="#//TType"/>
+    <eOperations name="getTType" eType="#//TType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="upstreamType" eType="#//Type"
+        eOpposite="#//Type/outgoings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="downstreamType" eType="#//Type"
+        eOpposite="#//Type/incomings"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="agregatedTypes" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="icon" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relations" upperBound="-1"
+        eType="#//Relation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//TypeConfigContainer"
+        eOpposite="#//TypeConfigContainer/configurations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Entry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IType" instanceClassName="org.eclipse.reqcycle.types.IType"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TType" instanceClassName="org.eclipse.reqcycle.traceability.model.TType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true">
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getPossibleValues" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getType" eType="#//AttributeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisteredAttribute" eSuperTypes="#//StdAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StdAttribute" eSuperTypes="#//Attribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="possibleValues" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AttributeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
+    <eLiterals name="String"/>
+    <eLiterals name="Boolean" value="1"/>
+    <eLiterals name="Int" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationsPredicatesMapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relation" eType="#//Relation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decorations" upperBound="-1"
+        eType="#//DecorationPredicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DecorationPredicate" eSuperTypes="#//IPredicateLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPredicateLink" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" eType="ecore:EClass ../../org.eclipse.reqcycle.predicates.core/model/predicates.ecore#//IPredicate"/>
+  </eClassifiers>
+</ecore:EPackage>

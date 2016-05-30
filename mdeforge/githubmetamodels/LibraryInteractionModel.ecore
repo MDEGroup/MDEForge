@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="libraryinteractionmodel"
+    nsURI="http://libraryinteractionmodel/1.0" nsPrefix="libraryinteractionmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Library">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="availableBooks" lowerBound="1"
+        eType="#//Books">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="All available books. There may be 'hidden' books in the Library which do not show up here,&#xD;&#xA;e.g. books lent in the past (which could show up from authors.books) but are no longer&#xD;&#xA;available to borrow.  If a book is in principle available to borrow but not right now&#xD;&#xA;because somebody else has it, it will still show up in this list though."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="authors" lowerBound="1"
+        eType="#//Authors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clients" lowerBound="1"
+        eType="#//Clients"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isbn" lowerBound="1" eType="#//ISBN"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+        eType="#//AuthorShort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentReservation" eType="#//Reservation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reservations" lowerBound="1"
+        eType="#//Reservations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Books">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//BookShort" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Authors">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//AuthorShort" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AuthorShort">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="self" lowerBound="1" eType="#//Author"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nationality" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Client">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="self" lowerBound="1" eType="#//Client"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" lowerBound="1" eType="#//EMail"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Clients">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//Client" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reservation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="client" lowerBound="1"
+        eType="#//Client"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="book" lowerBound="1" eType="#//Book"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ISBN" instanceClassName="java.lang.Long"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Author">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#//BookShort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nationality" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullBio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BookShort">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="self" lowerBound="1" eType="#//Book"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isbn" lowerBound="1" eType="#//ISBN"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="EMail" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Reservations">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//Reservation" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

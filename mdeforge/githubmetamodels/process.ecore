@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="process"
+    nsURI="http://process/1.0" nsPrefix="process">
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Activity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//TaskKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//Activity" containment="true" eOpposite="#//Activity/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gateway" eSuperTypes="#//Activity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Process" eOpposite="#//Process/contents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" upperBound="-1" eType="#//Activity"
+        eOpposite="#//Activity/previous"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previous" upperBound="-1"
+        eType="#//Activity" eOpposite="#//Activity/next"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TaskKind">
+    <eLiterals name="user"/>
+    <eLiterals name="manual" value="1"/>
+    <eLiterals name="service" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

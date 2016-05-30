@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spreadsheet"
+    nsURI="http://spreadsheet/1.0" nsPrefix="spreadsheet">
+  <eClassifiers xsi:type="ecore:EClass" name="Cell" eSuperTypes="#//visitors/Visitable">
+    <eOperations name="accept">
+      <eAnnotations source="v.visitCell(this);"/>
+      <eParameters name="v" eType="#//visitors/Visitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true" eOpposite="#//Expression/cell"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//visitors/Visitable">
+    <eOperations name="accept">
+      <eAnnotations source="v.visitExpression(this);"/>
+      <eParameters name="v" eType="#//visitors/Visitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cell" eType="#//Cell" eOpposite="#//Cell/expression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinExpression" eSuperTypes="#//Expression">
+    <eOperations name="getFunction" eType="#//String"/>
+    <eOperations name="accept">
+      <eAnnotations source="v.visitBinExpression(this);"/>
+      <eParameters name="v" eType="#//visitors/Visitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="function" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subexprs" upperBound="-1"
+        eType="#//Expression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Expression">
+    <eOperations name="getVal" eType="#//integer"/>
+    <eOperations name="setVal">
+      <eParameters name="newVal" eType="#//integer"/>
+    </eOperations>
+    <eOperations name="accept">
+      <eAnnotations source="v.visitValue(this);"/>
+      <eParameters name="v" eType="#//visitors/Visitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="val" eType="#//integer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CellRef" eSuperTypes="#//Expression">
+    <eOperations name="accept">
+      <eAnnotations source="v.visitCellRef(this);"/>
+      <eParameters name="v" eType="#//visitors/Visitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="#//Cell"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="integer" instanceClassName="java.lang.Integer"/>
+  <eSubpackages name="visitors">
+    <eClassifiers xsi:type="ecore:EClass" name="Visitable" interface="true">
+      <eOperations name="accept">
+        <eParameters name="v" eType="#//visitors/Visitor"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Visitor" abstract="true">
+      <eOperations name="visitCell">
+        <eParameters name="v" eType="#//Cell"/>
+      </eOperations>
+      <eOperations name="visitExpression">
+        <eParameters name="v" eType="#//Expression"/>
+      </eOperations>
+      <eOperations name="visitBinExpression">
+        <eParameters name="v" eType="#//BinExpression"/>
+      </eOperations>
+      <eOperations name="visitValue">
+        <eParameters name="v" eType="#//Value"/>
+      </eOperations>
+      <eOperations name="visitCellRef">
+        <eParameters name="v" eType="#//CellRef"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConcreteVisitor" eSuperTypes="#//visitors/Visitor"/>
+  </eSubpackages>
+</ecore:EPackage>

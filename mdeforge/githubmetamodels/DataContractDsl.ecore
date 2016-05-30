@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="DataContractDsl"
+    nsURI="http://www.mod4j.org/datacontract" nsPrefix="datacontract">
+  <eClassifiers xsi:type="ecore:EClass" name="DataContractModel" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dtos" upperBound="-1" eType="#//Dto"
+        containment="true" eOpposite="#//Dto/datacontractModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumerations" upperBound="-1"
+        eType="#//EnumerationDto" containment="true" eOpposite="#//EnumerationDto/datacontractModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalReferences" upperBound="-1"
+        eType="#//ExternalReference" containment="true" eOpposite="#//ExternalReference/datacontractModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dto" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datacontractModel" eType="#//DataContractModel"
+        eOpposite="#//DataContractModel/dtos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BusinessClassDto" eSuperTypes="#//Dto">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//DtoProperty" containment="true" eOpposite="#//DtoProperty/businessClassDto"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="base" eType="#//ExternalReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyReferences" upperBound="-1"
+        eType="#//BusinessClassPropertyReference" containment="true" eOpposite="#//BusinessClassPropertyReference/dto"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associationReferences"
+        upperBound="-1" eType="#//BusinessClassAssociationRoleReference" containment="true"
+        eOpposite="#//BusinessClassAssociationRoleReference/dto"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creatable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoProperty" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="businessClassDto" eType="#//BusinessClassDto"
+        eOpposite="#//BusinessClassDto/properties"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customDto" eType="#//CustomDto"
+        eOpposite="#//CustomDto/properties"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mandatoryForCreation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="writable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoDataProperty" eSuperTypes="#//DtoProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoStringProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoBooleanProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumerationDto" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" upperBound="-1"
+        eType="#//EnumerationDtoLiteral" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="base" eType="#//ExternalReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datacontractModel" eType="#//DataContractModel"
+        eOpposite="#//DataContractModel/enumerations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumerationDtoLiteral" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomDto" eSuperTypes="#//Dto">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//DtoProperty" containment="true" eOpposite="#//DtoProperty/customDto"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoIntegerProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoDecimalProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoEnumerationProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//EnumerationDto"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueAsString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoDateTimeProperty" eSuperTypes="#//DtoDataProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BusinessClassPropertyReference" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dto" eType="#//BusinessClassDto"
+        eOpposite="#//BusinessClassDto/propertyReferences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BusinessClassAssociationRoleReference"
+      eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dto" eType="#//BusinessClassDto"
+        eOpposite="#//BusinessClassDto/associationReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dtoType" eType="#//Dto"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DtoAssociationRoleProperty" eSuperTypes="#//DtoProperty">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dtoType" eType="#//Dto"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" eType="#//Multiplicity"
+        defaultValueLiteral="ONE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalReference" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datacontractModel" eType="#//DataContractModel"
+        eOpposite="#//DataContractModel/externalReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Multiplicity">
+    <eLiterals name="NONE"/>
+    <eLiterals name="ONE" value="1"/>
+    <eLiterals name="MANY" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

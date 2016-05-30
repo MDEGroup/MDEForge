@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rok" nsURI="uri:rok" nsPrefix="rok">
+  <eClassifiers xsi:type="ecore:EDataType" name="InetAddress" instanceClassName="java.net.InetAddress"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Locale" instanceClassName="java.util.Locale">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Code langue&#xA;Code pays&#xA;Encodage"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Country" instanceClassName="java.lang.String"/>
+  <eSubpackages name="model" nsURI="uri:rok/model" nsPrefix="m">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Règles :&#xA;- Une propriété ne peut pas avoir plus d'une des caractéristique suivante : key, readOnly, required&#xA;&#xA;Valeur par défaut.&#xA;- Pour les propriété key : valeur par défaut non permise&#xA;- Pour les propriété requires : valeur par défaut non permise&#xA;- Pour les propriété readOnly : Si spécifié, est positionnée au niveau du getter&#xA;"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Domain">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+          containment="true">
+        <eGenericType eClassifier="#//model/MClass">
+          <eTypeArguments/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subDomains" upperBound="-1"
+          eType="#//model/Domain" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="enumerations" upperBound="-1"
+          eType="#//model/Enumeration" containment="true"/>
+      <eGenericSuperTypes eClassifier="#//model/Res">
+        <eTypeArguments eClassifier="#//model/Domain"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Res" abstract="true" interface="true"
+        eSuperTypes="#//model/Documentable #//model/Nameable">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="confidentiality" lowerBound="1"
+          eType="#//model/Confidentiality" defaultValueLiteral="public">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Confidentialité de la ressource.&#xA;Si cette propriété n'est pas renseignée, elle est concodéré comme public"/>
+        </eAnnotations>
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="namespace" value=""/>
+          <details key="wildcards" value=""/>
+          <details key="name" value=""/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="List" abstract="true" interface="true">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1">
+        <eGenericType eClassifier="#//model/MClass">
+          <eTypeArguments eTypeParameter="#//model/List/T"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1">
+        <eGenericType eClassifier="#//model/MClass">
+          <eTypeArguments eTypeParameter="#//model/List/T"/>
+        </eGenericType>
+      </eStructuralFeatures>
+      <eGenericSuperTypes eClassifier="#//model/Res">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eTypeParameter="#//model/List/T"/>
+        </eTypeArguments>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MClass">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//model/property/Property" derived="true" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+          eType="#//model/Rule" containment="true"/>
+      <eGenericSuperTypes eClassifier="#//model/Res">
+        <eTypeArguments eTypeParameter="#//model/MClass/T"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Confidentiality">
+      <eLiterals name="public">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Caractérise une donnée non confidentielle.&#xA;Cette donnée publique peut être rattachée à un individu mais peut être connue de tous."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="private" value="3">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Caractérise une donnée non confidentiel mais qui doit reste à la discrétion de celui qui interagit avec la ressource."/>
+        </eAnnotations>
+      </eLiterals>
+      <eLiterals name="secret" value="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Désigne une ressource ou propriété confidentiel.&#xA;Cela implique :&#xA;* un transport via flux crypté (SSL)&#xA;* une modification via champ &quot;password&quot; (éventuellement avec un 2ème champ de vérification)&#xA;* un chiffrement si la propriété fait parti de l'URI&#xA;* un chiffrement sur disque si la donnée peut être stocké dans un cache local"/>
+        </eAnnotations>
+      </eLiterals>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Rule" eSuperTypes="#//model/Documentable #//model/Nameable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Info">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="info" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="locale" lowerBound="1"
+          eType="#//Locale"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RootDomain">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subDomains" upperBound="-1"
+          eType="#//model/Domain" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Documentable" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="labels" upperBound="-1"
+          eType="#//model/Info" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descriptions" upperBound="-1"
+          eType="#//model/Info" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Nameable" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//model/Nameable #//model/Documentable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+          eType="#//model/EnumValue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EnumValue" eSuperTypes="#//model/Nameable #//model/Documentable"/>
+    <eSubpackages name="property" nsURI="uri:rok/model/property" nsPrefix="p">
+      <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" interface="true"
+          eSuperTypes="#//model/Nameable #//model/Documentable">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//model/property/PropertyKind"
+            defaultValueLiteral="standard"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="confidentiality" eType="#//model/Confidentiality">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Confidentialité de la ressource.&#xA;Si cette propriété n'est pas renseignée, c'est la confidentialité de la ressource attachée qui est appliquée."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="minOccurrences" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxOccurrences" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+            defaultValueLiteral="1"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IdProperty" eSuperTypes="#//model/property/Property"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StringProperty" eSuperTypes="#//model/property/Property">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Pour information, voici les type de données mis en oeuvre en fonction des bornes min/max (inclus) :&#xA;&#xA;Si min = 0 et max = 1 : char sinon String"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"
+            defaultValueLiteral="-1">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Nombre de caractères minimum.&#xA;Si &lt; 0, pas de limite."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Nombre de caractères maximum&#xA;Si &lt; 0, pas de limite."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiline" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            defaultValueLiteral="false"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanProperty" eSuperTypes="#//model/property/Property">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DateProperty" eSuperTypes="#//model/property/Property">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultvalue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="NumberProperty" abstract="true"
+          interface="true" eSuperTypes="#//model/property/Property"/>
+      <eClassifiers xsi:type="ecore:EClass" name="IntegerProperty" eSuperTypes="#//model/property/NumberProperty">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Pour information, voici les type de données mis en oeuvre en fonction des bornes min/max (inclus) :&#xA;&#xA;8 bits/1octet&#x9;&#x9;(byte)&#x9;: de -2^7&#x9;(= -128)&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;à 127&#xA;16 bits/2 octets&#x9;(short)&#x9;: de -2^15&#x9;(= -32 768)&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;à 2^15 -1 (= 32 767)&#xA;16 bits/2 octets&#x9;(char)&#x9;: de 0&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;à \uFFFF (= 65 535)&#xA;32 bits/4 octets&#x9;(int)&#x9;: de -2^31 (= -2 147 483 648)&#x9;&#x9;&#x9;&#x9;à 2^31 -1 (= 2 147 483 647)&#xA;64 bits/8 octets&#x9;(long)&#x9;: de -2^63 (= -9 223 372 036 854 775 808)&#x9;à 2^63 -1 (= 9 223 372 036 854 775 807)&#xA;&#xA;&#xA;"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Valeur minimale en-dessous de laquelle la propriété ne peut être définie."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Valeur maximale au-dessus de laquelle la propriété ne peut être définie."/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="RealNumberProperty" eSuperTypes="#//model/property/NumberProperty">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Pour des raisons de précision, le type employé pour représenter un nombre relatif et un BigDecimal"/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AmountProperty" eSuperTypes="#//model/property/RealNumberProperty">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="currency" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="Code de la devise (sur 3 caractères) tel que défini par la norme ISO 4217&#xA;&#xA;Plus d'information sur lescodes et format disponible ici :&#xA;- http://www.oanda.com/currency/currency-code&#xA;- http://docs.oracle.com/javase/6/docs/api/java/util/Currency.html#getSymbol%28java.util.Locale%29"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="EnumerationProperty" eSuperTypes="#//model/property/Property">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+            eType="#//model/Enumeration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryProperty">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+        <eGenericSuperTypes eClassifier="#//model/property/Property"/>
+        <eGenericSuperTypes eClassifier="#//model/property/feature/Range">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+        </eGenericSuperTypes>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="PropertyKind">
+        <eLiterals name="standard" value="3"/>
+        <eLiterals name="key" value="2"/>
+        <eLiterals name="readOnly"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="EntityProperty" abstract="true"
+          interface="true" eSuperTypes="#//model/property/Property"/>
+      <eClassifiers xsi:type="ecore:EClass" name="LinkedEntityProperty" eSuperTypes="#//model/property/EntityProperty">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Liaison avec une entité externe.&#xD;&#xA;Son cycle de vie n'est pas lié à son entité &quot;parent&quot;.&#xD;&#xA;Si max-Occurences > 1, la relation entre l'entité &quot;parent&quot; et celle-ci peut être considérée comme une relation d'aggrégation."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1">
+          <eGenericType eClassifier="#//model/MClass">
+            <eTypeArguments/>
+          </eGenericType>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="NestedEntityProperty" eSuperTypes="#//model/property/EntityProperty">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Entité &quot;fille&quot;. Son cycle de vie est lié à son entité &quot;parent&quot;.&#xD;&#xA;Si max-Occurences > 1, la relation entre l'entité &quot;parent&quot; et celle-ci peut être considérée comme une relation de composition."/>
+        </eAnnotations>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+            containment="true">
+          <eGenericType eClassifier="#//model/MClass">
+            <eTypeArguments/>
+          </eGenericType>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eSubpackages name="feature" nsURI="urn:rok/model/property" nsPrefix="f">
+        <eClassifiers xsi:type="ecore:EClass" name="Range" abstract="true" interface="true">
+          <eTypeParameters name="T"/>
+        </eClassifiers>
+        <eClassifiers xsi:type="ecore:EClass" name="DefaultValue" abstract="true"
+            interface="true">
+          <eTypeParameters name="T"/>
+        </eClassifiers>
+      </eSubpackages>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

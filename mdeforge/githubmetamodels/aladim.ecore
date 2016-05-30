@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="aladim"
+    nsURI="aladim" nsPrefix="aladim">
+  <eClassifiers xsi:type="ecore:EClass" name="interfaceModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactionSpaces" lowerBound="1"
+        upperBound="-1" eType="#//interactionSpace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainFunctions" lowerBound="1"
+        upperBound="-1" eType="#//domainFunction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reactions" upperBound="-1"
+        eType="#//transitionReaction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//transitionAction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="navigations" upperBound="-1"
+        eType="#//transitionNavigation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="interactionSpace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" lowerBound="1"
+        upperBound="-1" eType="#//Interaction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="compositeInteraction" abstract="true"
+      eSuperTypes="#//Interaction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicInteractions" lowerBound="1"
+        upperBound="-1" eType="#//basicInteraction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composites" upperBound="-1"
+        eType="#//compositeInteraction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="enterInformation" eSuperTypes="#//basicInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="selectInformation" eSuperTypes="#//basicInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="perceiveInforrmation" eSuperTypes="#//basicInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="basicInteraction" abstract="true" eSuperTypes="#//Interaction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="activate" eSuperTypes="#//basicInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="join" eSuperTypes="#//compositeInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="sequence" eSuperTypes="#//compositeInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="choose" eSuperTypes="#//compositeInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="repeat" eSuperTypes="#//compositeInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="combine" eSuperTypes="#//compositeInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Interaction" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="domainFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="transitionAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taFrom" lowerBound="1"
+        eType="#//interactionSpace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taTo" lowerBound="1" eType="#//domainFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="transitionReaction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trFrom" lowerBound="1"
+        eType="#//domainFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trTo" lowerBound="1" eType="#//interactionSpace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="transitionReactionSuccess" eSuperTypes="#//transitionReaction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="transitionReactionFail" eSuperTypes="#//transitionReaction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="transitionNavigation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tnFrom" lowerBound="1"
+        eType="#//interactionSpace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tnTo" lowerBound="1" eType="#//interactionSpace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="navigate" eSuperTypes="#//basicInteraction"/>
+</ecore:EPackage>

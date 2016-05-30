@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="journeymodel"
+    nsURI="http://customerjourney/1.0" nsPrefix="journeymodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Journey">
+    <eOperations name="compareTo" eType="#//JourneyDiff">
+      <eParameters name="other" eType="#//Journey"/>
+    </eOperations>
+    <eOperations name="getRatingStatistics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getChannelStatistics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getInitiatorStatistics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getComparedToExpected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="expected" eType="#//Journey"/>
+    </eOperations>
+    <eOperations name="getSingleInitiatorStatistics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="initiator" eType="#//EInitiator"/>
+    </eOperations>
+    <eOperations name="getRatingCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eParameters name="evaluation" eType="#//EEvaluation"/>
+    </eOperations>
+    <eOperations name="getSingleChannelStatistics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="channel" eType="#//EChannel"/>
+    </eOperations>
+    <eOperations name="getEdges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList"/>
+    <eOperations name="getGraphviz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="isActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="activeEdges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList"/>
+    </eOperations>
+    <eOperations name="toMarkdown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//EStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="journeySet" eType="#//JourneySet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="touchpoints" lowerBound="1"
+        upperBound="-1" eType="#//Touchpoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Touchpoint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DT1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//EType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="evaluation" eType="#//EEvaluation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="channel" eType="#//EChannel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initiator" eType="#//EInitiator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Calendar" instanceClassName="java.util.Calendar"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="EStatus">
+    <eLiterals name="completed"/>
+    <eLiterals name="aborted" value="1"/>
+    <eLiterals name="inProgress" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EChannel">
+    <eLiterals name="web"/>
+    <eLiterals name="email" value="1"/>
+    <eLiterals name="sms" value="2"/>
+    <eLiterals name="selfServiceMachine" value="3"/>
+    <eLiterals name="faceToFace" value="4"/>
+    <eLiterals name="phone" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EType">
+    <eLiterals name="generic"/>
+    <eLiterals name="adhoc" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EInitiator">
+    <eLiterals name="customer"/>
+    <eLiterals name="movieAgency" value="1"/>
+    <eLiterals name="movieEmployee" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EEvaluation">
+    <eLiterals name="good" value="3"/>
+    <eLiterals name="bad" value="1"/>
+    <eLiterals name="medium" value="2"/>
+    <eLiterals name="not_available" value="-1" literal="not_available"/>
+    <eLiterals name="empty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EEnum0"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JourneySet">
+    <eOperations name="getComparedToExpected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="journey" eType="#//Journey"/>
+    </eOperations>
+    <eOperations name="getGraphviz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getGraphviz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="activeJourney" eType="#//Journey"/>
+    </eOperations>
+    <eOperations name="getGlobalComparedToExpected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="toMarkdown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="journeys" upperBound="-1"
+        eType="#//Journey" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expectedJoruney" eType="#//Journey"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JourneyDiff">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commonTP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unusedTP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

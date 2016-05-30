@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="notifier" nsURI="http://junit/1.0" nsPrefix="junit">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="TestCase" abstract="true" eSuperTypes="#//Test">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notifier" lowerBound="1"
+        eType="#//RunNotifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fixture">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tests" lowerBound="1" upperBound="-1"
+        eType="#//Test"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Suite" eSuperTypes="#//ParentRunner"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParentRunner" eSuperTypes="#//Runner"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Runner">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="fixtureImpliesTests fixtureTestsIsInTests"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="fixtureImpliesTests" value="fixtures->notEmpty() implies tests->notEmpty()"/>
+      <details key="fixtureTestsIsInTests" value="fixtures->forAll(tests->includesAll(self.tests))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fixtures" lowerBound="1"
+        upperBound="-1" eType="#//Fixture" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tests" lowerBound="1" upperBound="-1"
+        eType="#//Test" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RunNotifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JUnitCore">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notifier" lowerBound="1"
+        eType="#//RunNotifier" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runner" lowerBound="1"
+        eType="#//Runner" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" lowerBound="1"
+        upperBound="-1" eType="#//Result" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Test" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testMethod" lowerBound="1"
+        eType="#//Method" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Result"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Method">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="befores" upperBound="-1"
+        eType="#//Method" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="afters" upperBound="-1"
+        eType="#//Method" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="domain"
+    nsURI="http://dependency-graph/1.0" nsPrefix="dg">
+  <eClassifiers xsi:type="ecore:EClass" name="GraphElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uuid" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="ExtendedMetaData">
+        <details key="name" value="uuid"/>
+        <details key="namespace" value="http://cern.ch/be/co/devtools-deps-analysis/2.0.0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CodeElement" abstract="true" eSuperTypes="#//GraphElement">
+    <eOperations name="getDisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingDeps" upperBound="-1"
+        eType="#//Dependency" eOpposite="#//Dependency/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingDeps" upperBound="-1"
+        eType="#//Dependency" eOpposite="#//Dependency/from"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="#//CodeElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//ApiClass" containment="true" eOpposite="#//ApiClass/product"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containingFolders" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApiClass" eSuperTypes="#//CodeElement">
+    <eOperations name="getFqName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getSourcePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simpleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//Method" containment="true" eOpposite="#//Method/apiClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//Field" containment="true" eOpposite="#//Field/apiClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" lowerBound="1"
+        eType="#//Product" eOpposite="#//Product/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extends" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="anonymous" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencedClasses" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//CodeElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apiClass" lowerBound="1"
+        eType="#//ApiClass" eOpposite="#//ApiClass/methods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencedFields" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referencedMethods" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" eSuperTypes="#//CodeElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apiClass" lowerBound="1"
+        eType="#//ApiClass" eOpposite="#//ApiClass/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency" eSuperTypes="#//GraphElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//CodeElement"
+        eOpposite="#//CodeElement/outgoingDeps"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//CodeElement"
+        eOpposite="#//CodeElement/incomingDeps"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DependencyType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyGraph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//Dependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+        eType="#//Product" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitiveDependency" eSuperTypes="#//Dependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitiveFrom" upperBound="-1"
+        eType="#//Dependency"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependencyType">
+    <eLiterals name="METHOD_CALL" value="1"/>
+    <eLiterals name="FIELD_REF" value="2"/>
+    <eLiterals name="CLASS_DEF" value="4"/>
+    <eLiterals name="INHERITANCE" value="8"/>
+    <eLiterals name="OVERRIDED_FUNC" value="16"/>
+    <eLiterals name="CLASS_INHERITANCE" value="32"/>
+    <eLiterals name="CLASS_USAGE" value="64"/>
+  </eClassifiers>
+</ecore:EPackage>

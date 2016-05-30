@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="glucose" nsURI="http://edu/utah/cdmcc/glucose" nsPrefix="edu.utah.cdmcc">
+  <eAnnotations source="teneo.jpa">
+    <details key="appinfo" value="@GenericGenerator(name=&quot;system-uuid&quot;, strategy = &quot;uuid2&quot;)"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Person entity is used as a base class for patients and users."/>
+    </eAnnotations>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getLastName().trim() + &quot;, &quot; + getFirstName().trim();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@Basic(optional=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="personID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@Id &#xA;@GeneratedValue(generator=&quot;system-uuid&quot;)&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//StatusType"
+        defaultValueLiteral="0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Status of the person record."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Patient" eSuperTypes="#//Person">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Patient object represents a patient in the intensive care unit."/>
+    </eAnnotations>
+    <eOperations name="getBirthdateString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%java.text.DateFormat%> df = DateFormat.getDateInstance(DateFormat.LONG);&#xA;return df.format(birthdate.getTime());"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTodayAgeYears" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDeltaAgeYears(new &lt;%java.util.GregorianCalendar%>());"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTodayAgeDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDeltaAgeDays(new &lt;%java.util.GregorianCalendar%>());"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDeltaAgeYears" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="long millisBetween = Math.abs(getBirthdate().getTimeInMillis()&#xA;&#x9;&#x9;&#x9;&#x9;- date.getTimeInMillis());&#xA;return (int) ((millisBetween / (1000 * 60 * 60 * 24)) / 365);"/>
+      </eAnnotations>
+      <eParameters name="date" eType="#//calendar"/>
+    </eOperations>
+    <eOperations name="getDeltaAgeDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="long millisBetween = Math.abs(getBirthdate().getTimeInMillis()&#xA;&#x9;- date.getTimeInMillis());&#xA;return (int) (millisBetween / (1000 * 60 * 60 * 24));"/>
+      </eAnnotations>
+      <eParameters name="date" eType="#//calendar"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Weight is measured in kilograms."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="medRecNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Medical record number should be the hospital medical record number, not the visit account record."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="studyID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This is the ID used in the specific study in which the patient is enrolled."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthdate" eType="#//calendar">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Date of birth of patient."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Height of the patient, measured in centimeters."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decisions" upperBound="-1"
+        eType="#//GlucoseDecision" containment="true" eOpposite="#//GlucoseDecision/patient"
+        eKeys="#//ClinicalDecision/observationDate #//ClinicalDecision/userAction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="createdBy" eType="#//User"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Person">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a clinical user of the software, generally a nurse or physician."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accountRights" eType="#//AccessType"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accountName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="passwordDigest" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="createdBy" eType="#//User"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AccessType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a software user, generally a clinician in the intensive care unit."/>
+    </eAnnotations>
+    <eLiterals name="Normal" literal="Normal"/>
+    <eLiterals name="Administrative" value="1" literal="Administrative"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StatusType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Status Type is used to classify patients in the software."/>
+    </eAnnotations>
+    <eLiterals name="Current" literal="Current">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Patient is stored locally and is currently active."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Archived" value="1" literal="Archived">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Patient record has been archived to remote database."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Invalid" value="2" literal="Invalid">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Patient is invalid, and probably should not be archived to remote database.&#xA;We need to determine this with a Preference setting so that the administrative&#xA;user can choose whether to keep invalid patient records in the target."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Sample" value="3" literal="Sample">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Patient is a sample patient and should NOT be archived to remote database."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="calendar" instanceClassName="java.util.Calendar"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClinicalDecision">
+    <eOperations name="advise">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (this.getAdviceText().length() == 0)&#xA;&#x9;{&#xA;&#x9;&#x9;this.setAdviceText(message);&#xA;&#x9;} else &#xA;&#x9;{&#xA;&#x9;this.setAdviceText(this.getAdviceText() + &quot;\n&quot; + message);&#xA;&#x9;}"/>
+      </eAnnotations>
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decisionTimeStamp" eType="#//calendar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="observationDate" eType="#//calendar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="patientWeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="patientHeight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="patientAgeDays" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adviceText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rulesFiredText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rationaleText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="declineComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acceptComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="otherComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userAction" eType="#//UserActionType"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minutesToNextEvaluation"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="999999"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="createdBy" eType="#//User"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decisionID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@Id &#xA;@GeneratedValue(generator=&quot;system-uuid&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//StatusType"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UserActionType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="These are the four potential actions of a user of our CDS system when clinical data have been entered.&#xA;When these actions are selected, dirty flags should be turned off because data are saved.&#xA;&#xA;In addition there is a pending status that is used when a new decision object is created."/>
+    </eAnnotations>
+    <eLiterals name="Accept" literal="Accept">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="User accepts the advice of the software.  Accept comment will be possible."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Decline" value="1" literal="Decline">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="User declines to follow advice from the software.  Decline comment will be required."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Backchart" value="2" literal="Backchart">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="User is entering clinical data for storage but software is not providing advice.  Useful for entering old clinical data."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Passive" value="3" literal="Passive">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used to indicate that the inference engine was turned off, so there was no active decision support provided."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Pending" value="4" literal="Pending">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used when new decision object is created prior to any user action."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlucoseDecision" eSuperTypes="#//ClinicalDecision">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a glucose insulin protocol decision."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="previousGlucoseConcentration"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="previousObservationTime"
+        eType="#//calendar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serumGlucoseConcentration"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentInsulinDripRate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="carbohydrateStatus" eType="#//CarbohydrateStatusType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recommendedInsulinDripRate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recommendedInsulinBolus"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="recommendedGlucoseBolus"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="insulinMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patient" lowerBound="1"
+        eType="#//Patient" eOpposite="#//Patient/decisions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntensiveCareUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patients" upperBound="-1"
+        eType="#//Patient" containment="true" eKeys="#//Person/lastName #//Person/firstName #//Patient/medRecNum #//Patient/studyID"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+        eType="#//User" containment="true" eKeys="#//Person/lastName #//Person/firstName"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CarbohydrateStatusType">
+    <eLiterals name="unchanged" literal="No Change"/>
+    <eLiterals name="decreased" value="1" literal="Decreased or stopped"/>
+    <eLiterals name="increased" value="2" literal="Increased or started"/>
+  </eClassifiers>
+</ecore:EPackage>

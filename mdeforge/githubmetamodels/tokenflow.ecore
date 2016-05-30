@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tokenflow"
+    nsURI="http://www.uni-augsburg.de/pvs/MAF/dfa/tokenflow" nsPrefix="tokenflow">
+  <eClassifiers xsi:type="ecore:EClass" name="Token">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="splitNode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetNode" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outgoingCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenInfo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edge" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokenset" ordered="false"
+        upperBound="-1" eType="#//Token"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenStack">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokenInfos" upperBound="-1"
+        eType="#//TokenInfo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//componentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokenset" ordered="false"
+        upperBound="-1" eType="#//Token"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subComponents" ordered="false"
+        upperBound="-1" eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputEdges" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputEdges" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trivialNodes" ordered="false"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerEdges" ordered="false"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sccInputPorts" ordered="false"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sccOutputPorts" ordered="false"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validResult" eType="#//validationResult"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validClassification" eType="#//validationClassification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="componentType">
+    <eLiterals name="SEQUENCE" literal="SEQUENCE"/>
+    <eLiterals name="SEQUENCECYCLIC" value="1" literal="SEQUENCECYCLIC"/>
+    <eLiterals name="COMPLEX" value="2" literal="COMPLEX"/>
+    <eLiterals name="COMPLEXCYCLIC" value="3" literal="COMPLEXCYCLIC"/>
+    <eLiterals name="SCC" value="4" literal="SCC"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="validationResult">
+    <eLiterals name="UNCLASSIFIED" literal="UNCLASSIFIED"/>
+    <eLiterals name="SOUND" value="1" literal="SOUND"/>
+    <eLiterals name="UNSOUND" value="2" literal="UNSOUND"/>
+    <eLiterals name="UNKNOWN" value="3" literal="UNKNOWN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="validationClassification">
+    <eLiterals name="UNCLASSIFIED" literal="UNCLASSIFIED"/>
+    <eLiterals name="WELLSTRUCTUREDSEQUENCE" value="1" literal="WELLSTRUCTUREDSEQUENCE"/>
+    <eLiterals name="WELLSTRUCTUREDSEQUENTIALBRANCHING" value="2" literal="WELLSTRUCTUREDSEQUENTIALBRANCHING"/>
+    <eLiterals name="WELLSTRUCTUREDCONCURRENTBRANCHING" value="3" literal="WELLSTRUCTUREDCONCURRENTBRANCHING"/>
+    <eLiterals name="WELLSTRUCTUREDCYCLE" value="4" literal="WELLSTRUCTUREDCYCLE"/>
+    <eLiterals name="UNSTRUCTUREDCONCURRENT" value="5" literal="UNSTRUCTUREDCONCURRENT"/>
+    <eLiterals name="UNSTRUCTUREDSEQUENTIAL" value="6" literal="UNSTRUCTUREDSEQUENTIAL"/>
+    <eLiterals name="COMPLEXUNSOUNDLACKOFSYNC" value="7" literal="COMPLEXUNSOUNDLACKOFSYNC"/>
+    <eLiterals name="COMPLEXUNSOUNDDEADLOCK" value="8" literal="COMPLEXUNSOUNDDEADLOCK"/>
+    <eLiterals name="COMPLEXUNKNOWN" value="9" literal="COMPLEXUNKNOWN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConvergenceInfo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="detectedAt" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replacementSource" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replacementTargets" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conType" eType="#//convergenceType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConvergenceStack">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="convergenceInfos" upperBound="-1"
+        eType="#//ConvergenceInfo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="convergenceType">
+    <eLiterals name="SPLIT" literal="SPLIT"/>
+    <eLiterals name="MERGE" value="1" literal="MERGE"/>
+  </eClassifiers>
+</ecore:EPackage>

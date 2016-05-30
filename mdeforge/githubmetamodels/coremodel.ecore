@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="coremodel"
+    nsURI="http:///org/isistan/flabot/coremodel.ecore" nsPrefix="org.isistan.flabot.coremodel">
+  <eClassifiers xsi:type="ecore:EClass" name="BehavioralFeatureModel" eSuperTypes="#//FeatureModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentModel" eSuperTypes="#//ExtensibleElement #//NamedElementModel #//PropertyElementModel #//StereotypedElementModel #//NoteElementModel #//Adapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//FeatureModel" eOpposite="#//FeatureModel/components"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedPorts" upperBound="-1"
+        eType="#//PortModel" containment="true" resolveProxies="false" eOpposite="#//PortModel/component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreModel" eType="#//CoreModel"
+        transient="true" eOpposite="#//CoreModel/components"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CoreModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ResponsibilityGeneral ConditionEventGeneral"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ComponentModel" containment="true" resolveProxies="false" eOpposite="#//ComponentModel/coreModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilities" upperBound="-1"
+        eType="#//Responsibility" containment="true" resolveProxies="false" eOpposite="#//Responsibility/coreModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCaseMaps" upperBound="-1"
+        eType="#//UseCaseMap" containment="true" resolveProxies="false" eOpposite="#//UseCaseMap/coreModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceLinks" upperBound="-1"
+        eType="#//InterfaceLink" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//Relationship" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stereotypes" upperBound="-1"
+        eType="#//Stereotype" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="file" eType="ecore:EClass editormodel.ecore#//FlabotFileModel"
+        transient="true" eOpposite="editormodel.ecore#//FlabotFileModel/coreModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="families" upperBound="-1"
+        eType="#//Family" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="architecturalUseCaseMaps"
+        upperBound="-1" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionalUseCaseMaps"
+        upperBound="-1" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//ConditionEvent" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stubs" upperBound="-1"
+        eType="#//StubNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicStubs" upperBound="-1"
+        eType="#//DynamicStubNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditionedStubs" upperBound="-1"
+        eType="#//ConditionedStub" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureModel" eSuperTypes="#//NamedElementModel #//ExtensibleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ComponentModel" eOpposite="#//ComponentModel/features"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceModel" eSuperTypes="#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//PortModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="#//NamedElementModel #//PropertyElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provideds" upperBound="-1"
+        eType="#//InterfaceModel" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requireds" upperBound="-1"
+        eType="#//InterfaceModel" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//ComponentModel"
+        transient="true" eOpposite="#//ComponentModel/ownedPorts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Responsibility" eSuperTypes="#//BehavioralFeatureModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preconditions" upperBound="-1"
+        eType="#//Condition" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postconditions" upperBound="-1"
+        eType="#//Condition" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreModel" eType="#//CoreModel"
+        transient="true" eOpposite="#//CoreModel/responsibilities"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UseCaseMap" eSuperTypes="#//NamedElementModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UseCaseMapGeneral"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paths" upperBound="-1"
+        eType="#//Path" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentRoles" upperBound="-1"
+        eType="#//ComponentRole" containment="true" resolveProxies="false" eOpposite="#//ComponentRole/map"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreModel" eType="#//CoreModel"
+        transient="true" eOpposite="#//CoreModel/useCaseMaps"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelInfo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Path" eSuperTypes="#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//PathNode" containment="true" resolveProxies="false" eOpposite="#//PathNode/path"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endNodes" upperBound="-1"
+        eType="#//PathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startNodes" upperBound="-1"
+        eType="#//PathNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PathNode" abstract="true" eSuperTypes="#//NoteElementModel #//InterfacePrologCode #//ExtensibleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="path" eType="#//Path" transient="true"
+        eOpposite="#//Path/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previous" upperBound="-1"
+        eType="#//PathNode" eOpposite="#//PathNode/next"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" upperBound="-1" eType="#//PathNode"
+        eOpposite="#//PathNode/previous"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceLink" eSuperTypes="#//NamedElementModel #//NoteElementModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="InterfacesMustHaveSameName"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//InterfaceModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//InterfaceModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship" eSuperTypes="#//NamedElementModel #//PropertyElementModel #//StereotypedElementModel #//NoteElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//ComponentModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//ComponentModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//RelationshipDirection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentRole" eSuperTypes="#//ExtensibleElement #//NamedElementModel #//NoteElementModel #//Adapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//ComponentModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="map" eType="#//UseCaseMap"
+        transient="true" eOpposite="#//UseCaseMap/componentRoles"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstractInfo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Adapter" instanceClassName="org.eclipse.emf.common.notify.Adapter"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ForkNode" eSuperTypes="#//ResponsibilityNode #//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forkType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
+        eType="#//ForkCondition" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimplePathNode" eSuperTypes="#//PathNode #//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="map" eType="#//UseCaseMap"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Stereotype" eSuperTypes="#//NamedElementModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StereotypedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stereotype" eType="#//Stereotype"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityNode" eSuperTypes="#//SimplePathNode #//Adapter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ResponsibilityNodeGeneral"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibility" eType="#//Responsibility"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" eType="#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inputsCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputsCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//NamedElementModel #//InterfacePrologCode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ConditionMappingHasCorrectFamily"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCaseMap" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//ConditionEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="family" eType="#//Family"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceResponsibility" eType="#//ResponsibilityNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="precondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencyResponsibility"
+        eType="#//ResponsibilityNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Note">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="note" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//NoteElementModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NoteElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notes" upperBound="-1"
+        eType="#//Note"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Family" eSuperTypes="#//NamedElementModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="FamilyHasAllComponent"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="familyElement" upperBound="-1"
+        eType="#//FamilyElement" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associatedResponsibilities"
+        upperBound="-1" eType="#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="architecturalUseCaseMaps"
+        upperBound="-1" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionalUseCaseMaps"
+        upperBound="-1" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//ConditionEventToConditionEventMapEntry" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FamilyElement" eSuperTypes="#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCaseMap" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionalComponent" eType="#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="architecturalComponent"
+        eType="#//ComponentRole"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfacePrologCode" instanceClassName="org.isistan.flabot.coremodel.InterfacePrologCode"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JoinNode" eSuperTypes="#//ResponsibilityNode #//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Registrable" interface="true" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityRegistry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityBasedRegistry"
+        upperBound="-1" eType="#//ResponsibilityToRegistrableMapEntry" containment="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentBasedRegistry"
+        upperBound="-1" eType="#//ComponentToMapMapEntry" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roleBasedRegistry" upperBound="-1"
+        eType="#//RoleToMapMapEntry" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityToRegistrableMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//Responsibility"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Registrable"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentToMapMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//ComponentModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//ResponsibilityToRegistrableMapEntry" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoleToMapMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//ComponentToMapMapEntry" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StubNode" eSuperTypes="#//SimplePathNode #//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startPointReference" eType="#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPointReference" eType="#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedMap" eType="#//UseCaseMap"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="family" eType="#//Family"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForkCondition" eSuperTypes="#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensibleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedData" upperBound="-1"
+        eType="#//EStringToEObjectMapEntry" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEObjectMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionEvent" eSuperTypes="#//NamedElementModel #//ExtensibleElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionEvent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associatedConditions" upperBound="-1"
+        eType="#//Condition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionEventToConditionEventMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//ConditionEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//ConditionEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationshipDirection">
+    <eLiterals name="Unspecified"/>
+    <eLiterals name="Source" value="1"/>
+    <eLiterals name="Target" value="2"/>
+    <eLiterals name="Bidirectional" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimerNode" eSuperTypes="#//ResponsibilityNode #//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timerDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timerType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timerTimeOut" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timerTimeOutUnity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Hours"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectionArrowNode" eSuperTypes="#//SimplePathNode #//NamedElementModel"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionedStub" eSuperTypes="#//NamedElementModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stub" eType="#//StubNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityNode" eType="#//ResponsibilityNode"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicStubNode" eSuperTypes="#//SimplePathNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditionedStubs" upperBound="-1"
+        eType="#//ConditionedStub"/>
+  </eClassifiers>
+</ecore:EPackage>

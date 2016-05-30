@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="components"
+    nsURI="http://soton.ac.uk/models/fmusim/components/1.0" nsPrefix="components">
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentDiagram" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        upperBound="-1" eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectors" upperBound="-1"
+        eType="#//Connector" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//Port" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connector" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="CompatiblePorts CompleteConnection"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" eOpposite="#//Port/connector"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connector" eType="#//Connector"
+        eOpposite="#//Connector/ports"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//FmiTypes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//PortKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FmiTypes">
+    <eLiterals name="Real"/>
+    <eLiterals name="Integer" value="1" literal="Integer"/>
+    <eLiterals name="Boolean" value="2" literal="Boolean"/>
+    <eLiterals name="String" value="3" literal="String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PortKind">
+    <eLiterals name="Input"/>
+    <eLiterals name="Output" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventBComponent" eSuperTypes="#//Component">
+    <eOperations name="hasValidMachineReference" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="composed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeVariableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="machine" lowerBound="1"
+        eType="ecore:EClass ../../org.eventb.emf.core/model/eventbcore.ecore#//machine/Machine"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FMUComponent" eSuperTypes="#//Component">
+    <eOperations name="hasValidFmuPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fmu" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FMUPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventBPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fmiGetEvent" lowerBound="1"
+        eType="ecore:EClass ../../org.eventb.emf.core/model/eventbcore.ecore#//machine/Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fmiSetEvent" lowerBound="1"
+        eType="ecore:EClass ../../org.eventb.emf.core/model/eventbcore.ecore#//machine/Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+  </eClassifiers>
+</ecore:EPackage>

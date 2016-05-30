@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mm"
+    nsURI="http://eclipse.org/graphiti/mm" nsPrefix="mm">
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" ordered="false"
+        upperBound="-1" eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphicsAlgorithmContainer" abstract="true"
+      eSuperTypes="#//PropertyContainer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StyleContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="styles" ordered="false"
+        upperBound="-1" eType="#//algorithms/styles/Style" containment="true" eOpposite="#//algorithms/styles/Style/styleContainer"/>
+  </eClassifiers>
+  <eSubpackages name="pictograms" nsURI="http://eclipse.org/graphiti/mm/pictograms"
+      nsPrefix="pi">
+    <eClassifiers xsi:type="ecore:EClass" name="Shape" eSuperTypes="#//pictograms/AnchorContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="container" ordered="false"
+          unique="false" eType="#//pictograms/ContainerShape" eOpposite="#//pictograms/ContainerShape/children"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContainerShape" eSuperTypes="#//pictograms/Shape">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//pictograms/Shape" containment="true" eOpposite="#//pictograms/Shape/container"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//pictograms/ContainerShape #//StyleContainer">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="gridUnit" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="diagramTypeId" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connections" ordered="false"
+          upperBound="-1" eType="#//pictograms/Connection" containment="true" eOpposite="#//pictograms/Connection/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="snapToGrid" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="showGuides" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedSetVisibility" value="true"/>
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="documentation" value=" @deprecated This attribute simply exists because of compatibility (after &#xD;&#xA;removing it old diagrams would not be readable any more). It is never &#xD;&#xA;evaluated, instead the Graphiti framework queries the tool behaviour provider &#xD;&#xA;if guides shall be shown in a diagram editor.&#xD;&#xA;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="colors" ordered="false"
+          upperBound="-1" eType="#//algorithms/styles/Color" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fonts" ordered="false"
+          upperBound="-1" eType="#//algorithms/styles/Font" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pictogramLinks" ordered="false"
+          upperBound="-1" eType="#//pictograms/PictogramLink"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="verticalGridUnit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="-1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PictogramElement" abstract="true"
+        eSuperTypes="#//GraphicsAlgorithmContainer">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="graphicsAlgorithm" ordered="false"
+          unique="false" eType="#//algorithms/GraphicsAlgorithm" containment="true"
+          eOpposite="#//algorithms/GraphicsAlgorithm/pictogramElement"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="link" ordered="false"
+          unique="false" eType="#//pictograms/PictogramLink" containment="true" eOpposite="#//pictograms/PictogramLink/pictogramElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//pictograms/AnchorContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="start" ordered="false"
+          unique="false" lowerBound="1" eType="#//pictograms/Anchor" eOpposite="#//pictograms/Anchor/outgoingConnections"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="end" ordered="false"
+          unique="false" lowerBound="1" eType="#//pictograms/Anchor" eOpposite="#//pictograms/Anchor/incomingConnections"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" ordered="false"
+          unique="false" lowerBound="1" eType="#//pictograms/Diagram" eOpposite="#//pictograms/Diagram/connections"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connectionDecorators"
+          upperBound="-1" eType="#//pictograms/ConnectionDecorator" containment="true"
+          eOpposite="#//pictograms/ConnectionDecorator/connection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Anchor" abstract="true" eSuperTypes="#//pictograms/PictogramElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" ordered="false"
+          unique="false" lowerBound="1" eType="#//pictograms/AnchorContainer" eOpposite="#//pictograms/AnchorContainer/anchors"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingConnections"
+          ordered="false" upperBound="-1" eType="#//pictograms/Connection" eOpposite="#//pictograms/Connection/start"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="incomingConnections"
+          ordered="false" upperBound="-1" eType="#//pictograms/Connection" eOpposite="#//pictograms/Connection/end"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedGraphicsAlgorithm"
+          ordered="false" unique="false" eType="#//algorithms/GraphicsAlgorithm"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AnchorContainer" abstract="true" eSuperTypes="#//pictograms/PictogramElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="anchors" ordered="false"
+          upperBound="-1" eType="#//pictograms/Anchor" containment="true" eOpposite="#//pictograms/Anchor/parent"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FixPointAnchor" eSuperTypes="#//pictograms/AdvancedAnchor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="location" ordered="false"
+          unique="false" lowerBound="1" eType="#//algorithms/styles/Point" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BoxRelativeAnchor" eSuperTypes="#//pictograms/AdvancedAnchor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeWidth" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeHeight" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ChopboxAnchor" eSuperTypes="#//pictograms/Anchor"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConnectionDecorator" eSuperTypes="#//pictograms/Shape">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="locationRelative" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connection" ordered="false"
+          unique="false" lowerBound="1" eType="#//pictograms/Connection" eOpposite="#//pictograms/Connection/connectionDecorators"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FreeFormConnection" eSuperTypes="#//pictograms/Connection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bendpoints" upperBound="-1"
+          eType="#//algorithms/styles/Point" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ManhattanConnection" eSuperTypes="#//pictograms/Connection"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PictogramLink" eSuperTypes="#//PropertyContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pictogramElement" ordered="false"
+          unique="false" eType="#//pictograms/PictogramElement" eOpposite="#//pictograms/PictogramElement/link"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessObjects" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AdvancedAnchor" abstract="true" eSuperTypes="#//pictograms/Anchor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="useAnchorLocationAsConnectionEndpoint"
+          ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CurvedConnection" eSuperTypes="#//pictograms/Connection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="controlPoints" upperBound="-1"
+          eType="#//algorithms/styles/PrecisionPoint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositeConnection" eSuperTypes="#//pictograms/Connection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//pictograms/CurvedConnection"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="algorithms" nsURI="http://eclipse.org/graphiti/mm/algorithms"
+      nsPrefix="al">
+    <eClassifiers xsi:type="ecore:EClass" name="GraphicsAlgorithm" abstract="true"
+        eSuperTypes="#//GraphicsAlgorithmContainer #//algorithms/styles/AbstractStyle">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="graphicsAlgorithmChildren"
+          upperBound="-1" eType="#//algorithms/GraphicsAlgorithm" containment="true"
+          eOpposite="#//algorithms/GraphicsAlgorithm/parentGraphicsAlgorithm"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentGraphicsAlgorithm"
+          ordered="false" unique="false" eType="#//algorithms/GraphicsAlgorithm" eOpposite="#//algorithms/GraphicsAlgorithm/graphicsAlgorithmChildren"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pictogramElement" ordered="false"
+          unique="false" eType="#//pictograms/PictogramElement" eOpposite="#//pictograms/PictogramElement/graphicsAlgorithm"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="style" ordered="false"
+          unique="false" eType="#//algorithms/styles/Style"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Polyline" eSuperTypes="#//algorithms/GraphicsAlgorithm">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="points" upperBound="-1"
+          eType="#//algorithms/styles/Point" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Ellipse" eSuperTypes="#//algorithms/GraphicsAlgorithm"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//algorithms/AbstractText"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Polygon" eSuperTypes="#//algorithms/Polyline"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Rectangle" eSuperTypes="#//algorithms/GraphicsAlgorithm"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RoundedRectangle" eSuperTypes="#//algorithms/GraphicsAlgorithm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cornerHeight" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cornerWidth" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Image" eSuperTypes="#//algorithms/GraphicsAlgorithm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stretchH" ordered="false"
+          unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stretchV" ordered="false"
+          unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="proportional" ordered="false"
+          unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlatformGraphicsAlgorithm" eSuperTypes="#//algorithms/GraphicsAlgorithm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractText" abstract="true" eSuperTypes="#//algorithms/GraphicsAlgorithm">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="font" ordered="false"
+          unique="false" eType="#//algorithms/styles/Font"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizontalAlignment"
+          ordered="false" unique="false" eType="#//algorithms/styles/Orientation"
+          defaultValueLiteral="ALIGNMENT_LEFT"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="verticalAlignment" ordered="false"
+          unique="false" eType="#//algorithms/styles/Orientation" defaultValueLiteral="ALIGNMENT_CENTER"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="angle" ordered="false"
+          unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+          defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+          unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MultiText" eSuperTypes="#//algorithms/AbstractText"/>
+    <eSubpackages name="styles" nsURI="http://eclipse.org/graphiti/mm/algorithms/styles"
+        nsPrefix="st">
+      <eClassifiers xsi:type="ecore:EEnum" name="LineStyle">
+        <eLiterals name="SOLID"/>
+        <eLiterals name="DASH" value="1"/>
+        <eLiterals name="DASHDOT" value="2"/>
+        <eLiterals name="DASHDOTDOT" value="3"/>
+        <eLiterals name="DOT" value="4"/>
+        <eLiterals name="UNSPECIFIED" value="5" literal="UNSPECIFIED"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="Orientation">
+        <eLiterals name="ALIGNMENT_CENTER"/>
+        <eLiterals name="ALIGNMENT_LEFT" value="1"/>
+        <eLiterals name="ALIGNMENT_TOP" value="2"/>
+        <eLiterals name="ALIGNMENT_RIGHT" value="3"/>
+        <eLiterals name="ALIGNMENT_BOTTOM" value="4"/>
+        <eLiterals name="ALIGNMENT_MIDDLE" value="5"/>
+        <eLiterals name="UNSPECIFIED" value="6" literal="UNSPECIFIED"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="LocationType">
+        <eLiterals name="LOCATION_TYPE_RELATIVE" value="1"/>
+        <eLiterals name="LOCATION_TYPE_ABSOLUTE_START" value="2"/>
+        <eLiterals name="LOCATION_TYPE_ABSOLUTE_END" value="3"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="RenderingStyle">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="adaptedGradientColoredAreas"
+            eType="#//algorithms/styles/AdaptedGradientColoredAreas" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Style" eSuperTypes="#//StyleContainer #//algorithms/styles/AbstractStyle">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="font" ordered="false"
+            unique="false" eType="#//algorithms/styles/Font"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="horizontalAlignment"
+            ordered="false" unique="false" eType="#//algorithms/styles/Orientation"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="verticalAlignment"
+            ordered="false" unique="false" eType="#//algorithms/styles/Orientation"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="angle" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="stretchH" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="stretchV" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="proportional" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="styleContainer" ordered="false"
+            unique="false" lowerBound="1" eType="#//StyleContainer" eOpposite="#//StyleContainer/styles"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AbstractStyle" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="background" ordered="false"
+            unique="false" eType="#//algorithms/styles/Color"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="foreground" ordered="false"
+            unique="false" eType="#//algorithms/styles/Color"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineStyle" ordered="false"
+            unique="false" eType="#//algorithms/styles/LineStyle"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="filled" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+            defaultValueLiteral="true" unsettable="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineVisible" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+            defaultValueLiteral="true" unsettable="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="renderingStyle" ordered="false"
+            unique="false" eType="#//algorithms/styles/RenderingStyle" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="transparency" ordered="false"
+            unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GradientColoredLocation">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="locationType" lowerBound="1"
+            eType="#//algorithms/styles/LocationType"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="locationValue" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="color" lowerBound="1"
+            eType="#//algorithms/styles/Color" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GradientColoredArea">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//algorithms/styles/GradientColoredLocation"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//algorithms/styles/GradientColoredLocation"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GradientColoredAreas">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="gradientColor" upperBound="-1"
+            eType="#//algorithms/styles/GradientColoredArea" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="styleAdaption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AdaptedGradientColoredAreas">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="definedStyleId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="adaptedGradientColoredAreas"
+            upperBound="-1" eType="#//algorithms/styles/GradientColoredAreas" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradientType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Font">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="italic" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="bold" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Point">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="before" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="after" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Color">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="red" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="green" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="blue" ordered="false"
+            unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="suppressedSetVisibility" value="true"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PrecisionPoint">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

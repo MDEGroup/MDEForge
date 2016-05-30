@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="collaviz" nsURI="platform:/resource/Collaviz/model/Collaviz/collaviz.ecore"
+    nsPrefix="collaviz">
+  <eClassifiers xsi:type="ecore:EClass" name="WorldObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//Transform" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="color" lowerBound="1" eType="#//Color"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supported" upperBound="-1"
+        eType="#//SupportedObject" eOpposite="#//SupportedObject/support"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Juncture" eSuperTypes="#//DeformableObject">
+    <eOperations name="setNewRadius" eType="#//void">
+      <eParameters name="newRadius" eType="#//double"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="beginBall" lowerBound="1"
+        eType="#//Ball">
+      <eAnnotations source="http://Collaviz">
+        <details key="observability" value="true"/>
+        <details key="visualizable" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endBall" lowerBound="1"
+        eType="#//Ball">
+      <eAnnotations source="http://Collaviz">
+        <details key="observability" value="true"/>
+        <details key="visualizable" value="false"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="radius" lowerBound="1"
+        eType="#//double" defaultValueLiteral="0.1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" lowerBound="1"
+        eType="#//double" defaultValueLiteral="0.5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ball" eSuperTypes="#//SupportedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Quat4d">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="w" eType="#//double" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Vector3d">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="#//double" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transform">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="translation" lowerBound="1"
+        eType="#//Vector3d" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rotation" lowerBound="1"
+        eType="#//Quat4d" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scale" lowerBound="1" eType="#//Vector3d"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SupportedObject" abstract="true" eSuperTypes="#//WorldObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offset" lowerBound="1"
+        eType="#//Transform" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="support" lowerBound="1"
+        eType="#//WorldObject" eOpposite="#//WorldObject/supported"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Collaviz">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//WorldObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Color">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="r" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="g" eType="#//double" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="b" eType="#//double" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Light" abstract="true" eSuperTypes="#//SupportedObject">
+    <eOperations name="setIsOn" eType="#//void">
+      <eParameters name="on" eType="#//boolean"/>
+    </eOperations>
+    <eOperations name="setNewLightColor" eType="#//void">
+      <eParameters name="newColor" eType="#//Color"/>
+    </eOperations>
+    <eOperations name="processActionEvent" upperBound="-1" eType="#//void">
+      <eParameters name="actionId" eType="#//String"/>
+      <eParameters name="args" upperBound="-1" eType="#//Object"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lightColor" lowerBound="1"
+        eType="#//Color" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="on" lowerBound="1" eType="#//boolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attenuationPL" lowerBound="1"
+        eType="#//Vector3d" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectionalLight" eSuperTypes="#//Light">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="direction" lowerBound="1"
+        eType="#//Vector3d" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PointLight" eSuperTypes="#//Light">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attenuation" lowerBound="1"
+        eType="#//Vector3d" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeformableObject" eSuperTypes="#//SupportedObject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="float" instanceClassName="java.lang.Float"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="int" instanceClassName="java.lang.Integer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="boolean" instanceClassName="java.lang.Boolean"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="void" instanceClassName="java.lang.Void"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="double" instanceClassName="java.lang.Double"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="byte" instanceClassName="java.lang.Byte"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="short" instanceClassName="java.lang.Short"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="long" instanceClassName="java.lang.Long"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="char" instanceClassName="java.lang.Character"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+</ecore:EPackage>

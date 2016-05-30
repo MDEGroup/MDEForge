@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="emf" nsURI="http://com/ti/smartsight/pm.ecore" nsPrefix="com.ti.smartsight.pm.emf">
+  <eClassifiers xsi:type="ecore:EClass" name="PMConfig">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vdomains" upperBound="-1"
+        eType="#//VoltageDomain" containment="true" eOpposite="#//VoltageDomain/config"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="model" eType="ecore:EDataType ../../unw.base/model/db2emf.ecore#//EModelDB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VoltageDomain">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="voltageSrcs" upperBound="-1"
+        eType="#//VoltageSource" eOpposite="#//VoltageSource/voltageDomain"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pdomains" upperBound="-1"
+        eType="#//PowerDomain" containment="true" eOpposite="#//PowerDomain/vdomain"
+        eKeys="#//PowerDomain/name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separateMemPMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerSources" upperBound="-1"
+        eType="#//PowerSourceInstance" containment="true" eOpposite="#//PowerSourceInstance/vdomain"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="config" lowerBound="1"
+        eType="#//PMConfig" eOpposite="#//PMConfig/vdomains"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hgClass" eType="#//HG_CLASS"
+        defaultValueLiteral="NO_HG"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jupiterClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VoltageSource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pin" eType="ecore:EDataType ../../unw.base/model/db2emf.ecore#//EPortDBNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pdPortDefault" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="vdd"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="unique name inside the voltage domain"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="voltageDomain" lowerBound="1"
+        eType="#//VoltageDomain" eOpposite="#//VoltageDomain/voltageSrcs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultSuppliedPDomains"
+        upperBound="-1" eType="#//PowerDomain"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerDomain">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supplies" upperBound="-1"
+        eType="#//PDSupplyDirective" containment="true" eKeys="#//PDSupplyDirective/pdPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vdomain" lowerBound="1"
+        eType="#//VoltageDomain" eOpposite="#//VoltageDomain/pdomains"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//PDomainInstance" containment="true" eOpposite="#//PDomainInstance/pdomain"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultSupplies" upperBound="-1"
+        eType="#//PDSupplyDirective" volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separateMemPMode" eType="#//YesNoDef"
+        defaultValueLiteral="default"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hgClass" eType="#//HG_CLASS"
+        defaultValueLiteral="DEFAULT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PDSupplyDirective">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pdPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="vdd"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="driver" lowerBound="1"
+        eType="#//VoltageSource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PDomainInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instance" eType="ecore:EDataType ../../unw.base/model/db2emf.ecore#//EInstanceDBNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pdomain" lowerBound="1"
+        eType="#//PowerDomain" eOpposite="#//PowerDomain/instances"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLeaf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="separateMemPMode" eType="#//YesNoDef"
+        defaultValueLiteral="default"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="YesNoDef">
+    <eLiterals name="yes"/>
+    <eLiterals name="no" value="1"/>
+    <eLiterals name="default" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerSourceInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="model" eType="ecore:EDataType ../../unw.base/model/db2emf.ecore#//EModelDB"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pins" upperBound="-1" eType="#//PowerSourcePin"
+        containment="true" eOpposite="#//PowerSourcePin/powerInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vdomain" eType="#//VoltageDomain"
+        eOpposite="#//VoltageDomain/powerSources"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectInputVoltage" eType="#//CONNECT_DIRECTIVE"
+        defaultValueLiteral="UP"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectControl" eType="#//CONNECT_DIRECTIVE"
+        defaultValueLiteral="UP_WITH_PREFIX"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="if not defined, the instance name is used"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultSuppliedPDomains"
+        upperBound="-1" eType="#//PowerDomain"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PowerSourcePin" eSuperTypes="#//VoltageSource">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="created when its parent PowerSourceInstance  is created, and never changed after."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="powerInstance" lowerBound="1"
+        eType="#//PowerSourceInstance" unsettable="true" eOpposite="#//PowerSourceInstance/pins"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CONNECT_DIRECTIVE">
+    <eLiterals name="UP"/>
+    <eLiterals name="UP_WITH_PREFIX" value="1"/>
+    <eLiterals name="NONE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HG_CLASS">
+    <eLiterals name="NO_HG"/>
+    <eLiterals name="CLASS1_IP" value="1"/>
+    <eLiterals name="CLASS2_POWERDOMAIN" value="2"/>
+    <eLiterals name="CLASS3_CLOCK_GATING" value="3"/>
+    <eLiterals name="DEFAULT" value="4"/>
+  </eClassifiers>
+</ecore:EPackage>

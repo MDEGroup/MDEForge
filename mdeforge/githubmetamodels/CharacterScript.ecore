@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="characterScript" nsURI="http://www.unidue.de/ecg/characterScript/CharacterScript"
+    nsPrefix="characterScript">
+  <eClassifiers xsi:type="ecore:EClass" name="Characters">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templates" upperBound="-1"
+        eType="#//Template" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customs" eType="#//Customs"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="characters" upperBound="-1"
+        eType="#//Character" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Template">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaults" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customs" upperBound="-1"
+        eType="#//CustomAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="caName" eType="#//CustomAttributeName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumValues" upperBound="-1"
+        eType="#//EnumValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomAttributeName">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
+    <eLiterals name="NUMBER" literal="NUMBER"/>
+    <eLiterals name="TEXT" value="1" literal="TEXT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customs">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customAttributes" upperBound="-1"
+        eType="#//CustomAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Character">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" eType="#//Template"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultProperty" eSuperTypes="#//Property"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FullName" eSuperTypes="#//DefaultProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Description" eSuperTypes="#//DefaultProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//DefaultProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//CharaType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CharaType">
+    <eLiterals name="PC" literal="PC"/>
+    <eLiterals name="NPC" value="1" literal="NPC"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Age" eSuperTypes="#//DefaultProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sex" eSuperTypes="#//DefaultProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//CharaSex"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CharaSex">
+    <eLiterals name="male" literal="male"/>
+    <eLiterals name="female" value="1" literal="female"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customAttributeRef" eType="#//CustomAttributeName"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumValue" eType="#//EnumValue"/>
+  </eClassifiers>
+</ecore:EPackage>

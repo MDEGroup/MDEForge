@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="core"
+    nsURI="http:///org/generationcp/model/core.ecore" nsPrefix="org.generationcp.model.core">
+  <eClassifiers xsi:type="ecore:EClass" name="Change">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="#//Entity"
+        eOpposite="#//Entity/auditTrail"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ontology.ecore#//SimpleOntologyTerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changedFeatures" eType="ecore:EClass feature.ecore#//FeatureSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="justification" eType="ecore:EClass publication.ecore#//BiblioReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="curator" lowerBound="1"
+        eType="ecore:EClass organization.ecore#//Contact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="informationSource" eType="ecore:EClass organization.ecore#//Contact"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="identification.ecore#//Identifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ontology.ecore#//SimpleOntologyTerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryCitation" eType="ecore:EClass publication.ecore#//BiblioReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="citations" eType="ecore:EClass publication.ecore#//BiblioReferenceSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="synonyms" eType="ecore:EClass identification.ecore#//IdentifierSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//EntityRelationship" eOpposite="#//EntityRelationship/subject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="studies" upperBound="-1"
+        eType="ecore:EClass study.ecore#//Study"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="ecore:EClass identification.ecore#//SimpleIdentifier"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auditTrail" lowerBound="1"
+        upperBound="-1" eType="#//Change" eOpposite="#//Change/entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityRelationship" eSuperTypes="feature.ecore#//SimpleFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
+        eType="#//Entity" eOpposite="#//Entity/relationships"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" lowerBound="1"
+        upperBound="-1" eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="ecore:EClass identification.ecore#//SimpleIdentifier"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cm"
+    nsURI="http://www.quamoco.de/cm/v1" nsPrefix="cm">
+  <eClassifiers xsi:type="ecore:EClass" name="Checklist">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Checklist has a name, an  inspector, and several inspection items &#xD;&#xA;that have to be evaluated."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inspector" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The inspector the checklist shall be completed by."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionItems" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//InspectionItem" containment="true"
+        resolveProxies="false" eOpposite="#//InspectionItem/checklist"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionMeasures" lowerBound="1"
+        upperBound="-1" eType="#//InspectionMeasure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qmFileName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the quality model file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InspectionMeasure">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A measure to be inspected."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureInfo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Optional information on the measurement."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measureName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the measurement evaluated in the checklist."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instrumentInfo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Optional information on the manual instrument."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sampleType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The type of the sample, e.g. Identifier."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentations" upperBound="-1"
+        eType="#//Documentation" containment="true" eOpposite="#//Documentation/inspectionMeasure"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InspectionItem">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Inspection Item is one item to be inspected consisting of one or more samples and one or more measures."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="checklist" lowerBound="1"
+        eType="#//Checklist" eOpposite="#//Checklist/inspectionItems"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionMeasures" lowerBound="1"
+        upperBound="-1" eType="#//InspectionMeasure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="samples" lowerBound="1"
+        upperBound="-1" eType="#//Sample" containment="true" eOpposite="#//Sample/inspectionItem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionEvaluations"
+        lowerBound="1" upperBound="-1" eType="#//InspectionEvaluation" containment="true"
+        eOpposite="#//InspectionEvaluation/inspectionItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sample">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One sample (e.g., a code snippet or source code file) to be inspected."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the item."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packagePath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The path of the package the source code file is contained in."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourcePath" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The path of the source code file this inspection item is taken from."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The line number indicating the position of the sample in the source code file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The int value indicating the start position of the sample in the source code file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The int value indicating the end position of the sample in the source code file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionItem" lowerBound="1"
+        eType="#//InspectionItem" eOpposite="#//InspectionItem/samples"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Documentation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A documentation file consisting of a name and a path."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the documentation file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The path to the documentation file."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The type of the documentation: either &quot;url&quot; or &quot;file&quot;."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionMeasure" lowerBound="1"
+        eType="#//InspectionMeasure" eOpposite="#//InspectionMeasure/documentations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InspectionEvaluation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="One evaluation of a sample relating to a measure."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The value of the evaluation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sample" lowerBound="1"
+        eType="#//Sample"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionMeasure" lowerBound="1"
+        eType="#//InspectionMeasure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inspectionItem" lowerBound="1"
+        eType="#//InspectionItem" eOpposite="#//InspectionItem/inspectionEvaluations"/>
+  </eClassifiers>
+</ecore:EPackage>

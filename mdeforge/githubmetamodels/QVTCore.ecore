@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="qvtcore"
+    nsURI="http://www.schema.omg.org/spec/QVT/1.0/qvtcore" nsPrefix="qvtcore">
+  <eClassifiers xsi:type="ecore:EClass" name="Area" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guardPattern" lowerBound="1"
+        eType="#//GuardPattern" containment="true" eOpposite="#//GuardPattern/area"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bottomPattern" lowerBound="1"
+        eType="#//BottomPattern" containment="true" eOpposite="#//BottomPattern/area"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bottomPattern" lowerBound="1"
+        eType="#//BottomPattern" transient="true" eOpposite="#//BottomPattern/assignment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotExpression" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//OclExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass essentialocl.ecore#//OclExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType emof.ecore#//Boolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BottomPattern" eSuperTypes="#//CorePattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="area" lowerBound="1" eType="#//Area"
+        transient="true" eOpposite="#//Area/bottomPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" upperBound="-1"
+        eType="#//Assignment" containment="true" eOpposite="#//Assignment/bottomPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="realizedVariable" upperBound="-1"
+        eType="#//RealizedVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enforcementOperation" upperBound="-1"
+        eType="#//EnforcementOperation" containment="true" eOpposite="#//EnforcementOperation/bottomPattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GuardPattern" eSuperTypes="#//CorePattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="area" lowerBound="1" eType="#//Area"
+        transient="true" eOpposite="#//Area/guardPattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mapping" eSuperTypes="qvtbase.ecore#//Rule #//Area">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" upperBound="-1"
+        eType="#//Mapping"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="local" upperBound="-1"
+        eType="#//Mapping" eOpposite="#//Mapping/context"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Mapping"
+        eOpposite="#//Mapping/local"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RealizedVariable" eSuperTypes="essentialocl.ecore#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CoreDomain" eSuperTypes="qvtbase.ecore#//Domain #//Area"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CorePattern" eSuperTypes="qvtbase.ecore#//Pattern"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EnforcementOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enforcementMode" eType="#//EnforcementMode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bottomPattern" eType="#//BottomPattern"
+        transient="true" eOpposite="#//BottomPattern/enforcementOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationCallExp" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//OperationCallExp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EnforcementMode">
+    <eLiterals name="Creation"/>
+    <eLiterals name="Deletion" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyAssignment" eSuperTypes="#//Assignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetProperty" lowerBound="1"
+        eType="ecore:EClass emof.ecore#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableAssignment" eSuperTypes="#//Assignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetVariable" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//Variable"/>
+  </eClassifiers>
+</ecore:EPackage>

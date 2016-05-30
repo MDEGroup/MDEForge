@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="atomic" nsURI="http://atomic/1.0" nsPrefix="atomic">
+  <eClassifiers xsi:type="ecore:EClass" name="AGraph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+        eType="#//AToken" containment="true" eOpposite="#//AToken/graph"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" upperBound="-1"
+        eType="#//AStructured" containment="true" eOpposite="#//AStructured/graph"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="corpus" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//AEdge" containment="true" eOpposite="#//AEdge/graph"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AToken" eSuperTypes="#//ANode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//AToken"
+        eOpposite="#//AToken/previous"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previous" eType="#//AToken"
+        eOpposite="#//AToken/next"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" eType="#//AGraph"
+        eOpposite="#//AGraph/tokens"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ANode" abstract="true" eSuperTypes="#//XAnnotable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetedges" upperBound="-1"
+        eType="#//ATargetEdge" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XAnnotable" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AStructured" eSuperTypes="#//ANode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" lowerBound="1" eType="#//AGraph"
+        eOpposite="#//AGraph/structures"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AEdge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" lowerBound="1" eType="#//AGraph"
+        eOpposite="#//AGraph/edges"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ANode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ANode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ATargetEdge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ANode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" lowerBound="1" eType="#//AGraph"/>
+  </eClassifiers>
+</ecore:EPackage>

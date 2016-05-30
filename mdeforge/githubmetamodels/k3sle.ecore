@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="k3sle" nsURI="http://k3sle/1.0" nsPrefix="k3sle">
+  <eSubpackages name="interface" nsURI="http://k3sle/interface/1.0" nsPrefix="interface">
+    <eClassifiers xsi:type="ecore:EClass" name="Model">
+      <eOperations name="isTypeOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="mt" lowerBound="1" eType="#//interface/ModelType"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="strictType" eType="#//interface/ModelType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelType">
+      <eOperations name="subtypeOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="mt" lowerBound="1" eType="#//interface/ModelType"/>
+        <eParameters name="kind" lowerBound="1" eType="#//interface/Subtyping"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="compose" upperBound="-1"
+          eType="#//manipulation/composition/LanguageCompositionOperator" containment="true"
+          eOpposite="#//manipulation/composition/LanguageCompositionOperator/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="isComposedBy" upperBound="-1"
+          eType="#//manipulation/composition/LanguageCompositionOperator" eOpposite="#//manipulation/composition/LanguageCompositionOperator/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+          eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modelOperations" upperBound="-1"
+          eType="#//interface/ModelOperation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dse" upperBound="-1"
+          eType="#//interface/DSE" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelOperation">
+      <eOperations name="staticfootprint" eType="#//interface/ModelType"/>
+      <eOperations name="dynamicfootprint" eType="#//interface/ModelType">
+        <eParameters name="model" lowerBound="1" eType="#//interface/Model"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pre" upperBound="-1"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="post" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modelElementOperations"
+          upperBound="-1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EOperation"
+          derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Subtyping">
+      <eLiterals name="withoutConstraints"/>
+      <eLiterals name="withConstraints" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DSE"/>
+  </eSubpackages>
+  <eSubpackages name="manipulation" nsURI="http://k3sle/manipulation/1.0" nsPrefix="manipulation">
+    <eSubpackages name="composition" nsURI="http://k3sle/manipulation/composition/1.0"
+        nsPrefix="composition">
+      <eClassifiers xsi:type="ecore:EClass" name="Inheritance" eSuperTypes="#//manipulation/composition/LanguageCompositionOperator">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="filteredModelOperations"
+            upperBound="-1" eType="#//interface/ModelOperation"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Merge" eSuperTypes="#//manipulation/composition/LanguageCompositionOperator"/>
+      <eClassifiers xsi:type="ecore:EClass" name="LanguageCompositionOperator" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+            eType="#//interface/ModelType" eOpposite="#//interface/ModelType/compose"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+            eType="#//interface/ModelType" eOpposite="#//interface/ModelType/isComposedBy"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTransient" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="adaptations" upperBound="-1"
+            eType="#//manipulation/composition/AdaptationOperator" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AdaptationOperator" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Rename" eSuperTypes="#//manipulation/composition/AdaptationOperator">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+            eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//ENamedElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+            eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//ENamedElement"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="slicing" nsURI="http://k3sle/manipulation/slicing/1.0" nsPrefix="slicing">
+      <eClassifiers xsi:type="ecore:EClass" name="Slicer" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+            eType="#//interface/ModelType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Pruner" eSuperTypes="#//manipulation/slicing/Slicer"/>
+      <eClassifiers xsi:type="ecore:EClass" name="FreeSlicer" eSuperTypes="#//manipulation/slicing/Slicer">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1"
+            eType="ecore:EClass kompren.ecore#//inria/triskell/kompren/slicer/Slicer"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="variability" nsURI="http://k3sle/variability/1.0" nsPrefix="variability"/>
+  <eSubpackages name="impl" nsURI="http://k3sle/impl/1.0" nsPrefix="impl">
+    <eClassifiers xsi:type="ecore:EClass" name="ModelTypeDefinition" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="required" eType="#//interface/ModelType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="provided" lowerBound="1"
+          eType="#//interface/ModelType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MoC"/>
+    <eSubpackages name="kermeta2" nsURI="http://k3sle/impl/k2/1.0" nsPrefix="kermeta2">
+      <eClassifiers xsi:type="ecore:EClass" name="Metamodel" eSuperTypes="#//impl/ModelTypeDefinition"/>
+    </eSubpackages>
+    <eSubpackages name="kermeta3" nsURI="http://k3sle/impl/k3/1.0" nsPrefix="kermeta3">
+      <eClassifiers xsi:type="ecore:EClass" name="Todo" eSuperTypes="#//impl/ModelTypeDefinition"/>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

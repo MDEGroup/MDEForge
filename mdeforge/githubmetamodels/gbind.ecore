@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gbind"
+    nsURI="http://genericity/language/gbind" nsPrefix="gbind">
+  <eSubpackages name="simpleocl" nsURI="http://soft.vub.ac.be/simpleocl/2011/SimpleOCL"
+      nsPrefix="simpleocl">
+    <eClassifiers xsi:type="ecore:EClass" name="LocatedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" lowerBound="1"
+          eType="#//simpleocl/Integer" changeable="false" volatile="true" transient="true"
+          defaultValueLiteral="-1" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
+          eType="#//simpleocl/Integer" changeable="false" volatile="true" transient="true"
+          defaultValueLiteral="-1" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="charStart" lowerBound="1"
+          eType="#//simpleocl/Integer" changeable="false" volatile="true" transient="true"
+          defaultValueLiteral="-1" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="charEnd" lowerBound="1"
+          eType="#//simpleocl/Integer" changeable="false" volatile="true" transient="true"
+          defaultValueLiteral="-1" derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Module" eSuperTypes="#//simpleocl/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="metamodels" upperBound="-1"
+          eType="#//simpleocl/OclMetamodel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+          eType="#//simpleocl/Import" containment="true" eOpposite="#//simpleocl/Import/module"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//simpleocl/ModuleElement" containment="true" eOpposite="#//simpleocl/ModuleElement/module"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModuleElement" abstract="true" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+          eType="#//simpleocl/Module" eOpposite="#//simpleocl/Module/elements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Import" eSuperTypes="#//simpleocl/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+          eType="#//simpleocl/Module" eOpposite="#//simpleocl/Module/imports"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclExpression" abstract="true" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/oclExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ifExp3" ordered="false"
+          eType="#//simpleocl/IfExp" eOpposite="#//simpleocl/IfExp/elseExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="appliedProperty" ordered="false"
+          eType="#//simpleocl/PropertyCallExp" eOpposite="#//simpleocl/PropertyCallExp/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collection" ordered="false"
+          eType="#//simpleocl/CollectionExp" eOpposite="#//simpleocl/CollectionExp/elements"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="letExp" ordered="false"
+          eType="#//simpleocl/LetExp" eOpposite="#//simpleocl/LetExp/in_"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loopExp" ordered="false"
+          eType="#//simpleocl/LoopExp" eOpposite="#//simpleocl/LoopExp/body"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentOperation" ordered="false"
+          eType="#//simpleocl/OperationCall" eOpposite="#//simpleocl/OperationCall/arguments"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initializedVariable"
+          ordered="false" eType="#//simpleocl/LocalVariable" eOpposite="#//simpleocl/LocalVariable/initExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ifExp2" ordered="false"
+          eType="#//simpleocl/IfExp" eOpposite="#//simpleocl/IfExp/thenExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owningOperation" ordered="false"
+          eType="#//simpleocl/Operation" eOpposite="#//simpleocl/Operation/body"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ifExp1" ordered="false"
+          eType="#//simpleocl/IfExp" eOpposite="#//simpleocl/IfExp/condition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owningAttribute" ordered="false"
+          eType="#//simpleocl/Attribute" eOpposite="#//simpleocl/Attribute/initExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="appliedOperator" ordered="false"
+          eType="#//simpleocl/OperatorCallExp" eOpposite="#//simpleocl/OperatorCallExp/source"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referredVariable" ordered="false"
+          lowerBound="1" eType="#//simpleocl/VariableDeclaration" eOpposite="#//simpleocl/VariableDeclaration/variableExp"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SuperExp" eSuperTypes="#//simpleocl/OclExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SelfExp" eSuperTypes="#//simpleocl/OclExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EnvExp" eSuperTypes="#//simpleocl/OclExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimitiveExp" abstract="true" eSuperTypes="#//simpleocl/OclExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StringExp" eSuperTypes="#//simpleocl/PrimitiveExp">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringSymbol" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanExp" eSuperTypes="#//simpleocl/PrimitiveExp">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="booleanSymbol" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/Boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericExp" abstract="true" eSuperTypes="#//simpleocl/PrimitiveExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RealExp" eSuperTypes="#//simpleocl/NumericExp">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="realSymbol" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/Double"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntegerExp" eSuperTypes="#//simpleocl/NumericExp">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="integerSymbol" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/Integer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollectionExp" abstract="true" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/collection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BagExp" eSuperTypes="#//simpleocl/CollectionExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrderedSetExp" eSuperTypes="#//simpleocl/CollectionExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SequenceExp" eSuperTypes="#//simpleocl/CollectionExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SetExp" eSuperTypes="#//simpleocl/CollectionExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TupleExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tuplePart" upperBound="-1"
+          eType="#//simpleocl/TuplePart" containment="true" eOpposite="#//simpleocl/TuplePart/tuple"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TuplePart" eSuperTypes="#//simpleocl/LocalVariable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tuple" ordered="false"
+          lowerBound="1" eType="#//simpleocl/TupleExp" eOpposite="#//simpleocl/TupleExp/tuplePart"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MapExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//simpleocl/MapElement" containment="true" eOpposite="#//simpleocl/MapElement/map"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MapElement" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="map" ordered="false"
+          lowerBound="1" eType="#//simpleocl/MapExp" eOpposite="#//simpleocl/MapExp/elements"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="key" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclUndefinedExp" eSuperTypes="#//simpleocl/OclExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticPropertyCallExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/staticPropertyCall"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticCall" lowerBound="1"
+          eType="#//simpleocl/StaticPropertyCall" containment="true" eOpposite="#//simpleocl/StaticPropertyCall/staticCallExp"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticPropertyCall" abstract="true"
+        eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticCallExp" lowerBound="1"
+          eType="#//simpleocl/StaticPropertyCallExp" eOpposite="#//simpleocl/StaticPropertyCallExp/staticCall"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticNavigationOrAttributeCall" eSuperTypes="#//simpleocl/StaticPropertyCall">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticOperationCall" eSuperTypes="#//simpleocl/StaticPropertyCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationName" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyCallExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="calls" lowerBound="1"
+          upperBound="-1" eType="#//simpleocl/PropertyCall" containment="true" eOpposite="#//simpleocl/PropertyCall/callExp"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/appliedProperty"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyCall" abstract="true" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="callExp" lowerBound="1"
+          eType="#//simpleocl/PropertyCallExp" eOpposite="#//simpleocl/PropertyCallExp/calls"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NavigationOrAttributeCall" eSuperTypes="#//simpleocl/PropertyCall">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationCall" eSuperTypes="#//simpleocl/PropertyCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/parentOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationName" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperatorCallExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//simpleocl/OclExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationName" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/appliedOperator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NotOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RelOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EqOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AddOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IntOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MulOpCallExp" eSuperTypes="#//simpleocl/OperatorCallExp"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LambdaCallExp" eSuperTypes="#//simpleocl/VariableExp">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BraceExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exp" lowerBound="1" eType="#//simpleocl/OclExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollectionOperationCall" eSuperTypes="#//simpleocl/OperationCall"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LoopExp" abstract="true" eSuperTypes="#//simpleocl/PropertyCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="body" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/loopExp"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterators" ordered="false"
+          lowerBound="1" upperBound="-1" eType="#//simpleocl/Iterator" containment="true"
+          eOpposite="#//simpleocl/Iterator/loopExpr"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IterateExp" eSuperTypes="#//simpleocl/LoopExp">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="result" ordered="false"
+          lowerBound="1" eType="#//simpleocl/LocalVariable" containment="true" eOpposite="#//simpleocl/LocalVariable/baseExp"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IteratorExp" eSuperTypes="#//simpleocl/LoopExp">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LetExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" ordered="false"
+          lowerBound="1" eType="#//simpleocl/LocalVariable" containment="true" eOpposite="#//simpleocl/LocalVariable/letExp"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="in_" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/letExp"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IfExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpression" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/ifExp2"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/ifExp1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elseExpression" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/ifExp3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" abstract="true"
+        eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="varName" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/variableDeclaration"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableExp" ordered="false"
+          upperBound="-1" eType="#//simpleocl/VariableExp" eOpposite="#//simpleocl/VariableExp/referredVariable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LocalVariable" eSuperTypes="#//simpleocl/VariableDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="letExp" ordered="false"
+          eType="#//simpleocl/LetExp" eOpposite="#//simpleocl/LetExp/variable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/initializedVariable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="baseExp" ordered="false"
+          eType="#//simpleocl/IterateExp" eOpposite="#//simpleocl/IterateExp/result"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eq" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Iterator" eSuperTypes="#//simpleocl/VariableDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="loopExpr" ordered="false"
+          eType="#//simpleocl/LoopExp" eOpposite="#//simpleocl/LoopExp/iterators"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//simpleocl/VariableDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" ordered="false"
+          lowerBound="1" eType="#//simpleocl/Operation" eOpposite="#//simpleocl/Operation/parameters"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollectionType" eSuperTypes="#//simpleocl/OclType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/collectionTypes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclType" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definitions" ordered="false"
+          eType="#//simpleocl/OclContextDefinition" eOpposite="#//simpleocl/OclContextDefinition/context_"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="oclExpression" ordered="false"
+          eType="#//simpleocl/OclExpression" eOpposite="#//simpleocl/OclExpression/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" ordered="false"
+          eType="#//simpleocl/Operation" eOpposite="#//simpleocl/Operation/returnType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mapType2" ordered="false"
+          eType="#//simpleocl/MapType" eOpposite="#//simpleocl/MapType/valueType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" ordered="false"
+          eType="#//simpleocl/Attribute" eOpposite="#//simpleocl/Attribute/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mapType" ordered="false"
+          eType="#//simpleocl/MapType" eOpposite="#//simpleocl/MapType/keyType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collectionTypes" ordered="false"
+          eType="#//simpleocl/CollectionType" eOpposite="#//simpleocl/CollectionType/elementType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tupleTypeAttribute" ordered="false"
+          eType="#//simpleocl/TupleTypeAttribute" eOpposite="#//simpleocl/TupleTypeAttribute/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableDeclaration"
+          ordered="false" eType="#//simpleocl/VariableDeclaration" eOpposite="#//simpleocl/VariableDeclaration/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lambdaReturnType" eType="#//simpleocl/LambdaType"
+          eOpposite="#//simpleocl/LambdaType/returnType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lambdaArgType" eType="#//simpleocl/LambdaType"
+          eOpposite="#//simpleocl/LambdaType/argumentTypes"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticPropertyCall" eType="#//simpleocl/StaticPropertyCallExp"
+          eOpposite="#//simpleocl/StaticPropertyCallExp/source"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclModelElementExp" eSuperTypes="#//simpleocl/OclExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1"
+          eType="#//simpleocl/OclModel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Primitive" abstract="true" eSuperTypes="#//simpleocl/OclType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//simpleocl/Primitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanType" eSuperTypes="#//simpleocl/Primitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericType" abstract="true" eSuperTypes="#//simpleocl/Primitive"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IntegerType" eSuperTypes="#//simpleocl/NumericType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RealType" eSuperTypes="#//simpleocl/NumericType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BagType" eSuperTypes="#//simpleocl/CollectionType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrderedSetType" eSuperTypes="#//simpleocl/CollectionType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SequenceType" eSuperTypes="#//simpleocl/CollectionType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SetType" eSuperTypes="#//simpleocl/CollectionType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OclAnyType" eSuperTypes="#//simpleocl/OclType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TupleType" eSuperTypes="#//simpleocl/OclType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//simpleocl/TupleTypeAttribute" containment="true" eOpposite="#//simpleocl/TupleTypeAttribute/tupleType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TupleTypeAttribute" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/tupleTypeAttribute"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tupleType" ordered="false"
+          lowerBound="1" eType="#//simpleocl/TupleType" eOpposite="#//simpleocl/TupleType/attributes"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false"
+          unique="false" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclModelElement" eSuperTypes="#//simpleocl/OclType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclModel" eOpposite="#//simpleocl/OclModel/elements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MapType" eSuperTypes="#//simpleocl/OclType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="valueType" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/mapType2"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="keyType" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/mapType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LambdaType" eSuperTypes="#//simpleocl/OclType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
+          eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/lambdaReturnType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argumentTypes" upperBound="-1"
+          eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/lambdaArgType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EnvType" eSuperTypes="#//simpleocl/OclType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OclFeatureDefinition" eSuperTypes="#//simpleocl/ModuleElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclFeature" containment="true" eOpposite="#//simpleocl/OclFeature/definition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="context_" ordered="false"
+          eType="#//simpleocl/OclContextDefinition" containment="true" eOpposite="#//simpleocl/OclContextDefinition/definition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" lowerBound="1"
+          eType="#//simpleocl/Boolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclContextDefinition" eSuperTypes="#//simpleocl/LocatedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclFeatureDefinition" eOpposite="#//simpleocl/OclFeatureDefinition/context_"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="context_" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/definitions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclFeature" abstract="true" eSuperTypes="#//simpleocl/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definition" ordered="false"
+          eType="#//simpleocl/OclFeatureDefinition" eOpposite="#//simpleocl/OclFeatureDefinition/feature"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eq" lowerBound="1" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//simpleocl/OclFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/owningAttribute"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/attribute"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//simpleocl/OclFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//simpleocl/Parameter" containment="true" eOpposite="#//simpleocl/Parameter/operation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclType" containment="true" eOpposite="#//simpleocl/OclType/operation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="body" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclExpression" containment="true" eOpposite="#//simpleocl/OclExpression/owningOperation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclModel" abstract="true" eSuperTypes="#//simpleocl/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" ordered="false"
+          upperBound="-1" eType="#//simpleocl/OclModelElement" eOpposite="#//simpleocl/OclModelElement/model"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclMetamodel" eSuperTypes="#//simpleocl/OclModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" ordered="false"
+          upperBound="-1" eType="#//simpleocl/OclInstanceModel" eOpposite="#//simpleocl/OclInstanceModel/metamodel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="#//simpleocl/String"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclInstanceModel" eSuperTypes="#//simpleocl/OclModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="metamodel" ordered="false"
+          lowerBound="1" eType="#//simpleocl/OclMetamodel" eOpposite="#//simpleocl/OclMetamodel/model"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="boolean"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Double" instanceClassName="double"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="int"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  </eSubpackages>
+  <eSubpackages name="dsl" nsURI="http://http://genericity/language/gbind/dsl" nsPrefix="bindingModel">
+    <eClassifiers xsi:type="ecore:EClass" name="BindingModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+          eType="#//dsl/ConceptBinding" containment="true" eOpposite="#//dsl/ConceptBinding/model_"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="helpers" upperBound="-1"
+          eType="#//dsl/BaseHelper" containment="true" eOpposite="#//dsl/BaseHelper/model_"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conceptMetaclasses" upperBound="-1"
+          eType="#//dsl/ConceptMetaclass" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concreteMetaclasses"
+          upperBound="-1" eType="#//dsl/ConcreteMetaclass" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="virtualMetaclasses" upperBound="-1"
+          eType="#//dsl/VirtualMetaclass" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundConcept" lowerBound="1"
+          eType="#//dsl/MetamodelDeclaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundMetamodel" lowerBound="1"
+          eType="#//dsl/MetamodelDeclaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="options" lowerBound="1"
+          eType="#//dsl/BindingOptions" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BindingOptions">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="enableClassMerge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MetamodelDeclaration" eSuperTypes="#//simpleocl/OclMetamodel">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="metamodelURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Metaclass" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="eclass" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConceptMetaclass" eSuperTypes="#//dsl/Metaclass"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConcreteMetaclass" eSuperTypes="#//dsl/Metaclass"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConceptBinding" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="debugName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model_" eType="#//dsl/BindingModel"
+          eOpposite="#//dsl/BindingModel/bindings"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassBinding" eSuperTypes="#//dsl/ConceptBinding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concept" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concrete" lowerBound="1"
+          upperBound="-1" eType="#//dsl/ConcreteMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="whenClause" lowerBound="1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntermediateClassBinding" eSuperTypes="#//dsl/ConceptBinding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concept" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concreteClass" lowerBound="1"
+          eType="#//dsl/ConcreteMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concreteReference" lowerBound="1"
+          eType="#//dsl/ConcreteReferencDeclaringVar" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conceptContext" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="conceptReferenceName"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="featureBindings" upperBound="-1"
+          eType="#//dsl/BaseFeatureBinding" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConcreteReferencDeclaringVar" eSuperTypes="#//simpleocl/VariableDeclaration"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VirtualMetaclass" eSuperTypes="#//dsl/Metaclass">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+          eType="#//dsl/VirtualReference" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//dsl/VirtualAttribute" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="init" lowerBound="1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VirtualFeature">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VirtualReference" eSuperTypes="#//dsl/VirtualFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type_" lowerBound="1"
+          eType="#//dsl/ConcreteMetaclass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VirtualAttribute" eSuperTypes="#//dsl/VirtualFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type_" lowerBound="1"
+          eType="#//simpleocl/Primitive" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VirtualClassBinding" eSuperTypes="#//dsl/ConceptBinding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concept" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="virtual" lowerBound="1"
+          eType="#//dsl/VirtualMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refFeatures" upperBound="-1"
+          eType="#//dsl/ConceptFeatureRef" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConceptFeatureRef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conceptClass" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BaseFeatureBinding" eSuperTypes="#//dsl/ConceptBinding">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="conceptFeature" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conceptClass" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" eType="#//dsl/ConcreteMetaclass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RenamingFeatureBinding" eSuperTypes="#//dsl/BaseFeatureBinding">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="concreteFeature" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OclFeatureBinding" eSuperTypes="#//dsl/BaseFeatureBinding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concrete" lowerBound="1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BaseHelper">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1"
+          eType="#//simpleocl/OclExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//simpleocl/OclType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model_" eType="#//dsl/BindingModel"
+          eOpposite="#//dsl/BindingModel/helpers"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConceptHelper" eSuperTypes="#//dsl/BaseHelper">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" eType="#//dsl/ConcreteMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contextClass" lowerBound="1"
+          eType="#//dsl/ConceptMetaclass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LocalHelper" eSuperTypes="#//dsl/BaseHelper">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//dsl/ConcreteMetaclass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//dsl/HelperParameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HelperParameter" eSuperTypes="#//simpleocl/VariableDeclaration"/>
+  </eSubpackages>
+</ecore:EPackage>

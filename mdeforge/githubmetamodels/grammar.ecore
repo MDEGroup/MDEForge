@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Grammar" nsURI="grammar/1.0" nsPrefix="grammar">
+  <eClassifiers xsi:type="ecore:EClass" name="Grammar" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonTerminalRule" eSuperTypes="#//Rule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminalRule" eSuperTypes="#//Rule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" lowerBound="1"
+        upperBound="-1" eType="#//Token" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminalMacro" eSuperTypes="#//Rule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="macro" lowerBound="1" eType="#//MacroToken"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharClass" eSuperTypes="#//MacroToken">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//MacroToken">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MacroToken" abstract="true" eSuperTypes="#//Token"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Occurrence" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" lowerBound="1"
+        eType="#//Multiplicity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Multiplicity">
+    <eLiterals name="once" literal="1"/>
+    <eLiterals name="ZeroToN" value="1" literal="*"/>
+    <eLiterals name="OnceOrMore" value="2" literal="+"/>
+    <eLiterals name="NeverOrOnce" value="3" literal="?"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GrammarDetails" eSuperTypes="#//Grammar">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shouldLexerUseReflection"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Token" abstract="true" eSuperTypes="#//Occurrence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MacroRef" eSuperTypes="#//Token">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//TerminalMacro"/>
+  </eClassifiers>
+</ecore:EPackage>

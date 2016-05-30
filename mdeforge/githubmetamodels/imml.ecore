@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="imml"
+    nsURI="imml" nsPrefix="imml">
+  <eClassifiers xsi:type="ecore:EClass" name="interfaceModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domain" lowerBound="1"
+        eType="#//domainModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interaction" lowerBound="1"
+        eType="#//interactionModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="domainFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="2"
+        upperBound="-1" eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controls" lowerBound="1"
+        upperBound="-1" eType="#//Control" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//Operand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Control">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeFrom" lowerBound="1"
+        eType="#//State" eKeys="#//State/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeTo" lowerBound="1"
+        eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="objectType">
+    <eLiterals name="text"/>
+    <eLiterals name="number" value="1"/>
+    <eLiterals name="data" value="2"/>
+    <eLiterals name="finiteSet" value="3"/>
+    <eLiterals name="image" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="domainObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//objectType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="domainModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObjects" upperBound="-1"
+        eType="#//domainObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainFunctions" lowerBound="1"
+        upperBound="-1" eType="#//domainFunction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="inputOperand" eSuperTypes="#//Operand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="outputOperand" eSuperTypes="#//Operand"/>
+  <eClassifiers xsi:type="ecore:EClass" name="interactionModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" lowerBound="1"
+        upperBound="-1" eType="#//functionInteraction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="functionInteraction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" upperBound="-1"
+        eType="#//interactionStructure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+        eType="#//domainFunction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="interactionStructure" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" lowerBound="1"
+        upperBound="-1" eType="#//basicInteraction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="basicInteraction" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="enterInformation" eSuperTypes="#//manipulateInformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="selectInformation" eSuperTypes="#//manipulateInformation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="perceiveInforrmation" eSuperTypes="#//manipulateInformation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="activeControl" eSuperTypes="#//basicInteraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="control" lowerBound="1"
+        eType="#//Control"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operand" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="#//domainObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="structureOperator" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" upperBound="-1"
+        eType="#//structureOperator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//structureOperatorType"
+        defaultValueLiteral="join"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="manipulateInformation" abstract="true"
+      eSuperTypes="#//basicInteraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="#//domainObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="structureOperatorType">
+    <eLiterals name="join"/>
+    <eLiterals name="select" value="1"/>
+    <eLiterals name="sequence" value="2"/>
+    <eLiterals name="combine" value="3"/>
+    <eLiterals name="repeat" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

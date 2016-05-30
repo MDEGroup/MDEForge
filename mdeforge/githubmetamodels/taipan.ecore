@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="taipan"
+    nsURI="http://www.reuseware.org/application/taipan" nsPrefix="taipan">
+  <eClassifiers xsi:type="ecore:EClass" name="Aquatory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//PortType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routes" upperBound="-1"
+        eType="#//RouteType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ships" upperBound="-1"
+        eType="#//Ship" containment="true" eOpposite="#//Ship/aquatory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Destination" abstract="true" interface="true"
+      eSuperTypes="#//DestinationType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//Destination #//PortType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildings" upperBound="-1"
+        eType="#//Building" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="register" upperBound="-1"
+        eType="#//Ship"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Building">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="info" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="#//Destination #//RouteType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//DestinationType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//DestinationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reliability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ship">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" eType="#//RouteType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" upperBound="-1"
+        eType="#//ItemType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aquatory" lowerBound="1"
+        eType="#//Aquatory" eOpposite="#//Aquatory/ships"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true" eSuperTypes="#//ItemType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="article" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeItem" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SmallItems" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyBox" eSuperTypes="#//Item"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Warship" eSuperTypes="#//Ship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="escortOrder" eType="#//EscortShipsOrder"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attackOrders" upperBound="-1"
+        eType="#//BesiegePortOrder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EscortShipsOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ships" lowerBound="1" upperBound="-1"
+        eType="#//Ship"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BesiegePortOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="#//PortType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortType" abstract="true" eSuperTypes="#//DestinationType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AquatoryType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeItemType" abstract="true" eSuperTypes="#//ItemType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EscortShipsOrderType" abstract="true"
+      eSuperTypes="#//OrderType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ItemType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BesiegePortOrderType" abstract="true"
+      eSuperTypes="#//OrderType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SmallItemsType" abstract="true" eSuperTypes="#//ItemType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DestinationType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyBoxType" abstract="true" eSuperTypes="#//ItemType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WarshipType" abstract="true" eSuperTypes="#//ShipType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RouteType" abstract="true" eSuperTypes="#//DestinationType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ShipType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildingType" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeItemHook" eSuperTypes="#//LargeItemType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeItemPrototype" eSuperTypes="#//LargeItemType">
+    <eAnnotations source="hasVirtualInstances" references="#//LargeItem">
+      <details key="derivePortName" value="self.article"/>
+      <details key="eClass" value="LargeItem"/>
+      <details key="identification" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShipPrototype" eSuperTypes="#//ShipType">
+    <eAnnotations source="hasVirtualInstances" references="#//Ship">
+      <details key="derivePortName" value="self.name"/>
+      <details key="eClass" value="Ship"/>
+      <details key="identification" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShipHook" eSuperTypes="#//ShipType">
+    <eAnnotations source="hasVirtualInstances" references="#//Ship">
+      <details key="derivePortName" value="'shipExtension'"/>
+      <details key="eClass" value="Ship"/>
+      <details key="identification" value="self = self.aquatory.ships->last()"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortSlot" eSuperTypes="#//PortType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RouteSlot" eSuperTypes="#//RouteType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortAnchor" eSuperTypes="#//PortType">
+    <eAnnotations source="hasVirtualInstances" references="#//Port">
+      <details key="derivePortName" value="self.location.concat('Port')"/>
+      <details key="eClass" value="Port"/>
+      <details key="identification" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RouteAnchor" eSuperTypes="#//RouteType">
+    <eAnnotations source="hasVirtualInstances" references="#//Route">
+      <details key="derivePortName" value="self.description"/>
+      <details key="eClass" value="Route"/>
+      <details key="identification" value="true"/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

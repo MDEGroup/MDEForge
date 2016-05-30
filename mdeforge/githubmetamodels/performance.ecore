@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="performance"
+    nsURI="http://www.obeo.fr/performance/1.0.0" nsPrefix="performance">
+  <eClassifiers xsi:type="ecore:EClass" name="SystemUnderTest" eSuperTypes="#//Properties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Environment" eSuperTypes="#//Properties"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario" eSuperTypes="#//Properties">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Properties" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PerformanceTest">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sut" lowerBound="1" eType="#//SystemUnderTest"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" lowerBound="1"
+        eType="#//Environment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
+        eType="#//TestResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenario" lowerBound="1"
+        eType="#//Scenario" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataPoints" upperBound="-1"
+        eType="#//DataPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataPoint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measures" upperBound="-1"
+        eType="#//Measure" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measure">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dimension" lowerBound="1"
+        eType="#//Dimension"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Dimension">
+    <eLiterals name="TIME"/>
+    <eLiterals name="MEMORY" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

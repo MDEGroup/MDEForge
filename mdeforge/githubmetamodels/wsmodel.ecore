@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="wsmodel" nsURI="http://inf.mit.bme.hu/donat/incquery-deps/wsmodel"
+    nsPrefix="wsm">
+  <eClassifiers xsi:type="ecore:EClass" name="WProject" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packageFragmentRoots" upperBound="-1"
+        eType="#//WPackageFragmentRoot" containment="true" eOpposite="#//WPackageFragmentRoot/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspace" eType="#//WWorkspace"
+        eOpposite="#//WWorkspace/projects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WWorkspace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//WProject" containment="true" eOpposite="#//WProject/workspace"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//WNamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencties" upperBound="-1"
+        eType="#//WDependency" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WNamedElement" abstract="true">
+    <eOperations name="getParent" eType="#//WNamedElement"/>
+    <eOperations name="getChildren">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="#//WNamedElement"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="setParent">
+      <eParameters name="parent" lowerBound="1" eType="#//WNamedElement"/>
+    </eOperations>
+    <eOperations name="addChild">
+      <eParameters name="child" lowerBound="1" eType="#//WNamedElement"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="handler" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingDependencies" upperBound="-1"
+        eType="#//WDependency" eOpposite="#//WDependency/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingDependencies" upperBound="-1"
+        eType="#//WDependency" eOpposite="#//WDependency/from"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="WDependencyType">
+    <eLiterals name="CLASS_USAGE"/>
+    <eLiterals name="METHOD_CALL" value="1"/>
+    <eLiterals name="METHOD_OVERRIDE" value="2"/>
+    <eLiterals name="INHERITANCE" value="3"/>
+    <eLiterals name="FIELD_ACCESS" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WDependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//WNamedElement"
+        eOpposite="#//WNamedElement/outgoingDependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//WNamedElement"
+        eOpposite="#//WNamedElement/incomingDependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//WDependencyType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WPackageFragmentRoot" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//WProject"
+        eOpposite="#//WProject/packageFragmentRoots"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packageFragments" upperBound="-1"
+        eType="#//WPackageFragment" containment="true" eOpposite="#//WPackageFragment/packageFragmentRoot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WPackageFragment" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packageFragmentRoot" eType="#//WPackageFragmentRoot"
+        eOpposite="#//WPackageFragmentRoot/packageFragments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilationUnits" upperBound="-1"
+        eType="#//WCompilationUnit" containment="true" eOpposite="#//WCompilationUnit/packageFragment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WCompilationUnit" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packageFragment" eType="#//WPackageFragment"
+        eOpposite="#//WPackageFragment/compilationUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//WType" containment="true" eOpposite="#//WType/compilationUnit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WType" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilationUnit" eType="#//WCompilationUnit"
+        eOpposite="#//WCompilationUnit/types"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//WMethod" containment="true" eOpposite="#//WMethod/type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//WField" containment="true" eOpposite="#//WField/type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WMethod" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//WType"
+        eOpposite="#//WType/methods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="EAttribute0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WField" eSuperTypes="#//WNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//WType"
+        eOpposite="#//WType/fields"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="service"
+    nsURI="http://alive/serviceLevel/0.5.4" nsPrefix="sl">
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endpoint" upperBound="-1"
+        eType="#//syntax/Endpoint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interface" lowerBound="1"
+        eType="#//syntax/InterfaceDescription" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="presents" eType="#//semantics/ServiceProfile"
+        containment="true" eOpposite="#//semantics/ServiceProfile/presentedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supports" upperBound="-1"
+        eType="#//semantics/ServiceGrounding" containment="true" eOpposite="#//semantics/ServiceGrounding/supportedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="describedBy" eType="#//semantics/ProcessModel"
+        containment="true" eOpposite="#//semantics/ProcessModel/describes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adaptedBy" eType="#//template/GroundTemplate"
+        eOpposite="#//template/GroundTemplate/expose"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceProvider" abstract="true" eSuperTypes="CL.ecore#//agents/Agent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exposes" lowerBound="1"
+        upperBound="-1" eType="#//Service"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isType" lowerBound="1"
+        eType="#//ServiceType" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implementation" upperBound="-1"
+        eType="#//ServiceImplemetation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceConsumer" eSuperTypes="CL.ecore#//agents/Agent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invokes" lowerBound="1"
+        upperBound="-1" eType="#//Service"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isType" lowerBound="1"
+        eType="#//ServiceType" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ServiceType">
+    <eLiterals name="internal"/>
+    <eLiterals name="external" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SL">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providers" upperBound="-1"
+        eType="#//ServiceProvider" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consumers" upperBound="-1"
+        eType="#//ServiceConsumer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="framework" eType="#//architecture/ServiceFramework"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceImplemetation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="#//ServiceImpLanguage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ServiceImpLanguage">
+    <eLiterals name="Java_EJB"/>
+    <eLiterals name="Java_JSP" value="1"/>
+  </eClassifiers>
+  <eSubpackages name="syntax" nsURI="http://alive/serviceLevel/syntax/0.5" nsPrefix="snt">
+    <eClassifiers xsi:type="ecore:EClass" name="InterfaceDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operation" lowerBound="1"
+          upperBound="-1" eType="#//syntax/OperationDescription" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="binding" upperBound="-1"
+          eType="#//syntax/Binding" eOpposite="#//syntax/Binding/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inLineSchema" eType="ecore:EClass schema.ecore#//SchemaType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outLineSchema" upperBound="-1"
+          eType="ecore:EClass schema.ecore#//SchemaType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OperationDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+          eType="#//syntax/Message" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fault" upperBound="-1"
+          eType="#//syntax/Message" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="output" upperBound="-1"
+          eType="#//syntax/Message" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Message">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass schema.ecore#//TopLevelComplexType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass schema.ecore#//TopLevelElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Endpoint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="binding" lowerBound="1"
+          eType="#//syntax/Binding" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implementation" eType="#//ServiceImplemetation"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deployedService" eType="#//architecture/DeployedService"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Binding">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transport" eType="#//syntax/TransportProtocol"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//syntax/InterfaceDescription" eOpposite="#//syntax/InterfaceDescription/binding"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="#//syntax/StyleEncoding"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="StyleEncoding">
+      <eLiterals name="Document_Literal" literal="DocumentLiteral"/>
+      <eLiterals name="RPC_Encoded" value="1" literal="RPCEncoded"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TransportProtocol">
+      <eLiterals name="SOAP"/>
+      <eLiterals name="HTTP" value="1"/>
+      <eLiterals name="MIME" value="2"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="semantics" nsURI="http://alive/serviceLevel/semantics/0.5" nsPrefix="sem">
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceProfile">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="presentedBy" eType="#//Service"
+          eOpposite="#//Service/presents"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasProcess" eType="#//semantics/ProcessModel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceCategory" eType="#//semantics/ServiceCategory"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasInput" upperBound="-1"
+          eType="#//semantics/ServiceInput"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasOutput" upperBound="-1"
+          eType="#//semantics/ServiceOutput"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasResult" upperBound="-1"
+          eType="#//semantics/ServiceResult"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasCondition" upperBound="-1"
+          eType="#//semantics/ServiceCondition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceClassification"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceGrounding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="supportedBy" eType="#//Service"
+          eOpposite="#//Service/supports"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processModel" eType="#//semantics/ProcessModel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//syntax/InterfaceDescription"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="bindParams" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessModel" eSuperTypes="#//semantics/IOEP">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="describes" eType="#//Service"
+          eOpposite="#//Service/describedBy"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceCategory">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="taxonomy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceParameter" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceInput" eSuperTypes="#//semantics/ServiceParameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceOutput" eSuperTypes="#//semantics/ServiceParameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceCondition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass swrl.ecore#//Antecedent"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceResult">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass swrl.ecore#//Antecedent"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="ecore:EClass swrl.ecore#//Consequent"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IOEP" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasInput" upperBound="-1"
+          eType="#//semantics/ServiceInput" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasCondition" upperBound="-1"
+          eType="#//semantics/ServiceCondition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasOutput" upperBound="-1"
+          eType="#//semantics/ServiceOutput" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasResult" upperBound="-1"
+          eType="#//semantics/ServiceResult" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="template" nsURI="http://alive/serviceLevel/template/0.5" nsPrefix="temp">
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceTemplate">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="flow" eType="#//template/TemplateFlow"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateParameter" upperBound="-1"
+          eType="#//semantics/ServiceParameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expose" lowerBound="1"
+          eType="#//template/AbstractProcessModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" ordered="false"
+          upperBound="-1" eType="#//template/TemplateConstraint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateFlow">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="composedOf" upperBound="-1"
+          eType="#//template/ControlConstruct" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GroundTemplate">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implement" eType="#//template/ServiceTemplate"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bindTemplateParameter"
+          upperBound="-1" eType="#//template/BoundTemplateParameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bindProcessModel" upperBound="-1"
+          eType="#//template/BoundProcessModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expose" lowerBound="1"
+          eType="#//Service" eOpposite="#//Service/adaptedBy"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractProcessModel" eSuperTypes="#//semantics/IOEP">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BoundTemplateParameter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="abstract" lowerBound="1"
+          eType="#//semantics/ServiceParameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concrete" lowerBound="1"
+          eType="#//semantics/ServiceParameter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BoundProcessModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="abstract" lowerBound="1"
+          eType="#//template/AbstractProcessModel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="concrete" lowerBound="1"
+          eType="#//semantics/ProcessModel"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="body" upperBound="-1"
+          eType="ecore:EClass swrl.ecore#//Antecedent" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ControlConstruct" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="timeout" eType="#//template/IntervalThing"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AnyOrder" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+          eType="#//template/ControlConstructBag" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+          eType="#//template/ControlConstructBag" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IfThenElse" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ifCondition" lowerBound="1"
+          eType="ecore:EClass swrl.ecore#//Antecedent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1"
+          eType="#//template/ControlConstruct"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//template/ControlConstruct"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Iterate" abstract="true" eSuperTypes="#//template/ControlConstruct"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Perform" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="partnerProcess" lowerBound="1"
+          eType="#//template/AbstractProcessModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasDataFromProcess" eType="#//template/AbstractProcessModel"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="valueData" eType="#//semantics/ServiceParameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasDataFromTemplate"
+          eType="#//template/ServiceTemplate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RepeatUntil" eSuperTypes="#//template/Iterate">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="untilCondition" lowerBound="1"
+          eType="ecore:EClass swrl.ecore#//Antecedent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="untilProcess" lowerBound="1"
+          eType="#//template/ControlConstruct"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RepeatWhile" eSuperTypes="#//template/Iterate">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="whileCondition" lowerBound="1"
+          eType="ecore:EClass swrl.ecore#//Antecedent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="whileProcess" lowerBound="1"
+          eType="#//template/ControlConstruct"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+          eType="#//template/ControlConstructList" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Split" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+          eType="#//template/ControlConstructBag" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SplitJoin" eSuperTypes="#//template/ControlConstruct">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" eType="#//template/ControlConstructBag"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ControlConstructList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="first" eType="#//template/ControlConstruct"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rest" eType="#//template/ControlConstructList"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ControlConstructBag">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="first" eType="#//template/ControlConstruct"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rest" eType="#//template/ControlConstructBag"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntervalThing"/>
+  </eSubpackages>
+  <eSubpackages name="architecture" nsURI="http://alive/serviceLevel/architecture/0.5"
+      nsPrefix="arch">
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceFramework">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="matchmaker" lowerBound="1"
+          upperBound="-1" eType="#//architecture/ServiceTemplateMatchmaker" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="execution" eType="#//architecture/ExecutionFramework"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceDirectory" lowerBound="1"
+          upperBound="-1" eType="#//architecture/ServiceDirectory" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateRepository" lowerBound="1"
+          eType="#//architecture/TemplateRepository" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateRepository">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="template" upperBound="-1"
+          eType="#//template/ServiceTemplate" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groundTemplate" upperBound="-1"
+          eType="#//template/GroundTemplate" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateMatchmaker">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateRepository" lowerBound="1"
+          eType="#//architecture/TemplateRepository"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceMatchmaker">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceDirectory" lowerBound="1"
+          upperBound="-1" eType="#//architecture/ServiceDirectory"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceTemplateMatchmaker" eSuperTypes="#//architecture/ServiceMatchmaker #//architecture/TemplateMatchmaker"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceDirectory">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endpoint" upperBound="-1"
+          eType="#//syntax/Endpoint"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="semantic" eType="#//semantics/ServiceProfile"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="interface" upperBound="-1"
+          eType="#//syntax/InterfaceDescription"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExecutionFramework">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deployedService" upperBound="-1"
+          eType="#//architecture/DeployedService" containment="true" eOpposite="#//architecture/DeployedService/deploy"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="container" eType="#//architecture/ContainerType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeployedService">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deploy" lowerBound="1"
+          eType="#//architecture/ExecutionFramework" eOpposite="#//architecture/ExecutionFramework/deployedService"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ContainerType">
+      <eLiterals name="axis"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

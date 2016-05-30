@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="view"
+    nsURI="system.reliability.model.view" nsPrefix="view">
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionView" eSuperTypes="reliability.ecore#//Transition #//ViewObject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Rectangle" instanceClassName="org.eclipse.draw2d.geometry.Rectangle"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PortView" eSuperTypes="reliability.ecore#//Port #//ViewObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraints" eType="#//Rectangle"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLinks" upperBound="-1"
+        eType="#//ViewLink" containment="true" eOpposite="#//ViewLink/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLinks" upperBound="-1"
+        eType="#//ViewLink" eOpposite="#//ViewLink/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="anchors" upperBound="-1"
+        eType="#//Anchor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewLink">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//ViewObject"
+        eOpposite="#//ViewObject/outgoingLinks" eKeys="#//ViewObject/label"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//ViewObject"
+        eOpposite="#//ViewObject/incomingLinks" eKeys="#//ViewObject/label"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bendpoints" upperBound="-1"
+        eType="#//Point"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceAnchor" eType="#//Anchor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetAnchor" eType="#//Anchor"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FailureView" eSuperTypes="reliability.ecore#//Failure #//ViewObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemView" eSuperTypes="reliability.ecore#//GeneralizedNet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Anchor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="#//Point"/>
+  </eClassifiers>
+</ecore:EPackage>

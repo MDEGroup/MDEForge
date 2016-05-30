@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="qm"
+    nsURI="http://www.quamoco.de/qm/v17" nsPrefix="qm">
+  <eClassifiers xsi:type="ecore:EClass" name="QualityModel" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Modules allow decomposing a large quality model into smaller, dedicated &#xD;&#xA;chunks. All model elements are associated with exactly one module. The &#xD;&#xA;relations between model elements can be established across module &#xD;&#xA;boundaries."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
+        eType="#//Entity" containment="true" eOpposite="#//Entity/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="factors" upperBound="-1"
+        eType="#//Factor" containment="true" eOpposite="#//Factor/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluations" upperBound="-1"
+        eType="#//Evaluation" containment="true" eOpposite="#//Evaluation/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measures" upperBound="-1"
+        eType="#//Measure" containment="true" eOpposite="#//Measure/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measurementMethods" upperBound="-1"
+        eType="#//MeasurementMethod" containment="true" eOpposite="#//MeasurementMethod/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tools" upperBound="-1"
+        eType="#//Tool" containment="true" eOpposite="#//Tool/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        containment="true" eOpposite="#//Tag/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Source" containment="true" eOpposite="#//Source/qualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//QualityModel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schoolGradeBoundary2" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double" defaultValueLiteral="0.98"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schoolGradeBoundary3" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double" defaultValueLiteral="0.96"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schoolGradeBoundary4" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double" defaultValueLiteral="0.94"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schoolGradeBoundary5" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double" defaultValueLiteral="0.92"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schoolGradeBoundary6" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Double" defaultValueLiteral="0.90"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QualityModelElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="violatesRequires"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originatesFrom" upperBound="-1"
+        eType="#//Source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Source" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/sources"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DescribedElement" abstract="true" eSuperTypes="#//AnnotatedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A described element is an annotated element that can have a description."/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="noDescription"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The description of this element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//DescribedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A named element is a described element with a name. The name must be&#xD;&#xA;unique among the elements which are on the same level of hierarchy in&#xD;&#xA;the model."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of this element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotatedElement" abstract="true" eSuperTypes="#//TaggedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An annotated element can have a number of annotations which are key-&#xD;&#xA;value-pairs."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotation" containment="true" resolveProxies="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The key-value-pairs defined by this annotated element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="advancedAnnotations" upperBound="-1"
+        eType="#//AnnotationBase" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A key-value-pair."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The key"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/tags"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaggedElement" abstract="true" eSuperTypes="#//QualityModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taggedBy" upperBound="-1"
+        eType="#//Tag"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An entity type is a type of element which is part of the software product &#xD;&#xA;or which is a resource required during development, maintenance and &#xD;&#xA;use of a software product. A generalization/specialization (is-a) relation &#xD;&#xA;between entity types forms the entity type hierarchy."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isA" upperBound="-1" eType="#//Specialization"
+        containment="true" eOpposite="#//Specialization/child">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The parent entity type in the entity type hierarchy"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isADirect" upperBound="-1"
+        eType="#//Entity" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partOf" eType="#//Decomposition"
+        containment="true" eOpposite="#//Decomposition/child"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partOfDirect" eType="#//Entity"
+        volatile="true" transient="true" unsettable="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/entities"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stakeholder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useCase" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specialization" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Entity"
+        eOpposite="#//Entity/isA"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Decomposition" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Entity"
+        eOpposite="#//Entity/partOf"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CharacterizingElement" abstract="true"
+      eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="characterizes" eType="#//Entity"
+        unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The entity type which this factor characterizes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Factor" eSuperTypes="#//CharacterizingElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A factor associates a property to an entity type. A factor influences at &#xD;&#xA;least one quality aspect, which is specified by an impact for each &#xD;&#xA;influenced quality aspect. The factor can be quantified by a number of &#xD;&#xA;measures. We do not evaluate the factor, but rather the impact on a &#xD;&#xA;certain quality aspect, as the evaluation depends on the influenced &#xD;&#xA;quality aspect. Factors are one of the basic building blocks of quality &#xD;&#xA;models. They help to concretize quality requirements by specifying on a &#xD;&#xA;more detailed level what properties of entity types are important for &#xD;&#xA;specific quality aspects."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="influences" ordered="false"
+        upperBound="-1" eType="#//Impact" containment="true" resolveProxies="false"
+        eOpposite="#//Impact/source">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The impacts of this factor on quality aspects"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="influencesDirect" upperBound="-1"
+        eType="#//Factor" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refines" upperBound="-1"
+        eType="#//FactorRefinement" containment="true" eOpposite="#//FactorRefinement/child"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refinesDirect" upperBound="-1"
+        eType="#//Factor" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/factors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Impact" eSuperTypes="#//AnnotatedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An impact defines an influence of a factor on a quality aspect. The effect &#xD;&#xA;of the influence can be either positive or negative. The influence a factor &#xD;&#xA;has on a quality aspect is quantified by a single evaluation, which is &#xD;&#xA;termed impact evaluation. Each impact needs to specify in an explicit &#xD;&#xA;justification why the factor has an impact on the quality aspect. To &#xD;&#xA;ensure that the model contains only relevant impacts, this description of &#xD;&#xA;the justification is vital for the impact."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+        lowerBound="1" eType="#//Factor" eOpposite="#//Factor/influences">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The factors which have this impact on the quality aspect"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Factor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The quality aspect on which this impact has effect"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="justification" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The justification of this impact"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="effect" eType="#//Effect"
+        defaultValueLiteral="POSITIVE" unsettable="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Whether this impact has positive or negative effect"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Effect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An effect is a qualitative measure for the impact of a factor on a quality aspect."/>
+    </eAnnotations>
+    <eLiterals name="POSITIVE">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Positive effect"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NEGATIVE" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Negative effect"/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Evaluation" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An impact evaluation evaluates the influence one factor or more factors &#xD;&#xA;in combination have on a quality aspect. The quality model specifies &#xD;&#xA;exactly one evaluation for each impact. The impact evaluation is based &#xD;&#xA;on the measures associated to the factors. It has to consider all defined &#xD;&#xA;measures for its factors. For these measures, the measurement data &#xD;&#xA;for all entities are aggregated. The result of the evaluation is an impact &#xD;&#xA;evaluation result, which is a value on an ordinal scale."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluates" lowerBound="1"
+        eType="#//Factor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/evaluations"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completeness" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="100"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FactorRefinement" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Factor"
+        eOpposite="#//Factor/refines"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Factor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measurement" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Factor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Measure"
+        eOpposite="#//Measure/measures"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureRefinement" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//Measure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" lowerBound="1" eType="#//Measure"
+        eOpposite="#//Measure/refines"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measure" eSuperTypes="#//CharacterizingElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measures" ordered="false"
+        upperBound="-1" eType="#//Measurement" containment="true" eOpposite="#//Measurement/child">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The factors which this measure measures"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measuresDirect" upperBound="-1"
+        eType="#//Factor" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/measures"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refines" upperBound="-1"
+        eType="#//MeasureRefinement" containment="true" eOpposite="#//MeasureRefinement/child"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refinesDirect" upperBound="-1"
+        eType="#//Measure" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Type">
+    <eLiterals name="NONE"/>
+    <eLiterals name="FINDINGS" value="1"/>
+    <eLiterals name="NUMBER" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasurementMethod" abstract="true" eSuperTypes="#//AnnotatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="determines" lowerBound="1"
+        eType="#//Measure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/measurementMethods"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureAggregation" abstract="true"
+      eSuperTypes="#//MeasurementMethod #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Instrument" abstract="true" eSuperTypes="#//MeasurementMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManualInstrument" eSuperTypes="#//Instrument #//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolBasedInstrument" eSuperTypes="#//Instrument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tool" lowerBound="1" eType="#//Tool"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metric" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tool" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityModel" lowerBound="1"
+        eType="#//QualityModel" eOpposite="#//QualityModel/tools"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationBase" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QIESLEvaluation" eSuperTypes="#//TextEvaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TextEvaluation" eSuperTypes="#//Evaluation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specification" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The specification of this evaluation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormBasedEvaluation" abstract="true"
+      eSuperTypes="#//Evaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleMeasureEvaluation" eSuperTypes="#//FormBasedEvaluation #//MeasureEvaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FactorAggregation" abstract="true" eSuperTypes="#//FormBasedEvaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NormalizationMeasure" eSuperTypes="#//Measure"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QIESLAggregation" eSuperTypes="#//TextAggregation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TextAggregation" eSuperTypes="#//MeasureAggregation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specification" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormBasedMeasureAggregation" abstract="true"
+      eSuperTypes="#//MeasureAggregation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FactorRanking" eSuperTypes="#//Ranking">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="factor" lowerBound="1"
+        eType="#//Factor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinearFunction" abstract="true" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LinearIncreasingFunction" eSuperTypes="#//LinearFunction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LinearDecreasingFunction" eSuperTypes="#//LinearFunction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WeightedSumFactorAggregation" eSuperTypes="#//FactorAggregation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rankings" lowerBound="1"
+        upperBound="-1" eType="#//FactorRanking" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FindingsUnionMeasureAggregation" eSuperTypes="#//FormBasedMeasureAggregation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberMeanMeasureAggregation" eSuperTypes="#//FormBasedMeasureAggregation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManualEvaluation" eSuperTypes="#//Evaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureEvaluation" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measure" lowerBound="1"
+        eType="#//Measure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="normlizationMeasure" eType="#//NormalizationMeasure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+        eType="#//Function" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ranking" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultiMeasureEvaluation" abstract="true"
+      eSuperTypes="#//FormBasedEvaluation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WeightedSumMultiMeasureEvaluation" eSuperTypes="#//MultiMeasureEvaluation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rankings" lowerBound="1"
+        upperBound="-1" eType="#//MeasureRanking" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureRanking" eSuperTypes="#//MeasureEvaluation #//Ranking"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QualityModelResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measurementResults" upperBound="-1"
+        eType="#//MeasurementResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluationResults" upperBound="-1"
+        eType="#//EvaluationResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasurementResult" abstract="true" eSuperTypes="#//Result">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultsFrom" lowerBound="1"
+        eType="#//MeasurementMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberMeasurementResult" eSuperTypes="#//MeasurementResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//DoubleInterval"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FindingsMeasurementResult" eSuperTypes="#//MeasurementResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="findings" eType="#//FindingCollection"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="findingMessages" upperBound="-1"
+        eType="#//FindingMessage" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleInterval">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EvaluationResult" eSuperTypes="#//Result">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//DoubleInterval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultsFrom" lowerBound="1"
+        eType="#//Evaluation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleMeasureEvaluationResult" eSuperTypes="#//EvaluationResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ratioAffected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultiMeasureEvaluationResult" eSuperTypes="#//EvaluationResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluationResults" upperBound="-1"
+        eType="#//MeasureRankingEvaluationResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureRankingEvaluationResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ratioAffected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//DoubleInterval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultsFrom" lowerBound="1"
+        eType="#//MeasureRanking"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Result" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="FindingCollection" instanceClassName="edu.tum.cs.conqat.quamoco.FindingCollection"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FindingMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

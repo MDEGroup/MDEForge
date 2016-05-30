@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="taipan"
+    nsURI="http://www.eclipse.org/examples/gmf/taipan_original" nsPrefix="taipan">
+  <eClassifiers xsi:type="ecore:EClass" name="Aquatory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routes" upperBound="-1"
+        eType="#//Route" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ships" upperBound="-1"
+        eType="#//Ship" containment="true" eOpposite="#//Ship/aquatory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Destination" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//Destination">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildings" upperBound="-1"
+        eType="#//Building" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="register" upperBound="-1"
+        eType="#//Ship"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Building">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="info" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Route" eSuperTypes="#//Destination">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//Destination"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reliability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ship">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="route" eType="#//Route"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" upperBound="-1"
+        eType="#//Item" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aquatory" lowerBound="1"
+        eType="#//Aquatory" eOpposite="#//Aquatory/ships"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="article" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeItem" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SmallItems" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyBox" eSuperTypes="#//Item"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Warship" eSuperTypes="#//Ship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="escortOrder" eType="#//EscortShipsOrder"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attackOrders" upperBound="-1"
+        eType="#//BesiegePortOrder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EscortShipsOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ships" lowerBound="1" upperBound="-1"
+        eType="#//Ship"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BesiegePortOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="#//Port"/>
+  </eClassifiers>
+</ecore:EPackage>

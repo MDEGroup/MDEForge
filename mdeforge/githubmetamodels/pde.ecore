@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pde"
+    nsURI="http://www.eclipse.org/pop/pde/1.0.0" nsPrefix="pop.pde">
+  <eClassifiers xsi:type="ecore:EClass" name="TargetPlatformChecker" eSuperTypes="../../org.eclipse.net4j.pop.jdt/model/JDT.ecore#//JREChecker"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PDEConfigurator" abstract="true" eSuperTypes="../../org.eclipse.net4j.pop.product/model/Product.ecore#//WorkspaceConfigurator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allEntities" upperBound="-1"
+        eType="#//PDEEntity" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApiBaseline" eSuperTypes="#//PDEConfigurator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetPlatform" eType="#//TargetPlatform"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="release" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.net4j.pop.project/model/Project.ecore#//Release"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetPlatform" eSuperTypes="#//PDEConfigurator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distributions" upperBound="-1"
+        eType="#//PDEDistribution" containment="true" eOpposite="#//PDEDistribution/targetPlatform"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PDEProject" eSuperTypes="../../org.eclipse.net4j.pop.product/model/Product.ecore#//WorkspaceProject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="#//PDEEntity" changeable="false" volatile="true" transient="true" derived="true"
+        containment="true" eOpposite="#//PDEEntity/project"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PDEDistribution" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" lowerBound="1"
+        upperBound="-1" eType="#//PDEEntity" containment="true" eOpposite="#//PDEEntity/distribution"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetPlatform" lowerBound="1"
+        eType="#//TargetPlatform" eOpposite="#//TargetPlatform/distributions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PDEEntity" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType ../../org.eclipse.net4j.pop.base/model/Base.ecore#//Version"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="#//Location"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//PDEProject"
+        volatile="true" transient="true" eOpposite="#//PDEProject/entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distribution" eType="#//PDEDistribution"
+        eOpposite="#//PDEDistribution/entities"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//PDEEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PluginEntity" abstract="true" eSuperTypes="#//PDEEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Plugin" eSuperTypes="#//PluginEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fragment" eSuperTypes="#//PluginEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ZipDistribution" eSuperTypes="#//PDEDistribution"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PopDistribution" eSuperTypes="#//PDEDistribution"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Location">
+    <eLiterals name="WORKSPACE"/>
+    <eLiterals name="EXTERNAL" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ecp"
+    nsURI="http://ecp/1.0" nsPrefix="ecp">
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" lowerBound="1"
+        eType="#//Repository"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="properties" eType="#//Properties"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Repository">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" lowerBound="1"
+        eType="#//Provider"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="properties" eType="#//Properties"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Provider" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProviderRegistry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providers" upperBound="-1"
+        eType="#//Provider" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="INSTANCE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkspaceProvider" eSuperTypes="#//Provider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EMFStoreProvider" eSuperTypes="#//Provider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CDOProvider" eSuperTypes="#//Provider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositories" upperBound="-1"
+        eType="#//Repository" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="INSTANCE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProviderParser">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensionPoint" lowerBound="1"
+        eType="#//providers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="populates" lowerBound="1"
+        eType="#//ProviderRegistry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryParser">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensionPoint" lowerBound="1"
+        eType="#//repositories"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="populates" lowerBound="1"
+        eType="#//RepositoryManager"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="INSTANCE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensionPoint" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="repositories" eSuperTypes="#//ExtensionPoint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="providers" eSuperTypes="#//ExtensionPoint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="uiProviders" eSuperTypes="#//ExtensionPoint"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Properties" instanceTypeName="java.util.Map&lt;String, String>"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UIProvider" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="core" lowerBound="1" eType="#//Provider"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UIProviderRegistry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="INSTANCE"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uiProviders" upperBound="-1"
+        eType="#//UIProvider" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UIProviderParser">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensionPoint" lowerBound="1"
+        eType="#//uiProviders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="populates" lowerBound="1"
+        eType="#//UIProviderRegistry"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CDOUIProvider" eSuperTypes="#//UIProvider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkspaceUIProvider" eSuperTypes="#//UIProvider"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EMFStoreUIProvider" eSuperTypes="#//UIProvider"/>
+</ecore:EPackage>

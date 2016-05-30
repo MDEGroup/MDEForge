@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="petclinic"
+    nsURI="http://petclinic/1.0" nsPrefix="petclinic">
+  <eSubpackages name="fr.imag.petclinic">
+    <eAnnotations source="rooCommand::RooModelCommand">
+      <details key="loggingLevel" value="INFO"/>
+      <details key="controllersAll" value="true"/>
+      <details key="persistenceProvider" value="HIBERNATE"/>
+      <details key="persistenceDatabase" value="HYPERSONIC_IN_MEMORY"/>
+      <details key="webLanguages" value="de, es"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EEnum" name="Specialty">
+      <eLiterals name="Cardiology"/>
+      <eLiterals name="Dentistry" value="1"/>
+      <eLiterals name="Nutriology" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PetType">
+      <eLiterals name="Dog"/>
+      <eLiterals name="Cat" value="1"/>
+      <eLiterals name="Bird" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractPerson" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="50"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="telephone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="homepage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="6"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthday">
+        <eAnnotations source="rooStructure::RooFieldDate"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Owner" eSuperTypes="#//fr.imag.petclinic/AbstractPerson">
+      <eAnnotations source="rooSructure::RooEntity">
+        <details key="testAutomatically" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="rooCommand::RooEntityCommand">
+        <details key="seleniumTest" value="true"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pets" upperBound="-1"
+          eType="#//fr.imag.petclinic/Pet" containment="true">
+        <eAnnotations source="rooStructure::RooFieldSet">
+          <details key="mappedBy" value="owner"/>
+          <details key="cardinality" value="ONE_TO_MANY"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Vet" eSuperTypes="#//fr.imag.petclinic/AbstractPerson">
+      <eAnnotations source="rooSructure::RooEntity">
+        <details key="testAutomatically" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="rooCommand::RooEntityCommand">
+        <details key="seleniumTest" value="true"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="employedSince">
+        <eAnnotations source="rooStructure::RooFieldDate"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="specialty" eType="#//fr.imag.petclinic/Specialty"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Pet">
+      <eAnnotations source="rooSructure::RooEntity">
+        <details key="testAutomatically" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="rooCommand::RooEntityCommand">
+        <details key="seleniumTest" value="true"/>
+        <details key="finders" value="findPetsByNameAndWeight, findPetsByOwner, findPetsBySendRemindersAndWeightLessThan, findPetsByTypeAndNameLike"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sendReminders" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="rooStructure::RooFieldBoolean">
+          <details key="primitive" value="true"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="1"/>
+          <details key="sizeMax" value="255"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight">
+        <eAnnotations source="rooStructure::RooFieldNumber">
+          <details key="_numberType" value="Float"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//fr.imag.petclinic/PetType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//fr.imag.petclinic/Owner">
+        <eAnnotations source="rooStructure::RooFieldEnum">
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Visit">
+      <eAnnotations source="rooSructure::RooEntity">
+        <details key="testAutomatically" value="true"/>
+      </eAnnotations>
+      <eAnnotations source="rooCommand::RooEntityCommand">
+        <details key="seleniumTest" value="true"/>
+        <details key="finders" value="findVisitsByDescriptionAndVisitDate, findVisitsByVisitDateBetween, findVisitsByDescriptionLike"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="rooStructure::RooFieldString">
+          <details key="sizeMin" value="3"/>
+          <details key="sizeMax" value="30"/>
+          <details key="notNull" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="visitDate">
+        <eAnnotations source="rooStructure::RooFieldDate"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pet" lowerBound="1" eType="#//fr.imag.petclinic/Pet"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="vet" lowerBound="1" eType="#//fr.imag.petclinic/Vet"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="robmod" nsURI="http://dupa.org/robmod.ecore" nsPrefix="dwds">
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composition" upperBound="-1"
+        eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handlers" upperBound="-1"
+        eType="#//Handler" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
+        eType="#//InputPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
+        eType="#//OutputPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type2" lowerBound="1" eType="#//ComponentType"
+        defaultValueLiteral="">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="namespace" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="before" upperBound="-1"
+        eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executionOrder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"
+        defaultValueLiteral="0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Handler">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigeredBy" upperBound="-1"
+        eType="#//InputPort" eOpposite="#//InputPort/trigger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generates" upperBound="-1"
+        eType="#//OutputPort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//OutputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propagation" upperBound="-1"
+        eType="#//InputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" upperBound="-1"
+        eType="#//Handler" eOpposite="#//Handler/trigeredBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" upperBound="-1"
+        eType="#//InputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delegation" upperBound="-1"
+        eType="#//OutputPort"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="external" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propagate" upperBound="-1"
+        eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComponentType">
+    <eLiterals name="Component"/>
+    <eLiterals name="Composition" value="1"/>
+    <eLiterals name="SequentialThread" value="2"/>
+    <eLiterals name="Library" value="3"/>
+    <eLiterals name="Deployment" value="4"/>
+  </eClassifiers>
+</ecore:EPackage>

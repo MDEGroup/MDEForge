@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="aom"
+    nsURI="http://se.kaist.ac.kr/aom" nsPrefix="aom">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractObjectModel" eSuperTypes="#//MeasurableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//structure/AOMClass" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalTypes" upperBound="-1"
+        eType="#//structure/AOMExternalType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasurableElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measuredDataSet" upperBound="-1"
+        eType="#//StringToObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToObject" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eSubpackages name="structure" nsURI="http://se.kaist.ac.kr/aom/structure" nsPrefix="structure">
+    <eClassifiers xsi:type="ecore:EClass" name="AOMElement" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMNamedElement" abstract="true" eSuperTypes="#//structure/AOMElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMTypedElement" abstract="true" eSuperTypes="#//structure/AOMElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//structure/AOMType"
+          eOpposite="#//structure/AOMType/referer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMType" abstract="true" eSuperTypes="#//structure/AOMNamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referer" upperBound="-1"
+          eType="#//structure/AOMTypedElement" eOpposite="#//structure/AOMTypedElement/type"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fqdn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMClass" eSuperTypes="#//structure/AOMType #//MeasurableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+          eType="#//structure/AOMField" containment="true" eOpposite="#//structure/AOMField/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+          eType="#//structure/AOMMethod" containment="true" eOpposite="#//structure/AOMMethod/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ancestor" upperBound="-1"
+          eType="#//structure/AOMClass" eOpposite="#//structure/AOMClass/descendant"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="descendant" upperBound="-1"
+          eType="#//structure/AOMClass" eOpposite="#//structure/AOMClass/ancestor"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="interface" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="innerClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="anonymousClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifier" eType="#//structure/AOMModifier"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="remainingLOC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="LOC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMField" eSuperTypes="#//structure/AOMVariableDef #//MeasurableElement #//structure/AOMEntity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMClass"
+          eOpposite="#//structure/AOMClass/fields"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticReferer" upperBound="-1"
+          eType="#//staticmodel/StaticFieldAccess" eOpposite="#//staticmodel/StaticFieldAccess/accessedField"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMMethod" eSuperTypes="#//structure/AOMNamedElement #//structure/AOMTypedElement #//MeasurableElement #//structure/AOMEntity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//structure/AOMParameter" containment="true" eOpposite="#//structure/AOMParameter/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMClass"
+          eOpposite="#//structure/AOMClass/methods"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticReferer" upperBound="-1"
+          eType="#//staticmodel/StaticMethodCall" eOpposite="#//staticmodel/StaticMethodCall/callee"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="overriding" eType="#//structure/AOMMethod"
+          eOpposite="#//structure/AOMMethod/overridedBy"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="overridedBy" upperBound="-1"
+          eType="#//structure/AOMMethod" eOpposite="#//structure/AOMMethod/overriding"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedScope" eType="#//structure/AOMScope"
+          containment="true" eOpposite="#//structure/AOMScope/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicReferer" upperBound="-1"
+          eType="#//dynamicmodel/DynamicMethodCall" eOpposite="#//dynamicmodel/DynamicMethodCall/callee"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startLine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endLine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="LOC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="constructor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMScope">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+          eType="#//structure/AOMLocalVariable" containment="true" eOpposite="#//structure/AOMLocalVariable/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMMethod"
+          eOpposite="#//structure/AOMMethod/ownedScope"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticMethodCalls" upperBound="-1"
+          eType="#//staticmodel/StaticMethodCall" containment="true" eOpposite="#//staticmodel/StaticMethodCall/caller"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dynamicMethodCalls" upperBound="-1"
+          eType="#//dynamicmodel/DynamicMethodCall" containment="true" eOpposite="#//dynamicmodel/DynamicMethodCall/caller"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="staticFieldAccesses"
+          upperBound="-1" eType="#//staticmodel/StaticFieldAccess" containment="true"
+          eOpposite="#//staticmodel/StaticFieldAccess/accessingScope"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMParameter" eSuperTypes="#//structure/AOMVariableDef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMMethod"
+          eOpposite="#//structure/AOMMethod/parameters"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMVariableDef" abstract="true" interface="true"
+        eSuperTypes="#//structure/AOMTypedElement #//structure/AOMNamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMLocalVariable" eSuperTypes="#//structure/AOMVariableDef">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//structure/AOMScope"
+          eOpposite="#//structure/AOMScope/variables"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMExternalType" eSuperTypes="#//structure/AOMType"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="AOMModifier">
+      <eLiterals name="public" literal=""/>
+      <eLiterals name="private" value="1"/>
+      <eLiterals name="protected" value="2"/>
+      <eLiterals name="package" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AOMEntity" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          transient="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="staticmodel" nsURI="http://se.kaist.ac.kr/aom/staticmodel" nsPrefix="staticmodel">
+    <eClassifiers xsi:type="ecore:EClass" name="StaticMethodCall" eSuperTypes="#//staticmodel/StaticDependency">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="#//structure/AOMScope"
+          eOpposite="#//structure/AOMScope/staticMethodCalls"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="#//structure/AOMMethod"
+          eOpposite="#//structure/AOMMethod/staticReferer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="callingType" eType="#//structure/AOMClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticDependency" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StaticFieldAccess" eSuperTypes="#//staticmodel/StaticDependency">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessingScope" eType="#//structure/AOMScope"
+          eOpposite="#//structure/AOMScope/staticFieldAccesses"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessedField" eType="#//structure/AOMField"
+          eOpposite="#//structure/AOMField/staticReferer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="accessingType" eType="#//structure/AOMClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dynamicAccessCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="dynamicmodel" nsURI="http://se.kaist.ac.kr/aom/dynamicmodel"
+      nsPrefix="dynamicmodel">
+    <eClassifiers xsi:type="ecore:EClass" name="DynamicDependency" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DynamicMethodCall" eSuperTypes="#//dynamicmodel/DynamicDependency">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="caller" eType="#//structure/AOMScope"
+          eOpposite="#//structure/AOMScope/dynamicMethodCalls"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="callee" eType="#//structure/AOMMethod"
+          eOpposite="#//structure/AOMMethod/dynamicReferer"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="previousCall" eType="#//dynamicmodel/DynamicMethodCall"
+          eOpposite="#//dynamicmodel/DynamicMethodCall/nextCalls"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nextCalls" upperBound="-1"
+          eType="#//dynamicmodel/DynamicMethodCall" eOpposite="#//dynamicmodel/DynamicMethodCall/previousCall"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="static" eType="#//staticmodel/StaticMethodCall"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          transient="true"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

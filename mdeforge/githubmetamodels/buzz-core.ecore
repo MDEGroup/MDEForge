@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="core" nsURI="http://www.soluvas.org/schema/buzz-core/1.0" nsPrefix="buzz-core">
+  <eClassifiers xsi:type="ecore:EClass" name="BuzzAccount" eSuperTypes="../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//Identifiable">
+    <eOperations name="getTwitterUser" eType="#//TwitterUserLink">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get the primary TwitterUserLink, if any."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFacebookUser" eType="#//FacebookUserLink">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get the primary Facebook User Link, if any."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFacebookPage" eType="#//FacebookPageLink">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Get the primary Facebook Page Link, if any."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="socialLinks" upperBound="-1"
+        eType="#//SocialLink" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Collection of OAuth credentials for each registered Social Link."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TwitterConsumer">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="OAuth consumer (not user) info on Twitter for the app itself.&#xA;&#xA;Apps include:&#xA;1. Buzz Cloud&#xA;2. AksiMata&#xA;3. GaulDong"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumerKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="consumerSecret" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="customDomain" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used for testing, this fixes the domain part of the OAuth redirect URI to the specified hostname."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuzzAccounts">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A catalog of Buzz Accounts. It not used by DB, only used by XMI."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accounts" upperBound="-1"
+        eType="#//BuzzAccount" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TwitterUserLink" eSuperTypes="#//SocialLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="token" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tokenSecret" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="twitterId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="screenName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacebookUserLink" eSuperTypes="#//SocialLink #//FacebookLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FacebookPageLink" eSuperTypes="#//FacebookLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FacebookConsumer">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="OAuth consumer (not user) info on Twitter for the app itself.&#xA;&#xA;Note: When configuring your Facebook App API, you may want to set Settings > Permissions > Default Activity Privacy to Public.&#xA;Otherwise you get None (User Default) which usually means Friends.&#xA;&#xA;Apps include:&#xA;1. Buzz Cloud&#xA;2. AksiMata&#xA;3. GaulDong"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="appId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="appSecret" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultScope" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The default set of requested permissions.&#xA;Example: read_stream,email,user_birthday,user_hometown,user_about_me,user_religion_politics,user_relationships,user_work_history,user_education_history,user_website,offline_access,publish_actions,share_item&#xA;&#xA;Note: When configuring your Facebook App API, you may want to set Settings > Permissions > Default Activity Privacy to Public.&#xA;Otherwise you get None (User Default) which usually means Friends."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="customDomain" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used for testing, this fixes the domain part of the OAuth redirect URI to the specified hostname."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SocialLink" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A social media integration link between an app and an external user, containing:&#xA;1. Type (as concrete class)&#xA;2. ID&#xA;3. Username&#xA;4. OAuth token (and optionally, secret)&#xA;5. Token expiry&#xA;&#xA;The relationship between the external user (i.e. Arum on Facebook) to an internal user (i.e. Arum on AksiMata) is unspecified."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expiryTime" eType="ecore:EDataType ../../../../../../../../org.soluvas.commons/src/main/resources/org/soluvas/commons/commons.ecore#//DateTime">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Expiry time of this Social Link token, if known."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="permissions" upperBound="-1"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Social media provider-specific permissions (scope) granted to this Social Link token.&#xA;Facebook uses this (partial permissions is possible). Twitter doesn't (either yes or no).&#xA;Operations may optionally check this to ensure required permissions are allowed before posting."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuzzApp">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Tenant-wide Buzz consumer credentials.&#xA;&#xA;Note: SocialLinks should be stored *separate* to BuzzApp, because consumer credentials are fixed,&#xA;while social tokens are temporary/revokable (esp. for Facebook)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="twitterConsumer" eType="#//TwitterConsumer"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="OAuth consumer (not user) info on Twitter for the app itself.&#xA;&#xA;Apps include:&#xA;1. Buzz Cloud&#xA;2. AksiMata&#xA;3. GaulDong"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="facebookConsumer" eType="#//FacebookConsumer"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacebookLink" abstract="true" interface="true"
+      eSuperTypes="#//SocialLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessToken" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accountId" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//ELongObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

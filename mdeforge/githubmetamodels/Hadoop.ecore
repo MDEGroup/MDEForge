@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http://hadoop/1.0" nsPrefix="model">
+  <eClassifiers xsi:type="ecore:EClass" name="HDFSServer" eSuperTypes="#//Server">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loaded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operationURIs" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel" references="#//HDFSServer/operationURIs/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <details key="documentation" value="List of HDFS uris where operations are being performed."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Servers">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hdfsServers" upperBound="-1"
+        eType="#//HDFSServer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="1.0.0.0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zookeeperServers" upperBound="-1"
+        eType="#//ZooKeeperServer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ServerStatus">
+    <eLiterals name="NO_PROJECT" value="1"/>
+    <eLiterals name="DISCONNECTED" value="2"/>
+    <eLiterals name="CONNECTED" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Server" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel" references="#//Server/uri/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <details key="documentation" value="This is URI location for the HDFS server. Ex: hdfs://hdfs.server.hostname/path."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        transient="true" defaultValueLiteral="0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel" references="#//Server/statusCode/%http:%2F%2Fwww.eclipse.org%2Femf%2F2002%2FGenModel%">
+        <details key="documentation" value="Indicates the status of this server. Values could be from HTTP response codes to indicate server status."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statusMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastAccessed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ZooKeeperServer" eSuperTypes="#//Server #//ZNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ZNode">
+    <eOperations name="getPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (this instanceof org.apache.hadoop.eclipse.internal.model.ZooKeeperServer)&#xA;&#x9;return &quot;/&quot;;&#xA;else {&#xA;&#x9;String parentPath = getParent().getPath();&#xA;&#x9;return parentPath.endsWith(&quot;/&quot;) ? parentPath + getNodeName() : parentPath + &quot;/&quot; + getNodeName();&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getServer" eType="#//ZooKeeperServer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(this instanceof org.apache.hadoop.eclipse.internal.model.ZooKeeperServer)&#xA;&#x9;&#x9;&#x9;return (org.apache.hadoop.eclipse.internal.model.ZooKeeperServer) this;&#xA;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;return getParent().getServer();"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ZNode" transient="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastRefresh" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refreshing" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ephermeral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiedId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiedTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        transient="true" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="childrenVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        transient="true" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aclVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ephermalOwnerSessionId"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong" defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="childrenCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ZNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequential" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+</ecore:EPackage>

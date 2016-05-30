@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="script"
+    nsURI="http://torusfw.org/ide/Script" nsPrefix="script">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//AbstractElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractElement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="NativeTypeEnum">
+    <eLiterals name="string" literal="string"/>
+    <eLiterals name="int" value="1" literal="int"/>
+    <eLiterals name="bool" value="2" literal="bool"/>
+    <eLiterals name="object" value="3" literal="object"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NativeType" eSuperTypes="#//TypeRef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//NativeTypeEnum"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeRef" eSuperTypes="#//MultiTypeRef #//ReturnTypeRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenced" eType="#//Interface"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multi" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultiTypeRef"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnTypeRef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isVoid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageDeclaration" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//AbstractElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//Interface"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="singleton" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//MethodDeclaration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//ReturnTypeRef"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="args" upperBound="-1" eType="#//ArgumentDeclaration"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgumentDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//MultiTypeRef"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

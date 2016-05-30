@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ddlDsl"
+    nsURI="http://www.openxma.org/dsl/ddl/DdlDsl" nsPrefix="ddlDsl">
+  <eClassifiers xsi:type="ecore:EClass" name="Ddl">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//DdlStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DdlStatement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Alter" eSuperTypes="#//DdlStatement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//CreateTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="#//AlterTableAction"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlterTableAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DropTableConstraint" eSuperTypes="#//AlterTableAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintRef" eType="#//Constraint"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//DdlStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableComment" eSuperTypes="#//Comment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//CreateTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnComment" eSuperTypes="#//Comment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AddTableConstraint" eSuperTypes="#//AlterTableAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Create" eSuperTypes="#//DdlStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateTable" eSuperTypes="#//Create">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//TableProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateIndex" eSuperTypes="#//Create">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//CreateTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" unique="false"
+        upperBound="-1" eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sortOrders" unique="false"
+        upperBound="-1" eType="#//SortDirectionEnum"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableProperty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//TableProperty">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//SqlDataType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sorted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ReferenceClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Drop" eSuperTypes="#//DdlStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//TableProperty"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NullableConstraint" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="not" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UniqueKeyConstraint" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" unique="false"
+        upperBound="-1" eType="#//Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimaryKeyConstraint" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" unique="false"
+        upperBound="-1" eType="#//Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForeignKeyConstraint" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" unique="false"
+        upperBound="-1" eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ReferenceClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//CreateTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" unique="false"
+        upperBound="-1" eType="#//Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlCharacter" eSuperTypes="#//SqlDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="national" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlNumber" eSuperTypes="#//SqlDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasPrecision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LongRaw" eSuperTypes="#//SqlDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Long" eSuperTypes="#//LongRaw">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="raw" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Raw" eSuperTypes="#//LongRaw">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlDateTime" eSuperTypes="#//SqlDataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlDate" eSuperTypes="#//SqlDateTime"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlTimeStamp" eSuperTypes="#//SqlDateTime">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlInterval" eSuperTypes="#//SqlDateTime">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="day" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondsPrecision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LargeObjectType" eSuperTypes="#//SqlDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RowIdType" eSuperTypes="#//SqlDataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlBoolean" eSuperTypes="#//SqlDataType"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="SortDirectionEnum">
+    <eLiterals name="ASC" literal="ASC"/>
+    <eLiterals name="DESC" value="1" literal="DESC"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="avm"
+    nsURI="http://axdt.org/uri/Avm" nsPrefix="avm">
+  <eClassifiers xsi:type="ecore:EClass" name="AvmIdentifiable" abstract="true" interface="true">
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmDefinition" abstract="true" interface="true"
+      eSuperTypes="#//AvmIdentifiable">
+    <eOperations name="getQualifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getCanonicalName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getQualifiedName" eType="#//AvmQualifiedName"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmDefinitionContainer" abstract="true"
+      interface="true">
+    <eOperations name="getTypes">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eTypeParameter="#//AvmDefinitionContainer/getTypes/T"/>
+      </eGenericType>
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AvmDeclaredType"/>
+      </eTypeParameters>
+    </eOperations>
+    <eOperations name="getMembers">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eTypeParameter="#//AvmDefinitionContainer/getMembers/T"/>
+      </eGenericType>
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AvmMember"/>
+      </eTypeParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmPackage" abstract="true" interface="true"
+      eSuperTypes="#//AvmDefinitionContainer #//AvmDefinition #//AvmReferable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmType" abstract="true" interface="true"
+      eSuperTypes="#//AvmDefinition #//AvmReferable">
+    <eOperations name="isDynamic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isInterface" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="calculateCommonType" eType="#//AvmType">
+      <eParameters name="other" eType="#//AvmType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmTypeReference" abstract="true">
+    <eOperations name="getType" eType="#//AvmType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmDeclaredElement" abstract="true"
+      interface="true" eSuperTypes="#//AvmDefinition">
+    <eOperations name="getQualifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getVisibility" eType="#//AvmVisibility"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmDeclaredType" abstract="true" interface="true"
+      eSuperTypes="#//AvmDeclaredElement #//AvmType">
+    <eOperations name="getSuperTypes">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eClassifier="#//AvmTypeReference"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getExtendedClass" eType="#//AvmTypeReference"/>
+    <eOperations name="getExtendedInterfaces">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eTypeParameter="#//AvmDeclaredType/getExtendedInterfaces/T"/>
+      </eGenericType>
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AvmTypeReference"/>
+      </eTypeParameters>
+    </eOperations>
+    <eOperations name="getMembers">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eTypeParameter="#//AvmDeclaredType/getMembers/T"/>
+      </eGenericType>
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AvmMember"/>
+      </eTypeParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmClass" abstract="true" interface="true"
+      eSuperTypes="#//AvmDeclaredType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmInterface" abstract="true" interface="true"
+      eSuperTypes="#//AvmDeclaredType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmMember" abstract="true" interface="true"
+      eSuperTypes="#//AvmDeclaredElement #//AvmReferable">
+    <eOperations name="isStatic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmExecutable" abstract="true" interface="true"
+      eSuperTypes="#//AvmIdentifiable">
+    <eOperations name="getParameters" upperBound="-1">
+      <eGenericType eTypeParameter="#//AvmExecutable/getParameters/T"/>
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AvmParameter"/>
+      </eTypeParameters>
+    </eOperations>
+    <eOperations name="getReturnType" eType="#//AvmTypeReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmVariable" abstract="true" interface="true"
+      eSuperTypes="#//AvmReferable">
+    <eOperations name="getType" eType="#//AvmTypeReference"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmField" abstract="true" interface="true"
+      eSuperTypes="#//AvmMember #//AvmVariable">
+    <eOperations name="isConstant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getType" eType="#//AvmTypeReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmProperty" abstract="true" interface="true"
+      eSuperTypes="#//AvmField">
+    <eOperations name="isReadonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isWriteonly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getGetter" eType="#//AvmOperation"/>
+    <eOperations name="getSetter" eType="#//AvmOperation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmNamespace" abstract="true" interface="true"
+      eSuperTypes="#//AvmMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmParameter" abstract="true" interface="true"
+      eSuperTypes="#//AvmVariable">
+    <eOperations name="isRest" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmConstructor" abstract="true" interface="true"
+      eSuperTypes="#//AvmMember #//AvmExecutable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmOperation" abstract="true" interface="true"
+      eSuperTypes="#//AvmMember #//AvmExecutable">
+    <eOperations name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isNative" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isOverride" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="asdoc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AvmVisibility">
+    <eLiterals name="PUBLIC" value="1"/>
+    <eLiterals name="INTERNAL"/>
+    <eLiterals name="PROTECTED" value="2"/>
+    <eLiterals name="PRIVATE" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmNull" eSuperTypes="#//AvmType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmVoid" eSuperTypes="#//AvmType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmGeneric" eSuperTypes="#//AvmType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmVoidReference" eSuperTypes="#//AvmTypeReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmNullReference" eSuperTypes="#//AvmTypeReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmGenericReference" eSuperTypes="#//AvmTypeReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmDeclaredTypeReference" eSuperTypes="#//AvmTypeReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AvmType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//AvmType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="List" instanceClassName="java.util.List">
+    <eTypeParameters name="E"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvmReferable" abstract="true" interface="true"
+      eSuperTypes="#//AvmIdentifiable"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="AvmQualifiedName" instanceClassName="org.axdt.avm.naming.AvmQualifiedName"/>
+</ecore:EPackage>

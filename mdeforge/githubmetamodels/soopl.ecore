@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="soopl"
+    nsURI="http://www.big.tuwien.ac.at/me/ws11/soopl" nsPrefix="soopl">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" ordered="false"
+        upperBound="-1" eType="#//Class" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" ordered="false"
+        upperBound="-1" eType="#//Package" containment="true" eOpposite="#//Package/parentPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentPackage" ordered="false"
+        eType="#//Package" changeable="false" eOpposite="#//Package/packages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" ordered="false"
+        upperBound="-1" eType="#//Method" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" ordered="false"
+        upperBound="-1" eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAbstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StatefulClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+        eType="#//StateImplementationClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateClass" lowerBound="1"
+        eType="#//StateClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statefulClass" lowerBound="1"
+        eType="#//StatefulClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateImplementationClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryMethod" upperBound="-1"
+        eType="#//Method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateClass" lowerBound="1"
+        eType="#//StateClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleTypeProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
+        eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//ComplexTypeProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionMethod" eSuperTypes="#//Method">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiValued" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//Guard"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" lowerBound="1"
+        eType="#//StateImplementationClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="String"/>
+    <eLiterals name="Integer"/>
+    <eLiterals name="Boolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleTypeParameter" eSuperTypes="#//Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
+        eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexTypeParameter" eSuperTypes="#//Parameter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classType" lowerBound="1"
+        eType="#//Class"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallMethodAction" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calledMethod" lowerBound="1"
+        eType="#//Method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterBinding" upperBound="-1"
+        eType="#//ParameterBinding" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterBinding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structuralFeatureBinding"
+        eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IsInStateCondition" abstract="true"
+      eSuperTypes="#//Guard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inState" lowerBound="1"
+        eType="#//StateImplementationClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyIsInState" eSuperTypes="#//IsInStateCondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="property" lowerBound="1"
+        eType="#//ComplexTypeProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterIsInState" eSuperTypes="#//IsInStateCondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallMethodOfProperty" eSuperTypes="#//CallMethodAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="property" lowerBound="1"
+        eType="#//ComplexTypeProperty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallMethodOfParameter" eSuperTypes="#//CallMethodAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssignProperty" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="property" lowerBound="1"
+        eType="#//ComplexTypeProperty"/>
+  </eClassifiers>
+</ecore:EPackage>

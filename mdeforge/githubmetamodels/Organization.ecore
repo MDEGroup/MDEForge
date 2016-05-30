@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="organization"
+    nsURI="http:///org/generationcp/model/core/organization.ecore" nsPrefix="org.generationcp.model.core.organization">
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationDetail" eSuperTypes="feature.ecore#//SimpleFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Contact" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="affiliation" eType="#//Organization"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContactingDetail" eSuperTypes="feature.ecore#//SimpleFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="legalEntity" lowerBound="1"
+        eType="#//LegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="streetAddress" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postalCode" eType="ecore:EClass value.ecore#//StringValue"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="administrativeDivision"
+        upperBound="-1" eType="ecore:EClass ontology.ecore#//SimpleOntologyTerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="communicationModes" upperBound="-1"
+        eType="#//CommunicationDetail"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contactingDetails" upperBound="-1"
+        eType="#//ContactingDetail"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderedLegalEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="legalEntity" eType="#//LegalEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precedence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderedSet" lowerBound="1"
+        eType="#//OrderedLegalEntitySet" eOpposite="#//OrderedLegalEntitySet/members"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderedLegalEntitySet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" lowerBound="1"
+        upperBound="-1" eType="#//OrderedLegalEntity" eOpposite="#//OrderedLegalEntity/orderedSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Organization" eSuperTypes="#//LegalEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//LegalEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="principalInvestigator"
+        eType="#//Contact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collaborators" upperBound="-1"
+        eType="#//Contact"/>
+  </eClassifiers>
+</ecore:EPackage>

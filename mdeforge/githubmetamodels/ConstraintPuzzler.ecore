@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="constraintpuzzler" nsURI="http://constraintpuzzler/1.0" nsPrefix="constraintpuzzler">
+  <eSubpackages name="structure">
+    <eClassifiers xsi:type="ecore:EClass" name="Puzzle">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1"
+          eType="#//structure/Grid" containment="true" eOpposite="#//structure/Grid/puzzle"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraintGroups" upperBound="-1"
+          eType="#//constraint/ConstraintGroup" containment="true" eOpposite="#//constraint/ConstraintGroup/puzzle"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="solver" lowerBound="1"
+          eType="#//solver/Solver" containment="true" eOpposite="#//solver/Solver/puzzle"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Grid">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="puzzle" lowerBound="1"
+          eType="#//structure/Puzzle" eOpposite="#//structure/Puzzle/grid"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
+          eType="#//structure/Cell" containment="true" eOpposite="#//structure/Cell/grid"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Cell">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1"
+          eType="#//structure/Grid" eOpposite="#//structure/Grid/cells"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraintGroups" upperBound="-1"
+          eType="#//constraint/ConstraintGroup" eOpposite="#//constraint/ConstraintGroup/cells"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="solver">
+    <eClassifiers xsi:type="ecore:EClass" name="Solver">
+      <eOperations name="solve"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="puzzle" lowerBound="1"
+          eType="#//structure/Puzzle" eOpposite="#//structure/Puzzle/solver"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="solverPlugins" upperBound="-1"
+          eType="#//solver/SolverPlugin" containment="true" eOpposite="#//solver/SolverPlugin/solver"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SolverPlugin">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="solver" lowerBound="1"
+          eType="#//solver/Solver" eOpposite="#//solver/Solver/solverPlugins"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="constraint">
+    <eClassifiers xsi:type="ecore:EClass" name="ConstraintGroup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="puzzle" lowerBound="1"
+          eType="#//structure/Puzzle" eOpposite="#//structure/Puzzle/constraintGroups"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//constraint/Constraint" containment="true" eOpposite="#//constraint/Constraint/constraintGroup"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cells" upperBound="-1"
+          eType="#//structure/Cell" eOpposite="#//structure/Cell/constraintGroups"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Constraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraintGroup" lowerBound="1"
+          eType="#//constraint/ConstraintGroup" eOpposite="#//constraint/ConstraintGroup/constraints"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="gui"/>
+  <eSubpackages name="utility"/>
+</ecore:EPackage>

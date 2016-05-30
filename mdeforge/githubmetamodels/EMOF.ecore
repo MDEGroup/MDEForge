@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="emof"
+    nsURI="http:///emof.ecore" nsPrefix="emof">
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+        eType="#//Property" containment="true" eOpposite="#//Property/class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperation" upperBound="-1"
+        eType="#//Operation" containment="true" eOpposite="#//Operation/class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" upperBound="-1"
+        eType="#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAbstract" eType="#//Boolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tag" upperBound="-1" eType="#//Tag"
+        eOpposite="#//Tag/element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" upperBound="-1"
+        eType="#//Comment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" upperBound="-1"
+        eType="#//Element" eOpposite="#//Element/tag"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLiteral" upperBound="-1"
+        eType="#//EnumerationLiteral" containment="true" eOpposite="#//EnumerationLiteral/enumeration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Extent" eSuperTypes="#//Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//MultiplicityElement #//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="#//Class"
+        transient="true" eOpposite="#//Class/ownedOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+        eType="#//Parameter" containment="true" eOpposite="#//Parameter/operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="raisedException" upperBound="-1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultiplicityElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOrdered" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isUnique" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" eType="#//Integer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" eType="#//UnlimitedNatural"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedType" upperBound="-1"
+        eType="#//Type" containment="true" eOpposite="#//Type/package"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" upperBound="-1"
+        eType="#//Package" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" lowerBound="1"
+        eType="#//Package" transient="true" eOpposite="#//Package/ownedType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//MultiplicityElement #//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"
+        transient="true" eOpposite="#//Operation/ownedParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumerationLiteral" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" eType="#//Enumeration"
+        transient="true" eOpposite="#//Enumeration/ownedLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//MultiplicityElement #//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1" eType="#//Class"
+        transient="true" eOpposite="#//Class/ownedAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isReadOnly" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDerived" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComposite" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isId" eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="URIExtent" eSuperTypes="#//Extent"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="java.lang.Boolean"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="UnlimitedNatural" instanceClassName="java.lang.Integer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.lang.Integer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Real" instanceClassName="java.lang.Float"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotatedElement" upperBound="-1"
+        eType="#//NamedElement"/>
+  </eClassifiers>
+</ecore:EPackage>

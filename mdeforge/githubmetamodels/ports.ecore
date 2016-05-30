@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ports"
+    nsURI="http://redhawk.gov/ui/views/monitor/ports" nsPrefix="ports">
+  <eClassifiers xsi:type="ecore:EClass" name="PortMonitor" eSuperTypes="#//Monitor #//PortStatisticsProvider">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port">
+      <eGenericType eClassifier="ecore:EClass platform:/plugin/gov.redhawk.sca.model/model/sca.ecore#//ScaPort">
+        <eTypeArguments/>
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//PortConnectionMonitor" containment="true" eOpposite="#//PortConnectionMonitor/port"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//PortUsageType"
+        transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortConnectionMonitor" eSuperTypes="#//PortStatisticsProvider">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="#//PortMonitor"
+        eOpposite="#//PortMonitor/connections"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionId" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="PortUsageType" instanceClassName="BULKIO.PortUsageType"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="PortStatistics" instanceClassName="BULKIO.PortStatistics"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MonitorRegistry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitors" upperBound="-1"
+        eType="#//Monitor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortSupplierMonitor" eSuperTypes="#//Monitor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portContainer" eType="ecore:EClass platform:/plugin/gov.redhawk.sca.model/model/sca.ecore#//ScaPortContainer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitors" upperBound="-1"
+        eType="#//PortMonitor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Monitor" abstract="true" interface="true">
+    <eOperations name="fetchStats"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortStatisticsProvider">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="data" eType="#//PortStatistics"
+        transient="true"/>
+  </eClassifiers>
+</ecore:EPackage>

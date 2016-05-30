@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="opmodel"
+    nsURI="www.vainolo.com/phd/opmodel" nsPrefix="opmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="keyValuePair">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanceBase" abstract="true">
+    <eOperations name="getProperty" lowerBound="1" eType="#//PropertyInstance">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for (PropertyInstance propertyInstance:getProperties()){&#xD;&#xA;&#x9; if (propertyInstance.getName().equals(name)) return propertyInstance;&#xD;&#xA;}&#xD;&#xA;return null;"/>
+      </eAnnotations>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//PropertyInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Type" lowerBound="1" eType="#//TypeDescriptor"
+        eKeys="#//TypeDescriptor/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Rectangle" instanceClassName="org.eclipse.draw2d.geometry.Rectangle"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeInstance" eSuperTypes="#//InstanceBase ../../com.vainolo.phd.opm.model/model/opm.ecore#//OPMNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraints" lowerBound="1"
+        eType="#//Rectangle" defaultValueLiteral="0,0,50,50"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLinks" upperBound="-1"
+        eType="#//LinkInstance" eOpposite="#//LinkInstance/target" eKeys="#//InstanceBase/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLinks" upperBound="-1"
+        eType="#//LinkInstance" eOpposite="#//LinkInstance/source" eKeys="#//InstanceBase/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkInstance" eSuperTypes="#//InstanceBase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bendpoints" upperBound="-1"
+        eType="#//Point"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//NodeInstance" eOpposite="#//NodeInstance/incomingLinks" eKeys="#//InstanceBase/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//NodeInstance" eOpposite="#//NodeInstance/outgoingLinks" eKeys="#//InstanceBase/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//ContainerInstance" eOpposite="#//ContainerInstance/links" eKeys="#//InstanceBase/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerInstance" eSuperTypes="#//InstanceBase">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//NodeInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//LinkInstance" containment="true" eOpposite="#//LinkInstance/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThingInstance" eSuperTypes="#//NodeInstance #//ContainerInstance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeDescriptor">
+    <eOperations name="isAbstract" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (!getChildren().isEmpty());"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//PropertyDescriptor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parents" upperBound="-1"
+        eType="#//TypeDescriptor" eOpposite="#//TypeDescriptor/children" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//TypeDescriptor" eOpposite="#//TypeDescriptor/parents" eKeys="#//TypeDescriptor/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//propertyType"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPmodelHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//ContainerInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaDefinition" lowerBound="1"
+        eType="#//OPmetaDefinition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="NextId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPmetaDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" lowerBound="3" upperBound="-1"
+        eType="#//TypeDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1" upperBound="-1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containers" lowerBound="1"
+        upperBound="-1" eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" lowerBound="1" upperBound="-1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//PropertyDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkValidationRules" upperBound="-1"
+        eType="#//OPmodelLinkValidationRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containmentValidationRules"
+        upperBound="-1" eType="#//OPmodelContainmentValidationRule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="propertyType">
+    <eLiterals name="String"/>
+    <eLiterals name="int" value="1"/>
+    <eLiterals name="Boolean" value="2" literal="Boolean"/>
+    <eLiterals name="float" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyInstance">
+    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDescriptor().getName();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getType" eType="#//propertyType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDescriptor().getType();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="String oldValue = value;&#xD;&#xA;value = val;&#xD;&#xA;if (eNotificationRequired())&#xD;&#xA;&#x9;eNotify(new ENotificationImpl(this, Notification.SET, opmodelPackage.PROPERTY_INSTANCE__VALUE, oldValue, value));&#xD;&#xA;return true;"/>
+      </eAnnotations>
+      <eParameters name="val" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="unsetValue" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="value =VALUE_EDEFAULT;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" eType="#//PropertyDescriptor"
+        eKeys="#//PropertyDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyIntInstance" eSuperTypes="#//PropertyInstance">
+    <eOperations name="setValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="try {&#xD;&#xA;&#x9;Integer.parseInt(val);&#xD;&#xA;} catch (NumberFormatException e) {&#xD;&#xA;&#x9;return false;&#xD;&#xA;}&#xD;&#xA;super.setValue(val);&#xD;&#xA;return true;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="val" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyFloatInstance" eSuperTypes="#//PropertyInstance">
+    <eOperations name="setValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="try {&#xD;&#xA;&#x9;Float.parseFloat(val);&#xD;&#xA;} catch (NumberFormatException e) {&#xD;&#xA;&#x9;return false;&#xD;&#xA;}&#xD;&#xA;super.setValue(val);&#xD;&#xA;return true;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="val" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyBooleanInstance" eSuperTypes="#//PropertyInstance">
+    <eOperations name="setValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (val.equals(&quot;true&quot;) || val.equals(&quot;false&quot;)) {&#xD;&#xA;&#x9;super.setValue(val);&#xD;&#xA;&#x9;return true;&#xD;&#xA;}&#xD;&#xA;return false;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="val" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPmodelLinkValidationRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceType" lowerBound="1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetType" lowerBound="1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkType" lowerBound="1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPmodelContainmentValidationRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerType" lowerBound="1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodeType" lowerBound="1"
+        eType="#//TypeDescriptor" eKeys="#//TypeDescriptor/id"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="nima" nsURI="http://nima/1.0" nsPrefix="nima">
+  <eClassifiers xsi:type="ecore:EClass" name="Archetype" eSuperTypes="#//Fiche">
+    <eOperations name="getIP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if(typeAtt.CHALEUR == type)&#xD;&#xA;&#x9;return cha;&#xD;&#xA;if(typeAtt.ELECTRICITE == type)&#xD;&#xA;&#x9;return elec;&#xD;&#xA;if(typeAtt.FROID == type)&#xD;&#xA;&#x9;return cha;&#xD;&#xA;if(typeAtt.TRANCHANT == type)&#xD;&#xA;&#x9;return tran;&#xD;&#xA;if(typeAtt.CONTONDANT == type)&#xD;&#xA;&#x9;return con;&#xD;&#xA;if(typeAtt.PERFORANT == type)&#xD;&#xA;&#x9;return perf;&#xD;&#xA;if(typeAtt.ENERGIE == type)&#xD;&#xA;&#x9;return ener;&#xD;&#xA;return 0;"/>
+      </eAnnotations>
+      <eParameters name="type" eType="#//typeAtt"/>
+    </eOperations>
+    <eOperations name="resetRound">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="this.setPeutAgir(true);&#xD;&#xA;this.setNbAction(0);&#xD;&#xA;this.setNbDef(0);&#xD;&#xA;int init = this.getInit() + this.getActive().getInit();&#xD;&#xA;init+= Des.fullRoll();&#xD;&#xA;this.setRolledInit(init);&#xD;&#xA;this.setCurrent(this.getActive());"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTotalAttaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="int total = 0;&#xD;&#xA;total+=this.getAttaque();&#xD;&#xA;total+=this.getBonusAtaque();&#xD;&#xA;total+=this.getMalusCritTemp();&#xD;&#xA;return total;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTotalDefense" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="int total = 0;&#xD;&#xA;total+=this.getDefense();&#xD;&#xA;total+=this.getBonusDef();&#xD;&#xA;total+=this.getMalusCritTemp();&#xD;&#xA;return total;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="baston">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="Config attaque = this.getCurrent();&#xD;&#xA;Config contrattaque = this.getCible().getContre();&#xD;&#xA;if(attaque==null)&#xD;&#xA;{&#xD;&#xA;&#x9;return;&#xD;&#xA;}&#xD;&#xA;int nb  = attaque.getNbAttaques();&#xD;&#xA;int superbonus = bonus;&#xD;&#xA;while(nb>0){&#xD;&#xA;&#x9;nb--;&#xD;&#xA;&#x9;int r =attaque.attaque(superbonus);&#xD;&#xA;&#x9;superbonus=0;&#xD;&#xA;&#x9;if(r>=0){&#xD;&#xA;&#x9;&#x9;contrattaque.attaque(r);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;&#xD;&#xA;}&#xD;&#xA;if(attaque.getEnchaine()!=null) {&#xD;&#xA;&#x9;this.setCurrent(attaque.getEnchaine());&#xD;&#xA;&#x9;baston(0);&#xD;&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="bonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configs" upperBound="-1"
+        eType="#//Config" containment="true" eOpposite="#//Config/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="init" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defense" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeDef" eType="#//TypeDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rphy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rmys" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rpsy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="perf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tran" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="con" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cha" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="froid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elec" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ener" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="active" eType="#//Config"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nbDef" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joueur" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nbAction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="peutAgir" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rolledInit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cible" eType="#//Archetype"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hpMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="malusCritTemp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bonusAtaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bonusDef" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="current" eType="#//Config"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contre" eType="#//Config"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Config">
+    <eOperations name="calcMalusDef" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="TypeDef td = this.getTypeDef();&#xD;&#xA;TypeAttaque ta = attaquand.getTypeAttaque();&#xD;&#xA;if(ta==TypeAttaque.TIR){&#xD;&#xA;&#x9;if(td==TypeDef.ESQUIVE)&#xD;&#xA;&#x9;&#x9;return 30;&#xD;&#xA;&#x9;if(td==TypeDef.PARADE)&#xD;&#xA;&#x9;&#x9;return 80;&#xD;&#xA;}&#xD;&#xA;if(ta==TypeAttaque.LANCE){&#xD;&#xA;&#xD;&#xA;&#x9;if(td==TypeDef.PARADE)&#xD;&#xA;&#x9;&#x9;return 50;&#xD;&#xA;}&#xD;&#xA;return 0;"/>
+      </eAnnotations>
+      <eParameters name="attaquand" eType="#//Config"/>
+    </eOperations>
+    <eOperations name="attaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#xD;&#xA;Archetype attaquant, defenseur;&#xD;&#xA;Config attaque, defense;&#xD;&#xA;attaquant=this.getOwner();&#xD;&#xA;attaque=this;&#xD;&#xA;defenseur=attaquant.getCible();&#xD;&#xA;defense = defenseur.getActive();&#xD;&#xA;String attakname = attaque.getNom();&#xD;&#xA;&#xD;&#xA;if(!attaquant.isPeutAgir())&#xD;&#xA;&#x9;return -1;&#xD;&#xA;//Score de base&#xD;&#xA;int attaqueTotale =attaquant.getTotalAttaque();&#xD;&#xA;int defenseTotale=defenseur.getTotalDefense();&#xD;&#xA;&#xD;&#xA;//bonus config&#xD;&#xA;&#xD;&#xA;attaqueTotale+=attaque.getAttaque();&#xD;&#xA;defenseTotale+=defense.getDefense();&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;//bonus malus contexte&#xD;&#xA;if(defense.getTypeDef()==TypeDef.ESQUIVE&#xD;&#xA;&#x9;&#x9;|| defense.getTypeDef()==TypeDef.PARADE){&#xD;&#xA;&#x9;int def = defenseur.getNbDef();&#xD;&#xA;&#x9;if(def ==1) defenseTotale=defenseTotale-30;&#xD;&#xA;&#x9;if(def ==2) defenseTotale=defenseTotale-50;&#xD;&#xA;&#x9;if(def ==3) defenseTotale=defenseTotale-70;&#xD;&#xA;&#x9;if(def >3) defenseTotale=defenseTotale-90;&#xD;&#xA;&#x9;defenseur.setNbDef(def+1);&#xD;&#xA;}&#xD;&#xA;//roll&#xD;&#xA;System.out.println(&quot;att :&quot;+attaqueTotale+ &quot; def :&quot;+defenseTotale);&#xD;&#xA;if(attaquant.isJoueur()){&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;InputDialog d = new InputDialog(new Shell(),&quot;Score du joueur&quot;, &quot;Entrez le score d'attaque au dés de &quot;+attaquant.getNom(), &quot;50&quot;,null);&#xD;&#xA;&#x9;int choice = d.open();&#xD;&#xA;&#x9;if(choice==Window.OK) {&#xD;&#xA;&#x9;&#x9;Integer result = Integer.parseInt(d.getValue());&#xD;&#xA;&#x9;&#x9;attaqueTotale+=result;&#xD;&#xA;&#x9;}else {&#xD;&#xA;&#x9;&#x9;attaqueTotale+=Des.fullRoll();&#xD;&#xA;&#x9;}&#xD;&#xA;}else {&#xD;&#xA;&#x9;attaqueTotale+=Des.fullRoll();&#xD;&#xA;}&#xD;&#xA;if(defenseur.isJoueur()) {&#xD;&#xA;&#x9;InputDialog d = new InputDialog(new Shell(),&quot;Score du joueur&quot;, &quot;Entrez le score de défense au dés de &quot;+attaquant.getNom(), &quot;50&quot;,null);&#xD;&#xA;&#x9;int choice = d.open();&#xD;&#xA;&#x9;if(choice==Window.OK) {&#xD;&#xA;&#x9;&#x9;Integer result = Integer.parseInt(d.getValue());&#xD;&#xA;&#x9;&#x9;defenseTotale+=result;&#xD;&#xA;&#x9;}else {&#xD;&#xA;&#x9;&#x9;defenseTotale+=Des.fullRoll();&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;&#xD;&#xA;}else {&#xD;&#xA;&#x9;defenseTotale+=Des.fullRoll();&#x9;&#x9;&#xD;&#xA;}&#xD;&#xA;if(defenseTotale&lt;0) defenseTotale=0;&#xD;&#xA;int marge = attaqueTotale - defenseTotale;&#xD;&#xA;System.out.println(&quot;marge : &quot;+marge);&#xD;&#xA;if(marge>0) {&#xD;&#xA;&#x9;defenseur.setPeutAgir(defense.getTypeDef()==TypeDef.ENCAISSEMENT);&#xD;&#xA;&#x9;int absorption = 2 + defenseur.getIP(attaque.getTypeDegat());&#xD;&#xA;&#x9;marge -= absorption * 10;&#xD;&#xA;&#x9;if(marge>10) {&#xD;&#xA;&#x9;&#x9;int degat = attaque.getDegats()* marge /100;&#xD;&#xA;&#x9;&#x9;int hp = defenseur.getHp()- degat;&#xD;&#xA;&#x9;&#x9;defenseur.setHp(hp);&#xD;&#xA;&#x9;&#x9;String tab[] ={&quot;Ok&quot;}; &#xD;&#xA;&#x9;&#x9;String info = defenseur.getNom()+&quot; encaisse &quot;+degat+&quot; points de dégats sur &quot;+attakname+&quot;. Restant : &quot;+hp;&#xD;&#xA;&#x9;&#x9;MessageDialog d = new MessageDialog(new Shell(), &quot;Résultat&quot;, null, info, 0, tab, 0);&#xD;&#xA;&#x9;&#x9;d.open();&#xD;&#xA;&#x9;}else {&#xD;&#xA;&#x9;&#x9;String tab[] ={&quot;Ok&quot;}; &#xD;&#xA;&#x9;&#x9;String info = defenseur.getNom()+&quot; se défend de justesse sur &quot;+attakname+&quot;. 0 Dégat, pas d'actions&quot;;&#xD;&#xA;&#x9;&#x9;MessageDialog d = new MessageDialog(new Shell(), &quot;Résultat&quot;, null, info, 0, tab, 0);&#xD;&#xA;&#x9;&#x9;d.open();&#x9;&#xD;&#xA;&#x9;}&#xD;&#xA;}else if (marge&lt;0) {&#xD;&#xA;&#x9;int result = Des.getContre(marge);&#xD;&#xA;&#x9;String tab[] ={&quot;Ok&quot;}; &#xD;&#xA;&#x9;String info = &quot;Défense réussi par&quot;+defenseur.getNom()+&quot;, contre attaque contre &quot;+attakname+&quot; possible avec un bonus de &quot;+result;&#xD;&#xA;&#x9;MessageDialog d = new MessageDialog(new Shell(), &quot;Résultat&quot;, null, info, 0, tab, 0);&#xD;&#xA;&#x9;d.open();&#xD;&#xA;&#x9;return result;&#xD;&#xA;}else{&#xD;&#xA;&#x9;String tab[] ={&quot;Ok&quot;}; &#xD;&#xA;&#x9;String info = &quot;Défense réussi par&quot;+defenseur.getNom()+&quot;, pas de contre attaque possible contre &quot;+attakname;&#xD;&#xA;&#x9;MessageDialog d = new MessageDialog(new Shell(), &quot;Résultat&quot;, null, info, 0, tab, 0);&#xD;&#xA;&#x9;d.open();&#xD;&#xA;&#x9;return -1;&#xD;&#xA;}&#xD;&#xA;return-1;"/>
+      </eAnnotations>
+      <eParameters name="bonus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="init" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defense" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="degats" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeDegat" eType="#//typeAtt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//Archetype"
+        eOpposite="#//Archetype/configs"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nbAttaques" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enchaine" eType="#//Config"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeDef" eType="#//TypeDef"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeAttaque" eType="#//TypeAttaque"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TypeDef">
+    <eLiterals name="esquive"/>
+    <eLiterals name="parade" value="1"/>
+    <eLiterals name="bouclier" value="2"/>
+    <eLiterals name="encaissement" value="3"/>
+    <eLiterals name="neutre" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="typeAtt">
+    <eLiterals name="tranchant"/>
+    <eLiterals name="contondant" value="1"/>
+    <eLiterals name="perforant" value="2"/>
+    <eLiterals name="chaleur" value="3"/>
+    <eLiterals name="froid" value="4"/>
+    <eLiterals name="electricite" value="5"/>
+    <eLiterals name="energie" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Univers">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fiches" upperBound="-1"
+        eType="#//Fiche" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="combats" upperBound="-1"
+        eType="#//Combat" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categorie" eType="#//ListeCategorie"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Combat" eSuperTypes="#//Fiche">
+    <eOperations name="resetRound">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="setNbRound(nbRound+1);&#xD;&#xA;EList&lt;Archetype> l = this.getArchetypes();&#xD;&#xA;for(Archetype arch : l )&#xD;&#xA;{&#xD;&#xA;&#x9;arch.resetRound();&#xD;&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="resetAndRun">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9;setNbRound(nbRound+1);&#xD;&#xA;&#x9;&#x9;LinkedList&lt;Archetype> l =new LinkedList&lt;Archetype>(this.getArchetypes());&#xD;&#xA;&#x9;&#x9;for(Archetype arch : l ) {&#xD;&#xA;&#x9;&#x9;&#x9;arch.resetRound();&#xD;&#xA;&#x9;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;Collections.sort(l, new InitComparator());&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;for(Archetype arch : l ) {&#xD;&#xA;&#x9;&#x9;&#x9;if(arch.isPeutAgir()) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;arch.baston(0);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="archetypes" upperBound="-1"
+        eType="#//Archetype" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nbRound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TypeAttaque">
+    <eLiterals name="cac"/>
+    <eLiterals name="lance" value="1"/>
+    <eLiterals name="tir" value="2"/>
+    <eLiterals name="neutre" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fiche">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boxes" upperBound="-1"
+        eType="#//Box" containment="true" eOpposite="#//Box/fiche"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="liens" upperBound="-1"
+        eType="#//Lien" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categorie" eType="#//Categorie"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Lien">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Box"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cible" lowerBound="1" eType="#//Box"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categorie" eType="#//Categorie"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Box">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fiche" lowerBound="1" eType="#//Fiche"
+        eOpposite="#//Fiche/boxes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cible" eType="#//Fiche"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListeCategorie">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//Categorie" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Categorie">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

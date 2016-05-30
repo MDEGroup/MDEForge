@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sync"
+    nsURI="http://ca.uwaterloo.gsd/sync" nsPrefix="sync">
+  <eClassifiers xsi:type="ecore:EEnum" name="SynchronizationState">
+    <eLiterals name="unspecified" value="-1"/>
+    <eLiterals name="unchanged"/>
+    <eLiterals name="addedModel" value="1"/>
+    <eLiterals name="changedModel" value="2"/>
+    <eLiterals name="removedModel" value="3"/>
+    <eLiterals name="addedCode" value="4"/>
+    <eLiterals name="changedCode" value="5"/>
+    <eLiterals name="removedCode" value="6"/>
+    <eLiterals name="changed" value="7"/>
+    <eLiterals name="addedConsistently" value="8"/>
+    <eLiterals name="changedConsistently" value="9"/>
+    <eLiterals name="removedConsistently" value="10"/>
+    <eLiterals name="addedInconsistently" value="11"/>
+    <eLiterals name="changedInconsistently" value="12"/>
+    <eLiterals name="removedCodeChangedModel" value="13"/>
+    <eLiterals name="removedModelChangedCode" value="14"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReconciliationDecision">
+    <eLiterals name="unspecified" value="-1"/>
+    <eLiterals name="ignore"/>
+    <eLiterals name="enforce" value="1"/>
+    <eLiterals name="update" value="2"/>
+    <eLiterals name="overrideAndEnforce" value="3"/>
+    <eLiterals name="overrideAndUpdate" value="4"/>
+    <eLiterals name="enforceAndUpdate" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SyncItem" abstract="true">
+    <eOperations name="isStateForward" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isStateReverse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isStateConflict" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isStateChanged" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isDecisionIgnore" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isDecisionEnforce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isDecisionUpdate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isDecisionValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="decision" eType="#//ReconciliationDecision"/>
+    </eOperations>
+    <eOperations name="getModel" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eOperations name="getCode" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synchronizationState" eType="#//SynchronizationState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reconciliationDecision"
+        eType="#//ReconciliationDecision"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="result" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SynchronizationResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assertedModel" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implementationModel" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/ca.uwaterloo.gsd.fsml.core/model/fsml.ecore#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classSyncItems" upperBound="-1"
+        eType="#//ClassSyncItem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassSyncItem" eSuperTypes="#//SyncItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="syncItems" upperBound="-1"
+        eType="#//SyncItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="code" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralFeatureSyncItem" eSuperTypes="#//SyncItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structuralFeature" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+  </eClassifiers>
+</ecore:EPackage>

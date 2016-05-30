@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.imageio.ImageIO;
 
-import org.bson.types.ObjectId;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
@@ -48,7 +46,6 @@ import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.epsilon.eol.parse.Eol_EolParserRules.statementA_return;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.eclipse.m2m.atl.core.IExtractor;
 import org.eclipse.m2m.atl.core.IInjector;
@@ -89,11 +86,8 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SemanticSimilarityRelation;
-import org.mdeforge.business.model.SemanticSimilarityRelationV1;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
-import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.Tokenizer;
@@ -123,36 +117,11 @@ import com.mongodb.Mongo;
 import anatlyzer.atl.util.ATLSerializer;
 import anatlyzer.atlext.ATL.ATLPackage;
 import anatlyzer.atlext.OCL.OclExpression;
-//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
-//import it.univaq.disim.mdegroup.emfcompare.extension.match.SemanticMatchEngine;
-//import it.univaq.disim.mdegroup.wordnet.emf.compare.match.SemanticMatchEngine;
 
 @Service
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
 		implements EcoreMetamodelService {
-
-	@Override
-	public EcoreMetamodel findOneById(String idArtifact, User user) throws BusinessException {
-
-		EcoreMetamodel a = super.findOneById(idArtifact, user);
-		try {
-			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
-
-	@Override
-	public EcoreMetamodel findOneInProject(String project_id, String artifact_id, User user) {
-		EcoreMetamodel a = super.findOneInProject(project_id, artifact_id, user);
-		try {
-			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
+	
 
 	@Autowired
 	private Mongo mongo;
@@ -189,9 +158,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	@Override
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
-		artifact.setValid(isValid(artifact));
 		EcoreMetamodel result = super.create(artifact);
-
+		try {
+			artifact.setValid(isValid(artifact));
+		} catch (Exception e ) {System.err.println("KK");}
 		try {
 			this.extractedContent(result);
 		} catch (Exception e) {
@@ -199,7 +169,13 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			throw new ExtractContentEngineException(e.getMessage(), artifact.getId());
 		}
 		try {
-			artifact.setMetrics(getMetrics(artifact));
+			artifact.getUri().addAll(getNSUris(result));
+		} catch (Exception e) {
+			logger.error("Error when try to extract URI from metamodel");
+			throw new BusinessException();
+		}
+		try {
+			artifact.setMetrics(calculateMetrics(artifact));
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
 			throw new MetricEngineException("Some errors when try to calculate metric for metamodel", artifact.getId());
@@ -241,14 +217,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			throw new BusinessException();
 		}
 	}
-
-	@Override
-	public EcoreMetamodel findOnePublic(String id) {
-		EcoreMetamodel a = super.findOnePublic(id);
-		a.setMetrics(getMetrics(a));
-		return a;
-	}
-
 	@Override
 	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
 		return null;
@@ -845,8 +813,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		clusterizzation.setClusters(clusterList);
 		return clusterizzation;
 	}
-
-	private List<Relation> findInCluster(Artifact elem, Cluster cluster) {
+	@Override
+	public List<Relation> findInCluster(Artifact elem, Cluster cluster) {
 		List<Relation> result = new ArrayList<Relation>();
 		for (Relation rel : cluster.getRelations()) {
 			if (rel.getToArtifact().getId().equals(elem.getId()) || rel.getFromArtifact().getId().equals(elem.getId()))
@@ -1010,13 +978,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 
 	// endregion
-	@Override
-	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
-		List<Metric> metricList = metricRepository.findByArtifactId(new ObjectId(emm.getId()));
-		if (metricList.size() == 0)
-			metricList = calculateMetrics(emm);
-		return metricList;
-	}
+	
 
 	@Override
 	public List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample) throws BusinessException {
@@ -1207,8 +1169,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 		String mongoURI = mongoPrefix + mongo.getAddress().toString() + "/" + mongoDbFactory.getDb().getName() + "/"
 				+ jsonArtifactCollection + "/" + id.getId();
-		// Resource resource = jsonMongoResourceSet.getResourceSet()
-		// .createResource(URI.createURI(mongoURI));
 		Resource resource = jsonMongoResourceSet.getResourceSet().getResource(URI.createURI(mongoURI), true);
 		try {
 			if (!resource.isLoaded())
@@ -1287,7 +1247,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 			// CREATE OCLEXPRESSION
 			OCLExpression<EClassifier> expression;
-
 			expression = helper.createQuery("ecore::" + ATLSerializer.serialize(expr));
 
 			// CREATE QUERY FROM OCLEXPRESSION

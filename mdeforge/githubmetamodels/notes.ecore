@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="notes"
+    nsURI="http://org.emftext/notes" nsPrefix="notes">
+  <eClassifiers xsi:type="ecore:EClass" name="NoteDocument" eSuperTypes="#//Namedelement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//Part" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namedelement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section" eSuperTypes="#//Part #//Namedelement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superSection" eType="#//Section"
+        eKeys="#//Section/id"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bullets" upperBound="-1"
+        eType="#//BulletPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Part" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BulletPoint" eSuperTypes="#//Part">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="textParts" lowerBound="1"
+        upperBound="-1" eType="#//TextPart" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subPoints" upperBound="-1"
+        eType="#//BulletPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextPart" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleText" eSuperTypes="#//TextPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmphasisedText" abstract="true" eSuperTypes="#//TextPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Bold" eSuperTypes="#//EmphasisedText"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Italic" eSuperTypes="#//EmphasisedText"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeWriter" eSuperTypes="#//EmphasisedText"/>
+</ecore:EPackage>

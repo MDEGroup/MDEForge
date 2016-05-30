@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="doctrine"
+    nsURI="http://org.se/doctrine" nsPrefix="doctrine">
+  <eSubpackages name="Package" nsURI="http://org.se/doctrine/Package" nsPrefix="package">
+    <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//Connection/ConnectableElement #//Common/NamedElement #//Package/AbstractContainer">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="custom_path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Package/AbstractContainer"
+          eOpposite="#//Package/AbstractContainer/children"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractContainer" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+          eType="#//Package/Package" containment="true" eOpposite="#//Package/Package/parent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+          eType="#//Class/Class" containment="true" eOpposite="#//Class/Class/package"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Class" nsURI="http://org.se/doctrine/Class" nsPrefix="class">
+    <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//Common/NamedElement #//Connection/ConnectableElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="behaviors" eType="#//Class/Behaviors/Behaviors"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" eType="#//Class/Columns/Columns"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="package" lowerBound="1"
+          eType="#//Package/AbstractContainer" eOpposite="#//Package/AbstractContainer/classes"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//Class/Options/Options"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="listeners" eType="#//Class/Listeners/Listeners"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inheritance" eType="#//Class/Inheritance/Inheritance"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" eType="#//Class/Indexes/Indexes"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="extendedBy" upperBound="-1"
+          eType="#//Class/Inheritance/Inheritance" eOpposite="#//Class/Inheritance/Inheritance/class"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="checks" eType="#//Class/Checks/Checks"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relations" eType="#//Class/Relations/Relations"
+          containment="true"/>
+    </eClassifiers>
+    <eSubpackages name="Behaviors" nsURI="http://org.se/doctrine/Class/Behaviors"
+        nsPrefix="behaviors">
+      <eClassifiers xsi:type="ecore:EClass" name="Behaviors">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="behaviors" upperBound="-1"
+            eType="#//Class/Behaviors/Behavior" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Behavior" eSuperTypes="#//Common/NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+            eType="#//Class/Behaviors/Option" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Option" abstract="true" eSuperTypes="#//Common/NamedElement"/>
+      <eClassifiers xsi:type="ecore:EClass" name="LeafOption" abstract="true" eSuperTypes="#//Class/Behaviors/Option"/>
+      <eClassifiers xsi:type="ecore:EClass" name="IntermediateOption" eSuperTypes="#//Class/Behaviors/Option">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+            eType="#//Class/Behaviors/Option" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IntegerOption" eSuperTypes="#//Class/Behaviors/LeafOption">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayOption" eSuperTypes="#//Class/Behaviors/LeafOption">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+            eType="#//Class/Behaviors/ArrayValue" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayValue">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="StringOption" eSuperTypes="#//Class/Behaviors/LeafOption">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Columns" nsURI="http://org.se/doctrine/Class/Columns" nsPrefix="columns">
+      <eClassifiers xsi:type="ecore:EClass" name="Columns">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+            eType="#//Class/Columns/Column" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//Common/NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+            eType="#//Class/Columns/ColumnType" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="primary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="notNull" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="collation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnType" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanColumn" eSuperTypes="#//Class/Columns/ColumnType">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IntegerColumn" eSuperTypes="#//Class/Columns/ColumnType #//Class/Columns/LengthColumn">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsigned" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FloatColumn" eSuperTypes="#//Class/Columns/ColumnType #//Class/Columns/LengthColumn">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayColumn" eSuperTypes="#//Class/Columns/SerializedColumn"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DecimalColumn" eSuperTypes="#//Class/Columns/ColumnType #//Class/Columns/LengthColumn">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="StringColumn" eSuperTypes="#//Class/Columns/ColumnType #//Class/Columns/LengthColumn">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SerializedColumn" abstract="true"
+          eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BlobColumn" eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ClobColumn" eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="TimestampColumn" eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="TimeColumn" eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DateColumn" eSuperTypes="#//Class/Columns/ColumnType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="EnumColumn" eSuperTypes="#//Class/Columns/ColumnType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+            eType="#//Class/Columns/EnumValue" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//Class/Columns/EnumValue"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="EnumValue">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GzipColumn" eSuperTypes="#//Class/Columns/StringColumn"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ObjectColumn" eSuperTypes="#//Class/Columns/SerializedColumn"/>
+      <eClassifiers xsi:type="ecore:EClass" name="LengthColumn" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Relations" nsURI="http://org.se/doctrine/Class/Relations"
+        nsPrefix="relations">
+      <eClassifiers xsi:type="ecore:EClass" name="Relations">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="relations" upperBound="-1"
+            eType="#//Class/Relations/Relation" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="#//Common/NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="local" lowerBound="1"
+            eType="#//Class/Columns/IntegerColumn"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="foreign" lowerBound="1"
+            eType="#//Class/Columns/IntegerColumn"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="class" lowerBound="1"
+            eType="#//Class/Class"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="foreignAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="owningSide" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+            eType="#//Class/Relations/RelationType" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="onDelete" eType="#//Class/Relations/DATABASE_LEVEL_CASCADING"
+            defaultValueLiteral=""/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="onUpdate" eType="#//Class/Relations/DATABASE_LEVEL_CASCADING"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="delete" eType="#//Class/Relations/APPLICATION_LEVEL_CASCADING"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="foreignKeyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OneToManyRelationType" eSuperTypes="#//Class/Relations/RelationType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="OneToOneRelationType" eSuperTypes="#//Class/Relations/RelationType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ManyToManyRelationType" eSuperTypes="#//Class/Relations/RelationType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="refClass" lowerBound="1"
+            eType="#//Class/Class"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="equals" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="RelationType" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EEnum" name="DATABASE_LEVEL_CASCADING">
+        <eLiterals name="NONE" value="5"/>
+        <eLiterals name="CASCADE"/>
+        <eLiterals name="SET_NULL" value="2"/>
+        <eLiterals name="NO_ACTION" value="1"/>
+        <eLiterals name="RESTRICT" value="3"/>
+        <eLiterals name="SET_DEFAULT" value="4"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="APPLICATION_LEVEL_CASCADING">
+        <eLiterals name="NONE" value="1"/>
+        <eLiterals name="DELETE"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Options" nsURI="http://org.se/doctrine/Class/Options" nsPrefix="options">
+      <eClassifiers xsi:type="ecore:EClass" name="Options">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+            eType="#//Class/Options/Option" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Option">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Listeners" nsURI="http://org.se/doctrine/Class/Listeners"
+        nsPrefix="listeners">
+      <eClassifiers xsi:type="ecore:EClass" name="Listeners">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="listeners" upperBound="-1"
+            eType="#//Class/Listeners/Listener" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Listener" eSuperTypes="#//Common/NamedElement"/>
+    </eSubpackages>
+    <eSubpackages name="Indexes" nsURI="http://org.se/doctrine/Class/Indexes" nsPrefix="indexes">
+      <eClassifiers xsi:type="ecore:EClass" name="Indexes">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+            eType="#//Class/Indexes/Index" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Index">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+            eType="#//Class/Columns/Column"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sorting" eType="#//Class/Indexes/INDEX_SORTING"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="primary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//Class/Indexes/INDEX_TYPE"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="INDEX_SORTING">
+        <eLiterals name="ASC"/>
+        <eLiterals name="DESC" value="1"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="INDEX_TYPE">
+        <eLiterals name="FULLTEXT"/>
+        <eLiterals name="UNIQUE" value="1"/>
+        <eLiterals name="GIST" value="2"/>
+        <eLiterals name="GIN" value="3"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Inheritance" nsURI="http://org.se/doctrine/Class/Inheritance"
+        nsPrefix="inheritance">
+      <eClassifiers xsi:type="ecore:EClass" name="Inheritance">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//Class/Class"
+            eOpposite="#//Class/Class/extendedBy"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+            eType="#//Class/Inheritance/Type" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleInheritance" eSuperTypes="#//Class/Inheritance/Type"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConcreteInheritance" eSuperTypes="#//Class/Inheritance/Type"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnAggregationInheritance" eSuperTypes="#//Class/Inheritance/Type">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyField" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="keyValue" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Checks" nsURI="http://org.se/doctrine/Class/Checks" nsPrefix="checks">
+      <eClassifiers xsi:type="ecore:EClass" name="Checks">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="checks" upperBound="-1"
+            eType="#//Class/Checks/Check" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Check" eSuperTypes="#//Common/NamedElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="Connection" nsURI="http://org.se/doctrine/Connection" nsPrefix="connection">
+    <eClassifiers xsi:type="ecore:EClass" name="ConnectableElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connnection" eType="#//Connection/Connection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Connection">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Connections">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+          eType="#//Connection/Connection" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Common" nsURI="http://org.se/doctrine/Common" nsPrefix="common">
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Scheme" nsURI="http://org.se/doctrine/Scheme" nsPrefix="scheme">
+    <eClassifiers xsi:type="ecore:EClass" name="Scheme" eSuperTypes="#//Common/NamedElement #//Package/AbstractContainer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="globals" eType="#//Scheme/Globals"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connections" eType="#//Connection/Connections"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Globals">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//Connection/Connection"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="behaviors" eType="#//Class/Behaviors/Behaviors"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//Package/Package"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+          eType="#//Scheme/Option" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="detect_relations" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Option">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

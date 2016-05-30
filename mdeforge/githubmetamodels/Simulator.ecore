@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="simulator"
+    nsURI="http://klaper.sourceforge.net/metamodels/simulator/1.0" nsPrefix="simulator">
+  <eSubpackages name="base" nsURI="http://klaper.sourceforge.net/metamodels/simulator/1.0/base"
+      nsPrefix="simulator.base">
+    <eClassifiers xsi:type="ecore:EClass" name="SimModel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="workload" upperBound="-1"
+          eType="#//base/Workload" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resource" lowerBound="1"
+          upperBound="-1" eType="#//base/ResourceQueue" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Workload">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="step" lowerBound="1"
+          upperBound="-1" eType="#//base/Step" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Service">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="step" lowerBound="1"
+          upperBound="-1" eType="#//base/Step" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceQueue">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="capacity" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="offeredService" lowerBound="1"
+          upperBound="-1" eType="#//base/Service" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Step">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outTransition" upperBound="-1"
+          eType="#//base/Transition" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Transition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1"
+          eType="#//base/Step"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//base/Step"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="prob" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+          defaultValueLiteral="1.0"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Start" eSuperTypes="#//base/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="End" eSuperTypes="#//base/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//base/Step">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="repetitions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceTime" lowerBound="1"
+          eType="#//distribution/ProbabilityDistributionFunction" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="failMode" lowerBound="1"
+          eType="#//base/FailMode" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DiscreteFailMode" eSuperTypes="#//base/FailMode">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="internalFailTime" lowerBound="1"
+          eType="#//distribution/ProbabilityDistributionFunction" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContinuousFailMode" eSuperTypes="#//base/FailMode">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalFailProb" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FailMode"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceCall">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="service" lowerBound="1"
+          eType="#//base/Service"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SynchServiceCall" eSuperTypes="#//base/ServiceCall"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AsynchServiceCall" eSuperTypes="#//base/ServiceCall"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Branch" eSuperTypes="#//base/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//base/Step">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nTransition" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inTransition" lowerBound="1"
+          upperBound="-1" eType="#//base/Transition"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Fork" eSuperTypes="#//base/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Wait" eSuperTypes="#//base/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenWorkload" eSuperTypes="#//base/Workload">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arrivalProcess" lowerBound="1"
+          eType="#//distribution/ProbabilityDistributionFunction" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClosedWorkload" eSuperTypes="#//base/Workload">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="population" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExternalService" eSuperTypes="#//base/Step">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="serviceCall" lowerBound="1"
+          eType="#//base/ServiceCall" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="failProb" eType="#//base/ContinuousFailMode"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ServiceWake" eSuperTypes="#//base/Step">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="signal" lowerBound="1"
+          eType="#//base/Wait"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EClass0"/>
+  </eSubpackages>
+  <eSubpackages name="distribution" nsURI="http://klaper.sourceforge.net/metamodels/simulator/1.0/distribution"
+      nsPrefix="simulator.distribution">
+    <eClassifiers xsi:type="ecore:EClass" name="ProbabilityDistributionFunction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Normal" eSuperTypes="#//distribution/ProbabilityDistributionFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="variance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Poisson" eSuperTypes="#//distribution/ProbabilityDistributionFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Uniform" eSuperTypes="#//distribution/ProbabilityDistributionFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Exponential" eSuperTypes="#//distribution/ProbabilityDistributionFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

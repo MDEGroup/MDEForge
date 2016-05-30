@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dbuilder"
+    nsURI="http://torusfw.org/org.torusfw.docbuilder.core/docbuilder.ecore" nsPrefix="DocBuilder">
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFolder" instanceClassName="org.eclipse.core.resources.IFolder"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IResource" instanceClassName="org.eclipse.core.resources.IResource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DocManager">
+    <eOperations name="enableDocBuilder">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+    <eOperations name="disableDocBuilder">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+    <eOperations name="getDocumentedProject" eType="#//DocumentedProject">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentedProject">
+    <eOperations name="build">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( Document doc : getDocuments() ) { doc.build(); }"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="clean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( Document doc : getDocuments() ) { doc.clean(); }"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iProjectInstance" eType="#//IProject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documents" upperBound="-1"
+        eType="#//Document" containment="true" eOpposite="#//Document/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="My Project Name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="1.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Document">
+    <eOperations name="build"/>
+    <eOperations name="clean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//DocumentedProject"
+        eOpposite="#//DocumentedProject/documents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//DocInput" containment="true" eOpposite="#//DocInput/document"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//DocOutput" containment="true" eOpposite="#//DocOutput/document"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="${ProjectName} - My Document Name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="${ProjectVersion}"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocInput" eSuperTypes="#//DocResource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="document" eType="#//Document"
+        eOpposite="#//Document/inputs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocOutput" eSuperTypes="#//DocResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" eType="#//DocFormat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="document" eType="#//Document"
+        eOpposite="#//Document/outputs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocResource" abstract="true">
+    <eOperations name="getDocument" eType="#//Document">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="throw new UnsupportedOperationException ();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIFolder" eType="#//IFolder">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDocument().getProject().getIProjectInstance ().getFolder ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIFile" eType="#//IFile">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDocument().getProject().getIProjectInstance ().getFile ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIResource" eType="#//IResource">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getDocument().getProject().getIProjectInstance ().findMember ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="directory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DocFormat">
+    <eLiterals name="HTML"/>
+    <eLiterals name="HTML_ARCHIVE" value="1" literal="HTML Archive"/>
+    <eLiterals name="CHM" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

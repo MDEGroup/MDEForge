@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="internal.emf" nsURI="http:///org/eclipse/wst/dtd/core/dtd.ecore" nsPrefix="org.eclipse.wst.dtd.core.internal.emf">
+  <eClassifiers xsi:type="ecore:EClass" name="DTDElementContent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//DTDGroupContent"
+        transient="true" eOpposite="#//DTDGroupContent/content"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="#//DTDElement"
+        transient="true" eOpposite="#//DTDElement/content"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDGroupContent" eSuperTypes="#//DTDRepeatableContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupKind" eType="#//DTDGroupKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" lowerBound="1"
+        upperBound="-1" eType="#//DTDElementContent" containment="true" eOpposite="#//DTDElementContent/group"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDAttribute" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultKind" eType="#//DTDDefaultKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValueString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeNameReferencedEntity"
+        eType="#//DTDEntity" eOpposite="#//DTDEntity/attributeNameReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeTypeReferencedEntity"
+        eType="#//DTDEntity" eOpposite="#//DTDEntity/attributeTypeReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDElement" eType="#//DTDElement"
+        transient="true" eOpposite="#//DTDElement/DTDAttribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DTDOccurrenceType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="ONE=49 &#xA;OPTIONAL=63 ONE_OR_MORE=43 ZERO_OR_MORE=42"/>
+    </eAnnotations>
+    <eLiterals name="ONE" value="49"/>
+    <eLiterals name="OPTIONAL" value="63"/>
+    <eLiterals name="ONE_OR_MORE" value="43"/>
+    <eLiterals name="ZERO_OR_MORE" value="42"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDElement" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass #//DTDContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" lowerBound="1"
+        eType="#//DTDElementContent" containment="true" eOpposite="#//DTDElementContent/element"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDAttribute" upperBound="-1"
+        eType="#//DTDAttribute" containment="true" eOpposite="#//DTDAttribute/DTDElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDEmptyContent" eSuperTypes="#//DTDElementContent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDAnyContent" eSuperTypes="#//DTDElementContent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDPCDataContent" eSuperTypes="#//DTDElementContent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDElementReferenceContent" eSuperTypes="#//DTDRepeatableContent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedElement" lowerBound="1"
+        eType="#//DTDElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDRepeatableContent" abstract="true"
+      eSuperTypes="#//DTDElementContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="occurrence" eType="#//DTDOccurrenceType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="JUST_ONE= -1  ONE_OR_MORE=43 OPTIONAL=63 ZERO_OR_MORE=42"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parseError" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDContent" upperBound="-1"
+        eType="#//DTDContent" containment="true" eOpposite="#//DTDContent/DTDFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDEnumerationType" upperBound="-1"
+        eType="#//DTDEnumerationType" containment="true" eOpposite="#//DTDEnumerationType/DTDFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DTDDefaultKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="IMPLIED=1 REQUIRED=2 FIXED=3 NOFIXED=4"/>
+    </eAnnotations>
+    <eLiterals name="IMPLIED" value="1"/>
+    <eLiterals name="REQUIRED" value="2"/>
+    <eLiterals name="FIXED" value="3"/>
+    <eLiterals name="NOFIXED" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDBasicType" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//DTDBasicTypeKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDEnumerationType" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EEnum">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//DTDEnumGroupKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDFile" eType="#//DTDFile"
+        transient="true" eOpposite="#//DTDFile/DTDEnumerationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DTDBasicTypeKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="NONE=0 CDATA=1 ID=2 IDREF=3 IDREFS=4 ENTITY=5 ENTITIES=6 NMTOKEN=7 NMTOKENS=8"/>
+    </eAnnotations>
+    <eLiterals name="NONE"/>
+    <eLiterals name="CDATA" value="1"/>
+    <eLiterals name="ID" value="2"/>
+    <eLiterals name="IDREF" value="3"/>
+    <eLiterals name="IDREFS" value="4"/>
+    <eLiterals name="ENTITY" value="5"/>
+    <eLiterals name="ENTITIES" value="6"/>
+    <eLiterals name="NMTOKEN" value="7"/>
+    <eLiterals name="NMTOKENS" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DTDEnumGroupKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="NAME_TOKEN_GROUP=1 NOTATION_GROUP=2"/>
+    </eAnnotations>
+    <eLiterals name="NAME_TOKEN_GROUP" value="1"/>
+    <eLiterals name="NOTATION_GROUP" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DTDGroupKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="SEQUENCE=1 CHOICE=2"/>
+    </eAnnotations>
+    <eLiterals name="SEQUENCE" value="1"/>
+    <eLiterals name="CHOICE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDNotation" eSuperTypes="#//DTDContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="publicID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" upperBound="-1"
+        eType="#//DTDExternalEntity" eOpposite="#//DTDExternalEntity/notation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDEntity" eSuperTypes="#//DTDContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterEntity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" lowerBound="1"
+        eType="#//DTDEntityContent" containment="true" eOpposite="#//DTDEntityContent/DTDEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parmEntityRef" lowerBound="1"
+        eType="#//DTDParameterEntityReference" eOpposite="#//DTDParameterEntityReference/entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityReference" upperBound="-1"
+        eType="#//DTDEntityReferenceContent" eOpposite="#//DTDEntityReferenceContent/elementReferencedEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeNameReference"
+        upperBound="-1" eType="#//DTDAttribute" eOpposite="#//DTDAttribute/attributeNameReferencedEntity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeTypeReference"
+        upperBound="-1" eType="#//DTDAttribute" eOpposite="#//DTDAttribute/attributeTypeReferencedEntity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDEntityContent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDEntity" eType="#//DTDEntity"
+        transient="true" eOpposite="#//DTDEntity/content"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDExternalEntity" eSuperTypes="#//DTDEntityContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="publicID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notation" eType="#//DTDNotation"
+        transient="true" eOpposite="#//DTDNotation/entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entityReferencedFromAnotherFile"
+        eType="#//DTDFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDInternalEntity" eSuperTypes="#//DTDEntityContent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDParameterEntityReference" eSuperTypes="#//DTDContent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="#//DTDEntity" eOpposite="#//DTDEntity/parmEntityRef"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDEntityReferenceContent" eSuperTypes="#//DTDRepeatableContent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementReferencedEntity"
+        lowerBound="1" eType="#//DTDEntity" eOpposite="#//DTDEntity/entityReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XMLSchemaDefinedType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="NONE=-1&#xA;STRING=1&#xA;BOOLEAN=2&#xA;FLOAT=3&#xA;DOUBLE=4&#xA;DECIMAL=5&#xA;TIMEINSTANT=6&#xA;TIMEDURATION=7&#xA;RECURRINGINSTANT=8&#xA;BINARY=9&#xA;URI=10&#xA;INTEGER=11&#xA;DATE=12&#xA;TIME=13"/>
+    </eAnnotations>
+    <eLiterals name="NONE" value="-1"/>
+    <eLiterals name="STRING" value="1"/>
+    <eLiterals name="BOOLEAN" value="2"/>
+    <eLiterals name="FLOAT" value="3"/>
+    <eLiterals name="DOUBLE" value="4"/>
+    <eLiterals name="DECIMAL" value="5"/>
+    <eLiterals name="TIMEINSTANT" value="6"/>
+    <eLiterals name="TIMEDURATION" value="7"/>
+    <eLiterals name="RECURRINGINSTANT" value="8"/>
+    <eLiterals name="BINARY" value="9"/>
+    <eLiterals name="URI" value="10"/>
+    <eLiterals name="INTEGER" value="11"/>
+    <eLiterals name="DATE" value="12"/>
+    <eLiterals name="TIME" value="13"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DTDContent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DTDFile" eType="#//DTDFile"
+        transient="true" eOpposite="#//DTDFile/DTDContent"/>
+  </eClassifiers>
+</ecore:EPackage>

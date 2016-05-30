@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Leveleditor"
+    nsURI="leveleditor" nsPrefix="leveleditor">
+  <eClassifiers xsi:type="ecore:EClass" name="Act">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="world" lowerBound="1" upperBound="-1"
+        eType="#//Room" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gotoAct" eType="#//Act"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Room" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postItemsDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revealedDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hiddenDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enemies" upperBound="-1"
+        eType="#//Enemy" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="npcs" upperBound="-1" eType="#//NPC"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//Item" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLocked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unlockKeys" upperBound="-1"
+        eType="#//Key"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRevealed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHiddenEvent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="north" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="south" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="west" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="east" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="autosave" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NPC" eSuperTypes="#//Enemy">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dialogcontroller" lowerBound="1"
+        eType="#//DialogController" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="talking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firsttime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gotoId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Key" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventRoom" eSuperTypes="#//Room">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//RoomEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="quest" eType="#//Quest"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoomEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="#//ERoomEventCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="#//ERoomEventAction"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnemyDead" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isItemused" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemtaken" eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isItemtaken" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roomenteredtimes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enemyattack" eType="#//Enemy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="roomdescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trap" eType="#//Trap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trapdescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivedItem" eType="#//Item"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemUsed" eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeenemy" eType="#//Enemy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="npc" eType="#//NPC"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="HP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finishedtalking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="npcGotoId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hiddenroomfound" eType="#//Room"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="quest" eType="#//Quest"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ERoomEventCondition">
+    <eLiterals name="ENEMY_DIED"/>
+    <eLiterals name="ITEM_USED" value="1"/>
+    <eLiterals name="HIDDENROOM_FOUND" value="2"/>
+    <eLiterals name="ITEM_GIVEN" value="6"/>
+    <eLiterals name="ITEM_TAKEN" value="3"/>
+    <eLiterals name="ROOM_ENTERED_TWICE" value="4"/>
+    <eLiterals name="ROOM_ENTERED" value="5"/>
+    <eLiterals name="FINISHED_DIALOG" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ERoomEventAction">
+    <eLiterals name="ENEMY_ATTACK"/>
+    <eLiterals name="ROOM_DESCRIPTION" value="1"/>
+    <eLiterals name="HIDDENROOM_FOUND" value="2"/>
+    <eLiterals name="ROOM_PLACEENEMY" value="3"/>
+    <eLiterals name="TRIGGER_TRAP" value="4"/>
+    <eLiterals name="ADD_ITEM" value="5"/>
+    <eLiterals name="REMOVE_ENEMY" value="6"/>
+    <eLiterals name="REMOVE_NPC" value="7"/>
+    <eLiterals name="SET_HP_ENEMY" value="8"/>
+    <eLiterals name="MOVE_PLAYER" value="9"/>
+    <eLiterals name="NPC_TALK" value="10"/>
+    <eLiterals name="CANCEL_ACCESSORY" value="11"/>
+    <eLiterals name="UNLOCK_DOOR" value="12"/>
+    <eLiterals name="SOLVE_QUEST_ENTERROOM" value="13"/>
+    <eLiterals name="ADD_QUEST" value="14"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trap">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="poison" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lightning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="normal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trapagility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trapdescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//EElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Creature" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initHp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initMana" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mana" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="agility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charisma" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inventory" upperBound="-1"
+        eType="#//Item" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="experience" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initPlayerActions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistLightning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistFire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistPoison" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistIce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isMale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="race" eType="#//ECreatureRace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creatureClass" eType="#//ECreatureClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="armor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ECreatureClass">
+    <eLiterals name="Warrior"/>
+    <eLiterals name="Wizard" value="1"/>
+    <eLiterals name="Paladin" value="2"/>
+    <eLiterals name="Assasin" value="3"/>
+    <eLiterals name="Warlock" value="4"/>
+    <eLiterals name="IceWizard" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ECreatureRace">
+    <eLiterals name="Human"/>
+    <eLiterals name="Orc" value="1"/>
+    <eLiterals name="Goblin" value="2"/>
+    <eLiterals name="Elf" value="3"/>
+    <eLiterals name="Rat" value="4"/>
+    <eLiterals name="DarkOrc" value="7"/>
+    <eLiterals name="Wererat" value="6"/>
+    <eLiterals name="Hellhound" value="5"/>
+    <eLiterals name="Troll" value="8"/>
+    <eLiterals name="Undead" value="9"/>
+    <eLiterals name="Reptile" value="10"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enemy" eSuperTypes="#//Creature">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAttacking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scarefactor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageFire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageLightning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageIce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damagePoison" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="auras" upperBound="-1"
+        eType="#//Aura" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boss" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EElement">
+    <eLiterals name="LIGHTNING"/>
+    <eLiterals name="POISON" value="1"/>
+    <eLiterals name="FIRE" value="2"/>
+    <eLiterals name="ICE" value="3"/>
+    <eLiterals name="NORMAL" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DialogController">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conversation" upperBound="-1"
+        eType="#//DialogChoices" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DialogChoices">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="choices" upperBound="-1"
+        eType="#//Dialog" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dialog">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optiontext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="answertext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gotoId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dialogskilltest" eType="#//DialogSkillTest"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="giveItem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="quest" eType="#//Quest"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAttacking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DialogSkillTest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skill" eType="#//ESkill"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gotoIdSuccess" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gotoIdFail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skillNPC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sucessText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="failText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESkill">
+    <eLiterals name="STRENGTH"/>
+    <eLiterals name="AGILITY" value="1"/>
+    <eLiterals name="CHARISMA" value="3"/>
+    <eLiterals name="MANA" value="4"/>
+    <eLiterals name="HP" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Gold" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ammount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Potion" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="skill" eType="#//ESkill"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addSkill" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Weapon" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTwohanded" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageLightning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageFire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damagePoison" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="damageIce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classes" lowerBound="1"
+        upperBound="-1" eType="#//ECreatureClass" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mana" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="agility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charisma" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Armor" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="armor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="armorType" eType="#//EArmorType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistLightning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistIce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistFire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resistPoison" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classes" lowerBound="1"
+        upperBound="-1" eType="#//ECreatureClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mana" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="agility" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charisma" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EArmorType">
+    <eLiterals name="HEAD"/>
+    <eLiterals name="BODY" value="1"/>
+    <eLiterals name="LEGGINS" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalRoom" eSuperTypes="#//EventRoom">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Quest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="introduction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completeText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="questCondition" eType="#//ERoomEventCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="questItem" eType="#//Item"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComplete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xpEarned" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="awardItem" eType="#//Item"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="npcGivenby" eType="#//NPC"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enemydead" eType="#//Enemy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dialogid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" eType="#//Room"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Accessory" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="room" eType="#//Room"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EAura">
+    <eLiterals name="REGEN_MANA"/>
+    <eLiterals name="REGEN_HP" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aura">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="auraType" eType="#//EAura"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ammount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

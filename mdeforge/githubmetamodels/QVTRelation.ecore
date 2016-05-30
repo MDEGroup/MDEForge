@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="qvtrelation"
+    nsURI="http://www.schema.omg.org/spec/QVT/1.0/qvtrelation" nsPrefix="qvtrelation">
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="qvtbase.ecore#//Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTopLevel" eType="ecore:EDataType emof.ecore#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" upperBound="-1"
+        eType="ecore:EClass essentialocl.ecore#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operationalImpl" upperBound="-1"
+        eType="#//RelationImplementation" eOpposite="#//RelationImplementation/relation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="ecore:EClass qvtbase.ecore#//Pattern"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="where" eType="ecore:EClass qvtbase.ecore#//Pattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationDomain" eSuperTypes="qvtbase.ecore#//Domain">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//DomainPattern"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootVariable" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultAssignment" upperBound="-1"
+        eType="#//RelationDomainAssignment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainPattern" eSuperTypes="qvtbase.ecore#//Pattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateExpression" eType="ecore:EClass qvttemplate.ecore#//TemplateExp"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationImplementation" eSuperTypes="emof.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relation" eType="#//Relation"
+        eOpposite="#//Relation/operationalImpl"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="impl" lowerBound="1" eType="ecore:EClass emof.ecore#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inDirectionOf" lowerBound="1"
+        eType="ecore:EClass qvtbase.ecore#//TypedModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationCallExp" eSuperTypes="essentialocl.ecore#//OclExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+        eType="ecore:EClass essentialocl.ecore#//OclExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredRelation" eType="#//Relation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationalTransformation" eSuperTypes="qvtbase.ecore#//Transformation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedKey" upperBound="-1"
+        eType="#//Key" containment="true" eOpposite="#//Key/transformation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Key" eSuperTypes="emof.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identifies" lowerBound="1"
+        eType="ecore:EClass emof.ecore#//Class"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" lowerBound="1" upperBound="-1"
+        eType="ecore:EClass emof.ecore#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" eType="#//RelationalTransformation"
+        transient="true" eOpposite="#//RelationalTransformation/ownedKey"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationDomainAssignment" eSuperTypes="emof.ecore#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueExp" lowerBound="1"
+        eType="ecore:EClass essentialocl.ecore#//OclExpression" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

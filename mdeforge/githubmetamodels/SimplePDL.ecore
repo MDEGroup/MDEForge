@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="simplepdl" nsURI="http://simplepdl" nsPrefix="simplepdl">
+  <eClassifiers xsi:type="ecore:EEnum" name="WorkSequenceType">
+    <eLiterals name="startToStart"/>
+    <eLiterals name="finishToStart" value="1"/>
+    <eLiterals name="startToFinish" value="2"/>
+    <eLiterals name="finishToFinish" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processElements" upperBound="-1"
+        eType="#//ProcessElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkDefinition" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linksToPredecessors" upperBound="-1"
+        eType="#//WorkSequence" eOpposite="#//WorkSequence/successor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linksToSuccessors" upperBound="-1"
+        eType="#//WorkSequence" eOpposite="#//WorkSequence/predecessor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkSequence" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="linkType" lowerBound="1"
+        eType="#//WorkSequenceType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predecessor" lowerBound="1"
+        eType="#//WorkDefinition" eOpposite="#//WorkDefinition/linksToSuccessors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="successor" lowerBound="1"
+        eType="#//WorkDefinition" eOpposite="#//WorkDefinition/linksToPredecessors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessElement" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Guidance" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" upperBound="-1"
+        eType="#//ProcessElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

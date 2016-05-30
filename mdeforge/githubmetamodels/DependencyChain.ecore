@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="depchain"
+    nsURI="http://www.uni-augsburg.de/pvs/MAF/depchain" nsPrefix="depchain">
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyChainElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyChainSet" eSuperTypes="#//DependencyChainElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencyChains" upperBound="-1"
+        eType="#//DependencyChain" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyChain" eSuperTypes="#//DependencyChainElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DependencyChainType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replacedBy" lowerBound="1"
+        eType="#//DependencyChain"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootNodesVector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="innerNodesVector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leafNodesVector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="virtualNodesVector" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vectorUtil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requiresInitialRun" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanceNode" abstract="true" eSuperTypes="#//DependencyChainElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predecessors" upperBound="-1"
+        eType="#//InstanceNode" eOpposite="#//InstanceNode/successors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="successors" upperBound="-1"
+        eType="#//InstanceNode" eOpposite="#//InstanceNode/predecessors"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation3" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" eSuperTypes="#//InstanceNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeInstance" lowerBound="1"
+        eType="ecore:EClass ../attrm/AttrM.ecore#//AttrInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeType" eType="#//InstanceNodeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VirtualNode" eSuperTypes="#//InstanceNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedNode" lowerBound="1"
+        eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="virtualValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InstanceNodeType">
+    <eLiterals name="rootnode" literal="RootNode"/>
+    <eLiterals name="innernode" value="1" literal="InnerNode"/>
+    <eLiterals name="leafnode" value="2" literal="LeafNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependencyChainType">
+    <eLiterals name="building"/>
+    <eLiterals name="intermediate" value="1"/>
+    <eLiterals name="built" value="2" literal="built"/>
+    <eLiterals name="evaluating" value="3" literal="evaluating"/>
+    <eLiterals name="evaluated" value="4"/>
+    <eLiterals name="obsolete" value="5" literal="obsolete"/>
+  </eClassifiers>
+</ecore:EPackage>

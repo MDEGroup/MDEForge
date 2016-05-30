@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gcomponent"
+    nsURI="http://genericity/language/gcomponent" nsPrefix="gcomponent">
+  <eClassifiers xsi:type="ecore:EClass" name="DummyClass"/>
+  <eSubpackages name="core" nsURI="http://genericity/language/gcomponent/core" nsPrefix="gcomponent_core">
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Component" abstract="true" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maintainer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" lowerBound="1"
+          eType="#//core/Status" defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          upperBound="-1" eType="#//core/Concept" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" upperBound="-1"
+          eType="#//core/Concept" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceModels" upperBound="-1"
+          eType="#//core/ParameterModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targetModels" upperBound="-1"
+          eType="#//core/ParameterModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="generateModels" upperBound="-1"
+          eType="#//core/GeneratedModel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="formalParameters" upperBound="-1"
+          eType="#//variants/Parameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Model" abstract="true" eSuperTypes="#//core/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ParameterModel" eSuperTypes="#//core/Model">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//core/Concept"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeneratedModel" eSuperTypes="#//core/Model"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="Status">
+      <eLiterals name="UNKNOWN"/>
+      <eLiterals name="ALPHA" value="1"/>
+      <eLiterals name="BETA" value="2"/>
+      <eLiterals name="RELEASE" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Tagged" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1"
+          eType="#//core/Tag" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TransformationComponent" eSuperTypes="#//core/Component #//core/Tagged">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isM2M" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="template" lowerBound="1"
+          eType="#//core/Template" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//core/Constraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositeComponent" eSuperTypes="#//core/Component">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uses" lowerBound="1"
+          upperBound="-1" eType="#//core/Component"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="composition" lowerBound="1"
+          eType="#//flowcontrol/Composition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+          eType="#//core/BindingDeclaration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BindingDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Template" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OclConstraint" eSuperTypes="#//core/Constraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Metamodel" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//core/Constraint" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Tag">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Concept" eSuperTypes="#//core/Metamodel #//core/Tagged"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Documentation"/>
+  </eSubpackages>
+  <eSubpackages name="variants" nsURI="http://genericity/language/gcomponent/variants"
+      nsPrefix="gcomponent_variants">
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" abstract="true" eSuperTypes="#//core/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//variants/Parameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SingleFeature" eSuperTypes="#//variants/Feature"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositeFeature" abstract="true"
+        eSuperTypes="#//variants/Feature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="children" lowerBound="1"
+          upperBound="-1" eType="#//variants/Feature" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="XorFeature" eSuperTypes="#//variants/CompositeFeature"/>
+  </eSubpackages>
+  <eSubpackages name="flowcontrol" nsURI="http://genericity/language/gcomponent/flowcontrol"
+      nsPrefix="gcomponent_flowcontrol">
+    <eClassifiers xsi:type="ecore:EClass" name="Composition" eSuperTypes="#//core/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="step" lowerBound="1"
+          eType="#//flowcontrol/CompositionStep" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositionStep" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Apply" eSuperTypes="#//flowcontrol/CompositionStep">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+          eType="#//core/Component"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inputModels" upperBound="-1"
+          eType="#//flowcontrol/ApplyParameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outputModels" upperBound="-1"
+          eType="#//flowcontrol/ApplyParameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApplyParameter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1"
+          eType="#//core/Model"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundConceptQualifier"
+          eType="#//core/Component"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="boundConcept" eType="#//core/Concept"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="binding" eType="#//core/BindingDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Seq" eSuperTypes="#//flowcontrol/CompositionStep">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+          eType="#//flowcontrol/CompositionStep" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Xor" eSuperTypes="#//flowcontrol/CompositionStep">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" lowerBound="1"
+          upperBound="-1" eType="#//flowcontrol/XorCond" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="XorCond">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="#//flowcontrol/BooleanValue" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="step" lowerBound="1"
+          eType="#//flowcontrol/CompositionStep" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Par" eSuperTypes="#//flowcontrol/CompositionStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanValue" eSuperTypes="#//flowcontrol/Value"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//flowcontrol/Expression #//flowcontrol/BooleanValue">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1"
+          eType="#//flowcontrol/BooleanValue" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1"
+          eType="#//flowcontrol/BooleanValue" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" lowerBound="1"
+          eType="#//flowcontrol/BooleanOperator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BooleanOperator">
+      <eLiterals name="AND"/>
+      <eLiterals name="OR" value="1"/>
+      <eLiterals name="LESS" value="2"/>
+      <eLiterals name="LESS_THAN" value="3"/>
+      <eLiterals name="GREATER" value="4"/>
+      <eLiterals name="GREATER_THAN" value="5"/>
+      <eLiterals name="EQUAL" value="6"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FeatureRef" eSuperTypes="#//flowcontrol/Expression #//flowcontrol/BooleanValue">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+          eType="#//variants/Feature"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="dsl" nsURI="http://genericity/language/gcomponent/dsl" nsPrefix="gcomponent_dsl">
+    <eClassifiers xsi:type="ecore:EClass" name="DefinitionRoot">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+          eType="#//core/Component" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="technologies" nsURI="http://genericity/language/gcomponent/technologies"
+      nsPrefix="gcomponent_technologies">
+    <eClassifiers xsi:type="ecore:EClass" name="AtlTemplate" eSuperTypes="#//core/Template">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="template" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//technologies/AtlParameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AtlParameter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="atlModelName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="atlMetamodelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//core/Model"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="JavaTemplate" eSuperTypes="#//core/Template">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedClassname" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

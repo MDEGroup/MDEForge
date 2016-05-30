@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="capua" nsURI="http://capua/1.0" nsPrefix="capua">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="#//Uuid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Uuid" instanceClassName="java.util.UUID"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributedObject" abstract="true" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//AttributedObject" containment="true" eOpposite="#//AttributedObject/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//AttributedObject" eOpposite="#//AttributedObject/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeInstances" upperBound="-1"
+        eType="#//AttributeInstance" containment="true" eOpposite="#//AttributeInstance/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outlinks" upperBound="-1"
+        eType="#//Link" eOpposite="#//Link/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inlinks" upperBound="-1"
+        eType="#//Link" eOpposite="#//Link/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trackingGroup" eType="#//TrackingGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trackingId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeInstance" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//AttributedObject"
+        eOpposite="#//AttributedObject/attributeInstances"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instantiates" lowerBound="1"
+        eType="#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//ObjectCollection"
+        eOpposite="#//ObjectCollection/attributes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//AttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectCollection" abstract="true" eSuperTypes="#//AttributedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true" eOpposite="#//Attribute/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//AttributeType" containment="true" eOpposite="#//AttributeType/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//AttributedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//AttributedObject" eOpposite="#//AttributedObject/outlinks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//AttributedObject" eOpposite="#//AttributedObject/inlinks"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Heading" eSuperTypes="#//AttributedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeType" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//ObjectCollection"
+        eOpposite="#//ObjectCollection/types"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="#//ObjectCollection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConceptTree" eSuperTypes="#//ObjectCollection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrackingGroup" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nextFreeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postfix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paragraph" eSuperTypes="#//AttributedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sentence" eSuperTypes="#//AttributedObject"/>
+</ecore:EPackage>

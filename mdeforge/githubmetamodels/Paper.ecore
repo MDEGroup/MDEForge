@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="LRBAC" nsURI="http://BlankModel/LRBAC" nsPrefix="BlankModel">
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eOperations name="UpdateUserName" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="self.UserAssign->includes(r)&#xA;&#xA;self.UserAssign = self.UserAssign@pre->excluding(r)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="name" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="UpdateAge">
+      <eParameters name="age" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="UpdateLoc">
+      <eParameters name="l" eType="#//Location"/>
+    </eOperations>
+    <eOperations name="AssignRole" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="self.UserAssign->excludes(r) and r.AssignLoc->includes(self.UserLoc)&#xD;&#xA;&#xD;&#xA;&#xA;self.UserAssign = self.UserAssign@pre->including(r)&#xD;&#xA;&#xD;&#xA;gjkh"/>
+      </eAnnotations>
+      <eParameters name="r" ordered="false" lowerBound="1" eType="#//Role"/>
+    </eOperations>
+    <eOperations name="UpdateUserID">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="UserSess" ordered="false"
+        upperBound="-1" eType="#//Session" eOpposite="#//Session/SessUser"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AssignedRoles" ordered="false"
+        upperBound="-1" eType="#//Role" eOpposite="#//Role/AssignUser"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="UserLoc" ordered="false"
+        lowerBound="1" eType="#//Location" eOpposite="#//Location/LocUser"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Gender" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UserName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="UserID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Age" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Session">
+    <eOperations name="UpdateMaxRoles">
+      <eParameters name="NoOfRoles" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SessRole" ordered="false"
+        upperBound="-1" eType="#//Role" eOpposite="#//Role/RoleSess"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SessUser" ordered="false"
+        lowerBound="1" eType="#//User" eOpposite="#//User/UserSess"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="MaxRoles" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role">
+    <eOperations name="UpdateRoleName" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="self.AssignLoc->includes(l)&#xA;self.AssignLoc = self.AssignLoc@pre->excluding(l)&#xD;&#xA;&#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="name" ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="AddAssignLoc" ordered="false" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="self.AssignLoc->excludes(l)&#xD;&#xA;&#xD;&#xA;&#xA;self.AssignLoc = self.AssignLoc@pre->including(l)&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA; &#xD;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="l" ordered="false" lowerBound="1" eType="#//Location"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AssignUser" ordered="false"
+        upperBound="-1" eType="#//User" eOpposite="#//User/AssignedRoles"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="AssignLoc" ordered="false"
+        upperBound="-1" eType="#//Location" eOpposite="#//Location/LocAssign"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RoleSess" ordered="false"
+        upperBound="-1" eType="#//Session" eOpposite="#//Session/SessRole"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RoleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RolePerm" upperBound="-1"
+        eType="#//Permission" eOpposite="#//Permission/PermRole"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location">
+    <eOperations name="UpdateLocName">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="LocUser" ordered="false"
+        upperBound="-1" eType="#//User" eOpposite="#//User/UserLoc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="LocAssign" ordered="false"
+        upperBound="-1" eType="#//Role" eOpposite="#//Role/AssignLoc"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="LocName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="LocObj" upperBound="-1"
+        eType="#//Object" eOpposite="#//Object/ObjLoc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PermRoleLoc" upperBound="-1"
+        eType="#//Permission" eOpposite="#//Permission/RoleLocPerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PermObjLoc" upperBound="-1"
+        eType="#//Permission" eOpposite="#//Permission/ObjLocPerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permission">
+    <eOperations name="UpdatePermName">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PermOper" lowerBound="1"
+        eType="#//Operation" eOpposite="#//Operation/OperPerm"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PermName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PermObj" lowerBound="1"
+        eType="#//Object" eOpposite="#//Object/ObjPerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PermRole" lowerBound="1"
+        eType="#//Role" eOpposite="#//Role/RolePerm"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="RoleLocPerm" lowerBound="1"
+        eType="#//Location" eOpposite="#//Location/PermRoleLoc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ObjLocPerm" lowerBound="1"
+        eType="#//Location" eOpposite="#//Location/PermObjLoc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Object">
+    <eOperations name="UpdateObjID">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ObjLoc" lowerBound="1"
+        eType="#//Location" eOpposite="#//Location/LocObj"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ObjPerm" upperBound="-1"
+        eType="#//Permission" eOpposite="#//Permission/PermObj"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ObjID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OperPerm" upperBound="-1"
+        eType="#//Permission" eOpposite="#//Permission/PermOper"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Read" eSuperTypes="#//Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Write" eSuperTypes="#//Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Execute" eSuperTypes="#//Operation"/>
+</ecore:EPackage>

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="engine"
+    nsURI="http:///org/eclipse/tptp/platform/analysis/engine.ecore" nsPrefix="org.eclipse.tptp.platform.analysis.engine">
+  <eClassifiers xsi:type="ecore:EClass" name="IAlgorithm">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Abstraction for representing an algorithm. Each algorithm has associated list of data on which algorithm will execute.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eOperations name="getTitle" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString">
+      <eParameters name="algorithmData" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="supports" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="isQuick" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlFileURL" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/URL"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//algorithm/IParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IData">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Abstraction for representing the data of an algorithm."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithmType" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlFileURL" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/URL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userDefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputFilters" upperBound="-1"
+        eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/AbstractFilter"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputFilters" upperBound="-1"
+        eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/AbstractFilter"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//algorithm/IArgument" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMatch" eSuperTypes="#//IResult">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The match class is an abstraction for result of a successful application of a rule to the resource(s). The match contains the collection of links to places in resources that collectively represent the match."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//MatchStatus">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The status of the match, used to keep track of ignored matches, fixed problem, problems submited to bug tracker, etc."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" lowerBound="1" upperBound="-1"
+        eType="#//IMatchLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMatchLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startPosition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endPosition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceLastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MatchStatus">
+    <eLiterals name="UNRESOLVED"/>
+    <eLiterals name="FIX_APPLIED" value="1"/>
+    <eLiterals name="DEFECT_SUBMITED" value="2"/>
+    <eLiterals name="IGNORED" value="3"/>
+    <eLiterals name="OUT_OF_SYNC" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IMetric" eSuperTypes="#//IResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaNumber"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ICategory">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A category represents logical grouping of objects."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" eType="#//ICategoryDescriptor"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objects" upperBound="-1"
+        eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IReview">
+    <eOperations name="includes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="algorithmData" eType="#//IData"/>
+      <eParameters name="category" eType="#//ICategory"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A unique, descriptive name of this category"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A detailed description of this category"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEngineListener" abstract="true" eSuperTypes="../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/EclipseProgressMonitor">
+    <eOperations name="beginTask">
+      <eParameters name="taskName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+      <eParameters name="totalWork" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eParameters name="scope" eType="#//IAnalysisScope"/>
+      <eParameters name="review" eType="#//IReview"/>
+    </eOperations>
+    <eOperations name="error">
+      <eParameters name="throwable" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaThrowable"/>
+      <eParameters name="message" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    </eOperations>
+    <eOperations name="processedResult">
+      <eParameters name="result" eType="#//IResult"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IAlgorithmRunner">
+    <eOperations name="run">
+      <eParameters name="engine" eType="#//IEngine"/>
+      <eParameters name="algorithms" eType="#//types/AlgorithmArray"/>
+      <eParameters name="analysisScope" eType="#//IAnalysisScope"/>
+      <eParameters name="listener" eType="#//IEngineListener"/>
+    </eOperations>
+    <eOperations name="supports" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="algorithm" eType="#//IAlgorithm"/>
+    </eOperations>
+    <eOperations name="estimateWork" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the number of units of work expected to be performed by this runner to execute enabled algorithms on the given analysis scope."/>
+      </eAnnotations>
+      <eParameters name="scope" eType="#//IAnalysisScope"/>
+      <eParameters name="algorithms" eType="#//types/AlgorithmArray"/>
+      <eParameters name="engine" eType="#//IEngine"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IAnalysisScope">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"
+        changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootResources" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/EclipseResourceArray"
+        changeable="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEngine">
+    <eOperations name="init">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Initialize the engine after the extensions have been installed."/>
+      </eAnnotations>
+      <eParameters name="algorithmExtensions" eType="#//types/AlgorithmExtensionArray"/>
+      <eParameters name="runnerExtensions" eType="#//types/RunnerExtensionArray"/>
+    </eOperations>
+    <eOperations name="analyze">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Execute the engine on the current analysis scope."/>
+      </eAnnotations>
+      <eParameters name="listener" eType="#//IEngineListener"/>
+    </eOperations>
+    <eOperations name="getReviews" eType="#//types/ReviewArray"/>
+    <eOperations name="getCategories" eType="#//types/CategoryArray"/>
+    <eOperations name="getTemplateCategories" eType="#//types/CategoryArray"/>
+    <eOperations name="getRunners" eType="#//types/AlgorithmRunnerArray"/>
+    <eOperations name="getCategory" eType="#//ICategory">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="getTemplateCategory" eType="#//ICategory">
+      <eParameters name="template" eType="#//algorithm/ITemplateAlgorithm"/>
+    </eOperations>
+    <eOperations name="getEnabledData" eType="#//types/DataArray">
+      <eParameters name="alg" eType="#//IAlgorithm"/>
+    </eOperations>
+    <eOperations name="getAlgorithmExtension" eType="#//IAlgorithmExtension">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="getAlgorithmExtension" eType="#//IAlgorithmExtension">
+      <eParameters name="template" eType="#//algorithm/ITemplateAlgorithm"/>
+    </eOperations>
+    <eOperations name="create" eType="#//IData" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="template" eType="#//algorithm/ITemplateAlgorithm"/>
+      <eParameters name="cat" eType="#//ICategory"/>
+    </eOperations>
+    <eOperations name="delete">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="move" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="data" eType="#//IData"/>
+      <eParameters name="cat" eType="#//ICategory"/>
+    </eOperations>
+    <eOperations name="getEngineDataListeners" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaList"/>
+    <eOperations name="isRunning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="cancel"/>
+    <eOperations name="getAlgorithm" eType="#//IAlgorithm">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="analysisScope" lowerBound="1"
+        eType="#//IAnalysisScope" transient="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enableStateTracker" lowerBound="1"
+        eType="#//IEnableStateTracker" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentReview" lowerBound="1"
+        eType="#//IReview" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputFilters" upperBound="-1"
+        eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/AbstractFilter"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISolution">
+    <eOperations name="supportsHeadlessMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="canFix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="match" eType="#//IMatch"/>
+    </eOperations>
+    <eOperations name="fix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="match" eType="#//IMatch"/>
+      <eParameters name="headless" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="undoFix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="match" eType="#//IMatch"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEnableStateTracker">
+    <eOperations name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="category" eType="#//ICategory"/>
+    </eOperations>
+    <eOperations name="setEnabled">
+      <eParameters name="data" eType="#//IData"/>
+      <eParameters name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="setEnabled">
+      <eParameters name="category" eType="#//ICategory"/>
+      <eParameters name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabledAlgorithmNames"
+        upperBound="-1" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabledCategoryNames"
+        upperBound="-1" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEngineManager">
+    <eOperations name="loadEngines"/>
+    <eOperations name="saveEngine" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="engine" eType="#//IEngine"/>
+    </eOperations>
+    <eOperations name="saveEngines" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException"/>
+    <eOperations name="getEngines" eType="#//types/EngineArray"/>
+    <eOperations name="newEngine" eType="#//IEngine">
+      <eParameters name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    </eOperations>
+    <eOperations name="findEngine" eType="#//IEngine">
+      <eParameters name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    </eOperations>
+    <eOperations name="getEngineFile" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile">
+      <eParameters name="engine" eType="#//IEngine"/>
+    </eOperations>
+    <eOperations name="doNotSaveOnExit">
+      <eParameters name="engine" eType="#//IEngine"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDirectory" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ICategoryDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A unique, descriptive name of this category"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A detailed description of this category"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeDirectory" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IAlgorithmExtension">
+    <eOperations name="init" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="pluginBaseDir" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile"/>
+      <eParameters name="workspaceBaseDir" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile"/>
+      <eParameters name="newVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getAlgorithms" eType="#//types/AlgorithmArray"/>
+    <eOperations name="getAlgorithmData" eType="#//types/DataArray">
+      <eParameters name="categoryDescriptor" eType="#//ICategoryDescriptor"/>
+    </eOperations>
+    <eOperations name="getTemplateAlgorithms" eType="#//types/TemplateAlgorithmArray">
+      <eParameters name="categoryDescriptor" eType="#//ICategoryDescriptor"/>
+    </eOperations>
+    <eOperations name="getSolutions" eType="#//types/SolutionArray">
+      <eParameters name="problemData" eType="#//algorithm/IProblemData"/>
+      <eParameters name="match" eType="#//IMatch"/>
+    </eOperations>
+    <eOperations name="getCategoryReviewList" eType="#//ICategoryReviewList"/>
+    <eOperations name="create" eType="#//IData" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="template" eType="#//algorithm/ITemplateAlgorithm"/>
+      <eParameters name="descr" eType="#//ICategoryDescriptor"/>
+    </eOperations>
+    <eOperations name="save" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="move" eExceptions="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaException">
+      <eParameters name="data" eType="#//IData"/>
+      <eParameters name="categoryDescriptor" eType="#//ICategoryDescriptor"/>
+    </eOperations>
+    <eOperations name="delete">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="getPluginDirectory" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile"/>
+    <eOperations name="getWorkspaceDirectory" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IRunnerExtension">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runner" lowerBound="1"
+        eType="#//IAlgorithmRunner" changeable="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ICategoryReviewList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reviews" upperBound="-1"
+        eType="#//IReview" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//ICategoryDescriptor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateCategories" upperBound="-1"
+        eType="#//ICategoryDescriptor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="categoryName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="algorithmName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IResultSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reviewName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootResourceNames" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaStringArray"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="engineName" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="analysisTimeStamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="results" upperBound="-1"
+        eType="#//IResult" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEngineDataListener" abstract="true">
+    <eOperations name="created">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="deleted">
+      <eParameters name="data" eType="#//IData"/>
+    </eOperations>
+    <eOperations name="moved">
+      <eParameters name="data" eType="#//IData"/>
+      <eParameters name="oldCategory" eType="#//ICategory"/>
+    </eOperations>
+  </eClassifiers>
+  <eSubpackages name="algorithm" nsURI="http:///org/eclipse/tptp/platform/analysis/engine/algorithm.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.engine.algorithm">
+    <eClassifiers xsi:type="ecore:EClass" name="IProblemData" eSuperTypes="#//IData">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="severity" eType="#//algorithm/ProblemSeverity"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IResourceAlgorithm" eSuperTypes="#//IAlgorithm">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A resource algorithm executes on an Eclipse resource."/>
+      </eAnnotations>
+      <eOperations name="analyze">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Apply this algorithm to the given resource"/>
+        </eAnnotations>
+        <eParameters name="resource" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/EclipseResource">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The resource on which algorithm should run"/>
+          </eAnnotations>
+        </eParameters>
+        <eParameters name="data" eType="#//types/DataArray"/>
+        <eParameters name="categoryDescriptor" eType="#//types/CategoryDescriptorArray"/>
+        <eParameters name="listener" eType="#//IEngineListener">
+          <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+            <details key="documentation" value="The listener that will be notified by the algorithm"/>
+          </eAnnotations>
+        </eParameters>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IArgument">
+      <eOperations name="getValue" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaObject"/>
+      <eOperations name="setValue">
+        <eParameters name="value" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaObject"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="editable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ITemplateAlgorithm" eSuperTypes="#//IAlgorithm">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The template algorithm supports generic creation of the algorithm data."/>
+      </eAnnotations>
+      <eOperations name="newAlgorithmData" eType="#//IData"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ProblemSeverity">
+      <eLiterals name="HIGH" value="5"/>
+      <eLiterals name="MEDIUM" value="3"/>
+      <eLiterals name="LOW" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IParameter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/String"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaClass"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowedValues" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaStringArray"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="editable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IIntegerArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="intValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IEObjectArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="eobject" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/EMFObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IDoubleArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="doubleValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ILongArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="longValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IStringArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringValue" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMethodArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="method" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/IMethodProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IClassArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="clazz" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/IClassProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IInterfaceArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="interf" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/IInterfaceProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IPackageArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pkg" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/IPackageProxy"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MatchEqualsFilter" eSuperTypes="../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/EMFEqualsFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iMatch" eType="#//IMatch"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IStringArrayArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringArray" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaStringArray"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IBooleanArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="booleanValue" eType="ecore:EDataType ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//types/JavaBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IComponentArgument" eSuperTypes="#//algorithm/IArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="compnt" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//proxy/IComponentTypeProxy"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="types" nsURI="http:///org/eclipse/tptp/platform/analysis/engine/types.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.engine.types">
+    <eClassifiers xsi:type="ecore:EDataType" name="DataArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IData[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="SolutionArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.ISolution[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="TemplateAlgorithmArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.algorithm.ITemplateAlgorithm[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="AlgorithmArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IAlgorithm[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="AlgorithmExtensionArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IAlgorithmExtension[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="AlgorithmRunnerArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IAlgorithmRunner[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="ReviewArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IReview[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="CategoryArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.ICategory[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="RunnerExtensionArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IRunnerExtension[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="EngineArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.IEngine[]"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="CategoryDescriptorArray" instanceClassName="org.eclipse.tptp.platform.analysis.engine.ICategoryDescriptor[]"/>
+  </eSubpackages>
+  <eSubpackages name="review" nsURI="http:///org/eclipse/tptp/platform/analysis/engine/review.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.engine.review">
+    <eClassifiers xsi:type="ecore:EClass" name="CompleteReview" eSuperTypes="#//IReview"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CategoryReview" eSuperTypes="#//IReview">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="categoryDescriptor" lowerBound="1"
+          eType="#//ICategoryDescriptor" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FilterReview" eSuperTypes="#//IReview">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filter" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/AbstractFilter"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MultiReview" eSuperTypes="#//IReview">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reviews" lowerBound="1"
+          upperBound="-1" eType="#//IReview" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AndReview" eSuperTypes="#//review/MultiReview"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrReview" eSuperTypes="#//review/MultiReview"/>
+  </eSubpackages>
+  <eSubpackages name="runner" nsURI="http:///org/eclipse/tptp/platform/analysis/engine/runner.ecore"
+      nsPrefix="org.eclipse.tptp.platform.analysis.engine.runner">
+    <eClassifiers xsi:type="ecore:EClass" name="SingleFileRunner" eSuperTypes="#//IAlgorithmRunner">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resourceFilter" eType="ecore:EClass ../org.eclipse.tptp.platform.analysis.static.util/TPTPStaticAnalysisUtilities.ecore#//filter/AbstractFilter"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

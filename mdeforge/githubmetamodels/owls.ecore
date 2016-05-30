@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="owls"
+    nsURI="platform:/resource/owls/model/owls.ecore" nsPrefix="owls">
+  <eClassifiers xsi:type="ecore:EClass" name="Owls">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ontology" eType="#//OwlsOntology"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" eType="#//OwlsService"
+        eOpposite="#//OwlsService/ownedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="profile" eType="#//OwlsProfile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//OwlsProcess"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsOntology">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="imports" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsService">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="presents" eType="#//OwlsProfile"
+        containment="true" eOpposite="#//OwlsProfile/isPresentedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="describedBy" eType="#//OwlsProcess"
+        eOpposite="#//OwlsProcess/describes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supports" eType="#//OwlsWsdlGrounding"
+        containment="true" eOpposite="#//OwlsWsdlGrounding/supportedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBy" eType="#//Owls"
+        containment="true" eOpposite="#//Owls/service"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsProfile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isPresentedBy" eType="#//OwlsService"
+        eOpposite="#//OwlsService/presents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasProcess" eType="#//OwlsProcess"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsWsdlGrounding">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supportedBy" eType="#//OwlsService"
+        eOpposite="#//OwlsService/supports"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasAtomicProcessGrounding"
+        upperBound="-1" eType="#//OwlsWsdlAtomicProcessGrounding" containment="true"
+        eKeys="#//OwlsWsdlAtomicProcessGrounding/iD"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsWsdlAtomicProcessGrounding">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsProcess">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="describes" eType="#//OwlsService"
+        containment="true" eOpposite="#//OwlsService/describedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="peformedBy" eType="#//OwlsPeform"
+        containment="true" eOpposite="#//OwlsPeform/process"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasInputs" upperBound="-1"
+        eType="#//OwlsInput" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasOutputs" upperBound="-1"
+        eType="#//OwlsOutput" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//OwlsAssign" containment="true" eOpposite="#//OwlsAssign/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messagesBindings" upperBound="-1"
+        eType="#//OwlsAssignClient" containment="true" eOpposite="#//OwlsAssignClient/processReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAtomicProcess" eSuperTypes="#//OwlsProcess"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsCompositeProcess" eSuperTypes="#//OwlsProcess">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="composedOf" lowerBound="1"
+        eType="#//OwlsControlConstruct" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
+        eType="#//OwlsProcess" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructs" upperBound="-1"
+        eType="#//OwlsControlConstruct" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messages" lowerBound="2"
+        upperBound="2" eType="#//OwlsClientMessage" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsSequence" eSuperTypes="#//OwlsControlConstruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsSplit" eSuperTypes="#//OwlsControlConstruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAnyOrder" eSuperTypes="#//OwlsControlConstruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsPeform">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//OwlsProcess"
+        eOpposite="#//OwlsProcess/peformedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsInput" eSuperTypes="#//OwlsParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsOutput" eSuperTypes="#//OwlsParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAssign">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//OwlsProcess"
+        eOpposite="#//OwlsProcess/bindings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OwlsProcess"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputTarget" lowerBound="1"
+        eType="#//OwlsInput"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputSource" lowerBound="1"
+        eType="#//OwlsOutput"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsClientMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsInputClientMessage" eSuperTypes="#//OwlsClientMessage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientInputs" upperBound="-1"
+        eType="#//OwlsInput"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsOutputClientMessage" eSuperTypes="#//OwlsClientMessage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientOutputs" upperBound="-1"
+        eType="#//OwlsOutput"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAssignClient">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processReference" eType="#//OwlsProcess"
+        eOpposite="#//OwlsProcess/messagesBindings"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAssignInputClient" eSuperTypes="#//OwlsAssignClient">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientReference" eType="#//OwlsInputClientMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputReferences" lowerBound="1"
+        eType="#//OwlsInput"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputsReferences" lowerBound="1"
+        eType="#//OwlsInput"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OwlsAssignOutputClient" eSuperTypes="#//OwlsAssignClient">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientReference" eType="#//OwlsOutputClientMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputReferences" lowerBound="1"
+        eType="#//OwlsOutput"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputsReferences" lowerBound="1"
+        eType="#//OwlsOutput"/>
+  </eClassifiers>
+</ecore:EPackage>

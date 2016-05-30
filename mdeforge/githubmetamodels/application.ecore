@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="application" nsURI="http://application.cscm.communitymashup.de"
+    nsPrefix="application">
+  <eClassifiers xsi:type="ecore:EClass" name="Source" eSuperTypes="#//ConfigurableElement">
+    <eOperations name="getLogLevelIntValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="start"/>
+    <eOperations name="stop"/>
+    <eOperations name="pause"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persistency" eType="#//Persistency"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSet" eType="ecore:EClass data.ecore#//DataSet"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bundleId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//SourceState"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activeState" eType="#//SourceActiveStates"
+        defaultValueLiteral="7"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mashup" eType="#//Mashup"
+        eOpposite="#//Mashup/sources"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="removeDataOnStop" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateRound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mashup" eSuperTypes="#//Source">
+    <eOperations name="getNewSourceIdent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getSourceWithIdent" eType="#//Source">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappingRules" upperBound="-1"
+        eType="#//MappingRule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Source" containment="true" eOpposite="#//Source/mashup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaces" upperBound="-1"
+        eType="#//Interface" containment="true" eOpposite="#//Interface/mashup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mashupAdmins" upperBound="-1"
+        eType="#//MashupAdmin" eOpposite="#//MashupAdmin/configurableMashups"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingDirectory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheAttachments" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheDataSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backupDataSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backupIntervall" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="3600"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheDelay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="300"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceIdentCounter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true" eKeys="#//Property/Key"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Persistency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="XMLFile" eSuperTypes="#//Persistency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Database" eSuperTypes="#//Persistency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eOperations name="isValueList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isValueRange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getListOfValues" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getMinValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getMaxValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="possibleValues" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="helpText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="required" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyType" eType="#//PropertyTypes"
+        defaultValueLiteral="String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLRestrictedProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="OCLRestriction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MashupContainer">
+    <eOperations name="getConfigurationAdmins" upperBound="-1" eType="#//MashupAdmin"/>
+    <eOperations name="setNewIdentFor">
+      <eParameters name="configurableElement" eType="#//ConfigurableElement"/>
+    </eOperations>
+    <eOperations name="getNewIdentNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getMashupWithIdent" eType="#//Mashup">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSourceConfigurationWithIdent" eType="#//Source">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mashups" upperBound="-1"
+        eType="#//Mashup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allMashupAdmins" upperBound="-1"
+        eType="#//MashupAdmin" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backupConfiguration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backupIntervall" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="600"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultMashups" upperBound="-1"
+        eType="#//Mashup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceConfigurations" upperBound="-1"
+        eType="#//Mashup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceConfigurations"
+        upperBound="-1" eType="#//Interface" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="immediateSave" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="createAccountsAtLoginTry"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identCounter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface" eSuperTypes="#//ConfigurableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="security" eType="#//Security"
+        containment="true" eOpposite="#//Security/interface"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="urlSuffix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mashup" eType="#//Mashup"
+        eOpposite="#//Mashup/interfaces"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="frontEndCaching" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RESTInterface" eSuperTypes="#//Interface">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FEEDInterface" eSuperTypes="#//Interface">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowPersonFiltering" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowOrganisationFiltering"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowTypeFiltering" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowTagFiltering" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowMetaTagFiltering"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowCategoryFiltering"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="de"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feedType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="feedTitle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SourceState">
+    <eLiterals name="Active"/>
+    <eLiterals name="Paused" value="1"/>
+    <eLiterals name="Error" value="2"/>
+    <eLiterals name="Stoped" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SourceActiveStates">
+    <eLiterals name="Initializing"/>
+    <eLiterals name="Initialized" value="1"/>
+    <eLiterals name="Filling" value="2"/>
+    <eLiterals name="Filled" value="3"/>
+    <eLiterals name="WaitingForUpdate" value="4"/>
+    <eLiterals name="Updating" value="5"/>
+    <eLiterals name="Enriching" value="6"/>
+    <eLiterals name="Unknown" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Security" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//Interface"
+        eOpposite="#//Interface/security"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OAuthConfig" eSuperTypes="#//Security">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clients" upperBound="-1"
+        eType="#//OAuthClientConfig" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="admins" upperBound="-1"
+        eType="#//OAuthAdmin" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useScopeInterfaceOnRedirect"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicationKeyConfig" eSuperTypes="#//Security">
+    <eOperations name="hasApplicationKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="applicationKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="applicationKeys" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OAuthClientConfig">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="redirectionURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="clientSecret" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="grantType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="AuthorizationCode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refreshToken" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessToken" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessTokenCreationDate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accessTokenExpirationDate"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forbiddenMetaTags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowedMetaTags" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientScope" eType="#//OAuthClientScope"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oAuthScopeLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OAuthAdmin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="passwordHash" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OAuthClientScope">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positiveTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativeTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positiveMetaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativeMetaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positiveCategory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativeCategory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positivePerson" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativePerson" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positiveOrganisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativeOrganisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identSpecification" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowPersons" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowContents" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowOrganisations" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumAge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MashupAdmin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="provider" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurableMashups" upperBound="-1"
+        eType="#//Mashup" eOpposite="#//Mashup/mashupAdmins"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localIdent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isConfigurationAdmin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profileImage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PropertyTypes">
+    <eLiterals name="String"/>
+    <eLiterals name="Integer" value="1"/>
+    <eLiterals name="Float" value="2"/>
+    <eLiterals name="Date" value="3"/>
+    <eLiterals name="Authorization" value="4"/>
+    <eLiterals name="UploadZipFile" value="5"/>
+    <eLiterals name="UploadFile" value="6"/>
+    <eLiterals name="Boolean" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableElement" abstract="true">
+    <eOperations name="getProperty" eType="#//Property">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addProperty">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addProperty">
+      <eParameters name="property" eType="#//Property"/>
+    </eOperations>
+    <eOperations name="getPropertyValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="isPropertyTrue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPropertyValueElseDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="isPropertyTrueElseDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeProperty">
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//Configuration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="configurationImage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+</ecore:EPackage>

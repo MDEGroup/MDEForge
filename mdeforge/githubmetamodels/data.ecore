@@ -1,0 +1,1546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="data" nsURI="http://data.cscm.communitymashup.de" nsPrefix="data">
+  <eClassifiers xsi:type="ecore:EClass" name="Person" eSuperTypes="#//InformationObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Person is an @link InformationObject Information Object@endlink representing a human being. It acts as a collection of personal data associated with this specific Person."/>
+    </eAnnotations>
+    <eOperations name="getContents" upperBound="-1" eType="#//Content"/>
+    <eOperations name="getOrganisations" upperBound="-1" eType="#//Organisation"/>
+    <eOperations name="addContributedContent" lowerBound="1" eType="#//Content">
+      <eParameters name="contributedContent" lowerBound="1" eType="#//Content"/>
+    </eOperations>
+    <eOperations name="addAuthoredContent" lowerBound="1" eType="#//Content">
+      <eParameters name="authoredContent" lowerBound="1" eType="#//Content"/>
+    </eOperations>
+    <eOperations name="parseFirstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="parseLastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastname" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leaderOf" upperBound="-1"
+        eType="#//Organisation" eOpposite="#//Organisation/leader"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participates" upperBound="-1"
+        eType="#//Organisation" eOpposite="#//Organisation/participants"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="authored" upperBound="-1"
+        eType="#//Content" eOpposite="#//Content/author"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributed" upperBound="-1"
+        eType="#//Content" eOpposite="#//Content/contributors"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateOfBirth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persons" upperBound="-1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ranked" upperBound="-1"
+        eType="#//Ranking" eOpposite="#//Ranking/ranker"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InformationObject" abstract="true" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An @link InformationObject Information Object@endlink is an abstract superclass of Content, Organisation and Person. Every @link InformationObject Information Object@endlink can be classified by Category and Tag instances."/>
+    </eAnnotations>
+    <eOperations name="tag" lowerBound="1" eType="#//Tag">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="categorize" eType="#//Category">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="attachImage" eType="#//Image">
+      <eParameters name="imageUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAttachments" upperBound="-1" eType="#//Attachment"/>
+    <eOperations name="starRank" eType="#//StarRanking">
+      <eParameters name="stars" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      <eParameters name="ofStars" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="view" eType="#//ViewRanking"/>
+    <eOperations name="thumbsUp" eType="#//ThumbRanking"/>
+    <eOperations name="thumbsDown" eType="#//ThumbRanking"/>
+    <eOperations name="getThumbsUp" upperBound="-1" eType="#//ThumbRanking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link ThumbRanking Thumb Ranking@endlink instances of this @link InformationObject Information Object@endlink which imply thumbs up."/>
+        <details key="OCLCondition" value="&quot;self.stringValue='&quot; + ThumbRanking.THUMBS_UP_VALUE + &quot;'&quot;"/>
+        <details key="input" value="getThumbRankings()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getThumbsDown" upperBound="-1" eType="#//ThumbRanking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link ThumbRanking Thumb Ranking@endlink instances of this @link InformationObject Information Object@endlink which imply thumbs up."/>
+        <details key="OCLCondition" value="&quot;self.stringValue='&quot; + ThumbRanking.THUMBS_DOWN_VALUE + &quot;'&quot;"/>
+        <details key="input" value="getThumbRankings()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getThumbsUpCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the amount of given thumbs ups for this @link InformationObject Information Object@endlink."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getThumbsDownCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the amount of given thumbs down for this @link InformationObject Information Object@endlink."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getThumbsCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the amount of given thumbs up minus thumbs down."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getViewsCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the amount of views for this @link InformationObject Information Object@endlink."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getStarRanking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the average star ranking for this @link InformationObject Information Object@endlink normalized between 0 and 1. Null if it is not yet ranked."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="extend" eType="#//MetaInformation">
+      <eParameters name="metaInformation" eType="#//MetaInformation"/>
+    </eOperations>
+    <eOperations name="getWebAccounts" upperBound="-1" eType="#//WebAccount">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link WebAccount Web Account@endlink instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getWebSites" upperBound="-1" eType="#//WebSite">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link WebSite Web Site@endlink instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getPhones" upperBound="-1" eType="#//Phone">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Phone instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getLocations" upperBound="-1" eType="#//Location">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Location instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEmails" upperBound="-1" eType="#//Email">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link EMail E-Mail@endlink instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInstantMessengers" upperBound="-1" eType="#//InstantMessenger">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InstantMessenger Instant Messenger@endlink instances that are @link MetaInformation Meta Informations@endlink for this @link InformationObject Information Object@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getMetaInformations()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="addEmailAddress" lowerBound="1" eType="#//Email">
+      <eParameters name="emailAdress" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addWebSite" lowerBound="1" eType="#//WebSite">
+      <eParameters name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithCommonTags" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Information Objects that have at least one tag in common."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="addWebAccount" lowerBound="1" eType="#//WebAccount">
+      <eParameters name="username" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="hasImages" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eOperations name="getInformationObjectsConnectedTo" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objects with a @link Connection connection@endlink from this information object to the other."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjectsConnectedFrom" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objects with a @link Connection connection@endlink from the other information object to this one."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjectsConnected" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objects with a @link Connection connection@endlink from this information object to the other or in the inverse direction."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="connectTo" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connects this information object to the given other information object if it not already connected and returns the created or exiting connection."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+    </eOperations>
+    <eOperations name="connectToWithMetaTag" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connects this information object to the given other information object if it not already connected and returns the created or exiting connection. Adds the given meta tag to the connection."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsConnectedToWithMetaTag" upperBound="-1"
+        eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objecst with a @link Connection connection@endlink, taggeg by the given meta tag, from this information object to the other."/>
+      </eAnnotations>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsConnectedFromWithMetaTag" upperBound="-1"
+        eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objects with a @link Connection connection@endlink, taggeg by the given meta tag, from the other information object to this one."/>
+      </eAnnotations>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsConnectedWithMetaTag" upperBound="-1"
+        eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all information objects with a @link Connection connection@endlink, taggeg by the given meta tag, from this information object to the other or in the inverse direction."/>
+      </eAnnotations>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getConnectionsFrom" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from this information object to the given information object."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+    </eOperations>
+    <eOperations name="getConnectionsTo" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from the given information object to this information object."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+    </eOperations>
+    <eOperations name="connectToWithValueAndMetaTag" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Connects this information object to the given other information object and sets the value as stringValue of the connection if it not already connected and returns the created or exiting connection. Adds the given meta tag to the connection."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getConnectionTo" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from this to the given information object to this information object that has the given value."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getConnectionFrom" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from the given information object to this information object that has the given value."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAttachmentWithUrl" eType="#//Attachment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Attachment attachment@endlink of this information object with the given url."/>
+      </eAnnotations>
+      <eParameters name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAttachedImageWithUrl" eType="#//Image">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Attachment attachment@endlink of this information object with the given url."/>
+      </eAnnotations>
+      <eParameters name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addPhone" lowerBound="1" eType="#//Phone">
+      <eParameters name="phoneNumber" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonsWithCommonTags" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Persons that have at least one tag in common."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOrganisationsWithCommonTags" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Organisations that have at least one tag in common."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getContentsWithCommonTags" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Contents that have at least one tag in common."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="unTag" lowerBound="1" eType="#//Tag">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="unCategorize" eType="#//Category">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSlugName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a lowercase name without any non word characters."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getConnectionsToWithMetaTag" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from this to the given information object to this information object that has the given value."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getConnectionsFromWithMetaTag" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns, if it exists, the @link Connection connection@endlink from this to the given information object to this information object that has the given value."/>
+      </eAnnotations>
+      <eParameters name="informationObject" eType="#//InformationObject"/>
+      <eParameters name="metaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//Category" eOpposite="#//Category/categorized"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        eOpposite="#//Tag/tagged"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="images" upperBound="-1"
+        eType="#//Image"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="starRankings" upperBound="-1"
+        eType="#//StarRanking" eOpposite="#//StarRanking/rankedInformationObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thumbRankings" upperBound="-1"
+        eType="#//ThumbRanking" eOpposite="#//ThumbRanking/rankedInformationObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewRankings" upperBound="-1"
+        eType="#//ViewRanking" eOpposite="#//ViewRanking/rankedInformationObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedTo" upperBound="-1"
+        eType="#//Connection" eOpposite="#//Connection/from"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedBy" upperBound="-1"
+        eType="#//Connection" eOpposite="#//Connection/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="binaries" upperBound="-1"
+        eType="#//Binary"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainCategory" eType="#//Category"
+        eOpposite="#//Category/mainCategorized"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaInformations" upperBound="-1"
+        eType="#//MetaInformation" eOpposite="#//MetaInformation/informationObjects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Content" eSuperTypes="#//InformationObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Content is an @link InformationObject Information Object@endlink textual describing published information authored and contributed by @link Person Persons@endlink. A Content supports an hierarchical structure of parent and child Content elements. Furthermore @link Attachment Attachments@endlink of type Document and Video are addable. A Content can be used e.g. for articles, books, descriptions, comments, products, etc."/>
+    </eAnnotations>
+    <eOperations name="getOrganisations" upperBound="-1" eType="#//Organisation"/>
+    <eOperations name="getPersons" upperBound="-1" eType="#//Person"/>
+    <eOperations name="comment" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Creates a new sub-content of this content with the given string as stringValue  and the name &quot;Comment on &lt;name of this content>&quot;. @return The new sub-content, null in error case."/>
+      </eAnnotations>
+      <eParameters name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addContributor" lowerBound="1" eType="#//Person">
+      <eParameters name="contributor" lowerBound="1" eType="#//Person"/>
+    </eOperations>
+    <eOperations name="attachDocument" lowerBound="1" eType="#//Document">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Creates a new a document from the file at the given url and attaches it to this content. @return The newly created document or null in error case"/>
+      </eAnnotations>
+      <eParameters name="fileUrl" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//Content" eOpposite="#//Content/parentContent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributors" upperBound="-1"
+        eType="#//Person" eOpposite="#//Person/contributed"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" eType="#//Person"
+        eOpposite="#//Person/authored"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documents" upperBound="-1"
+        eType="#//Document"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentContent" eType="#//Content"
+        eOpposite="#//Content/contents"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformations" upperBound="-1"
+        eType="#//Transformation" eOpposite="#//Transformation/transformed"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="videos" upperBound="-1"
+        eType="#//Video"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataSet">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="restSuperClass" value="true"/>
+      <details key="documentation" value="A @link DataSet Data Set@endlink acts as container for all data elements contained in an CommunityMashup configuration. The @link DataSet Data Set@endlink can be queried to retrieve special items. It is the main entry point for all access to mashed up data."/>
+    </eAnnotations>
+    <eOperations name="add" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds the given item to this @link DataSet Data Set@endlink."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="getItemsWithStringValue" upperBound="-1" eType="#//Item">
+      <eParameters name="stringValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonsWithName" upperBound="-1" eType="#//Person">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonsWithLastname" upperBound="-1" eType="#//Person">
+      <eParameters name="lastname" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonsWithFirstName" upperBound="-1" eType="#//Person">
+      <eParameters name="firstname" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getTag" eType="#//Tag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Searches for a Tag with the given name."/>
+      </eAnnotations>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getMetaTag" eType="#//MetaTag">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllPersons" upperBound="-1" eType="#//Person"/>
+    <eOperations name="getAllContents" upperBound="-1" eType="#//Content"/>
+    <eOperations name="getAllOrganisations" upperBound="-1" eType="#//Organisation"/>
+    <eOperations name="getAllCategories" upperBound="-1" eType="#//Category"/>
+    <eOperations name="getCategory" eType="#//Category">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllTags" upperBound="-1" eType="#//Tag"/>
+    <eOperations name="getItemsModifiedSince" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all items that are modified since the given date."/>
+      </eAnnotations>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getAllMetaTags" upperBound="-1" eType="#//MetaTag"/>
+    <eOperations name="getAllConnections" upperBound="-1" eType="#//Connection"/>
+    <eOperations name="log">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="log">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="level" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getContentWithIdent" eType="#//Content">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonWithIdent" eType="#//Person">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOrganisationWithIdent" eType="#//Organisation">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAttachmentWithIdent" eType="#//Attachment">
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithAllCategories" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are in all of the given @link Category Categories@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithOneOfCategories" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are in one of the given @link Category Categories@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getContentsWithAllCategories" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Content instances which are in all of the given @link Category Categories@endlink. If the list is empty or undefined then all Content instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getContentsWithOneOfCategories" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Content instances which are in only of the given @link Category Categories@endlink. If the list is empty or undefined then all Content instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getPersonsWithAllCategories" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Person instances which are in all of the given @link Category Categories@endlink. If the list is empty or undefined then all Person instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getPersonsWithOneOfCategories" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Person instances which are in one of the given @link Category Categories@endlink. If the list is empty or undefined then all Person instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithAllCategories" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Organisation instances which are in all of the given @link Category Categories@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithOneOfCategories" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Organisation instances which are in one of the given @link Category Categories@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfCategories(categories)"/>
+      </eAnnotations>
+      <eParameters name="categories" upperBound="-1" eType="#//Category"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithAllTags" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by all of the given @link Tag Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithOneOfTags" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by one of the given @link Tag Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithAllTags" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Organisation instances which are tagged with all of the given @link Tag Tags@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithOneOfTags" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Organisation instances which are tagged by one of the given @link Tag Tags@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getPersonsWithAllTags" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Person instances which are tagged with all of the given @link Tag Tags@endlink. If the list is empty or undefined then all Person instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getPersonsWithOneOfTags" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Person instances which are tagged by one of the given @link Tag Tags@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getContentsWithAllTags" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Content instances which are tagged with all of the given @link Tag Tags@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithAllTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getContentsWithOneOfTags" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Content instances which are tagged with one of the given @link Tag Tags@endlink. If the list is empty or undefined then all Organisation instances will be returned."/>
+        <details key="input" value="getInformationObjectsWithOneOfTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//Tag"/>
+    </eOperations>
+    <eOperations name="getContentsWithName" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;self.name='&quot; + name + &quot;'&quot;"/>
+        <details key="documentation" value="Returns all Content instances with the given name."/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithName" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;self.name='&quot; + name + &quot;'&quot;"/>
+        <details key="documentation" value="Returns all Organisation instances with the given name."/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getItemsWithAllMetaTags" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Extension instances which are tagged by all of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all item instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getItemsWithOneOfMetaTags" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all items instances which are tagged by one of the given @link MetaTag@endlink. If the list is empty or undefined then all item instances will be returned."/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getPersons" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Person instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOrganisations" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Organisation instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getContents" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all main Content instances (the ones with no parent content) contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjects" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTags" upperBound="-1" eType="#//Tag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Tag instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getMetaTags" upperBound="-1" eType="#//MetaTag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link MetaTag Meta Tag@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getAttachments" upperBound="-1" eType="#//Attachment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Attachment instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getBinaries" upperBound="-1" eType="#//Binary">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all binary Attachment instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getCategories" upperBound="-1" eType="#//Category">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Category instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getClassifications" upperBound="-1" eType="#//Classification">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Classification instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getConnections" upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Connection instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getDocuments" upperBound="-1" eType="#//Document">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Document instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getEmails" upperBound="-1" eType="#//Email">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link EMail E-Mail@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getExtensions" upperBound="-1" eType="#//Extension">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Extension instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getImages" upperBound="-1" eType="#//Image">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Image instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInstantMessengers" upperBound="-1" eType="#//InstantMessenger">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InstantMessenger Instant Messenger@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getLocations" upperBound="-1" eType="#//Location">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Location instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getMetaInformations" upperBound="-1" eType="#//MetaInformation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link MetaInformation Meta Information@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getPhones" upperBound="-1" eType="#//Phone">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Phone instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getRankings" upperBound="-1" eType="#//Ranking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Ranking instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getStarRankings" upperBound="-1" eType="#//StarRanking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link StarRanking Star Ranking@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getThumbRankings" upperBound="-1" eType="#//ThumbRanking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link ThumbRanking Thumb Ranking@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getTransformations" upperBound="-1" eType="#//Transformation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Transformation instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getVideos" upperBound="-1" eType="#//Video">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Video instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getViewRankings" upperBound="-1" eType="#//ViewRanking">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link ViewRanking View Ranking@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getWebAccounts" upperBound="-1" eType="#//WebAccount">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link WebAccount Web Account@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getWebSites" upperBound="-1" eType="#//WebSite">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link WebSite Web Site@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithAllMetaTags" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by all of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithOneOfMetaTags" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by one of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getIdentifiers" upperBound="-1" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link Indentifier Identifier@endlink instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIdentifiersWithKey" upperBound="-1" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link Indentifier Identifier@endlink instances contained in this @link DataSet Data Set@endlink having the given key."/>
+        <details key="OCLCondition" value="&quot;self.key='&quot; + key + &quot;'&quot;"/>
+      </eAnnotations>
+      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getIdentifierWithKeyValue" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the identifier with the unique key ident pair."/>
+        <details key="OCLCondition" value="&quot;self.key='&quot; + key + &quot;' and self.value='&quot; + value + &quot;'&quot;"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getItemWithIdentifier" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the item identified by the identifier with the unique key ident pair."/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPersonWithIdentifier" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the person identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getContentWithIdentifier" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the content identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getOrganisationWithIdentifier" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the organisation identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getLocationWithIdentifier" eType="#//Location">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the location identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getIndoorLocationWithIdentifier" eType="#//IndoorLocation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the indoor location identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getImageWithIdentifier" eType="#//Image">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns the image identified by the identifier with the unique key ident pair."/>
+        <details key="input" value="getItemWithIdentifier(key, value)"/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getEmptyItemWithIdent" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a empty item with the same type as the item identified by the given ident"/>
+      </eAnnotations>
+      <eParameters name="ident" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getTagsWithMoreThanXInformationObjects" upperBound="-1" eType="#//Tag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;self.getCount() > &quot; + x"/>
+        <details key="documentation" value="Returns all Tags which tagged more than the given x information objects"/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getItemsCreatedSince" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all items that are created since the given date."/>
+      </eAnnotations>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="searchItems" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Searches for Items matching the given search term."/>
+        <details key="OCLCondition" value="&quot;self.matchesSearch('&quot; + term + &quot;') = true&quot;"/>
+      </eAnnotations>
+      <eParameters name="term" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="searchInformationObjects" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Searches for Information Objects matching the given search term."/>
+        <details key="OCLCondition" value="&quot;self.matchesSearch('&quot; + term + &quot;') = true&quot;"/>
+      </eAnnotations>
+      <eParameters name="term" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInformationObjectsWithAttachment" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink having the given attachment."/>
+        <details key="OCLCondition" value="&quot;((self.getAttachments())->notEmpty()) and (self.getAttachments()->exists(a | a.ident = '&quot; + attachment.getIdent()  + &quot;'))&quot;;"/>
+        <details key="input" value="getInformationObjects()"/>
+      </eAnnotations>
+      <eParameters name="attachment" lowerBound="1" eType="#//Attachment"/>
+    </eOperations>
+    <eOperations name="getPersonsWithAttachment" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link Person Persons@endlink having the given attachment."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getInformationObjectsWithAttachment(attachment)"/>
+      </eAnnotations>
+      <eParameters name="attachment" lowerBound="1" eType="#//Attachment"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithAttachment" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link Organisation Organisations@endlink having the given attachment."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getInformationObjectsWithAttachment(attachment)"/>
+      </eAnnotations>
+      <eParameters name="attachment" lowerBound="1" eType="#//Attachment"/>
+    </eOperations>
+    <eOperations name="getContentsWithAttachment" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link Content Contents@endlink having the given attachment."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getInformationObjectsWithAttachment(attachment)"/>
+      </eAnnotations>
+      <eParameters name="attachment" lowerBound="1" eType="#//Attachment"/>
+    </eOperations>
+    <eOperations name="getEqualItem" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If the dataset already contains an equal item it will be returned. Otherwise null is returned."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="hasEqualItem" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If the dataset already contains an equal item true will be returned. Otherwise false is returned."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="getItemsWithIdent" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the item with the given ident, or null if it does not exist."/>
+      </eAnnotations>
+      <eParameters name="ident" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAttachmentsWithCachedFileName" upperBound="-1" eType="#//Attachment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;self.cachedFileName = '&quot; + cachedFileName + &quot;'&quot;"/>
+        <details key="documentation" value="Returns all Attachments with the given cached file name"/>
+      </eAnnotations>
+      <eParameters name="cachedFileName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getEventsAfter" upperBound="-1" eType="#//Event">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Events after the given date."/>
+      </eAnnotations>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getEventsBefore" upperBound="-1" eType="#//Event">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Events before the given date."/>
+      </eAnnotations>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getEventsBetweenDates" upperBound="-1" eType="#//Event">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Events between the two given dates."/>
+      </eAnnotations>
+      <eParameters name="after" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eParameters name="before" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getSpicynodesRepresentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the data set as spicynodes representation @see http://www.spicynodes.org/"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getConnectionsBetweenInformationObjectsOfDifferentCategories"
+        upperBound="-1" eType="#//Connection">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Connection instances that exist between information objects having different categories"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjectsModifiedSince" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Objects@endlink modified since the given date."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsModifiedSince(date)"/>
+      </eAnnotations>
+      <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="getRandomXInformationObjects" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns x random information objects."/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getRandomXContents" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns x random contents."/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getRandomXPersons" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns x random persons."/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="getRandomXOrganisations" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns x random organisations."/>
+      </eAnnotations>
+      <eParameters name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="forceAdd" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Adds the given item without merging and ident changing."/>
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="getIdentsOfExistingItems" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a comma separated list of the idents of all existing items."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getCategoryWithSlug" eType="#//Category">
+      <eParameters name="slug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="rebuildIndexes">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Rebuilds all indexes used for performance."/>
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getContentsWithAllMetaTags" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by all of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getContentsWithOneOfMetaTags" upperBound="-1" eType="#//Content">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by one of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getPersonsWithAllMetaTags" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by all of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getPersonsWithOneOfMetaTags" upperBound="-1" eType="#//Person">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by one of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithAllMetaTags" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by all of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getOrganisationsWithOneOfMetaTags" upperBound="-1" eType="#//Organisation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances which are tagged by one of the given @link MetaTag Meta Tags@endlink. If the list is empty or undefined then all @link InformationObject Information Object@endlink instances will be returned."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="input" value="getItemsWithOneOfMetaTags(tags)"/>
+      </eAnnotations>
+      <eParameters name="tags" upperBound="-1" eType="#//MetaTag"/>
+    </eOperations>
+    <eOperations name="getEvents" upperBound="-1" eType="#//Event">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns all Person instances contained in this @link DataSet Data Set@endlink."/>
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="searchByQuery" upperBound="-1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Searches for Items matching the given search term."/>
+      </eAnnotations>
+      <eParameters name="query" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//Item" containment="true" resolveProxies="false" eOpposite="#//Item/dataSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cacheFileAttachements"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        volatile="true" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setUp" eType="ecore:EClass application.ecore#//Mashup"
+        transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"
+        volatile="true" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identCounter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"
+        defaultValueLiteral="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="a_">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="restSuperClass" value="true"/>
+      <details key="documentation" value="An Item is an abstract superclass of @link InformationObject Information Object@endlink, Extension, Classification and @link MetaTag Meta Tag@endlink. Every Item can be classified by @link MetaTag Meta Tags@endlink."/>
+    </eAnnotations>
+    <eOperations name="log">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="log">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="noREST" value="true"/>
+      </eAnnotations>
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="level" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    </eOperations>
+    <eOperations name="metaTag" eType="#//MetaTag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Tags this item with a @link MetaTag Meta Tag@endlink represented by the given name. If the @link MetaTag Meta Tag@endlink already exists, this item will be added to its tagged items. If it does not exist, it will be created. The new or updated @link MetaTag Meta Tag@endlink will be returned."/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="identifyBy" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Creates an identifierer with the given key value pair to identify this item."/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getIdentifier" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the @link Identifier Identifier@endlink for the key. Returns null if no identifier exists for that key."/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="hasMetaTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns wether this item is meta tagged by the given tag or not."/>
+      </eAnnotations>
+      <eParameters name="tag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="matchesSearch" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Determines if this item fulfills the provided search."/>
+      </eAnnotations>
+      <eParameters name="term" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="delete">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Deletes this item from the data set."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isEqualItem" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns true, if the given item is equal to this item. Should be used like equals method for object. EMF does not allow to overwrite equals method."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="getCreatedPrettyInLanguage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the created date with pretty formatting like &quot;Two days ago&quot;. Language must be set in iso language code {@linkplain http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt}"/>
+      </eAnnotations>
+      <eParameters name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getCreatedPretty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the created date with pretty formatting like &quot;Two days ago&quot;."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getLastModifiedPrettyInLanguage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the modified date with pretty formatting like &quot;Two days ago&quot;. Language must be set in iso language code {@linkplain http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt}"/>
+      </eAnnotations>
+      <eParameters name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getLastModifiedPretty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the modified date with pretty formatting like &quot;Two days ago&quot;."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="deleteOnDeleteOf" lowerBound="1" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Activates the deletion of this item when the given item will be deleted."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="deleteIfEmptyOnDelete">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Deletes this item from the data set if the on delete list is empty."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="update" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Updates this item with the values and referenced objects from the given updated item and returns the this updated item. The given item will be deleted afterwards."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="forceUpdate" eType="#//Item">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Overwrites this item with the values and referenced objects from the given updated item and returns the this updated item. The given item will be deleted afterwards."/>
+      </eAnnotations>
+      <eParameters name="item" eType="#//Item"/>
+    </eOperations>
+    <eOperations name="unMetaTag" eType="#//MetaTag">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Removes the @link MetaTag Meta Tag@endlink represented by the given name from this item. If the @link MetaTag Meta Tag@endlink already exists, this item will be added to its tagged items. If it does not exist, nothing will be done."/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeIdentifier" eType="#//Identifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Creates an identifierer with the given key value pair to identify this item."/>
+      </eAnnotations>
+      <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSet" eType="#//DataSet"
+        transient="true" resolveProxies="false" eOpposite="#//DataSet/items"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ident" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringValue" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="created" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaTags" upperBound="-1"
+        eType="#//MetaTag" eOpposite="#//MetaTag/metaTagged"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identifiedBy" upperBound="-1"
+        eType="#//Identifier" eOpposite="#//Identifier/identified"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deleteOnDelete" upperBound="-1"
+        eType="#//Item" eOpposite="#//Item/deletedIfDeleted">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References items will be deleted when this item will be deleted"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deletedIfDeleted" upperBound="-1"
+        eType="#//Item" eOpposite="#//Item/deleteOnDelete">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This item will be deleted if one of the referenced items will be deleted."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Extension" abstract="true" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="extendedListAccessors" value="true"/>
+      <details key="documentation" value="An Extension is an abstract superclass for extending the core data elements by additional information like Attachment, Ranking, Connectionsand @link MetaInformation Meta Information@endlink instances."/>
+    </eAnnotations>
+    <eOperations name="tag" eType="#//MetaTag">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Classification" abstract="true" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Classification is a superclass of @link Tag Tags@endlink and @link Category Categories@endlink for grouping @link InformationObject Information Object@endlink instances by their defining features and concepts."/>
+    </eAnnotations>
+    <eOperations name="getPersons" upperBound="-1" eType="#//Person"/>
+    <eOperations name="getContents" upperBound="-1" eType="#//Content"/>
+    <eOperations name="getOrganisations" upperBound="-1" eType="#//Organisation"/>
+    <eOperations name="getCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getPersonsCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getContentsCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getOrganisationsCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getSlug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns a lowercase name without any non word characters."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//Classification">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="plural" value="Categories"/>
+      <details key="documentation" value="A Category is a textual Classification element for grouping @link InformationObject Information Object@endlink instances by their defining features and concepts. Compared to @link Tag Tags@endlink, @link Category Categories@endlink are often predefined values of the domain specific meta model. A Category support an hierarchical structure of parent and child Category elements."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categorized" upperBound="-1"
+        eType="#//InformationObject" eOpposite="#//InformationObject/categories"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentCategory" eType="#//Category"
+        eOpposite="#//Category/categories"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//Category" eOpposite="#//Category/parentCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainCategorized" upperBound="-1"
+        eType="#//InformationObject" eOpposite="#//InformationObject/mainCategory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag" eSuperTypes="#//Classification">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Tag is a textual index term assigned to an @link InformationObject Information Object@endlink for Classification purposes. Compared to @link Category Categories@endlink, @link Tag Tags@endlink are often user-defined Classification Items. @link Tag Tags@endlink do not support an hierarchical structure."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tagged" upperBound="-1"
+        eType="#//InformationObject" eOpposite="#//InformationObject/tags"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Organisation" eSuperTypes="#//InformationObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Organisation is a social group of Person instances, e.g. corporations, governments. A Organisation supports an hierarchical structure of parent and child Organisation elements. In addition optional Extensions of Type Phone, @link Email E-Mail@endlink, @link WebAccount Web Account@endlink and/or Location can be attached."/>
+    </eAnnotations>
+    <eOperations name="getPersons" upperBound="-1" eType="#//Person"/>
+    <eOperations name="getContents" upperBound="-1" eType="#//Content"/>
+    <eOperations name="addParticipant" eType="#//Person">
+      <eParameters name="participant" eType="#//Person"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentOrganisation" eType="#//Organisation"
+        eOpposite="#//Organisation/organisations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leader" eType="#//Person"
+        eOpposite="#//Person/leaderOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
+        eType="#//Person" eOpposite="#//Person/participates"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="organisations" upperBound="-1"
+        eType="#//Organisation" eOpposite="#//Organisation/parentOrganisation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaTag" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A @link MetaTag Meta Tag@endlink is a textual index term on Item level for meta Classification purposes. @link MetaTag Meta Tags@endlink do not support an hierarchical structure. In contrast to @link Tag Tags@endlink, @link MetaTag Meta Tags@endlink are used for meta purposes."/>
+    </eAnnotations>
+    <eOperations name="getWebAccounts" upperBound="-1" eType="#//WebAccount">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all @link WebAccount Web Account@endlink instances tagged by this @link MetaTag Meta Tag@endlink."/>
+        <details key="input" value="getMetaTagged()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInformationObjects" upperBound="-1" eType="#//InformationObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all @link InformationObject Information Object@endlink instances tagged by this @link MetaTag Meta Tag@endlink."/>
+        <details key="input" value="getMetaTagged()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getExtensions" upperBound="-1" eType="#//Extension">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="OCLCondition" value="&quot;true&quot;"/>
+        <details key="documentation" value="Returns all Extension instances tagged by this @link MetaTag Meta Tag@endlink."/>
+        <details key="input" value="getMetaTagged()"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eOperations name="getInformationObjectsCount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaTagged" upperBound="-1"
+        eType="#//Item" eOpposite="#//Item/metaTags"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Phone" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Phone is a @link MetaInformation Meta Information@endlink Extension for describing an international telephone or mobile number."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="areaCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="countryCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstantMessenger" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An @link InstantMessenger Instant Messenger@endlink is a @link MetaInformation Meta Information@endlink Extension for specifying an account for a real-time direct text-based chat communication solution."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Email" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Email is a @link MetaInformation Meta Information@endlink Extension for specifying an e-mail address."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WebAccount" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A WebAccount is a @link MetaInformation Meta Information@endlink Extension for generically specifying web-based service accounts. This could be a Social Networking Service account, e.g. Facebook, Twitter, etc."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WebSite" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A WebSite is a @link MetaInformation Meta Information@endlink Extension for referencing a specific web site. Depending on the domain meta model this could for example be a personal/corporate web site or for managing web site favorites."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ranking" abstract="true" eSuperTypes="#//Extension">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Ranking is superclass of @link StarRanking Star Ranking@endlink, @link ThumbRanking Thumb Ranking@endlink or @link ViewRanking View Ranking@endlink. A Ranking Extension is used for rating or page ranking of @link InformationObject Information Object@endlink instances."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ranker" eType="#//Person"
+        eOpposite="#//Person/ranked"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attachment" abstract="true" eSuperTypes="#//Extension">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Attachment is a superclass of Binary, Document, Image, Transformation or Video. An Attachment is an Extension to an @link InformationObject Information Object@endlink extending the capabilities of the core meta model."/>
+    </eAnnotations>
+    <eOperations name="getOriginalFileUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the original file url."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cachedFileUrl" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cachedOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileExtension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileIdentifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Identifier for the file. Can be used as hint for caching if a file gets a new url every time."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cachedFileName" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Location is a @link MetaInformation Meta Information@endlink Extension for specifying a postal address or geographic point."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="houseNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zipCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="longitude" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="latitude" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indoorLocations" upperBound="-1"
+        eType="#//IndoorLocation" eOpposite="#//IndoorLocation/location"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Image" eSuperTypes="#//Attachment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Image is an Attachment for referencing picture, photo or illustration files."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Document" eSuperTypes="#//Attachment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Document is an Attachment for referencing files that contain text."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StarRanking" eSuperTypes="#//Ranking">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A @link StarRanking Star Ranking@endlink is used for rating for a given @link InformationObject Information Object@endlink. As rating scale a normalized value in the range from 0.0 to 1.0 is expected allowing the mapping to any kind of ranking, e.g. 5 stars, 10 stars etc.. The total ranking is given by the arithmetic mean of normalized @link StarRanking Star Ranking@endlink values for an @link InformationObject Information Object@endlink."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rankedInformationObject"
+        eType="#//InformationObject" eOpposite="#//InformationObject/starRankings"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="normalizedValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewRanking" eSuperTypes="#//Ranking">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A @link ViewRanking View Ranking@endlink is used for counting the amount of views for a given @link InformationObject Information Object@endlink, also known as page ranking. The total amount is given by the sum of @link ViewRanking View Rankings@endlink for an @link InformationObject Information Object@endlink."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rankedInformationObject"
+        eType="#//InformationObject" eOpposite="#//InformationObject/viewRankings"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThumbRanking" eSuperTypes="#//Ranking">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A @link ThumbRanking Thumb Ranking@endlink is used for rating a given @link InformationObject Information Object@endlink. Thumbs Ups are represented by an stringValue of +1 Thumbs Down by a stringValue of -1. Other values allowing weighted thumb rankings. The total amount is given by the sum of @link ThumbRanking Thumb Rankings@endlink for an @link InformationObject Information Object@endlink."/>
+    </eAnnotations>
+    <eOperations name="isThumbUp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns if this @link Thumb Ranking ThumbRanking @endlink is a thumb up."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isThumbDown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns if this @link Thumb Ranking ThumbRanking @endlink is a thumb up."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rankedInformationObject"
+        eType="#//InformationObject" eOpposite="#//InformationObject/thumbRankings"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="#//Attachment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Transformation is an Attachment representing the transformation applied to an source element and resulting in the given @link InformationObject Information Object@endlink."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformed" upperBound="-1"
+        eType="#//Content" eOpposite="#//Content/transformations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Video" eSuperTypes="#//Attachment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Video is an Attachment for referencing moving picture files."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" eSuperTypes="#//Extension">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Connection is an Extension for creating uni-directional relationships (or associations) between two @link InformationObject Information Object@endlink instances. Bi-directional relationships can be defined by creating two uni-directional Connection instances where both @link InformationObject Information Object@endlink instances are associated to each other."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//InformationObject"
+        eOpposite="#//InformationObject/connectedTo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//InformationObject"
+        eOpposite="#//InformationObject/connectedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Binary" eSuperTypes="#//Attachment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="plural" value="Binaries"/>
+      <details key="documentation" value="A Binary is an Attachment for referencing a generic file in binary format."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bytes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaInformation" eSuperTypes="#//Extension">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A @link MetaInformation Meta Information@endlink is a superclass for @link Email E-Mail@endlink, @link InstantMessenger Instant Messenger@endlink, Location, Phone, @link WebAccount Web Account@endlink and @link WebSite Web Site@endlink. A MetaInformation is an Extension used for extending an @link InformationObject Information Object@endlink by additional references or other kind of information."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="informationObjects" upperBound="-1"
+        eType="#//InformationObject" eOpposite="#//InformationObject/metaInformations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IndoorLocation" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An IndoorLocation is a @link MetaInformation Meta Information@endlink Extension for specifying a building or a location inside of a building.&#xA;It can be created hierarchical by the parent relation and mapped to a @link Location @endlink. The value is specified by the stringValue."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//Location"
+        eOpposite="#//Location/indoorLocations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentIndoorLocation" eType="#//IndoorLocation"
+        eOpposite="#//IndoorLocation/indoorLocations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indoorLocations" upperBound="-1"
+        eType="#//IndoorLocation" eOpposite="#//IndoorLocation/parentIndoorLocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifier" eSuperTypes="#//Item">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Identifier Objects uniquely identifing items by key value pairs."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="identified" lowerBound="1"
+        eType="#//Item" eOpposite="#//Item/identifiedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//MetaInformation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Event is an @link Event Event@endlink Information for adding dated information to information objects."/>
+    </eAnnotations>
+    <eOperations name="getDatePrettyInLanguage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the date with pretty formatting like &quot;Two days ago&quot;. Language must be set in iso language code {@linkplain http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt}"/>
+      </eAnnotations>
+      <eParameters name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getDatePretty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Returns the date with pretty formatting like &quot;Two days ago&quot;."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+</ecore:EPackage>

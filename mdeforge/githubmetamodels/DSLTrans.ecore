@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dsltrans"
+    nsURI="http://dsltrans/2.0" nsPrefix="dsltrans">
+  <eAnnotations source="gmf">
+    <details key="foo" value="bar"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="TransformationModel">
+    <eAnnotations source="gmf.diagram">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" upperBound="-1"
+        eType="#//AbstractSource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Layer" abstract="true" eSuperTypes="#//AbstractSource">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Layer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousSource" upperBound="-1"
+        eType="#//AbstractSource">
+      <eAnnotations source="gmf.link">
+        <details key="source.decoration" value="arrow"/>
+        <details key="width" value="2"/>
+        <details key="tool.description" value="Controls the flow of the transformation. Connects Layers/FilePorts."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputFilePathURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasRule" upperBound="-1"
+        eType="#//Rule" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchClass" abstract="true" eSuperTypes="#//AbstractClass">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//MatchAttribute" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositiveMatchClass" abstract="true"
+      eSuperTypes="#//MatchClass">
+    <eAnnotations source="gmf.node">
+      <details key="border.color" value="204,255,153"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyMatchClass" eSuperTypes="#//PositiveMatchClass">
+    <eAnnotations source="gmf.node">
+      <details key="tool.description" value="Match any class."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExistsMatchClass" eSuperTypes="#//PositiveMatchClass">
+    <eAnnotations source="gmf.node">
+      <details key="tool.description" value="Match at most one class."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NegativeMatchClass" eSuperTypes="#//MatchClass">
+    <eAnnotations source="gmf.node">
+      <details key="border.color" value="255,61,100"/>
+      <details key="tool.description" value="Exclude class from pattern."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchModel">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+      <details key="tool.description" value="Match pattern. Place inside Rule."/>
+      <details key="label.readOnly" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//MatchClass" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
+        eType="#//MatchAssociation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="explicitSource" eType="#//FilePort">
+      <eAnnotations source="gmf.link">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchAssociation" abstract="true" eSuperTypes="#//Association">
+    <eAnnotations source="gmf.link">
+      <details key="label" value=""/>
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//MatchClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//MatchClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositiveIndirectAssociation" eSuperTypes="#//MatchAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="style" value="dash"/>
+      <details key="color" value="204,255,153"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Existing association across several containments."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NegativeIndirectAssociation" eSuperTypes="#//MatchAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="style" value="dash"/>
+      <details key="color" value="255,61,100"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Existing association across several containments."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositiveMatchAssociation" eSuperTypes="#//MatchAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="tool.description" value="Existing direct association."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NegativeMatchAssociation" eSuperTypes="#//MatchAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="color" value="255,61,100"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Non-existing direct association."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyClass" eSuperTypes="#//AbstractClass">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+      <details key="tool.description" value="Generates a class in the apply pattern."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//ApplyAttribute" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyModel">
+    <eAnnotations source="gmf.node">
+      <details key="color" value="255,255,163"/>
+      <details key="tool.description" value="Apply pattern. Place inside Rule."/>
+      <details key="label.readOnly" value="true"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//ApplyClass" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
+        eType="#//ApplyAssociation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyAssociation" eSuperTypes="#//Association">
+    <eAnnotations source="gmf.link">
+      <details key="label" value="associationName"/>
+      <details key="source" value="source"/>
+      <details key="target" value="target"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="tool.description" value="Create direct association in the apply pattern."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ApplyClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ApplyClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractClass" abstract="true">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="className"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowInheritance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Association" abstract="true">
+    <eAnnotations source="gmf.link">
+      <details key="label" value="associationName"/>
+      <details key="width" value="2"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchAttribute" eSuperTypes="#//Attribute">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="attributeName"/>
+      <details key="tool.description" value="Match an attribute."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValue" eType="#//MatchAttributeValue"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyAttribute" eSuperTypes="#//Attribute">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="attributeName"/>
+      <details key="tool.description" value="Create attribute in the apply pattern."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeValue" eType="#//Term"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSource" abstract="true">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaModelId" lowerBound="1"
+        eType="#//MetaModelIdentifier" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilePort" eSuperTypes="#//AbstractSource">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="filePathURI"/>
+      <details key="tool.small.bundle" value="Transformer"/>
+      <details key="tool.description" value="Specify input model."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePathURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="description"/>
+      <details key="tool.description" value="Create Rule. Place inside Layer."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" lowerBound="1" upperBound="-1"
+        eType="#//MatchModel" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apply" lowerBound="1" eType="#//ApplyModel"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="backwards" upperBound="-1"
+        eType="#//AbstractTemporalRelation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeRelations" upperBound="-1"
+        eType="#//AbstractAttributeRelation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaModelIdentifier">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="metaModelName"/>
+      <details key="tool.description" value="Describe a metamodel."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaModelURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaModelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PositiveBackwardRestriction" eSuperTypes="#//AbstractTemporalRelation">
+    <eAnnotations source="gmf.link">
+      <details key="foo" value="bar"/>
+      <details key="tool.description" value="Create a generator-generated restriction."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NegativeBackwardRestriction" eSuperTypes="#//AbstractTemporalRelation">
+    <eAnnotations source="gmf.link">
+      <details key="color" value="255,61,100"/>
+      <details key="tool.description" value="Avoid a generator-generated situation."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eAnnotations source="gmf.link">
+      <details key="target" value="target"/>
+      <details key="source" value="source"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="color" value="85,64,45"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Copy full model elements."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ApplyClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//PositiveMatchClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequential" eSuperTypes="#//Layer">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="description"/>
+      <details key="color" value="153,204,255"/>
+      <details key="tool.name" value="Layer"/>
+      <details key="tool.description" value="Create a new Layer."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator" abstract="true" eSuperTypes="#//Term"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Atom" eSuperTypes="#//Term #//MatchAttributeValue">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="value"/>
+      <details key="label.icon" value="false"/>
+      <details key="tool.description" value="Create a literal."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ref" abstract="true" eSuperTypes="#//Term"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeRef" eSuperTypes="#//Ref">
+    <eAnnotations source="gmf.node">
+      <details key="tool.description" value="Copy attribute value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeRef" lowerBound="1"
+        eType="#//Attribute">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="width" value="2"/>
+        <details key="tool.description" value="Specify source attribute."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassRef" eSuperTypes="#//Ref">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classRef" lowerBound="1"
+        eType="#//AbstractClass">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="width" value="2"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Concat" eSuperTypes="#//Operator">
+    <eAnnotations source="gmf.node">
+      <details key="tool.description" value="Concatenate expressions."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTerm" lowerBound="1"
+        eType="#//Term" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTerm" lowerBound="1"
+        eType="#//Term" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeOf" eSuperTypes="#//Operator #//AttributeRef">
+    <eAnnotations source="gmf.node">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Wildcard" eSuperTypes="#//Term">
+    <eAnnotations source="gmf.node">
+      <details key="tool.description" value="Match any literal."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="attributeName"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="isNull" eSuperTypes="#//MatchAttributeValue">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="value"/>
+      <details key="label.icon" value="false"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchAttributeValue" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTemporalRelation" abstract="true">
+    <eAnnotations source="gmf.link">
+      <details key="target" value="targetClass"/>
+      <details key="source" value="sourceClass"/>
+      <details key="style" value="dot"/>
+      <details key="width" value="2"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetClass" lowerBound="1"
+        eType="#//ApplyClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceClass" lowerBound="1"
+        eType="#//PositiveMatchClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequencer" eSuperTypes="#//Term">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="Sequencer"/>
+      <details key="label.readOnly" value="true"/>
+      <details key="tool.description" value="Create a sequential number generator."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAttributeRelation" abstract="true">
+    <eAnnotations source="gmf.link">
+      <details key="target" value="targetAttribute"/>
+      <details key="target.decoration" value="none"/>
+      <details key="source" value="sourceAttribute"/>
+      <details key="source.decoration" value="none"/>
+      <details key="style" value="solid"/>
+      <details key="width" value="2"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceAttribute" eType="#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetAttribute" eType="#//Attribute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeEquality" eSuperTypes="#//AbstractAttributeRelation">
+    <eAnnotations source="gmf.link">
+      <details key="label" value="="/>
+      <details key="color" value="145,147,255"/>
+      <details key="tool.description" value="Create an equality constrain between attributes."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeInequality" eSuperTypes="#//AbstractAttributeRelation">
+    <eAnnotations source="gmf.link">
+      <details key="color" value="255,61,100"/>
+      <details key="label" value="!="/>
+      <details key="tool.description" value="Create an inequality constrain between attributes"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchMayBeSameRelation" eSuperTypes="#//MatchAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="label" value=""/>
+      <details key="target.decoration" value="none"/>
+      <details key="source.decoration" value="none"/>
+      <details key="style" value="dash"/>
+      <details key="color" value="181,215,255"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Match classes can have same binding."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyMayBeSameRelation" eSuperTypes="#//ApplyAssociation">
+    <eAnnotations source="gmf.link">
+      <details key="label" value=""/>
+      <details key="target.decoration" value="none"/>
+      <details key="source.decoration" value="none"/>
+      <details key="style" value="dash"/>
+      <details key="color" value="181,215,255"/>
+      <details key="width" value="2"/>
+      <details key="tool.description" value="Apply classes can have same binding."/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

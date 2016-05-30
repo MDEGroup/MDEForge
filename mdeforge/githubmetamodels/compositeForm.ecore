@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="uibindings"
+    nsURI="http://rcp-company.com/schemas/uibindings/compositeForm.ecore" nsPrefix="compositeForm">
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFormManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forms" upperBound="-1"
+        eType="#//CompositeFormDescriptor" containment="true" resolveProxies="false"
+        eOpposite="#//CompositeFormDescriptor/manager"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFormDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manager" lowerBound="1"
+        eType="#//CompositeFormManager" eOpposite="#//CompositeFormManager/forms"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//CompositeFormPartDescriptor" containment="true" resolveProxies="false"
+        eOpposite="#//CompositeFormPartDescriptor/form"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFormPartDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="#//CompositeFormDescriptor"
+        eOpposite="#//CompositeFormDescriptor/parts"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="image" lowerBound="1" eType="ecore:EDataType uibindings.ecore#//CEResourceHolder"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="factory" lowerBound="1"
+        transient="true">
+      <eGenericType eClassifier="ecore:EDataType uibindings.ecore#//CEObjectHolder">
+        <eTypeArguments eClassifier="#//ICompositeFormPartFactory"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeForm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+        eType="#//CompositeFormDescriptor" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formCreator" lowerBound="1"
+        eType="ecore:EDataType uibindings.ecore#//FormCreator" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//CompositeFormPart" containment="true" resolveProxies="false" eOpposite="#//CompositeFormPart/form"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeFormPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" lowerBound="1" eType="#//CompositeForm"
+        eOpposite="#//CompositeForm/parts"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" lowerBound="1"
+        eType="#//CompositeFormPartDescriptor" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="image" eType="ecore:EDataType uibindings.ecore#//Image"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="open" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operations" lowerBound="1"
+        eType="#//ICompositeFormPartOperations" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formCreator" lowerBound="1"
+        eType="ecore:EDataType uibindings.ecore#//FormCreator" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ICompositeFormPartFactory" instanceClassName="com.rcpcompany.uibindings.compositeform.ICompositeFormPartFactory"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ICompositeFormPartOperations" instanceClassName="com.rcpcompany.uibindings.compositeform.ICompositeFormPartOperations"
+      serializable="false"/>
+</ecore:EPackage>

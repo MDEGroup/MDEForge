@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sequencemodel"
+    nsURI="http://www.cvut.cz/earlgrey/sequencemodel/Sequencemodel" nsPrefix="sequencemodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" upperBound="-1"
+        eType="#//Sequence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotation" upperBound="-1"
+        eType="ecore:EClass ../../../../../../cz.cvut.earlgrey.annotation/src-gen/cz/cvut/earlgrey/annotation/Annotation.ecore#//Annotation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participant" upperBound="-1"
+        eType="#//Participant" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Participant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="ecore:EClass ../../../../../../cz.cvut.earlgrey.classmodel/src-gen/cz/cvut/earlgrey/classmodel/Classmodel.ecore#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fragment" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfElseFragment" eSuperTypes="#//Fragment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elseIfExpr" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseIftransition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseTransition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForeachFragment" eSuperTypes="#//Fragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopFragment" eSuperTypes="#//Fragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AssertFragment" eSuperTypes="#//Fragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakFragment" eSuperTypes="#//Fragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NextFragment" eSuperTypes="#//Fragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Message" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FoundMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="return" eType="#//Return"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="return" eType="#//Return"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NewMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Participant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Participant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Return">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" upperBound="-1"
+        eType="#//Array" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Participant"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelfMessage" eSuperTypes="#//Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Participant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="return" eType="#//Return"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Reference"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../../../../../cz.cvut.earlgrey.classmodel/src-gen/cz/cvut/earlgrey/classmodel/Classmodel.ecore#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" upperBound="-1"
+        eType="#//Array" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Array">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

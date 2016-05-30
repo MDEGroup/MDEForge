@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diagramrt"
+    nsURI="http://www.eclipse.org/gmf/2005/diagramrt" nsPrefix="diagramrt">
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramNode" eSuperTypes="#//DiagramBaseNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+        eType="#//DiagramCanvas" resolveProxies="false" eOpposite="#//DiagramCanvas/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLinks" upperBound="-1"
+        eType="#//DiagramLink" resolveProxies="false" eOpposite="#//DiagramLink/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLinks" upperBound="-1"
+        eType="#//DiagramLink" resolveProxies="false" eOpposite="#//DiagramLink/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childNodes" upperBound="-1"
+        eType="#//ChildNode" containment="true" eOpposite="#//ChildNode/parentNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="#//Point"
+        defaultValueLiteral="20,20"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="#//Dimension"
+        defaultValueLiteral="100, 50"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramLink" eSuperTypes="#//DiagramBaseElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+        eType="#//DiagramCanvas" resolveProxies="false" eOpposite="#//DiagramCanvas/links"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//DiagramNode"
+        resolveProxies="false" eOpposite="#//DiagramNode/outgoingLinks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//DiagramNode"
+        resolveProxies="false" eOpposite="#//DiagramNode/incomingLinks"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramCanvas">
+    <eOperations name="nextAvailableUin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//DiagramLink" containment="true" resolveProxies="false" eOpposite="#//DiagramLink/diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//DiagramNode" containment="true" resolveProxies="false" eOpposite="#//DiagramNode/diagram"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainContainerObject"
+        lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainResource" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EResource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastAssignedUin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramBaseElement" abstract="true">
+    <eOperations name="getDiagram" eType="#//DiagramCanvas"/>
+    <eOperations name="getProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="propertyName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setProperty">
+      <eParameters name="propertyName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainModelElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foregroundColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="String, not datatype(org.eclipse.swt.graphics.Color) solves next issues: 1) show it's possible to be independent from GEF, 2) easy to serialize"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uin" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visualID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runTimeProperties" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="IMPORTANT: This is internal container for attribute values and should not be used by clients!!!"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiagramBaseNode" abstract="true" eSuperTypes="#//DiagramBaseElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChildNode" eSuperTypes="#//DiagramNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="XXX FIXME Looks like ChildNode should extend DiagramBaseNode, but for now I want to reuse NodeEditPart.javajet which heavily relies on DiagramNode"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentNode" lowerBound="1"
+        eType="#//DiagramNode" changeable="false" eOpposite="#//DiagramNode/childNodes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RigidChildNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="FIXME Should extend ChildNode once it doesn't extend DiagramNode (duplicating attributes)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="#//Point"
+        defaultValueLiteral="20,20"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="#//Dimension"
+        defaultValueLiteral="100, 50"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Dimension" instanceClassName="org.eclipse.draw2d.geometry.Dimension"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+</ecore:EPackage>

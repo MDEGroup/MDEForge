@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="robot"
+    nsURI="http://robot/1.0" nsPrefix="robot">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Mission">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sequence" lowerBound="1"
+        eType="#//Sequence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//Operation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="conflictmovement"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+      <details key="conflictmovement" value="&#xA;&#x9;&#x9;&#x9;self.Operations->forAll(op1, op2 | Operations->indexOf(op1)+1 = Operations->indexOf(op2) and op1.oclIsKindOf(Movement) and op2.oclIsKindOf(Movement) implies op1.oclAsType(Movement).duration &lt;> 0.0)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Operations" lowerBound="1"
+        upperBound="-1" eType="#//Operation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Movement" eSuperTypes="#//Operation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="positif"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+      <details key="positif" value="&#xA;&#x9;&#x9;&#x9;self.duration >= 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Forward" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Backward" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TurnLeft" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TurnRight" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Consequence" lowerBound="1"
+        eType="#//Operation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Alternative" eType="#//Operation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="At" lowerBound="1" eType="#//Operation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Onleave" eType="#//Operation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Values"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESensor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TInteger" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TString" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TFloat" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TBoolean" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//EOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Different" eSuperTypes="#//Operator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Echo" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="param" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EOperator">
+    <eLiterals name="GT"/>
+    <eLiterals name="LT" value="1"/>
+    <eLiterals name="EQ" value="2"/>
+    <eLiterals name="DIFF" value="3"/>
+    <eLiterals name="GTE" value="4"/>
+    <eLiterals name="LTE" value="5"/>
+    <eLiterals name="AND" value="6"/>
+    <eLiterals name="OR" value="7"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESensor">
+    <eLiterals name="distanceFRF" value="4"/>
+    <eLiterals name="distanceFRB" value="5"/>
+    <eLiterals name="distanceR" value="6"/>
+    <eLiterals name="distanceBR" value="7"/>
+    <eLiterals name="distanceBL" value="8"/>
+    <eLiterals name="distanceL" value="9"/>
+    <eLiterals name="distanceFLB" value="10"/>
+    <eLiterals name="distanceFLF" value="11"/>
+    <eLiterals name="lightFRF" value="16"/>
+    <eLiterals name="lightFRB" value="17"/>
+    <eLiterals name="lightR" value="18"/>
+    <eLiterals name="lightBR" value="19"/>
+    <eLiterals name="lightBL" value="20"/>
+    <eLiterals name="lightL" value="21"/>
+    <eLiterals name="lightFLB" value="22"/>
+    <eLiterals name="lightFLF" value="23"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Value" lowerBound="1" eType="#//Values"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//Values">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Stop" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Sleep" eSuperTypes="#//Movement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Whenever" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Whenever" lowerBound="1"
+        eType="#//Operation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Else" eType="#//Operation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Affectation" eSuperTypes="#//Var"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Declaration" eSuperTypes="#//Var"/>
+  <eClassifiers xsi:type="ecore:EClass" name="While" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Operation" lowerBound="1"
+        eType="#//Operation" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="name" value="Operation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Variable" lowerBound="1"
+        eType="#//Values" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Compare" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Operator" lowerBound="1"
+        eType="#//Operator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition2" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Condition1" lowerBound="1"
+        eType="#//Condition" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

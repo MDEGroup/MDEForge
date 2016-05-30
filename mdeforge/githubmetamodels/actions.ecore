@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="action"
+    nsURI="http://ict-alive.sourceforge.net/RunTime/actions" nsPrefix="action">
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="byActor" lowerBound="1"
+        eType="ecore:EClass events.ecore#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cause" eType="ecore:EClass fact.ecore#//Fact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enactment" upperBound="-1"
+        eType="ecore:EClass enactment.ecore#//Enactment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" upperBound="-1"
+        eType="#//Result" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicativeAction" eSuperTypes="#//Action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CoordinationAction" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plan" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//Plan"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coordAction" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//ActionGrounding"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanSynthesis" eSuperTypes="#//PlanningActions"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanDistribution" eSuperTypes="#//PlanningActions"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanSchedule" eSuperTypes="#//PlanningActions"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanExecution" eSuperTypes="#//PlanningActions"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Result" eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceInvocation" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enactingAgent" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/agents.ecore#//Agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlatedAction" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//ActionGrounding"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchmakerResponse" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryResult" upperBound="-1"
+        eType="#//MatchmakerResult" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//MatchmakerQuery"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanningActions" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plan" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//Plan"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AgentAction" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/agents.ecore#//Agent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReplaceAgent" eSuperTypes="#//AgentAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AgentReplan" eSuperTypes="#//AgentAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="failedPlan" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//Plan"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NotifyStateOfWorld" eSuperTypes="#//AgentAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateOfWorld" upperBound="-1"
+        eType="#//StateOfWorld" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StateOfWorld">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partialStateDescription"
+        eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//PartialStateDescription"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="atom" eType="ecore:EClass platform:/plugin/net.sf.ictalive.rules/model/swrl.ecore#//Atom"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchmakerQuery" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchmakerResult">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reliability" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="performance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+</ecore:EPackage>

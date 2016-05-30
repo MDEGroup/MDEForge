@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="processor"
+    nsURI="http://processor/1.0" nsPrefix="processor">
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplexor">
+    <eOperations name="multiplexorBehavior"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numInputs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" lowerBound="1"
+        upperBound="-1" eType="#//InputMultiplexor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+        eType="#//OutputMultiplexor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inout" eType="#//Multiplexor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputsMul" lowerBound="1"
+        upperBound="-1" eType="#//InputMultiplexor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputMul" lowerBound="1"
+        eType="#//OutputMultiplexor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeletorRegisterFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Demultiplexor">
+    <eOperations name="demultiplexorBehavior"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numOutputs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" lowerBound="1"
+        upperBound="-1" eType="#//OutputDemux"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1" eType="#//InputDemux"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outin" eType="#//Demultiplexor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputsDemux" lowerBound="1"
+        upperBound="-1" eType="#//OutputDemux"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputDemux" lowerBound="1"
+        eType="#//InputDemux"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisterFile">
+    <eOperations name="registerFileBehavior"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sel" lowerBound="1" eType="#//SeletorRegisterFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rwBit" lowerBound="1" eType="#//ReadWrite"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//Clock"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registers" eType="#//ArrayInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inRf" lowerBound="1" eType="#//InputRegisterFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outRf" lowerBound="1" eType="#//OutputRegisterFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RegisterAssyncReset">
+    <eOperations name="RegisterBehaviour" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="internalData" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outRa" lowerBound="1" eType="#//OutputRegisterAssync"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inRa" lowerBound="1" eType="#//InputRegisterAssync"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reset" lowerBound="1" eType="#//Reset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//Clock"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="load" lowerBound="1" eType="#//Load"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Write">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Read">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReadWrite">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Register">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlUnit">
+    <eOperations name="controlUnitBehavior"/>
+    <eOperations name="processInstruction"/>
+    <eOperations name="processMiscellaneousInstruction"/>
+    <eOperations name="processControlInstruction"/>
+    <eOperations name="processRegisterInstruction"/>
+    <eOperations name="processMemoryInstruction"/>
+    <eOperations name="resetAllLoads"/>
+    <eOperations name="incrementPC"/>
+    <eOperations name="loadsARWithPc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loads" lowerBound="1" upperBound="-1"
+        eType="#//LoadControlUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="writeMemory" lowerBound="1"
+        eType="#//Write"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="readwritebit" lowerBound="1"
+        eType="#//ReadWrite"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selControlUnit" lowerBound="1"
+        eType="#//SeletorControlUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instructionSubstate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ULA">
+    <eOperations name="ULABehavior"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opSel" lowerBound="1" eType="#//SeletorRegisterFile"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ulastatus" lowerBound="1"
+        eType="#//Status"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" lowerBound="1"
+        upperBound="-1" eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opSelUla" lowerBound="1"
+        eType="#//SeletorULA"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ulaOut" lowerBound="1"
+        eType="#//OutputULA"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reset">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Clock">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputBoolean">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputMultiplexor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputMultiplexor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputDemux">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputDemux">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ArrayInteger" instanceClassName="int[]"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InputRegisterFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputRegisterFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputRegisterAssync">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputRegisterAssync">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Load">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputMemory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputMemory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AddressMemory">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Memory">
+    <eOperations name="t_sync_mem"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mem" eType="#//ArrayInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="write" lowerBound="1" eType="#//Write"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reset" lowerBound="1" eType="#//Reset"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//Clock"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datai" lowerBound="1" eType="#//InputMemory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datao" lowerBound="1" eType="#//OutputMemory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="address" lowerBound="1"
+        eType="#//AddressMemory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputULA">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeletorULA">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Status">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoadControlUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeletorControlUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

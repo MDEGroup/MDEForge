@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="statecharts" nsURI="http://uam.es/StateCharts" nsPrefix="schart">
+  <eClassifiers xsi:type="ecore:EClass" name="Statechart">
+    <eAnnotations source="gmf.diagram">
+      <details key="foo" value="bar"/>
+      <details key="model.extension" value="statechart"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="topState" lowerBound="1"
+        eType="#//AND" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" upperBound="-1" eType="#//State"
+        eOpposite="#//State/rnext">
+      <eAnnotations source="gmf.link">
+        <details key="source" value="src"/>
+        <details key="target" value="trg"/>
+        <details key="target.decoration" value="arrow"/>
+        <details key="color" value="0,0,0"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rnext" upperBound="-1"
+        eType="#//State" eOpposite="#//State/next"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rcontains" eType="#//Compound"
+        eOpposite="#//Compound/contains"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HyperEdge" eSuperTypes="#//State">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="label.readOnly" value="true"/>
+      <details key="figure" value="rectangle"/>
+      <details key="color" value="0,0,0"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="tool.name" value="Hyper-edge"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Basic" eSuperTypes="#//State">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="label.readOnly" value="true"/>
+      <details key="figure" value="rounded"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="tool.name" value="Basic"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Compound" abstract="true" eSuperTypes="#//State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contains" upperBound="-1"
+        eType="#//State" containment="true" eOpposite="#//State/rcontains">
+      <eAnnotations source="gmf.compartment">
+        <details key="collapsible" value="true"/>
+        <details key="layout" value="free"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AND" eSuperTypes="#//Compound">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="tool.name" value="Region"/>
+      <details key="size" value="250,250"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OR" eSuperTypes="#//Compound">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+      <details key="label.icon" value="false"/>
+      <details key="figure" value="rectangle"/>
+      <details key="border.color" value="0,0,0"/>
+      <details key="border.style" value="dash"/>
+      <details key="tool.name" value="Sub Region"/>
+      <details key="size" value="150,150"/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

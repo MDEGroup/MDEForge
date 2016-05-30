@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="task"
+    nsURI="http://www.sebastianbenz.de/task/2011/" nsPrefix="Task">
+  <eClassifiers xsi:type="ecore:EClass" name="TaskModel" eSuperTypes="#//Container">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//Content" containment="true" eOpposite="#//Content/taskModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Content" abstract="true" eSuperTypes="#//Container">
+    <eOperations name="getLevel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="getValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="isDone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intend" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Container"
+        transient="true" derived="true" eOpposite="#//Container/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taskModel" eType="#//TaskModel"
+        eOpposite="#//TaskModel/contents"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//Link" transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="segments" upperBound="-1"
+        eType="#//TextSegment" transient="true" derived="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="images" upperBound="-1"
+        eType="#//Image" transient="true" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Content"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Note" eSuperTypes="#//Content"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//Content"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalTaskModel" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Content" transient="true" derived="true" eOpposite="#//Content/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyLine" eSuperTypes="#//Content"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Code" eSuperTypes="#//Content">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lang" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" transient="true" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextSegment" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//Content"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag" eSuperTypes="#//TextSegment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//TextSegment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//TextSegment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Image" eSuperTypes="#//Link"/>
+</ecore:EPackage>

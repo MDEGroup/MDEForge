@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="workflow"
+    nsURI="http://www.panlab.org/workflow" nsPrefix="org.panlab.workflow">
+  <eClassifiers xsi:type="ecore:EClass" name="Workflow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasActivities" upperBound="-1"
+        eType="#//Activity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasForks" upperBound="-1"
+        eType="#//Fork" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasJoins" upperBound="-1"
+        eType="#//Join" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//workflowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependsFrom" upperBound="-1"
+        eType="#//Activity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//TASK_STATUS"
+        defaultValueLiteral="UNKNOWN"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceRequest" eType="ecore:EClass ../../org.panlab.software.office.model/model/FederationOffice.ecore#//federationscenarios/ResourceRequest"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TASK_STATUS">
+    <eLiterals name="STARTING"/>
+    <eLiterals name="RUNNING" value="1"/>
+    <eLiterals name="STOPPING" value="2"/>
+    <eLiterals name="STOPPED" value="3"/>
+    <eLiterals name="FAILED" value="4"/>
+    <eLiterals name="UNKNOWN" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fork" eSuperTypes="#//workflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//workflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="workflowElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Flow" eSuperTypes="#//workflowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//workflowElement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//workflowElement"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

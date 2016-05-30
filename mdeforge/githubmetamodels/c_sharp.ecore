@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="c_sharp"
+    nsURI="http://www.emftext.org/c_sharp" nsPrefix="c_sharp">
+  <eSubpackages name="common" nsURI="http://www.emftext.org/c_sharp/common" nsPrefix="common">
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamespaceOrTypeName">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parts" lowerBound="1"
+          upperBound="-1" eType="#//common/Identifier" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Identifier" eSuperTypes="#//common/NamedElement #//expressions/PrimaryNoArrayCreationExpression"/>
+  </eSubpackages>
+  <eSubpackages name="namespaces" nsURI="http://www.emftext.org/c_sharp/namespaces"
+      nsPrefix="namespaces">
+    <eClassifiers xsi:type="ecore:EClass" name="CompilationUnit">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usingDirectives" upperBound="-1"
+          eType="#//namespaces/UsingDirective" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="globalAttributes" upperBound="-1"
+          eType="#//attributes/GlobalAttributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceMemberDeclaration"
+          upperBound="-1" eType="#//namespaces/NamespaceMemberDeclaration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UsingDirective" eSuperTypes="#//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceOrTypeName"
+          lowerBound="1" eType="#//common/NamespaceOrTypeName" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamespaceMemberDeclaration" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Namespace" eSuperTypes="#//namespaces/NamespaceMemberDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceName" lowerBound="1"
+          eType="#//common/NamespaceOrTypeName" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceBody" lowerBound="1"
+          eType="#//namespaces/NamespaceBody" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamespaceBody">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="usingDirectives" upperBound="-1"
+          eType="#//namespaces/UsingDirective" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceMemberDeclaration"
+          upperBound="-1" eType="#//namespaces/NamespaceMemberDeclaration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TypeDeclaration" abstract="true" eSuperTypes="#//namespaces/NamespaceMemberDeclaration #//classes/ClassMemberDeclaration"/>
+  </eSubpackages>
+  <eSubpackages name="classes" nsURI="http://www.emftext.org/c_sharp/classes" nsPrefix="classes">
+    <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//namespaces/TypeDeclaration #//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+          eType="#//modifiers/Modifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classBase" eType="#//classes/ClassBase"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classMemberDeclarations"
+          upperBound="-1" eType="#//classes/ClassMemberDeclaration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassBase">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="types" lowerBound="1"
+          upperBound="-1" eType="#//types/ClassOrInterfaceOrDelegateOrEnumType" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassMemberDeclaration" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//classes/ClassMemberDeclaration #//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+          eType="#//modifiers/Modifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceType" eType="#//types/ClassOrInterfaceOrDelegateOrEnumType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="formalParameterList"
+          eType="#//classes/FormalParameterList" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" lowerBound="1"
+          eType="#//classes/Block" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FormalParameterList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fixedParameter" upperBound="-1"
+          eType="#//classes/FixedParameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameterArray" eType="#//classes/ParameterArray"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FixedParameter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="#//keywords/Ref"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//keywords/Out"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ParameterArray">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="params" eType="#//keywords/Params"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arrayType" eType="#//arrays/ArrayType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Block">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statement" upperBound="-1"
+          eType="#//statements/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableInitializer" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConstantDeclaration" eSuperTypes="#//classes/ClassMemberDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+          eType="#//modifiers/Modifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constantDeclarator" lowerBound="1"
+          upperBound="-1" eType="#//statements/ConstantDeclarator" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FieldDeclaration" eSuperTypes="#//classes/ClassMemberDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/Attributes" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+          eType="#//modifiers/Modifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableDeclarator" lowerBound="1"
+          upperBound="-1" eType="#//statements/VariableDeclarator" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="structs" nsURI="http://www.emftext.org/c_sharp/structs" nsPrefix="structs"/>
+  <eSubpackages name="arrays" nsURI="http://www.emftext.org/c_sharp/arrays" nsPrefix="arrays">
+    <eClassifiers xsi:type="ecore:EClass" name="StackallocInitializer" eSuperTypes="#//classes/VariableInitializer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArrayInitializer" eSuperTypes="#//classes/VariableInitializer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableInitializer"
+          upperBound="-1" eType="#//classes/VariableInitializer" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//types/Type">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nonArrayType" eType="#//types/NonArrayType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rankSpecifier" lowerBound="1"
+          upperBound="-1" eType="#//arrays/RankSpecifier" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RankSpecifier"/>
+  </eSubpackages>
+  <eSubpackages name="interfaces" nsURI="http://www.emftext.org/c_sharp/interfaces"
+      nsPrefix="interfaces"/>
+  <eSubpackages name="enums" nsURI="http://www.emftext.org/c_sharp/enums" nsPrefix="enums"/>
+  <eSubpackages name="delegates" nsURI="http://www.emftext.org/c_sharp/delegates"
+      nsPrefix="delegates"/>
+  <eSubpackages name="attributes" nsURI="http://www.emftext.org/c_sharp/attributes"
+      nsPrefix="attributes">
+    <eClassifiers xsi:type="ecore:EClass" name="GlobalAttributes">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="globalAttributeTarget"
+          lowerBound="1" eType="#//attributes/GlobalAttributeTarget" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+          upperBound="-1" eType="#//attributes/Attribute" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GlobalAttributeTarget">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" lowerBound="1"
+          eType="#//common/Identifier" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attributes">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributeTarget" lowerBound="1"
+          eType="#//attributes/AttributeTarget" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+          upperBound="-1" eType="#//attributes/Attribute" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeTarget">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//keywords/Event"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="return" eType="#//keywords/Return"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceOrTypeName"
+          lowerBound="1" eType="#//common/NamespaceOrTypeName" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributeArguments" eType="#//attributes/AttributeArguments"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeArguments">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressionList" eType="#//expressions/ExpressionList"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namedArgumentList" eType="#//attributes/NamedArgumentList"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedArgumentList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namedArgument" lowerBound="1"
+          upperBound="-1" eType="#//attributes/NamedArgument" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedArgument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="statements" nsURI="http://www.emftext.org/c_sharp/statements"
+      nsPrefix="statements">
+    <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LabeledStatement" eSuperTypes="#//statements/Statement #//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statement" lowerBound="1"
+          eType="#//statements/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeclarationStatement" eSuperTypes="#//statements/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableDeclaration"
+          eType="#//statements/VariableDeclaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="localConstantDeclaration"
+          eType="#//statements/LocalConstantDeclaration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EmbeddedStatement" abstract="true"
+        eSuperTypes="#//statements/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleEmbeddedStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unsafe" eType="#//modifiers/Unsafe"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EmptyStatement" eSuperTypes="#//statements/EmbeddedStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExpressionStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statementExpression"
+          eType="#//expressions/StatementExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SelectionStatement" abstract="true"
+        eSuperTypes="#//statements/EmbeddedStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//statements/SelectionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" lowerBound="1"
+          upperBound="2" eType="#//statements/EmbeddedStatement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SwitchStatement" eSuperTypes="#//statements/SelectionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="switchSection" upperBound="-1"
+          eType="#//statements/SwitchSection" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SwitchSection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="switchLabel" upperBound="-1"
+          eType="#//statements/SwitchLabel" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statement" upperBound="-1"
+          eType="#//statements/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SwitchLabel">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//keywords/Default"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="case" eType="#//keywords/Case"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IterationStatement" abstract="true"
+        eSuperTypes="#//statements/EmbeddedStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WhileStatement" eSuperTypes="#//statements/IterationStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DoStatement" eSuperTypes="#//statements/IterationStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForStatement" eSuperTypes="#//statements/IterationStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forInitializer" eType="#//statements/ForInitializer"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statementExpressionList"
+          eType="#//expressions/StatementExpressionList" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForeachStatement" eSuperTypes="#//statements/IterationStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForInitializer" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="JumpStatement" abstract="true" eSuperTypes="#//statements/EmbeddedStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BreakStatement" eSuperTypes="#//statements/JumpStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ContinueStatement" eSuperTypes="#//statements/JumpStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GotoStatement" eSuperTypes="#//statements/JumpStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//keywords/Default"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="case" eType="#//keywords/Case"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" eSuperTypes="#//statements/JumpStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ThrowStatement" eSuperTypes="#//statements/JumpStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TryStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specificCatchClause"
+          upperBound="-1" eType="#//statements/SpecificCatchClause" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="generalCatchClause" eType="#//statements/GeneralCatchClause"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="finallyClause" eType="#//statements/FinallyClause"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SpecificCatchClause">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="classType" eType="#//types/ClassOrInterfaceOrDelegateOrEnumType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeneralCatchClause">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FinallyClause">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckedStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UncheckedStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//classes/Block"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LockStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResourceAcquisition" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UsingStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resourceAcquisition"
+          eType="#//statements/ResourceAcquisition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FixedStatement" eSuperTypes="#//statements/EmbeddedStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pointerType" lowerBound="1"
+          eType="#//types/PointerType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fixedPointerDeclarator"
+          lowerBound="1" upperBound="-1" eType="#//statements/FixedPointerDeclarator"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="embeddedStatement" eType="#//statements/EmbeddedStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FixedPointerDeclarator">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" lowerBound="1"
+          eType="#//common/Identifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" eSuperTypes="#//statements/ForInitializer #//statements/ResourceAcquisition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//types/Type" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="VariableDeclarator" lowerBound="1"
+          eType="#//statements/VariableDeclarator" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableDeclarator" eSuperTypes="#//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="VariableInitializer"
+          eType="#//classes/VariableInitializer" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LocalConstantDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constantDeclarator" lowerBound="1"
+          upperBound="-1" eType="#//statements/ConstantDeclarator" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConstantDeclarator" eSuperTypes="#//common/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="expressions" nsURI="http://www.emftext.org/c_sharp/expressions"
+      nsPrefix="expressions">
+    <eClassifiers xsi:type="ecore:EClass" name="StatementExpression" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="StatementExpressionList" eSuperTypes="#//statements/ForInitializer">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statementExpression"
+          upperBound="-1" eType="#//expressions/StatementExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="#//classes/VariableInitializer #//statements/ResourceAcquisition"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExpressionList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Argument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//keywords/Out"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ref" eType="#//keywords/Ref"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArgumentList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+          eType="#//expressions/Argument" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryExpression" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryNoArrayCreationExpression"
+        abstract="true" eSuperTypes="#//expressions/PrimaryExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryExtendedExpressionType" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MemberAccess" eSuperTypes="#//expressions/PrimaryExtendedExpressionType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//types/SimpleType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementAccess" eSuperTypes="#//expressions/PrimaryExtendedExpressionType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressionList" eType="#//expressions/ExpressionList"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InvocationExpression" eSuperTypes="#//expressions/PrimaryExtendedExpressionType #//expressions/StatementExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argumentList" eType="#//expressions/ArgumentList"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PostIncrementExpression" eSuperTypes="#//expressions/PrimaryExtendedExpressionType #//expressions/StatementExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PostDecrementExpression" eSuperTypes="#//expressions/PrimaryExtendedExpressionType #//expressions/StatementExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PointerMemberAccess" eSuperTypes="#//expressions/PrimaryExtendedExpressionType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" lowerBound="1"
+          eType="#//common/Identifier" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BaseAccess" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressionList" eType="#//expressions/ExpressionList"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//common/Identifier"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectCreationExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression #//expressions/StatementExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//types/Type" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="argumentList" eType="#//expressions/ArgumentList"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArrayCreationExpression" eSuperTypes="#//expressions/PrimaryExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//types/Type" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arrayType" lowerBound="1"
+          eType="#//arrays/ArrayType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressionList" eType="#//expressions/ExpressionList"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rankSpecifier" upperBound="-1"
+          eType="#//arrays/RankSpecifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arrayInitializer" eType="#//arrays/ArrayInitializer"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ParenthesizedExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UnaryExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="memberAccess" eType="#//expressions/MemberAccess"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="primaryExpression" eType="#//expressions/PrimaryExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="primaryExtendedExpressionType"
+          upperBound="-1" eType="#//expressions/PrimaryExtendedExpressionType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="addition" lowerBound="1"
+          eType="#//operators/Addition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subtraction" lowerBound="1"
+          eType="#//operators/Subtraction" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="negate" lowerBound="1"
+          eType="#//operators/Negate" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="complement" lowerBound="1"
+          eType="#//operators/Complement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="multiplication" lowerBound="1"
+          eType="#//operators/Multiplication" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" eType="#//expressions/UnaryExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="preIncrementExpression"
+          eType="#//expressions/PreIncrementExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="preDecrementExpression"
+          eType="#//expressions/PreDecrementExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="castExpression" eType="#//expressions/CastExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="addressOfExpression"
+          eType="#//expressions/AddressOfExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalExpression" eSuperTypes="#//expressions/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" upperBound="-1"
+          eType="#//expressions/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalOrExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/ConditionalOrExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentExpression" eSuperTypes="#//expressions/Expression #//expressions/StatementExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" lowerBound="1"
+          eType="#//expressions/UnaryExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assignmentOperator" lowerBound="1"
+          eType="#//operators/AssignmentOperator" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TypeOfExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DelegateCreationExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="delegateType" lowerBound="1"
+          eType="#//types/ClassOrInterfaceOrDelegateOrEnumType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckedExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expressions/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UncheckedExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expressions/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SizeOfExpression" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PreIncrementExpression" eSuperTypes="#//expressions/StatementExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" lowerBound="1"
+          eType="#//expressions/UnaryExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PreDecrementExpression" eSuperTypes="#//expressions/StatementExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" lowerBound="1"
+          eType="#//expressions/UnaryExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CastExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" eType="#//expressions/UnaryExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddressOfExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" eType="#//expressions/UnaryExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MultiplicativeExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unaryExpression" lowerBound="1"
+          upperBound="-1" eType="#//expressions/UnaryExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="multiplication" eType="#//operators/Multiplication"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="division" eType="#//operators/Division"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="remainder" eType="#//operators/Remainder"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AdditiveExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="multiplicativeExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/MultiplicativeExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="addition" eType="#//operators/Addition"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subtraction" eType="#//operators/Subtraction"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ShiftExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightShift" eType="#//operators/RightShift"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftShift" eType="#//operators/LeftShift"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="remainder" eType="#//operators/Remainder"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="additiveExpression" eType="#//expressions/AdditiveExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RelationalExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="shiftExpression" lowerBound="1"
+          upperBound="-1" eType="#//expressions/ShiftExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//types/Type"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lessThan" eType="#//operators/LessThan"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lessThanOrEqual" eType="#//operators/LessThanOrEqual"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="greaterThan" eType="#//operators/GreaterThan"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="greaterThanOrEqual" eType="#//operators/GreaterThanOrEqual"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EqualityExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relationalExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/RelationalExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="equal" eType="#//operators/Equal"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="notEqual" eType="#//operators/NotEqual"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AndExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="equalityExpression" lowerBound="1"
+          upperBound="-1" eType="#//expressions/EqualityExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="and" eType="#//operators/And"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExclusiveOrExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="andExpression" lowerBound="1"
+          upperBound="-1" eType="#//expressions/AndExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exclusiveOr" eType="#//operators/ExclusiveOr"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InclusiveOrExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exclusiveOrExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/ExclusiveOrExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inclusiveOr" eType="#//operators/InclusiveOr"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalAndExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inclusiveOrExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/InclusiveOrExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalAnd" eType="#//operators/ConditionalAnd"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalOrExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalAndExpression"
+          lowerBound="1" upperBound="-1" eType="#//expressions/ConditionalAndExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditionalOr" eType="#//operators/ConditionalOr"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="types" nsURI="http://www.emftext.org/c_sharp/types" nsPrefix="types">
+    <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NonArrayType" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferenceType" abstract="true" eSuperTypes="#//types/NonArrayType #//types/Type"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleType" abstract="true" eSuperTypes="#//types/Type #//types/NonArrayType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Void" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Decimal" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Bool" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SByte" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Byte" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Short" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UShort" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Int" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UInt" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Long" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ULong" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Char" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Float" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Double" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Object" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="String" eSuperTypes="#//types/SimpleType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassOrInterfaceOrDelegateOrEnumType"
+        eSuperTypes="#//types/ReferenceType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceOrTypeName"
+          lowerBound="1" eType="#//common/NamespaceOrTypeName" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PointerType" eSuperTypes="#//types/Type #//types/NonArrayType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="simpleType" eType="#//types/SimpleType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceType" eType="#//types/ReferenceType"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="modifiers" nsURI="http://www.emftext.org/c_sharp/modifiers"
+      nsPrefix="modifiers">
+    <eClassifiers xsi:type="ecore:EClass" name="Modifier" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Abstract" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Extern" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Internal" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="New" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OverrideModifier" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Private" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Protected" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Public" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Partial" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReadOnly" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Sealed" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Static" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Unsafe" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Virtual" eSuperTypes="#//modifiers/Modifier"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Volatile" eSuperTypes="#//modifiers/Modifier"/>
+  </eSubpackages>
+  <eSubpackages name="literals" nsURI="http://www.emftext.org/c_sharp/literals" nsPrefix="literals">
+    <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true" eSuperTypes="#//expressions/PrimaryNoArrayCreationExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DecimalIntegerLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HexadecimalIntegerLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RealLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NullLiteral" eSuperTypes="#//literals/Literal"/>
+    <eClassifiers xsi:type="ecore:EClass" name="This" eSuperTypes="#//literals/Literal"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CharacterLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringLiteral" eSuperTypes="#//literals/Literal">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="keywords" nsURI="http://www.emftext.org/c_sharp/keywords" nsPrefix="keywords">
+    <eClassifiers xsi:type="ecore:EClass" name="Out"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Ref"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Params"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Case"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Default"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Return"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Event"/>
+  </eSubpackages>
+  <eSubpackages name="operators" nsURI="http://www.emftext.org/c_sharp/operators"
+      nsPrefix="operators">
+    <eClassifiers xsi:type="ecore:EClass" name="Operator" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AdditiveOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EqualityOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MultiplicativeOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RelationOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ShiftOperator" abstract="true" eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" abstract="true" eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UnaryModificationOperator" abstract="true"
+        eSuperTypes="#//operators/Operator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentAnd" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentDivision" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentExclusiveOr" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentMinus" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentModulo" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentMultiplication" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentLeftShift" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentOr" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentPlus" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentRightShift" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentUnsignedRightShift" eSuperTypes="#//operators/AssignmentOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Equal" eSuperTypes="#//operators/EqualityOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NotEqual" eSuperTypes="#//operators/EqualityOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GreaterThan" eSuperTypes="#//operators/RelationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GreaterThanOrEqual" eSuperTypes="#//operators/RelationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LessThan" eSuperTypes="#//operators/RelationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LessThanOrEqual" eSuperTypes="#//operators/RelationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Addition" eSuperTypes="#//operators/AdditiveOperator #//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Subtraction" eSuperTypes="#//operators/AdditiveOperator #//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Division" eSuperTypes="#//operators/MultiplicativeOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Multiplication" eSuperTypes="#//operators/MultiplicativeOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Remainder" eSuperTypes="#//operators/MultiplicativeOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Complement" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="MinusMinus" eSuperTypes="#//operators/UnaryModificationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Negate" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PlusPlus" eSuperTypes="#//operators/UnaryModificationOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LeftShift" eSuperTypes="#//operators/ShiftOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RightShift" eSuperTypes="#//operators/ShiftOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UnsignedRightShift" eSuperTypes="#//operators/ShiftOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="And" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExclusiveOr" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="InclusiveOr" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalAnd" eSuperTypes="#//operators/UnaryOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionalOr" eSuperTypes="#//operators/UnaryOperator"/>
+  </eSubpackages>
+</ecore:EPackage>

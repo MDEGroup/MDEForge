@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="SOS"
+    nsURI="http://www.emftext.org/language/SOS" nsPrefix="SOS">
+  <eClassifiers xsi:type="ecore:EClass" name="Semantics">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signature" upperBound="-1"
+        eType="#//adtmm/ADT" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assumes" eType="#//PremisseList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concludes" lowerBound="1"
+        eType="#//Conclusion" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedVariables" upperBound="-1"
+        eType="#//adtmm/Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PremisseList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="has" lowerBound="1" eType="#//Condition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//PremisseList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Conclusion">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="has" lowerBound="1" eType="#//Transition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" lowerBound="1" eType="#//adtmm/Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preState" lowerBound="1"
+        eType="#//adtmm/Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="posState" lowerBound="1"
+        eType="#//adtmm/Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//adtmm/Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeJudment" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//adtmm/Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" lowerBound="1"
+        eType="#//adtmm/Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" lowerBound="1"
+        eType="#//adtmm/Term" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlgebraicCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedConditions" lowerBound="1"
+        upperBound="-1" eType="#//adtmm/AbstractEquation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlgebraicConditionList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="has" lowerBound="1" eType="#//AlgebraicCondition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//AlgebraicConditionList"
+        containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="adtmm" nsURI="SOS.adtmm" nsPrefix="adtmm">
+    <eClassifiers xsi:type="ecore:EClass" name="ADT">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedSorts" upperBound="-1"
+          eType="#//adtmm/SortDeclaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperations" upperBound="-1"
+          eType="#//adtmm/Operation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedGenerators" upperBound="-1"
+          eType="#//adtmm/Operation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedVariables" upperBound="-1"
+          eType="#//adtmm/Variable" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAxioms" upperBound="-1"
+          eType="#//adtmm/CondEquation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sort" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//adtmm/AbstractOperation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operationSorts" upperBound="-1"
+          eType="#//adtmm/Sort" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="result" lowerBound="1"
+          eType="#//adtmm/Sort" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variableSort" eType="#//adtmm/Sort"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CondEquation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedConditions" upperBound="-1"
+          eType="#//adtmm/AbstractEquation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedEquation" lowerBound="1"
+          eType="#//adtmm/Equation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VariableRef" eSuperTypes="#//adtmm/Term">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+          eType="#//adtmm/Variable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CTerm" eSuperTypes="#//adtmm/Term">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTerms" upperBound="-1"
+          eType="#//adtmm/Term" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="op" lowerBound="1" eType="#//adtmm/Operation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="iterTerm" eType="#//adtmm/Term"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="iter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractEquation" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedRightTerm" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLeftTerm" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Equation" eSuperTypes="#//adtmm/AbstractEquation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Inequation" eSuperTypes="#//adtmm/AbstractEquation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractSort" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AtomicSort" eSuperTypes="#//adtmm/Sort">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declaration" lowerBound="1"
+          eType="#//adtmm/SortDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SortDeclaration">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractOperation" abstract="true"
+        interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractGenericOp" abstract="true"
+        interface="true" eSuperTypes="#//adtmm/AbstractOperation"/>
+  </eSubpackages>
+  <eSubpackages name="set" nsURI="SOS.set" nsPrefix="set">
+    <eClassifiers xsi:type="ecore:EClass" name="ModelSort" eSuperTypes="#//adtmm/Sort">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetMembership" abstract="true" eSuperTypes="#//set/SetTerm">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetTerm" abstract="true" eSuperTypes="#//adtmm/Term"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelSet" eSuperTypes="#//set/SetTerm"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SetOperator" abstract="true" eSuperTypes="#//set/SetTerm">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" lowerBound="1"
+          eType="#//adtmm/Term" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetConstructor" eSuperTypes="#//set/SetTerm">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="suchThat" eType="#//AlgebraicConditionList"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="member" eType="#//adtmm/Term"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Union" eSuperTypes="#//set/SetOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Excluding" eSuperTypes="#//set/SetOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Intersection" eSuperTypes="#//set/SetOperator"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelRelation" eSuperTypes="#//adtmm/Term">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceName" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//adtmm/VariableRef" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//adtmm/VariableRef" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelClassAttribute" eSuperTypes="#//adtmm/Term">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selector" lowerBound="1"
+          eType="#//adtmm/VariableRef" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Set" eSuperTypes="#//adtmm/Sort">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sort" lowerBound="1"
+          eType="#//adtmm/Sort" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExistsIn" eSuperTypes="#//set/SetMembership"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ForAllIn" eSuperTypes="#//set/SetMembership"/>
+  </eSubpackages>
+</ecore:EPackage>

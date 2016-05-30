@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="attrmm"
+    nsURI="http://www.uni-augsburg.de/pvs/MAF/attrmm" nsPrefix="attrmm">
+  <eSubpackages name="attribution" nsURI="http://www.uni-augsburg.de/pvs/MAF/attribution"
+      nsPrefix="attribution">
+    <eClassifiers xsi:type="ecore:EClass" name="AttributionElement" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributionElementWithID" eSuperTypes="#//attribution/AttributionElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributionCollection" eSuperTypes="#//attribution/AttributionElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+          eType="#//attribution/Import" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributions" upperBound="-1"
+          eType="#//attribution/Attribution" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Attribution" eSuperTypes="#//attribution/AttributionElementWithID">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attrExtensions" upperBound="-1"
+          eType="#//attributes/AttrExtension" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attrDefinitions" upperBound="-1"
+          eType="#//attributes/AttrDefinition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attrSemanticRules" upperBound="-1"
+          eType="#//semanticrules/AttrSemanticRule" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attrDataTypes" upperBound="-1"
+          eType="#//datatypes/AttrDataType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Import" eSuperTypes="#//attribution/AttributionElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="importURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="attributes" nsURI="http://www.uni-augsburg.de/pvs/MAF/attributes"
+      nsPrefix="attributes">
+    <eClassifiers xsi:type="ecore:EClass" name="AttrDefinition" abstract="true" eSuperTypes="#//attribution/AttributionElementWithID"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AttrAssignDefinition" eSuperTypes="#//attributes/AttrDefinition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" eType="#//datatypes/AttrDataType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initializationRule" eType="#//semanticrules/AttrSemanticRule"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttrConstDefinition" eSuperTypes="#//attributes/AttrDefinition">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="violationID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="severity" eType="#//attributes/ConstSeverity"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttrExtension" eSuperTypes="#//attribution/AttributionElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//attributes/AttrOccurrence" containment="true" eOpposite="#//attributes/AttrOccurrence/containedIn"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributedClass" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttrOccurrence" eSuperTypes="#//attribution/AttributionElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="definedBy" lowerBound="1"
+          eType="#//attributes/AttrDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="calculatedBy" lowerBound="1"
+          eType="#//semanticrules/AttrSemanticRule"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedIn" lowerBound="1"
+          eType="#//attributes/AttrExtension" eOpposite="#//attributes/AttrExtension/attributes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ConstSeverity">
+      <eLiterals name="info" literal="info"/>
+      <eLiterals name="advice" value="1" literal="advice"/>
+      <eLiterals name="warning" value="2" literal="warning"/>
+      <eLiterals name="error" value="3" literal="error"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="semanticrules" nsURI="http://www.uni-augsburg.de/pvs/MAF/semanticrules"
+      nsPrefix="semanticrules">
+    <eClassifiers xsi:type="ecore:EClass" name="AttrSemanticRule" eSuperTypes="#//attribution/AttributionElementWithID">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rule" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ruleType" eType="#//semanticrules/SRuleType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="SRuleType">
+      <eLiterals name="java_call" literal="java method invocation"/>
+      <eLiterals name="java_inline" value="1" literal="java inline invocation"/>
+      <eLiterals name="java_constructor" value="2" literal="java datatype constructor"/>
+      <eLiterals name="ocl" value="3" literal="ocl invocation"/>
+      <eLiterals name="impocl" value="4" literal="imperative ocl invocation"/>
+      <eLiterals name="null" value="5" literal="null"/>
+      <eLiterals name="const" value="6" literal="constant value"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="datatypes" nsURI="http://www.uni-augsburg.de/pvs/MAF/datatypes"
+      nsPrefix="datatypes">
+    <eClassifiers xsi:type="ecore:EClass" name="AttrDataType" eSuperTypes="#//attribution/AttributionElementWithID">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="#//datatypes/DataType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypeManual" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+      <eLiterals name="Java_Object" literal="[Java] Object"/>
+      <eLiterals name="OCL_ManualDeclaration" value="1" literal="[OCL] manual"/>
+      <eLiterals name="OCL_Integer" value="2" literal="[OCL] Integer"/>
+      <eLiterals name="OCL_Real" value="3" literal="[OCL] Real"/>
+      <eLiterals name="OCL_Boolean" value="4" literal="[OCL] Boolean"/>
+      <eLiterals name="OCL_String" value="5" literal="[OCL] String"/>
+      <eLiterals name="OCL_Set_String_" value="6" literal="[OCL] Set(String)"/>
+      <eLiterals name="OCL_Set_Integer_" value="7" literal="[OCL] Set(Integer)"/>
+      <eLiterals name="OCL_OrderedSet_String_" value="8" literal="[OCL] OrderedSet(String)"/>
+      <eLiterals name="OCL_OrderedSet_Integer_" value="9" literal="[OCL] OrderedSet(Integer)"/>
+      <eLiterals name="OCL_Sequence_String_" value="10" literal="[OCL] Sequence(String)"/>
+      <eLiterals name="OCL_Sequence_Integer_" value="11" literal="[OCL] Sequence(Integer)"/>
+      <eLiterals name="OCL_Bag_String_" value="12" literal="[OCL] Bag(String)"/>
+      <eLiterals name="OCL_Bag_Integer_" value="13" literal="[OCL] Bag(Integer)"/>
+      <eLiterals name="OCL_Set_Any_" value="14" literal="[OCL] Set(Any)"/>
+      <eLiterals name="OCL_OrderedSet_Any_" value="15" literal="[OCL] OrderedSet(Any)"/>
+      <eLiterals name="OCL_Sequence_Any_" value="16" literal="[OCL] Sequence(Any)"/>
+      <eLiterals name="OCL_Bag_Any_" value="17" literal="[OCL] Bag(Any)"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

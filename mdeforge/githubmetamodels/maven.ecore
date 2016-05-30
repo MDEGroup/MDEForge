@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="maven" nsURI="http://www.sourcepit.org/common/maven/0.1" nsPrefix="common-maven">
+  <eClassifiers xsi:type="ecore:EClass" name="MavenArtifact" eSuperTypes="../../../../common-modeling/src/main/emf/CommonModeling.ecore#//XAnnotatable #//MavenArtifactCoordinates">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="ecore:EDataType ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//EFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenDependency" eSuperTypes="#//DependencyDeclaration ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//XAnnotatable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenArtifactConflictCoordinates" abstract="true">
+    <eOperations name="getArtifactConflictKey" lowerBound="1" eType="#//ArtifactConflictKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="groupId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="artifactId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenProjectCoordinates" abstract="true"
+      eSuperTypes="#//MavenArtifactConflictCoordinates">
+    <eOperations name="getProjectKey" lowerBound="1" eType="#//ProjectKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenClassified" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="jar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenProject" eSuperTypes="#//MavenProjectCoordinates ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//XAnnotatable">
+    <eOperations name="getProjectDirectory" eType="ecore:EDataType ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//EFile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packaging" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="jar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pomFile" eType="ecore:EDataType ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//EFile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputDirectory" eType="ecore:EDataType ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//EFile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testOutputDirectory" eType="ecore:EDataType ../../../../common-modeling/src/main/emf/CommonModeling.ecore#//EFile"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyDeclaration" abstract="true"
+      eSuperTypes="#//MavenArtifactConflictCoordinates #//MavenClassified">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionConstraint" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" lowerBound="1" eType="#//Scope"
+        defaultValueLiteral="compile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Scope">
+    <eLiterals name="compile"/>
+    <eLiterals name="provided" value="1"/>
+    <eLiterals name="runtime" value="2"/>
+    <eLiterals name="test" value="3"/>
+    <eLiterals name="system" value="4"/>
+    <eLiterals name="import" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="NullableScope" instanceClassName="org.sourcepit.common.maven.model.Scope"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenArtifactCoordinates" abstract="true"
+      eSuperTypes="#//MavenProjectCoordinates #//MavenClassified">
+    <eOperations name="getArtifactKey" lowerBound="1" eType="#//ArtifactKey"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ArtifactConflictKey" instanceClassName="org.sourcepit.common.maven.model.ArtifactConflictKey"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ProjectKey" instanceClassName="org.sourcepit.common.maven.model.ProjectKey"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ArtifactKey" instanceClassName="org.sourcepit.common.maven.model.ArtifactKey"/>
+</ecore:EPackage>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="company"
+    nsURI="http://www.eclipse.org/emf/CDO/examples/company/1.0.0" nsPrefix="company">
+  <eAnnotations source="teneo.jpa">
+    <details key="value" value="@hbGenericGenerators({@GenericGenerator(name=&quot;system-uuid&quot;, strategy = &quot;org.eclipse.emf.cdo.examples.hibernate.server.CDOExampleUUIDHexGenerator&quot;)})"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Addressable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Company" eSuperTypes="#//Addressable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//Category" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suppliers" upperBound="-1"
+        eType="#//Supplier" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseOrders" upperBound="-1"
+        eType="#//PurchaseOrder" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="salesOrders" upperBound="-1"
+        eType="#//SalesOrder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Supplier" eSuperTypes="#//Addressable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="purchaseOrders" upperBound="-1"
+        eType="#//PurchaseOrder" eOpposite="#//PurchaseOrder/supplier"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preferred" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer" eSuperTypes="#//Addressable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="salesOrders" upperBound="-1"
+        eType="#//SalesOrder" eOpposite="#//SalesOrder/customer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Order">
+    <eAnnotations source="teneo.jpa">
+      <details key="value" value="@Entity(name=&quot;BaseOrder&quot;)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderDetails" upperBound="-1"
+        eType="#//OrderDetail" containment="true" eOpposite="#//OrderDetail/order"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderDetail">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="order" lowerBound="1" eType="#//Order"
+        eOpposite="#//Order/orderDetails"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" eType="#//Product"
+        eOpposite="#//Product/orderDetails"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PurchaseOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supplier" lowerBound="1"
+        eType="#//Supplier" eOpposite="#//Supplier/purchaseOrders"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SalesOrder" eSuperTypes="#//Order">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer" eOpposite="#//Customer/salesOrders"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Id @GeneratedValue(generator=&quot;system-uuid&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categories" upperBound="-1"
+        eType="#//Category" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+        eType="#//Product" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Product">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderDetails" upperBound="-1"
+        eType="#//OrderDetail" eOpposite="#//OrderDetail/product"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vat" eType="#//VAT" defaultValueLiteral="vat15">
+      <eAnnotations source="teneo.jpa">
+        <details key="value" value="@Basic(optional=false)&#xA;@Column(nullable=false)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VAT">
+    <eLiterals name="vat0"/>
+    <eLiterals name="vat7" value="7"/>
+    <eLiterals name="vat15" value="15"/>
+  </eClassifiers>
+</ecore:EPackage>

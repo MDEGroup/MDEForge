@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rpg"
+    nsURI="rpg" nsPrefix="rpg">
+  <eClassifiers xsi:type="ecore:EClass" name="RPG">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasWorldMap" lowerBound="1"
+        eType="#//WorldMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasAgents" upperBound="-1"
+        eType="#//NonPlayableCharacther" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasHero" lowerBound="1"
+        eType="#//Hero" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasObject" upperBound="-1"
+        eType="#//Object" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Object" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occupies" eType="#//Cell">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="color" value="155,255,0"/>
+        <details key="style" value="dash"/>
+        <details key="tool.name" value="objectOccupies"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true" interface="true"
+      eSuperTypes="#//Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Key" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opens" lowerBound="1" eType="#//Door">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="color" value="155,155,155"/>
+        <details key="style" value="dash"/>
+        <details key="tool.name" value="useKey"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Door" eSuperTypes="#//Object">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" lowerBound="1" eType="#//Cell">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="color" value="155,255,0"/>
+        <details key="style" value="dash"/>
+        <details key="tool.name" value="exit"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Agent" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="occupies" lowerBound="1"
+        eType="#//Cell">
+      <eAnnotations source="gmf.link">
+        <details key="target.decoration" value="arrow"/>
+        <details key="color" value="0,0,0"/>
+        <details key="style" value="dash"/>
+        <details key="tool.name" value="occupies"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasInventory" eType="#//Inventory"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inventory">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasItems" upperBound="-1"
+        eType="#//Item">
+      <eAnnotations source="gmf.compartment">
+        <details key="layout" value="list"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonPlayableCharacther" abstract="true"
+      interface="true" eSuperTypes="#//Agent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Hostile" eSuperTypes="#//NonPlayableCharacther"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Friendly" eSuperTypes="#//NonPlayableCharacther"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Hero" eSuperTypes="#//Agent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WorldMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasScene" lowerBound="1"
+        upperBound="-1" eType="#//Scene" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Scene">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasCell" lowerBound="1"
+        upperBound="-1" eType="#//Cell" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cell">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Cell"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Cell"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="top" eType="#//Cell"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bottom" eType="#//Cell"/>
+  </eClassifiers>
+</ecore:EPackage>

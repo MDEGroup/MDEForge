@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="emf"
+    nsURI="http:///uk/ac/ed/inf/pepa/emf.ecore" nsPrefix="uk.ac.ed.inf.pepa.emf">
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rate" lowerBound="1" eType="#//Rate"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" lowerBound="1"
+        eType="#//Action" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aggregation" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="copies" eType="#//FiniteRate"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" abstract="true" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//BinaryOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cooperation" eSuperTypes="#//BinaryOperator #//ProcessWithSet"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FiniteRate" abstract="true" eSuperTypes="#//Rate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Hiding" eSuperTypes="#//ProcessWithSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hiddenProcess" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemEquation" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processAssignments" upperBound="-1"
+        eType="#//ProcessAssignment" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rateAssignments" upperBound="-1"
+        eType="#//RateAssignment" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PassiveRate" eSuperTypes="#//Rate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prefix" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetProcess" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activity" lowerBound="1"
+        eType="#//Activity" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessWithSet" abstract="true" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//ActionIdentifier" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rate" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SilentAction" eSuperTypes="#//Action"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionIdentifier" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//FiniteRate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processIdentifier" lowerBound="1"
+        eType="#//ProcessIdentifier" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" lowerBound="1"
+        eType="#//Process" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessIdentifier" eSuperTypes="#//Process">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RateAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rateIdentifier" lowerBound="1"
+        eType="#//RateIdentifier" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rate" lowerBound="1" eType="#//FiniteRate"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RateExpression" eSuperTypes="#//FiniteRate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftHandSide" lowerBound="1"
+        eType="#//FiniteRate" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightHandSide" lowerBound="1"
+        eType="#//FiniteRate" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//RateOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RateIdentifier" eSuperTypes="#//FiniteRate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RateOperator">
+    <eLiterals name="Plus"/>
+    <eLiterals name="Minus" value="1"/>
+    <eLiterals name="Divide" value="2"/>
+    <eLiterals name="Times" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

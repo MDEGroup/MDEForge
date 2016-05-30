@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pragmacpndefinition"
+    nsURI="http://pragmacpndefinition/1.0" nsPrefix="pragmacpndefinition">
+  <eClassifiers xsi:type="ecore:EClass" name="PragmaCPN" eSuperTypes="../../ePNK%20CPN%20Type/model/CPNDefinition.ecore#//CPN">
+    <eAnnotations source="EAnnotation0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Place" eSuperTypes="../../ePNK%20CPN%20Type/model/CPNDefinition.ecore#//Place #//OntologyMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Pragma" eSuperTypes="platform:/plugin/org.pnml.tools.epnk/model/PNMLCoreModel.ecore#//Label">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="OntologyFile" instanceClassName="org.eclipse.core.resources.IFile"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OntologyDocument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ontology" eType="#//PragmaticsOntology"
+        eOpposite="#//PragmaticsOntology/documents"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PragmaticsOntology" eSuperTypes="platform:/plugin/org.pnml.tools.epnk/model/PNMLCoreModel.ecore#//Label">
+    <eOperations name="addOntologyFromFile">
+      <eParameters name="file" eType="#//OntologyFile"/>
+    </eOperations>
+    <eOperations name="getValidPragmatics" eType="#//OWLClassSet">
+      <eParameters name="object" eType="#//OntologyMember"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documents" upperBound="-1"
+        eType="#//OntologyDocument" containment="true" eOpposite="#//OntologyDocument/ontology"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="net" eType="#//PetriNet"
+        eOpposite="#//PetriNet/ontology"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manager" eType="#//OntologyManager"
+        changeable="false" transient="true" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PetriNet" eSuperTypes="platform:/plugin/org.pnml.tools.epnk/model/PNMLCoreModel.ecore#//PetriNet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ontology" eType="#//PragmaticsOntology"
+        containment="true" eOpposite="#//PragmaticsOntology/net"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="OntologyManager" instanceClassName="org.semanticweb.owlapi.model.OWLOntologyManager"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OntologyMember" abstract="true" interface="true">
+    <eOperations name="getOWLClass" eType="#//OWLClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Annotation" upperBound="-1"
+        eType="#//Pragma" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="OWLClassSet" instanceTypeName="java.util.Set&lt;org.semanticweb.owlapi.model.OWLClass>"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="OWLClass" instanceClassName="org.semanticweb.owlapi.model.OWLClass"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="../../ePNK%20CPN%20Type/model/CPNDefinition.ecore#//Transition #//OntologyMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Arc" eSuperTypes="../../ePNK%20CPN%20Type/model/CPNDefinition.ecore#//Arc #//OntologyMember"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="../../ePNK%20CPN%20Type/model/CPNDefinition.ecore#//Page #//OntologyMember"/>
+</ecore:EPackage>

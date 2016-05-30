@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="common" nsURI="http://openscada.org/Configurator/Processors/Common"
+    nsPrefix="common">
+  <eClassifiers xsi:type="ecore:EClass" name="StoreConfigurationSlotProcessor" eSuperTypes="../../org.openscada.configurator.model/model/configurator.ecore#//Processor">
+    <eOperations name="process" eExceptions="ecore:EDataType ../../org.openscada.configurator.model/model/configurator.ecore#//Exception">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( ConfigurationSlot slot : getSlots () )&#xA;{&#xA;&#x9;System.out.println ( &quot; ** Storing slot: &quot; + slot );&#xA;&#x9;slot.store();&#xA;}"/>
+      </eAnnotations>
+      <eParameters name="project" eType="ecore:EClass ../../org.openscada.configurator.model/model/configurator.ecore#//Project"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
+        eType="ecore:EClass ../../org.openscada.configurator.model/model/configurator.ecore#//ConfigurationSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Pattern" instanceClassName="java.util.regex.Pattern"/>
+  <eSubpackages name="global" nsURI="http://openscada.org/Configurator/Processors/Common/Global"
+      nsPrefix="global">
+    <eClassifiers xsi:type="ecore:EClass" name="TransformSiteToGlobal" eSuperTypes="../../org.openscada.configurator.model/model/configurator.ecore#//Processor">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Converts a site local configuration to a global centralized data hub configuration."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="globalSlot" lowerBound="1"
+          eType="ecore:EClass ../../org.openscada.configurator.model/model/configurator.ecore#//master/AtlantisConfigurationSlot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sites" upperBound="-1"
+          eType="#//global/Site" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionIdFormat" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="site.master.%s.%s"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchyPrefix" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionItemStateFormat"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionItemStringStateFormat"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="summaryItemPattern" lowerBound="1"
+          eType="#//Pattern">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The pattern used to detect site local summary items."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="summaryItemFormat" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The format string which will be used to generate global summary item names. 1 = site id, 2 = site local name"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selector" upperBound="-1"
+          eType="#//global/ItemSelector" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="queries" upperBound="-1"
+          eType="#//global/QueryImport" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aePullConfiguration"
+          eType="#//global/AePullConfiguration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Site">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionDa" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionAe" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="siteOutputDir" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Output directory of the site configuration."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hierarchy" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="aknPattern" upperBound="-1"
+          eType="#//Pattern"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ItemSelector" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
+          eType="#//Pattern"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Exclude" eSuperTypes="#//global/ItemSelector"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Include" eSuperTypes="#//global/ItemSelector"/>
+    <eClassifiers xsi:type="ecore:EClass" name="QueryImport" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="localName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeLocal" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MonitorQueryImport" eSuperTypes="#//global/QueryImport"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EventQueryImport" eSuperTypes="#//global/QueryImport">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="localPoolSize" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="10000"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AePullConfiguration">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="customSelectSql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="customDeleteSql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//global/PropertyEntry" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyEntry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="main" nsURI="http://openscada.org/Configurator/Processors/Common/Main"
+      nsPrefix="main">
+    <eClassifiers xsi:type="ecore:EClass" name="AuthorizationLoader" eSuperTypes="../../org.openscada.configurator.model/model/configurator.ecore#//Processor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="slot" eType="ecore:EClass ../../org.openscada.configurator.model/model/configurator.ecore#//GenericMasterConfigurationSlot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SecurityLoader" eSuperTypes="../../org.openscada.configurator.model/model/configurator.ecore#//Processor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="1"
+          eType="ecore:EClass ../../org.openscada.configurator.sec/model/sec.ecore#//Rules"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="slot" upperBound="-1"
+          eType="ecore:EClass ../../org.openscada.configurator.model/model/configurator.ecore#//GenericMasterConfigurationSlot"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

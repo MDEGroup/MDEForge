@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="core"
+    nsURI="http://axdt.org/uri/Axdt" nsPrefix="axdt">
+  <eClassifiers xsi:type="ecore:EDataType" name="CoreException" instanceClassName="org.eclipse.core.runtime.CoreException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ICommand" instanceClassName="org.eclipse.core.resources.ICommand"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IPath" instanceClassName="org.eclipse.core.runtime.IPath"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IWorkspace" instanceClassName="org.eclipse.core.resources.IWorkspace"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IResource" instanceClassName="org.eclipse.core.resources.IResource"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IContainer" instanceClassName="org.eclipse.core.resources.IContainer"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProgressMonitor" instanceClassName="org.eclipse.core.runtime.IProgressMonitor"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProjectDescription" instanceClassName="org.eclipse.core.resources.IProjectDescription"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Set" instanceClassName="java.util.Set">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="List" instanceClassName="java.util.List">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtElement" abstract="true">
+    <eOperations name="getPath" eType="#//IPath"/>
+    <eOperations name="getResource" eType="#//IResource"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="isHandle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getHandle" eType="#//AxdtElement"/>
+    <eOperations name="isConnected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="connect"/>
+    <eOperations name="disconnect"/>
+    <eOperations name="exists" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getParent" eType="#//AxdtElement"/>
+    <eOperations name="isReadOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtHandle" abstract="true" eSuperTypes="#//AxdtElement">
+    <eTypeParameters name="T">
+      <eBounds eClassifier="#//AxdtElement"/>
+    </eTypeParameters>
+    <eOperations name="checkDelegate">
+      <eGenericType eTypeParameter="#//AxdtHandle/T"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resource" eType="#//IResource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delegate">
+      <eGenericType eTypeParameter="#//AxdtHandle/T"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtModel" eSuperTypes="#//AxdtElement">
+    <eOperations name="getProject" eType="#//AxdtProject">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+    <eOperations name="getPackageRoot" eType="#//AxdtPackageRoot">
+      <eParameters name="resource" eType="#//IResource"/>
+    </eOperations>
+    <eOperations name="getProjects">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eClassifier="#//AxdtProject"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="hasAxdtNature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+    <eOperations name="newBuilderCommand" eType="#//ICommand">
+      <eParameters name="description" eType="#//IProjectDescription"/>
+      <eParameters name="builderId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getWorkspace" eType="#//IWorkspace"/>
+    <eOperations name="connectHandle">
+      <eTypeParameters name="T">
+        <eBounds eClassifier="#//AxdtElement"/>
+      </eTypeParameters>
+      <eParameters name="handle">
+        <eGenericType eClassifier="#//AxdtHandle">
+          <eTypeArguments eTypeParameter="#//AxdtModel/connectHandle/T"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedProjects" upperBound="-1"
+        eType="#//AxdtProjectSource" containment="true" eOpposite="#//AxdtProjectSource/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtProject" abstract="true" interface="true"
+      eSuperTypes="#//AxdtElement">
+    <eOperations name="getRequiredProjectNames">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getDefaultPackageRoot" eType="#//AxdtPackageRoot"/>
+    <eOperations name="getConfiguredSourcePaths">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eClassifier="#//IPath"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="addToBuildSpec" eExceptions="#//CoreException">
+      <eParameters name="builderId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeFromBuildSpec" eExceptions="#//CoreException">
+      <eParameters name="builderId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getPackageRoots">
+      <eGenericType eClassifier="#//List">
+        <eTypeArguments eClassifier="#//AxdtPackageRoot"/>
+      </eGenericType>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtProjectSource" eSuperTypes="#//AxdtProject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputLocation" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="librariesLocation" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="configLocation" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedPackageRoots"
+        upperBound="-1" eType="#//AxdtPackageRootSource" containment="true" eOpposite="#//AxdtPackageRootSource/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AxdtModel"
+        eOpposite="#//AxdtModel/connectedProjects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtProjectHandle">
+    <eGenericSuperTypes eClassifier="#//AxdtHandle">
+      <eTypeArguments eClassifier="#//AxdtProjectSource"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//AxdtProject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtPackageRoot" abstract="true" interface="true"
+      eSuperTypes="#//AxdtElement">
+    <eOperations name="isExternal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isArchive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getPackages">
+      <eGenericType eClassifier="#//Set">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getPackage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addPackage">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtPackageRootSource" eSuperTypes="#//AxdtPackageRoot">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resource" eType="#//IResource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AxdtProjectSource"
+        eOpposite="#//AxdtProjectSource/connectedPackageRoots"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AxdtPackageRootHandle">
+    <eGenericSuperTypes eClassifier="#//AxdtHandle">
+      <eTypeArguments eClassifier="#//AxdtPackageRootSource"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//AxdtPackageRoot"/>
+  </eClassifiers>
+</ecore:EPackage>

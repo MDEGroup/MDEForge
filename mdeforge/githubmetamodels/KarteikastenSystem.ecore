@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="karteikastensystem"
+    nsURI="http://www.iks-gmbh.com/hto/karteikastensystem/1.0.0" nsPrefix="kks">
+  <eClassifiers xsi:type="ecore:EClass" name="KarteikastenSystem">
+    <eOperations name="addBenutzer" eType="#//Person">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="addKarte" eType="#//Karte">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="benutzer" upperBound="-1"
+        eType="#//Person" containment="true" eKeys="#//Person/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="karten" upperBound="-1"
+        eType="#//Karte" containment="true" eKeys="#//Karte/id"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eOperations name="getKarteikasten" eType="#//Karteikasten">
+      <eParameters name="von" eType="#//Sprache"/>
+      <eParameters name="nach" eType="#//Sprache"/>
+    </eOperations>
+    <eOperations name="addKarteikasten" eType="#//Karteikasten">
+      <eParameters name="von" eType="#//Sprache"/>
+      <eParameters name="nach" eType="#//Sprache"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="karteikaesten" upperBound="12"
+        eType="#//Karteikasten" containment="true" eOpposite="#//Karteikasten/person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nickName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Karteikasten">
+    <eOperations name="getFach" eType="#//Fach">
+      <eParameters name="typ" eType="#//Karteifachtyp"/>
+    </eOperations>
+    <eOperations name="addFach" eType="#//Fach">
+      <eParameters name="typ" eType="#//Karteifachtyp"/>
+    </eOperations>
+    <eOperations name="moveKarteUp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="fromFach" eType="#//Fach"/>
+      <eParameters name="karte" eType="#//Karte"/>
+    </eOperations>
+    <eOperations name="moveKarteDown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="fach" eType="#//Fach"/>
+      <eParameters name="karte" eType="#//Karte"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vonSprache" eType="#//Sprache"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nachSprache" eType="#//Sprache"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="faecher" lowerBound="5"
+        upperBound="5" eType="#//Fach" containment="true" eOpposite="#//Fach/karteikasten"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" lowerBound="1"
+        eType="#//Person" eOpposite="#//Person/karteikaesten"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Sprache">
+    <eLiterals name="deutsch" literal="deutsch"/>
+    <eLiterals name="englisch" value="1"/>
+    <eLiterals name="spanisch" value="2"/>
+    <eLiterals name="franzoesisch" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fach">
+    <eOperations name="addKarte">
+      <eParameters name="karte" eType="#//Karte"/>
+    </eOperations>
+    <eOperations name="removeKarte" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="karte" eType="#//Karte"/>
+    </eOperations>
+    <eOperations name="getNextKarte" eType="#//Karte"/>
+    <eOperations name="getAnzahlKartenInFolgeGewusst" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eParameters name="inFolgeGewusst" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typ" eType="#//Karteifachtyp"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="karten" upperBound="-1"
+        eType="#//Karte"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="karteikasten" lowerBound="1"
+        eType="#//Karteikasten" eOpposite="#//Karteikasten/faecher"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="anzahlKarten" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="anzahlUnbekannt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Karteifachtyp">
+    <eLiterals name="neu"/>
+    <eLiterals name="gelernt" value="1"/>
+    <eLiterals name="bekannt" value="2"/>
+    <eLiterals name="gesichert" value="3"/>
+    <eLiterals name="archiviert" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Karte">
+    <eOperations name="beschrifteSeite" eType="#//Kartenseite">
+      <eParameters name="sprache" eType="#//Sprache"/>
+      <eParameters name="vokabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="beispiel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSeite" eType="#//Kartenseite">
+      <eParameters name="sprache" eType="#//Sprache"/>
+    </eOperations>
+    <eOperations name="addSeite" eType="#//Kartenseite">
+      <eParameters name="sprache" eType="#//Sprache"/>
+    </eOperations>
+    <eOperations name="richtig" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Eine Vokabel wurde bei der Abfrage gewusst. Zurückgegeben wird die Anzahl der der in Folge gewussten Versuche."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="falsch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Eine Vokabel wurde bei der Abfragenicht gewusst. Zurückgegeben wird 0."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="seiten" lowerBound="1"
+        upperBound="2" eType="#//Kartenseite" containment="true" eOpposite="#//Kartenseite/karte"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="anzahlGewusstInFolge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Kartenseite">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sprache" eType="#//Sprache"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vokabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="beispiel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="karte" eType="#//Karte"
+        eOpposite="#//Karte/seiten"/>
+  </eClassifiers>
+</ecore:EPackage>

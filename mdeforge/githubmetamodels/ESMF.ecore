@@ -1,0 +1,1264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="esmf" nsURI="http://www.earthsystemcurator.org/cupid/esmf" nsPrefix="esmf">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFNamedEntity" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="nameNotEmpty"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="nameNotEmpty" value="self.name->notEmpty() and self.name.size() > 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFScope" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" upperBound="-1" eType="#//ESMFScopedItem"
+        containment="true" eOpposite="#//ESMFScopedItem/scope" eKeys="#//ESMFNamedEntity/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFScopedItem" abstract="true" eSuperTypes="#//ESMFNamedEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scope" lowerBound="1" eType="#//ESMFScope"
+        transient="true" eOpposite="#//ESMFScope/item"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFWorkspace" eSuperTypes="#//ESMFNamedEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" upperBound="-1"
+        eType="#//ESMFComponent" containment="true" eOpposite="#//ESMFComponent/workspace"
+        eKeys="#//ESMFNamedEntity/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFComponent" abstract="true" eSuperTypes="#//ESMFNamedEntity #//ESMFScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" upperBound="-1"
+        eType="#//ESMFComponent" eOpposite="#//ESMFComponent/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ESMFComponent"
+        eOpposite="#//ESMFComponent/component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stage" upperBound="-1"
+        eType="#//ESMFStage" containment="true" eOpposite="#//ESMFStage/component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspace" lowerBound="1"
+        eType="#//ESMFWorkspace" eOpposite="#//ESMFWorkspace/component"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFGriddedComponent" eSuperTypes="#//ESMFComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCouplerComponent" eSuperTypes="#//ESMFComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFSimpleCouplerComponent" eSuperTypes="#//ESMFCouplerComponent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="commonSrcAndDst"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="commonSrcAndDst" value="self.fieldConnection->forAll(srcField.scope = self.srcComponent and dstField.scope = self.dstComponent)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fieldConnection" upperBound="-1"
+        eType="#//ESMFFieldConnection" containment="true" eOpposite="#//ESMFFieldConnection/component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcComponent" lowerBound="1"
+        eType="#//ESMFGriddedComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstComponent" lowerBound="1"
+        eType="#//ESMFGriddedComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFDriver" eSuperTypes="#//ESMFComponent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStage" abstract="true" eSuperTypes="#//ESMFNamedEntity #//ESMFScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFComponent" eOpposite="#//ESMFComponent/stage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" eType="#//ESMFStageActionSequence"
+        containment="true" eOpposite="#//ESMFStageActionSequence/stage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageInitialize" eSuperTypes="#//ESMFStage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageRun" eSuperTypes="#//ESMFStage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageFinalize" eSuperTypes="#//ESMFStage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageAction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ESMFStageActionSequence"
+        eOpposite="#//ESMFStageActionSequence/action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionSequence" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" lowerBound="1"
+        upperBound="-1" eType="#//ESMFStageAction" containment="true" eOpposite="#//ESMFStageAction/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stage" eType="#//ESMFStage"
+        eOpposite="#//ESMFStage/actions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionIterate" eSuperTypes="#//ESMFStageActionSequence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionIterateClock" eSuperTypes="#//ESMFStageActionIterate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionArraySpecCreate" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" lowerBound="1"
+        upperBound="-1" eType="#//ESMFArraySpec"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionComponentCreate" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        upperBound="-1" eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionComponentDestroy" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        upperBound="-1" eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionComponentSetGrid" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionExecuteStage" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stageToExecute" lowerBound="1"
+        eType="#//ESMFStage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionFieldCreate" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" upperBound="-1"
+        eType="#//ESMFField"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionFieldDestroy" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" upperBound="-1"
+        eType="#//ESMFField"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionFieldRedistStore" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionFieldRedist" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionFieldRedistRelease" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionGridCreate" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" upperBound="-1"
+        eType="#//ESMFGrid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionGridInherit" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" upperBound="-1"
+        eType="#//ESMFGrid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionImportStateAdd" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" upperBound="-1"
+        eType="#//ESMFStateItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionExportStateAdd" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" upperBound="-1"
+        eType="#//ESMFStateItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionImportStateGet" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" eType="#//ESMFStateItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionExportStateGet" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" eType="#//ESMFStateItem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionStateCreate" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" upperBound="-1"
+        eType="#//ESMFState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStageActionStateDestroy" eSuperTypes="#//ESMFStageAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" upperBound="-1"
+        eType="#//ESMFState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFMethod" eSuperTypes="#//ESMFNamedEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" upperBound="-1"
+        eType="#//ESMFAction" containment="true" eOpposite="#//ESMFAction/context"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SIDLMethod" eType="ecore:EClass ../../org.earthsystemcurator.cupid.sidl/model/SIDL.ecore#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFInitMethod" eSuperTypes="#//ESMFMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFPreInitMethodSIDL" eSuperTypes="#//ESMFInitMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFPostInitMethodSIDL" eSuperTypes="#//ESMFInitMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFRunMethod" eSuperTypes="#//ESMFMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFFinalizeMethod" eSuperTypes="#//ESMFMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFFinalizeMethodSIDL" eSuperTypes="#//ESMFFinalizeMethod"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFRegisterMethod" eSuperTypes="#//ESMFNamedEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCalendar" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESMFCalKind">
+    <eLiterals name="ESMF_CALKIND_GREGORIAN"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFTimeInterval">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hours" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minutes" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seconds" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFTime">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="month" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="day" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hour" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minute" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="second" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calendar" lowerBound="1"
+        eType="#//ESMFCalendar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFClock" eSuperTypes="#//ESMFScopedItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startTime" eType="#//ESMFTime"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stopTime" eType="#//ESMFTime"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeStep" eType="#//ESMFTimeInterval"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFState" eSuperTypes="#//ESMFStateItem">
+    <eOperations name="add">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+        <details key="name" value="ESMF_StateAdd"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value=""/>
+      </eAnnotations>
+      <eParameters name="state" lowerBound="1" eType="#//ESMFState"/>
+      <eParameters name="itemList" lowerBound="1" upperBound="-1" eType="#//ESMFStateItem"/>
+      <eParameters name="rc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFStateItem" abstract="true" interface="true"
+      eSuperTypes="#//ESMFScopedItem"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFField" eSuperTypes="#//ESMFStateItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" eType="#//ESMFArray"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="staggerLoc" eType="#//ESMFStaggerLoc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" eType="#//ESMFArraySpec"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="#//ESMF_INDEX"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalLWidth" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalUWidth" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFFieldConnection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstField" lowerBound="1"
+        eType="#//ESMFField"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFSimpleCouplerComponent" eOpposite="#//ESMFSimpleCouplerComponent/fieldConnection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFArray" eSuperTypes="#//ESMFStateItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//ESMFComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" lowerBound="1"
+        eType="#//ESMFArraySpec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distGrid" lowerBound="1"
+        eType="#//ESMFDistGrid"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farray" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="indexflag" lowerBound="1"
+        eType="#//ESMF_INDEX" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="haloLWidth" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="haloUWidth" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFRouteHandle" eSuperTypes="#//ESMFScopedItem"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFArraySpec" eSuperTypes="#//ESMFScopedItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typekind" lowerBound="1"
+        eType="#//ESMFTypeKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESMFStaggerLoc">
+    <eLiterals name="ESMF_STAGGERLOC_CENTER"/>
+    <eLiterals name="ESMF_STAGGERLOC_CORNER" value="1"/>
+    <eLiterals name="ESMF_STAGGERLOC_EDGE1" value="2"/>
+    <eLiterals name="ESMF_STAGGERLOC_EDGE2" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFGrid" eSuperTypes="#//ESMFScopedItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distGrid" eType="#//ESMFDistGrid"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Extent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="MinLessThanOrEqualToMax"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+      <details key="MinLessThanOrEqualToMax" value="min &lt;= max"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFDistGrid" eSuperTypes="#//ESMFScopedItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extent" lowerBound="1"
+        upperBound="-1" eType="#//Extent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="de" upperBound="-1" eType="#//ESMFDecompositionElement"
+        containment="true" eOpposite="#//ESMFDecompositionElement/parentDistGrid"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deLayout" eType="#//ESMFDELayout"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="regularDecompositionSize"
+        unique="false" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESMFTypeKind">
+    <eLiterals name="ESMF_TYPEKIND_I1"/>
+    <eLiterals name="ESMF_TYPEKIND_I2" value="1"/>
+    <eLiterals name="ESMF_TYPEKIND_I4" value="2"/>
+    <eLiterals name="ESMF_TYPEKIND_I8" value="3"/>
+    <eLiterals name="ESMF_TYPEKIND_R4" value="4"/>
+    <eLiterals name="ESMF_TYPEKIND_R8" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFVirtualMachine">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="PETsAreSubsetOfParentVMPETs"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+      <details key="PETsAreSubsetOfParentVMPETs" value="parentVM.oclIsUndefined() or parentVM.petID->includesAll(petID)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentVM" eType="#//ESMFVirtualMachine"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="petID" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFPersistentExecutionThread">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFDELayout">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="MappedDEsOwnedByThisDELayout"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decompositionElement" lowerBound="1"
+        upperBound="-1" eType="#//ESMFDecompositionElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deToPet" lowerBound="1"
+        transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="#//ESMFDecompositionElement"/>
+        <eTypeArguments eClassifier="#//ESMFPersistentExecutionThread"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFDecompositionElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ExtentSizeEqualsParentDistGridExtentSize"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+      <details key="ExtentSizeEqualsParentDistGridExtentSize" value="parentDistGrid.oclIsUndefined() or extent->size() = parentDistGrid.extent->size()"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extent" lowerBound="1"
+        upperBound="-1" eType="#//Extent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentDistGrid" eType="#//ESMFDistGrid"
+        eOpposite="#//ESMFDistGrid/de"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFVirtualAddressSpace"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="EIntArray" instanceClassName="int[]"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ESMF_INDEX">
+    <eLiterals name="ESMF_INDEX_DELOCAL"/>
+    <eLiterals name="ESMF_INDEX_GLOBAL" value="1"/>
+    <eLiterals name="ESMF_INDEX_USER" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//ESMFMethod"
+        eOpposite="#//ESMFMethod/action"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionAPI" abstract="true" eSuperTypes="#//ESMFAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rc" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionMethodInvokePattern" eSuperTypes="#//ESMFActionAPI"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionMethodInvokeSequence" eSuperTypes="#//ESMFActionMethodInvokePattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" lowerBound="1"
+        upperBound="-1" eType="#//ESMFActionMethodInvokePattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionMethodInvokeIteration" eSuperTypes="#//ESMFActionMethodInvokeSequence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionStateAdd" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_StateAdd"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="keyword"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemList" lowerBound="1"
+        upperBound="-1" eType="#//ESMFStateItem">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="keyword"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionStateCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_StateCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionStateGet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_StateGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="keyword"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="itemName" lowerBound="1"
+        eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+        <details key="keyword"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" eType="#//ESMFStateItem">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="keyword"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionStateReconcile" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_StateReconcile"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" lowerBound="1" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionArrayCreate" eSuperTypes="#//ESMFActionAPI">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" lowerBound="1" eType="#//ESMFArray"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionArrayCreateAllocateAS" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_ArrayCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" lowerBound="1" eType="#//ESMFArray">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distGrid" lowerBound="1"
+        eType="#//ESMFDistGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" lowerBound="1"
+        eType="#//ESMFArraySpec">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="indexflag" eType="#//ESMF_INDEX">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalLWidth" unique="false"
+        upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalUWidth" unique="false"
+        upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionArraySpecSet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_ArraySpecSet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" lowerBound="1"
+        eType="#//ESMFArraySpec">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typekind" lowerBound="1"
+        eType="#//ESMFTypeKind">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" lowerBound="1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionClockCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_ClockCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeStep" lowerBound="1"
+        eType="#//ESMFTimeInterval">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startTime" eType="#//ESMFTime">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stopTime" eType="#//ESMFTime">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionClockGet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_ClockGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeStep" eType="#//ESMFTimeInterval">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currTime" eType="#//ESMFTime">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionClockGetTimestep" eSuperTypes="#//ESMFActionAPI">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" lowerBound="1" eType="#//ESMFClock"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionCplCompCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_CplCompCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionCplCompInitialize" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_CplCompInitialize"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionCplCompRun" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_CplCompRun"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionCplCompFinalize" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_CplCompFinalize"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionCplCompSetServices" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_CplCompSetServices"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRoutine" lowerBound="1"
+        eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRC" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionDistGridCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_DistGridCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distGrid" lowerBound="1"
+        eType="#//ESMFDistGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minIndex" unique="false"
+        lowerBound="1" upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxIndex" unique="false"
+        lowerBound="1" upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="regDecomp" unique="false"
+        lowerBound="1" upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldCreate" eSuperTypes="#//ESMFActionAPI">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldCreateGridArray" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="array" lowerBound="1" eType="#//ESMFArray">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldCreateGridArraySpec"
+      eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arraySpec" lowerBound="1"
+        eType="#//ESMFArraySpec">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="indexflag" eType="#//ESMF_INDEX">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalLWidth" unique="false"
+        upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalUWidth" unique="false"
+        upperBound="-1" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldCreateTKR" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typekind" lowerBound="1"
+        eType="#//ESMFTypeKind">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldGet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farrayPtr" lowerBound="1"
+        eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="real"/>
+        <details key="kind" value="self.field.array.arraySpec.typekind.toFortranKind()"/>
+        <details key="pointer" value="true"/>
+        <details key="dim" value="self.field.grid.distGrid.extent->size()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldGetBounds" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldGetBounds"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exclusiveLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exclusiveUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computationalLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computationalUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.field.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldHaloStore" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldHaloStore"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldHalo" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldHalo"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="field" lowerBound="1" eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldHaloRelease" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldHaloRelease"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldRedistStore" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldRedistStore"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcField" lowerBound="1"
+        eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstField" lowerBound="1"
+        eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldRedist" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldRedist"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="srcField" lowerBound="1"
+        eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dstField" lowerBound="1"
+        eType="#//ESMFField">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFieldRedistRelease" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_FieldRedistRelease"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeHandle" lowerBound="1"
+        eType="#//ESMFRouteHandle">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFrameworkInit" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_Initialize"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCalKind" eType="#//ESMFCalKind">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionFrameworkFinalize" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_Finalize"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCreate"/>
+      <details key="post" value="created(self.grid)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="distGrid" lowerBound="1"
+        eType="#//ESMFDistGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="indexflag" eType="#//ESMF_INDEX">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridGet" abstract="true" eSuperTypes="#//ESMFActionAPI">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridGetPLocalDe" eSuperTypes="#//ESMFActionGridGet">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localDE" lowerBound="1"
+        eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="logical"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="logical"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridGetPLocalDePSloc" eSuperTypes="#//ESMFActionGridGetPLocalDe">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="staggerloc" lowerBound="1"
+        eType="#//ESMFStaggerLoc" defaultValueLiteral="0">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exclusiveLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exclusiveUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computationalLBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="computationalUBound" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="arraySize" value="self.grid.distGrid.extent->size().toString()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridGetCoord" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridGetCoord"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grid" lowerBound="1" eType="#//ESMFGrid">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coordDim" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farrayPtr" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="real"/>
+        <details key="pointer" value="true"/>
+        <details key="dim" value="1"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCompCreate" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCompCreate"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apireturn"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="character"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCompInitialize" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCompInitialize"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCompRun" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCompRun"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCompFinalize" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCompFinalize"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clock" eType="#//ESMFClock">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionGridCompSetServices" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_GridCompSetServices"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFComponent">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRoutine" lowerBound="1"
+        eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userRC" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionMethodInvoke" eSuperTypes="#//ESMFActionMethodInvokePattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+        eType="#//ESMFMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importState" eType="#//ESMFState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exportState" eType="#//ESMFState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionTimeSet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_TimeSet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="time" lowerBound="1" eType="#//ESMFTime">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yy" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mm" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dd" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="h" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="s" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionTimeGet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_TimeGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="time" lowerBound="1" eType="#//ESMFTime">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="yy" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mm" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dd" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="h" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="s" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionTimeIntervalSet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_TimeIntervalSet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeInterval" lowerBound="1"
+        eType="#//ESMFTimeInterval">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="h" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="s" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionTimeIntervalGet" eSuperTypes="#//ESMFActionAPI">
+    <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apimethod">
+      <details key="name" value="ESMF_TimeIntervalGet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeInterval" lowerBound="1"
+        eType="#//ESMFTimeInterval">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="h" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="m" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="s" eType="#//ESMFUserToken">
+      <eAnnotations source="http://www.earthsystemcurator.org/metapattern/apiparam">
+        <details key="type" value="integer"/>
+        <details key="kind" value="&quot;ESMF_KIND_I4&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFActionUserServiceInvoke" eSuperTypes="#//ESMFActionAPI">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="declaration" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="execution" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCall" eSuperTypes="#//ESMFAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallGridCompCreate" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallGridCompInitialize" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFGriddedComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallGridCompSetServices" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gridcomp" lowerBound="1"
+        eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallCplCompCreate" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallCplCompInitialize" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFCouplerComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallCplCompSetServices" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cplcomp" lowerBound="1"
+        eType="#//ESMFComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallFieldCreateSIDL" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" lowerBound="1"
+        eType="ecore:EClass ../../org.earthsystemcurator.cupid.sidl/model/SIDL.ecore#//Argument"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESMFCallSIDLMethod" eSuperTypes="#//ESMFCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SIDLMethod" lowerBound="1"
+        eType="ecore:EClass ../../org.earthsystemcurator.cupid.sidl/model/SIDL.ecore#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ESMFUserToken" instanceClassName="java.lang.String"/>
+</ecore:EPackage>

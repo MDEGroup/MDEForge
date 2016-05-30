@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="traceability"
+    nsURI="http://www.eclipse.org/acceleo/traceability/1.0" nsPrefix="traceability">
+  <eClassifiers xsi:type="ecore:EClass" name="TraceabilityModel">
+    <eOperations name="getGeneratedFile" eType="#//GeneratedFile">
+      <eParameters name="filePath" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getGeneratedFile" eType="#//GeneratedFile">
+      <eParameters name="moduleElement" eType="#//ModuleElement"/>
+    </eOperations>
+    <eOperations name="getGenerationModule" eType="#//ModuleFile">
+      <eParameters name="moduleURI" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getGenerationModule" eType="#//ModuleFile">
+      <eParameters name="resource" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EResource"/>
+    </eOperations>
+    <eOperations name="getInputModel" eType="#//ModelFile">
+      <eParameters name="modelURI" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getInputModel" eType="#//ModelFile">
+      <eParameters name="resource" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EResource"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//ModuleFile" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedFiles" upperBound="-1"
+        eType="#//GeneratedFile" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelFiles" upperBound="-1"
+        eType="#//ModelFile" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="#//path"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="charset" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelFile" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InputElements" upperBound="-1"
+        eType="#//InputElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleFile" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleElements" upperBound="-1"
+        eType="#//ModuleElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneratedFile" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedRegions" upperBound="-1"
+        eType="#//GeneratedText" containment="true" eOpposite="#//GeneratedText/outputFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceElements" upperBound="-1"
+        eType="#//InputElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nameRegions" upperBound="-1"
+        eType="#//GeneratedText" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileBlock" eType="#//ModuleElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EOperation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleElement" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneratedText">
+    <eOperations name="compareTo" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt">
+      <eParameters name="other" eType="#//GeneratedText"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceElement" eType="#//InputElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleElement" eType="#//ModuleElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputFile" eType="#//GeneratedFile"
+        eOpposite="#//GeneratedFile/generatedRegions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startOffset" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endOffset" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eGenericSuperTypes eClassifier="#//IComparable">
+      <eTypeArguments eClassifier="#//GeneratedText"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IComparable" instanceClassName="java.lang.Comparable"
+      abstract="true" interface="true">
+    <eTypeParameters name="T"/>
+    <eOperations name="compareTo" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt">
+      <eParameters name="other">
+        <eGenericType eTypeParameter="#//IComparable/T"/>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="path" instanceClassName="java.lang.String"/>
+</ecore:EPackage>

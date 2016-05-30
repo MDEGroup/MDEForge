@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="school"
+    nsURI="http:///school.ecore" nsPrefix="school">
+  <eClassifiers xsi:type="ecore:EClass" name="Course">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="school" eType="#//School"
+        transient="true" eOpposite="#//School/courses"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="teacher" eType="#//Teacher"
+        transient="true" eOpposite="#//Teacher/courses"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schoolClass" eType="#//SchoolClass"
+        transient="true" eOpposite="#//SchoolClass/courses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="School">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="years" upperBound="-1"
+        eType="#//Year" containment="true" resolveProxies="false" eOpposite="#//Year/school"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="teachers" upperBound="-1"
+        eType="#//Teacher" containment="true" resolveProxies="false" eOpposite="#//Teacher/school"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="courses" upperBound="-1"
+        eType="#//Course" containment="true" resolveProxies="false" eOpposite="#//Course/school"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SchoolClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="year" eType="#//Year" transient="true"
+        eOpposite="#//Year/schoolClasses"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="students" upperBound="-1"
+        eType="#//Student" containment="true" resolveProxies="false" eOpposite="#//Student/schoolClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="courses" upperBound="-1"
+        eType="#//Course" resolveProxies="false" eOpposite="#//Course/schoolClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="homeroomTeacher" eType="#//Teacher"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpecialisationCourse" eSuperTypes="#//Course">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specialisation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Student">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schoolClass" eType="#//SchoolClass"
+        transient="true" eOpposite="#//SchoolClass/students"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Teacher">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="school" eType="#//School"
+        transient="true" eOpposite="#//School/teachers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="courses" upperBound="-1"
+        eType="#//Course" resolveProxies="false" eOpposite="#//Course/teacher"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="homeroomedClass" eType="#//SchoolClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Year">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startingDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="school" eType="#//School"
+        transient="true" eOpposite="#//School/years"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schoolClasses" upperBound="-1"
+        eType="#//SchoolClass" containment="true" resolveProxies="false" eOpposite="#//SchoolClass/year"/>
+  </eClassifiers>
+</ecore:EPackage>

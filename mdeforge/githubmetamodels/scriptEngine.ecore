@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="uibindings"
+    nsURI="http://rcp-company.com/schemas/uibindings/scriptEngine.ecore" nsPrefix="scriptEngine">
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="engines" upperBound="-1"
+        eType="#//StringToScriptEngineMapEntry" transient="true" containment="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalEvaluationContext"
+        eType="#//ScriptEvaluationContext" changeable="false" transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="registeredEvaluationContexts"
+        upperBound="-1" eType="#//EObjectToScriptEngineMapEntry" transient="true"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//EObjectToScriptDependencyListMapEntry" transient="true" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptEngineDescriptor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//ScriptExpression" changeable="false" transient="true" containment="true"
+        resolveProxies="false" eOpposite="#//ScriptExpression/engine"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="engine" transient="true">
+      <eGenericType eClassifier="ecore:EDataType uibindings.ecore#//CEObjectHolder">
+        <eTypeArguments eClassifier="#//ScriptEngine"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptEngine" abstract="true" eSuperTypes="uibindings.ecore#//IDisposable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptEvaluationContext">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ScriptEvaluationContext"
+        transient="true" resolveProxies="false" eOpposite="#//ScriptEvaluationContext/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//ScriptEvaluationContext" transient="true" resolveProxies="false"
+        eOpposite="#//ScriptEvaluationContext/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="ecore:EClass uibindings.ecore#//StringToObjectMapEntry" transient="true"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//ScriptExpression" transient="true" resolveProxies="false" eOpposite="#//ScriptExpression/evaluationContext"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptExpression" eSuperTypes="uibindings.ecore#//IDisposable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="engine" lowerBound="1"
+        eType="#//ScriptEngineDescriptor" transient="true" resolveProxies="false"
+        eOpposite="#//ScriptEngineDescriptor/expressions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evaluationContext" lowerBound="1"
+        eType="#//ScriptEvaluationContext" transient="true" resolveProxies="false"
+        eOpposite="#//ScriptEvaluationContext/expressions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="script" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//ScriptDependency" transient="true" resolveProxies="false" eOpposite="#//ScriptDependency/expressions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValueClass" lowerBound="1">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="observableValue" lowerBound="1"
+        eType="ecore:EDataType uibindings.ecore#//IObservableValue" changeable="false"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptDependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" transient="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"
+        transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//ScriptExpression" transient="true" resolveProxies="false" eOpposite="#//ScriptExpression/dependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToScriptEngineMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//ScriptEngineDescriptor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EObjectToScriptDependencyListMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//ScriptDependency" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EObjectToScriptEngineMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//ScriptEvaluationContext"/>
+  </eClassifiers>
+</ecore:EPackage>

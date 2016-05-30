@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="linuxnetconf"
+    nsURI="http://linuxnetconf/1.0" nsPrefix="linuxnetconf">
+  <eClassifiers xsi:type="ecore:EClass" name="CMDB">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//ServerGroup" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServerGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="servers" upperBound="-1"
+        eType="#//ServerComputer" containment="true" eOpposite="#//ServerComputer/group"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServerComputer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaces" upperBound="-1"
+        eType="#//AbstractInterface" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ipconfigs" upperBound="-1"
+        eType="#//StaticIPConfig" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//AbstractConnection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" eType="#//ServerGroup"
+        eOpposite="#//ServerGroup/servers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticIPConfig">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ipAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="netmask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="networkAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gateway" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="broadcast" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractInterface" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ipconfig" eType="#//StaticIPConfig"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="configType" eType="#//IFConfigType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EthernetInterface" eSuperTypes="#//PhysicalInterface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BondingInterface" eSuperTypes="#//PhysicalInterface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VlanInterface" eSuperTypes="#//Interface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Bridge" eSuperTypes="#//AbstractInterface">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bridgePorts" lowerBound="1"
+        upperBound="-1" eType="#//Interface"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IFConfigType">
+    <eLiterals name="STATIC"/>
+    <eLiterals name="DYNAMIC" value="1"/>
+    <eLiterals name="MANUAL" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface" abstract="true" eSuperTypes="#//AbstractInterface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubInterface" eSuperTypes="#//AbstractInterface"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PhysicalInterface" abstract="true" eSuperTypes="#//Interface"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="BondMode">
+    <eLiterals name="RoundRobin" literal="RR"/>
+    <eLiterals name="ActiveBackup" value="1" literal="AB"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractConnection" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VlanToInterfaceConnection" eSuperTypes="#//AbstractConnection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vlan" lowerBound="1" eType="#//VlanInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rawInterface" lowerBound="1"
+        eType="#//PhysicalInterface"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EthernetToBondingConnection" eSuperTypes="#//AbstractConnection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slave" lowerBound="1" eType="#//EthernetInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="master" lowerBound="1"
+        eType="#//BondingInterface"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubToInterfaceConnection" eSuperTypes="#//AbstractConnection">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subInterface" lowerBound="1"
+        eType="#//SubInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainInterface" lowerBound="1"
+        eType="#//Interface"/>
+  </eClassifiers>
+</ecore:EPackage>

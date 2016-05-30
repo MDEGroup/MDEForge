@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="employee"
+    nsURI="http://www.eclipse.org/OCL/examples/codegen/employee" nsPrefix="emp">
+  <eClassifiers xsi:type="ecore:EClass" name="Company">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1"
+        eType="#//Employee" containment="true" eOpposite="#//Employee/company"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="departments" upperBound="-1"
+        eType="#//Department" containment="true" eOpposite="#//Department/company"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Department">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="deptHasEmployees positiveID validName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+      <details key="deptHasEmployees" value="not manager.oclIsUndefined() implies employees->notEmpty()"/>
+      <details key="positiveID" value="self.deptID > 0"/>
+      <details key="validName" value="not self.name.oclIsUndefined() and self.name &lt;> ''"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manager" eType="#//Employee"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deptID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" ordered="false"
+        upperBound="-1" eType="#//Employee" changeable="false" volatile="true" transient="true"
+        derived="true" eOpposite="#//Employee/department">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="derive" value="if manager.oclIsUndefined() then Set{} else manager.directReports endif"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="company" eType="#//Company"
+        eOpposite="#//Company/departments"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="positiveID validName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+      <details key="positiveID" value="self.empID > 0"/>
+      <details key="validName" value="not self.name.oclIsUndefined() and self.name &lt;> ''"/>
+    </eAnnotations>
+    <eOperations name="allReports" ordered="false" upperBound="-1" eType="#//Employee">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="body" value="self->closure(directReports)"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="reportingChain" upperBound="-1" eType="#//Employee">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="body" value="if manager.oclIsUndefined() then OrderedSet{} else manager.reportingChain()->prepend(manager) endif"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="reportsTo" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="body" value="self.reportingChain()->includes(mgr)"/>
+      </eAnnotations>
+      <eParameters name="mgr" eType="#//Employee"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isManager" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="derive" value="directReports->notEmpty()"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="department" eType="#//Department"
+        changeable="false" volatile="true" transient="true" derived="true" eOpposite="#//Department/employees">
+      <eAnnotations source="http://www.eclipse.org/ocl/examples/OCL">
+        <details key="derive" value="company.departments->any(employees->includes(self))"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manager" eType="#//Employee"
+        eOpposite="#//Employee/directReports"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directReports" ordered="false"
+        upperBound="-1" eType="#//Employee" eOpposite="#//Employee/manager"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="empID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="company" eType="#//Company"
+        eOpposite="#//Company/employees"/>
+  </eClassifiers>
+</ecore:EPackage>

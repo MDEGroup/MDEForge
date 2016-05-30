@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="commonarchivecore"
+    nsURI="commonarchive.xmi" nsPrefix="org.eclipse.jst.j2ee.commonarchivecore">
+  <eClassifiers xsi:type="ecore:EClass" name="File" eSuperTypes="common.ecore#//J2EEEObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="directoryEntry" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loadingContainer" lowerBound="1"
+        eType="#//Container"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Container"
+        transient="true" eOpposite="#//Container/files"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Archive" eSuperTypes="#//Container">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="types" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBJarFile" eSuperTypes="#//ModuleFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentDescriptor" lowerBound="1"
+        eType="ecore:EClass ejb.ecore#//EJBJar"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WARFile" eSuperTypes="#//ModuleFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentDescriptor" lowerBound="1"
+        eType="ecore:EClass webapplication.ecore#//WebApp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EARFile" eSuperTypes="#//ModuleFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleRefs" lowerBound="1"
+        upperBound="-1" eType="#//ModuleRef" containment="true" eOpposite="#//ModuleRef/earFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentDescriptor" lowerBound="1"
+        eType="ecore:EClass application.ecore#//Application"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicationClientFile" eSuperTypes="#//ModuleFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentDescriptor" lowerBound="1"
+        eType="ecore:EClass client.ecore#//ApplicationClient"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleFile" abstract="true" eSuperTypes="#//Archive"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true" eSuperTypes="#//File">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="files" upperBound="-1"
+        eType="#//File" containment="true" eOpposite="#//File/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReadOnlyDirectory" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RARFile" eSuperTypes="#//ModuleFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deploymentDescriptor" lowerBound="1"
+        eType="ecore:EClass jca.ecore#//Connector"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleRef" abstract="true" eSuperTypes="common.ecore#//J2EEEObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleFile" lowerBound="1"
+        eType="#//ModuleFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="earFile" lowerBound="1"
+        eType="#//EARFile" transient="true" eOpposite="#//EARFile/moduleRefs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+        eType="ecore:EClass application.ecore#//Module"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EJBModuleRef" eSuperTypes="#//ModuleRef"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WebModuleRef" eSuperTypes="#//ModuleRef"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClientModuleRef" eSuperTypes="#//ModuleRef"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectorModuleRef" eSuperTypes="#//ModuleRef"/>
+  <eSubpackages name="looseconfig" nsURI="commonarchive.looseconfig.xmi" nsPrefix="org.eclipse.jst.j2ee.commonarchivecore.looseconfig">
+    <eClassifiers xsi:type="ecore:EClass" name="LooseApplication" eSuperTypes="#//looseconfig/LooseArchive">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="looseArchives" upperBound="-1"
+          eType="#//looseconfig/LooseArchive" containment="true" eOpposite="#//looseconfig/LooseArchive/looseApp"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LooseArchive" abstract="true" eSuperTypes="common.ecore#//J2EEEObject">
+      <eOperations name="isModule" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="binariesPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourcesPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="looseApp" eType="#//looseconfig/LooseApplication"
+          transient="true" eOpposite="#//looseconfig/LooseApplication/looseArchives"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LooseLibrary" eSuperTypes="#//looseconfig/LooseArchive">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="looseWAR" eType="#//looseconfig/LooseWARFile"
+          transient="true" eOpposite="#//looseconfig/LooseWARFile/looseLibs"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LooseModule" eSuperTypes="#//looseconfig/LooseArchive">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="altDD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LooseConfiguration" eSuperTypes="common.ecore#//J2EEEObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="applications" upperBound="-1"
+          eType="#//looseconfig/LooseApplication" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LooseWARFile" eSuperTypes="#//looseconfig/LooseModule">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="looseLibs" upperBound="-1"
+          eType="#//looseconfig/LooseLibrary" containment="true" eOpposite="#//looseconfig/LooseLibrary/looseWAR"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

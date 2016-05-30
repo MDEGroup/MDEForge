@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rental"
+    nsURI="http://com.opcoach.training/rental/1.0" nsPrefix="rental">
+  <eClassifiers xsi:type="ecore:EClass" name="Customer">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="consistentName"/>
+    </eAnnotations>
+    <eOperations name="getDisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="address" lowerBound="1"
+        eType="#//Address" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="licenses" upperBound="-1"
+        eType="#//License" containment="true" eOpposite="#//License/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAgency" lowerBound="1"
+        eType="#//RentalAgency" eOpposite="#//RentalAgency/customers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RentalAgency">
+    <eOperations name="book" eType="#//Rental">
+      <eParameters name="customer" eType="#//Customer"/>
+      <eParameters name="rentedObject" eType="#//RentalObject"/>
+      <eParameters name="from" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eParameters name="to" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eOperations name="addCustomer">
+      <eParameters name="customer" eType="#//Customer"/>
+    </eOperations>
+    <eOperations name="addObject">
+      <eParameters name="object" eType="#//RentalObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="address" lowerBound="1"
+        eType="#//Address" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectsToRent" upperBound="-1"
+        eType="#//RentalObject" containment="true" eOpposite="#//RentalObject/parentAgency"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true" eOpposite="#//Customer/parentAgency"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rentals" upperBound="-1"
+        eType="#//Rental" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Address">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="streetType" eType="#//StreetType"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zipCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="streetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StreetType">
+    <eLiterals name="Street"/>
+    <eLiterals name="Road" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RentalObject">
+    <eOperations name="rent" eType="#//Rental">
+      <eParameters name="customer" eType="#//Customer"/>
+    </eOperations>
+    <eOperations name="isAvailable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="picture" eType="#//Image"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAgency" lowerBound="1"
+        eType="#//RentalAgency" eOpposite="#//RentalAgency/objectsToRent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Image" instanceClassName="org.eclipse.swt.graphics.Image"/>
+  <eClassifiers xsi:type="ecore:EClass" name="License">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validityDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//Customer"
+        eOpposite="#//Customer/licenses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rental">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="startDateBeforeEndDate"/>
+    </eAnnotations>
+    <eOperations name="nbDaysBooked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eOperations name="nbDaysRented" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rentedObject" eType="#//RentalObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAgency" lowerBound="1"
+        eType="#//RentalAgency"/>
+  </eClassifiers>
+</ecore:EPackage>

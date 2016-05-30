@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hierarchy"
+    nsURI="http://www.eclipse.org/hyades/models/hierarchy.xmi" nsPrefix="Hierarchy">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Internal package, please do not extend or use.&#xD;&#xA;The &quot;hierarchy&quot; package is used to capture the base topology used to provide a hierarchical view that is used to organize and interact with the various  agent contents."/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EEnum" name="TRCCollectionMode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;&#xD;&#xA;"/>
+    </eAnnotations>
+    <eLiterals name="HEAP_STATISTICS_ONLY"/>
+    <eLiterals name="HEAP_FULL" value="1"/>
+    <eLiterals name="HEAP_AND_EXECUTION_FULL" value="2"/>
+    <eLiterals name="HEAP_AND_EXECUTION_STATISTICS_ONLY" value="3"/>
+    <eLiterals name="EXECUTION_STATISTICS_ONLY" value="4"/>
+    <eLiterals name="EXECUTION_NO_INSTANCES" value="5"/>
+    <eLiterals name="EXECUTION_FULL" value="6"/>
+    <eLiterals name="HEAP_FULL_AND_EXECUTION_STATISTICS_ONLY" value="7"/>
+    <eLiterals name="HEAP_STATISTICS_AND_EXECUTION_NO_INSTANCES" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCProcessProxy">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The proxy for a real OS process. Has properties that represent the execution context. The reason this is referred to as a proxy is that if an agent is actually collecting an execution trace, it will contain the relevant details at runtime of the process that is being monitored.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classpath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The process classpath"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The process command-line parameters"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="launchMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The launching mode for the current process,&#xD;&#xA;1 if the trace was attached to the process, 0 if the&#xD;&#xA;process was launched by the trace process.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The initial current directory for the process"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vmArguments" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="execParameters" upperBound="-1"
+        eType="#//TRCExecParameter" containment="true" eOpposite="#//TRCExecParameter/processProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environmentVariables" upperBound="-1"
+        eType="#//TRCEnvironmentVariable" containment="true" eOpposite="#//TRCEnvironmentVariable/processProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//TRCNode"
+        eOpposite="#//TRCNode/processProxies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agentProxies" upperBound="-1"
+        eType="#//TRCAgentProxy" containment="true" eOpposite="#//TRCAgentProxy/processProxy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCOption">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a name/value pair, used to define options for the profiling agent. Eg.: key=&quot;ALLOCATION_INFORMATION&quot; optionValue=&quot;all&quot;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A name used to identify an option"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The value of the option"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//TRCConfiguration" transient="true" eOpposite="#//TRCConfiguration/options"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCAgent">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An agent is analogous to a &quot;trace file&quot;. An agent is typed to hold a particular type of trace, and the TRCAgent object owns by value the instances of the trace data. Because agents are typed, there can be zero or more agents associated with a given TRCMonitor, TRCNode or TRCProcessProxy. However, a given agent instance can only be associated with one of those objects.&#xD;&#xA;&#xD;&#xA;This agent is the model entity for a data provider.  Providers provide metadata as a collection of descriptors and the data itself as observations. &#xD;&#xA;&#xD;&#xA;The agent is also the granularity of persistence.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A descriptive agent name, like &quot;Java Profiler Agent&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="_unknown">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The type of the agent, eg. &quot;Profiler&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A GUID based ID to identify an monitoring agent instance"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Marks the starting point of the collecting session"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Marks the end point of the collecting session"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionMode" eType="#//TRCCollectionMode"
+        defaultValueLiteral="HEAP_STATISTICS_ONLY">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Defines different collection modes (some include filtering of data on agent side some on loader side and some are combined). This is used by loaders and UI to decide the model building algorithms and the presentation mode. This is has the same value as TRCAgentProxy.collectionMode attribute."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The version of an agent (for example &quot;1.0.0&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultEvents" upperBound="-1"
+        eType="#//AbstractDefaultEvent" containment="true" eOpposite="#//AbstractDefaultEvent/agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="view" eType="#//AbstractTRCView"
+        containment="true" eOpposite="#//AbstractTRCView/agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" upperBound="-1"
+        eType="#//AbstractTRCDescription" containment="true" eOpposite="#//AbstractTRCDescription/agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//AbstractTRCProcess"
+        containment="true" eOpposite="#//AbstractTRCProcess/agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agentProxy" eType="#//TRCAgentProxy"
+        eOpposite="#//TRCAgentProxy/agent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unresolvedCorrelations"
+        upperBound="-1" eType="#//UnresolvedCorrelation" containment="true" eOpposite="#//UnresolvedCorrelation/agent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCAgentProxy">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A TRCAgent proxy, to enable support for loading and unloading the agent resource. This class shadows most of the properties of the TRCAgent: please check the documentation on TRCAgent for duplicated fields."/>
+    </eAnnotations>
+    <eOperations name="isToProfileFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="_unknown"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionMode" eType="#//TRCCollectionMode"
+        defaultValueLiteral="HEAP_STATISTICS_ONLY">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Defines different collection modes (some include filtering of data on agent side some on loader side and some are combined). This is used by loaders and UI to decide the model building algorithms and the presentation mode."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attached" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionData" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="monitored" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profileFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deltaTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used to synchronize entry, exit events between different agents, on a distributed application. It is in microseconds."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processProxy" eType="#//TRCProcessProxy"
+        transient="true" eOpposite="#//TRCProcessProxy/agentProxies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurations" upperBound="-1"
+        eType="#//TRCConfiguration" containment="true" eOpposite="#//TRCConfiguration/agentProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" eType="#//TRCAgent"
+        eOpposite="#//TRCAgent/agentProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="internalCorrelations" upperBound="-1"
+        eType="#//CorrelationContainerProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//TRCAnnotation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relatedAgentProxies" upperBound="-1"
+        eType="#//TRCAgentProxy" eOpposite="#//TRCAgentProxy/derivedAgentProxies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivedAgentProxies" upperBound="-1"
+        eType="#//TRCAgentProxy" eOpposite="#//TRCAgentProxy/relatedAgentProxies"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCConfiguration">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A configuration is used to hold a set of options and filters. This would normally be used to capture a set of options and filters that are active for a given agent."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" upperBound="-1"
+        eType="#//TRCOption" containment="true" eOpposite="#//TRCOption/configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+        eType="#//TRCFilter" containment="true" eOpposite="#//TRCFilter/configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agentProxy" lowerBound="1"
+        eType="#//TRCAgentProxy" transient="true" eOpposite="#//TRCAgentProxy/configurations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCEnvironmentVariable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A name-value pair to capture an environment variable. For example classpath"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processProxy" lowerBound="1"
+        eType="#//TRCProcessProxy" transient="true" eOpposite="#//TRCProcessProxy/environmentVariables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCExecParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processProxy" lowerBound="1"
+        eType="#//TRCProcessProxy" transient="true" eOpposite="#//TRCProcessProxy/execParameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCFilter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A filter describes a pattern that can be used during data collection to control the data being collected."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//TRCConfiguration" transient="true" eOpposite="#//TRCConfiguration/filters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCNode">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Node is a machine, or at least a machine execution partition. It owns process proxies for processes with agents attached and data collected.&#xD;&#xA;There is one server/service installed for each Node. An analogy is a service running on NT that hooks to the process being monitored."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timezone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="port" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="10002"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deltaTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Used to synchronize entry, exit events between different nodes, on a distributed application. It is in microseconds."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The machine/host name "/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ipAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The IP address of the node"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitor" eType="#//TRCMonitor"
+        eOpposite="#//TRCMonitor/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processProxies" upperBound="-1"
+        eType="#//TRCProcessProxy" eOpposite="#//TRCProcessProxy/node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCMonitor">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A monitor is in effect a complete set of traces that may have been collected from one or more agents. It is the logical root for a persisted model instance that may reflect a complete distributed application or simply a set of data collection points.&#xD;&#xA;&#x9;&#x9;&#x9;&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A user provider name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The overall start time (the earliest start time of all the agents in this monitor)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The overall stop time (the latest stop time of all the agents in this monitor)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//TRCNode" eOpposite="#//TRCNode/monitor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlationContainerProxies"
+        upperBound="-1" eType="#//CorrelationContainerProxy" containment="true" eOpposite="#//CorrelationContainerProxy/monitor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDefaultEvent" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class allows for a clean plugin dependency packaging. Hyades needs to allow different plugins for each model sub-package in order to avoid all of them having to always be present and possibly loaded."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="#//TRCAgent"
+        transient="true" eOpposite="#//TRCAgent/defaultEvents"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTRCView" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class allows for a clean plugin dependency packaging. Hyades needs to allow different plugins for each model sub-package in order to avoid all of them having to always be present and possibly loaded."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" eType="#//TRCAgent"
+        transient="true" eOpposite="#//TRCAgent/view"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTRCDescription" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class allows for a clean plugin dependency packaging. Hyades needs to allow different plugins for each model sub-package in order to avoid all of them having to always be present and possibly loaded."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="#//TRCAgent"
+        transient="true" eOpposite="#//TRCAgent/descriptor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTRCProcess" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class allows for a clean plugin dependency packaging. Hyades needs to allow different plugins for each model sub-package in order to avoid all of them having to always be present and possibly loaded."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="#//TRCAgent"
+        transient="true" eOpposite="#//TRCAgent/process"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTRCCollectionBoundary" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class allows for a clean plugin dependency packaging. Hyades needs to allow different plugins for each model sub-package in order to avoid all of them having to always be present and possibly loaded."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The creation time of this object, relative to hierarchy.TRCAgent.startTime"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionMode" eType="#//TRCCollectionMode"
+        defaultValueLiteral="HEAP_STATISTICS_ONLY">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Defines different collection modes (some include filtering of data on agent side some on loader side and some are combined). This is used by loaders and UI to decide the model building algorithms and the presentation mode."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//TRCConfiguration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnresolvedCorrelation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Class used to persist the unresolved correlations. When a correlation is  resolved the object should be removed form the list."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contextId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="String based look-up key (eg. in Trace submodel case this is a concatenation of runtimeIds, ticket, sequence and threadId). The schema of this ID can be arbitrary chosen and has to be know by both the producer the consumer of this class."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="#//TRCAgent"
+        transient="true" eOpposite="#//TRCAgent/unresolvedCorrelations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceInfos" upperBound="-1"
+        eType="#//CorrelationSourceInfo" containment="true" eOpposite="#//CorrelationSourceInfo/targetInfo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelationSourceInfo">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Describes the known information from the received event."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetInfo" lowerBound="1"
+        eType="#//UnresolvedCorrelation" transient="true" eOpposite="#//UnresolvedCorrelation/sourceInfos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelationContainer">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is a root in a correlation instance resource. For example the correlation instance is created when a correlation operation/action is used or by the loaders when an AssciationEngine event is received."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlations" upperBound="-1"
+        eType="#//CorrelationEntry" containment="true" eOpposite="#//CorrelationEntry/correlationContainer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlationContainerProxy"
+        eType="#//CorrelationContainerProxy" eOpposite="#//CorrelationContainerProxy/correlationContainer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelationContainerProxy">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A UI proxy class, to avoid loading the whole correlation instance resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlationContainer" eType="#//CorrelationContainer"
+        eOpposite="#//CorrelationContainer/correlationContainerProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlatedAgents" upperBound="-1"
+        eType="#//TRCAgentProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlationEngine" eType="#//CorrelationEngine"
+        containment="true" eOpposite="#//CorrelationEngine/CorrelationContainerProxy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="monitor" lowerBound="1"
+        eType="#//TRCMonitor" transient="true" eOpposite="#//TRCMonitor/correlationContainerProxies"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelationEntry" instanceClassName="java.util.Map$Entry">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Represents a 1-many relation between a source event and it's associated events (an event can be a CBE, method invocation etc)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="correlationContainer" lowerBound="1"
+        eType="#//CorrelationContainer" transient="true" eOpposite="#//CorrelationContainer/correlations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CorrelationEngine">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The id should uniquely identify the engine."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Engines are typed with this attribute. Examples of types are &#xD;&#xA;&quot;Correlation based on URI&quot;, &quot;root&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Each engine has a name. This is not ensured to be unique. The name is intended to be human readable."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The id of an engine is something that uniquely identifes the engine from all other engines installed.&#xD;&#xA;The uniqueness is managed outside the model and is the responsibility of the engine provider."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The description of this engine"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="CorrelationContainerProxy"
+        eType="#//CorrelationContainerProxy" transient="true" eOpposite="#//CorrelationContainerProxy/correlationEngine"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="BooleanArray" instanceClassName="boolean[]"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IntArray" instanceClassName="int[]"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="DoubleArray" instanceClassName="double[]"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TRCAnnotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Generic annotation mechanism, can be used to add metadata information on specific classes."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="extensions" nsURI="http://www.eclipse.org/hyades/models/hierarchy-extensions.xmi"
+      nsPrefix="HierarchyExtensions">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Resource extensions (internal code)"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="Query" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sources" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Points to a list of resource URIs, starting EObject URIs or Query names"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="distinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="count" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outputElements" upperBound="-1"
+          eType="#//extensions/Operand" containment="true" eOpposite="#//extensions/Operand/query"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subQuery" upperBound="-1"
+          eType="#//extensions/Query" containment="true" eOpposite="#//extensions/Query/query"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//extensions/Query"
+          transient="true" eOpposite="#//extensions/Query/subQuery"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredPaths" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+          eType="#//TRCAnnotation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleSearchQuery" eSuperTypes="#//extensions/Query">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxElements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Maximum number of returned elements."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startWith" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The starting index in the result set from where we will return the values, if negative it will be relative to the end of the result set."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="orderByExpresions" upperBound="-1"
+          eType="#//extensions/OrderByElement" containment="true" eOpposite="#//extensions/OrderByElement/searchQuery"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="whereExpression" eType="#//extensions/WhereExpression"
+          containment="true" eOpposite="#//extensions/WhereExpression/searchQuery"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InstanceQuery" eSuperTypes="#//extensions/Query">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A simple query, in XMI case could have an optimized implementation"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
+          eType="#//extensions/BinaryExpression" containment="true" eOpposite="#//extensions/BinaryExpression/instanceQuery"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OrderByElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//extensions/OrderByOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operand" eType="#//extensions/Operand"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="searchQuery" eType="#//extensions/SimpleSearchQuery"
+          transient="true" eOpposite="#//extensions/SimpleSearchQuery/orderByExpresions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="QueryResult">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The list results, one entry per output element"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1"
+          eType="#//extensions/Query"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resultEntries" upperBound="-1"
+          eType="#//extensions/ResultEntry"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//extensions/WhereExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Binary expressions which might have multiple rigth operands (e.g. IN and BETWEEN)"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//extensions/RelationalOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftOperand" eType="#//extensions/Operand"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightOperands" upperBound="-1"
+          eType="#//extensions/Operand" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="This is a list because we can have one or many operatand in expresions with IN or BETWEEN operators"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="caseInsensitive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If true the operand's value is treated as beeing case insensitive. Default is false."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instanceQuery" lowerBound="1"
+          eType="#//extensions/InstanceQuery" transient="true" eOpposite="#//extensions/InstanceQuery/conditions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Operand" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="An alias for this operand. If it starts with $ it is a reference to an existing operand with the same name (without the $ prefix)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1"
+          eType="#//extensions/Query" transient="true" eOpposite="#//extensions/Query/outputElements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RelationalOperators">
+      <eLiterals name="LT"/>
+      <eLiterals name="GT" value="1"/>
+      <eLiterals name="EQ" value="2"/>
+      <eLiterals name="LE" value="3"/>
+      <eLiterals name="GE" value="4"/>
+      <eLiterals name="NEQ" value="5"/>
+      <eLiterals name="LIKE" value="6"/>
+      <eLiterals name="IN" value="7"/>
+      <eLiterals name="BETWEEN" value="8"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="OrderByOperators">
+      <eLiterals name="ASC"/>
+      <eLiterals name="DESC" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResultEntry">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Contains a value of type Object (most case would be a List)"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
+          transient="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The transient result value for a specific output element. It can be also a list."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CorrelationQuery" eSuperTypes="#//extensions/SimpleSearchQuery">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="correlationContainerURI"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The URI of the correlation container where the correlation entries are stored"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="correlationContainerProxyURI"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The URI of the correlation container proxy"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deltaTime" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="This list contains the delta time for each entry in the Query.sources list."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeBasedCorrelationQuery" eSuperTypes="#//extensions/CorrelationQuery"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="LogicalOperators">
+      <eLiterals name="NOT"/>
+      <eLiterals name="AND" value="1"/>
+      <eLiterals name="OR" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LogicalExpression" eSuperTypes="#//extensions/WhereExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//extensions/LogicalOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//extensions/WhereExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WhereExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="An alias for this expression. If it starts with $ it is a reference to an existing expression with the same name (without the $ prefix)."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="searchQuery" eType="#//extensions/SimpleSearchQuery"
+          transient="true" eOpposite="#//extensions/SimpleSearchQuery/whereExpression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpression" eSuperTypes="#//extensions/Operand">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Simple arithmetic expressions. All the arguments should have numeric types.&#xD;&#xA;The value in this case is the value resulted from the evaluation of the expression."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//extensions/ArithmeticOperators"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//extensions/Operand" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ArithmeticOperators">
+      <eLiterals name="ADD"/>
+      <eLiterals name="SUBSTRACT" value="1"/>
+      <eLiterals name="MULTIPLY" value="2"/>
+      <eLiterals name="DIVIDE" value="3"/>
+      <eLiterals name="INTEGER_DIVIDE" value="4"/>
+      <eLiterals name="MOD" value="5"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="NumericFunctions">
+      <eLiterals name="MAX"/>
+      <eLiterals name="MIN" value="1"/>
+      <eLiterals name="COUNT" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericFunction" eSuperTypes="#//extensions/Operand">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Function which has only numeric arguments and return types.&#xD;&#xA;The value in this case is the value resulted from the evaluation of the function."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="function" eType="#//extensions/NumericFunctions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//extensions/Operand" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleOperand" eSuperTypes="#//extensions/Operand">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Use value, feature or type whichever is not null. Value could represent an XPointer path (if starts with /) or just a name."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rawValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"
+          volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EStructuralFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="valueType" eType="ecore:EClass ../../../org.eclipse.emf.ecore/model/Ecore.ecore#//EDataType"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

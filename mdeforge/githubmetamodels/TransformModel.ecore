@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="TransformModel" nsURI="platform:/resource/BDDCTransform/model/TransformModel.ecore"
+    nsPrefix="TransformModel">
+  <eClassifiers xsi:type="ecore:EClass" name="TransformModel_">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviors" upperBound="-1"
+        eType="#//Behavior" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" lowerBound="1" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Behavior">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="class" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patterns" lowerBound="1"
+        upperBound="-1" eType="#//Pattern" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pattern" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExactSting" eSuperTypes="#//Pattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//Pattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternation" eSuperTypes="#//Pattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="choices" lowerBound="2"
+        upperBound="-1" eType="#//Pattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Optional" eSuperTypes="#//Pattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" upperBound="-1"
+        eType="#//Pattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//Transformation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfDef" eSuperTypes="#//Transformation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variables" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="true_body" lowerBound="1"
+        eType="#//Transformation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="false_body" lowerBound="1"
+        eType="#//Transformation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Match" eSuperTypes="#//Transformation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="1" eType="#//Rule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
+        eType="#//KeyValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fail" eSuperTypes="#//Transformation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

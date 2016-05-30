@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scm"
+    nsURI="http://eclipse.org/mylyn/models/scm" nsPrefix="scm">
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
+        eType="#//ScmArtifact" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" eType="#//ScmUser"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" lowerBound="1"
+        eType="#//ScmRepository"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changes" upperBound="-1"
+        eType="#//ChangeSet" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScmArtifact">
+    <eOperations name="getFileRevision"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeType" eType="#//ChangeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repository" lowerBound="1"
+        eType="#//ScmRepository"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScmUser">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScmRepository">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ChangeType">
+    <eLiterals name="ADDED"/>
+    <eLiterals name="DELETED" value="1"/>
+    <eLiterals name="MODIFIED" value="2"/>
+    <eLiterals name="REPLACED" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CvsArtifact" eSuperTypes="#//ScmArtifact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connector" lowerBound="1"
+        eType="#//CvsConnector"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CvsConnector" eSuperTypes="#//ScmConnector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ScmConnector"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CvsRepository" eSuperTypes="#//ScmRepository">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location"/>
+  </eClassifiers>
+</ecore:EPackage>

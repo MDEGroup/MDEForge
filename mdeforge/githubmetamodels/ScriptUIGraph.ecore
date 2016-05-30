@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="scriptuigraph" nsURI="http://scriptuigraph/1.0" nsPrefix="scriptuigraph">
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptGraph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParentNode" abstract="true" eSuperTypes="#//Node">
+    <eOperations name="addScript" lowerBound="1" eType="#//StoredScriptUI">
+      <eParameters name="path" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getChildren" eType="#//SubNode">
+      <eParameters name="path" lowerBound="1" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeScript">
+      <eParameters name="script" lowerBound="1" eType="#//StoredScriptUI"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//SubNode" containment="true" eOpposite="#//SubNode/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubNode" abstract="true" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//ParentNode"
+        eOpposite="#//ParentNode/children"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptSetUI" eSuperTypes="#//ParentNode #//SubNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StoredScriptUI" eSuperTypes="#//SubNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="script" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.escriptmonkey.scripting.storedscript/models/StoredScript.ecore#//IStoredScript"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Root" eSuperTypes="#//ParentNode"/>
+</ecore:EPackage>

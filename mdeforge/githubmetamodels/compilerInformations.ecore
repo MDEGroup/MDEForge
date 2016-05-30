@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="compiler" nsURI="http://www.eclipse.org/intent/compilerinfos/0.8"
+    nsPrefix="intentCompilerInfos">
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEObject" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextualReferenceToContributions" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//UnresolvedContributionHolder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringToEObjectMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nameToElement" upperBound="-1"
+        eType="#//EStringToEObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ETypeToStringToEObjectMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//StringToEObjectMap"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EObjectToUnresolvedReferencesList" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//UnresolvedReferenceHolder" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceToContainedElementsMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass modelingUnit.ecore#//ResourceDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingUnitToStatusList" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass modelingUnit.ecore#//ModelingUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//CompilationStatus"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreatedElementToInstructionMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="ecore:EClass document.ecore#//UnitInstruction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnresolvedReferenceHolder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="textualReference" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containmentReference" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instructionContainer" lowerBound="1"
+        eType="ecore:EClass document.ecore#//UnitInstruction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concernedFeature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CompilationStatusSeverity">
+    <eLiterals name="WARNING"/>
+    <eLiterals name="ERROR" value="1"/>
+    <eLiterals name="INFO" value="2" literal="INFO"/>
+    <eLiterals name="OK" value="3" literal="OK"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CompilationMessageType">
+    <eLiterals name="RESOLVE_ERROR"/>
+    <eLiterals name="PACKAGE_NOT_FOUND_ERROR" value="1"/>
+    <eLiterals name="PACKAGE_REGISTRATION_ERROR" value="2"/>
+    <eLiterals name="INVALID_REFERENCE_ERROR" value="3" literal="INVALID_REFERENCE_ERROR"/>
+    <eLiterals name="VALIDATION_ERROR" value="4"/>
+    <eLiterals name="INVALID_VALUE_ERROR" value="5"/>
+    <eLiterals name="GENERAL_WARNING" value="6"/>
+    <eLiterals name="SYNCHRONIZER_WARNING" value="7" literal="SYNCHRONIZER_WARNING"/>
+    <eLiterals name="SYNCHRONIZER_INFO" value="8" literal="SYNCHRONIZER_INFO"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompilationStatus">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="ecore:EClass document.ecore#//IntentGenericElement" eOpposite="document.ecore#//IntentGenericElement/compilationStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="severity" lowerBound="1"
+        eType="#//CompilationStatusSeverity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//CompilationMessageType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompilationStatusManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilationStatusList"
+        upperBound="-1" eType="#//CompilationStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelingUnitToStatusList"
+        upperBound="-1" eType="#//ModelingUnitToStatusList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synchronizationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompilationInformationHolder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedElementList" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementToUnresolvedReferenceMap"
+        upperBound="-1" eType="#//EObjectToUnresolvedReferencesList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeToNameToElementsMap"
+        upperBound="-1" eType="#//ETypeToStringToEObjectMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="createdElementsToInstructions"
+        upperBound="-1" eType="#//CreatedElementToInstructionMapEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentGeneratedElementList"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceToContainedElements"
+        upperBound="-1" eType="#//ResourceToContainedElementsMapEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unresolvedContributions"
+        upperBound="-1" eType="#//TextualReferenceToContributions" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnresolvedContributionHolder">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolved" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedContribution"
+        lowerBound="1" eType="ecore:EClass modelingUnit.ecore#//ContributionInstruction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceabilityIndex">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//TraceabilityIndexEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceabilityIndexEntry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatedResourcePath"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compilationTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceDeclaration" lowerBound="1"
+        eType="ecore:EClass modelingUnit.ecore#//ResourceDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedElementToInstructions"
+        upperBound="-1" eType="#//CompiledElementToInstructionEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompiledElementToInstructionEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//InstructionTraceabilityEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstructionTraceabilityEntry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instruction" lowerBound="1"
+        eType="ecore:EClass document.ecore#//IntentGenericElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//FeatureToAffectationEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureToAffectationEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" upperBound="-1"
+        eType="ecore:EClass modelingUnit.ecore#//AbstractValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceChangeStatus" eSuperTypes="#//SynchronizerCompilationStatus">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyResourceState"
+        eType="#//SynchronizerResourceState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compiledResourceState"
+        eType="#//SynchronizerResourceState" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElementChangeStatus" eSuperTypes="#//SynchronizerCompilationStatus">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeState" eType="#//SynchronizerChangeState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compiledParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compiledElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyParentURIFragment"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyElementURIFragment"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralFeatureChangeStatus" abstract="true"
+      eSuperTypes="#//SynchronizerCompilationStatus">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeState" eType="#//SynchronizerChangeState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compiledElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyElementURIFragment"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceChangeStatus" eSuperTypes="#//StructuralFeatureChangeStatus">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compiledTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyTargetURIFragment"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeChangeStatus" eSuperTypes="#//StructuralFeatureChangeStatus"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SynchronizerCompilationStatus" abstract="true"
+      eSuperTypes="#//CompilationStatus">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compiledResourceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="workingCopyResourceURI"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SynchronizerResourceState">
+    <eLiterals name="DEFAULT" literal="DEFAULT"/>
+    <eLiterals name="NULL" value="1" literal="NULL"/>
+    <eLiterals name="EMPTY" value="2" literal="EMPTY"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SynchronizerChangeState">
+    <eLiterals name="UPDATE" literal="UPDATE"/>
+    <eLiterals name="ORDER" value="1" literal="ORDER"/>
+    <eLiterals name="WORKING_COPY_TARGET" value="2" literal="WORKING_COPY_TARGET"/>
+    <eLiterals name="COMPILED_TARGET" value="3" literal="COMPILED_TARGET"/>
+  </eClassifiers>
+</ecore:EPackage>

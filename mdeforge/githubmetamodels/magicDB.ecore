@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="database"
+    nsURI="http://madcow.magic.database" nsPrefix="db">
+  <eSubpackages name="set" nsURI="http://madcow.magic.database.set" nsPrefix="set">
+    <eClassifiers xsi:type="ecore:EClass" name="Set" eSuperTypes="#//core/MagicDBElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//set/Block"
+          eOpposite="#//set/Block/sets"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cards" upperBound="-1"
+          eType="#//card/Card" containment="true" eOpposite="#//card/Card/set"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//core/MagicDBElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sets" upperBound="-1"
+          eType="#//set/Set" containment="true" eOpposite="#//set/Set/block"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//set/BlockType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BlockType">
+      <eLiterals name="Core"/>
+      <eLiterals name="Cycle" value="1" literal=""/>
+      <eLiterals name="Other" value="-1"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="card" nsURI="http://madcow.magic.database.card" nsPrefix="card">
+    <eClassifiers xsi:type="ecore:EClass" name="Card" eSuperTypes="#//core/MagicDBElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="manacost" unique="false"
+          upperBound="-1" eType="#//card/ManaType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="convertedManaCost" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="artist" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="legendary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="subtype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rarity" eType="#//card/RarityType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="originalCard" eType="#//card/Card"
+          eOpposite="#//card/Card/reprints"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="set" eType="#//set/Set"
+          eOpposite="#//set/Set/cards"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tribal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="manacostString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reprints" upperBound="-1"
+          eType="#//card/Card" eOpposite="#//card/Card/originalCard"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ManaType">
+      <eLiterals name="Colorless" literal="C"/>
+      <eLiterals name="White" value="1" literal="W"/>
+      <eLiterals name="Blue" value="2" literal="U"/>
+      <eLiterals name="Black" value="3" literal="B"/>
+      <eLiterals name="Red" value="4" literal="R"/>
+      <eLiterals name="Green" value="5" literal="G"/>
+      <eLiterals name="WhiteBlue" value="6" literal="{W/U}"/>
+      <eLiterals name="BlueBlack" value="7" literal="{U/B}"/>
+      <eLiterals name="BlackRed" value="8" literal="{B/R}"/>
+      <eLiterals name="RedGreen" value="9" literal="{R/G}"/>
+      <eLiterals name="GreenWhite" value="10" literal="{G/W}"/>
+      <eLiterals name="WhiteBlack" value="11" literal="{W/B}"/>
+      <eLiterals name="BlueRed" value="12" literal="{U/R}"/>
+      <eLiterals name="BlackGreen" value="13" literal="{B/G}"/>
+      <eLiterals name="RedWhite" value="14" literal="{R/W}"/>
+      <eLiterals name="GreenBlue" value="15" literal="{G/U}"/>
+      <eLiterals name="TwoWhite" value="16" literal="{2/W}"/>
+      <eLiterals name="TwoBlue" value="17" literal="{2/U}"/>
+      <eLiterals name="TwoBlack" value="18" literal="{2/B}"/>
+      <eLiterals name="TwoRed" value="19" literal="{2/R}"/>
+      <eLiterals name="TwoGreen" value="20" literal="{2/G}"/>
+      <eLiterals name="Many" value="-1" literal="X"/>
+      <eLiterals name="Other" value="-2" literal="O"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Artifact" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Creature" eSuperTypes="#//card/Card">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="toughness" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Enchancement" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Instant" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Land" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Sorcery" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ArtifactCreature" eSuperTypes="#//card/Creature #//card/Artifact"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Interrupt" eSuperTypes="#//card/Instant"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Planeswalker" eSuperTypes="#//card/Card"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="RarityType">
+      <eLiterals name="Common"/>
+      <eLiterals name="Uncommon" value="1"/>
+      <eLiterals name="Rare" value="2"/>
+      <eLiterals name="MythicRare" value="3" literal="Mythic Rare"/>
+      <eLiterals name="Special" value="4"/>
+      <eLiterals name="Land" value="5"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="core" nsURI="http://madcow.magic.database.core" nsPrefix="core">
+    <eClassifiers xsi:type="ecore:EClass" name="MagicDBElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Database" eSuperTypes="#//core/MagicDBElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+          eType="#//set/Block" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardTotal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CardCSVFields">
+      <eLiterals name="Number"/>
+      <eLiterals name="Name" value="1"/>
+      <eLiterals name="Type" value="2"/>
+      <eLiterals name="ManaCost" value="3"/>
+      <eLiterals name="Rarity" value="4"/>
+      <eLiterals name="Artist" value="5"/>
+      <eLiterals name="Set" value="6"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

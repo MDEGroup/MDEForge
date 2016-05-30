@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="MiniJavaMetamodel" nsURI="miniJava/1.0" nsPrefix="miniJava">
+  <eClassifiers xsi:type="ecore:EClass" name="Program">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+        eType="#//Declaration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Declaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variableList" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Empty" eSuperTypes="#//Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Compound" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerStatements" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Read" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lhs" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Write" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfThenElse" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Condition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" eType="#//Statement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Statement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loop" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Condition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//Statement"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Condition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Condition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//LogicalOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LogicalOperator">
+    <eLiterals name="AND" literal="&amp;&amp;"/>
+    <eLiterals name="OR" value="1" literal="||"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//ComparisonOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComparisonOperator">
+    <eLiterals name="LESS_OR_EQUAL" literal="&lt;="/>
+    <eLiterals name="GREATER_OR_EQUAL" value="1" literal=">="/>
+    <eLiterals name="EQUAL" value="2" literal="=="/>
+    <eLiterals name="NOT_EQUAL" value="3" literal="!="/>
+    <eLiterals name="LESS" value="4" literal="&lt;"/>
+    <eLiterals name="GREATER" value="5" literal=">"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NotCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Condition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupedCondition" eSuperTypes="#//Condition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Condition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifier" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntConstant" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SignedExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
+    <eLiterals name="PLUS" literal="+"/>
+    <eLiterals name="MINUS" value="1" literal="-"/>
+    <eLiterals name="MULTIPLY" value="2" literal="*"/>
+    <eLiterals name="DIV" value="3" literal="/"/>
+    <eLiterals name="MOD" value="4" literal="%"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupedExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="manifest" nsURI="http://www.sourcepit.org/common/manifest/0.1"
+    nsPrefix="manifest">
+  <eClassifiers xsi:type="ecore:EClass" name="Manifest" eSuperTypes="#//AbstractSection">
+    <eOperations name="getSection" eType="#//ManifestSection">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="setHeader">
+      <eParameters name="name" lowerBound="1" eType="#//HeaderName"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setHeader">
+      <eParameters name="name" lowerBound="1" eType="#//HeaderName"/>
+      <eParameters name="parsedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getHeader" eType="#//Header">
+      <eParameters name="name" eType="#//HeaderName"/>
+    </eOperations>
+    <eOperations name="getHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="name" eType="#//HeaderName"/>
+    </eOperations>
+    <eOperations name="getParsedHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="name" eType="#//HeaderName"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="headers" upperBound="-1"
+        eType="#//HeaderEntry" containment="true" eOpposite="#//HeaderEntry/manifest"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" upperBound="-1"
+        eType="#//SectionEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ManifestSection" abstract="true" eSuperTypes="#//AbstractSection">
+    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Header" abstract="true" eSuperTypes="#//Parseable">
+    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getManifest" eType="#//Manifest"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SectionEntry" instanceClassName="java.util.Map.Entry"
+      eSuperTypes="#//ManifestSection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//HeaderEntry" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HeaderEntry" instanceClassName="java.util.Map.Entry"
+      eSuperTypes="#//Header">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manifest" eType="#//Manifest"
+        eOpposite="#//Manifest/headers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="EEMap" instanceClassName="org.eclipse.emf.common.util.EMap">
+    <eTypeParameters name="K"/>
+    <eTypeParameters name="V"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HeaderName">
+    <eLiterals name="MANIFEST_VERSION" literal="Manifest-Version"/>
+    <eLiterals name="SIGNATURE_VERSION" value="1" literal="Signature-Version"/>
+    <eLiterals name="CONTENT_TYPE" value="2" literal="Content-Type"/>
+    <eLiterals name="CLASS_PATH" value="3" literal="Class-Path"/>
+    <eLiterals name="MAIN_CLASS" value="4" literal="Main-Class"/>
+    <eLiterals name="SEALED" value="5" literal="Sealed"/>
+    <eLiterals name="EXTENSION_LIST" value="6" literal="Extension-List"/>
+    <eLiterals name="EXTENSION_NAME" value="7" literal="Extension-Name"/>
+    <eLiterals name="EXTENSION_INSTALLATION" value="8" literal="Extension-Installation"/>
+    <eLiterals name="IMPLEMENTATION_TITLE" value="9" literal="Implementation-Title"/>
+    <eLiterals name="IMPLEMENTATION_VERSION" value="10" literal="Implementation-Version"/>
+    <eLiterals name="IMPLEMENTATION_VENDOR" value="11" literal="Implementation-Vendor"/>
+    <eLiterals name="IMPLEMENTATION_VENDOR_ID" value="12" literal="Implementation-Vendor-Id"/>
+    <eLiterals name="IMPLEMENTATION_URL" value="13" literal="Implementation-URL"/>
+    <eLiterals name="SPECIFICATION_TITLE" value="14" literal="Specification-Title"/>
+    <eLiterals name="SPECIFICATION_VERSION" value="15" literal="Specification-Version"/>
+    <eLiterals name="SPECIFICATION_VENDOR" value="16" literal="Specification-Vendor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSection" abstract="true">
+    <eOperations name="getHeaders" lowerBound="1">
+      <eGenericType eClassifier="#//EEMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getHeader" eType="#//Header">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setHeader">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="setHeader">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="parsedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getParsedHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parseable" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parsedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="osgi" nsURI="http://www.sourcepit.org/common/manifest/osgi/0.1"
+      nsPrefix="manifest-osgi">
+    <eClassifiers xsi:type="ecore:EClass" name="BundleManifest" eSuperTypes="#//Manifest">
+      <eOperations name="getHeader" eType="#//Header">
+        <eParameters name="name" eType="#//osgi/BundleHeaderName"/>
+      </eOperations>
+      <eOperations name="setHeader">
+        <eParameters name="name" eType="#//osgi/BundleHeaderName"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setHeader">
+        <eParameters name="name" lowerBound="1" eType="#//osgi/BundleHeaderName"/>
+        <eParameters name="parsedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      </eOperations>
+      <eOperations name="getHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="name" eType="#//osgi/BundleHeaderName"/>
+      </eOperations>
+      <eOperations name="getParsedHeaderValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eParameters name="name" eType="#//osgi/BundleHeaderName"/>
+      </eOperations>
+      <eOperations name="getBundleManifestVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="getBundleVersion" eType="#//osgi/Version"/>
+      <eOperations name="setBundleVersion" eType="#//osgi/Version">
+        <eParameters name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setBundleVersion">
+        <eParameters name="version" eType="#//osgi/Version"/>
+      </eOperations>
+      <eOperations name="getBundleSymbolicName" eType="#//osgi/BundleSymbolicName"/>
+      <eOperations name="getBundleSymbolicName" eType="#//osgi/BundleSymbolicName">
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setBundleSymbolicName" eType="#//osgi/BundleSymbolicName">
+        <eParameters name="bundleSymbolicName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setBundleSymbolicName">
+        <eParameters name="bundleSymbolicName" eType="#//osgi/BundleSymbolicName"/>
+      </eOperations>
+      <eOperations name="getBundleRequiredExecutionEnvironment" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setBundleRequiredExecutionEnvironment">
+        <eParameters name="executionEnvironment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setBundleRequiredExecutionEnvironment">
+        <eParameters name="executionEnvironments">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eOperations name="getFragmentHost" eType="#//osgi/FragmentHost"/>
+      <eOperations name="getFragmentHost" eType="#//osgi/FragmentHost">
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setFragmentHost" eType="#//osgi/FragmentHost">
+        <eParameters name="fragmentHost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setFragmentHost">
+        <eParameters name="fragmentHost" eType="#//osgi/FragmentHost"/>
+      </eOperations>
+      <eOperations name="getBundleActivationPolicy" eType="#//osgi/BundleActivationPolicy"/>
+      <eOperations name="getBundleActivationPolicy" eType="#//osgi/BundleActivationPolicy">
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setBundleActivationPolicy" eType="#//osgi/BundleActivationPolicy">
+        <eParameters name="activationPolicy" eType="#//osgi/ActivationPolicy"/>
+      </eOperations>
+      <eOperations name="setBundleActivationPolicy" eType="#//osgi/BundleActivationPolicy">
+        <eParameters name="activationPolicy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setBundleActivationPolicy">
+        <eParameters name="bundleActivationPolicy" eType="#//osgi/BundleActivationPolicy"/>
+      </eOperations>
+      <eOperations name="getBundleActivator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setBundleActivator">
+        <eParameters name="bundleActivator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getExportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/PackageExport"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getExportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/PackageExport"/>
+        </eGenericType>
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setExportPackage">
+        <eParameters name="packageExports">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="#//osgi/PackageExport"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eOperations name="getImportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/PackageImport"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getImportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/PackageImport"/>
+        </eGenericType>
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setImportPackage">
+        <eParameters name="packageImports">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="#//osgi/PackageImport"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eOperations name="getDynamicImportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/DynamicPackageImport"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getDynamicImportPackage">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/DynamicPackageImport"/>
+        </eGenericType>
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setDynamicImportPackage">
+        <eParameters name="dynamicPackageImports">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="#//osgi/DynamicPackageImport"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eOperations name="getRequireBundle">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/BundleRequirement"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getRequireBundle">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/BundleRequirement"/>
+        </eGenericType>
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setRequireBundle">
+        <eParameters name="bundleRequirements">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="#//osgi/BundleRequirement"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eOperations name="getBundleClassPath">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/ClassPathEntry"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getBundleClassPath">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//osgi/ClassPathEntry"/>
+        </eGenericType>
+        <eParameters name="createOnDemand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      </eOperations>
+      <eOperations name="setBundleClassPath">
+        <eParameters name="classPathEntries">
+          <eGenericType eClassifier="#//osgi/EList">
+            <eTypeArguments eClassifier="#//osgi/ClassPathEntry"/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameterized" abstract="true">
+      <eOperations name="getParameter" eType="#//osgi/Parameter">
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getParameterValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getParsedParameterValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+        <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//osgi/Parameter" containment="true" eOpposite="#//osgi/Parameter/parameterized"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//Parseable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="quoted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1"
+          eType="#//osgi/ParameterType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameterized" eType="#//osgi/Parameterized"
+          eOpposite="#//osgi/Parameterized/parameters"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BundleActivationPolicy" eSuperTypes="#//osgi/Parameterized">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="policy" lowerBound="1"
+          eType="#//osgi/ActivationPolicy" defaultValueLiteral="eager"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PackagesDeclaration" abstract="true"
+        eSuperTypes="#//osgi/Parameterized">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageNames" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BundleHeaderName">
+      <eLiterals name="BUNDLE_ACTIVATIONPOLICY" literal="Bundle-ActivationPolicy"/>
+      <eLiterals name="BUNDLE_ACTIVATOR" value="1" literal="Bundle-Activator"/>
+      <eLiterals name="BUNDLE_CATEGORY" value="2" literal="Bundle-Category"/>
+      <eLiterals name="BUNDLE_CLASSPATH" value="3" literal="Bundle-ClassPath"/>
+      <eLiterals name="BUNDLE_CONTACTADRESS" value="4" literal="Bundle-ContactAddress"/>
+      <eLiterals name="BUNDLE_COPYRIGHT" value="5" literal="Bundle-Copyright"/>
+      <eLiterals name="BUNDLE_DESCRIPTION" value="6" literal="Bundle-Description"/>
+      <eLiterals name="BUNDLE_DOCURL" value="7" literal="Bundle-DocURL"/>
+      <eLiterals name="BUNDLE_ICON" value="8" literal="Bundle-Icon"/>
+      <eLiterals name="BUNDLE_LICENSE" value="9" literal="Bundle-License"/>
+      <eLiterals name="BUNDLE_LOCALIZATION" value="10" literal="Bundle-Localization"/>
+      <eLiterals name="BUNDLE_MANIFESTVERSION" value="11" literal="Bundle-ManifestVersion"/>
+      <eLiterals name="BUNDLE_NAME" value="12" literal="Bundle-Name"/>
+      <eLiterals name="BUNDLE_NATIVECODE" value="13" literal="Bundle-NativeCode"/>
+      <eLiterals name="BUNDLE_REQUIREDEXECUTIONENVIRONMENT" value="14" literal="Bundle-RequiredExecutionEnvironment"/>
+      <eLiterals name="BUNDLE_SYMBOLICNAME" value="15" literal="Bundle-SymbolicName"/>
+      <eLiterals name="BUNDLE_UPDATELOCATION" value="16" literal="Bundle-UpdateLocation"/>
+      <eLiterals name="BUNDLE_VENDOR" value="17" literal="Bundle-Vendor"/>
+      <eLiterals name="BUNDLE_VERSION" value="18" literal="Bundle-Version"/>
+      <eLiterals name="DYNAMICIMPORT_PACKAGE" value="19" literal="DynamicImport-Package"/>
+      <eLiterals name="EXPORT_PACKAGE" value="20" literal="Export-Package"/>
+      <eLiterals name="EXPORT_SERVICE" value="21" literal="Export-Service"/>
+      <eLiterals name="FRAGMENT_HOST" value="22" literal="Fragment-Host"/>
+      <eLiterals name="IMPORT_PACKAGE" value="23" literal="Import-Package"/>
+      <eLiterals name="IMPORT_SERVICE" value="24" literal="Import-Service"/>
+      <eLiterals name="PROVIDED_CAPABILITY" value="25" literal="Provided-Capability"/>
+      <eLiterals name="REQUIRE_BUNDLE" value="26" literal="Require-Bundle"/>
+      <eLiterals name="REQUIRE_CAPABILITY" value="27" literal="Require-Capability"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ActivationPolicy">
+      <eLiterals name="EAGER" literal="eager"/>
+      <eLiterals name="LAZY" value="1" literal="lazy"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ParameterType">
+      <eLiterals name="ATTRIBUTE" value="1"/>
+      <eLiterals name="DIRECTIVE"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="EList" instanceClassName="java.util.List">
+      <eTypeParameters name="T"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PackageExport" eSuperTypes="#//osgi/PackagesDeclaration">
+      <eOperations name="getVersion" eType="#//osgi/Version"/>
+      <eOperations name="setVersion">
+        <eParameters name="version" eType="#//osgi/Version"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PackageImport" eSuperTypes="#//osgi/PackagesDeclaration">
+      <eOperations name="getVersion" eType="#//osgi/VersionRange"/>
+      <eOperations name="setVersion">
+        <eParameters name="version" eType="#//osgi/VersionRange"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Version" instanceClassName="org.sourcepit.common.manifest.osgi.Version"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="VersionRange" instanceClassName="org.sourcepit.common.manifest.osgi.VersionRange"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BundleRequirement" eSuperTypes="#//osgi/Parameterized">
+      <eOperations name="getBundleVersion" eType="#//osgi/VersionRange"/>
+      <eOperations name="setBundleVersion">
+        <eParameters name="bundleVersion" eType="#//osgi/VersionRange"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicNames" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BundleSymbolicName" eSuperTypes="#//osgi/Parameterized">
+      <eOperations name="isSingleton" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassPathEntry" eSuperTypes="#//osgi/Parameterized">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="paths" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FragmentHost" eSuperTypes="#//osgi/Parameterized">
+      <eOperations name="getBundleVersion" eType="#//osgi/VersionRange"/>
+      <eOperations name="setBundleVersion">
+        <eParameters name="bundleVersion" eType="#//osgi/VersionRange"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DynamicPackageImport" eSuperTypes="#//osgi/PackagesDeclaration">
+      <eOperations name="getVersion" eType="#//osgi/VersionRange"/>
+      <eOperations name="setVersion">
+        <eParameters name="version" eType="#//osgi/VersionRange"/>
+      </eOperations>
+      <eOperations name="getBundleVersion" eType="#//osgi/VersionRange"/>
+      <eOperations name="setBundleVersion">
+        <eParameters name="bundleVersion" eType="#//osgi/VersionRange"/>
+      </eOperations>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

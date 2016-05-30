@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fML" nsURI="http://www.xtext.org/example/mydsl/FML" nsPrefix="fML">
+  <eClassifiers xsi:type="ecore:EClass" name="ViewDef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//VirtualModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VirtualModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//VMTYPE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ModelSlots" upperBound="-1"
+        eType="#//ModelSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EditionPatterns" upperBound="-1"
+        eType="#//EditionPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelSlot">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MSTYPE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="required" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditionPattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superEditionPattern" eType="#//EditionPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternRoles" upperBound="-1"
+        eType="#//PatternRole" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editionSchemes" upperBound="-1"
+        eType="#//EditionScheme" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternRole">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//PRTYPE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modelElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelSlot" eType="#//ModelSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditionScheme">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="editionSchemeType" eType="#//EditionSchemeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editionAction" upperBound="-1"
+        eType="#//EditionAction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EditionSchemeType">
+    <eLiterals name="creationScheme" literal="CreationScheme"/>
+    <eLiterals name="deletionScheme" value="1" literal="DeletionScheme"/>
+    <eLiterals name="actionScheme" value="2" literal="ActionScheme"/>
+    <eLiterals name="cloningScheme" value="3" literal="CloningScheme"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="widget" eType="#//PRTYPE"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editionPattern" eType="#//EditionPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditionAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuiltInAction" eSuperTypes="#//EditionAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DeclarePatternRole" eSuperTypes="#//BuiltInAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternRole" unique="false"
+        upperBound="-1" eType="#//PatternRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="add" upperBound="-1" eType="#//AddEMFObjectIndividual"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteAction" eSuperTypes="#//BuiltInAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternRole" eType="#//PatternRole"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AddEMFObjectIndividual" eSuperTypes="#//BuiltInAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editionPattern" eType="#//EditionPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelSlot" eType="#//ModelSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MSTYPE">
+    <eLiterals name="owl" literal="OWLModelSlot"/>
+    <eLiterals name="diag" value="1" literal="DiagramModelSlot"/>
+    <eLiterals name="emf" value="2" literal="EMFModelSlot"/>
+    <eLiterals name="virtual" value="3" literal="VirtualModelModelSlot"/>
+    <eLiterals name="xsd" value="4" literal="XSDModelSlot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VMTYPE">
+    <eLiterals name="DiagSpec" literal="DiagramSpecification"/>
+    <eLiterals name="VM" value="1" literal="VirtualModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PRTYPE">
+    <eLiterals name="Individual" literal="Individual"/>
+  </eClassifiers>
+</ecore:EPackage>

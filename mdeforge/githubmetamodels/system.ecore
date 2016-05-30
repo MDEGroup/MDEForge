@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="system" nsURI="http://system/1.0" nsPrefix="system">
+  <eClassifiers xsi:type="ecore:EClass" name="System" eSuperTypes="#//ResourceElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provides" upperBound="-1"
+        eType="#//Interface" containment="true" eOpposite="#//Interface/provider"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uses" upperBound="-1" eType="#//Interface"
+        eOpposite="#//Interface/user"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contains" upperBound="-1"
+        eType="#//Job" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" upperBound="-1" eType="#//Data"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface" eSuperTypes="#//ResourceElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" eType="#//System"
+        eOpposite="#//System/provides"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="user" upperBound="-1" eType="#//System"
+        eOpposite="#//System/uses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Job" eSuperTypes="#//ResourceElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="runsOn" lowerBound="1"
+        eType="#//System"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calls" upperBound="-1"
+        eType="#//Interface"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="taskIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="ecore:EClass process.ecore#//Task" changeable="false" volatile="true"
+        transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="system.queries.JobTaskCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="info" upperBound="-1" eType="ecore:EClass operation.ecore#//RuntimeInformation"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="system.queries.JobInfoCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Data" eSuperTypes="#//ResourceElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readingTaskIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="writingTaskIds" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="writingTask" upperBound="-1"
+        eType="ecore:EClass process.ecore#//Task" changeable="false" volatile="true"
+        transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="system.queries.DataTaskWriteCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="readingTask" upperBound="-1"
+        eType="ecore:EClass process.ecore#//Task" changeable="false" volatile="true"
+        transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="system.queries.DataTaskReadCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

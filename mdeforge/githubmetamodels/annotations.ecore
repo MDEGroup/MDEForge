@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="annotations"
+    nsURI="http://kieler.cs.cau.de/annotations" nsPrefix="ann">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedObject" abstract="true" eSuperTypes="#//Annotatable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotatable" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The Annotatable abstract class allows subclasses to be annotated by arbitrary information.&#xA;An Annotatable has a list of attached Annotation objects and defines convenience functions&#xA;to search annotations with a specific name."/>
+    </eAnnotations>
+    <eOperations name="getAnnotation" lowerBound="1" eType="#//Annotation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Search an annotation with the given name.&#xA;&#xA;@param name the name of the annotation, does not need to be unique&#xA;@returns the first annotation that matches the name"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getAllAnnotations" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Search all annotations with the given name.&#xA;&#xA;@param name the name of the annotations, does not need to be unique&#xA;@returns a list of all annotations that match the name"/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="#//Annotation"/>
+      </eGenericType>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="removeAllAnnotations">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Remove all annotations with the given name.&#xA;&#xA;@param name name of the annotations to remove"/>
+      </eAnnotations>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" eSuperTypes="#//NamedObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Annotation is an Object that can be attached to an Annotatable. It&#xA;extends NamedObject and therefore it has a String name which is used&#xA;as a key to identify the Annotation within the list of Annotations in&#xA;the Annotatable.&#xA;&lt;p>&#xA;A pure Annotatable Object can be used to specify some kind of&#xA;boolean property that an Annotatable can carry or not.&#xA;However, usually additional information is attached by subclassing&#xA;the Annotation and add some additional value to the subclass."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A StringAnnotation carries a String Value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A ReferenceAnnotation carries a reference to an arbitrary EObject.&#xA;By this any EObject can be referenced from an Annotation. The distinction&#xA;to the ContainmentAnnotation is that the reference is only a pointer&#xA;to the EObject most probably in another resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A BooleanAnnotation carries a boolean value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An IntAnnotation carries an integer value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A FloatAnnotation carries a float value."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainmentAnnotation" eSuperTypes="#//Annotation">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A ContainmentAnnotation carries an arbitrary EObject.&#xA;By this any EObject can be attached as Annotation to an Annotatable.&#xA;The EObject will be persistently stored together with the&#xA;Annotatable as its child in the Annotation. Hence it also gets serialized&#xA;into a file when the model gets saved. Therefore here an EObject is used&#xA;and not any Object, because an EObject can be serialized with EMF.&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImportAnnotation" eSuperTypes="#//Annotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedStringAnnotation" eSuperTypes="#//StringAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

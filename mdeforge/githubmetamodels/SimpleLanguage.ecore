@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="simplelanguage" nsURI="http://ubicompforall.org/simplelanguage"
+    nsPrefix="simplelanguage">
+  <eClassifiers xsi:type="ecore:EClass" name="Step" eSuperTypes="#//BuildingBlock">
+    <eOperations name="perform"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//BuildingBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
+        eType="#//Condition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalStep" eSuperTypes="#//Step">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stepSequence" upperBound="-1"
+        eType="#//Step" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" lowerBound="1"
+        upperBound="-1" eType="#//Condition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task">
+    <eOperations name="perform"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="infoObjects" upperBound="-1"
+        eType="#//InformationObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" lowerBound="1"
+        eType="#//Trigger" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stepSequence" upperBound="-1"
+        eType="#//Step" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//InformationObject #//Step">
+    <eOperations name="perform"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="result" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyReference" eSuperTypes="#//PropertyAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromObject" lowerBound="1"
+        eType="#//BuildingBlock"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fromProperty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InformationObject" eSuperTypes="#//BuildingBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//BuildingBlock">
+    <eOperations name="check" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildingBlock" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="descriptor" eType="ecore:EClass ../../org.ubicompforall.descriptor/model/descriptor.ecore#//BuildingBlockDesc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyValues" upperBound="-1"
+        eType="#//PropertyAssignment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainObjectReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1"
+        eType="ecore:EClass ../../org.ubicompforall.descriptor/model/descriptor.ecore#//DomainObjectDesc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyAssignment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserService">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="libraries" upperBound="-1"
+        eType="ecore:EClass ../../org.ubicompforall.descriptor/model/descriptor.ecore#//DescriptorLibrary"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DomainObjectAssignment" eSuperTypes="#//PropertyAssignment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domainObject" upperBound="-1"
+        eType="#//DomainObjectReference" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="definitions"
+    nsURI="http://www.eclipse.org/dltk/tcl/parserules.ecore" nsPrefix="tclparse">
+  <eClassifiers xsi:type="ecore:EClass" name="Argument" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Command" eSuperTypes="#//Scope">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Argument" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="(-;-)"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scope" upperBound="-1"
+        eType="#//Command"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deprecated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Scope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Scope" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strictMatch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Argument" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Switch" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//Group" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedArgument" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ArgumentType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace" eSuperTypes="#//Scope">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexArgument" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Argument" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ArgumentType">
+    <eLiterals name="Any"/>
+    <eLiterals name="Integer" value="1"/>
+    <eLiterals name="Index" value="2"/>
+    <eLiterals name="NotNegative" value="3"/>
+    <eLiterals name="Expression" value="4"/>
+    <eLiterals name="Script" value="5"/>
+    <eLiterals name="VarName" value="6"/>
+    <eLiterals name="CmdName" value="7"/>
+    <eLiterals name="Level" value="8"/>
+    <eLiterals name="Package" value="9"/>
+    <eLiterals name="Namespace" value="10"/>
+    <eLiterals name="Boolean" value="11"/>
+  </eClassifiers>
+</ecore:EPackage>

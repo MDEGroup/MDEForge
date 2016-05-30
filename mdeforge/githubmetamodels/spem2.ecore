@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spem"
+    nsURI="http://www.thalesgroup.com/spem/2.0" nsPrefix="spem">
+  <eAnnotations source="add-ons">
+    <details key="uma" value="WorkProductUseRelationship"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensibleElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kind" eType="#//Kind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Kind" eSuperTypes="#//ExtensibleElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkDefinitionPerformer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedWorkDefinition" eType="#//WorkDefinition"
+        transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkDefinition" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preCondition" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postCondition" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+        eType="#//WorkDefinitionParameter" transient="true" derived="true" resolveProxies="false">
+      <eAnnotations source="TODO">
+        <details key="implem" value="isDerived"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkDefinitionParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="#//ParameterDirectionKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ParameterDirectionKind">
+    <eLiterals name="in"/>
+    <eLiterals name="out" value="1"/>
+    <eLiterals name="inout" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakdownElement" abstract="true" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasMultipleOccurrences"
+        ordered="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOptional" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPlanned" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="planningData" eType="#//PlanningData"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkBreakdownElement" abstract="true"
+      eSuperTypes="#//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRepeatable" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOngoing" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEventDriven" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkToPredecessor" upperBound="-1"
+        eType="#//WorkSequence" eOpposite="#//WorkSequence/successor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkToSuccessor" upperBound="-1"
+        eType="#//WorkSequence" eOpposite="#//WorkSequence/predecessor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkSequence" eSuperTypes="#//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="linkKind" ordered="false"
+        eType="#//WorkSequenceKind" defaultValueLiteral="finishToStart"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predecessor" lowerBound="1"
+        eType="#//WorkBreakdownElement" eOpposite="#//WorkBreakdownElement/linkToSuccessor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="successor" lowerBound="1"
+        eType="#//WorkBreakdownElement" eOpposite="#//WorkBreakdownElement/linkToPredecessor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="WorkSequenceKind">
+    <eLiterals name="finishToStart"/>
+    <eLiterals name="finishToFinish" value="1"/>
+    <eLiterals name="startToStart" value="2"/>
+    <eLiterals name="startToFinish" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" eSuperTypes="#//WorkDefinition #//WorkBreakdownElement #//VariabilityElement">
+    <eAnnotations source="add-ons">
+      <details key="uma" value="isEnactable"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useKind" ordered="false"
+        lowerBound="1" eType="#//ActivityUseKind" defaultValueLiteral="na"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedActivity" eType="#//Activity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedBreakdownElement"
+        upperBound="-1" eType="#//BreakdownElement" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suppressedBreakdownElement"
+        upperBound="-1" eType="#//BreakdownElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedProcessParameter"
+        upperBound="-1" eType="#//ProcessParameter" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultContext" eType="#//MethodConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="validContext" upperBound="-1"
+        eType="#//MethodConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnactable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ActivityUseKind">
+    <eLiterals name="na"/>
+    <eLiterals name="extension" value="1"/>
+    <eLiterals name="localContribution" value="2"/>
+    <eLiterals name="localReplacement" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessPerformer" eSuperTypes="#//WorkDefinitionPerformer #//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedRoleUse" lowerBound="1"
+        upperBound="-1" eType="#//RoleUse"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedActivity" eType="#//Activity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedTaskUse" eType="#//TaskUse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RoleUse" eSuperTypes="#//MethodContentUse">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" eType="#//RoleDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appliedQualification" upperBound="-1"
+        eType="#//Qualification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessResponsibilityAssignment" eSuperTypes="#//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedRoleUse" lowerBound="1"
+        upperBound="-1" eType="#//RoleUse"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedWorkProductUse" lowerBound="1"
+        eType="#//WorkProductUse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductUse" eSuperTypes="#//MethodContentUse">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workProduct" eType="#//WorkProductDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductUseRelationship" eSuperTypes="#//BreakdownElement">
+    <eAnnotations source="add-ons">
+      <details key="uma" value="relationshipkind"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//WorkProductUse"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        upperBound="-1" eType="#//WorkProductUse"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relationshipKind" lowerBound="1"
+        eType="#//WorkProductRelationshipKind" defaultValueLiteral="impactedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessParameter" eSuperTypes="#//WorkDefinitionParameter #//BreakdownElement">
+    <eAnnotations source="add-ons">
+      <details key="Thales R&amp;T" value="optionality (bug in the spec)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterType" eType="#//WorkProductUse"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optionality" eType="#//OptionalityKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Milestone" eSuperTypes="#//WorkBreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredResult" upperBound="-1"
+        eType="#//WorkProductUse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessElement" abstract="true" eSuperTypes="#//DescribableElement #//ProcessPackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processKind" eType="#//ProcessKind"
+        transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DescribableElement" abstract="true"
+      eSuperTypes="#//ExtensibleElement">
+    <eAnnotations source="add-ons">
+      <details key="uma" value="category, copyright, author, changeDate, changeDescription, version"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="presentationName" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="briefDescription" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mainDescription" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="purpose" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guidance" upperBound="-1"
+        eType="#//Guidance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metric" upperBound="-1"
+        eType="#//Metric"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="category" upperBound="-1"
+        eType="#//Category" eOpposite="#//Category/categorizedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="copyright" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subCategory" upperBound="-1"
+        eType="#//Category"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categorizedElement" upperBound="-1"
+        eType="#//DescribableElement" eOpposite="#//DescribableElement/category"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Guidance" eSuperTypes="#//MethodContentElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Metric" eSuperTypes="#//DescribableElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodContentElement" abstract="true"
+      eSuperTypes="#//DescribableElement #//MethodContentPackageableElement #//VariabilityElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodContentKind" eType="#//MethodContentKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolDefinition" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="managedWorkProduct" upperBound="-1"
+        eType="#//WorkProductDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskDefinition" eSuperTypes="#//WorkDefinition #//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTaskDefinitionParameter"
+        upperBound="-1" eType="#//Default_TaskDefinitionParameter" containment="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedTool" upperBound="-1"
+        eType="#//ToolDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="step" upperBound="-1" eType="#//Step"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredQualification"
+        upperBound="-1" eType="#//Qualification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Step" eSuperTypes="#//WorkDefinition #//DescribableElement #//VariabilityElement">
+    <eAnnotations source="add-ons">
+      <details key="Thales R&amp;T" value="predecessor, successor in order to replace Section metaclass"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predecessor" eType="#//Step"
+        eOpposite="#//Step/successor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="successor" eType="#//Step"
+        eOpposite="#//Step/predecessor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductDefinition" eSuperTypes="#//MethodContentElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RoleDefinition" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synonym" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providedQualification"
+        upperBound="-1" eType="#//Qualification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductDefinitionRelationship" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//WorkProductDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        upperBound="-1" eType="#//WorkProductDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Default_TaskDefinitionPerformer" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedTaskDefinition" lowerBound="1"
+        eType="#//TaskDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedRoleDefinition" lowerBound="1"
+        upperBound="-1" eType="#//RoleDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Default_ResponsibilityAssignment" eSuperTypes="#//MethodContentElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedRoleDefinition" lowerBound="1"
+        upperBound="-1" eType="#//RoleDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedWorkProductDefinition"
+        lowerBound="1" eType="#//WorkProductDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Default_TaskDefinitionParameter" eSuperTypes="#//WorkDefinitionParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterType" eType="#//WorkProductDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optionality" eType="#//OptionalityKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Qualification" eSuperTypes="#//MethodContentElement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="OptionalityKind">
+    <eLiterals name="mandatory"/>
+    <eLiterals name="optional" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodContentPackageableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessPackageableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodContentPackage" eSuperTypes="#//MethodContentPackageableElement #//MethodPluginPackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMethodContentMember"
+        upperBound="-1" eType="#//MethodContentPackageableElement" containment="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reusedPackage" upperBound="-1"
+        eType="#//MethodContentPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessPackage" eSuperTypes="#//ProcessPackageableElement #//MethodPluginPackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedProcessMember" upperBound="-1"
+        eType="#//ProcessPackageableElement" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodContentKind" abstract="true" eSuperTypes="#//MethodContentElement #//Kind"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessKind" abstract="true" eSuperTypes="#//ProcessElement #//Kind"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlanningData" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finishDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodContentUse" abstract="true" eSuperTypes="#//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSynchronizedWithSource"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskUse" eSuperTypes="#//MethodContentUse #//WorkBreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="#//TaskDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedQualification" upperBound="-1"
+        eType="#//Qualification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedStep" upperBound="-1"
+        eType="#//Step"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedProcessParameter"
+        upperBound="-1" eType="#//ProcessParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeRole" eSuperTypes="#//RoleUse">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aggregatedRole" upperBound="-1"
+        eType="#//RoleDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TeamProfile" eSuperTypes="#//BreakdownElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subTeam" upperBound="-1"
+        eType="#//TeamProfile" containment="true" resolveProxies="false" eOpposite="#//TeamProfile/superTeam"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superTeam" eType="#//TeamProfile"
+        eOpposite="#//TeamProfile/subTeam"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="teamRole" upperBound="-1"
+        eType="#//RoleUse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariabilityElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="variabilityType" eType="#//VariabilityType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variabilityBasedOnElement"
+        eType="#//VariabilityElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessComponent" eSuperTypes="#//ProcessPackage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//Activity"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedPort" upperBound="-1"
+        eType="#//WorkProductPort" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessComponentUse" eSuperTypes="#//MethodContentUse">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processComponent" lowerBound="1"
+        eType="#//ProcessComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedPort" upperBound="-1"
+        eType="#//WorkProductPort" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodLibraryPackageableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodPluginPackageableElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodConfiguration" eSuperTypes="#//MethodLibraryPackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="baseConfiguration" upperBound="-1"
+        eType="#//MethodConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methodPluginSelection"
+        lowerBound="1" upperBound="-1" eType="#//MethodPlugin" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processPackageSelection"
+        upperBound="-1" eType="#//ProcessPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contentPackageSelection"
+        upperBound="-1" eType="#//MethodContentPackage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="substractedCategory" upperBound="-1"
+        eType="#//Category"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultView" lowerBound="1"
+        eType="#//Category"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processView" upperBound="-1"
+        eType="#//Category"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodPlugin" eSuperTypes="#//MethodLibraryPackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMethodContentPackage"
+        upperBound="-1" eType="#//MethodContentPackage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedProcessPackage" upperBound="-1"
+        eType="#//ProcessPackage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basePlugin" upperBound="-1"
+        eType="#//MethodPlugin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MethodLibrary">
+    <eAnnotations source="add-ons">
+      <details key="uma" value="configurationPackage"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedMethodPlugin" upperBound="-1"
+        eType="#//MethodPlugin" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predefinedConfiguration"
+        upperBound="-1" eType="#//MethodConfiguration" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurationPackage" eType="#//MethodContentPackage"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductPort" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOptional" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portKind" ordered="false"
+        eType="#//ParameterDirectionKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portType" eType="#//WorkProductDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductPortConnector" eSuperTypes="#//ProcessElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedPort" upperBound="-1"
+        eType="#//WorkProductPort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariabilityType">
+    <eLiterals name="na"/>
+    <eLiterals name="contributes" value="1"/>
+    <eLiterals name="extends" value="2"/>
+    <eLiterals name="replaces" value="3"/>
+    <eLiterals name="extends_replaces" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="WorkProductRelationshipKind">
+    <eLiterals name="impactedBy" literal="impactedBy"/>
+    <eLiterals name="composition" value="1" literal="composition"/>
+    <eLiterals name="aggregation" value="2" literal="aggregation"/>
+  </eClassifiers>
+  <eSubpackages name="uma" nsURI="http://www.thalesgroup.com/spem/2.0/uma" nsPrefix="uma">
+    <eClassifiers xsi:type="ecore:EClass" name="Artifact" eSuperTypes="#//WorkProductUse">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedArtifact" upperBound="-1"
+          eType="#//uma/Artifact" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CapabilityPattern" eSuperTypes="#//uma/Process"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Checklist" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Concept" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CategoryPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CustomCategory" eSuperTypes="#//Category"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Deliverable" eSuperTypes="#//WorkProductUse">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="deliveredProduct" upperBound="-1"
+          eType="#//WorkProductUse"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalDescription"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="packagingGuidance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//Activity">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="includedPattern" upperBound="-1"
+          eType="#//uma/CapabilityPattern" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="usageNote" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="includedConnector" upperBound="-1"
+          eType="#//WorkProductPortConnector" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeliveryProcess" eSuperTypes="#//uma/Process">
+      <eAnnotations source="doc">
+        <details key="scale" value="represents the size in man.year or other equivalent units"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectCharacteristics"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="riskLevel" eType="#//uma/RiskLevel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="estimatingTechnique"
+          eType="#//uma/EstimatingTechnique"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectMemberExpertise"
+          eType="#//uma/ExpertiseLevel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeOfContract" eType="#//uma/ContractKind"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="communicationMaterial"
+          upperBound="-1" eType="#//uma/SupportingMaterial"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="educationalMaterial"
+          upperBound="-1" eType="#//uma/SupportingMaterial"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RiskLevel">
+      <eLiterals name="LOW"/>
+      <eLiterals name="MID" value="1"/>
+      <eLiterals name="HIGH" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EstimatingTechnique">
+      <eLiterals name="COST"/>
+      <eLiterals name="TIME" value="1"/>
+      <eLiterals name="SKILLS" value="2"/>
+      <eLiterals name="DEFECTS" value="3"/>
+      <eLiterals name="OTHER" value="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ExpertiseLevel">
+      <eLiterals name="LOW"/>
+      <eLiterals name="MID" value="1"/>
+      <eLiterals name="LEVEL" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ContractKind">
+      <eLiterals name="EXPRESS" value="1"/>
+      <eLiterals name="IMPLIED" value="2"/>
+      <eLiterals name="OTHER" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Discipline" eSuperTypes="#//Category">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relatedTask" upperBound="-1"
+          eType="#//TaskDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relatedWorflow" upperBound="-1"
+          eType="#//uma/Process"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DisciplineGrouping" eSuperTypes="#//Category"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Root">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methodConfiguration"
+          upperBound="-2" eType="#//MethodConfiguration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methodLibrary" upperBound="-2"
+          eType="#//MethodLibrary" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="MethodPlugin" upperBound="-2"
+          eType="#//MethodPlugin" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Domain" eSuperTypes="#//Category">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="relatedProduct" upperBound="-1"
+          eType="#//WorkProductDefinition"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EstimatingConsideration" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Example" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Iteration" eSuperTypes="#//Activity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Outcome" eSuperTypes="#//WorkProductUse"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Phase" eSuperTypes="#//Activity"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Practice" eSuperTypes="#//Guidance">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subPractice" upperBound="-1"
+          eType="#//uma/Practice" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedActivity" upperBound="-1"
+          eType="#//Activity"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contentReference" upperBound="-1"
+          eType="#//MethodContentElement"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="additionalInfo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="application" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="background" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="goal" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="levelOfAdoption" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="problem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessPlanningTemplate" eSuperTypes="#//uma/Process">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="baseProcess" upperBound="-1"
+          eType="#//uma/Process"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Report" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReusableAsset" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Roadmap" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Template" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TermDefinition" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ToolMentor" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Whitepaper" eSuperTypes="#//uma/Concept"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Guideline" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SupportingMaterial" eSuperTypes="#//Guidance"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleDefinitionPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TaskDefinitionPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WorkProductDefinitionPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GuidancePackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DisciplinePackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DomainPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WorkProductKindPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleSetPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ToolDefinitionPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ConfigurationPackage" eSuperTypes="#//MethodContentPackage">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedConfiguration" upperBound="-1"
+          eType="#//MethodConfiguration" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CapabilityPatternPackage" eSuperTypes="#//ProcessPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DeliveryProcessPackage" eSuperTypes="#//ProcessPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleSet" eSuperTypes="#//MethodContentElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="role" upperBound="-1"
+          eType="#//RoleDefinition"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="QualificationPackage" eSuperTypes="#//MethodContentPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcessComponentPackage" eSuperTypes="#//ProcessPackage"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WorkProductKind" eSuperTypes="#//Kind #//MethodContentElement"/>
+  </eSubpackages>
+</ecore:EPackage>

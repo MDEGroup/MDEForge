@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="toone"
+    nsURI="http://www.eclipse.org/emf/teneo/samples/emf/annotations/toone" nsPrefix="toone">
+  <eClassifiers xsi:type="ecore:EClass" name="Address">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Address"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" unique="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="city"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Arm">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Arm"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
+        unsettable="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="length"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Head">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Head"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hairColor" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="hairColor"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" lowerBound="1"
+        eType="#//Person" resolveProxies="false" eOpposite="#//Person/head">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;@OneToOne(fetch=EAGER cascade={MERGE,PERSIST,REFRESH} targetEntity=&quot;Person&quot; optional=false mappedBy=&quot;head&quot;)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="person"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Person"/>
+      <details key="kind" value="elementOnly"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="address" eType="#//Address"
+        resolveProxies="false">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@ManyToOne(fetch=EAGER cascade={MERGE,PERSIST,REFRESH} targetEntity=&quot;Address&quot; optional=true)"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="address"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="head" eType="#//Head" resolveProxies="false"
+        eOpposite="#//Head/person">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToOne(fetch=EAGER cascade=ALL targetEntity=&quot;Head&quot; optional=true)"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="head"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftArm" lowerBound="1"
+        eType="#//Arm" resolveProxies="false">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToOne(fetch=EAGER cascade=NONE targetEntity=&quot;Arm&quot; optional=true)"/>
+      </eAnnotations>
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="leftArm"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

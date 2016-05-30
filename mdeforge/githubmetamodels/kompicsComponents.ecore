@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2012 Lars Kroll.
+  All rights reserved. This program and the accompanying materials
+  are made available under the terms of the GNU Public License v3.0
+  which accompanies this distribution, and is available at
+  http://www.gnu.org/licenses/gpl.html
+  
+  Contributors:
+      Lars Kroll - initial API and implementation
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="kompicsComponents" nsURI="http://kompicsComponents/1.0" nsPrefix="kompicsComponents">
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provides" upperBound="-1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//Port" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="var" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//ComponentDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subscribers" upperBound="-1"
+        eType="#//Subscription"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portType" lowerBound="1"
+        eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="provided" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Handler">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventType" lowerBound="1"
+        eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subscriptions" upperBound="-1"
+        eType="#//Subscription"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Channel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connects" lowerBound="2"
+        upperBound="2" eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portType" lowerBound="1"
+        eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provided" lowerBound="1"
+        eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="required" lowerBound="1"
+        eType="#//Port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indications" upperBound="-1"
+        eType="#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requests" upperBound="-1"
+        eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requires" upperBound="-1"
+        eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provides" upperBound="-1"
+        eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handlers" upperBound="-1"
+        eType="#//Handler" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+        eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subscriptions" upperBound="-1"
+        eType="#//Subscription" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="portTypes" upperBound="-1"
+        eType="#//PortType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ComponentDefinition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channels" upperBound="-1"
+        eType="#//Channel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subscription">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handler" lowerBound="1"
+        eType="#//Handler"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="#//Port"/>
+  </eClassifiers>
+</ecore:EPackage>

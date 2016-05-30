@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sequence"
+    nsURI="http:///org/generationcp/model/data/genotype/linkagemap/sequence.ecore"
+    nsPrefix="org.generationcp.model.data.genotype.linkagemap.sequence">
+  <eClassifiers xsi:type="ecore:EClass" name="DNASequence" eSuperTypes="#//NucleotideSequence"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MolecularPhylogeny" eSuperTypes="germplasm.ecore#//Clade">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alignment" eType="#//MultipleSequenceAlignment"
+        eOpposite="#//MultipleSequenceAlignment/molecularPhylogeny"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MultipleSequenceAlignment" eSuperTypes="linkagemap.ecore#//CorrelatedLinkageMapSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" lowerBound="2"
+        upperBound="-1" eType="#//Sequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="molecularPhylogeny" eType="#//MolecularPhylogeny"
+        eOpposite="#//MolecularPhylogeny/alignment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NucleotideSequence" eSuperTypes="#//Sequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualityScores" eType="ecore:EClass value.ecore#//ValueSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NucleotideSequenceFeature" eSuperTypes="linkagemap.ecore#//GenomicFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PeptideSequence" eSuperTypes="#//Sequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="residues" upperBound="-1"
+        eType="ecore:EClass protein.ecore#//Residue" eOpposite="protein.ecore#//Residue/peptideSequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transcript" eType="#//RNASequence"
+        eOpposite="#//RNASequence/peptideSequences"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PeptideSequenceFeature" eSuperTypes="linkagemap.ecore#//GenomicFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RNASequence" eSuperTypes="#//NucleotideSequence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="peptideSequences" upperBound="-1"
+        eType="#//PeptideSequence" eOpposite="#//PeptideSequence/transcript"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="linkagemap.ecore#//PhysicalMap">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" lowerBound="1"
+        eType="#//SimpleSequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sample" eType="ecore:EClass experiment.ecore#//BiologicalSample"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleSequence" eSuperTypes="feature.ecore#//SimpleFeature"/>
+</ecore:EPackage>

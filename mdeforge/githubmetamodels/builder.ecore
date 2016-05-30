@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="buildertools"
+    nsURI="http://torusfw.org/org.torusfw.tools.builder/builder.ecore" nsPrefix="BuilderTools">
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFolder" instanceClassName="org.eclipse.core.resources.IFolder"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IFile" instanceClassName="org.eclipse.core.resources.IFile"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IResource" instanceClassName="org.eclipse.core.resources.IResource"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProgressMonitor" instanceClassName="org.eclipse.core.runtime.IProgressMonitor"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="CoreException" instanceClassName="org.eclipse.core.runtime.CoreException"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManagedProject">
+    <eOperations name="build">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( BuildProcess doc : getProcesses() ) { doc.build(); }"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="clean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for ( BuildProcess doc : getProcesses() ) { doc.clean(); }"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" upperBound="-1"
+        eType="#//BuildProcess" containment="true" eOpposite="#//BuildProcess/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iProjectInstance" eType="#//IProject"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildProcess" abstract="true">
+    <eOperations name="build"/>
+    <eOperations name="clean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//InputResource" containment="true" eOpposite="#//InputResource/process"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//OutputResource" containment="true" eOpposite="#//OutputResource/process"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//ManagedProject"
+        eOpposite="#//ManagedProject/processes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildResource" abstract="true">
+    <eOperations name="getProcess" eType="#//BuildProcess">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="throw new UnsupportedOperationException ();"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIFolder" eType="#//IFolder">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getProcess().getProject().getIProjectInstance ().getFolder ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIFile" eType="#//IFile">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getProcess().getProject().getIProjectInstance ().getFile ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIResource" eType="#//IResource">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return getProcess().getProject().getIProjectInstance ().findMember ( getPath() );"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="directory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputResource" eSuperTypes="#//BuildResource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//BuildProcess"
+        eOpposite="#//BuildProcess/inputs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputResource" eSuperTypes="#//BuildResource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//BuildProcess"
+        eOpposite="#//BuildProcess/outputs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildManager">
+    <eOperations name="enableNature" eExceptions="#//CoreException">
+      <eParameters name="project" eType="#//IProject"/>
+      <eParameters name="nature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="disableNature" eExceptions="#//CoreException">
+      <eParameters name="project" eType="#//IProject"/>
+      <eParameters name="nature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getManagedProject" eType="#//ManagedProject">
+      <eParameters name="project" eType="#//IProject"/>
+    </eOperations>
+    <eOperations name="build" eType="#//IProject" eExceptions="#//CoreException">
+      <eParameters name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eParameters name="args">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eParameters>
+      <eParameters name="monitor" eType="#//IProgressMonitor"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildNatureConfigs" eType="#//BuildNatureContainer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildNatureConfig" eSuperTypes="../../org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="builders" upperBound="-1"
+        eType="#//BuilderConfig" eOpposite="#//BuilderConfig/nature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="natureID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuilderConfig" eSuperTypes="../../org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nature" eType="#//BuildNatureConfig"
+        eOpposite="#//BuildNatureConfig/builders"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="builderID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="#//BuilderPosition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postionArg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BuilderPosition">
+    <eLiterals name="top"/>
+    <eLiterals name="bottom" value="1"/>
+    <eLiterals name="before" value="2"/>
+    <eLiterals name="after" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildNatureContainer">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationContainer">
+      <eTypeArguments eClassifier="#//BuildNatureConfig"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+</ecore:EPackage>

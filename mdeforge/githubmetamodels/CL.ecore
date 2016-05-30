@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="coordination"
+    nsURI="http://alive/coordinationLevel/0.3" nsPrefix="cl">
+  <eSubpackages name="workflow" nsURI="http://alive/coordinationLevel/workflow/0.3"
+      nsPrefix="wf"/>
+  <eSubpackages name="tasks" nsURI="http://alive/coordinationLevel/tasks/0.3" nsPrefix="tasks">
+    <eClassifiers xsi:type="ecore:EClass" name="Task">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+          upperBound="-1" eType="ecore:EClass owl-s.ecore#//process/ControlConstruct"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasPrecondition" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//expr/Condition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasResult" eType="#//actions/ActionResult"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+          eType="#//tasks/InputMessageMap" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InputMessageMap">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="messagePart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="ecore:EClass owl-s.ecore#//process/Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Plan">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="forTask" lowerBound="1"
+          eType="#//tasks/Task"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasAtomicProcessGroundingList"
+          lowerBound="1" eType="#//tasks/ActionGroundingList" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActionGroundingList">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="first" lowerBound="1"
+          eType="#//tasks/ActionGrounding" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rest" eType="#//tasks/ActionGroundingList"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActionGrounding">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owlsProcess" lowerBound="1"
+          eType="#//actions/Action"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="input" upperBound="-1"
+          eType="#//tasks/InputMessageMap" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TasksCollection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+          eType="#//tasks/Task" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="controlConstructs" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//process/ControlConstruct" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlansCollection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="plans" upperBound="-1"
+          eType="#//tasks/Plan" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="actions" nsURI="http://alive/coordinationLevel/actions/0.3"
+      nsPrefix="actions">
+    <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true" eSuperTypes="owl-s.ecore#//process/Process"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AtomicAction" eSuperTypes="#//actions/Action owl-s.ecore#//process/AtomicProcess">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasAtomicActionResult"
+          upperBound="-1" eType="#//actions/AtomicActionResult" derived="true" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CompositeAction" eSuperTypes="#//actions/Action owl-s.ecore#//process/CompositeProcess"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ActionResult">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inCondition" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//expr/Condition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasAddEffect" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//expr/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasDeleteEffect" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//expr/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AtomicActionResult" eSuperTypes="#//actions/ActionResult">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasDensity" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1.0"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasCostDistribution"
+          upperBound="-1" eType="#//actions/Distribution" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasDurationDistribution"
+          upperBound="-1" eType="#//actions/Distribution" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hasQualityDistribution"
+          upperBound="-1" eType="#//actions/Distribution" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Distribution">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="datapoint" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1.0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="density" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat" defaultValueLiteral="1.0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActionsCollection">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+          eType="#//actions/Action" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//process/Participant" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//process/Parameter" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="controlConstructs" upperBound="-1"
+          eType="ecore:EClass owl-s.ecore#//process/ControlConstruct" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="teneo.jpa">
+          <details key="appinfo" value="@Version"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="agents" nsURI="http://alive/coordinationLevel/agents/0.3" nsPrefix="agents">
+    <eClassifiers xsi:type="ecore:EClass" name="Agent">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actors" lowerBound="1"
+          upperBound="-1" eType="#//agents/Actor" eOpposite="#//agents/Actor/agent"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="playRole" lowerBound="1"
+          upperBound="-1" eType="ecore:EClass OperA.ecore#//OM/Role"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Actor" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1"
+          eType="#//agents/Agent" eOpposite="#//agents/Agent/actors"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implementedBy" eType="#//agents/ActorImpl"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CL">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="agent" upperBound="-1"
+          eType="#//agents/Agent" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actor" upperBound="-1"
+          eType="#//agents/Actor" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ActorImpl">
+      <eAnnotations source="ActorType?" references="#//agents/ActorImpl"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="platform" eType="#//agents/AgentPlatform"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OrganisationalActor" eSuperTypes="#//agents/Actor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="undertakeTask" lowerBound="1"
+          eType="#//tasks/Task"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleActor" eSuperTypes="#//agents/Actor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="takeRole" lowerBound="1"
+          eType="ecore:EClass OperA.ecore#//OM/Role"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="AgentPlatform">
+      <eLiterals name="AgentScape"/>
+      <eLiterals name="Jade" value="1"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

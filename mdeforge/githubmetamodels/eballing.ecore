@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ecliballs"
+    nsURI="http://ecliballs/1.0" nsPrefix="ecliballs">
+  <eClassifiers xsi:type="ecore:EClass" name="Board">
+    <eOperations name="init">
+      <eParameters name="boardSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="clear"/>
+    <eOperations name="setRandomFigureInField"/>
+    <eOperations name="isFieldEmpty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="field" eType="#//Field"/>
+    </eOperations>
+    <eOperations name="moveFigureToField">
+      <eParameters name="field" eType="#//Field"/>
+    </eOperations>
+    <eOperations name="getField" eType="#//Field">
+      <eParameters name="position" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="calculateMatches" lowerBound="1">
+      <eParameters name="field" eType="#//Field"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" lowerBound="10"
+        upperBound="-1" eType="#//Field" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedField" eType="#//Field"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//Status"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="figureList" lowerBound="1"
+        eType="#//FigureList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="score" lowerBound="1" eType="#//Score"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emptyFields" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field">
+    <eOperations name="hasFigure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="hasFigure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="figure" eType="#//Figure"/>
+    </eOperations>
+    <eOperations name="removeFigure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="figure" eType="#//Figure"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Status">
+    <eLiterals name="READY"/>
+    <eLiterals name="SELECTED" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FigureList">
+    <eOperations name="addFigure">
+      <eParameters name="figureType" eType="#//Figure"/>
+    </eOperations>
+    <eOperations name="removeFigure">
+      <eParameters name="figureType" eType="#//Figure"/>
+    </eOperations>
+    <eOperations name="initFigureBuffer"/>
+    <eOperations name="getFigureFromBuffer" eType="#//Figure"/>
+    <eOperations name="addFigures">
+      <eParameters name="figures">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="#//Figure"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="figures" lowerBound="1"
+        upperBound="-1" eType="#//Figure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="figureSort" eType="#//FiguresType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="figureBuffer" lowerBound="3"
+        upperBound="3" eType="#//Figure"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Figure">
+    <eOperations name="equals" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="" iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Score">
+    <eOperations name="addPoints">
+      <eParameters name="pointValue" eType="#//PointsValues"/>
+    </eOperations>
+    <eOperations name="reset"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PointsValues">
+    <eLiterals name="four" value="40"/>
+    <eLiterals name="five" value="65"/>
+    <eLiterals name="six" value="80"/>
+    <eLiterals name="max" value="100"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FiguresType">
+    <eLiterals name="Ball"/>
+    <eLiterals name="Square" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

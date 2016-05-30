@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="backbone"
+    nsURI="http://www.obeonetwork.org/2012/backbone" nsPrefix="backbone">
+  <eClassifiers xsi:type="ecore:EClass" name="Application" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="models" upperBound="-1"
+        eType="#//Model" containment="true" eOpposite="#//Model/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collections" upperBound="-1"
+        eType="#//Collection" containment="true" eOpposite="#//Collection/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="router" lowerBound="1"
+        eType="#//Router" containment="true" eOpposite="#//Router/application"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
+        eType="#//View" containment="true" eOpposite="#//View/application"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//Reference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/models"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
+        eType="#//CardinalityKind" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reference" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
+        eType="#//CardinalityKind" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Collection" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/collections"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Router" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//RouterMapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/router"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RouterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="view" lowerBound="1" eType="#//View"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="View" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="application" lowerBound="1"
+        eType="#//Application" eOpposite="#//Application/views"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CardinalityKind">
+    <eLiterals name="ONE"/>
+    <eLiterals name="MANY" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

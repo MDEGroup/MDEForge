@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="eventPatternLanguage" nsURI="http://www.bme.hu/mit/incquery/cep/dsl/EventPatternLanguage"
+    nsPrefix="eventPatternLanguage">
+  <eClassifiers xsi:type="ecore:EClass" name="EventModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usages" upperBound="-1"
+        eType="#//Usage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotations" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//EventModelElements" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Usage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IQUsage" eSuperTypes="#//Usage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EventSourceUsage" eSuperTypes="#//Usage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EventModelElements">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//EventModelElements">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actionDefinition" eType="#//Action"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAtomicEvent" eSuperTypes="#//Event"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicEvent" eSuperTypes="#//AbstractAtomicEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotations" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterFilters" upperBound="-1"
+        eType="#//ParameterFilter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IQPatternEvent" eSuperTypes="#//AbstractAtomicEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iqpattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeType" eType="#//IQPatternChangeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" eType="ecore:EClass ../../../../../../../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexEvent" eSuperTypes="#//Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotations" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramlist" eType="#//CEParamlist"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="complexEventExpressions"
+        upperBound="-1" eType="#//ComplexEventExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CEParamlist">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="params" upperBound="-1"
+        eType="#//EventParamWithType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventParamWithType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterFilter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramFilterRule" eType="#//ParameterFilterRule"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IQPatternChangeType">
+    <eLiterals name="FOUND" literal="FOUND"/>
+    <eLiterals name="LOST" value="1" literal="LOST"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotations"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ContextAnnotation" eSuperTypes="#//Annotations">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="#//Context"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Context">
+    <eLiterals name="Chronicle" literal="Chronicle"/>
+    <eLiterals name="Recent" value="1" literal="Recent"/>
+    <eLiterals name="Unrestricted" value="2" literal="Unrestricted"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SamplingAnnotation" eSuperTypes="#//Annotations">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sampling" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PriorityAnnotation" eSuperTypes="#//Annotations">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterFilterRule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RangeFilter" eSuperTypes="#//ParameterFilterRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="neg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="range" eType="#//Range"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Range">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenOpen" eSuperTypes="#//Range"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenClosed" eSuperTypes="#//Range"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClosedClosed" eSuperTypes="#//Range"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClosedOpen" eSuperTypes="#//Range"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericFilter" eSuperTypes="#//ParameterFilterRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiteralFilter" eSuperTypes="#//ParameterFilterRule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="neg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexEventExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FollowsExpression" eSuperTypes="#//ComplexEventExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="firstEvent" upperBound="-1"
+        eType="#//EventWithMultiplicity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//EventWithFollowsOperator" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventWithFollowsOperator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operator" eType="#//FollowsOperator"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//EventWithMultiplicity"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FollowsOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FollowsOperatorNoTW" eSuperTypes="#//FollowsOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FollowsOperatorViaTW" eSuperTypes="#//FollowsOperator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timewindow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventWithMultiplicity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="event" eType="#//EventParamWithType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Source" eSuperTypes="#//EventModelElements">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapter" upperBound="-1"
+        eType="#//Adapter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Adapter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

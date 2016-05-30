@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mprolog"
+    nsURI="mprolog" nsPrefix="mprolog">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedClause" upperBound="-1"
+        eType="#//Clause" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Clause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedHead" eType="#//Head"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBody" eType="#//Body"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Head">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedFunctor" lowerBound="1"
+        eType="#//Functor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextTerm" eType="#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Body">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTerm" lowerBound="1"
+        eType="#//Term" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Functor" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTerm" eType="#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QuotedAtom" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="List" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedHeadTerms" eType="#//Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTailTerms" eType="#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InfixExpression" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTerm" lowerBound="1"
+        eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTerm" lowerBound="1"
+        eType="#//Term" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperator" lowerBound="1"
+        eType="#//Operator" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbol" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parenthesis" eSuperTypes="#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTerm" lowerBound="1"
+        eType="#//Term" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="streamdesc"
+    nsURI="http://eclectic.org/streamdesc" nsPrefix="streamdesc_mm">
+  <eClassifiers xsi:type="ecore:EClass" name="StreamDescription">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="streamName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metamodelName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keys" upperBound="-1" eType="#//KeySpec"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="windows" upperBound="-1"
+        eType="#//SlidingWindow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SlidingWindow" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementSlidingWindow" eSuperTypes="#//SlidingWindow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elements" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeSlidingWindow" eSuperTypes="#//SlidingWindow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seconds" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeySpec">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="runtime" nsURI="http://eclectic.org/streamdesc/runtime" nsPrefix="streamdesc_runtime_mm">
+    <eClassifiers xsi:type="ecore:EClass" name="StreamedFragment">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nonProxyElements" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="proxyElements" upperBound="-1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+          eType="#//runtime/Annotation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Annotation" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IsProxyAnnotation" eSuperTypes="#//runtime/Annotation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referenceSource" lowerBound="1"
+          eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

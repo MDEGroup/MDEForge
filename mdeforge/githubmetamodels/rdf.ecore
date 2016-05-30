@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rdf"
+    nsURI="http://www.w3.org/1999/02/22-rdf-syntax-ns#" nsPrefix="RDF">
+  <eClassifiers xsi:type="ecore:EClass" name="URIElement" abstract="true">
+    <eOperations name="getLocalName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="Id">
+        <details key="base" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespace" eType="#//Namespace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace" eSuperTypes="#//URIElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" lowerBound="1" eType="#//DocumentGraph"
+        eOpposite="#//DocumentGraph/namespaces"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFGraph" abstract="true" eSuperTypes="#//URIElement">
+    <eOperations name="isEquivalentTo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="graph" eType="#//RDFGraph"/>
+    </eOperations>
+    <eOperations name="add">
+      <eParameters name="graph" eType="#//RDFGraph"/>
+    </eOperations>
+    <eOperations name="union" eType="#//RDFGraph">
+      <eParameters name="graph" eType="#//RDFGraph"/>
+    </eOperations>
+    <eOperations name="diff" eType="#//RDFGraph">
+      <eParameters name="graph" eType="#//RDFGraph"/>
+    </eOperations>
+    <eOperations name="addTriple" eType="#//Triple">
+      <eParameters name="subject" eType="#//Node"/>
+      <eParameters name="property" eType="#//Property"/>
+      <eParameters name="object" eType="#//Node"/>
+    </eOperations>
+    <eOperations name="listSubjectsWithProperty" upperBound="-1" eType="#//SubjectNode">
+      <eParameters name="property" eType="#//Property"/>
+    </eOperations>
+    <eOperations name="listSubjectsWithPropertyValue" upperBound="-1" eType="#//SubjectNode">
+      <eParameters name="property" eType="#//Property"/>
+      <eParameters name="object" eType="#//Node"/>
+    </eOperations>
+    <eOperations name="listSubjects" upperBound="-1" eType="#//SubjectNode"/>
+    <eOperations name="getResource" eType="#//Resource">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getProperty" eType="#//Property">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getDatatype" eType="#//Datatype">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getBlankNode" eType="#//BlankNode">
+      <eParameters name="nodeID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="listAllTriples" upperBound="-1" eType="#//Triple"/>
+    <eOperations name="listAllResources" upperBound="-1" eType="#//Resource"/>
+    <eOperations name="listAllProperties" upperBound="-1" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodes" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFeatureMapEntry">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="group"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//Resource" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false" eOpposite="#//Resource/graph">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#nodes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#nodes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blankNodes" upperBound="-1"
+        eType="#//BlankNode" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false" eOpposite="#//BlankNode/graph">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#nodes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datatypes" upperBound="-1"
+        eType="#//Datatype" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#nodes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" upperBound="-1"
+        eType="#//Literal" volatile="true" transient="true" derived="true" containment="true"
+        resolveProxies="false" eOpposite="#//Literal/graph">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#nodes"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triples" upperBound="-1"
+        eType="#//Triple" containment="true" eOpposite="#//Triple/graph"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentGraph" eSuperTypes="#//RDFGraph">
+    <eOperations name="getNamedGraph" lowerBound="1" eType="#//NamedGraph">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespaces" upperBound="-1"
+        eType="#//Namespace" containment="true" eOpposite="#//Namespace/graph"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subGraphs" upperBound="-1"
+        eType="#//NamedGraph" eOpposite="#//NamedGraph/document"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Triple">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
+        eType="#//SubjectNode" eOpposite="#//SubjectNode/subjectOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" lowerBound="1"
+        eType="#//Property" eOpposite="#//Property/predicateOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="#//Node" eOpposite="#//Node/objectOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" lowerBound="1" eType="#//RDFGraph"
+        eOpposite="#//RDFGraph/triples"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectOf" upperBound="-1"
+        eType="#//Triple" eOpposite="#//Triple/object"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubjectNode" abstract="true" eSuperTypes="#//Node">
+    <eOperations name="isTypeOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getTypes" upperBound="-1" eType="#//Resource"/>
+    <eOperations name="getStringValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getValues" upperBound="-1" eType="#//Node">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getURIValues" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getObject" upperBound="-1" eType="#//Node">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subjectOf" upperBound="-1"
+        eType="#//Triple" eOpposite="#//Triple/subject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedGraph" eSuperTypes="#//RDFGraph #//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="document" lowerBound="1"
+        eType="#//DocumentGraph" eOpposite="#//DocumentGraph/subGraphs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlankNode" eSuperTypes="#//SubjectNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" eType="#//RDFGraph"
+        eOpposite="#//RDFGraph/blankNodes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TripleNode" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triple" lowerBound="1"
+        eType="#//Triple"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//SubjectNode #//URIElement">
+    <eOperations name="isTypeOf" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" eType="#//RDFGraph"
+        transient="true" eOpposite="#//RDFGraph/resources"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicateOf" upperBound="-1"
+        eType="#//Triple" eOpposite="#//Triple/predicate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Datatype" eSuperTypes="#//Resource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lexicalForm" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lang" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datatype" lowerBound="1"
+        eType="#//Datatype"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graph" eType="#//RDFGraph"
+        eOpposite="#//RDFGraph/literals"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFSContainer" abstract="true" eSuperTypes="#//BlankNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFBag" eSuperTypes="#//RDFSContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFAlt" eSuperTypes="#//RDFSContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFSeq" eSuperTypes="#//RDFSContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFList" eSuperTypes="#//BlankNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Node"/>
+  </eClassifiers>
+</ecore:EPackage>

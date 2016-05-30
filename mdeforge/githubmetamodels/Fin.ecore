@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fin" nsURI="http://www.nie.de/fin/Fin" nsPrefix="fin">
+  <eClassifiers xsi:type="ecore:EClass" name="FinModelFile">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Element" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedNamespace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Konto" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inhaber" eType="#//Kontakt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ktoNr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bank" eType="#//Kontakt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verwendung" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bemerkung" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MONAT">
+    <eLiterals name="ALLE" literal="monatlich"/>
+    <eLiterals name="JANUAR" value="2" literal="Januar"/>
+    <eLiterals name="FEBRUAR" value="4" literal="Februar"/>
+    <eLiterals name="MAERZ" value="6" literal="März"/>
+    <eLiterals name="APRIL" value="8" literal="April"/>
+    <eLiterals name="MAI" value="10" literal="Mai"/>
+    <eLiterals name="JUNI" value="12" literal="Juni"/>
+    <eLiterals name="JULI" value="14" literal="Juli"/>
+    <eLiterals name="AUGUST" value="16" literal="August"/>
+    <eLiterals name="SEPTEMBER" value="18" literal="September"/>
+    <eLiterals name="OKTOBER" value="20" literal="Oktober"/>
+    <eLiterals name="NOVEMBER" value="22" literal="November"/>
+    <eLiterals name="DEZEMBER" value="24" literal="Dezember"/>
+    <eLiterals name="VIERTELJAEHRLICH" value="26" literal="vierteljährlich"/>
+    <eLiterals name="HALBJAEHRLICH" value="27" literal="halbjährlich"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Buchungsart">
+    <eLiterals name="DAUERAUFTRAG" literal="Dauerauftrag"/>
+    <eLiterals name="UEBERWEISUNG" value="1" literal="Überweisung"/>
+    <eLiterals name="ABBUCHUNG" value="2" literal="Abbuchung"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Intervall">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="monate" unique="false"
+        upperBound="-1" eType="#//MONAT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Kategorie" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Buchungsintervall" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intervall" eType="#//Intervall"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Buchung" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="konto" eType="#//Konto"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="betrag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="empfaenger" eType="#//Kontakt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="empfaengerKto" eType="#//Konto"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="von" eType="#//Kontakt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vonKto" eType="#//Konto"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intervall" eType="#//Intervall"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intervallRef" eType="#//Buchungsintervall"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buchungsart" eType="#//Buchungsart"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="kategorie" unique="false"
+        upperBound="-1" eType="#//Kategorie"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Kontakt" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nachname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strasse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="plz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bemerkung" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

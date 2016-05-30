@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="perf"
+    nsURI="http://www.eclipse.org/ecl/perf.ecore" nsPrefix="org.eclipse.ecl.perf">
+  <eClassifiers xsi:type="ecore:EClass" name="PerfCounter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartTimeMeasure" eSuperTypes="../../org.eclipse.ecl.core/model/ecl.ecore#//Command">
+    <eAnnotations source="http://www.eclipse.org/ecl/docs">
+      <details key="description" value="Start measuring time with a certain counter name."/>
+      <details key="returns" value="nothing"/>
+      <details key="example" value="start-time-measure MyCounter&#xD;&#xA;//Some ECL script&#xD;&#xA;stop-time-measure MyCounter | constrain-max duration 2000"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StopTimeMeasure" eSuperTypes="../../org.eclipse.ecl.core/model/ecl.ecore#//Command">
+    <eAnnotations source="http://www.eclipse.org/ecl/docs">
+      <details key="description" value="Finishes measuring time. Writes to the output stream the object with fields name and duration, where the name is counterName, and duration - the execution in milliseconds."/>
+      <details key="returns" value="object with fields name and the duration of execution in milliseconds"/>
+      <details key="example" value="start-time-measure MyCounter&#xD;&#xA;//Some ECL script&#xD;&#xA;stop-time-measure MyCounter | constrain-max duration 2000"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MeasureTime" eSuperTypes="../../org.eclipse.ecl.core/model/ecl.ecore#//Command">
+    <eAnnotations source="http://www.eclipse.org/ecl/docs">
+      <details key="description" value="Takes the name of the counter and the command on execution. Writes to the output stream the object with fields name and duration, where the name is counterName, and duration - the execution in milliseconds."/>
+      <details key="returns" value="object with fields name and the duration of execution in milliseconds"/>
+      <details key="example" value="measure-time &quot;MyCounterName&quot; {&#xD;&#xA;   // some ECL script&#xD;&#xA;} | constrain-max duration 2000 &#xD;&#xA;// fail if the operation was more than 2 seconds with a message &#xD;&#xA;//Max constraint violation: 'MyCounterName' duration is 100500 which is greater than 2000."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="do" eType="ecore:EClass ../../org.eclipse.ecl.core/model/ecl.ecore#//Command"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstrainMax" eSuperTypes="../../org.eclipse.ecl.core/model/ecl.ecore#//Command">
+    <eAnnotations source="http://www.eclipse.org/ecl/docs">
+      <details key="description" value="Takes a property name and a number. Reads from the input stream object, takes his property and compares with a defined value."/>
+      <details key="returns" value="True if received number is less or equal to defined value. False if number is greater than defined value."/>
+      <details key="example" value="measure-time &quot;MyCounterName&quot; {&#xD;&#xA;   // some ECL script&#xD;&#xA;} | constrain-max duration 2000 &#xD;&#xA;// fail if the operation was more than 2 seconds with a message &#xD;&#xA;//Max constraint violation: 'MyCounterName' duration is 100500 which is greater than 2000."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="counter" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject">
+      <eAnnotations source="http://www.eclipse.org/ecl/input"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

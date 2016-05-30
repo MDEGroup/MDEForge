@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mappings"
+    nsURI="http://eclectic.org/frontend/mappingL" nsPrefix="ec_frontend_mappingL">
+  <eClassifiers xsi:type="ecore:EClass" name="MappingTransformation" eSuperTypes="#//dep/TransformationDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delegates" upperBound="-1"
+        eType="#//Delegate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" upperBound="-1"
+        eType="#//Context" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingVariable" eSuperTypes="#//dep/Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchedElement" eSuperTypes="#//dep/ClassUse #//MappingVariable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Delegate" eSuperTypes="#//dep/LocatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" upperBound="-1" eType="#//MatchedElement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isExternal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" eType="#//dep/UseDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="linkName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Context" eSuperTypes="#//dep/LocatedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" upperBound="-1" eType="#//MatchedElement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" upperBound="-1"
+        eType="#//MatchedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//MappingElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+        eType="#//C2CModifier" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" upperBound="-1"
+        eType="#//Section" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tags" upperBound="-1" eType="#//Tag"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section" eSuperTypes="#//dep/LocatedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sectionType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//MappingElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingElement" abstract="true" eSuperTypes="#//dep/LocatedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassMapping" abstract="true" eSuperTypes="#//MappingElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature2Feature" abstract="true" eSuperTypes="#//MappingElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftFeature" eType="#//FeatureRef"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="converter" eType="#//Converter"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeMapping" eSuperTypes="#//Feature2Feature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" upperBound="-1" eType="#//AttributeRef"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightPart" lowerBound="1"
+        eType="#//AttributeRightPart" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeRightPart" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeIsString" eSuperTypes="#//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeIsBoolean" eSuperTypes="#//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="boolValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeIsDouble" eSuperTypes="#//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="doubleValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeIsResolveLink" eSuperTypes="#//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolveLink" lowerBound="1"
+        eType="#//dep/ResolveLink" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeIsInteger" eSuperTypes="#//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Converter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isExternal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" eType="#//dep/UseDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="converterName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tag" eSuperTypes="#//dep/NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Class2Class" eSuperTypes="#//ClassMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
+        eType="#//MappingCardinality" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+        eType="#//C2CModifier" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1" upperBound="-1"
+        eType="#//ClassRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" upperBound="-1"
+        eType="#//ClassRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scopedAttributes" upperBound="-1"
+        eType="#//Attribute2Attribute" containment="true" eOpposite="#//Attribute2Attribute/context"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="C2CModifier" abstract="true" eSuperTypes="#//MappingElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RelatedBy" eSuperTypes="#//C2CModifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="#//AttributeRef" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkedBy" eSuperTypes="#//C2CModifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="#//AttributeRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkedElement" lowerBound="1"
+        eType="#//MatchedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EqualityFilter" eSuperTypes="#//C2CModifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" lowerBound="1"
+        eType="#//AttributeRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operator" abstract="true" eSuperTypes="#//dep/LocatedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Split" eSuperTypes="#//Operator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//ClassMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="#//Operator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" upperBound="-1"
+        eType="#//ClassMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute2Attribute" eSuperTypes="#//Feature2Feature #//AttributeRightPart">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
+        eType="#//MappingCardinality"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Class2Class"
+        eOpposite="#//Class2Class/scopedAttributes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" upperBound="-1"
+        eType="#//AttributeRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifiers" upperBound="-1"
+        eType="#//AttributeModifier" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Reference2Reference" eSuperTypes="#//Feature2Feature">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cardinality" lowerBound="1"
+        eType="#//MappingCardinality"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" upperBound="-1" eType="#//ReferenceRef"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1" upperBound="-1"
+        eType="#//ReferenceRef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolverName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MappingCardinality">
+    <eLiterals name="OneToOne"/>
+    <eLiterals name="NToOne" value="1"/>
+    <eLiterals name="OneToN" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Modifier" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeModifier" abstract="true" eSuperTypes="#//Modifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConvertModifier" eSuperTypes="#//AttributeModifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="converter" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultValue" abstract="true" eSuperTypes="#//AttributeModifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntDefaultValue" eSuperTypes="#//DefaultValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetamodelElementRef" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassRef" eSuperTypes="#//MetamodelElementRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="klass" lowerBound="1" eType="#//dep/ClassUse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureRef" eSuperTypes="#//MetamodelElementRef #//Feature2Feature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredElement" lowerBound="1"
+        eType="#//MatchedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multivalued" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeRef" eSuperTypes="#//MetamodelElementRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredElement" lowerBound="1"
+        eType="#//MatchedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multivalued" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceRef" eSuperTypes="#//MetamodelElementRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredElement" lowerBound="1"
+        eType="#//MatchedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="featureName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multivalued" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eSubpackages name="dep" nsURI="http://eclectic.org/frontend/dep" nsPrefix="ec_frontend_dep">
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TransformationDefinition"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TransformationDefinitionParameter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LocatedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ClassUse"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UseDeclaration"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ResolveLink"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable"/>
+  </eSubpackages>
+</ecore:EPackage>

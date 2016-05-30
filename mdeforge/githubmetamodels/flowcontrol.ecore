@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="flowcontrol"
+    nsURI="http://flowcontrol" nsPrefix="flowcontrol">
+  <eClassifiers xsi:type="ecore:EClass" name="FlowElement" abstract="true">
+    <eOperations name="getOutGoings" upperBound="-1" eType="#//Transition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//Transition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" upperBound="-1" eType="#//Transition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+        eType="#//FlowDiagram"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Activity" abstract="true" eSuperTypes="#//FlowElement #//ParameterProvider">
+    <eOperations name="isNested" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass platform:/plugin/org.eclipse.emf.henshin.model/model/henshin.ecore#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterMappings" upperBound="-1"
+        eType="#//ParameterMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlElement" abstract="true" eSuperTypes="#//FlowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalActivity" eSuperTypes="#//Activity #//ConditionalElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Start" eSuperTypes="#//ControlElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="End" eSuperTypes="#//ControlElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eOperations name="isAlternate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" lowerBound="1" eType="#//FlowElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prevous" lowerBound="1"
+        eType="#//FlowElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowDiagram" eSuperTypes="platform:/plugin/org.eclipse.emf.henshin.model/model/henshin.ecore#//NamedElement #//ParameterProvider">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//FlowElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterMappings" upperBound="-1"
+        eType="#//ParameterMapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" lowerBound="1" eType="#//Start"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" lowerBound="1" eType="#//End"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="strict" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rollback" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowControlSystem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
+        eType="#//FlowDiagram" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" lowerBound="1" eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterProvider" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalElement" abstract="true"
+      eSuperTypes="#//FlowElement">
+    <eOperations name="getAlternativeLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="altOut" eType="#//Transition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompoundActivity" eSuperTypes="#//SimpleActivity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Activity" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="platform:/plugin/org.eclipse.emf.henshin.model/model/henshin.ecore#//NamedElement">
+    <eOperations name="isInput" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isOutPut" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="provider" lowerBound="1"
+        eType="#//ParameterProvider"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="henshinParameter" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.henshin.model/model/henshin.ecore#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleActivity" eSuperTypes="#//Activity"/>
+</ecore:EPackage>

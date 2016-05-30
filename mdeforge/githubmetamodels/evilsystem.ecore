@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="evilsystem"
+    nsURI="http://evilsystem/1.0" nsPrefix="evilsystem">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="System">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//PackageElement" containment="true" eOpposite="#//PackageElement/system"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemNameSpace" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//PackageElement #//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//PackageElement #//Type">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueAttributeName UniqueFunctionName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueAttributeName" value="self.attributes->forAll(a1 : Attribute, a2 : Attribute | a1 &lt;> a2 implies a1.name &lt;> a2.name)"/>
+      <details key="UniqueFunctionName" value="self.functions->forAll(f1 : Function, f2 : Function | f1 &lt;> f2 implies f1.name &lt;> f2.name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queries" lowerBound="1"
+        upperBound="-1" eType="#//NamedQuery" eOpposite="#//NamedQuery/referred"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedObject" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NotEmptyName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NotEmptyName" value="self.name &lt;> ''"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//TypeReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//TypeReference">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueParameterName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueParameterName" value="self.parameters->forAll(p1 : Parameter, p2 : Parameter | p1 &lt;> p2 implies p1.name &lt;> p2.name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="methodType" lowerBound="1"
+        eType="#//MethodType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queries" upperBound="-1"
+        eType="#//NamedQuery" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypeReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Service">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueFunctionName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniqueFunctionName" value="self.functions->forAll(f1 : Function, f2 : Function | f1 &lt;> f2 implies f1.name &lt;> f2.name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functions" upperBound="-1"
+        eType="#//Function" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//Component" eOpposite="#//Component/services"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageElement" abstract="true" eSuperTypes="#//NamedObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniquePackageElementName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="UniquePackageElementName" value="PackageElement.allInstances()->forAll(p1 : PackageElement, p2 : PackageElement | p1 &lt;> p2 implies p1.name &lt;> p2.name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="system" eType="#//System"
+        eOpposite="#//System/elements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//NamedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeReference" abstract="true" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collection" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//PackageElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="platform" lowerBound="1"
+        eType="#//Platform"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true" eOpposite="#//Service/component"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Platform">
+    <eLiterals name="OSGi"/>
+    <eLiterals name="dotNet" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MethodType">
+    <eLiterals name="GET"/>
+    <eLiterals name="POST" value="1"/>
+    <eLiterals name="PUT" value="2" literal="PUT"/>
+    <eLiterals name="DELETE" value="3"/>
+    <eLiterals name="HEAD" value="4"/>
+    <eLiterals name="OPTIONS" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedQuery" eSuperTypes="#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referred" lowerBound="1"
+        eType="#//Entity" eOpposite="#//Entity/queries"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

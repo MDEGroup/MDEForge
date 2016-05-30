@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="operation" nsURI="http://operation/1.0" nsPrefix="operation">
+  <eClassifiers xsi:type="ecore:EClass" name="MenuItem" eSuperTypes="#//OperationElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuntimeInformation" eSuperTypes="#//OperationElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contents" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChecklistEntry" eSuperTypes="#//OperationElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="menu" eType="#//MenuItem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="info" eType="#//RuntimeInformation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="taskId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobPaths" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" lowerBound="1" eType="ecore:EClass process.ecore#//Task"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="operation.queries.ChecklistEntryTaskCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jobs" upperBound="-1" eType="ecore:EClass system.ecore#//Job"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="operation.queries.ChecklistEntryJobCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Checklist" eSuperTypes="#//OperationElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ChecklistEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="menu" upperBound="-1" eType="#//MenuItem"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" lowerBound="1"
+        eType="ecore:EClass process.ecore#//Process" changeable="false" volatile="true"
+        transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="operation.queries.ChecklistProcessCorrespondence"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

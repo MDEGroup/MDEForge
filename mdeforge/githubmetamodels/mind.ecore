@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="adl" nsURI="http://org.ow2.mindEd/adl.ecore/0.2.0" nsPrefix="mindEd.ecore">
+  <eClassifiers xsi:type="ecore:EClass" name="ArchitectureDefinition" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="default_Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAdlDefinition" eType="#//AdlDefinition"
+        transient="true" eOpposite="#//AdlDefinition/architecturedefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" eType="#//Body" containment="true"
+        eOpposite="#//Body/parentComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencesList" eType="#//ReferencesList"
+        containment="true" eOpposite="#//ReferencesList/parentComponentDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameFQN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentKind" eType="#//ComponentKind"
+        transient="true" defaultValueLiteral="NULL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simpleName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdlDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//ImportDefinition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="architecturedefinition"
+        eType="#//ArchitectureDefinition" containment="true" eOpposite="#//ArchitectureDefinition/parentAdlDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" eSuperTypes="#//ElementValue #//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="annotationt_Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationElements" upperBound="-1"
+        eType="#//AnnotationElement" containment="true" eOpposite="#//AnnotationElement/parentAnnotation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAnnotationList" eType="#//AnnotationsList"
+        transient="true" eOpposite="#//AnnotationsList/annotations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="element_Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementValue" eType="#//ElementValue"
+        containment="true" eOpposite="#//ElementValue/parentAnnotationElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAnnotation" eType="#//Annotation"
+        transient="true" eOpposite="#//Annotation/annotationElements"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationsList" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//Annotation" containment="true" eOpposite="#//Annotation/parentAnnotationList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgumentDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="argumentValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="argumentName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="argument_Name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinition" eSuperTypes="#//PrimitiveDefinitionElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="attribute_Name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingDefinition" eSuperTypes="#//CompositeDefinitionElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceSource" unique="false"
+        eType="#//InterfaceDefinition" transient="true" eKeys="#//InterfaceDefinition/name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceSourceIndex" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceTarget" unique="false"
+        eType="#//InterfaceDefinition" transient="true" eKeys="#//InterfaceDefinition/name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceTargetIndex" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceSourceLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceTargetLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceSourceParentLabel"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceTargetParentLabel"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Body" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentComponent" eType="#//ArchitectureDefinition"
+        transient="true" eOpposite="#//ArchitectureDefinition/body"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Element" containment="true" eOpposite="#//Element/parentBody"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsList" eType="#//AnnotationsList"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="anonymous" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentReference" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="referenceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="reference_Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templatesList" upperBound="-1"
+        eType="#//TemplateDefinition" unsettable="true" containment="true" eOpposite="#//TemplateDefinition/parentCompositeReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argumentsList" upperBound="-1"
+        eType="#//ArgumentDefinition" unsettable="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameFQN" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolved" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentReferencesList" eType="#//ReferencesList"
+        transient="true" eOpposite="#//ReferencesList/references"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentSubComponent" eType="#//SubComponentDefinition"
+        transient="true" eOpposite="#//SubComponentDefinition/referenceDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentTypeDefinition" eSuperTypes="#//ArchitectureDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsList" eType="#//AnnotationsList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeBody" eSuperTypes="#//Body"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeComponentDefinition" eSuperTypes="#//ArchitectureDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateSpecifiersList"
+        eType="#//TemplateSpecifiersList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compositeFormalArgumentsList"
+        eType="#//FormalArgumentsList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsList" eType="#//AnnotationsList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeDefinitionElement" abstract="true"
+      eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeReferenceDefinition" eSuperTypes="#//ComponentReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeReferencesList" eSuperTypes="#//ReferencesList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstantValue" eSuperTypes="#//ElementValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataDefinition" eSuperTypes="#//PrimitiveDefinitionElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileC" eType="#//FileC"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inlineCcode" eType="#//InlineCodeC"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentBody" eType="#//Body"
+        transient="true" eOpposite="#//Body/elements"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsList" eType="#//AnnotationsList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentAnnotationElement"
+        eType="#//AnnotationElement" transient="true" eOpposite="#//AnnotationElement/elementValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementValueArrayInitializer" eSuperTypes="#//ElementValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//ElementValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileC" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="directory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="file_Name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalArgument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="argument_name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentFormalArgumentsList"
+        eType="#//FormalArgumentsList" transient="true" eOpposite="#//FormalArgumentsList/formalArguments"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FormalArgumentsList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formalArguments" upperBound="-1"
+        eType="#//FormalArgument" containment="true" eOpposite="#//FormalArgument/parentFormalArgumentsList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImplementationDefinition" eSuperTypes="#//PrimitiveDefinitionElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileC" eType="#//FileC"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inlineCcode" eType="#//InlineCodeC"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImportDefinition" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="import_Name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InlineCodeC" eSuperTypes="#//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="codeC" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="{{ }}"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceDefinition" eSuperTypes="#//CompositeDefinitionElement #//PrimitiveDefinitionElement #//TypeDefinitionElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="role" eType="#//Role"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="signature" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="signature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collectionsize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="interface_name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MergedObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="merged" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false" unsettable="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="override" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" unsettable="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canOverride" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="true" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveBody" eSuperTypes="#//Body"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveComponentDefinition" eSuperTypes="#//ArchitectureDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primitiveFormalArgumentsList"
+        eType="#//FormalArgumentsList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationsList" eType="#//AnnotationsList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveDefinitionElement" abstract="true"
+      eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveReferenceDefinition" eSuperTypes="#//ComponentReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveReferencesList" eSuperTypes="#//ReferencesList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferencesList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="references" upperBound="-1"
+        eType="#//ComponentReference" containment="true" eOpposite="#//ComponentReference/parentReferencesList"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentComponentDefinition"
+        eType="#//ArchitectureDefinition" transient="true" eOpposite="#//ArchitectureDefinition/referencesList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubComponentCompositeBody" eSuperTypes="#//CompositeBody"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubComponentDefinition" eSuperTypes="#//CompositeDefinitionElement #//ArchitectureDefinition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceDefinition" eType="#//ComponentReference"
+        unsettable="true" containment="true" eOpposite="#//ComponentReference/parentSubComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubComponentPrimitiveBody" eSuperTypes="#//PrimitiveBody"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateDefinition" eSuperTypes="#//TemplateSpecifier #//MergedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentCompositeReference"
+        eType="#//ComponentReference" transient="true" eOpposite="#//ComponentReference/templatesList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateSpecifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//ComponentReference"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="template_name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateSpecifiersList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateSpecifiers" upperBound="-1"
+        eType="#//TemplateSpecifier" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeBody" eSuperTypes="#//Body"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeDefinitionElement" abstract="true"
+      eSuperTypes="#//Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeReferenceDefinition" eSuperTypes="#//ComponentReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeReferencesList" eSuperTypes="#//ReferencesList"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Role">
+    <eLiterals name="provides" literal="provides"/>
+    <eLiterals name="requires" value="1" literal="requires"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComponentKind" serializable="false">
+    <eLiterals name="NULL"/>
+    <eLiterals name="COMPOSITE" value="1"/>
+    <eLiterals name="PRIMITIVE" value="2"/>
+    <eLiterals name="TYPE" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

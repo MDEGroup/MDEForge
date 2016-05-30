@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gitmodel"
+    nsURI="http://gitmodel/1.0/emffrag" nsPrefix="gitmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="SourceRepository">
+    <eOperations name="getCommit" eType="#//Commit">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="putCommit">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="commit" eType="#//Commit"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRefs" upperBound="-1"
+        eType="#//Ref" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allCommits" upperBound="-1"
+        eType="#//Commit" containment="true">
+      <eAnnotations source="de.hub.emffrag">
+        <details key="indexes" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaModel" eType="ecore:EClass java.ecore#//Model"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootCommit" eType="#//Commit"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Commit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commiter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRelations" upperBound="-1"
+        eType="#//ParentRelation" containment="true" eOpposite="#//ParentRelation/child"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childRelations" upperBound="-1"
+        eType="#//ParentRelation" eOpposite="#//ParentRelation/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ref">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedCommit" eType="#//Commit"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPeeled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSymbolic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diff">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ChangeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="ChangeType" instanceClassName="org.eclipse.jgit.diff.DiffEntry.ChangeType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaDiff" eSuperTypes="#//Diff">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilationUnit" eType="ecore:EClass java.ecore#//CompilationUnit">
+      <eAnnotations source="de.hub.emffrag">
+        <details key="Fragmentation" value="true"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RevCompilationUnit" eSuperTypes="java.ecore#//CompilationUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" upperBound="-1"
+        eType="#//RevCompilationUnit" eOpposite="#//RevCompilationUnit/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//RevCompilationUnit" eOpposite="#//RevCompilationUnit/parent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParentRelation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diffs" upperBound="-1"
+        eType="#//Diff" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Commit"
+        eOpposite="#//Commit/childRelations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" eType="#//Commit"
+        eOpposite="#//Commit/parentRelations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmfFragSourceRepository">
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../de.hub.emffrag/metamodels/emffrag.ecore#//IndexedMap">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eTypeArguments eClassifier="#//Commit"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//SourceRepository"/>
+  </eClassifiers>
+</ecore:EPackage>

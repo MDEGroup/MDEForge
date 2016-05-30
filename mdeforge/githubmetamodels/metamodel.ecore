@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="metamodel"
+    nsURI="http://www.example.org/metamodel" nsPrefix="metamodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="#//Type" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Datatype" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="list" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotations" upperBound="-1"
+        eType="#//HibernateAnnotation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HibernateAnnotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotationType" eType="#//HibernateAnnotationTypes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappedBy" eType="#//Attribute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cascade" eType="#//HibernateCascadeTypes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HibernateAnnotationTypes">
+    <eLiterals name="OneToMany"/>
+    <eLiterals name="ManyToOne" value="1"/>
+    <eLiterals name="ManyToMany" value="2"/>
+    <eLiterals name="OneToOne" value="3"/>
+    <eLiterals name="Column" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="HibernateCascadeTypes">
+    <eLiterals name="CascadeAll"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="swt" nsURI="http://jeeeyul.net/swtquery" nsPrefix="swt">
+  <eClassifiers xsi:type="ecore:EDataType" name="RuntimeType" instanceTypeName="java.lang.Class&lt;?>"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="RuntimeMethod" instanceClassName="java.lang.reflect.Method"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyType" eType="#//RuntimeType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
+        eType="#//WidgetDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyDefinitionEntry" instanceClassName="java.util.Map.Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//PropertyDefinition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyDefinitions" upperBound="-1"
+        eType="#//PropertyDefinitionEntry" containment="true" eKeys="#//PropertyDefinitionEntry/key"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviorDefinitions" upperBound="-1"
+        eType="#//BehaviorDefinition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="widgets" upperBound="-1"
+        eType="#//WidgetDefinition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definition" eType="#//PropertyDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="getter" eType="#//RuntimeMethod"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="setter" eType="#//RuntimeMethod"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WidgetDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimeType" eType="#//RuntimeType"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyFeatures" upperBound="-1"
+        eType="#//PropertyFeatureEntry" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviors" upperBound="-1"
+        eType="#//BehaviorDefinition" eOpposite="#//BehaviorDefinition/owners"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superType" eType="#//WidgetDefinition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyFeatureEntry" instanceClassName="java.util.Map.Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//PropertyDefinition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//PropertyFeature"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviorDefinition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owners" upperBound="-1"
+        eType="#//WidgetDefinition" eOpposite="#//WidgetDefinition/behaviors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//RuntimeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

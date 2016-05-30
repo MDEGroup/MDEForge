@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="diff"
+    nsURI="http://www.eclipse.org/emf/compare/diff/1.1" nsPrefix="diff">
+  <eClassifiers xsi:type="ecore:EClass" name="DiffModel">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root of the differences model for single resources differencing."/>
+    </eAnnotations>
+    <eOperations name="getSubchanges" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eOperations name="getDifferences" upperBound="-1" eType="#//DiffElement">
+      <eParameters name="modelElement" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    </eOperations>
+    <eOperations name="getDifferences" upperBound="-1" eType="#//DiffElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedElements" upperBound="-1"
+        eType="#//DiffElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftRoots" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightRoots" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ancestorRoots" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffResourceSet">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root of the differences model for ResourceSet-wide differencing."/>
+    </eAnnotations>
+    <eOperations name="getSubchanges" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diffModels" upperBound="-1"
+        eType="#//DiffModel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceDiffs" upperBound="-1"
+        eType="#//ResourceDiff" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffElement" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This is the superclass of all types of differences EMF Compare can detect."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subDiffElements" upperBound="-1"
+        eType="#//DiffElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isHiddenBy" upperBound="-1"
+        eType="#//AbstractDiffExtension" eOpposite="#//AbstractDiffExtension/hideElements"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conflicting" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"
+        changeable="false" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//DifferenceKind"
+        changeable="false" transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remote" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConflictingDiffElement" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This will act as a container for conflictual changes."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="originElement" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffGroup" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="DiffGroups are used as container for differences so that we can maintain the original models' hierarchy within the differences model."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subchanges" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        changeable="false" transient="true" unsettable="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonSnapshot" abstract="true"
+      interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass for classes allowing the serialization of comparison results."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonResourceSnapshot" eSuperTypes="#//ComparisonSnapshot">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This can be used to hold the result of single-elements comparison (Resource with Resource, EObject with EObject, ...)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diff" eType="#//DiffModel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" eType="ecore:EClass platform:/plugin/org.eclipse.emf.compare.match/model/match.ecore#//MatchModel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonResourceSetSnapshot" eSuperTypes="#//ComparisonSnapshot">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This can be used to hold the result of ResourceSet-wide comparisons."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diffResourceSet" eType="#//DiffResourceSet"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matchResourceSet" eType="ecore:EClass platform:/plugin/org.eclipse.emf.compare.match/model/match.ecore#//MatchResourceSet"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElementChange" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass of DiffElements used to describe element additions or removals."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElementChangeLeftTarget" eSuperTypes="#//ModelElementChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;LeftTarget&quot; element change describes a difference involving the left element/resource. In the case of ModelElementChanges, this can describe either the addition of an element or the remote removal of an element (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElementChangeRightTarget" eSuperTypes="#//ModelElementChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;RightTarget&quot; element change describes a difference involving the right element/resource. In the case of ModelElementChanges, this can describe either the removal of an element or the remote addition of an element (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftParent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateModelElement" eSuperTypes="#//ModelElementChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass of DiffElements used to describe &quot;move&quot; types of differences. This includes both Moving from a container to another and changing the containment reference of an element. These changes imply both an addition and a removal."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MoveModelElement" eSuperTypes="#//UpdateModelElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="These describe a change of container for a given element."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateContainmentFeature" eSuperTypes="#//MoveModelElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This particular kind of move operation describe a change of containment reference of a given element within the same container."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeChange" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass of elements describing difference between the values of a given attribute."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeChangeLeftTarget" eSuperTypes="#//AttributeChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;LeftTarget&quot; element change describes a difference involving the left element/resource. In the case of AttributeChanges, these describe differences within multi-valued attributes. Specifically, the addition of a value or the remote removal of a value (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="leftTarget" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeChangeRightTarget" eSuperTypes="#//AttributeChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;RightTarget&quot; element change describes a difference involving the right element/resource. In the case of AttributeChanges, these describe differences within multi-valued attributes. Specifically, the removal of a value or the remote addition of a value (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rightTarget" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateAttribute" eSuperTypes="#//AttributeChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Differences of this kind represent modifications of the value of single-valued attributes."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceChange" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass of elements describing difference between the values of a given reference."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EReference"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceChangeLeftTarget" eSuperTypes="#//ReferenceChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;LeftTarget&quot; element change describes a difference involving the left element/resource. In the case of ReferenceChanges, these describe differences within multi-valued references. Specifically, the addition of a value or the remote removal of a value (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceChangeRightTarget" eSuperTypes="#//ReferenceChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;RightTarget&quot; element change describes a difference involving the right element/resource. In the case of ReferenceChanges, these describe differences within multi-valued references. Specifically, the removal of a value or the remote addition of a value (for three way comparisons)."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateReference" eSuperTypes="#//ReferenceChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Differences of this kind represent modifications of the value of single-valued references."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTarget" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceOrderChange" eSuperTypes="#//ReferenceChange">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftTarget" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightTarget" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDiffExtension" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="These can be used to extend the DiffModel so that DiffElements can be collapsed under a single high level difference"/>
+    </eAnnotations>
+    <eOperations name="visit">
+      <eParameters name="diffModel" eType="#//DiffModel"/>
+    </eOperations>
+    <eOperations name="getText" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eOperations name="getImage" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EJavaObject"/>
+    <eOperations name="provideMerger" eType="#//IMerger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hideElements" upperBound="-1"
+        eType="#//DiffElement" eOpposite="#//DiffElement/isHiddenBy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCollapsed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDiff" eSuperTypes="#//DiffElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Differences of this kind represent changes regarding a third-party resource."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDependencyChange" eSuperTypes="#//ResourceDiff">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Superclass of DiffElements representing additions or removals of references towards a third-party resource."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roots" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDependencyChangeLeftTarget"
+      eSuperTypes="#//ResourceDependencyChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;LeftTarget&quot; element change describes a difference involving the left ResourceSet. These differences can be used to describe additions or remote removals of third-party resources dependencies."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDependencyChangeRightTarget"
+      eSuperTypes="#//ResourceDependencyChange">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A &quot;RightTarget&quot; element change describes a difference involving the right ResourceSet. These differences can be used to describe deletions or remote additions of third-party resources dependencies."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IMerger" instanceClassName="org.eclipse.emf.compare.diff.merge.IMerger"
+      serializable="false">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Can represent mergers provided by a given DiffExtension."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DifferenceKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="These flags will be used to describe the kind of a DiffElement."/>
+    </eAnnotations>
+    <eLiterals name="Addition"/>
+    <eLiterals name="Deletion" value="1"/>
+    <eLiterals name="Change" value="2"/>
+    <eLiterals name="Move" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

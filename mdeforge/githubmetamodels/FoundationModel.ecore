@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="foundationmodel"
+    nsURI="http://foundationmodel/1.0" nsPrefix="foundationmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="committerId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bugzillaEmail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="committerAgreement" eType="#//IndividualCommitterAgreeemnt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gitEmail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Review" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="approval" eType="#//Approval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comments" upperBound="-1"
+        eType="#//Comment"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReleaseReview" eSuperTypes="#//Review"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GraduationReview" eSuperTypes="#//ReleaseReview"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RestructuringReview" eSuperTypes="#//Review"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Release">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Review" eType="#//ReleaseReview"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateSite" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newAndNoteworthy" upperBound="-1"
+        eType="#//NewAndNoteworthy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference0" eType="#//ProjectPlan"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iplog" eType="#//IPLog"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreationReview" eSuperTypes="#//Review">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="committers" eType="#//Committer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="whyEclipse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initialContribution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="legalIssues" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interestedParties" upperBound="-1"
+        eType="#//InterestedParty"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TopLevelProject" eSuperTypes="#//Project">
+    <eOperations name="getPmcMembers"/>
+    <eOperations name="getPmcLead"/>
+    <eOperations name="getArchitectureCouncilRep"/>
+    <eOperations name="getPlanningCouncilRep"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="charter" eType="#//Charter"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubProject" eSuperTypes="#//Project">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Project"
+        eOpposite="#//Project/children"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" abstract="true">
+    <eOperations name="getCommitters"/>
+    <eOperations name="getLeaders"/>
+    <eOperations name="getMentors"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="namespace" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="longName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reviews" upperBound="-1"
+        eType="#//Review"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="release" upperBound="-1"
+        eType="#//Release" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="approval" eType="#//Approval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paragraph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="downloadDirectory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceRepository" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bugzilla" upperBound="-1"
+        eType="#//BugzillaProjectLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//SubProject" containment="true" eOpposite="#//SubProject/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationship" upperBound="-1"
+        eType="#//ProjectRelationship" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="websiteUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="wikiUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="retentionPolicy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Organization">
+    <eOperations name="getPlanningCouncilRep"/>
+    <eOperations name="getArchitectureCouncilRep"/>
+    <eOperations name="getBoardMember"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="committerAgreement" eType="#//MemberCommitterAgreement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logoAgreement" eType="#//LogoAgreement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberType" eType="#//MemberType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationRelationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="organization" lowerBound="1"
+        eType="#//Organization"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employee" lowerBound="1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relation" eType="#//OrganizationRelation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationRelation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectRelationship">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" lowerBound="1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relation" eType="#//ProjectRelation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectRelation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Approval">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NewAndNoteworthy">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Committer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isProjectLead" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="affiliation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rationale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectPlan">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="theme" upperBound="-1"
+        eType="#//Theme"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPLog"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimultaneousRelease">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participants" upperBound="-1"
+        eType="#//SimultaneousReleaseProject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimultaneousReleaseProject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" lowerBound="1"
+        eType="#//Project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="release" lowerBound="1"
+        eType="#//Release"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BugzillaProjectLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="product" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="component" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BugzillaPlanLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="product" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="component" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Theme">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bugzilla" upperBound="-1"
+        eType="#//BugzillaPlanLink"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminationReview" eSuperTypes="#//Review"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommitterAgreement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MemberCommitterAgreement" eSuperTypes="#//CommitterAgreement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IndividualCommitterAgreeemnt" eSuperTypes="#//CommitterAgreement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InterestedParty">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="affiliation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Charter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogoAgreement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="MemberType">
+    <eLiterals name="Strategic"/>
+    <eLiterals name="Enterprise" value="1"/>
+    <eLiterals name="Solution" value="2"/>
+    <eLiterals name="Associate" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContributionQuestionnaire">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePattern" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attachments" upperBound="-1"
+        eType="#//SourceAttachment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ContributionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="discussion" upperBound="-1"
+        eType="#//Comment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pmcApproval" eType="#//Approval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ipTeamApproval" eType="#//Approval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emoApproval" eType="#//Approval"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requester" lowerBound="1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="license" lowerBound="1"
+        eType="#//License"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributors" eType="#//Contribution"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceAttachment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attachment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ContributionType">
+    <eLiterals name="Eclipse"/>
+    <eLiterals name="Prereq" value="1"/>
+    <eLiterals name="ExemptPrereq" value="2"/>
+    <eLiterals name="Workswith" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reply" upperBound="-1"
+        eType="#//Comment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Contribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="amount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributor" lowerBound="1"
+        eType="#//Person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="License">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

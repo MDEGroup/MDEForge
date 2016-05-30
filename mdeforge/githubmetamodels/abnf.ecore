@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="abnf"
+    nsURI="http://www.emftext.org/language/abnf" nsPrefix="abnf">
+  <eClassifiers xsi:type="ecore:EClass" name="RuleSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"
+        eType="#//Alternative" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IncrementalAlternativRule" eSuperTypes="#//Rule"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleReference" eSuperTypes="#//RuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rule" lowerBound="1" eType="#//Rule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalSequence" eSuperTypes="#//RuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"
+        eType="#//Alternative" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//RuleElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" upperBound="-1"
+        eType="#//Alternative" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concatenation" upperBound="-1"
+        eType="#//Concatenation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Concatenation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repetition" upperBound="-1"
+        eType="#//Repetition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Repetition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//RuleElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TerminalValue" abstract="true" eSuperTypes="#//RuleElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryTerminal" eSuperTypes="#//TerminalValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="2" upperBound="2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tail" eType="#//DecTerminalTail"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DecimalTerminal" eSuperTypes="#//TerminalValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="2" upperBound="2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tail" eType="#//DecTerminalTail"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HexadecimalTerminal" eSuperTypes="#//TerminalValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="2" upperBound="2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tail" eType="#//HexTerminalTail"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DecTerminalTail" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="2" upperBound="2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HexTerminalTail" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="2" upperBound="2"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DecRangeEnd" eSuperTypes="#//DecTerminalTail"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HexRangeEnd" eSuperTypes="#//HexTerminalTail"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AdditionalDecTerminal" eSuperTypes="#//DecTerminalTail">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tail" eType="#//AdditionalDecTerminal"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AdditionalHexTerminal" eSuperTypes="#//HexTerminalTail">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tail" eType="#//AdditionalHexTerminal"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringTerminal" eSuperTypes="#//TerminalValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Multiplicity"/>
+</ecore:EPackage>

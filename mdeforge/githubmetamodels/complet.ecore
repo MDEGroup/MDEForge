@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="editor"
+    nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#editor" nsPrefix="editor">
+  <eClassifiers xsi:type="ecore:EClass" name="InformationSystem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="company" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="businessDomains" upperBound="-1"
+        eType="#//domain/BusinessDomain" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//util/Status"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eSubpackages name="domain" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#domain"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionalDomain">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="areas" upperBound="-1"
+          eType="#//area/Area" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BusinessDomain">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="functionalDomains" upperBound="-1"
+          eType="#//domain/FunctionalDomain"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="#//util/Color"
+          defaultValueLiteral=""/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="area" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#area"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EClass" name="Area">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="macroProcesses" upperBound="-1"
+          eType="#//area/MacroProcess" containment="true" eOpposite="#//area/MacroProcess/ownerArea"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessInformationsNotUsed"
+          upperBound="-1" eType="#//data/BusinessInformation" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="purpose" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MacroProcess">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessServices" upperBound="-1"
+          eType="#//services/BusinessService" containment="true" eOpposite="#//services/BusinessService/ownerMacroProcess"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subscriptions" upperBound="-1"
+          eType="#//services/BusinessService" eOpposite="#//services/BusinessService/subscribers"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownerArea" eType="#//area/Area"
+          eOpposite="#//area/Area/macroProcesses"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="data" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#data"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EClass" name="BusinessInformation">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="tags" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="services" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#services"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EClass" name="BusinessService" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownerMacroProcess" eType="#//area/MacroProcess"
+          eOpposite="#//area/MacroProcess/businessServices"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subscribers" upperBound="-1"
+          eType="#//area/MacroProcess" eOpposite="#//area/MacroProcess/subscriptions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Provider" eSuperTypes="#//services/BusinessService">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="providerType" eType="#//services/ProviderType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessSoftwareService"
+          eType="#//software/BusinessSoftwareService"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessInformations"
+          upperBound="-1" eType="#//data/BusinessInformation" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//services/BusinessService">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessSoftwareService"
+          eType="#//software/BusinessSoftwareService"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Stub" eSuperTypes="#//services/BusinessService"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="ProviderType" instanceTypeName="ProviderType">
+      <eLiterals name="WebService" literal="WebService"/>
+      <eLiterals name="Stream" value="1"/>
+      <eLiterals name="MQMessage" value="2"/>
+      <eLiterals name="ManualScript" value="3" literal="ManualScript"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="software" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#software"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EClass" name="BusinessSoftwareService">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//software/Project"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="applications" upperBound="-1"
+          eType="#//software/Application" eOpposite="#//software/Application/businessSoftwareServices"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Application">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="businessSoftwareServices"
+          upperBound="-1" eType="#//software/BusinessSoftwareService" eOpposite="#//software/BusinessSoftwareService/applications"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Project">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="acceptanceDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="productionDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="outsourced" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="util" nsURI="http://callisto.blizzart.net/redmine/projects/ccu-lbe#util"
+      nsPrefix="editor">
+    <eClassifiers xsi:type="ecore:EEnum" name="Status">
+      <eLiterals name="PRODUCTION" value="2"/>
+      <eLiterals name="PROJECT" value="1" literal="PROJECT"/>
+      <eLiterals name="INITIATIVE"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Color">
+      <eLiterals name="RED"/>
+      <eLiterals name="GREEN" value="1"/>
+      <eLiterals name="BLUE" value="2"/>
+      <eLiterals name="YELLOW" value="3"/>
+      <eLiterals name="BROWN" value="4"/>
+      <eLiterals name="PINK" value="5"/>
+      <eLiterals name="PURPLE" value="6"/>
+      <eLiterals name="GREY" value="7"/>
+      <eLiterals name="BLACK" value="8" literal="BLACK"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

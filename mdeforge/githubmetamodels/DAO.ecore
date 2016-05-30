@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dao" nsURI="http://dao/1.0" nsPrefix="dao">
+  <eClassifiers xsi:type="ecore:EClass" name="GenericDao">
+    <eOperations name="create">
+      <eParameters name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="read" eType="#//List">
+      <eParameters name="class">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="update">
+      <eParameters name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="delete">
+      <eParameters name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getByQuery" eType="#//List">
+      <eParameters name="query" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getById" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getList" eType="#//List">
+      <eParameters name="class">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getListByOwner" eType="#//List">
+      <eParameters name="class">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
+      <eParameters name="user" eType="#//User"/>
+    </eOperations>
+    <eOperations name="massInsert" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="list" eType="#//List"/>
+      <eParameters name="class">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
+      <eParameters name="object" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persistentClass">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+        <eTypeArguments/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="session" eType="#//Session"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="List" instanceClassName="java.util.List"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Query" instanceClassName="org.hibernate.Query"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Session" instanceClassName="org.hibernate.Session"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="SessionFactory" instanceClassName="org.hibernate.SessionFactory"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HibernateUtil">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sessionFactory" eType="#//SessionFactory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDao" eSuperTypes="#//GenericDao">
+    <eOperations name="findByUsername" eType="#//User">
+      <eParameters name="user" eType="#//User"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventDao" eSuperTypes="#//GenericDao"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="User" instanceClassName="general.User"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GeneralQueries" eSuperTypes="#//GenericDao">
+    <eOperations name="dbAlive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerDao" eSuperTypes="#//GenericDao">
+    <eOperations name="setOwner">
+      <eParameters name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionDao" eSuperTypes="#//GenericDao">
+    <eOperations name="findMksPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="user" eType="#//User"/>
+    </eOperations>
+    <eOperations name="getListByContainer" eType="#//List">
+      <eParameters name="container" eType="#//Container"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FolderDao" eSuperTypes="#//GenericDao">
+    <eOperations name="getRootFolderBySnapshot" eType="#//Folder">
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileDao" eSuperTypes="#//GenericDao"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Container" instanceClassName="general.Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SnapshotDao" eSuperTypes="#//GenericDao">
+    <eOperations name="getListByContainer" eType="#//List">
+      <eParameters name="container" eType="#//Container"/>
+    </eOperations>
+    <eOperations name="getSnapshotsWithFunction" eType="#//List">
+      <eParameters name="containerId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContentObjectDao" eSuperTypes="#//GenericDao">
+    <eOperations name="getListBySnapshot" eType="#//List">
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="deleteListBySnapshot">
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="getChildren" eType="#//List">
+      <eParameters name="parent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="addFunctionToCo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="contentObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getObjectsOfFunction" eType="#//List">
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="deleteFunctionFromCo">
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="contentObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="deleteDummyObjects">
+      <eParameters name="snapshot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Snapshot" instanceClassName="general.Snapshot"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Folder" instanceClassName="general.Folder"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionDao" eSuperTypes="#//GenericDao">
+    <eOperations name="getFunctionsBySnapshot" eType="#//List">
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="emtpyFunction">
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getById" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileFunctionStatusDao" eSuperTypes="#//GenericDao">
+    <eOperations name="getFileFunctionStatusBySnapshot" eType="#//List">
+      <eParameters name="snapshot" eType="#//Snapshot"/>
+    </eOperations>
+    <eOperations name="getFileFunctionStatusByFunction" eType="#//List">
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="getById" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="createFfsWithFunctionIdObjectId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject">
+      <eParameters name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="function" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="fileFunctionStatus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="setFFSType">
+      <eParameters name="fileFunctionStatus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="enumValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+</ecore:EPackage>

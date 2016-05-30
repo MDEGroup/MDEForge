@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="article"
+    nsURI="http://www.eclipse.org/ARTICLE/1.0" nsPrefix="article">
+  <eClassifiers xsi:type="ecore:EClass" name="Documentation" eSuperTypes="#//StructuralElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" lowerBound="1"
+        eType="#//Context" resolveProxies="false" eOpposite="#//Context/documentations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="embeddableElements" upperBound="-1"
+        eType="#//EmbeddableElement" containment="true" resolveProxies="false" eOpposite="#//EmbeddableElement/documentation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//Documentation" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugins" upperBound="-1"
+        eType="#//Plugin" changeable="false" derived="true" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Context">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFolder" lowerBound="1"
+        eType="#//File" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentations" lowerBound="1"
+        upperBound="-1" eType="#//Documentation" containment="true" resolveProxies="false"
+        eOpposite="#//Documentation/context"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="root" lowerBound="1" eType="#//RootDoc"
+        changeable="false" volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="RootDoc" instanceClassName="com.sun.javadoc.RootDoc"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="File" instanceClassName="java.io.File"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Category" eSuperTypes="#//Body"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Article" eSuperTypes="#//Chapter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Chapter" eSuperTypes="#//Body">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="article" lowerBound="1"
+        eType="#//Article" changeable="false" volatile="true" transient="true" derived="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Snippet" eSuperTypes="#//EmbeddableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callouts" upperBound="-1"
+        eType="#//Callout" containment="true" resolveProxies="false" eOpposite="#//Callout/snippet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formatter" lowerBound="1"
+        eType="#//Formatter" containment="true" eOpposite="#//Formatter/snippet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//BodyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Factory" eSuperTypes="#//EmbeddableElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaElement" eSuperTypes="#//LinkTarget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classFile" eType="#//File"
+        changeable="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralElement" abstract="true" eSuperTypes="#//LinkTarget">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//StructuralElement" containment="true" resolveProxies="false" eOpposite="#//StructuralElement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//StructuralElement"
+        resolveProxies="false" eOpposite="#//StructuralElement/children"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" lowerBound="1"
+        eType="#//Documentation" changeable="false" volatile="true" transient="true"
+        derived="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="doc" lowerBound="1" eType="#//Doc"
+        changeable="false" volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkTarget" abstract="true" eSuperTypes="#//Identifiable">
+    <eOperations name="linkFrom" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="source" lowerBound="1" eType="#//StructuralElement"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tooltip" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Callout" eSuperTypes="#//BodyElementContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="snippet" lowerBound="1"
+        eType="#//Snippet" resolveProxies="false" eOpposite="#//Snippet/callouts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Doc" instanceClassName="com.sun.javadoc.Doc"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmbeddableElement" abstract="true" eSuperTypes="#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" lowerBound="1"
+        eType="#//Documentation" resolveProxies="false" eOpposite="#//Documentation/embeddableElements"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="doc" lowerBound="1" eType="#//Doc"
+        changeable="false" volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalTarget" eSuperTypes="#//LinkTarget">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Identifiable" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Body" abstract="true" eSuperTypes="#//StructuralElement #//BodyElementContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="category" eType="#//Category"
+        changeable="false" volatile="true" transient="true" derived="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BodyElementContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//BodyElement" containment="true" resolveProxies="false" eOpposite="#//BodyElement/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BodyElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//BodyElementContainer" resolveProxies="false" eOpposite="#//BodyElementContainer/elements"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tag" eType="#//Tag" changeable="false"
+        volatile="true" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Text" eSuperTypes="#//BodyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//BodyElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//LinkTarget"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Embedding" eSuperTypes="#//BodyElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//EmbeddableElement" changeable="false" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceCode" eSuperTypes="#//ExternalTarget"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Tag" instanceClassName="com.sun.javadoc.Tag"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Plugin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" lowerBound="1"
+        upperBound="-1" eType="#//JavaPackage" containment="true" eOpposite="#//JavaPackage/plugin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensionPoints" upperBound="-1"
+        eType="#//ExtensionPoint" containment="true" eOpposite="#//ExtensionPoint/plugin"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaPackage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugin" lowerBound="1"
+        eType="#//Plugin" eOpposite="#//Plugin/packages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Javadoc" eSuperTypes="#//Category"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalArticle" eSuperTypes="#//Article">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Schemadoc" eSuperTypes="#//Category"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensionPoint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugin" lowerBound="1"
+        eType="#//Plugin" eOpposite="#//Plugin/extensionPoints"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Toc" eSuperTypes="#//BodyElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="levels" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        changeable="false" defaultValueLiteral="-1" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PluginResource" eSuperTypes="#//ExternalArticle"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Excel" eSuperTypes="#//BodyElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Formatter" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="snippet" lowerBound="1"
+        eType="#//Snippet" eOpposite="#//Snippet/formatter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaFormatter" eSuperTypes="#//Formatter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="XmlFormatter" eSuperTypes="#//Formatter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="#//File"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Image" eSuperTypes="#//BodyElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" lowerBound="1" eType="#//File"
+        changeable="false" volatile="true" transient="true"/>
+  </eClassifiers>
+</ecore:EPackage>

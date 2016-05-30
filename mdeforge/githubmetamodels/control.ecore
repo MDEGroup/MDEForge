@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="control"
+    nsURI="http://www.example.org" nsPrefix="control">
+  <eAnnotations source="gmf">
+    <details key="foo" value="bar"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessVar" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" abstract="true" eSuperTypes="#//ProcessVar #//ValueSpecifier">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ontology" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ontologyURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateConstraint" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aspCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aspBinding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Input" eSuperTypes="#//Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Output" eSuperTypes="#//Parameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OuterProcess" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.diagram">
+      <details key="foo" value="bar"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="construct" eType="#//ControlConstruct"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasInput" upperBound="-1"
+        eType="#//Input" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasOutput" upperBound="-1"
+        eType="#//Output" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasPrecondition" upperBound="-1"
+        eType="#//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasResult" upperBound="-1"
+        eType="#//Result" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//Binding" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outerLocals" upperBound="-1"
+        eType="#//Loc" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outerLinks" upperBound="-1"
+        eType="#//Link" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ontologies" upperBound="-1"
+        eType="#//Ontology" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateConstraints" lowerBound="1"
+        eType="#//TemplateConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceDescription" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractProcess" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasInput" upperBound="-1"
+        eType="#//Input" containment="true">
+      <eAnnotations source="gmf.affixed">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasOutput" upperBound="-1"
+        eType="#//Output" containment="true">
+      <eAnnotations source="gmf.affixed">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RemoteProcess" eSuperTypes="#//AbstractProcess">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasResult" upperBound="-1"
+        eType="#//Result" containment="true">
+      <eAnnotations source="gmf.affixed">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//Expr" containment="true">
+      <eAnnotations source="gmf.affixed">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateProcess" eSuperTypes="#//AbstractProcess">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="slotName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstruct" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        eType="#//ControlConstructList" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        eType="#//ControlConstructBag" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyOrder" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        eType="#//ControlConstructBag" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Split" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        eType="#//ControlConstructBag" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SplitJoin" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" lowerBound="1"
+        eType="#//ControlConstructBag" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfThenElse" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ifCondition" lowerBound="1"
+        eType="#//Expr" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//ControlConstruct"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" lowerBound="1" eType="#//ControlConstruct"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepeatUntil" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="untilCondition" lowerBound="1"
+        eType="#//Expr" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="untilProcess" lowerBound="1"
+        eType="#//ControlConstruct" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepeatWhile" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whileCondition" lowerBound="1"
+        eType="#//Expr" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whileProcess" lowerBound="1"
+        eType="#//ControlConstruct" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Perform" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="theProcess" lowerBound="1"
+        eType="#//AbstractProcess" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Produce" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producedBindingValueSpecifier"
+        eType="#//ValueSpecifierElement" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Set" eSuperTypes="#//ControlConstruct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producedBindingValueSpecifier"
+        eType="#//ValueSpecifierElement" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueSpecifier" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueSpecifierElement" abstract="true"
+      eSuperTypes="#//ValueSpecifier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueSource" eSuperTypes="#//NamedElement #//ValueSpecifierElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueForm" eSuperTypes="#//NamedElement #//ValueSpecifierElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueFunction" eSuperTypes="#//NamedElement #//ValueSpecifierElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Binding" abstract="true" eSuperTypes="#//ProcessVar"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SetBinding" abstract="true" eSuperTypes="#//Binding"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InputBinding" eSuperTypes="#//Binding">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="valueSource"/>
+      <details key="target" value="toParam"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+      <details key="color" value="120,181,0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toParam" eType="#//Input"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="valueSource" eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputBinding" eSuperTypes="#//Binding">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="origin"/>
+      <details key="target" value="toParam"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+      <details key="color" value="255,0,0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toParam" eType="#//Output"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" eType="#//ValueSpecifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LocBinding" eSuperTypes="#//SetBinding">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="origin"/>
+      <details key="target" value="toLoc"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+      <details key="color" value="0,0,255"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toLoc" eType="#//Loc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" eType="#//ValueSpecifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkBinding" eSuperTypes="#//Binding">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="origin"/>
+      <details key="target" value="toLink"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+      <details key="color" value="0,0,255"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toLink" eType="#//Link"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" eType="#//ValueSpecifier"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="outputBindingSource" eSuperTypes="#//Binding">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="source"/>
+      <details key="target" value="specifierElement"/>
+      <details key="style" value="dash"/>
+      <details key="target.decoration" value="arrow"/>
+      <details key="width" value="2"/>
+      <details key="color" value="255,0,0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specifierElement" eType="#//ValueSpecifierElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Result" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inCondition" upperBound="-1"
+        eType="#//Expr" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasResultVar" eType="#//ResultVar"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasEffect" eType="#//Expr"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindingSource" upperBound="-1"
+        eType="#//ValueSpecifierElement" containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResultVar" eSuperTypes="#//ProcessVar">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Local" eSuperTypes="#//ProcessVar"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Loc" eSuperTypes="#//Local">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Link" eSuperTypes="#//ProcessVar">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hasBeenWritten" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstructBag" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="first" lowerBound="1" eType="#//ControlConstruct"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rest" lowerBound="1" eType="#//ControlConstructBag"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlConstructList" eSuperTypes="#//NamedElement">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="first" eType="#//ControlConstruct"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rest" lowerBound="1" eType="#//ControlConstructList"
+        containment="true">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//Expr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expr">
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="logicLanguage" eType="#//ExpressionLanguage"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bodyLiteral" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="gmf.compartment">
+        <details key="foo" value="bar"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ExpressionLanguage">
+    <eLiterals name="KIF"/>
+    <eLiterals name="SWRL" value="1"/>
+    <eLiterals name="DRS" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

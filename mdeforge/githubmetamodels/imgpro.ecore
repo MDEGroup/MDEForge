@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http:/uz.zgora/imgpro/model" nsPrefix="imgpro_model">
+  <eSubpackages name="diagram" nsURI="http:/uz.zgora/imgpro/model/diagram" nsPrefix="imgpro_model_diagram">
+    <eClassifiers xsi:type="ecore:EClass" name="ImproDiagram">
+      <eOperations name="getElementsOfClass" upperBound="-1" eType="#//diagram/DiagramElement">
+        <eParameters name="class">
+          <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+            <eTypeArguments/>
+          </eGenericType>
+        </eParameters>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//diagram/DiagramElement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DiagramElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+          eType="#//diagram/ElementConnection" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+          eType="#//diagram/InputConnector" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+          eType="#//diagram/OutputConnector" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="connectedWith" upperBound="-1"
+          eType="#//diagram/DiagramElement"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="user-defined" iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLinker" lowerBound="1"
+          eType="#//diagram/SourceLinker" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//diagram/Phase"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementComment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="Comment for this block"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SourceLinker">
+      <eOperations name="getDependencies">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceFilePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DirInput" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="*.tif"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="directory" lowerBound="1"
+          eType="#//diagram/DirectoryType" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DirectoryType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementConnection">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//diagram/DiagramElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Connector">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CustomElement" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="InputConnector" eSuperTypes="#//diagram/Connector"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OutputConnector" eSuperTypes="#//diagram/Connector"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ImagePreview" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Vignetting" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Crop" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfHorizontalPixels"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="4"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfVerticalPixels"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HistStretch" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NoiseRemove" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Multiplication" eSuperTypes="#//diagram/DiagramElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SegAT" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="windowSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="20"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="at_threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="0.01"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="useMedian" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SegFCM" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_clusters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_options" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="[2 100 0.00001 0]">
+        <eAnnotations source="meta-tag"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="0.8"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SegFCMOff" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_off_clusters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_off_options" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="[2 100 0.00001 0]">
+        <eAnnotations source="meta-tag"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fcm_off_threshold" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="0.6"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SegCLN" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clnLearningEpochs" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="100"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SegKM" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="KM_clusters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SegKMOff" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="KM_Off_clusters" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExtractFeatures" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="classificationGroup"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForwardSelection" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="crossValidationType"
+          lowerBound="1" eType="#//diagram/CrossValidationType" defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="classifiers" upperBound="-1"
+          eType="#//diagram/Classifier"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="features" upperBound="-1"
+          eType="#//diagram/Features"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FullSelection" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="crossValidationType"
+          lowerBound="1" eType="#//diagram/CrossValidationType" defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimumFeatures" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="2"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximumFeatures" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="3"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="features" upperBound="-1"
+          eType="#//diagram/Features"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Classification" eSuperTypes="#//diagram/DiagramElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="classificationStyle"
+          eType="#//diagram/ClassificationStyle"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="features" upperBound="-1"
+          eType="#//diagram/Features"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Phase">
+      <eLiterals name="Input"/>
+      <eLiterals name="Preprocessing" value="1"/>
+      <eLiterals name="Segmentation" value="2"/>
+      <eLiterals name="FeatureExtraction" value="3" literal="Features Extraction"/>
+      <eLiterals name="FeaturesSelection" value="4" literal="Features Selection"/>
+      <eLiterals name="Classification" value="5"/>
+      <eLiterals name="UNKNOWN" value="6" literal="UNKNOWN"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Classifier">
+      <eLiterals name="KNN" literal="KNN"/>
+      <eLiterals name="Naive_Bayes" value="1" literal="Naive Bayes"/>
+      <eLiterals name="Decision_trees" value="2" literal="Decision trees"/>
+      <eLiterals name="Ensemble_classifier" value="3" literal="Ensemble classifier"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CrossValidationType">
+      <eLiterals name="image" literal="image"/>
+      <eLiterals name="patient" value="1" literal="patient"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Features">
+      <eLiterals name="Area_mean" literal="Area_mean"/>
+      <eLiterals name="Area_var" value="1" literal="Area_var"/>
+      <eLiterals name="Perimeter_mean" value="2" literal="Perimeter_mean"/>
+      <eLiterals name="Perimeter_var" value="3" literal="Perimeter_var"/>
+      <eLiterals name="Eccentricity_mean" value="4" literal="Eccentricity_mean"/>
+      <eLiterals name="Eccentricity_var" value="5" literal="Eccentricity_var"/>
+      <eLiterals name="MajorAxisLength_mean" value="6" literal="MajorAxisLength_mean"/>
+      <eLiterals name="MajorAxisLength_var" value="7" literal="MajorAxisLength_var"/>
+      <eLiterals name="MinorAxisLength_mean" value="8" literal="MinorAxisLength_mean"/>
+      <eLiterals name="MinorAxisLength_var" value="9" literal="MinorAxisLength_var"/>
+      <eLiterals name="LuminanceMean_mean" value="10" literal="LuminanceMean_mean"/>
+      <eLiterals name="LuminanceMean_var" value="11" literal="LuminanceMean_var"/>
+      <eLiterals name="LuminanceVariance_mean" value="12" literal="LuminanceVariance_mean"/>
+      <eLiterals name="LuminanceVariance_var" value="13" literal="LuminanceVariance_var"/>
+      <eLiterals name="DistToCentroid_mean" value="14" literal="DistToCentroid_mean"/>
+      <eLiterals name="DistToCentroid_var" value="15" literal="DistToCentroid_var"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ClassificationStyle">
+      <eLiterals name="basic" literal="basic"/>
+      <eLiterals name="standard" value="1" literal="standard"/>
+      <eLiterals name="extended" value="2" literal="extended"/>
+      <eLiterals name="full" value="3" literal="full"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

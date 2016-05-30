@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="jex"
+    nsURI="platform:/plugin/no.hal.jex/model/jex.ecore" nsPrefix="jex">
+  <eClassifiers xsi:type="ecore:EClass" name="JavaPack" eSuperTypes="#//JavaElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
+        eType="#//JavaClass" containment="true" eOpposite="#//JavaClass/pack"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaClass" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="classKind" eType="#//ClassKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" containment="true" eOpposite="#//Member/owner"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pack" eType="#//JavaPack"
+        transient="true" eOpposite="#//JavaPack/classes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="superclasses" upperBound="-1"
+        eType="#//ClassName"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaField" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DeclarationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaMethod" eSuperTypes="#//Member">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="returnType" eType="#//DeclarationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameters" unique="false"
+        upperBound="-1" eType="#//DeclarationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="throwables" upperBound="-1"
+        eType="#//ClassName"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Member" abstract="true" eSuperTypes="#//JavaElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modifiers" eType="#//Modifiers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//JavaClass"
+        transient="true" eOpposite="#//JavaClass/members"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="required" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="present" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ClassKind">
+    <eLiterals name="classKind"/>
+    <eLiterals name="interfaceKind" value="1"/>
+    <eLiterals name="enumKind" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DeclarationType" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Modifiers" instanceClassName="int"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ClassName" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaRequirement" eSuperTypes="#//Requirement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NonNullJavaElement"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaElement" eType="#//JavaElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requiredFeatures" eType="#//Features"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JUnitTest" eSuperTypes="#//JavaRequirement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="PositivePoints"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRunnable" eType="#//TestRunnable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="testStatus" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        transient="true" defaultValueLiteral="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" abstract="true" eSuperTypes="#//AbstractRequirement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfied" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messages" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exercise" eSuperTypes="#//AbstractRequirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExercisePart" eSuperTypes="#//AbstractRequirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractRequirement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+      <eAnnotations source="http:///no/hal/jex/JexMetaData">
+        <details key="contentType" value="text/html"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+      <eAnnotations source="http:///no/hal/jex/JexMetaData">
+        <details key="contentType" value="text/html"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="javaElements" upperBound="-1"
+        eType="#//JavaElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"
+        eType="#//AbstractRequirement" containment="true" eOpposite="#//AbstractRequirement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//AbstractRequirement"
+        eOpposite="#//AbstractRequirement/requirements"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="childrenSatisfied" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Features" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="JUnitTestStatus">
+    <eLiterals name="undefined" value="-1"/>
+    <eLiterals name="ok"/>
+    <eLiterals name="error" value="1"/>
+    <eLiterals name="failure" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TestRunnable" abstract="true" interface="true"
+      eSuperTypes="#//Member">
+    <eOperations name="getTestRuns" upperBound="-1" eType="#//TestRunnable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testedElement" eType="#//Member"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaClassTester" eSuperTypes="#//JavaClass #//TestRunnable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JavaMethodTester" eSuperTypes="#//JavaMethod #//TestRunnable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TestSuite" eSuperTypes="#//JavaClass #//TestRunnable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="testRuns" upperBound="-1"
+        eType="#//TestRunnable"/>
+  </eClassifiers>
+</ecore:EPackage>

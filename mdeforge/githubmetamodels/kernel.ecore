@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="kernel" nsURI="http://www.ptolemy.org/kernel" nsPrefix="kernel">
+  <eClassifiers xsi:type="ecore:EClass" name="Named" abstract="true" interface="true">
+    <eOperations name="getContainer" eType="#//NamedObj"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getDisplayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getFullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="container" eType="#//NamedObj"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nameable" abstract="true" interface="true"
+      eSuperTypes="#//Named">
+    <eOperations name="setName">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedObj" abstract="true" eSuperTypes="#//Nameable">
+    <eOperations name="getAttribute" eType="#//Attribute">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true" eKeys="#//NamedObj/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritsFrom" eType="#//NamedObj"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true" eSuperTypes="#//NamedObj"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IEntity" abstract="true" interface="true"
+      eSuperTypes="#//Nameable">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//Port"/>
+    </eTypeParameters>
+    <eOperations name="getAttributes" upperBound="-1" eType="#//Attribute"/>
+    <eOperations name="getAllAttributes" upperBound="-1" eType="#//Attribute"/>
+    <eOperations name="getPorts" upperBound="-1">
+      <eGenericType eTypeParameter="#//IEntity/P"/>
+    </eOperations>
+    <eOperations name="getAllPorts" upperBound="-1">
+      <eGenericType eTypeParameter="#//IEntity/P"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//Port"/>
+    </eTypeParameters>
+    <eOperations name="getContainer">
+      <eGenericType eClassifier="#//EntityContainer">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eOperations name="getPort">
+      <eGenericType eTypeParameter="#//Entity/P"/>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="resolveSuperEntity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="force" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        containment="true" eKeys="#//NamedObj/name">
+      <eGenericType eTypeParameter="#//Entity/P"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceEntities" upperBound="-1"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetEntities" upperBound="-1"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superEntity" containment="true"
+        eOpposite="#//EntityRef/owner">
+      <eGenericType eClassifier="#//EntityRef">
+        <eTypeArguments eTypeParameter="#//Entity/P"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedAttributes" upperBound="-1"
+        eType="#//Attribute" transient="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedPorts" upperBound="-1"
+        transient="true" containment="true" eKeys="#//NamedObj/name">
+      <eGenericType eTypeParameter="#//Entity/P"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allAttributes" upperBound="-1"
+        eType="#//Attribute" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allPorts" upperBound="-1"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eGenericType eTypeParameter="#//Entity/P"/>
+    </eStructuralFeatures>
+    <eGenericSuperTypes eClassifier="#//NamedObj"/>
+    <eGenericSuperTypes eClassifier="#//EntityRefOwner"/>
+    <eGenericSuperTypes eClassifier="#//IEntity">
+      <eTypeArguments eTypeParameter="#//Entity/P"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityRefOwner" abstract="true" interface="true">
+    <eOperations name="entityResolved">
+      <eParameters name="feature" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStructuralFeature"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityRef">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//Port"/>
+    </eTypeParameters>
+    <eOperations name="resolve" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="force" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eOpposite="#//Entity/superEntity">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments eTypeParameter="#//EntityRef/P"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments eTypeParameter="#//EntityRef/P"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolved" transient="true"
+        derived="true" containment="true">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments eTypeParameter="#//EntityRef/P"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//NamedObj">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value=""/>
+    </eAnnotations>
+    <eOperations name="getContainer">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLinks" upperBound="-1"
+        eType="#//Relation" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLinks" upperBound="-1"
+        eType="#//Relation" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetPorts" upperBound="-1"
+        eType="#//Port" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourcePorts" upperBound="-1"
+        eType="#//Port" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="#//NamedObj">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="sourceTargetContainer inputOutputLogic"/>
+    </eAnnotations>
+    <eOperations name="getContainer">
+      <eGenericType eClassifier="#//EntityContainer">
+        <eTypeArguments/>
+      </eGenericType>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourcePort" lowerBound="1"
+        eType="#//Port"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetPorts" lowerBound="1"
+        upperBound="-1" eType="#//Port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentEntity">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//ComponentPort"/>
+    </eTypeParameters>
+    <eOperations name="isAtomic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="isOpaque" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eGenericSuperTypes eClassifier="#//Entity">
+      <eTypeArguments eTypeParameter="#//ComponentEntity/P"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerOutgoingLinks" upperBound="-1"
+        eType="#//Relation" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerIncomingLinks" upperBound="-1"
+        eType="#//Relation" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityContainer">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//Port"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entities" upperBound="-1"
+        containment="true" eKeys="#//NamedObj/name">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relations" upperBound="-1"
+        eType="#//Relation" containment="true"/>
+    <eGenericSuperTypes eClassifier="#//NamedObj"/>
+    <eGenericSuperTypes eClassifier="#//IEntity">
+      <eTypeArguments eTypeParameter="#//EntityContainer/P"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeEntity">
+    <eTypeParameters name="P">
+      <eBounds eClassifier="#//ComponentPort"/>
+    </eTypeParameters>
+    <eOperations name="getEntity">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mergedEntities" upperBound="-1"
+        changeable="false" containment="true" eKeys="#//NamedObj/name">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedRelations" upperBound="-1"
+        eType="#//Relation" transient="true" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allEntities" upperBound="-1"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eGenericType eClassifier="#//Entity">
+        <eTypeArguments>
+          <eUpperBound eClassifier="#//Port"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRelations" upperBound="-1"
+        eType="#//Relation" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eGenericSuperTypes eClassifier="#//ComponentEntity">
+      <eTypeArguments eTypeParameter="#//CompositeEntity/P"/>
+    </eGenericSuperTypes>
+    <eGenericSuperTypes eClassifier="#//EntityContainer">
+      <eTypeArguments eTypeParameter="#//CompositeEntity/P"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="JavaClassRef" instanceTypeName="EString"/>
+</ecore:EPackage>

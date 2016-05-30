@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="highway" nsURI="highway" nsPrefix="highway">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="highway">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initNodes" ordered="false"
+        upperBound="-1" eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initCars" ordered="false"
+        upperBound="-1" eType="#//Car" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initSegments" ordered="false"
+        upperBound="-1" eType="#//Segment" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initSemaphore" ordered="false"
+        upperBound="-1" eType="#//Semaphore" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initSignal" ordered="false"
+        upperBound="-1" eType="#//Signal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NullName UniqueName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NullName" value="name &lt;> null"/>
+      <details key="UniqueName" value="highway.initNodes->isUnique(name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasStarts" ordered="false"
+        upperBound="-1" eType="#//Segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasEnds" ordered="false"
+        upperBound="-1" eType="#//Segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="semaphore" ordered="false"
+        eType="#//Semaphore"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" ordered="false"
+        upperBound="-1" eType="#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Segment">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NullName UniqueName"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details value="numLanes > 0"/>
+      <details key="NullName" value="name &lt;> null"/>
+      <details key="UniqueName" value="highway.initNodes->isUnique(name)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numLanes" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasCars" ordered="false"
+        upperBound="-1" eType="#//Car"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Semaphore">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details value="secondsGreen > 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondsRed" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondsGreen" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="canGo" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="belongsTo" ordered="false"
+        lowerBound="1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Signal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="belongsTo" ordered="false"
+        lowerBound="1" eType="#//Node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Car">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeIn" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeOut" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isInSegment" ordered="false"
+        eType="#//Segment"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Extractor" eSuperTypes="#//Node">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NoEnds"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NoEnds" value="hasEnds->isEmpty()"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Injector" eSuperTypes="#//Node">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NoStart"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="NoStart" value="hasStarts->isEmpty()"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="carsPerHour" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Speedlimit" eSuperTypes="#//Signal">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details value="Speed > 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Speed" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Stop" eSuperTypes="#//Signal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Yield" eSuperTypes="#//Signal"/>
+</ecore:EPackage>

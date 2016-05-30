@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="viewmodel" nsURI="http://org.feature.multi.perspective.model/schema/1.0"
+    nsPrefix="viewmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="CoreGroup" eSuperTypes="#//AbstractGroup"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractGroup" eSuperTypes="#//Element">
+    <eOperations name="checkForRedundantViewPoints" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="eDiagnosticChain" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="eMap" lowerBound="1">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments/>
+          <eTypeArguments/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewPointReference" upperBound="-1"
+        eType="#//ViewPoint" eOpposite="#//ViewPoint/containedInGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//Group" containment="true" eOpposite="#//Group/parentGroup"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewPoint" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedInGroup" upperBound="-1"
+        eType="#//AbstractGroup" changeable="false" eOpposite="#//AbstractGroup/viewPointReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coreGroup" lowerBound="1"
+        eType="#//CoreGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewPointContainer" lowerBound="1"
+        eType="#//ViewPointContainer" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ViewPointContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="viewPoints" upperBound="-1"
+        eType="#//ViewPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//AbstractGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentGroup" eType="#//AbstractGroup"
+        eOpposite="#//AbstractGroup/groups"/>
+  </eClassifiers>
+</ecore:EPackage>

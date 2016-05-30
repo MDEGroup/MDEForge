@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http://schmeedy.com/pdt/joomla/project/model" nsPrefix="jpm">
+  <eClassifiers xsi:type="ecore:EClass" name="JoomlaExtensionProject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="project" eType="#//IProject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
+        eType="#//BasicExtensionModel" containment="true" eOpposite="#//BasicExtensionModel/project"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicExtensionModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symbolicName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ExtensionType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manifestVersion" eType="#//ManifestVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manifestPath" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="group" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//JoomlaExtensionProject"
+        eOpposite="#//JoomlaExtensionProject/extensions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//ExtensionResource" transient="true" containment="true" eOpposite="#//ExtensionResource/extensionModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtensionResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullPath" eType="#//IPath"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="manifestRelativePath" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="installPackagePathSegments"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourceType" eType="#//ResourceType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="folder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inAdministration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extensionModel" eType="#//BasicExtensionModel"
+        transient="true" eOpposite="#//BasicExtensionModel/resources"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specialResource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MediaResource" eSuperTypes="#//ExtensionResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="destination" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LanguageResource" eSuperTypes="#//ExtensionResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="languageTag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IPath" instanceClassName="org.eclipse.core.runtime.IPath"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ManifestVersion">
+    <eLiterals name="UNKNOWN"/>
+    <eLiterals name="ONE_FIVE" value="1" literal="1.5.0"/>
+    <eLiterals name="ONE_SIX" value="2" literal="1.6.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ExtensionType">
+    <eLiterals name="UNKNOWN"/>
+    <eLiterals name="COMPONENT" value="1" literal="component"/>
+    <eLiterals name="PLUGIN" value="2" literal="plugin"/>
+    <eLiterals name="MODULE" value="3" literal="module"/>
+    <eLiterals name="TEMPLATE" value="4" literal="template"/>
+    <eLiterals name="PACKAGE" value="5" literal="package"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ResourceType">
+    <eLiterals name="GENERIC_FILE"/>
+    <eLiterals name="LANGUAGE" value="1"/>
+    <eLiterals name="MEDIA" value="2"/>
+    <eLiterals name="SPECIAL_INSTALL_SCRIPT" value="3" literal="SPECIAL_INSTALL_SCRIPT"/>
+    <eLiterals name="SPECIAL_UNINSTALL_SCRIPT" value="4" literal="SPECIAL_UNINSTALL_SCRIPT"/>
+    <eLiterals name="SPECIAL_INSTALL_SQL" value="5" literal="SPECIAL_INSTALL_SQL"/>
+    <eLiterals name="SPECIAL_UNINSTALL_SQL" value="6" literal="SPECIAL_UNINSTALL_SQL"/>
+  </eClassifiers>
+</ecore:EPackage>

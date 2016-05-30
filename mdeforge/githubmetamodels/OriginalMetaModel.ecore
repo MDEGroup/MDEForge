@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="metamodel"
+    nsURI="http://metamodel/1.0" nsPrefix="metamodel">
+  <eClassifiers xsi:type="ecore:EClass" name="TransformationModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" upperBound="-1"
+        eType="#//AbstractSource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Layer" eSuperTypes="#//AbstractSource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousSource" lowerBound="1"
+        eType="#//AbstractSource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="outputFilePathURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hasRule" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchClass" eSuperTypes="#//Class #//Match">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//MatchAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//MatchClass" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
+        eType="#//MatchAssociation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchAssociation" eSuperTypes="#//Association #//Match">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//MatchClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//MatchClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyClass" eSuperTypes="#//Class #//Apply">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//ApplyAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" upperBound="-1"
+        eType="#//ApplyClass" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" upperBound="-1"
+        eType="#//ApplyAssociation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyAssociation" eSuperTypes="#//Association #//Apply">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//ApplyClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//ApplyClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Association" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MatchAttribute" eSuperTypes="#//Match">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplyAttribute" eSuperTypes="#//Apply">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attributeType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSource" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaModelId" lowerBound="1"
+        eType="#//MetaModelIdentifier" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilePort" eSuperTypes="#//AbstractSource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePathURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="match" lowerBound="1" eType="#//MatchModel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apply" lowerBound="1" eType="#//ApplyModel"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maps" upperBound="-1" eType="#//Map"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaModelIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaModelURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metaModelName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Map">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetMap" lowerBound="1"
+        eType="#//Apply"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceMap" lowerBound="1"
+        eType="#//Match"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mapDirection" lowerBound="1"
+        eType="#//Direction" defaultValueLiteral="Forward"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Match" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Apply" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eLiterals name="Forward"/>
+    <eLiterals name="Backward" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

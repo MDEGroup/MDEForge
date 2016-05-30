@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="opm"
+    nsURI="www.vainolo.com/phd/opm" nsPrefix="opm">
+  <eClassifiers xsi:type="ecore:EClass" name="OPMElementWithID" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMNamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&lt;&lt;name>>"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alignment" eType="#//VerticalAlignment"
+        defaultValueLiteral="Center"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMContainer" abstract="true" eSuperTypes="#//OPMElementWithID">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//OPMNode" containment="true" eOpposite="#//OPMNode/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMNode" abstract="true" eSuperTypes="#//OPMElementWithID #//OPMNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingLinks" upperBound="-1"
+        eType="#//OPMLink" eOpposite="#//OPMLink/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingLinks" upperBound="-1"
+        eType="#//OPMLink" eOpposite="#//OPMLink/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//OPMContainer"
+        eOpposite="#//OPMContainer/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraints" eType="#//Rectangle"
+        defaultValueLiteral="0,0,50,50"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMObjectProcessDiagram" eSuperTypes="#//OPMContainer #//OPMNamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//OPMLink" containment="true" eOpposite="#//OPMLink/opd"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nextId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//OPMObjectProcessDiagramKind"
+        defaultValueLiteral="Compound"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMThing" abstract="true" eSuperTypes="#//OPMNode #//OPMContainer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMState" eSuperTypes="#//OPMNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMObject" eSuperTypes="#//OPMThing"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMProcess" eSuperTypes="#//OPMThing">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//OPMProcessKind"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMLink" abstract="true" eSuperTypes="#//OPMElementWithID">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opd" eType="#//OPMObjectProcessDiagram"
+        eOpposite="#//OPMObjectProcessDiagram/links"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OPMNode"
+        eOpposite="#//OPMNode/outgoingLinks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//OPMNode"
+        eOpposite="#//OPMNode/incomingLinks"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bendpoints" upperBound="-1"
+        eType="#//Point"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="routerKind" eType="#//OPMLinkRouterKind"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceDecoration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetDecoration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="centerDecoration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMProceduralLink" abstract="true" eSuperTypes="#//OPMLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ActivationKind" lowerBound="1"
+        eType="#//OPMProceduralActivationKind" changeable="false" transient="true"
+        defaultValueLiteral="Normal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" eSuperTypes="#//OPMNode"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="OPMLinkRouterKind">
+    <eLiterals name="BENDPOINT" literal="Bendpoint"/>
+    <eLiterals name="MANHATTAN" value="1" literal="Manhattan"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Rectangle" instanceClassName="org.eclipse.draw2d.geometry.Rectangle"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="OPMProcessKind">
+    <eLiterals name="COMPOUND" literal="Compound"/>
+    <eLiterals name="BUILT_IN" value="1" literal="Built In"/>
+    <eLiterals name="JAVA" value="2" literal="Java"/>
+    <eLiterals name="CONCEPTUAL" value="3" literal="Conceptual"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OPMObjectProcessDiagramKind">
+    <eLiterals name="COMPOUND" value="1" literal="Compound"/>
+    <eLiterals name="SYSTEM" literal="System"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VerticalAlignment">
+    <eLiterals name="TOP" value="8" literal="Top"/>
+    <eLiterals name="CENTER" value="16" literal="Center"/>
+    <eLiterals name="BOTTOM" value="32" literal="Bottom"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMAgentLink" eSuperTypes="#//OPMProceduralLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMEffectLink" eSuperTypes="#//OPMProceduralLink">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="body" value="if (this.activationKind == activationKind) return;&#xD;&#xA;this.activationKind = activationKind;"/>
+    </eAnnotations>
+    <eOperations name="setActivationKind">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (this.activationKind==activationKind) return;&#xD;&#xA;this.activationKind=activationKind;"/>
+      </eAnnotations>
+      <eParameters name="activationKind" eType="#//OPMProceduralActivationKind"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMResultLink" eSuperTypes="#//OPMProceduralLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMInvocationLink" eSuperTypes="#//OPMProceduralLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMInstrumentLink" eSuperTypes="#//OPMProceduralLink">
+    <eOperations name="setActivationKind" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (this.activationKind==activationKind) return;&#xD;&#xA;this.activationKind=activationKind;"/>
+      </eAnnotations>
+      <eParameters name="activationKind" eType="#//OPMProceduralActivationKind"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMConsumptionLink" eSuperTypes="#//OPMProceduralLink">
+    <eOperations name="setActivationKind" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (this.activationKind==activationKind) return;&#xD;&#xA;this.activationKind=activationKind;"/>
+      </eAnnotations>
+      <eParameters name="activationKind" eType="#//OPMProceduralActivationKind"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMStructuralLink" abstract="true" eSuperTypes="#//OPMLink">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aggregatorPosition" eType="#//Point"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMAggregationLink" eSuperTypes="#//OPMStructuralLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMExhibitionLink" eSuperTypes="#//OPMStructuralLink"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OPMGeneralizationLink" eSuperTypes="#//OPMStructuralLink"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="OPMProceduralActivationKind">
+    <eLiterals name="Normal"/>
+    <eLiterals name="Event" value="1"/>
+    <eLiterals name="Condition" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

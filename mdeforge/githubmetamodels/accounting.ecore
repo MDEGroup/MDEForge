@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="accounting" nsURI="http://eclipsesource.com/accounting" nsPrefix="com.eclipsesource.accounting">
+  <eClassifiers xsi:type="ecore:EClass" name="Order">
+    <eOperations name="validateUnitAmount" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="diagnosticChain" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" lowerBound="1"
+        eType="#//Project" eOpposite="#//Project/orders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deliverables" upperBound="-1"
+        eType="#//Deliverable" containment="true" eOpposite="#//Deliverable/order"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invoices" upperBound="-1"
+        eType="#//Invoice" containment="true" eOpposite="#//Invoice/order"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paymentOffset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricePerUnit" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Deliverable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dueDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitAmount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="order" lowerBound="1" eType="#//Order"
+        eOpposite="#//Order/deliverables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Invoice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="advisor" eType="#//Employee"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="order" lowerBound="1" eType="#//Order"
+        eOpposite="#//Order/invoices"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unitAmount" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="invoiceDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" lowerBound="1" eType="#//InvoiceState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Client" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" lowerBound="1"
+        upperBound="-1" eType="#//Project" containment="true" eOpposite="#//Project/client"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="client" lowerBound="1"
+        eType="#//Client" eOpposite="#//Client/projects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orders" upperBound="-1"
+        eType="#//Order" containment="true" eOpposite="#//Order/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="liason" eType="#//Employee"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emails" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InvoiceState">
+    <eLiterals name="New"/>
+    <eLiterals name="Invoiced" value="1"/>
+    <eLiterals name="Paid" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClientDatabase">
+    <eAnnotations source="org.eclipse.emf.ecp.navigator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clients" upperBound="-1"
+        eType="#//Client" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmployeeDatabase">
+    <eAnnotations source="org.eclipse.emf.ecp.navigator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1"
+        eType="#//Employee" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

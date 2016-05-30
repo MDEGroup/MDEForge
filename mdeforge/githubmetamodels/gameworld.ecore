@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gameworld" nsURI="http://mmocore.ru/model/gameworld/1.0.0" nsPrefix="gameworld">
+  <eClassifiers xsi:type="ecore:EClass" name="GameWorld" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="maps" upperBound="-1" eType="#//GameMap"
+        containment="true" eOpposite="#//GameMap/world"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameMap" eSuperTypes="#//GameLogic #//physics/CollidedObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="world" eType="#//GameWorld"
+        eOpposite="#//GameWorld/maps"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="locations" upperBound="-1"
+        eType="#//Spatial" containment="true" eOpposite="#//Spatial/map"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameLogic" abstract="true" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persist" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraData" upperBound="-1"
+        eType="#//ExtraData"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logic" eType="ecore:EClass ../../ru.mmocore.model.gamelogic/model/gamelogic.ecore#//LogicObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Spatial" eSuperTypes="#//ModelledObject #//Area">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="map" eType="#//GameMap"
+        eOpposite="#//GameMap/locations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="areas" ordered="false"
+        upperBound="-1" eType="#//GameArea" eOpposite="#//GameArea/location"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameArea" abstract="true" eSuperTypes="#//physics/Translation #//Area">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//Spatial"
+        eOpposite="#//Spatial/areas"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorldObject" eSuperTypes="#//GameLogic #//physics/PhysicsObject #//ModelledObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="area" eType="#//Area" eOpposite="#//Area/objects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelledObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//GameModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GameModel" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//UrlResource"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GameInstance" eSuperTypes="#//GameMap"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Area" abstract="true" eSuperTypes="#//GameLogic #//physics/CollidedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//WorldObject" containment="true" eOpposite="#//WorldObject/area"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtraData" abstract="true" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable"/>
+  <eSubpackages name="physics" nsURI="http://mmocore.ru/model/gameworld/physics/1.0.0"
+      nsPrefix="gameworld-physics">
+    <eClassifiers xsi:type="ecore:EClass" name="PhysicsObject" abstract="true" eSuperTypes="#//physics/Rotation #//physics/Scale #//physics/Translation #//physics/CollidedObject"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Collider" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="auto" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Translation">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Rotation">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotationX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotationY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotationZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotationW" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Scale">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scaleX" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scaleY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scaleZ" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+          defaultValueLiteral="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModelCollider" eSuperTypes="#//physics/Collider">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" eType="#//GameModel"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BoxCollider" eSuperTypes="#//physics/Collider">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="z" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SphereCollider" eSuperTypes="#//physics/Collider">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="radius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CapsuleCollider" eSuperTypes="#//physics/Collider">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="radius" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollidedObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collider" eType="#//physics/Collider"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="control" nsURI="http://mmocore.ru/model/gameworld/control/1.0.0"
+      nsPrefix="gameworld-control">
+    <eClassifiers xsi:type="ecore:EClass" name="RespawnControl" eSuperTypes="../../ru.mmocore.model.gamelogic/model/gamelogic.ecore#//LogicControl">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="spawnTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="respawnState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="notify" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MessageControl" eSuperTypes="../../ru.mmocore.model.gamelogic/model/gamelogic.ecore#//LogicControl">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

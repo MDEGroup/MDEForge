@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="HALL"
+    nsURI="HALL" nsPrefix="HALL">
+  <eClassifiers xsi:type="ecore:EClass" name="VisualObject" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colorData" eType="#//Geometry/ColorData"
+        containment="true" eOpposite="#//Geometry/ColorData/colorDataInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="geometryData" eType="#//Geometry/GeometryData"
+        containment="true" eOpposite="#//Geometry/GeometryData/geometryDataInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visualObjectInv" eType="#//UserProfile"
+        eOpposite="#//UserProfile/visualObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSet" upperBound="-1"
+        eType="#//VisualObject" eOpposite="#//VisualObject/componentSetInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSetInv" eType="#//VisualObject"
+        eOpposite="#//VisualObject/componentSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="data" upperBound="-1" eType="#//Data"
+        containment="true" eOpposite="#//Data/dataInvComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FSM" eType="#//FSM/FSM"
+        containment="true" eOpposite="#//FSM/FSM/FSMInv"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageHandlerSet" upperBound="-1"
+        eType="#//Messages/MessageHandler" containment="true" eOpposite="#//Messages/MessageHandler/messageHandlerSetInv"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemComponent" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemComponentInv" eType="#//Model"
+        eOpposite="#//Model/systemComponent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSet" upperBound="-1"
+        eType="#//SystemComponent" containment="true" eOpposite="#//SystemComponent/componentSetInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSetInv" eType="#//SystemComponent"
+        eOpposite="#//SystemComponent/componentSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userProfile" upperBound="-1"
+        eType="#//UserProfile" containment="true" eOpposite="#//UserProfile/userProfileInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemComponent" upperBound="-1"
+        eType="#//SystemComponent" containment="true" eOpposite="#//SystemComponent/systemComponentInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageDefinition" upperBound="-1"
+        eType="#//Messages/MessageDefinition" containment="true" eOpposite="#//Messages/MessageDefinition/messageDefinitionInv"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserProfile" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="visualObject" upperBound="-1"
+        eType="#//VisualObject" containment="true" eOpposite="#//VisualObject/visualObjectInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taskObject" upperBound="-1"
+        eType="#//TaskObject" containment="true" eOpposite="#//TaskObject/taskObjectInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userProfileInv" eType="#//Model"
+        eOpposite="#//Model/userProfile"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberofcompletedtasks"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSet" upperBound="-1"
+        eType="#//UserProfile" eOpposite="#//UserProfile/componentSetInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSetInv" eType="#//UserProfile"
+        eOpposite="#//UserProfile/componentSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskObject" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goal" upperBound="-1" eType="#//Goal"
+        containment="true" eOpposite="#//Goal/goalInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taskObjectInv" eType="#//UserProfile"
+        eOpposite="#//UserProfile/taskObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completionTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberofgoalscompleted"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSet" upperBound="-1"
+        eType="#//TaskObject" eOpposite="#//TaskObject/componentSetInv"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentSetInv" eType="#//TaskObject"
+        eOpposite="#//TaskObject/componentSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Goal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goalInv" lowerBound="1"
+        eType="#//TaskObject" eOpposite="#//TaskObject/goal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterInv" eType="#//Messages/MessageDefinition"
+        eOpposite="#//Messages/MessageDefinition/parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Data">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="initValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataInvMessageDefinition"
+        eType="#//Messages/MessageDefinition" eOpposite="#//Messages/MessageDefinition/data"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataInvComponent" eType="#//Component"
+        eOpposite="#//Component/data"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Type" instanceTypeName="Type"/>
+  <eSubpackages name="Geometry" nsURI="HALL.Geometry" nsPrefix="Geometry">
+    <eClassifiers xsi:type="ecore:EClass" name="Color">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ambianceColor" eType="#//Geometry/RGBColor"
+          containment="true" eOpposite="#//Geometry/RGBColor/ambianceColorInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="difuseColor" eType="#//Geometry/RGBColor"
+          containment="true" eOpposite="#//Geometry/RGBColor/difuseColorInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specularColor" eType="#//Geometry/RGBColor"
+          containment="true" eOpposite="#//Geometry/RGBColor/specularColorInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="foregroundColorInv" eType="#//Geometry/ColorState"
+          eOpposite="#//Geometry/ColorState/foregroundColor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColorInv" eType="#//Geometry/ColorState"
+          eOpposite="#//Geometry/ColorState/backgroundColor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RGBColor">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="redValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="greenValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="blueValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ambianceColorInv" eType="#//Geometry/Color"
+          eOpposite="#//Geometry/Color/ambianceColor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="difuseColorInv" eType="#//Geometry/Color"
+          eOpposite="#//Geometry/Color/difuseColor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specularColorInv" eType="#//Geometry/Color"
+          eOpposite="#//Geometry/Color/specularColor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColorState" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="foregroundColor" eType="#//Geometry/Color"
+          containment="true" eOpposite="#//Geometry/Color/foregroundColorInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="backgroundColor" eType="#//Geometry/Color"
+          containment="true" eOpposite="#//Geometry/Color/backgroundColorInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="alphaTransparency" eType="#//Geometry/AlphaTransparency"
+          containment="true" eOpposite="#//Geometry/AlphaTransparency/alphaTransparencyInv"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AlphaTransparency">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="alphaTransparencyInv"
+          eType="#//Geometry/ColorState" eOpposite="#//Geometry/ColorState/alphaTransparency"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NormalColors" eSuperTypes="#//Geometry/ColorState">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="normalColorsInv" eType="#//Geometry/ColorData"
+          eOpposite="#//Geometry/ColorData/normalColors"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SelectedColors" eSuperTypes="#//Geometry/ColorState">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selectedColorsInv" eType="#//Geometry/ColorData"
+          eOpposite="#//Geometry/ColorData/selectedColors"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DisabledColors" eSuperTypes="#//Geometry/ColorState">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="disabledColorsInv" eType="#//Geometry/ColorData"
+          eOpposite="#//Geometry/ColorData/disabledColors"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColorData">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selectedColors" eType="#//Geometry/SelectedColors"
+          containment="true" eOpposite="#//Geometry/SelectedColors/selectedColorsInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="disabledColors" eType="#//Geometry/DisabledColors"
+          containment="true" eOpposite="#//Geometry/DisabledColors/disabledColorsInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="normalColors" eType="#//Geometry/NormalColors"
+          containment="true" eOpposite="#//Geometry/NormalColors/normalColorsInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="colorDataInv" eType="#//VisualObject"
+          eOpposite="#//VisualObject/colorData"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeometryData" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="geometryDataInv" eType="#//VisualObject"
+          eOpposite="#//VisualObject/geometryData"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeometryData3D" eSuperTypes="#//Geometry/GeometryData">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="face" upperBound="-1"
+          eType="#//Geometry/Face" containment="true" eOpposite="#//Geometry/Face/faceInv"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeometryData2D" eSuperTypes="#//Geometry/GeometryData">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="point2d" lowerBound="3"
+          upperBound="-1" eType="#//Geometry/Point2D" containment="true" eOpposite="#//Geometry/Point2D/point2dInv"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Face">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="point3d" lowerBound="3"
+          upperBound="-1" eType="#//Geometry/Point3D" containment="true" eOpposite="#//Geometry/Point3D/point2dInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="faceInv" eType="#//Geometry/GeometryData3D"
+          eOpposite="#//Geometry/GeometryData3D/face"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="labelText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Point3D" eSuperTypes="#//Geometry/Point">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="point2dInv" eType="#//Geometry/Face"
+          eOpposite="#//Geometry/Face/point3d"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="zCoord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Point2D" eSuperTypes="#//Geometry/Point">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="point2dInv" eType="#//Geometry/GeometryData2D"
+          eOpposite="#//Geometry/GeometryData2D/point2d"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Point">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="xCoord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="yCoord" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="Messages" nsURI="HALL.Messages" nsPrefix="Messages">
+    <eClassifiers xsi:type="ecore:EClass" name="MessageTransition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transitionsInvMessageState"
+          eType="#//Messages/MessageState" eOpposite="#//Messages/MessageState/transitions"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stateRef" lowerBound="1"
+          eType="#//Messages/MessageState"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="PreCondition" eType="#//Messages/Conditions/PreConditionMessageExpression"
+          containment="true" eOpposite="#//Messages/Conditions/PreConditionMessageExpression/PreConditionInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="PosCondition" eType="#//Messages/Instructions/PosConditionMessageExpression"
+          containment="true" eOpposite="#//Messages/Instructions/PosConditionMessageExpression/PosConditionInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ActionMessage" eType="#//Messages/Actions/ActionMessageExpression"
+          containment="true" eOpposite="#//Messages/Actions/ActionMessageExpression/ActionMessageInv"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedMessageState" eSuperTypes="#//Messages/MessageState">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="messageStateInv" eType="#//Messages/MessageHandler"
+          eOpposite="#//Messages/MessageHandler/messageState"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MessageDefinition">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="messageDefinitionInv"
+          eType="#//Model" eOpposite="#//Model/messageDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+          eType="#//Parameter" containment="true" eOpposite="#//Parameter/parameterInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="data" upperBound="-1"
+          eType="#//Data" containment="true" eOpposite="#//Data/dataInvMessageDefinition"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MessageHandler">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="messageState" upperBound="-1"
+          eType="#//Messages/NamedMessageState" containment="true" eOpposite="#//Messages/NamedMessageState/messageStateInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialMessageState"
+          lowerBound="1" eType="#//Messages/InitialMessageState" containment="true"
+          eOpposite="#//Messages/InitialMessageState/initialMessageStateInv"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="messageHandlerSetInv"
+          eType="#//Component" eOpposite="#//Component/messageHandlerSet"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MessageState">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isContinue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+          eType="#//Messages/MessageTransition" containment="true" eOpposite="#//Messages/MessageTransition/transitionsInvMessageState"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InitialMessageState" eSuperTypes="#//Messages/MessageState">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialMessageStateInv"
+          eType="#//Messages/MessageHandler" eOpposite="#//Messages/MessageHandler/initialMessageState"/>
+    </eClassifiers>
+    <eSubpackages name="Instructions" nsURI="Instructions" nsPrefix="Instructions">
+      <eClassifiers xsi:type="ecore:EClass" name="PosConditionMessageExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionInv" eType="#//Messages/MessageTransition"
+            eOpposite="#//Messages/MessageTransition/PosCondition"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionSet" upperBound="-1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"
+            containment="true" eOpposite="#//Messages/Instructions/PosConditionMessageExpressionElement/PosConditionSetInv"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PosConditionMessageExpressionElement"
+          abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionSetInv"
+            eType="#//Messages/Instructions/PosConditionMessageExpression" eOpposite="#//Messages/Instructions/PosConditionMessageExpression/PosConditionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftexpression" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetState" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetState" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetData" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetMessageData" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetMessageParameter" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageData" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageParameter" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetTopDown" eSuperTypes="#//Messages/Instructions/PosConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//Messages/Instructions/PosConditionMessageExpressionElement"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Conditions" nsURI="Conditions" nsPrefix="Conditions">
+      <eClassifiers xsi:type="ecore:EClass" name="PreConditionMessageExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionInv" eType="#//Messages/MessageTransition"
+            eOpposite="#//Messages/MessageTransition/PreCondition"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionSet" upperBound="-1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement" containment="true"
+            eOpposite="#//Messages/Conditions/PreConditionMessageExpressionElement/PreConditionSetInv"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PreConditionMessageExpressionElement"
+          abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionSetInv"
+            eType="#//Messages/Conditions/PreConditionMessageExpression" eOpposite="#//Messages/Conditions/PreConditionMessageExpression/PreConditionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageData" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageParameter" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetState" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="#//Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//Messages/Conditions/PreConditionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftexpression" lowerBound="1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//Messages/Conditions/PreConditionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="Actions" nsURI="Actions" nsPrefix="Actions">
+      <eClassifiers xsi:type="ecore:EClass" name="ActionMessageExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionMessageInv" eType="#//Messages/MessageTransition"
+            eOpposite="#//Messages/MessageTransition/ActionMessage"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionMessageSet" upperBound="-1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement" containment="true"
+            eOpposite="#//Messages/Actions/ActionMessageExpressionElement/ActionMessageSetInv"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ActionMessageExpressionElement"
+          abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionMessageSetInv"
+            eType="#//Messages/Actions/ActionMessageExpression" eOpposite="#//Messages/Actions/ActionMessageExpression/ActionMessageSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftexpression" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageData" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetMessageParameter" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="MessageInvocation" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTopDown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="actualset" eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertySet" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Enable" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+            eType="#//Messages/Actions/ActionMessageExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Messages/MessageDefinition"
+            containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="FSM" nsURI="HALL.FSM" nsPrefix="FSM">
+    <eClassifiers xsi:type="ecore:EClass" name="FSM">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="FSMInv" eType="#//Component"
+          eOpposite="#//Component/FSM"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+          eType="#//FSM/InitialState" containment="true" eOpposite="#//FSM/InitialState/fsm"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
+          eType="#//FSM/NamedState" containment="true" eOpposite="#//FSM/NamedState/fsm"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedState" eSuperTypes="#//FSM/State">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fsm" eType="#//FSM/FSM"
+          eOpposite="#//FSM/FSM/state"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="#//FSM/State">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fsm" eType="#//FSM/FSM"
+          eOpposite="#//FSM/FSM/initialState"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Transition">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//FSM/State" eOpposite="#//FSM/State/transitions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stateRef" lowerBound="1"
+          eType="#//FSM/State"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="PreCondition" eType="#//FSM/FSMConditions/PreConditionExpression"
+          containment="true" eOpposite="#//FSM/FSMConditions/PreConditionExpression/PreConditionInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="PosCondition" eType="#//FSM/FSMInstructions/PosConditionExpression"
+          containment="true" eOpposite="#//FSM/FSMInstructions/PosConditionExpression/PosConditionInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Action" eType="#//FSM/FSMActions/ActionExpression"
+          containment="true" eOpposite="#//FSM/FSMActions/ActionExpression/ActionInv"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Trigger" eType="#//FSM/Trigger/TriggerExpression"
+          containment="true" eOpposite="#//FSM/Trigger/TriggerExpression/TriggerInv"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="State" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+          eType="#//FSM/Transition" containment="true" eOpposite="#//FSM/Transition/source"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eSubpackages name="Trigger" nsURI="HALL.FSM.Trigger" nsPrefix="Trigger">
+      <eClassifiers xsi:type="ecore:EClass" name="TriggerExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="TriggerExpressionSet"
+            eType="#//FSM/Trigger/TriggerExpressionElement" containment="true" eOpposite="#//FSM/Trigger/TriggerExpressionElement/TriggerExpressionSetInv"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="TriggerInv" eType="#//FSM/Transition"
+            eOpposite="#//FSM/Transition/Trigger"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TriggerExpressionElement" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="String" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="TriggerExpressionSetInv"
+            eType="#//FSM/Trigger/TriggerExpression" eOpposite="#//FSM/Trigger/TriggerExpression/TriggerExpressionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="MessageNotification" eSuperTypes="#//FSM/Trigger/TriggerExpressionElement"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainEventFired" eSuperTypes="#//FSM/Trigger/TriggerExpressionElement"/>
+    </eSubpackages>
+    <eSubpackages name="FSMInstructions" nsURI="HALL.FSM.FSMInstructions" nsPrefix="FSMInstructions">
+      <eClassifiers xsi:type="ecore:EClass" name="PosConditionExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionSet" upperBound="-1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement" containment="true"
+            eOpposite="#//FSM/FSMInstructions/PosConditionExpressionElement/PosConditionSetInv"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionInv" eType="#//FSM/Transition"
+            eOpposite="#//FSM/Transition/PosCondition"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PosConditionExpressionElement" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PosConditionSetInv"
+            eType="#//FSM/FSMInstructions/PosConditionExpression" eOpposite="#//FSM/FSMInstructions/PosConditionExpression/PosConditionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftexpression" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetState" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetState" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetData" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//FSM/FSMInstructions/PosConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//FSM/FSMInstructions/PosConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="FSMConditions" nsURI="HALL.FSM.FSMConditions" nsPrefix="FSMConditions">
+      <eClassifiers xsi:type="ecore:EClass" name="PreConditionExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionSet" upperBound="-1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement" containment="true"
+            eOpposite="#//FSM/FSMConditions/PreConditionExpressionElement/PreConditionSetInv"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionInv" eType="#//FSM/Transition"
+            eOpposite="#//FSM/Transition/PreCondition"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PreConditionExpressionElement" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="PreConditionSetInv"
+            eType="#//FSM/FSMConditions/PreConditionExpression" eOpposite="#//FSM/FSMConditions/PreConditionExpression/PreConditionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftexpression" lowerBound="1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetState" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//FSM/FSMConditions/PreConditionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//FSM/FSMConditions/PreConditionExpressionElement"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="FSMActions" nsURI="HALL.FSM.FSMActions" nsPrefix="FSMActions">
+      <eClassifiers xsi:type="ecore:EClass" name="ActionExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionInv" eType="#//FSM/Transition"
+            eOpposite="#//FSM/Transition/Action"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionExpressionSet"
+            upperBound="-1" eType="#//FSM/FSMActions/ActionExpressionElement" containment="true"
+            eOpposite="#//FSM/FSMActions/ActionExpressionElement/ActionExpressionSetInv"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ActionExpressionElement" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="ActionExpressionSetInv"
+            eType="#//FSM/FSMActions/ActionExpression" eOpposite="#//FSM/FSMActions/ActionExpression/ActionExpressionSet"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VarRef" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertyGet" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Let" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="namevar" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialization" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="MessageInvocation" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTopDown" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="actualset" upperBound="-1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Enable" eSuperTypes="#//Messages/Actions/ActionMessageExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FSM/FSMActions/ActionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="message" lowerBound="1"
+            eType="#//Messages/MessageDefinition" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DomainPropertySet" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GetData" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Component"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryOperator" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftoperator" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightexpression" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryOperator" eSuperTypes="#//FSM/FSMActions/ActionExpressionElement">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operatorname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//FSM/FSMActions/ActionExpressionElement"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="epo2"
+    nsURI="http://www.elver.org/store/test/emf/extendedpo2" nsPrefix="com.example.epo2">
+  <eClassifiers xsi:type="ecore:EClass" name="Item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="order" lowerBound="1" eType="#//PurchaseOrder"
+        transient="true" eOpposite="#//PurchaseOrder/items"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="USPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shipDate" eType="#//Date"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partNum" eType="#//SKU"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="USAddress" eSuperTypes="#//Address">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="SKU" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Date" instanceClassName="java.util.Date"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PurchaseOrder">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//Item" containment="true" eOpposite="#//Item/order"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="billTo" lowerBound="1"
+        eType="#//Address" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shipTo" eType="#//Address"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderDate" eType="#//Date"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//OrderStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="totalAmount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        changeable="false" volatile="true" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" lowerBound="1"
+        eType="#//Customer" resolveProxies="false" eOpposite="#//Customer/orders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousOrder" eType="#//PurchaseOrder"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Address" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="country" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OrderStatus">
+    <eLiterals name="Pending"/>
+    <eLiterals name="BackOrder" value="1"/>
+    <eLiterals name="Complete" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Supplier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orders" upperBound="-1"
+        eType="#//PurchaseOrder" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pendingOrders" upperBound="-1"
+        eType="#//PurchaseOrder" changeable="false" volatile="true" transient="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shippedOrders" upperBound="-1"
+        eType="#//PurchaseOrder" changeable="false" volatile="true" transient="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="customerID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orders" upperBound="-1"
+        eType="#//PurchaseOrder" resolveProxies="false" eOpposite="#//PurchaseOrder/customer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalAddress" eSuperTypes="#//Address #//GlobalLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GlobalLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="countryCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

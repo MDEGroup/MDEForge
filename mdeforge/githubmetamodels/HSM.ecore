@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="HSM" name="HSM" nsURI="HSM" nsPrefix="hsm">
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+    <eOperations name="addTransition">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="post_a" value="Transition.allInstances()->one(x | x.oclIsNew() and x.source.name = src and x.target.name = trg and self.transitions->includes(x))"/>
+        <details key="post_b" value="StateMachine.allInstances()->forAll(x | x.states@pre = x.states)"/>
+        <details key="post_c" value="State.allInstances()->forAll(x | x.name@pre = x.name)"/>
+        <details key="post_d" value="Transition.allInstances@pre()->forAll(x | x.source@pre = x.source and x.target@pre = x.target)"/>
+        <details key="post_e" value="State.allInstances@pre() = State.allInstances()"/>
+        <details key="post_f" value="StateMachine.allInstances@pre() = StateMachine.allInstances()"/>
+      </eAnnotations>
+      <eParameters name="src" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="trg" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="inheritance" value="not self->closure(owner)->includes(self)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" eType="#//CompositeState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//State"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ast"
+    nsURI="http:///org/eclipse/dltk/tcl/ast.ecore" nsPrefix="org.eclipse.dltk.tcl.ast">
+  <eClassifiers xsi:type="ecore:EClass" name="Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Script" eSuperTypes="#//TclArgument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commands" upperBound="-1"
+        eType="#//TclCommand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringArgument" eSuperTypes="#//TclArgument">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rawValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Substitution" eSuperTypes="#//TclArgument #//ISubstitution">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commands" upperBound="-1"
+        eType="#//TclCommand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TclArgument" eSuperTypes="#//Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TclCommand" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//TclArgument"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//TclArgument" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definition" eType="ecore:EClass definitions.ecore#//Command"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matches" upperBound="-1"
+        eType="#//ArgumentMatch" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="qualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="matched" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TclArgumentList" eSuperTypes="#//TclArgument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//TclArgument" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definitionArgument" eType="ecore:EClass definitions.ecore#//ComplexArgument"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgumentMatch">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definition" eType="ecore:EClass definitions.ecore#//Argument"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" unique="false"
+        upperBound="-1" eType="#//TclArgument"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexString" eSuperTypes="#//TclArgument #//ISubstitution">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//TclArgument" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableReference" eSuperTypes="#//TclArgument #//ISubstitution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" eType="#//TclArgument"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ISubstitution" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TclModule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+        eType="#//TclCommand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="codeModel" eType="#//TclCodeModel"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TclCodeModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delimeters" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineOffsets" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TclProblemModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="problems" upperBound="-1"
+        eType="#//TclProblem" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TclProblem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arguments" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceStart" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceEnd" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="error" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="warning" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

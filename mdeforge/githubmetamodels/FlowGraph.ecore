@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="flowgraph" nsURI="http://flowgraph/1.0" nsPrefix="flowgraph">
+  <eClassifiers xsi:type="ecore:EClass" name="Stmt" abstract="true" eSuperTypes="#//Item"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleStmt" eSuperTypes="#//Stmt #//FlowInstr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//Stmt">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stmts" upperBound="-1"
+        eType="#//Stmt" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="If" eSuperTypes="#//Conditional">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="then" lowerBound="1" eType="#//Stmt"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//Stmt" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expr" eSuperTypes="#//FlowInstr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Item" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="txt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Return" eSuperTypes="#//Stmt #//FlowInstr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Block #//FlowInstr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" lowerBound="1" eType="#//Exit"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vars" upperBound="-1" eType="#//Var"
+        containment="true" eOpposite="#//Var/method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exit" eSuperTypes="#//FlowInstr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Loop" eSuperTypes="#//Conditional">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="#//Stmt"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Conditional" abstract="true" eSuperTypes="#//Stmt">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1" eType="#//Expr"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JumpStmt" abstract="true" eSuperTypes="#//Stmt #//FlowInstr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="label" eType="#//Label"
+        eOpposite="#//Label/jumps"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Break" eSuperTypes="#//JumpStmt"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Continue" eSuperTypes="#//JumpStmt"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowInstr" abstract="true" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cfNext" upperBound="-1"
+        eType="#//FlowInstr" eOpposite="#//FlowInstr/cfPrev"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cfPrev" upperBound="-1"
+        eType="#//FlowInstr" eOpposite="#//FlowInstr/cfNext"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="def" upperBound="-1" eType="#//Var"
+        eOpposite="#//Var/definers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="use" upperBound="-1" eType="#//Var"
+        eOpposite="#//Var/users"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dfNext" upperBound="-1"
+        eType="#//FlowInstr"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="#//Item">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definers" upperBound="-1"
+        eType="#//FlowInstr" eOpposite="#//FlowInstr/def"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+        eType="#//FlowInstr" eOpposite="#//FlowInstr/use"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" eType="#//Method"
+        eOpposite="#//Method/vars"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Param" eSuperTypes="#//Var"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" eSuperTypes="#//Stmt">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stmt" lowerBound="1" eType="#//Stmt"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jumps" upperBound="-1"
+        eType="#//JumpStmt" eOpposite="#//JumpStmt/label"/>
+  </eClassifiers>
+</ecore:EPackage>

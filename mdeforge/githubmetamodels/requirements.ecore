@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (C) 2007-2011  BlueXML - www.bluexml.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="requirements"
+    nsURI="http://www.kerblue.org/requirements/1.0" nsPrefix="requirements">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicElement" abstract="true" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity" eSuperTypes="#//BasicElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RelationShip" eSuperTypes="#//BasicElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetMin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetMax" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//BasicElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AttributeType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributeType">
+    <eLiterals name="TextualValue"/>
+    <eLiterals name="NumericalValue" value="1" literal="NumericalValue"/>
+    <eLiterals name="TemporalValue" value="2" literal="TemporalValue"/>
+    <eLiterals name="Other" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Organization" eSuperTypes="#//AnnotableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="childElements" upperBound="-1"
+        eType="#//ModelElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Agent" eSuperTypes="#//AnnotableElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHuman" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="isResponsible" upperBound="-1"
+        eType="#//Goal" eOpposite="#//Goal/responsible"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Goal" eSuperTypes="#//AnnotableElement">
+    <eAnnotations source="http://www.bluexml.com/OCL">
+      <details key="uniqueName" value="Goal.allInstances()->select(g | g.name = self.name)->reject(g | g =self)->size() = 0"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="uniqueName"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subgoals" upperBound="-1"
+        eType="#//Goal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="#//PriorityLevel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" upperBound="-1"
+        eType="#//Agent" eOpposite="#//Agent/isResponsible"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="privilegeGroup" upperBound="-1"
+        eType="#//PrivilegeGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="step" upperBound="-1" eType="#//GoalStep"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="synopsis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PriorityLevel">
+    <eLiterals name="VeryHigh"/>
+    <eLiterals name="High" value="1"/>
+    <eLiterals name="Normal"/>
+    <eLiterals name="Low"/>
+    <eLiterals name="VeryLow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Privilege">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//BasicElement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="#//PrivilegeNature"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PrivilegeNature">
+    <eLiterals name="create"/>
+    <eLiterals name="read" value="1"/>
+    <eLiterals name="update"/>
+    <eLiterals name="delete"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementsDefinition" eSuperTypes="#//Organization">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrivilegeGroup" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryPoint" lowerBound="1"
+        eType="#//Entity"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="privileges" upperBound="-1"
+        eType="#//Privilege" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//Organization"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GoalStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextGoals" upperBound="-1"
+        eType="#//Goal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//Process"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//AnnotationStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AnnotationStatus">
+    <eLiterals name="New" literal="New"/>
+    <eLiterals name="Fixed" value="1"/>
+    <eLiterals name="Invalid" value="2"/>
+    <eLiterals name="Wontfix" value="3" literal="Won't fix"/>
+    <eLiterals name="Duplicate" value="4"/>
+    <eLiterals name="Incomplete" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotableElement" eSuperTypes="#//BasicElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotation" upperBound="-1"
+        eType="#//Annotation" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

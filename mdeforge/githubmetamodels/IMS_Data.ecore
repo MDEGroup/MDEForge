@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="IMS_Data"
+    nsURI="http://www.sysfera.com/IMS/Data">
+  <eClassifiers xsi:type="ecore:EEnum" name="MetricType" instanceTypeName="MetricType">
+    <eAnnotations source="Description">
+      <details key="content" value="The metric type is the type of metric to use"/>
+    </eAnnotations>
+    <eLiterals name="UNDEFINED"/>
+    <eLiterals name="CPUUSE" value="1"/>
+    <eLiterals name="FREEDISKSPACE" value="2"/>
+    <eLiterals name="FREEMEMORY" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Metric" instanceTypeName="Metric">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MetricType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The type of the metric"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The value of the metric"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The timestamp the metric had the value"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LoadShedType" instanceTypeName="LoadShedType">
+    <eAnnotations source="Description">
+      <details key="content" value="The load shed type reprensents how to proceed the load shed"/>
+    </eAnnotations>
+    <eLiterals name="UNDEFINED" literal="SOFT"/>
+    <eLiterals name="HARD" value="1"/>
+    <eLiterals name="SOFT" value="2" literal="SOFT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListMetric" instanceTypeName="ListMetric">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metric" upperBound="-1"
+        eType="#//Metric" containment="true">
+      <eAnnotations source="Description">
+        <details key="content" value="The metrics of the list"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListProcesses" instanceTypeName="ListProcesses">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" upperBound="-1"
+        eType="#//Process" containment="true">
+      <eAnnotations source="Description">
+        <details key="content" value="The processes of the list"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemInfo" instanceTypeName="SystemInfo">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="Amount of RAM memory available on the machine (in Bytes)"/>
+        <details key="shortOption" value="m"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="diskSpace" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="Amount of disk space available on the machine (in Bytes)"/>
+        <details key="shortOption" value="d"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The id of the machine"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" instanceTypeName="Process">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="processName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The name of the process (the name of the executable)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The id of the machine"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dietId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The diet id of the process"/>
+        <details key="shortOption" value="d"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//ProcessState"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="THe state of the process"/>
+        <details key="shortOption" value="s"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The timestamp corresponding to the moment the process has been updated"/>
+        <details key="shortOption" value="t"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="script" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The content of the script used to launch the sed"/>
+        <details key="shortOption" value="l"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExportOp" instanceTypeName="ExportOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exportType" eType="#//ExportType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description" references="#//ExportOp/exportType/%Description%">
+        <details key="content" value="The type to export"/>
+        <details key="shortOption" value="t"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ExportType" instanceTypeName="ExportType">
+    <eAnnotations source="Description">
+      <details key="content" value="The export type is the format to export an history of commands"/>
+    </eAnnotations>
+    <eLiterals name="UNDEFINED" literal="UNDEFINED"/>
+    <eLiterals name="SHELL" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetricHistOp" instanceTypeName="MetricHistOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The start time to get the history"/>
+        <details key="shortOption" value="s"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The end time to get the history"/>
+        <details key="shortOption" value="e"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MetricType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The type of metric searched"/>
+        <details key="shortOption" value="t"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CurMetricOp" instanceTypeName="CurMetricOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metricType" eType="#//MetricType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The type of the metric"/>
+        <details key="shortOption" value="t"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessOp" instanceTypeName="ProcessOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The id of the machine"/>
+        <details key="shortOption" value="p"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThresholdOp" instanceTypeName="ThresholdOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The id of the machine where the metric is defined"/>
+        <details key="shortOption" value="m"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metricType" eType="#//MetricType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The type of the metric"/>
+        <details key="shortOption" value="t"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListThreshold" instanceTypeName="ListThreshold">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Threshold" upperBound="-1"
+        eType="#//Threshold" containment="true">
+      <eAnnotations source="Description">
+        <details key="content" value="The list of the thresholds"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Threshold" instanceTypeName="Threshold">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The value of the threshold"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The machine ID the threshold is available"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//MetricType"
+        defaultValueLiteral="0">
+      <eAnnotations source="Description">
+        <details key="content" value="The type of the threshold"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="handler" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The userId of the admin responsible for handling the threshold problems"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ProcessState" instanceTypeName="ProcessState">
+    <eAnnotations source="Description">
+      <details key="content" value="It defines the state of a process"/>
+    </eAnnotations>
+    <eLiterals name="UNDEFINED" literal="UNDEFINED"/>
+    <eLiterals name="RUNNING" value="1"/>
+    <eLiterals name="DOWN" value="2"/>
+    <eLiterals name="DELETED" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SysInfoOp" instanceTypeName="SysInfoOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="machineId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description">
+        <details key="content" value="The machine id"/>
+        <details key="shortOption" value="m"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ListSysInfo" instanceTypeName="ListSysInfo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sysInfo" upperBound="-1"
+        eType="#//SystemInfo" containment="true">
+      <eAnnotations source="Description">
+        <details key="content" value="The set of system info"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SupervisorOp" instanceTypeName="SupervisorOp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description" references="#//SupervisorOp/URI/%Description%">
+        <details key="content" value="The URI of the supervisor to control the processes"/>
+        <details key="shortOption" value="s"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="&quot;&quot;">
+      <eAnnotations source="Description" references="#//SupervisorOp/name/%Description%">
+        <details key="content" value="The path to the supervisord script file on the machine"/>
+        <details key="shortOption" value="n"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

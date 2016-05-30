@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="customerBehaviour"
+    nsURI="http://mit.bme.hu/mdsd/appstore/customer-behaviour" nsPrefix="customerBehaviour">
+  <eClassifiers xsi:type="ecore:EClass" name="CustomerBehaviour">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customers" upperBound="-1"
+        eType="#//Customer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="developers" upperBound="-1"
+        eType="#//Developer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="similarityScores" upperBound="-1"
+        eType="#//CustomerSimilarityScore" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Developer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="authoredApps" upperBound="-1"
+        eType="#//App" containment="true" eOpposite="#//App/developer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="App">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ageRestriction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category" eType="#//AppCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="developer" eType="#//Developer"
+        eOpposite="#//Developer/authoredApps"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="purchases" upperBound="-1"
+        eType="#//Purchase" eOpposite="#//Purchase/app"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AppCategory">
+    <eLiterals name="PRODUCTIVITY" value="1"/>
+    <eLiterals name="NEWS_AND_WEATHER" value="2"/>
+    <eLiterals name="TOOLS" value="3"/>
+    <eLiterals name="MULTIMEDIA" value="4"/>
+    <eLiterals name="SOCIAL" value="5"/>
+    <eLiterals name="GAME" value="6"/>
+    <eLiterals name="OTHER"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Customer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateOfBirth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="purchases" upperBound="-1"
+        eType="#//Purchase" containment="true" eOpposite="#//Purchase/customer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Purchase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer" eType="#//Customer"
+        eOpposite="#//Customer/purchases"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="app" eType="#//App" eOpposite="#//App/purchases"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="atPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomerSimilarityScore">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer1" eType="#//Customer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="customer2" eType="#//Customer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="score" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+</ecore:EPackage>

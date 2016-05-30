@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="n3_turtle"
+    nsURI="http://emftext.org/n3_turtle" nsPrefix="n3_turtle">
+  <eClassifiers xsi:type="ecore:EClass" name="N3Doc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" lowerBound="1"
+        upperBound="-1" eType="#//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Directive" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prefixName" eType="#//Name"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uriref" lowerBound="1"
+        eType="#//Uriref" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Triple" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
+        eType="#//Subject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicateObjectList" lowerBound="1"
+        upperBound="-1" eType="#//AbstractPredicateObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractPredicateObject" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PredicateObject" eSuperTypes="#//AbstractPredicateObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="verb" lowerBound="1" eType="#//Verb"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectList" lowerBound="1"
+        upperBound="-1" eType="#//Obj" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Verb" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Subject" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Predicate" eSuperTypes="#//Verb">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" lowerBound="1"
+        eType="#//Resource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Obj" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true" eSuperTypes="#//Obj"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DatatypeString" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//QuotedString"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" lowerBound="1"
+        eType="#//Resource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberLiteral" eSuperTypes="#//Literal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" abstract="true" eSuperTypes="#//Literal"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BTRUE" eSuperTypes="#//BooleanLiteral"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BFALSE" eSuperTypes="#//BooleanLiteral"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Blank" abstract="true" eSuperTypes="#//Subject #//Obj"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyList" eSuperTypes="#//Blank"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PredicateObjectList" eSuperTypes="#//Blank">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicateObjects" upperBound="-1"
+        eType="#//AbstractPredicateObject" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ItemList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="obj" lowerBound="1" upperBound="-1"
+        eType="#//Obj" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Collection" eSuperTypes="#//Blank">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="itemList" eType="#//ItemList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" abstract="true" eSuperTypes="#//Subject #//Obj"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeID" eSuperTypes="#//Blank">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" lowerBound="1" eType="#//Name"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Qname" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prefix" eType="#//Name"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//Name" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IsA" eSuperTypes="#//Verb"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Uriref" eSuperTypes="#//Resource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Name">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QuotedString">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

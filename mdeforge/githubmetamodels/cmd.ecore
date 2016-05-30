@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cmdtools"
+    nsURI="http://torusfw.org/tools/cmd.ecore" nsPrefix="CmdTools">
+  <eClassifiers xsi:type="ecore:EClass" name="Command" eSuperTypes="platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationObject">
+    <eOperations name="run" eType="#//IStatus">
+      <eParameters name="in" eType="#//CommandInput"/>
+      <eParameters name="out" eType="#//CommandOutput"/>
+    </eOperations>
+    <eOperations name="getArgument" eType="#//Argument">
+      <eParameters name="argument" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Argument" eOpposite="#//Argument/command"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handler" eType="#//CommandHandler"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Argument" eSuperTypes="platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" eType="#//Command"
+        resolveProxies="false" eOpposite="#//Command/arguments"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="argument" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectingArgument" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiple" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="handler" eType="#//ArgumentHandler"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandContainer">
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationContainer">
+      <eTypeArguments eClassifier="#//Command"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgumentContainer">
+    <eGenericSuperTypes eClassifier="ecore:EClass platform:/plugin/org.torusfw.tools.emf/model/emftools.ecore#//ConfigurationContainer">
+      <eTypeArguments eClassifier="#//Argument"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgumentHandler" abstract="true" interface="true">
+    <eOperations name="handleValue" eType="#//IStatus">
+      <eParameters name="arg" eType="#//Argument"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandHandler" abstract="true" interface="true">
+    <eOperations name="run" eType="#//IStatus">
+      <eParameters name="out" eType="#//CommandOutput"/>
+    </eOperations>
+    <eOperations name="setProperty">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandManager">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commands" eType="#//CommandContainer"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" eType="#//ArgumentContainer"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandOutput" abstract="true">
+    <eOperations name="print">
+      <eParameters name="obj" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="println">
+      <eParameters name="obj" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="println"/>
+    <eOperations name="printWarning">
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="printError">
+      <eParameters name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="printStatus">
+      <eParameters name="status" eType="#//IStatus"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrintStreamOutput" eSuperTypes="#//CommandOutput">
+    <eOperations name="setOutput">
+      <eParameters name="output" eType="#//PrintStream"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandInterpreterOutput" eSuperTypes="#//CommandOutput">
+    <eOperations name="setOutput">
+      <eParameters name="output" eType="#//CommandInterpreter"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandInput" abstract="true" interface="true">
+    <eOperations name="nextArgument" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandInterpreterInput" eSuperTypes="#//CommandInput">
+    <eOperations name="setInput">
+      <eParameters name="input" eType="#//CommandInterpreter"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandListInput" eSuperTypes="#//CommandInput">
+    <eOperations name="setInput">
+      <eParameters name="input">
+        <eGenericType eClassifier="#//Iterator">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IStatus" instanceClassName="org.eclipse.core.runtime.IStatus"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="CommandInterpreter" instanceClassName="org.eclipse.osgi.framework.console.CommandInterpreter"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="PrintStream" instanceClassName="java.io.PrintStream"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Iterator" instanceClassName="java.util.Iterator"
+      serializable="false">
+    <eTypeParameters name="X"/>
+  </eClassifiers>
+</ecore:EPackage>

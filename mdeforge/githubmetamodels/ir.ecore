@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ir" nsURI="http://orcc.sf.net/model/2011/Ir" nsPrefix="net.sf.orcc.ir">
+  <eClassifiers xsi:type="ecore:EClass" name="Procedure" eSuperTypes="../../net.sf.orcc.models/model/Util.ecore#//Attributable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="locals" upperBound="-1"
+        eType="#//Var" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="native" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//Block" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Param" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="#//Type"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cfg" eType="#//Cfg" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Param">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//Var"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="byRef" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" abstract="true" eSuperTypes="../../net.sf.orcc.models/model/Util.ecore#//Attributable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cfgNode" eType="#//CfgNode"
+        eOpposite="#//CfgNode/node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockBasic" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instructions" upperBound="-1"
+        eType="#//Instruction" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockIf" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseBlocks" upperBound="-1"
+        eType="#//Block" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinBlock" eType="#//BlockBasic"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenBlocks" upperBound="-1"
+        eType="#//Block" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlockWhile" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinBlock" eType="#//BlockBasic"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//Block" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instruction" abstract="true" eSuperTypes="../../net.sf.orcc.models/model/Util.ecore#//Attributable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicate" eType="#//Predicate"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstAssign" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Def"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstCall" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Arg" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="procedure" eType="#//Procedure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Def"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstLoad" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Use"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Def"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstPhi" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="oldVariable" eType="#//Var"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Def"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstReturn" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstStore" eSuperTypes="#//Instruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Def"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Arg" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgByRef" eSuperTypes="#//Arg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="use" eType="#//Use" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArgByVal" eSuperTypes="#//Arg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" eSuperTypes="../../net.sf.orcc.models/model/Util.ecore#//Attributable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprBinary" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="e1" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="e2" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//OpBinary"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprBool" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprFloat" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprInt" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprList" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprString" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprUnary" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="#//OpUnary"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprVar" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="use" eType="#//Use" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeBool" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeFloat" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeInt" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeList" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sizeExpr" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeString" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeUint" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeVoid" eSuperTypes="#//Type"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Def">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//Var"
+        eOpposite="#//Var/defs"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="../../net.sf.orcc.models/model/Util.ecore#//Attributable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="assignable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defs" upperBound="-1" eType="#//Def"
+        eOpposite="#//Def/variable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="global" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialValue" eType="#//Expression"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type" containment="true"
+        resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="uses" upperBound="-1" eType="#//Use"
+        eOpposite="#//Use/variable"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Use">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//Var"
+        eOpposite="#//Var/uses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Predicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+        eType="#//Expression" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cfg" eSuperTypes="../../net.sf.orcc.models/model/Graph.ecore#//Graph">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" eType="#//CfgNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" eType="#//CfgNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CfgNode" eSuperTypes="../../net.sf.orcc.models/model/Graph.ecore#//Vertex">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" eType="#//Block"
+        eOpposite="#//Block/cfgNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OpBinary">
+    <eLiterals name="BITAND"/>
+    <eLiterals name="BITOR" value="1"/>
+    <eLiterals name="BITXOR" value="2"/>
+    <eLiterals name="DIV" value="3"/>
+    <eLiterals name="DIV_INT" value="4"/>
+    <eLiterals name="EQ" value="5"/>
+    <eLiterals name="EXP" value="6"/>
+    <eLiterals name="GE" value="7"/>
+    <eLiterals name="GT" value="8"/>
+    <eLiterals name="LE" value="9"/>
+    <eLiterals name="LOGIC_AND" value="10"/>
+    <eLiterals name="LOGIC_OR" value="11"/>
+    <eLiterals name="LT" value="12"/>
+    <eLiterals name="MINUS" value="13"/>
+    <eLiterals name="MOD" value="14"/>
+    <eLiterals name="NE" value="15"/>
+    <eLiterals name="PLUS" value="16"/>
+    <eLiterals name="SHIFT_LEFT" value="17"/>
+    <eLiterals name="SHIFT_RIGHT" value="18"/>
+    <eLiterals name="TIMES" value="19"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="OpUnary">
+    <eLiterals name="BITNOT"/>
+    <eLiterals name="LOGIC_NOT" value="1"/>
+    <eLiterals name="MINUS" value="2"/>
+    <eLiterals name="NUM_ELTS" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

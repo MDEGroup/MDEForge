@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://openscada.org/Deploy/Configurator" nsPrefix="configurator">
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slots" upperBound="-1"
+        eType="#//ConfigurationSlot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processors" upperBound="-1"
+        eType="#//Processor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Configuration" instanceClassName="org.openscada.configurator.Configuration"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationSlot" abstract="true" interface="true">
+    <eOperations name="store" eExceptions="#//Exception"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Processor" abstract="true" interface="true">
+    <eOperations name="process" eExceptions="#//Exception">
+      <eParameters name="project" eType="#//Project"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericConfigurationSlot" abstract="true"
+      eSuperTypes="#//ConfigurationSlot">
+    <eOperations name="initialize">
+      <eParameters name="configuration" eType="#//GenericConfiguration"/>
+    </eOperations>
+    <eOperations name="getConfigurationData" lowerBound="1" eType="#//GenericConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jsonBase" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseDirectory" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="GenericConfiguration" instanceClassName="org.openscada.configurator.GenericConfiguration"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.Exception"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GenericMasterConfigurationSlot" abstract="true"
+      eSuperTypes="#//GenericConfigurationSlot">
+    <eOperations name="getConfigurationData" eType="#//GenericMasterConfiguration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="GenericMasterConfiguration" instanceClassName="org.openscada.configurator.GenericMasterConfiguration"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultGenericMasterConfiguration" eSuperTypes="#//GenericMasterConfigurationSlot"/>
+  <eSubpackages name="hd" nsURI="http://openscada.org/Deploy/Configurator/HD" nsPrefix="hd">
+    <eClassifiers xsi:type="ecore:EClass" name="ConfigurationSlot" eSuperTypes="#//GenericMasterConfigurationSlot">
+      <eOperations name="getConfigurationData" lowerBound="1" eType="#//GenericMasterConfiguration"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="masterConnectionUri"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StorageCommandGenerator" eSuperTypes="#//Processor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1"
+          eType="#//hd/ConfigurationSlot"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HDItemGenerator" eSuperTypes="#//Processor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="hdSlot" lowerBound="1"
+          eType="#//hd/ConfigurationSlot"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="daSlot" lowerBound="1"
+          eType="#//master/AtlantisConfigurationSlot"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="master" nsURI="http://openscada.org/Deploy/Configurator/Master"
+      nsPrefix="master">
+    <eClassifiers xsi:type="ecore:EClass" name="AtlantisConfigurationSlot" eSuperTypes="#//GenericMasterConfigurationSlot">
+      <eOperations name="getConfigurationData" lowerBound="1" eType="#//Configuration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Module" abstract="true" interface="true">
+      <eOperations name="process">
+        <eParameters name="configuration" eType="#//Configuration"/>
+        <eParameters name="project" eType="#//Project"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ModuleProcessor" eSuperTypes="#//Processor">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+          eType="#//master/Module" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="slot" lowerBound="1"
+          eType="#//master/AtlantisConfigurationSlot" eKeys="#//ConfigurationSlot/id"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

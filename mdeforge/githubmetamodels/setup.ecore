@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="setup" nsURI="http://www.eclipse.org/CDO/releng/setup/1.0" nsPrefix="setup">
+  <eClassifiers xsi:type="ecore:EClass" name="Preferences" eSuperTypes="#//ToolInstallation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="installFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gitPrefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkLocations" upperBound="-1"
+        eType="#//LinkLocation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkLocation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolInstallation" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directorCalls" upperBound="-1"
+        eType="#//DirectorCall" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toolPreferences" upperBound="-1"
+        eType="#//ToolPreference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolPreference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EclipseVersion">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        eOpposite="#//Configuration/eclipseVersions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directorCall" lowerBound="1"
+        eType="#//DirectorCall" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectorCall">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installableUnits" lowerBound="1"
+        upperBound="-1" eType="#//InstallableUnit" containment="true" eOpposite="#//InstallableUnit/directorCall"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="p2Repositories" lowerBound="1"
+        upperBound="-1" eType="#//P2Repository" containment="true" eOpposite="#//P2Repository/directorCall"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstallableUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directorCall" eType="#//DirectorCall"
+        eOpposite="#//DirectorCall/installableUnits"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="P2Repository">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directorCall" eType="#//DirectorCall"
+        eOpposite="#//DirectorCall/p2Repositories"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" lowerBound="1"
+        upperBound="-1" eType="#//Project" containment="true" eOpposite="#//Project/configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eclipseVersions" lowerBound="1"
+        upperBound="-1" eType="#//EclipseVersion" containment="true" eOpposite="#//EclipseVersion/configuration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//ToolInstallation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        eOpposite="#//Configuration/projects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branches" lowerBound="1"
+        upperBound="-1" eType="#//Branch" containment="true" eOpposite="#//Branch/project"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apiBaselines" upperBound="-1"
+        eType="#//ApiBaseline" containment="true" eOpposite="#//ApiBaseline/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workingSetGroup" eType="ecore:EClass ../../org.eclipse.emf.cdo.releng.workingsets/model/workingsets.ecore#//WorkingSetGroup"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Branch" eSuperTypes="#//ToolInstallation">
+    <eOperations name="isInstalled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="installFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getURI" eType="#//URI">
+      <eParameters name="installFolder" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/branches"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="gitClones" lowerBound="1"
+        upperBound="-1" eType="#//GitClone" containment="true" eOpposite="#//GitClone/branch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="apiBaseline" eType="#//ApiBaseline"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mspecFilePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cloneVariableName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApiBaseline">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/apiBaselines"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zipLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GitClone">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branch" eType="#//Branch"
+        eOpposite="#//Branch/gitClones"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkoutBranch" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Setup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branch" lowerBound="1"
+        eType="#//Branch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eclipseVersion" lowerBound="1"
+        eType="#//EclipseVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preferences" eType="#//Preferences"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="updateLocations" upperBound="-1"
+        eType="#//P2Repository" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
+</ecore:EPackage>

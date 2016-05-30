@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="things"
+    nsURI="http://www.eclipse.org/m2miwg/things/0.8" nsPrefix="things">
+  <eClassifiers xsi:type="ecore:EClass" name="Universe" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//Type" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Thing" eSuperTypes="#//Struct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" upperBound="-1"
+        eType="#//Service" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+        eType="#//Event" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//NamedElement #//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="access" lowerBound="1"
+        eType="#//AccessType" defaultValueLiteral="READ_WRITE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//NamedElement #//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="response" eType="#//ServiceResponse"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//ServiceParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceResponse" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceParameter" eSuperTypes="#//NamedElement #//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="STRING"/>
+    <eLiterals name="INTEGER" value="1"/>
+    <eLiterals name="LONG" value="2"/>
+    <eLiterals name="FLOAT" value="3"/>
+    <eLiterals name="DOUBLE" value="4"/>
+    <eLiterals name="DATE" value="5"/>
+    <eLiterals name="BOOLEAN" value="6"/>
+    <eLiterals name="BINARY" value="7" literal="BINARY"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AccessType">
+    <eLiterals name="READ_WRITE"/>
+    <eLiterals name="READ_ONLY" value="1"/>
+    <eLiterals name="WRITE_ONLY" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperBound" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Struct" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" lowerBound="1"
+        upperBound="-1" eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomPrimitiveType" abstract="true"
+      eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" lowerBound="1"
+        eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="String" eSuperTypes="#//CustomPrimitiveType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regexConstraint" eType="#//Regex"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Number" eSuperTypes="#//CustomPrimitiveType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Date" eSuperTypes="#//CustomPrimitiveType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Boolean" eSuperTypes="#//CustomPrimitiveType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Regex" eSuperTypes="#//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

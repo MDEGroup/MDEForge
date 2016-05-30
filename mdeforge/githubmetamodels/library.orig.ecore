@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_Tb04gXT5EeCrWsURfnMdtQ"
+    name="library" nsURI="platform:/plugin/org.eclipse.emf/js4emf/examples/library/library.ecore"
+    nsPrefix="library">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" xmi:id="_621qUHT5EeCrWsURfnMdtQ" name="Book">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="library" eType="#//Library"
+        eOpposite="#//Library/books"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="nameWithLetters"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+      <details key="nameWithLetters" value="var i;&#xA;var s = this.name;&#xA;for (i = 0; s != null &amp;&amp; i &lt; s.length; i++) {&#xA;  var c = s.charAt(i);&#xA;  if (! (java.lang.Character.isLetter(c) || c == ' ')) {&#xA;    return false;&#xA;  }&#xA;}&#xA;return true;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="givenName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="var name = this.name;&#xA;var pos = name.indexOf(' ');&#xA;return pos &lt; 0 ? null : name.substring(0, pos);"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="familyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="var name = this.name;&#xA;var pos = name.lastIndexOf(' ');&#xA;return name.substring(pos + 1);"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1"
+        eType="#//Loan" eOpposite="#//Loan/person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Library">
+    <eOperations name="getLoansDueBefore" upperBound="-1" eType="#//Loan">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="var loans = newList();&#xA;var it = this.loans.iterator();&#xA;while (it.hasNext()) {&#xA;  var loan = it.next();&#xA;  if (loan.dueDate != null &amp;&amp; loan.dueDate.compareTo(dueDate) &lt;= 0) {&#xA;    loans.add(loan);&#xA;  }&#xA;}&#xA;return loans;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="dueDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#_621qUHT5EeCrWsURfnMdtQ" containment="true" eOpposite="#//Book/library"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loans" upperBound="-1"
+        eType="#//Loan" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Loan">
+    <eOperations name="checkLoanBooksInSameLibrary" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="body" value="var it = this.books.iterator();&#xA;while (it.hasNext()) {&#xA;  var book = it.next();&#xA;  if (book.library != this.eContainer()) {&#xA;    return false;&#xA;  }&#xA;}&#xA;return true;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" eType="#//Person"
+        eOpposite="#//Person/loans"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="books" upperBound="-1"
+        eType="#_621qUHT5EeCrWsURfnMdtQ"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dueDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UoD">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allLibraries" upperBound="-1"
+        eType="#//Library" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allPersons" upperBound="-1"
+        eType="#//Person" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

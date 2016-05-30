@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="isabelle" nsURI="http://org/ai4fm/proofprocess/isabelle/v1.0.0.10"
+    nsPrefix="isabelle">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="conversionDelegates" value="http://org/ai4fm/proofprocess/isabelle/conversion/v1.0.0"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="DisplayTerm" abstract="true" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="display" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MarkupTerm" eSuperTypes="#//DisplayTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="term" lowerBound="1" eType="#//IsabelleXML">
+      <eAnnotations source="http://www.eclipse.org/CDO/DBStore">
+        <details key="columnType" value="CLOB"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IsabelleXML" instanceClassName="isabelle.XML.Tree">
+    <eAnnotations source="http://org/ai4fm/proofprocess/isabelle/conversion/v1.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IsaTerm" eSuperTypes="#//DisplayTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="term" lowerBound="1" eType="#//IsabelleTerm">
+      <eAnnotations source="http://www.eclipse.org/CDO/DBStore">
+        <details key="columnType" value="CLOB"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IsabelleTerm" instanceClassName="isabelle.Term.Term">
+    <eAnnotations source="http://org/ai4fm/proofprocess/isabelle/conversion/v1.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NameTerm" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedTerm" eSuperTypes="#//NameTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstTerm" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="insts" upperBound="-1"
+        eType="#//Inst" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inst">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IsabelleTrace" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Trace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="command" lowerBound="1"
+        eType="#//IsabelleCommand" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simpLemmas" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedTermTree">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="terms" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branches" upperBound="-1"
+        eType="#//NamedTermTree" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IsabelleCommand" eSuperTypes="#//NamedTermTree">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssumptionTerm" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JudgementTerm" eSuperTypes="platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assms" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goal" lowerBound="1" eType="ecore:EClass platform:/plugin/org.ai4fm.proofprocess/model/history/ProofProcess-v1.0.0.10.ecore#//Term"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

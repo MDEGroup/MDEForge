@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="abstractsyntax"
+    nsURI="http://www.reuseware.org/air/language/abstractsyntax" nsPrefix="org.reuseware.air.language">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSyntax">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unit" lowerBound="1" eType="#//ASUnit"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsuri" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsprefix" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="import" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ePackage" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ASUnit" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ASProgram" eSuperTypes="#//ASUnit">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" lowerBound="1"
+        upperBound="-1" eType="#//ASStatement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ASStatement" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Definition" abstract="true" interface="true"
+      eSuperTypes="#//ASStatement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaces" upperBound="-1"
+        eType="#//InterfaceNodeDefinition" eOpposite="#//InterfaceNodeDefinition/options"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConcreteNodeDefinition" eSuperTypes="#//Definition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//NodeFeature" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eSuperClass" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InterfaceNodeDefinition" eSuperTypes="#//Definition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="options" lowerBound="1"
+        upperBound="-1" eType="#//Definition" eOpposite="#//Definition/interfaces"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cardinality" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PLUS" eSuperTypes="#//Cardinality"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STAR" eSuperTypes="#//Cardinality"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QUESTIONMARK" eSuperTypes="#//Cardinality"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeFeature" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cardinality" eType="#//Cardinality"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" eSuperTypes="#//NodeFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EDataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Containment" eSuperTypes="#//NodeFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Definition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalReference" eSuperTypes="#//NodeFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Definition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//InternalReference"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalReference" eSuperTypes="#//NodeFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+  </eClassifiers>
+</ecore:EPackage>

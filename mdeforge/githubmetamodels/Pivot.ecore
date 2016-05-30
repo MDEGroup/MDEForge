@@ -1,0 +1,2119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pivot" nsURI="http://www.eclipse.org/ocl/3.1.0/Pivot" nsPrefix="pivot">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EDataType" name="Boolean" instanceClassName="boolean">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Boolean type is used for logical expression, consisting of the predefined values true and false."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.lang.Number">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An integer is a primitive type representing integer values."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="LibraryFeature" instanceClassName="org.eclipse.ocl.examples.domain.library.LibraryFeature"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Real" instanceClassName="java.lang.Number"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A string is a sequence of characters in some suitable character set used to display information about the model. Character sets may include non-Roman alphabets and characters."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Throwable" instanceClassName="java.lang.Throwable"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="UnlimitedNatural" instanceClassName="java.lang.Number">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An unlimited natural is a primitive type representing unlimited natural values."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AssociativityKind">
+    <eLiterals name="Left"/>
+    <eLiterals name="Right" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CollectionKind">
+    <eLiterals name="Collection"/>
+    <eLiterals name="Set" value="1"/>
+    <eLiterals name="OrderedSet" value="2"/>
+    <eLiterals name="Bag" value="3"/>
+    <eLiterals name="Sequence" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PseudostateKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="PseudostateKind is an enumeration type."/>
+    </eAnnotations>
+    <eLiterals name="initial">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An initial pseudostate represents a default vertex that is the source for a single transition to the default state of a composite state. There can be at most one initial vertex in a region. The outgoing transition from the initial vertex may have a behavior, but not a trigger or guard."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="deepHistory" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="DeepHistory represents the most recent active configuration of the composite state that directly contains this pseudostate; e.g. the state configuration that was active when the composite state was last exited. A composite state can have at most one deep history vertex. At most one transition may originate from the history connector to the default deep history state. This transition is taken in case the composite state had never been active before. Entry actions of states entered on the path to the state represented by a deep history are performed."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="shallowHistory" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="ShallowHistory represents the most recent active substate of its containing state (but not the substates of that substate). A composite state can have at most one shallow history vertex. A transition coming into the shallow history vertex is equivalent to a transition coming into the most recent active substate of a state. At most one transition may originate from the history connector to the default shallow history state. This transition is taken in case the composite state had never been active before. Entry actions of states entered on the path to the state represented by a shallow history are performed."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="join" value="3">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Join vertices serve to merge several transitions emanating from source vertices in different orthogonal regions. The transitions entering a join vertex cannot have guards or triggers."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="fork" value="4">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Fork vertices serve to split an incoming transition into two or more transitions terminating on orthogonal target vertices&#xD;&#xA;(i.e. vertices in different regions of a composite state). The segments outgoing from a fork vertex must not have guards or triggers."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="junction" value="5">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Junction vertices are semantic-free vertices that are used to chain together multiple transitions. They are used to construct compound transition paths between states. For example, a junction can be used to converge multiple incoming transitions into a single outgoing transition representing a shared transition path (this is known as an merge). Conversely, they can be used to split an incoming transition into multiple outgoing transition segments with different guard conditions. This realizes a static conditional branch. (In the latter case, outgoing transitions whose guard conditions evaluate to false are disabled. A predefined guard denoted 'else' may be defined for at most one outgoing transition. This transition is enabled if all the guards labeling the other transitions are false.) Static conditional branches are distinct from dynamic conditional branches that are realized by choice vertices (described below)."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="choice" value="6">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Choice vertices which, when reached, result in the dynamic evaluation of the guards of the triggers of its outgoing transitions. This realizes a dynamic conditional branch. It allows splitting of transitions into multiple outgoing paths such that the decision on which path to take may be a function of the results of prior actions performed in the same run-tocompletion step. If more than one of the guards evaluates to true, an arbitrary one is selected. If none of the guards evaluates to true, then the model is considered ill-formed. (To avoid this, it is recommended to define one outgoing transition with the predefined else guard for every choice vertex.) Choice vertices should be distinguished from static branch points that are based on junction points (described above)."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="entryPoint" value="7">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An entry point pseudostate is an entry point of a state machine or composite state. In each region of the state machine or composite state it has a single transition to a vertex within the same region."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="exitPoint" value="8">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An exit point pseudostate is an exit point of a state machine or composite state. Entering an exit point within any region of the composite state or state machine referenced by a submachine state implies the exit of this composite state or submachine state and the triggering of the transition that has this exit point as source in the state machine enclosing the submachine or composite state."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="terminate" value="9">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Entering a terminate pseudostate implies that the execution of this state machine by means of its context object is terminated. The state machine does not exit any states nor does it perform any exit actions other than those associated with the transition leading to the terminate pseudostate. Entering a terminate pseudostate is equivalent to invoking a DestroyObjectAction."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransitionKind">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="TransitionKind is an enumeration type."/>
+    </eAnnotations>
+    <eLiterals name="internal">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Implies that the transition, if triggered, occurs without exiting or entering the source state. Thus, it does not cause a state change. This means that the entry or exit condition of the source state will not be invoked. An internal transition can be taken even if the state machine is in one or more regions nested within this state."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="local" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Implies that the transition, if triggered, will not exit the composite (source) state, but it will apply to any state within the composite state, and these will be exited and entered."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="external" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Implies that the transition, if triggered, will exit the composite (source) state."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedContent" upperBound="-1"
+        eType="#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedDetail" upperBound="-1"
+        eType="#//Detail" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" upperBound="-1"
+        eType="#//Element"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyType" eSuperTypes="#//Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AssociationClass" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unownedAttribute" ordered="false"
+        upperBound="-1" eType="#//Property" eOpposite="#//Property/association"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AssociationClassCallExp" eSuperTypes="#//NavigationCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredAssociationClass"
+        eType="#//AssociationClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BagType" eSuperTypes="#//CollectionType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Behavior" abstract="true" eSuperTypes="#//Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteralExp" eSuperTypes="#//PrimitiveLiteralExp">
+    <eOperations name="TypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="booleanSymbol" lowerBound="1"
+        eType="#//Boolean" unsettable="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallExp" abstract="true" eSuperTypes="#//OCLExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implicit" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//OCLExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallOperationAction" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" lowerBound="1"
+        eType="#//Operation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//Type #//Namespace">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A class is a type that has objects as its instances."/>
+    </eAnnotations>
+    <eAnnotations source="duplicates">
+      <contents xsi:type="ecore:EReference" name="ownedOperation" upperBound="-1"
+          eType="#//Operation" containment="true" eOpposite="#//Operation/class">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The operations owned by a class. These do not include the inherited operations."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//Type/ownedOperation"/>
+      </contents>
+      <contents xsi:type="ecore:EReference" name="superClass" upperBound="-1" eType="#//Class">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The immediate superclasses of a class, from which the class inherits."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//Type/superClass"/>
+      </contents>
+      <contents xsi:type="ecore:EAttribute" name="instanceClassName" eType="#//String">
+        <eAnnotations source="redefines" references="#//Type/instanceClassName"/>
+      </contents>
+      <contents xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+          eType="#//Property" containment="true" eOpposite="#//Property/class">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The attributes owned by a class. These do not include the inherited attributes. Attributes are represented by instances of Property."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//Type/ownedAttribute"/>
+      </contents>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAbstract" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="True when a class is abstract."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInterface" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedType" ordered="false"
+        upperBound="-1" eType="#//Class" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedBehavior" ordered="false"
+        upperBound="-1" eType="#//Behavior" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionItem" eSuperTypes="#//CollectionLiteralPart">
+    <eOperations name="TypeIsItemType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="type = item.type&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="item" lowerBound="1" eType="#//OCLExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionLiteralExp" eSuperTypes="#//LiteralExp">
+    <eOperations name="BagKindIsBag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="kind = CollectionKind::Bag implies type.oclIsKindOf (BagType)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectionKindIsConcrete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="kind &lt;> CollectionKind::Collection&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="OrderedSetKindIsOrderedSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="kind = CollectionKind::OrderedSet implies type.oclIsKindOf (OrderedSetType)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SequenceKindIsSequence" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="kind = CollectionKind::Sequence implies type.oclIsKindOf (SequenceType)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SetKindIsSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="kind = CollectionKind::Set implies type.oclIsKindOf (SetType)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//CollectionKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" upperBound="-1" eType="#//CollectionLiteralPart"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionLiteralPart" abstract="true"
+      eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionRange" eSuperTypes="#//CollectionLiteralPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="first" lowerBound="1" eType="#//OCLExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="last" lowerBound="1" eType="#//OCLExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionType" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" lowerBound="1"
+        eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lower" lowerBound="1" eType="#//Integer"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upper" lowerBound="1" eType="#//UnlimitedNatural"
+        defaultValueLiteral="*"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A comment is a textual annotation that can be attached to a set of elements."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotatedElement" ordered="false"
+        upperBound="-1" eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References the Element(s) being commented."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies a string that is the comment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionPointReference" eSuperTypes="#//Vertex">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A connection point reference represents a usage (as part of a submachine state) of an entry/exit point defined in the statemachine reference by the submachine state."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" ordered="false"
+        upperBound="-1" eType="#//Pseudostate">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The entryPoint kind pseudo states corresponding to this connection point."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" ordered="false" upperBound="-1"
+        eType="#//Pseudostate">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The exitPoints kind pseudo states corresponding to this connection point."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="#//State">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The State in which the connection point refreshens are defined."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A constraint is a condition or restriction expressed in natural language text or in a machine readable language for the purpose of declaring some of the semantics of an element."/>
+    </eAnnotations>
+    <eOperations name="UniqueName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="true "/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constrainedElement" upperBound="-1"
+        eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ordered set of Elements referenced by this Constraint."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Namespace"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCallable" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+        eType="#//OpaqueExpression" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A condition that must be true when evaluated in order for the constraint to be satisfied."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorExp" eSuperTypes="#//OCLExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" upperBound="-1" eType="#//ConstructorPart"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorPart" eSuperTypes="#//TypedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredProperty" lowerBound="1"
+        eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataType" eSuperTypes="#//Class">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="DataType is an abstract class that acts as a common superclass for different kinds of data types."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behavioralType" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSerializable" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Detail" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicElement" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaType" lowerBound="1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicProperty" eSuperTypes="#//Element">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredProperty" lowerBound="1"
+        eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicType" eSuperTypes="#//Type #//DynamicElement">
+    <eAnnotations source="duplicates">
+      <contents xsi:type="ecore:EReference" name="metaType" lowerBound="1" eType="#//Type">
+        <eAnnotations source="redefines" references="#//DynamicElement/metaType"/>
+      </contents>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedProperty" ordered="false"
+        upperBound="-1" eType="#//DynamicProperty" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true" eSuperTypes="#//Visitable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An element is a constituent of a model."/>
+    </eAnnotations>
+    <eOperations name="allOwnedElements" ordered="false" upperBound="-1" eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;--self->closure(oclContents())&#xA;oclContents()&#xA;&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getValue" eType="#//Element">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="null&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="stereotype" lowerBound="1" eType="#//Type"/>
+      <eParameters name="propertyName" lowerBound="1" eType="#//String"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extension" ordered="false"
+        upperBound="-1" eType="#//ElementExtension" containment="true" eOpposite="#//ElementExtension/base"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedComment" ordered="false"
+        upperBound="-1" eType="#//Comment" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Comments owned by this element."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementExtension" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="base" lowerBound="1" eType="#//Element"
+        eOpposite="#//Element/extension"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stereotype" lowerBound="1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumLiteralExp" eSuperTypes="#//LiteralExp">
+    <eOperations name="TypeIsEnumerationType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.type = referredEnumLiteral.enumeration&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredEnumLiteral" eType="#//EnumerationLiteral"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Enumeration" eSuperTypes="#//DataType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An enumeration defines a set of literals that can be used as its values."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedLiteral" upperBound="-1"
+        eType="#//EnumerationLiteral" containment="true" eOpposite="#//EnumerationLiteral/enumeration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ordered set of literals for this Enumeration."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumerationLiteral" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An enumeration literal is a value of an enumeration."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enumeration" eType="#//Enumeration"
+        eOpposite="#//Enumeration/ownedLiteral">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The Enumeration that this EnumerationLiteral is a member of."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="#//Integer"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionInOCL" eSuperTypes="#//OpaqueExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyExpression" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextVariable" eType="#//Variable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="messageExpression" eType="#//OCLExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterVariable" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultVariable" eType="#//Variable"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//TypedMultiplicityElement">
+    <eAnnotations source="duplicates">
+      <contents xsi:type="ecore:EAttribute" name="isStatic" lowerBound="1" eType="#//Boolean">
+        <eAnnotations source="redefines" references="#//NamedElement/isStatic"/>
+      </contents>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementation" eType="#//LibraryFeature"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementationClass" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureCallExp" abstract="true" eSuperTypes="#//CallExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPre" lowerBound="1" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//State">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A special kind of state signifying that the enclosing region is completed. If the enclosing region is directly contained in a state machine and all other regions in the state machine also are completed, then it means that the entire state machine is completed."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfExp" eSuperTypes="#//OCLExpression">
+    <eOperations name="ConditionTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.condition.type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseExpression" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpression" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedNamespace" lowerBound="1"
+        eType="#//Namespace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerLiteralExp" eSuperTypes="#//NumericLiteralExp">
+    <eOperations name="TypeIsInteger" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.type = Integer&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integerSymbol" lowerBound="1"
+        eType="#//Integer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InvalidLiteralExp" eSuperTypes="#//LiteralExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InvalidType" eSuperTypes="#//Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IterateExp" eSuperTypes="#//LoopExp #//ReferringElement">
+    <eOperations name="BodyTypeConformsToResultType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="_'body'.type.conformsTo(result.type)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="OneInitializer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.result.initExpression->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="TypeIsResultType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="type = result.type&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//Variable"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Iteration" eSuperTypes="#//Operation">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAccumulator" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedIterator" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IteratorExp" eSuperTypes="#//LoopExp #//ReferringElement">
+    <eOperations name="AnyBodyTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'any' implies _'body'.type = 'Boolean'&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="AnyHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'any' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="AnyTypeIsSourceElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'any' implies type = source.type.oclAsType(CollectionType).elementType&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ClosureBodyTypeIsConformanttoIteratorType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;true&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ClosureElementTypeIsSourceElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'closure' implies&#xA;type.oclAsType(CollectionType).elementType&#xA;= source.type.oclAsType(CollectionType).elementType&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ClosureHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'closure' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ClosureSourceElementTypeIsBodyElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'closure' implies&#xA;source.type.oclAsType(CollectionType).elementType =&#xA;if _'body'.type.oclIsKindOf(CollectionType)&#xA;then _'body'.type.oclAsType(CollectionType).elementType&#xA;else _'body'.type&#xA;endif&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ClosureTypeIsUniqueCollection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'closure' implies&#xA;if source.type.oclIsKindOf(SequenceType) or source.type.oclIsKindOf(OrderedSetType) then&#xA;type.oclIsKindOf(OrderedSetType)&#xA;else&#xA;type.oclIsKindOf(SetType)&#xA;endif&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectElementTypeIsSourceElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collect' implies&#xA;type.oclAsType(CollectionType).elementType =&#xA;_'body'.type.oclAsType(CollectionType).elementType&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collect' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectNestedHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collectNested' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectNestedTypeIsBag" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collectNested' implies type.oclIsKindOf(BagType)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectNestedTypeIsBodyType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collectNested' implies type = _'body'.type&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="CollectTypeIsUnordered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'collect' implies&#xA;if source.type.oclIsKindOf(SequenceType) or source.type.oclIsKindOf(OrderedSetType) then&#xA;type.oclIsKindOf(SequenceType)&#xA;else&#xA;type.oclIsKindOf(BagType)&#xA;endif&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ExistsBodyTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'exists' implies _'body'.type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ExistsTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'exists' implies type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ForAllBodyTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'forAll' implies _'body'.type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ForAllTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'forAll' implies type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="IsUniqueHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'isUnique' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="IsUniqueTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'isUnique' implies type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="IteratorTypeIsSourceElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.iterator->forAll(source.type.oclAsType (CollectionType).elementType.conformsTo(type))&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="OneBodyTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'one' implies _'body'.type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="OneHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'one' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="OneTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'one' implies type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="RejectOrSelectHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'reject' or name = 'select' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="RejectOrSelectTypeIsBoolean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'reject' or name = 'select' implies type = Boolean&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="RejectOrSelectTypeIsSourceType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'reject' or name = 'select' implies type = source.type&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SortedByElementTypeIsSourceElementType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'sortedBy' implies&#xA;type.oclAsType(CollectionType).elementType =&#xA;_'body'.type.oclAsType(CollectionType).elementType&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SortedByHasOneIterator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'sortedBy' implies iterator->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SortedByIsOrderedIfSourceIsOrdered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="name = 'sortedBy' implies&#xA;if source.type.oclIsKindOf(SequenceType) or source.type.oclIsKindOf(BagType) then&#xA;type.oclIsKindOf(SequenceType)&#xA;else&#xA;type.oclIsKindOf(OrderedSetType)&#xA;endif&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SortedByIteratorTypeIsComparable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;true&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LambdaType" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contextType" lowerBound="1"
+        eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterType" unique="false"
+        upperBound="-1" eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultType" lowerBound="1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LetExp" eSuperTypes="#//OCLExpression">
+    <eOperations name="TypeIsInType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="type = _'in'.type&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" lowerBound="1" eType="#//OCLExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Library" eSuperTypes="#//Package">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedPrecedence" upperBound="-1"
+        eType="#//Precedence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LiteralExp" abstract="true" eSuperTypes="#//OCLExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopExp" abstract="true" eSuperTypes="#//CallExp">
+    <eOperations name="NoInitializers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self.iterator->forAll(initExpression->isEmpty())&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="SourceIsCollection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="source.type.oclIsKindOf (CollectionType)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="body" lowerBound="1" eType="#//OCLExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iterator" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredIteration" eType="#//Iteration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageExp" eSuperTypes="#//OCLExpression">
+    <eOperations name="OneCallOrOneSend" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="calledOperation->size() + sentSignal->size() = 1&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="TargetIsNotACollection" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="not target.type.oclIsKindOf (CollectionType)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calledOperation" eType="#//CallOperationAction"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sentSignal" eType="#//SendSignalAction"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//OCLExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MessageType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredOperation" eType="#//Operation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredSignal" eType="#//Signal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Metaclass" eSuperTypes="#//Class">
+    <eTypeParameters name="T"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceType" lowerBound="1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MorePivotable" instanceClassName="org.eclipse.ocl.examples.pivot.util.MorePivotable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Nameable" instanceClassName="org.eclipse.ocl.examples.domain.elements.Nameable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true" eSuperTypes="#//Element #//Nameable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A named element represents an element with a name."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStatic" lowerBound="1"
+        eType="#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name of the NamedElement."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAnnotation" upperBound="-1"
+        eType="#//Annotation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Namespace" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedRule" upperBound="-1"
+        eType="#//Constraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NavigationCallExp" abstract="true" eSuperTypes="#//FeatureCallExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="navigationSource" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="qualifier" upperBound="-1"
+        eType="#//OCLExpression"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NullLiteralExp" eSuperTypes="#//PrimitiveLiteralExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericLiteralExp" abstract="true" eSuperTypes="#//PrimitiveLiteralExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OCLExpression" abstract="true" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpaqueExpression" eSuperTypes="#//ValueSpecification">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An opaque expression is an uninterpreted textual statement that denotes a (possibly empty) set of values when evaluated in a context."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" unique="false" upperBound="-1"
+        eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The text of the expression, possibly in multiple languages."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" upperBound="-1"
+        eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the languages in which the expression is stated. The interpretation of the expression body depends on the languages. If the languages are unspecified, they might be implicit from the expression body or the context. Languages are matched to body strings by order."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" unique="false"
+        upperBound="-1" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//Feature #//Namespace #//TemplateableElement #//ParameterableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An operation is owned by a class and may be invoked in the context of objects that are instances of that class. It is a typed element and a multiplicity element.&#xD;&#xA;Operation specializes TemplateableElement in order to support specification of template operations and bound operations. Operation specializes ParameterableElement to specify that an operation can be exposed as a formal template parameter, and provided as an actual parameter in a binding of a template."/>
+    </eAnnotations>
+    <eAnnotations source="duplicates">
+      <eAnnotations source="templateParameter">
+        <details key="eType" value="pivot::OperationTemplateParameter"/>
+      </eAnnotations>
+      <contents xsi:type="ecore:EReference" name="templateParameter" eType="#//TemplateParameter"
+          eOpposite="#//OperationTemplateParameter/%duplicates%/parameteredElement">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The template parameter that exposes this element as a formal parameter."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//ParameterableElement/templateParameter"/>
+      </contents>
+    </eAnnotations>
+    <eOperations name="CompatibleReturn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="bodyExpression &lt;> null and bodyExpression.oclIsKindOf(ExpressionInOCL) implies CompatibleBody(bodyExpression)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="LoadableImplementation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;true&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="UniquePostconditionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="postcondition->isUnique(name)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="UniquePreconditionName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="precondition->isUnique(name)&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyExpression" eType="#//OpaqueExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//Class"
+        changeable="false" volatile="true" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The class that owns the operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInvalidating" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isValidating" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+        eType="#//Parameter" containment="true" eOpposite="#//Parameter/operation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The parameters to the operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningType" eType="#//Type"
+        eOpposite="#//Type/ownedOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postcondition" ordered="false"
+        upperBound="-1" eType="#//Constraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="precedence" eType="#//Precedence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="precondition" ordered="false"
+        upperBound="-1" eType="#//Constraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="raisedException" ordered="false"
+        upperBound="-1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The exceptions that are declared as possible during an invocation of the operation."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="redefinedOperation" ordered="false"
+        upperBound="-1" eType="#//Operation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationCallExp" eSuperTypes="#//FeatureCallExp #//ReferringElement">
+    <eOperations name="ArgumentCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="argument->size() = referredOperation.ownedParameter->size()&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="ArgumentTypeIsConformant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;let operation : Operation = self.referredOperation in&#xA;&#x9;let parameters : OrderedSet(Parameter) = operation.ownedParameter in&#xA;&#x9;let selfType : Type = operation.owningType in&#xA;&#x9;Sequence{1..argument->size()}->forAll (i | &#xA;&#x9;&#x9;let argument : OCLExpression = argument->at(i) in&#xA;&#x9;&#x9;let parameter : Parameter = parameters->at(i) in&#xA;&#x9;&#x9;let parameterType : Type = parameter.type in&#xA;&#x9;&#x9;argument.type.conformsTo(parameterType.specializeIn(self, selfType)))&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" upperBound="-1"
+        eType="#//OCLExpression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredOperation" eType="#//Operation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperationTemplateParameter" eSuperTypes="#//TemplateParameter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An operation template parameter exposes an operation as a formal parameter for a template."/>
+    </eAnnotations>
+    <eAnnotations source="duplicates">
+      <eAnnotations source="parameteredElement">
+        <details key="eType" value="pivot::Operation"/>
+      </eAnnotations>
+      <contents xsi:type="ecore:EReference" name="parameteredElement" lowerBound="1"
+          eType="#//ParameterableElement" eOpposite="#//Operation/%duplicates%/templateParameter">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The operation for this template parameter."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//TemplateParameter/parameteredElement"/>
+      </contents>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderedSetType" eSuperTypes="#//CollectionType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//Namespace #//TemplateableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A package is a container for types and other packages.&#xD;&#xA;Package specializes TemplateableElement and PackageableElement specializes ParameterableElement to specify that a package can be used as a template and a PackageableElement as a template parameter."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedPackage" ordered="false"
+        upperBound="-1" eType="#//Package"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" ordered="false"
+        upperBound="-1" eType="#//Package" containment="true" eOpposite="#//Package/nestingPackage">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The set of contained packages."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestingPackage" eType="#//Package"
+        eOpposite="#//Package/nestedPackage">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The containing package."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsPrefix" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nsURI" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedType" ordered="false"
+        upperBound="-1" eType="#//Type" containment="true" eOpposite="#//Type/package">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The set of contained types."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" abstract="true"
+      eSuperTypes="#//ParameterableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Packageable elements are able to serve as a template parameter."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypedMultiplicityElement #//VariableDeclaration">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A parameter is a typed element that represents a parameter of an operation."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//Operation"
+        eOpposite="#//Operation/ownedParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The operation that owns the parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterableElement" abstract="true"
+      eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A parameterable element is an element that can be exposed as a formal template parameter for a template, or specified as an actual parameter in a binding of a template."/>
+    </eAnnotations>
+    <eOperations name="isCompatibleWith" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;p.oclIsKindOf(self.oclType())&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="p" lowerBound="1" eType="#//ParameterableElement"/>
+    </eOperations>
+    <eOperations name="isTemplateParameter" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query isTemplateParameter() determines if this parameterable element is exposed as a formal template parameter."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningTemplateParameter"
+        eType="#//TemplateParameter" eOpposite="#//TemplateParameter/ownedParameteredElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The formal template parameter that owns this element."/>
+      </eAnnotations>
+      <eAnnotations source="subsets" references="#//ParameterableElement/templateParameter"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateParameter" eType="#//TemplateParameter"
+        eOpposite="#//TemplateParameter/parameteredElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The template parameter that exposes this element as a formal parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pivotable" instanceClassName="org.eclipse.ocl.examples.pivot.util.Pivotable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Precedence" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associativity" eType="#//AssociativityKind"
+        defaultValueLiteral="Left"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="order" lowerBound="1" eType="#//Integer"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveLiteralExp" abstract="true"
+      eSuperTypes="#//LiteralExp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimitiveType" eSuperTypes="#//DataType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A primitive type is a data type implemented by the underlying infrastructure and made available for modeling."/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Profile" eSuperTypes="#//Package"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//Feature #//ParameterableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A property is a typed element that represents an attribute of a class.&#xD;&#xA;Property specializes ParameterableElement to specify that a property can be exposed as a formal template parameter, and provided as an actual parameter in a binding of a template."/>
+    </eAnnotations>
+    <eOperations name="CompatibleDefaultExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="defaultExpression &lt;> null and defaultExpression.oclIsKindOf(ExpressionInOCL) implies CompatibleBody(defaultExpression)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="isAttribute" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;--Type.allInstances()->exists(c| c.ownedAttribute->includes(p))&#xA;let container : ocl::OclElement = oclContainer() in container.oclIsKindOf(Type) and container.oclAsType(Type).ownedAttribute->includes(self)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="p" lowerBound="1" eType="#//Property"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="association" eType="#//AssociationClass"
+        eOpposite="#//AssociationClass/unownedAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//Class"
+        changeable="false" volatile="true" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The class that owns the property, and of which the property is an attribute."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A string that is evaluated to give a default value for the attribute when an object of the owning class is instantiated."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultExpression" eType="#//OpaqueExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implicit" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComposite" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If isComposite is true, the object containing the attribute is a container for the object or value contained in the attribute."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDerived" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If isDerived is true, the value of the attribute is derived from information elsewhere."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isID" lowerBound="1" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isReadOnly" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If isReadOnly is true, the attribute may not be written to after initialization."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isResolveProxies" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isTransient" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isUnsettable" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isVolatile" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keys" ordered="false" upperBound="-1"
+        eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opposite" eType="#//Property">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Two attributes attr1 and attr2 of two objects o1 and o2 (which may be the same object) may be paired with each other so that o1.attr1 refers to o2 if and only if o2.attr2 refers to o1. In such a case attr1 is the opposite of attr2 and attr2 is the opposite of attr1."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningType" eType="#//Type"
+        eOpposite="#//Type/ownedAttribute"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="redefinedProperty" ordered="false"
+        upperBound="-1" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredProperty" eType="#//Property"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subsettedProperty" ordered="false"
+        upperBound="-1" eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyCallExp" eSuperTypes="#//NavigationCallExp #//ReferringElement">
+    <eOperations name="CompatibleResultType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="type = getSpecializedReferredPropertyType()&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="NonStaticSourceTypeIsConformant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="not referredProperty.isStatic implies source.type.conformsTo(getSpecializedReferredPropertyOwningType())&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getSpecializedReferredPropertyOwningType" lowerBound="1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="referredProperty.owningType "/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSpecializedReferredPropertyType" lowerBound="1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="referredProperty.type "/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredProperty" eType="#//Property"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pseudostate" eSuperTypes="#//Vertex">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A pseudostate is an abstraction that encompasses different types of transient vertices in the state machine graph."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//PseudostateKind"
+        defaultValueLiteral="initial">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Determines the precise type of the Pseudostate and can be one of: entryPoint, exitPoint, initial, deepHistory, shallowHistory, join, fork, junction, terminate or choice."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="#//State">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The State that owns this pseudostate and in which it appears."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachine" eType="#//StateMachine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The StateMachine in which this Pseudostate is defined. This only applies to Pseudostates of the kind entryPoint or exitPoint."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RealLiteralExp" eSuperTypes="#//NumericLiteralExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="realSymbol" lowerBound="1"
+        eType="#//Real"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferringElement" abstract="true" interface="true">
+    <eOperations name="getReferredElement" lowerBound="1" eType="#//Element"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region" eSuperTypes="#//Namespace">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A region is an orthogonal part of either a composite state or a state machine. It contains states and transitions."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedRegion" eType="#//Region">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The region of which this region is an extension."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="#//State">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The State that owns the Region. If a Region is owned by a State, then it cannot also be owned by a StateMachine."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachine" eType="#//StateMachine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The StateMachine that owns the Region. If a Region is owned by a StateMachine, then it cannot also be owned by a State."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subvertex" ordered="false"
+        upperBound="-1" eType="#//Vertex" containment="true" eOpposite="#//Vertex/container">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The set of vertices that are owned by this region."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" ordered="false"
+        upperBound="-1" eType="#//Transition" containment="true" eOpposite="#//Transition/container">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The set of transitions owned by the region. Note that internal transitions are owned by a region, but applies to the source state."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Root" eSuperTypes="#//Namespace">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalURI" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedPackage" ordered="false"
+        upperBound="-1" eType="#//Package" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelfType" eSuperTypes="#//Class">
+    <eOperations name="specializeIn" lowerBound="1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="selfType&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="expr" lowerBound="1" eType="#//OCLExpression"/>
+      <eParameters name="selfType" lowerBound="1" eType="#//Type"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SendSignalAction" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" lowerBound="1"
+        eType="#//Signal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SequenceType" eSuperTypes="#//CollectionType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SetType" eSuperTypes="#//CollectionType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Signal" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//Vertex #//Namespace">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A state models a situation during which some (usually implicit) invariant condition holds."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" ordered="false"
+        upperBound="-1" eType="#//ConnectionPointReference" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The entry and exit connection points used in conjunction with this (submachine) state, i.e. as targets and sources, respectively, in the region with the submachine state. A connection point reference references the corresponding definition of a connection point pseudostate in the statemachine referenced by the submachinestate."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectionPoint" ordered="false"
+        upperBound="-1" eType="#//Pseudostate" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The entry and exit pseudostates of a composite state. These can only be entry or exit Pseudostates, and they must have different names. They can only be defined for composite states."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="deferrableTrigger" ordered="false"
+        upperBound="-1" eType="#//Trigger" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A list of triggers that are candidates to be retained by the state machine if they trigger no transitions out of the state (not consumed). A deferred trigger is retained until the state machine reaches a state configuration where it is no longer deferred.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doActivity" eType="#//Behavior"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An optional behavior that is executed while being in the state. The execution starts when this state is entered, and stops either by itself, or when the state is exited, whichever comes first."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" eType="#//Behavior"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An optional behavior that is executed whenever this state is entered regardless of the transition taken to reach the state. If defined, entry actions are always executed to completion prior to any internal behavior or transitions performed within the state.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" eType="#//Behavior"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An optional behavior that is executed whenever this state is exited regardless of which transition was taken out of the state. If defined, exit actions are always executed to completion only after all internal activities and transition actions have completed execution."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isComposite" lowerBound="1"
+        eType="#//Boolean" volatile="true" transient="true" defaultValueLiteral="false"
+        derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A state with isComposite=true is said to be a composite state. A composite state is a state that contains at least one region."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isOrthogonal" lowerBound="1"
+        eType="#//Boolean" volatile="true" transient="true" defaultValueLiteral="false"
+        derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A state with isOrthogonal=true is said to be an orthogonal composite state. An orthogonal composite state contains two or more regions."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSimple" lowerBound="1"
+        eType="#//Boolean" volatile="true" transient="true" defaultValueLiteral="true"
+        derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A state with isSimple=true is said to be a simple state. A simple state does not have any regions and it does not refer to any submachine state machine."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSubmachineState" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="false">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A state with isSubmachineState=true is said to be a submachine state. Such a state refers to a state machine (submachine)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="redefinedState" eType="#//State">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The state of which this state is a redefinition."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="region" ordered="false"
+        upperBound="-1" eType="#//Region" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The regions owned directly by the state."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateInvariant" eType="#//Constraint"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies conditions that are always true when this state is the current state. In protocol state machines, state invariants are additional conditions to the preconditions of the outgoing transitions, and to the postcondition of the incoming transitions.&#xD;&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="submachine" eType="#//StateMachine"
+        eOpposite="#//StateMachine/submachineState">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The state machine that is to be inserted in place of the (submachine) state."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateExp" eSuperTypes="#//OCLExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredState" eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine" eSuperTypes="#//Behavior">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="State machines can be used to express the behavior of part of a system. Behavior is modeled as a traversal of a graph of state nodes interconnected by one or more joined transition arcs that are triggered by the dispatching of series of (event) occurrences. During this traversal, the state machine executes a series of activities associated with various elements of the state machine."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectionPoint" ordered="false"
+        upperBound="-1" eType="#//Pseudostate" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The connection points defined for this state machine. They represent the interface of the state machine when used as part of submachine state."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extendedStateMachine" ordered="false"
+        upperBound="-1" eType="#//StateMachine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The state machines of which this is an extension."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="region" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//Region" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The regions owned directly by the state machine."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="submachineState" ordered="false"
+        upperBound="-1" eType="#//State" eOpposite="#//State/submachine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="References the submachine(s) in case of a submachine state. Multiple machines are referenced in case of a concurrent state."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Stereotype" eSuperTypes="#//Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringLiteralExp" eSuperTypes="#//PrimitiveLiteralExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringSymbol" lowerBound="1"
+        eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateBinding" eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A template binding represents a relationship between a templateable element and a template. A template binding specifies the substitutions of actual parameters for the formal parameters of the template."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundElement" lowerBound="1"
+        eType="#//TemplateableElement" eOpposite="#//TemplateableElement/templateBinding">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that is bound by this binding."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterSubstitution"
+        ordered="false" upperBound="-1" eType="#//TemplateParameterSubstitution" containment="true"
+        eOpposite="#//TemplateParameterSubstitution/templateBinding">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The parameter substitutions owned by this template binding."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signature" lowerBound="1"
+        eType="#//TemplateSignature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The template signature for the template that is the target of the binding."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateParameter" eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A template parameter exposes a parameterable element as a formal template parameter of a template."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="default" eType="#//ParameterableElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that is the default for this formal template parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedDefault" eType="#//ParameterableElement"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that is owned by this template parameter for the purpose of providing a default."/>
+      </eAnnotations>
+      <eAnnotations source="subsets" references="#//TemplateParameter/default"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameteredElement"
+        eType="#//ParameterableElement" containment="true" eOpposite="#//ParameterableElement/owningTemplateParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that is owned by this template parameter."/>
+      </eAnnotations>
+      <eAnnotations source="subsets" references="#//TemplateParameter/parameteredElement"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameteredElement" lowerBound="1"
+        eType="#//ParameterableElement" eOpposite="#//ParameterableElement/templateParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element exposed by this template parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signature" lowerBound="1"
+        eType="#//TemplateSignature" eOpposite="#//TemplateSignature/ownedParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The template signature that owns this template parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateParameterSubstitution" eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A template parameter substitution relates the actual parameter to a formal template parameter as part of a template binding."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actual" lowerBound="1"
+        eType="#//ParameterableElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that is the actual parameter for this substitution."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="formal" lowerBound="1"
+        eType="#//TemplateParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The formal template parameter that is associated with this substitution."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedActual" eType="#//ParameterableElement"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The actual parameter that is owned by this substitution."/>
+      </eAnnotations>
+      <eAnnotations source="subsets" references="#//TemplateParameterSubstitution/actual"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateBinding" lowerBound="1"
+        eType="#//TemplateBinding" eOpposite="#//TemplateBinding/parameterSubstitution">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The optional bindings from this element to templates."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateParameterType" eSuperTypes="#//Type">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="specification" eType="#//String"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateSignature" eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A template signature bundles the set of formal template parameters for a templated element."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+        eType="#//TemplateParameter" containment="true" eOpposite="#//TemplateParameter/signature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The formal template parameters that are owned by this template signature."/>
+      </eAnnotations>
+      <eAnnotations source="subsets" references="#//TemplateSignature/parameter"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        upperBound="-1" eType="#//TemplateParameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The ordered set of all formal template parameters for this template signature."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="template" lowerBound="1"
+        eType="#//TemplateableElement" eOpposite="#//TemplateableElement/ownedTemplateSignature">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The element that owns this template signature."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TemplateableElement" abstract="true"
+      eSuperTypes="#//Element">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A templateable element is an element that can optionally be defined as a template and bound to other templates."/>
+    </eAnnotations>
+    <eOperations name="isTemplate" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query isTemplate() returns whether this templateable element is actually a template."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="parameterableElements" ordered="false" upperBound="-1" eType="#//ParameterableElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query parameterableElements() returns the set of elements that may be used as the parametered elements for a template parameter of this templateable element. By default, this set includes all the owned elements. Subclasses may override this operation if they choose to restrict the set of parameterable elements."/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTemplateSignature"
+        eType="#//TemplateSignature" containment="true" eOpposite="#//TemplateSignature/template">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The optional template signature specifying the formal template parameters."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="templateBinding" ordered="false"
+        upperBound="-1" eType="#//TemplateBinding" containment="true" eOpposite="#//TemplateBinding/boundElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The optional bindings from this element to templates."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unspecializedElement" eType="#//TemplateableElement"
+        transient="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//Namespace">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A transition is a directed relationship between a source vertex and a target vertex. It may be part of a compound transition, which takes the state machine from one state configuration to another, representing the complete response of the state machine to an occurrence of an event of a particular type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        eType="#//Region" eOpposite="#//Region/transition">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Designates the region that owns this transition."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effect" eType="#//Behavior"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies an optional behavior to be performed when the transition fires."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//Constraint"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A guard is a constraint that provides a fine-grained control over the firing of the transition. The guard is evaluated when an event occurrence is dispatched by the state machine. If the guard is true at that time, the transition may be enabled, otherwise, it is disabled. Guards should be pure expressions without side effects. Guard expressions with side effects are ill formed."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//TransitionKind"
+        defaultValueLiteral="external">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Indicates  the precise type of the transition."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Vertex" eOpposite="#//Vertex/outgoing">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Designates the originating vertex (state or pseudostate) of the transition."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Vertex" eOpposite="#//Vertex/incoming">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Designates the target vertex that is reached when the transition is taken."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" ordered="false"
+        upperBound="-1" eType="#//Trigger" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the triggers that may fire the transition."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TupleLiteralExp" eSuperTypes="#//LiteralExp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" upperBound="-1" eType="#//TupleLiteralPart"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TupleLiteralPart" eSuperTypes="#//VariableDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//OCLExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TupleType" eSuperTypes="#//DataType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" eSuperTypes="#//NamedElement #//TemplateableElement #//ParameterableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A type is a named element that is used as the type for a typed element. A type can be contained in a package.&#xD;&#xA;Type is defined to be a kind of templateable element so that a type can be parameterized. It is also defined to be a kind of parameterable element so that a type can be a formal template parameter."/>
+    </eAnnotations>
+    <eAnnotations source="duplicates">
+      <eAnnotations source="templateParameter">
+        <details key="eType" value="pivot::TypeTemplateParameter"/>
+      </eAnnotations>
+      <contents xsi:type="ecore:EOperation" name="isTemplate" lowerBound="1" eType="#//Boolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The query isTemplate() returns whether this templateable element is actually a template."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//TemplateableElement/isTemplate"/>
+      </contents>
+      <contents xsi:type="ecore:EReference" name="templateParameter" eType="#//TemplateParameter"
+          eOpposite="#//TypeTemplateParameter/%duplicates%/parameteredElement">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The template parameter that exposes this element as a formal parameter."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//ParameterableElement/templateParameter"/>
+      </contents>
+    </eAnnotations>
+    <eOperations name="UniqueInvariantName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="ownedInvariant->isUnique(name)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="specializeIn" lowerBound="1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="self&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="expr" lowerBound="1" eType="#//OCLExpression"/>
+      <eParameters name="selfType" lowerBound="1" eType="#//Type"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceClassName" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+        eType="#//Property" containment="true" eOpposite="#//Property/owningType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedInvariant" ordered="false"
+        upperBound="-1" eType="#//Constraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperation" upperBound="-1"
+        eType="#//Operation" containment="true" eOpposite="#//Operation/owningType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="package" eType="#//Package"
+        eOpposite="#//Package/ownedType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the owning package of this classifier, if any."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superClass" upperBound="-1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeExp" eSuperTypes="#//OCLExpression #//ReferringElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredType" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeTemplateParameter" eSuperTypes="#//TemplateParameter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A type template parameter exposes a type as a formal template parameter."/>
+    </eAnnotations>
+    <eAnnotations source="duplicates">
+      <eAnnotations source="parameteredElement">
+        <details key="eType" value="pivot::Type"/>
+      </eAnnotations>
+      <contents xsi:type="ecore:EReference" name="parameteredElement" lowerBound="1"
+          eType="#//ParameterableElement" eOpposite="#//Type/%duplicates%/templateParameter">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="The parameterable classifier for this template parameter."/>
+        </eAnnotations>
+        <eAnnotations source="redefines" references="#//TemplateParameter/parameteredElement"/>
+      </contents>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowSubstitutable" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Constrains the required relationship between an actual parameter and the parameteredElement for this formal parameter."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constrainingType" ordered="false"
+        upperBound="-1" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The classifiers that constrain the argument that can be used for the parameter. If the allowSubstitutable attribute is true, then any classifier that is compatible with this constraining classifier can be substituted; otherwise, it must be either this classifier or one of its subclasses. If this property is empty, there are no constraints on the classifier that can be used as an argument."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A typed element is a kind of named element that represents an element with a type."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRequired" lowerBound="1"
+        eType="#//Boolean" defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The type of the TypedElement."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedMultiplicityElement" abstract="true"
+      eSuperTypes="#//TypedElement">
+    <eOperations name="CompatibleBody" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;bodySpecification.type.conformsTo(self.type)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="bodySpecification" lowerBound="1" eType="#//ValueSpecification"/>
+    </eOperations>
+    <eOperations name="makeParameter" lowerBound="1" eType="#//Parameter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="Parameter{name='name'}&#xA;&#xA;"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnlimitedNaturalLiteralExp" eSuperTypes="#//NumericLiteralExp">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unlimitedNaturalSymbol"
+        lowerBound="1" eType="#//UnlimitedNatural"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnspecifiedType" eSuperTypes="#//Class">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lowerBound" lowerBound="1"
+        eType="#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="upperBound" lowerBound="1"
+        eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnspecifiedValueExp" eSuperTypes="#//OCLExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueSpecification" abstract="true"
+      eSuperTypes="#//TypedElement #//ParameterableElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A value specification is the specification of a (possibly empty) set of instances, including both objects and data values.&#xD;&#xA;ValueSpecification specializes ParameterableElement to specify that a value specification can be exposed as a formal template parameter, and provided as an actual parameter in a binding of a template."/>
+    </eAnnotations>
+    <eOperations name="booleanValue" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query booleanValue() gives a single Boolean value when one can be computed."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="integerValue" lowerBound="1" eType="#//Integer">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query integerValue() gives a single Integer value when one can be computed."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isComputable" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query isComputable() determines whether a value specification can be computed in a model. This operation cannot be fully defined in OCL. A conforming implementation is expected to deliver true for this operation for all value specifications that it can compute, and to compute all of those for which the operation is true. A conforming implementation is expected to be able to compute the value of all literals."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isNull" lowerBound="1" eType="#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query isNull() returns true when it can be computed that the value is null."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="stringValue" lowerBound="1" eType="#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query stringValue() gives a single String value when one can be computed."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="unlimitedValue" lowerBound="1" eType="#//UnlimitedNatural">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The query unlimitedValue() gives a single UnlimitedNatural value when one can be computed."/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//VariableDeclaration">
+    <eOperations name="CompatibleInitialiserType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="initExpression &lt;> null implies initExpression.type.conformsTo(type)&#xA;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implicit" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//OCLExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="representedParameter" eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" abstract="true"
+      eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableExp" eSuperTypes="#//OCLExpression #//ReferringElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="implicit" eType="#//Boolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredVariable" eType="#//VariableDeclaration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Vertex" abstract="true" eSuperTypes="#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A vertex is an abstraction of a node in a state machine graph. In general, it can be the source or destination of any number of transitions."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Region"
+        eOpposite="#//Region/subvertex">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The region that contains this vertex."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" ordered="false"
+        upperBound="-1" eType="#//Transition" eOpposite="#//Transition/target">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the transitions entering this vertex."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" ordered="false"
+        upperBound="-1" eType="#//Transition" eOpposite="#//Transition/source">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Specifies the transitions departing from this vertex."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Visitable" instanceClassName="org.eclipse.ocl.examples.pivot.util.Visitable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Visitor" instanceClassName="org.eclipse.ocl.examples.pivot.util.Visitor"
+      abstract="true" interface="true">
+    <eTypeParameters name="R"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VoidType" eSuperTypes="#//Class"/>
+</ecore:EPackage>

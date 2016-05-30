@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sqlmodel"
+    nsURI="http:///SQLModel.ecore" nsPrefix="SQLModel">
+  <eSubpackages name="schema" nsURI="http:///org/eclipse/datatools/modelbase/sql/schema.ecore"
+      nsPrefix="SQLSchema">
+    <eClassifiers xsi:type="ecore:EClass" name="IdentitySpecifier" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14.4 Identity columns"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="generationType" eType="#//schema/GenerateType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startValue" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBigInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="increment" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBigInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimum" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBigInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maximum" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBigInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cycleOption" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="GenerateType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14.4 Identity columns&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="DEFAULT_GENERATED"/>
+      <eLiterals name="ALWAYS_GENERATED" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 "/>
+      </eAnnotations>
+      <eOperations name="setDataType">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Set the type for this TypedElement"/>
+        </eAnnotations>
+        <eParameters name="newType" eType="#//datatypes/DataType"/>
+      </eOperations>
+      <eOperations name="getDataType" eType="#//datatypes/DataType">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Get the type for this TypedElement"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="containedType" eType="#//datatypes/SQLDataType"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedType" eType="#//datatypes/UserDefinedType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Dependency" eSuperTypes="#//schema/SQLObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targetEnd" lowerBound="1"
+          eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dependencyType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Schema" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.20 SQL-schemas&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+          eType="#//tables/Trigger" eOpposite="#//tables/Trigger/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="indices" upperBound="-1"
+          eType="#//constraints/Index" eOpposite="#//constraints/Index/Schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+          eType="#//tables/Table" eOpposite="#//tables/Table/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+          eType="#//schema/Sequence" eOpposite="#//schema/Sequence/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+          eType="#//schema/Database" eOpposite="#//schema/Database/schemas"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Catalog" lowerBound="1"
+          eType="#//schema/Catalog" eOpposite="#//schema/Catalog/schemas"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assertions" upperBound="-1"
+          eType="#//constraints/Assertion" eOpposite="#//constraints/Assertion/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="userDefinedTypes" upperBound="-1"
+          eType="#//datatypes/UserDefinedType" eOpposite="#//datatypes/UserDefinedType/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="charSets" upperBound="-1"
+          eType="#//datatypes/CharacterSet" eOpposite="#//datatypes/CharacterSet/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="routines" upperBound="-1"
+          eType="#//routines/Routine" eOpposite="#//routines/Routine/schema"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//accesscontrol/AuthorizationIdentifier" eOpposite="#//accesscontrol/AuthorizationIdentifier/ownedSchema"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLObject" abstract="true" eSuperTypes="../../org.eclipse.emf.ecore/model/Ecore.ecore#//ENamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The base object to be used for any Relation Database concept, representing the placeholder for the name and alias.  This object will extend ENamedElement in the generated code.  The string attribute name will be inherited&#xD;&#xA;from ENamedElement.&#xD;&#xA;&#xD;&#xA;Note: In the RDB sense, only table and view objects can be represented by aliases, but DB2 defines also database and network aliases, and even for nicknames that refer to data tables or views located on federated systems."/>
+      </eAnnotations>
+      <eOperations name="addEAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation">
+        <eParameters name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="addEAnnotationDetail">
+        <eParameters name="eAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation"/>
+        <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getEAnnotationDetail" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="eAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation"/>
+        <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setAnnotationDetail">
+        <eParameters name="eAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation"/>
+        <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="removeEAnnotationDetail">
+        <eParameters name="eAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation"/>
+        <eParameters name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="getEAnnotation" eType="ecore:EClass ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EAnnotation">
+        <eParameters name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+          eType="#//schema/Dependency" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="comments" upperBound="-1"
+          eType="#//schema/Comment" eOpposite="#//schema/Comment/SQLObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="extensions" upperBound="-1"
+          eType="#//schema/ObjectExtension" containment="true" eOpposite="#//schema/ObjectExtension/SQLObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="privileges" upperBound="-1"
+          eType="#//accesscontrol/Privilege" eOpposite="#//accesscontrol/Privilege/object"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Sequence" eSuperTypes="#//schema/TypedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.21 Sequence Generators"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identity" lowerBound="1"
+          eType="#//schema/IdentitySpecifier" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/sequences"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Database" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 "/>
+      </eAnnotations>
+      <eOperations name="getUserDefinedTypes" eType="#//schema/List"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="vendor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schemas" upperBound="-1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/database"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
+          eType="#//schema/Event" eOpposite="#//schema/Event/Database"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="catalogs" upperBound="-1"
+          eType="#//schema/Catalog" eOpposite="#//schema/Catalog/Database"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="authorizationIds" upperBound="-1"
+          eType="#//accesscontrol/AuthorizationIdentifier" eOpposite="#//accesscontrol/AuthorizationIdentifier/Database"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Date" instanceClassName="java.util.Date"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="List" instanceClassName="java.util.List"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="ReferentialActionType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 "/>
+      </eAnnotations>
+      <eLiterals name="NO_ACTION"/>
+      <eLiterals name="RESTRICT" value="1"/>
+      <eLiterals name="CASCADE" value="2"/>
+      <eLiterals name="SET_NULL" value="3"/>
+      <eLiterals name="SET_DEFAULT" value="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="for" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="the type of object on which the event applies"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="the condition to be satisfied inorder to activate the event"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="the action that the event performs after being activated"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="event state"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Database" lowerBound="1"
+          eType="#//schema/Database" eOpposite="#//schema/Database/events"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Comment">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="SQLObject" lowerBound="1"
+          eType="#//schema/SQLObject" eOpposite="#//schema/SQLObject/comments"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Catalog" eSuperTypes="#//schema/SQLObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Database" lowerBound="1"
+          eType="#//schema/Database" eOpposite="#//schema/Database/catalogs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schemas" upperBound="-1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/Catalog"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ObjectExtension" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="SQLObject" lowerBound="1"
+          eType="#//schema/SQLObject" transient="true" eOpposite="#//schema/SQLObject/extensions"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="constraints" nsURI="http:///org/eclipse/datatools/modelbase/sql/constraints.ecore"
+      nsPrefix="SQLConstraints">
+    <eClassifiers xsi:type="ecore:EClass" name="Assertion" eSuperTypes="#//constraints/Constraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17.4 Assertions,&#xD;&#xA;5WD-02-Foundation-2002-12 11.37 &lt;assertion definition>&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="searchCondition" eType="#//expressions/SearchCondition"
+          containment="true" resolveProxies="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/assertions"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constrainedTables" lowerBound="1"
+          upperBound="-1" eType="#//tables/BaseTable" derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Constraint" abstract="true" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17 Integrity constraints&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deferrable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If True allows you to specify when the DBMS should check the constraint for violation (statement end or transaction end).  If False it will always be after statement end.&#xD;&#xA;&#xD;&#xA;Could also be named deferralMode with values DEFERRABLE and NOT DEFERRABLE."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="initiallyDeferred" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If True isDeferrable must be True and constraint check time will be DEFERRED.  If False constraint check time will be IMMEDIATE.&#xD;&#xA;&#xD;&#xA;Could also be named (initial)ConstraintCheckTime with values INITIALLY DEFERRED and INITIALLY IMMEDIATE.  Default value would be INITIALLY IMMEDIATE.&#xD;&#xA;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="enforced" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableConstraint" abstract="true" eSuperTypes="#//constraints/Constraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17.2 Table constraints&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="BaseTable" eType="#//tables/BaseTable"
+          transient="true" eOpposite="#//tables/BaseTable/constraints"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferenceConstraint" abstract="true"
+        eSuperTypes="#//constraints/TableConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17.2 Table constraints"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members" lowerBound="1"
+          upperBound="-1" eType="#//tables/Column"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckConstraint" eSuperTypes="#//constraints/TableConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17.2 Table constraints&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="searchCondition" eType="#//expressions/SearchCondition"
+          containment="true" resolveProxies="false">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Section 4.17.2&#xD;&#xA;A check constraint is satisfied if and only if the specified &lt;search condition> is not False for any row of a table."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForeignKey" eSuperTypes="#//constraints/ReferenceConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17 Integrity constraints, Reference, 5WD-02-Foundation-2002-12 11.8 &lt;referencial constraint definition>&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="match" eType="#//constraints/MatchType"
+          defaultValueLiteral="MATCH_SIMPLE"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="onUpdate" eType="#//schema/ReferentialActionType"
+          defaultValueLiteral="NO_ACTION"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="onDelete" eType="#//schema/ReferentialActionType"
+          defaultValueLiteral="NO_ACTION"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uniqueConstraint" eType="#//constraints/UniqueConstraint"
+          eOpposite="#//constraints/UniqueConstraint/ForeignKey"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedMembers" lowerBound="1"
+          upperBound="-1" eType="#//tables/Column"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uniqueIndex" eType="#//constraints/Index"
+          eOpposite="#//constraints/Index/ForeignKey"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedTable" eType="#//tables/BaseTable"
+          eOpposite="#//tables/BaseTable/referencingForeignKeys"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueConstraint" eSuperTypes="#//constraints/ReferenceConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17.2 Table constraints, 5WD-02-Foundation-2002-12 11.7 &lt;unique contraint definition>&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clustered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ForeignKey" upperBound="-1"
+          eType="#//constraints/ForeignKey" eOpposite="#//constraints/ForeignKey/uniqueConstraint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryKey" eSuperTypes="#//constraints/UniqueConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.17 Integrity constraints, Reference, 5WD-02-Foundation-2002-12 11.7 &lt;unique contraint definition>"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="MatchType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="See KeyRelationship description."/>
+      </eAnnotations>
+      <eLiterals name="MATCH_SIMPLE"/>
+      <eLiterals name="MATCH_FULL" value="1"/>
+      <eLiterals name="MATCH_PARTIAL" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/indices"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clustered" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fillFactor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemGenerated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="members" lowerBound="1"
+          upperBound="-1" eType="#//constraints/IndexMember" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1"
+          eType="#//tables/Table" eOpposite="#//tables/Table/index"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ForeignKey" upperBound="-1"
+          eType="#//constraints/ForeignKey" eOpposite="#//constraints/ForeignKey/uniqueIndex"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="includedMembers" upperBound="-1"
+          eType="#//constraints/IndexMember" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexMember" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="IndexMember is an EObject.  It does not have a name or associated SQL descriptor so it is not an SQLObject.  This is the way we have chosen to model Index columns because EMF does not support association classes.&#xD;&#xA;The &quot;expression&quot; reference was added to support function/expression-based indexes.  The expression relationship and the column relationship should be mutually exclusive; that is, one and only one of these should be set."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="incrementType" eType="#//constraints/IncrementType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//tables/Column"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//constraints/IndexExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="IncrementType">
+      <eLiterals name="ASC"/>
+      <eLiterals name="DESC" value="1"/>
+      <eLiterals name="RANDOM" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexExpression" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="IndexExpression is a SQLObject.  It was added to support function/expression-based indexes."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="datatypes" nsURI="http:///org/eclipse/datatools/modelbase/sql/datatypes.ecore"
+      nsPrefix="SQLDataTypes">
+    <eClassifiers xsi:type="ecore:EClass" name="UserDefinedType" abstract="true" eSuperTypes="#//datatypes/DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/userDefinedTypes"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ordering" eType="#//datatypes/UserDefinedTypeOrdering"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.1 Data types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="setContainer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="This method is used to set the type on the given Column.  It is implemented on the child classes of DataType.  The concrete children classses will know which type relationship to use on Column to set the data type."/>
+        </eAnnotations>
+        <eParameters name="newContainer" eType="#//schema/TypedElement"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PredefinedDataType" abstract="true"
+        eSuperTypes="#//datatypes/SQLDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.1 Data types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="primitiveType" eType="#//datatypes/PrimitiveType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CollectionDataType" abstract="true"
+        eSuperTypes="#//datatypes/ConstructedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.10 Collection Types"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elementType" lowerBound="1"
+          eType="#//datatypes/ElementType" containment="true" eOpposite="#//datatypes/ElementType/CollectionDataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericalDataType" abstract="true"
+        eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.4 Numbers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CharacterStringDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.2 Character strings"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="1"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="coercibility" eType="#//datatypes/CoercibilityType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fixedLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          changeable="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="collationName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="characterSet" lowerBound="1"
+          eType="#//datatypes/CharacterSet" eOpposite="#//datatypes/CharacterSet/CharacterStringDataType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RowDataType" eSuperTypes="#//datatypes/ConstructedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.8 Row Types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" lowerBound="1"
+          upperBound="-1" eType="#//datatypes/Field" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArrayDataType" abstract="true" eSuperTypes="#//datatypes/CollectionDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.10.1 Arrays"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCardinality" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MultisetDataType" abstract="true"
+        eSuperTypes="#//datatypes/CollectionDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.10.2 Multisets"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.5 Boolean types&#xD;&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntervalDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.6.2 Intervals&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="leadingQualifier" eType="#//datatypes/IntervalQualifierType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="trailingQualifier" eType="#//datatypes/IntervalQualifierType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="leadingFieldPrecision"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="trailingFieldPrecision"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fractionalSecondsPrecision"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BinaryStringDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.3 Binary strings&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="equals" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CharacterSet" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.2.6 Character sets, 5WD-02-Foundation-2002-12 4.2.7 Universal character sets&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="repertoire" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultCollation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="CharacterStringDataType"
+          lowerBound="1" eType="#//datatypes/CharacterStringDataType" eOpposite="#//datatypes/CharacterStringDataType/characterSet"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/charSets"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CoercibilityType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.2.1 Comparison of character strings&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="IMPLICIT"/>
+      <eLiterals name="EXPLICIT" value="1"/>
+      <eLiterals name="COERCIBILE" value="2"/>
+      <eLiterals name="NO_COLLATION" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.6.1 Datetimes&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fractionalSecondsPrecision"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="IntervalQualifierType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.6.2 Intervals&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="YEAR"/>
+      <eLiterals name="MONTH" value="1"/>
+      <eLiterals name="DAY" value="2"/>
+      <eLiterals name="HOUR" value="3"/>
+      <eLiterals name="MINUTE" value="4"/>
+      <eLiterals name="SECOND" value="5"/>
+      <eLiterals name="FRACTION" value="6"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DistinctUserDefinedType" eSuperTypes="#//datatypes/UserDefinedType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="predefinedRepresentation"
+          lowerBound="1" eType="#//datatypes/PredefinedDataType" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StructuredUserDefinedType" eSuperTypes="#//datatypes/UserDefinedType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="instantiable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="True"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="final" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="super" eType="#//datatypes/StructuredUserDefinedType"
+          eOpposite="#//datatypes/StructuredUserDefinedType/sub"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sub" upperBound="-1"
+          eType="#//datatypes/StructuredUserDefinedType" eOpposite="#//datatypes/StructuredUserDefinedType/super"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+          eType="#//datatypes/AttributeDefinition" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+          eType="#//routines/Method" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="OrderingType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="EQUALS"/>
+      <eLiterals name="FULL" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="OrderingCategoryType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="RELATIVE"/>
+      <eLiterals name="MAP" value="1"/>
+      <eLiterals name="STATE" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AttributeDefinition" eSuperTypes="#//schema/TypedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.13 Columns, fields, and attributes&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeCheck" eType="#//schema/ReferentialActionType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeChecked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FixedPrecisionDataType" eSuperTypes="#//datatypes/ExactNumericDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.4 Numbers"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="PrimitiveType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.1 Data types"/>
+      </eAnnotations>
+      <eLiterals name="CHARACTER"/>
+      <eLiterals name="CHARACTER_VARYING" value="1"/>
+      <eLiterals name="CHARACTER_LARGE_OBJECT" value="2"/>
+      <eLiterals name="NATIONAL_CHARACTER" value="3"/>
+      <eLiterals name="NATIONAL_CHARACTER_VARYING" value="4"/>
+      <eLiterals name="NATIONAL_CHARACTER_LARGE_OBJECT" value="5"/>
+      <eLiterals name="BINARY" value="6"/>
+      <eLiterals name="BINARY_VARYING" value="7"/>
+      <eLiterals name="BINARY_LARGE_OBJECT" value="8"/>
+      <eLiterals name="NUMERIC" value="9"/>
+      <eLiterals name="DECIMAL" value="10"/>
+      <eLiterals name="SMALLINT" value="11"/>
+      <eLiterals name="INTEGER" value="12"/>
+      <eLiterals name="BIGINT" value="13"/>
+      <eLiterals name="FLOAT" value="14"/>
+      <eLiterals name="REAL" value="15"/>
+      <eLiterals name="DOUBLE_PRECISION" value="16"/>
+      <eLiterals name="BOOLEAN" value="17"/>
+      <eLiterals name="DATE" value="18"/>
+      <eLiterals name="TIME" value="19"/>
+      <eLiterals name="TIMESTAMP" value="20"/>
+      <eLiterals name="INTERVAL" value="21"/>
+      <eLiterals name="DATALINK" value="22"/>
+      <eLiterals name="XML_TYPE" value="23"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Domain" eSuperTypes="#//datatypes/DistinctUserDefinedType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.12 Domains&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" upperBound="-1"
+          eType="#//constraints/CheckConstraint" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Field" eSuperTypes="#//schema/TypedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.13 Columns, fields, and attributes&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeCheck" eType="#//schema/ReferentialActionType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeChecked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferenceDataType" abstract="true"
+        eSuperTypes="#//datatypes/ConstructedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.9 Reference Types"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="scopeTable" lowerBound="1"
+          eType="#//tables/Table"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedType" lowerBound="1"
+          eType="#//datatypes/StructuredUserDefinedType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConstructedDataType" abstract="true"
+        eSuperTypes="#//datatypes/DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.1 Data Types"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLDataType" abstract="true" eSuperTypes="#//datatypes/DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="SQLDataType represents any non user defined data type.  It was introduced because a TypedElement needs to distinguish between UDTs and non UDTs."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataLinkDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Represents a link to a file/location outside the system. "/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="linkControl" eType="#//datatypes/LinkControlOption"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="integrityControl" eType="#//datatypes/IntegrityControlOption"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="readPermission" eType="#//datatypes/ReadPermissionOption"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="writePermission" eType="#//datatypes/WritePermissionOption"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="recovery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unlink" eType="#//datatypes/UnlinkOption"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="LinkControlOption">
+      <eLiterals name="FILE_LINK_CONTROL"/>
+      <eLiterals name="NO_FILE_LINK_CONTROL" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="IntegrityControlOption">
+      <eLiterals name="ALL"/>
+      <eLiterals name="SELECTIVE" value="1"/>
+      <eLiterals name="NONE" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ReadPermissionOption">
+      <eLiterals name="FS"/>
+      <eLiterals name="DB" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="WritePermissionOption">
+      <eLiterals name="FS"/>
+      <eLiterals name="ADMIN" value="1"/>
+      <eLiterals name="BLOCKED" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="UnlinkOption">
+      <eLiterals name="RESTORE"/>
+      <eLiterals name="DELETE" value="1"/>
+      <eLiterals name="NONE" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UserDefinedTypeOrdering" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.7 User-defined types"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderingForm" eType="#//datatypes/OrderingType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderingCategory" eType="#//datatypes/OrderingCategoryType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="orderingRoutine" lowerBound="1"
+          eType="#//routines/Routine"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DateDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.6.1 Datetimes"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExactNumericDataType" abstract="true"
+        eSuperTypes="#//datatypes/NumericalDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.4 Numbers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApproximateNumericDataType" eSuperTypes="#//datatypes/NumericalDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.4 Numbers"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntegerDataType" eSuperTypes="#//datatypes/ExactNumericDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.4 Numbers"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="XMLDataType" eSuperTypes="#//datatypes/PredefinedDataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.1 Data Types"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementType" eSuperTypes="#//schema/TypedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="CollectionDataType" eType="#//datatypes/CollectionDataType"
+          transient="true" eOpposite="#//datatypes/CollectionDataType/elementType"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="expressions" nsURI="http:///org/eclipse/datatools/modelbase/sql/expressions.ecore"
+      nsPrefix="SQLExpressions">
+    <eClassifiers xsi:type="ecore:EClass" name="QueryExpression" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 7 Query Expression&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="getSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setSQL">
+        <eParameters name="sqlText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ValueExpression" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14.5 Base columns and generated columns&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="getSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setSQL">
+        <eParameters name="sqlText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SearchCondition" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12"/>
+      </eAnnotations>
+      <eOperations name="getSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setSQL">
+        <eParameters name="sqlText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="QueryExpressionDefault" eSuperTypes="#//schema/SQLObject #//expressions/QueryExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Place holder for the default query expression."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="SQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SearchConditionDefault" eSuperTypes="#//schema/SQLObject #//expressions/SearchCondition">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Place holder for the default search condition."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="SQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ValueExpressionDefault" eSuperTypes="#//schema/SQLObject #//expressions/ValueExpression">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Place holder for the default value expression."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="SQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="routines" nsURI="http:///org/eclipse/datatools/modelbase/sql/routines.ecore"
+      nsPrefix="SQLRoutines">
+    <eClassifiers xsi:type="ecore:EClass" name="Routine" abstract="true" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="specificName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;&#xD;&#xA;An SQL-invoked routine is uniquely identified by a &lt;specific name> , called the specific name of the SQLinvoked&#xD;&#xA;routine.&#xD;&#xA;&#xD;&#xA;Typically qualified with a schema name. &#xD;&#xA;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Since there are many languages, rather than constrain ourselves to an enumerated list which is difficult to subclass in the EMF environment, we have chosen to use strings.&#xD;&#xA;&#xD;&#xA;JAVA&#xD;&#xA;SQL&#xD;&#xA;PERL&#xD;&#xA;C&#xD;&#xA;ADA&#xD;&#xA;COBOL&#xD;&#xA;FORTRAN&#xD;&#xA;MUMPS&#xD;&#xA;PASCAL&#xD;&#xA;PLI&#xD;&#xA;and so on..."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterStyle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Paraphrased from 5WD-02-Foundation-2002-12 &#xD;&#xA;The spec only calls for two. Though it seems like an easy choice for enumeration as in the language attribute, other vendors have different styles and since enumeration is not good to subclass within the EMF tooling framework, a string representation is used.&#xD;&#xA;&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;SQL &#xD;&#xA;GENERAL.&#xD;&#xA;&#xD;&#xA;Used in stored procedures, user defined functions, and methods.&#xD;&#xA;&#xD;&#xA;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deterministic" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;&#xD;&#xA;An SQL-invoked routine is either deterministic or possibly non-deterministic. An SQL-invoked function that&#xD;&#xA;is deterministic always returns the identical return value for a given list of SQL argument values. An SQLinvoked&#xD;&#xA;procedure that is deterministic always returns the identical values in its output and inout SQL parameters&#xD;&#xA;for a given list of SQL argument values. An SQL-invoked routine is possibly non-deterministic if it might&#xD;&#xA;produce nonidentical results when invoked with the identical list of SQL argument values."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="sqlDataAccess" eType="#//routines/DataAccess">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="5WD-02-Foundation-2002-12&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&#xD;&#xA;&lt;SQL-data access indication> ::= NO SQL | CONTAINS SQL | READS SQL DATA | MODIFIES SQL DATA&#xD;&#xA;&#xD;&#xA;(see DataAccess enumeration class)"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="creationTS" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;&#xD;&#xA;An SQL-invoked routine is described by a routine descriptor. A routine descriptor includes:&#xD;&#xA;- The creation timestamp.&#xD;&#xA;&#xD;&#xA;Because there is no provision in the spec as to the format of the timestamp, it is left to the individual implementers to determine the format."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastAlteredTS" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;&#xD;&#xA;An SQL-invoked routine is described by a routine descriptor. A routine descriptor includes:&#xD;&#xA;- The last-altered timestamp.&#xD;&#xA;&#xD;&#xA;Because there is no provision in the spec as to the format of the timestamp, it is left to the individual implementers to determine the format."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="authorizationID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;&#xD;&#xA;An SQL-invoked routine has a routine authorization identifier, which is (directly or indirectly) the authorization&#xD;&#xA;identifier of the owner of the schema that contains the SQL-invoked routine at the time that the SQL-invoked&#xD;&#xA;routine is created."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="security" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From the below, typical values would be: &quot;DEFINER&quot;, &quot;INVOKER&quot;, &quot;IMPLEMENTATION DEFINED&quot;&#xD;&#xA;Since there are several implementation defined security designations, it is best to go with the string.&#xD;&#xA;&#xD;&#xA;From 5WD-02-Foundation-2002-12&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&#xD;&#xA;&lt;external security clause> ::=&#xD;&#xA;  EXTERNAL SECURITY DEFINER&#xD;&#xA;  | EXTERNAL SECURITY INVOKER&#xD;&#xA;  | EXTERNAL SECURITY IMPLEMENTATION DEFINED&#xD;&#xA;&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;If the SQL-invoked routine is an SQL routine, then the identifiers are determined according to the SQL security&#xD;&#xA;characteristic of the SQL-invoked routine:&#xD;&#xA;- If the SQL security characteristic is DEFINER , then:&#xD;&#xA;  * If the routine authorization identifier is a user identifier, the user identifier is set to the routine authorization&#xD;&#xA;    identifier and the role name is set to null.&#xD;&#xA;  * Otherwise, the role name is set to the routine authorization identifier and the user identifier is set to&#xD;&#xA;    null.&#xD;&#xA;- If the SQL security characteristic is INVOKER , then the identifiers remain unchanged.      &#xD;&#xA;If the SQL-invoked routine is an external routine, then the identifiers are determined according to the external&#xD;&#xA;security characteristic of the SQL-invoked routine:&#xD;&#xA;- If the external security characteristic is DEFINER , then:&#xD;&#xA;  * If the routine authorization identifier is a user identifier, then the user identifier is set to the routine&#xD;&#xA;    authorization identifier and the role name is set to the null value.&#xD;&#xA;  * Otherwise, the role name is set to the routine authorization identifier and the user identifier is set to the&#xD;&#xA;    null value.&#xD;&#xA;- If the external security characteristic is INVOKER , then the identifiers remain unchanged.&#xD;&#xA;- If the external security characteristic is IMPLEMENTATION DEFINED , then the identifiers are set to&#xD;&#xA;implementation-defined values."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;from 11.50 SQL-invoked routine:&#xD;&#xA;&#xD;&#xA;The external name of the routine descriptor is &lt;external routine name> .&#xD;&#xA;&lt;external body reference> ::= EXTERNAL [ NAME &lt;external routine name> ] [ &lt;parameter&#xD;&#xA;style clause> ] [ &lt;transform group specification> ] [ &lt;external security clause> ]&#xD;&#xA;&#xD;&#xA;from 4.27 SQL-invoked routines&#xD;&#xA;&lt;external routine name> identifies a program written in some&#xD;&#xA;standard programming language other than SQL .&#xD;&#xA;&#xD;&#xA;from 5.4 Names and identifiers&#xD;&#xA;&lt;external routine name> ::= &lt;identifier> | &lt;character string literal>&#xD;&#xA;An &lt;external routine name> identifies an external routine."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//routines/Parameter" containment="true" eOpposite="#//routines/Parameter/routine"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//routines/Source"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/routines"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Source" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//schema/TypedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines, 5WD-02-Foundation-2002-12 11.50 &lt;SQL-invoked routine>,  Reference: 5WD-02-Foundation-2002-12 4.29.4 Locators  &#xD;&#xA;Reference: Information technology - Database languages - SQL - Part 14: XML-Related Specifications (SQL/XML) 12.7 &lt;SQL-invoked routine>"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//routines/ParameterMode">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="5WD-02-Foundation-2002-12&#xD;&#xA;&#xD;&#xA;&lt;SQL parameter declaration> ::= [ &lt;parameter mode> ] [ &lt;SQL parameter name> ] &lt;parameter type> [ RESULT ]&#xD;&#xA;&#xD;&#xA;&lt;parameter mode> ::= IN | OUT | INOUT&#xD;&#xA;&#xD;&#xA;For functions, defaults to IN.&#xD;&#xA;See enumerated class ParameterMode"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="locator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="5WD-02-Foundation-2002-12&#xD;&#xA;4.29.4 Locators&#xD;&#xA;A host parameter, a host variable, an SQL parameter of an external routine, or the value returned by an external&#xD;&#xA;function may be specified to be a locator by specifying AS LOCATOR . A locator is an SQL-session object,&#xD;&#xA;rather than SQL-data, that can be used to reference an SQL-data instance. A locator is either a large object&#xD;&#xA;locator, a user-defined type locator, an array locator, or a multiset locator. &#xD;&#xA;&#xD;&#xA;A large object locator is one of the following:&#xD;&#xA;- Binary large object locator, a value of which identifies a binary large object.&#xD;&#xA;- Character large object locator, a value of which identifies a large object character string.&#xD;&#xA;- National character large object locator, a value of which identifies a national large object character string.&#xD;&#xA;&#xD;&#xA;A user-defined type locator identifies a value of the user-defined type specified by the locator specification.&#xD;&#xA;An array locator identifies a value of the array type specified by the locator specification. A multiset locator&#xD;&#xA;identifies a value of the multiset type specified by the locator specification."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="routine" lowerBound="1"
+          eType="#//routines/Routine" transient="true" eOpposite="#//routines/Routine/parameters"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stringTypeOption" eType="#//datatypes/CharacterStringDataType"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Procedure" eSuperTypes="#//routines/Routine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines, 5WD-02-Foundation-2002-12 11.50 &lt;SQL-invoked routine>&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxResultSets" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Maximun number of result sets the procedure can return.  If the stored procedure returns more result sets than is specified by this value, then a database error will be generated.&#xD;&#xA;&#xD;&#xA;From 5WD-02-Foundation-2002-12&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&lt;dynamic result sets characteristic> ::= DYNAMIC RESULT SETS &lt;maximum dynamic result sets>"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldSavePoint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;An SQL-invoked procedure may optionally be specified to require a new savepoint level to be established when it is invoked and destroyed on return from the executed routine body. The alternative of not taking a savepoint can also be directly specified with OLD SAVEPOINT LEVEL . When an SQL-invoked function is invoked a new savepoint level is always established.&#xD;&#xA;&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&lt;savepoint level indication> ::= NEW SAVEPOINT LEVEL | OLD SAVEPOINT LEVEL"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resultSet" upperBound="-1"
+          eType="#//routines/RoutineResultTable" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//routines/Routine">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullCall" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&lt;null-call clause> ::= RETURNS NULL ON NULL INPUT | CALLED ON NULL INPUT&#xD;&#xA;&#xD;&#xA;If PROCEDURE is specified, then:&#xD;&#xA;- &lt;null-call clause> shall not be specified.&#xD;&#xA;&#xD;&#xA;if &lt;null-call clause> is not specified, then &#xD;&#xA;- CALLED ON NULL INPUT is implicit.&#xD;&#xA;&#xD;&#xA;If the SQL-invoked routine is an SQL-invoked function, then:&#xD;&#xA;- The SQL-invoked routine descriptor includes an indication of whether the SQL-invoked routine&#xD;&#xA;is a null-call function.&#xD;&#xA;&#xD;&#xA;4.27 SQL-invoked routines&#xD;&#xA;A null-call function is an SQL-invoked function that is defined to return the null value if any of its input arguments is the null value. A null-call function is an SQL-invoked function whose &lt;null-call clause> specifies&#xD;&#xA;&quot;RETURNS NULL ON NULL INPUT&quot;."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="static" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;11.50 &lt;SQL-invoked routine>&#xD;&#xA;&#xD;&#xA;&lt;dispatch clause> ::= STATIC DISPATCH&#xD;&#xA;&#xD;&#xA;If R is an SQL-invoked regular function and the &lt;SQL parameter declaration list> contains an&#xD;&#xA;&lt;SQL parameter declaration> that specifies a &lt;data type> that is one of:&#xD;&#xA;1) A user-defined type.&#xD;&#xA;2) A collection type whose element type is a user-defined type.&#xD;&#xA;3) A collection type whose element type is a reference type.&#xD;&#xA;4) A reference type.&#xD;&#xA;then &lt;dispatch clause> shall be specified. Otherwise, &lt;dispatch clause> shall not be specified."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="transformGroup" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="From 5WD-02-Foundation-2002-12&#xD;&#xA;4.7.5 Transforms for user-defined types&#xD;&#xA;&#xD;&#xA;Transforms are SQL-invoked functions that are automatically invoked when values of user-defined types are&#xD;&#xA;transferred from SQL-environment to host languages or vice-versa.&#xD;&#xA;&#xD;&#xA;A transform is associated with a user-defined type. A transform identifies a list of transform groups of up to&#xD;&#xA;two SQL-invoked functions, called the transform functions, each identified by a group name. The group name&#xD;&#xA;of a transform group is an &lt;identifier> such that no two transform groups for a transform have the same group&#xD;&#xA;name. The two transform functions are:&#xD;&#xA;- from-sql function : This SQL-invoked function maps the user-defined type value into a value of an SQL&#xD;&#xA;  pre-defined type, and gets invoked whenever a user-defined type value is passed to a host language &#xD;&#xA;  program or an external routine.&#xD;&#xA;- to-sql function : This SQL-invoked function maps a value of an SQL predefined type to a value of a&#xD;&#xA;  user-defined type and gets invoked whenever a user-defined type value is supplied by a host language&#xD;&#xA;  program or an external routine."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typePreserving" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mutator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnTable" eType="#//routines/RoutineResultTable"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnScalar" eType="#//routines/Parameter"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="returnCast" eType="#//routines/Parameter"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DataAccess">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+      <eLiterals name="NO_SQL"/>
+      <eLiterals name="CONTAINS_SQL" value="1"/>
+      <eLiterals name="READS_SQL_DATA" value="2"/>
+      <eLiterals name="MODIFIES_SQL_DATA" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ParameterMode">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 11.50 &lt;SQL-invoked routine>"/>
+      </eAnnotations>
+      <eLiterals name="IN"/>
+      <eLiterals name="OUT" value="1"/>
+      <eLiterals name="INOUT" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RoutineResultTable" eSuperTypes="#//tables/Table">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//routines/Function">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines &#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="overriding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="constructor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UserDefinedFunction" eSuperTypes="#//routines/Function">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BuiltInFunction" eSuperTypes="#//routines/Function">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.27 SQL-invoked routines"/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="statements" nsURI="http:///org/eclipse/datatools/modelbase/sql/statements.ecore"
+      nsPrefix="SQLStatements">
+    <eClassifiers xsi:type="ecore:EClass" name="SQLStatement" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.33 SQL-statements"/>
+      </eAnnotations>
+      <eOperations name="getSQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eOperations name="setSQL">
+        <eParameters name="sqlText" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLDataStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 14 Data Manipulation"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLSchemaStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 11 Schema definition and manipulation"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLControlStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 15 Control statements"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLDataChangeStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLDataStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 14 Data Manipulation"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLStatementDefault" eSuperTypes="#//schema/SQLObject #//statements/SQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="SQL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLConnectionStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 17 Connection management"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLDiagnosticsStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 22 Diagnostics management "/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLDynamicStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 19 Dynamic SQL"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLSessionStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 18 Session management"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLTransactionStatement" abstract="true"
+        interface="true" eSuperTypes="#//statements/SQLStatement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 16 Transaction management"/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="tables" nsURI="http:///org/eclipse/datatools/modelbase/sql/tables.ecore"
+      nsPrefix="SQLTables">
+    <eClassifiers xsi:type="ecore:EClass" name="ViewTable" eSuperTypes="#//tables/DerivedTable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkType" eType="#//tables/CheckType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemporaryTable" eSuperTypes="#//tables/BaseTable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="local" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteOnCommit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Table" abstract="true" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          upperBound="-1" eType="#//tables/Column" containment="true" eOpposite="#//tables/Column/table"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="supertable" eType="#//tables/Table"
+          eOpposite="#//tables/Table/subtables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subtables" upperBound="-1"
+          eType="#//tables/Table" eOpposite="#//tables/Table/supertable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/tables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="udt" eType="#//datatypes/StructuredUserDefinedType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+          eType="#//tables/Trigger" eOpposite="#//tables/Trigger/subjectTable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="index" upperBound="-1"
+          eType="#//constraints/Index" eOpposite="#//constraints/Index/table"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="selfRefColumnGeneration"
+          eType="#//tables/ReferenceType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="insertable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="updatable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          changeable="false" volatile="true" transient="true" derived="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PersistentTable" eSuperTypes="#//tables/BaseTable">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DerivedTable" abstract="true" eSuperTypes="#//tables/Table">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="queryExpression" eType="#//expressions/QueryExpression"
+          containment="true" resolveProxies="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BaseTable" abstract="true" eSuperTypes="#//tables/Table">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="getUniqueConstraints" eType="#//schema/List"/>
+      <eOperations name="getForeignKeys" eType="#//schema/List"/>
+      <eOperations name="getPrimaryKey" eType="#//constraints/PrimaryKey"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//constraints/TableConstraint" containment="true" eOpposite="#//constraints/TableConstraint/BaseTable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencingForeignKeys"
+          upperBound="-1" eType="#//constraints/ForeignKey" eOpposite="#//constraints/ForeignKey/referencedTable"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CheckType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.14 Tables&#xD;&#xA;"/>
+      </eAnnotations>
+      <eLiterals name="CASCADED"/>
+      <eLiterals name="LOCAL" value="1"/>
+      <eLiterals name="NONE" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ReferenceType">
+      <eLiterals name="SYSTEM_GENERATED"/>
+      <eLiterals name="USER_GENERATED" value="1"/>
+      <eLiterals name="DERIVED_SELF_REF" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//schema/TypedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.13 Columns, fields, and attributes&#xD;&#xA;"/>
+      </eAnnotations>
+      <eOperations name="isPartOfForeignKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eOperations name="isPartOfUniqueConstraint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eOperations name="isPartOfPrimaryKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1"
+          eType="#//tables/Table" transient="true" eOpposite="#//tables/Table/columns"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="identitySpecifier" eType="#//schema/IdentitySpecifier"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="generateExpression" eType="#//expressions/ValueExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="implementationDependent"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="False"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="True"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeCheck" eType="#//schema/ReferentialActionType"
+          defaultValueLiteral="NO_ACTION"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scopeChecked" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.38 Triggers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schema" lowerBound="1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/triggers"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subjectTable" lowerBound="1"
+          eType="#//tables/Table" eOpposite="#//tables/Table/triggers"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actionStatement" lowerBound="1"
+          upperBound="-1" eType="#//statements/SQLStatement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggerColumn" upperBound="-1"
+          eType="#//tables/Column"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionGranularity" eType="#//tables/ActionGranularityType"
+          defaultValueLiteral="STATEMENT"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="#//expressions/SearchCondition"
+          containment="true" resolveProxies="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeStamp" eType="#//schema/Date"
+          changeable="false">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Triggers on the same table with the same action time are executed in order of creation, i.e. the time stamp, such that older triggers have priority."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionTime" eType="#//tables/ActionTimeType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="insertType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldRow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="newRow" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ActionTimeType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.38 Triggers"/>
+      </eAnnotations>
+      <eLiterals name="AFTER"/>
+      <eLiterals name="BEFORE" value="1"/>
+      <eLiterals name="INSTEADOF" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ActionGranularityType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.38 Triggers"/>
+      </eAnnotations>
+      <eLiterals name="STATEMENT"/>
+      <eLiterals name="ROW" value="1"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="accesscontrol" nsURI="http:///org/eclipse/datatools/modelbase/sql/accesscontrol.ecore"
+      nsPrefix="SQLAccessControl">
+    <eClassifiers xsi:type="ecore:EClass" name="AuthorizationIdentifier" abstract="true"
+        eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.1 Authorization Identifiers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ownedSchema" upperBound="-1"
+          eType="#//schema/Schema" eOpposite="#//schema/Schema/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Database" lowerBound="1"
+          eType="#//schema/Database" eOpposite="#//schema/Database/authorizationIds"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="receivedRoleAuthorization"
+          upperBound="-1" eType="#//accesscontrol/RoleAuthorization" eOpposite="#//accesscontrol/RoleAuthorization/grantee"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantedRoleAuthorization"
+          upperBound="-1" eType="#//accesscontrol/RoleAuthorization" eOpposite="#//accesscontrol/RoleAuthorization/grantor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantedPrivilege" upperBound="-1"
+          eType="#//accesscontrol/Privilege" eOpposite="#//accesscontrol/Privilege/grantor"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="receivedPrivilege" upperBound="-1"
+          eType="#//accesscontrol/Privilege" containment="true" eOpposite="#//accesscontrol/Privilege/grantee"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Privilege" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.2 Privileges"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="grantable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="withHierarchy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantor" lowerBound="1"
+          eType="#//accesscontrol/AuthorizationIdentifier" eOpposite="#//accesscontrol/AuthorizationIdentifier/grantedPrivilege"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantee" eType="#//accesscontrol/AuthorizationIdentifier"
+          transient="true" eOpposite="#//accesscontrol/AuthorizationIdentifier/receivedPrivilege"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actionObjects" upperBound="-1"
+          eType="#//schema/SQLObject"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+          eType="#//schema/SQLObject" eOpposite="#//schema/SQLObject/privileges"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//accesscontrol/AuthorizationIdentifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.1 Authorization Identifiers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="user" upperBound="-1"
+          eType="#//accesscontrol/User" eOpposite="#//accesscontrol/User/group"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//accesscontrol/AuthorizationIdentifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.1 Authorization Identifiers"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="group" upperBound="-1"
+          eType="#//accesscontrol/Group" eOpposite="#//accesscontrol/Group/user"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//accesscontrol/AuthorizationIdentifier">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.3 Roles"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="roleAuthorization" lowerBound="1"
+          upperBound="-1" eType="#//accesscontrol/RoleAuthorization" eOpposite="#//accesscontrol/RoleAuthorization/role"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RoleAuthorization" eSuperTypes="#//schema/SQLObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Reference: 5WD-02-Foundation-2002-12 4.34.3 Roles"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="grantable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="role" lowerBound="1"
+          eType="#//accesscontrol/Role" eOpposite="#//accesscontrol/Role/roleAuthorization"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantee" lowerBound="1"
+          eType="#//accesscontrol/AuthorizationIdentifier" eOpposite="#//accesscontrol/AuthorizationIdentifier/receivedRoleAuthorization"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="grantor" lowerBound="1"
+          eType="#//accesscontrol/AuthorizationIdentifier" eOpposite="#//accesscontrol/AuthorizationIdentifier/grantedRoleAuthorization"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fact"
+    nsURI="http://ict-alive.sourceforge.net/RunTime/facts" nsPrefix="fact">
+  <eClassifiers xsi:type="ecore:EClass" name="Fact" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dueTo" eType="ecore:EClass actions.ecore#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effect" eType="ecore:EClass actions.ecore#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relate" upperBound="-1"
+        eType="#//Fact"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StartedAct" eSuperTypes="#//InvocativeAct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutedAct" eSuperTypes="#//InvocativeAct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FailureAct" eSuperTypes="#//InvocativeAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reason" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="failureReason" eType="#//FailureReasons"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Disaster" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reason" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormAct" abstract="true" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="who" eType="ecore:EClass events.ecore#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="norm" eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Norm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicativeAct" abstract="true" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="ecore:EClass events.ecore#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="ecore:EClass events.ecore#//Actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReceiveAct" eSuperTypes="#//CommunicativeAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivedMessage" eType="#//Message"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SendAct" eSuperTypes="#//CommunicativeAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sendMessage" eType="#//Message"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InvocativeAct" abstract="true" eSuperTypes="#//Fact"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="body" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Content">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fact" lowerBound="1" eType="#//Fact"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effect" upperBound="-1"
+        eType="ecore:EClass actions.ecore#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeadlineViolation" eSuperTypes="#//NormAct">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dealine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskViolation" eSuperTypes="#//NormAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unmetRequirement" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Objective"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="ecore:EClass platform:/plugin/net.sf.ictalive.coordination/model/tasks.ecore#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Availability" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ofResource" eType="ecore:EClass enactment.ecore#//Resource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//AvailabilityKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AvailabilityKind">
+    <eLiterals name="Available"/>
+    <eLiterals name="NoAvailable" value="1"/>
+    <eLiterals name="Busy" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FulfilmentAct" abstract="true" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relatedEvent" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass events.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LandmarkFulfilment" eSuperTypes="#//FulfilmentAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="landmark" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Landmark"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormConditionFulfilment" eSuperTypes="#//FulfilmentAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="norm" lowerBound="1" eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Norm"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//NormType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectiveFulfilment" eSuperTypes="#//FulfilmentAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objective" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Objective"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NormType">
+    <eLiterals name="Deadline"/>
+    <eLiterals name="ActivationCondition" value="1"/>
+    <eLiterals name="ExpirationCondition" value="2"/>
+    <eLiterals name="MaintainanceCondition" value="3"/>
+    <eLiterals name="What" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganisationAct" abstract="true" eSuperTypes="#//Fact"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PlayerFulfilment" eSuperTypes="#//OrganisationAct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="ecore:EClass platform:/plugin/net.sf.ictalive.operetta/model/OperA.ecore#//Player"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormInstanceAct" abstract="true" eSuperTypes="#//Fact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="normInstance" eType="ecore:EClass platform:/plugin/net.sf.ictalive.runtime.NormInstances/model/NormInstance.ecore#//NormInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NormInstanceViolated" eSuperTypes="#//NormInstanceAct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NormInstanceActivated" eSuperTypes="#//NormInstanceAct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NormInstanceExpired" eSuperTypes="#//NormInstanceAct"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="FailureReasons">
+    <eLiterals name="UnabletoPlanForTask" literal="UnabletoPlanForTask"/>
+    <eLiterals name="ActionNotPerformedByARole" value="1"/>
+    <eLiterals name="PreconditionFail" value="2"/>
+    <eLiterals name="ZeroServiceMatchesForAction" value="3"/>
+    <eLiterals name="NoUsableServiceMatchesForAction" value="4"/>
+    <eLiterals name="ServiceUnavailable" value="5"/>
+    <eLiterals name="ServiceFailure" value="6"/>
+    <eLiterals name="NullPointerException" value="7"/>
+  </eClassifiers>
+</ecore:EPackage>

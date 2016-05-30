@@ -125,44 +125,10 @@ public class ATLTransformationServiceImpl extends
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
 
 	@Override
-	public ATLTransformation findOnePublic(String id) {
-		ATLTransformation a = super.findOnePublic(id);
-		try {
-			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
-
-	@Override
-	public ATLTransformation findOneInProject(String project_id, String artifact_id, User user) {
-		ATLTransformation a = super.findOneInProject(project_id, artifact_id, user);
-		try {
-			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
-	
-	@Override
-	public ATLTransformation findOneById(String idArtifact, User user)
-			throws BusinessException {
-		ATLTransformation a = super.findOneById(idArtifact, user);
-		try {
-			a.setMetrics(getMetrics(a));
-		} catch (BusinessException e) {
-			logger.error(e.getMessage());
-		}
-		return a;
-	}
-
-	@Override
 	public ATLTransformation create(ATLTransformation artifact) {
 		ATLTransformation result = super.create(artifact);
 		try {
-			artifact.setMetrics(getMetrics(artifact));
+			artifact.setMetrics(calculateMetrics(artifact));
 			artifactRepository.save(artifact);
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
@@ -392,18 +358,7 @@ public class ATLTransformationServiceImpl extends
 		return result;
 	}
 
-	@Override
-	public List<Metric> getMetrics(Artifact emm) throws BusinessException {
-		try {
-			List<Metric> metricList = metricRepository
-					.findByArtifactId(new ObjectId(emm.getId()));
-			if (metricList.size() == 0)
-				metricList = calculateMetrics(emm);
-			return metricList;
-		} catch (Exception e) {
-			throw new BusinessException(e.getMessage());
-		}
-	}
+	
 
 	@Override
 	public String inject(ATLTransformation atlTransformation)

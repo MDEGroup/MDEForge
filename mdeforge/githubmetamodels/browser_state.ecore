@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="description"
+    nsURI="http://description/1.0" nsPrefix="description">
+  <eClassifiers xsi:type="ecore:EClass" name="BrowserState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedFacets" upperBound="-1"
+        eType="#//Facet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guiState" eType="#//GUIState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filteredContent" upperBound="-1"
+        eType="#//FragmentDescription"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="additionalFacets" upperBound="-1"
+        eType="#//FacetTypeDecorator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="presentedFacets" upperBound="-1"
+        eType="#//FacetTypeDecorator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetType" abstract="true">
+    <eOperations name="getQuery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" lowerBound="1"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" lowerBound="1"
+        upperBound="-1" eType="#//FacetValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Facet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//FacetType"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" lowerBound="1"
+        upperBound="-1" eType="#//FacetValue" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeID" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//FacetValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FragmentDescription" eSuperTypes="../../org.reuseware.coconut.repository/model/repository.ecore#//PackageableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" lowerBound="1"
+        eType="ecore:EClass ../../org.reuseware.coconut.fragment/model/fragment.ecore#//Fragment"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="derivationState" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetTypeDecorator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+        eType="#//FacetValueDecorator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decoratee" lowerBound="1"
+        eType="#//FacetType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selection" eType="#//Facet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetValueDecorator">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//FacetValueDecorator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decoratee" lowerBound="1"
+        eType="#//FacetValue"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="GUIState">
+    <eLiterals name="REFRESH_ALL"/>
+    <eLiterals name="REFRESH_VALUE_COUNTS"/>
+    <eLiterals name="UP_TO_DATE"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="subsumption"
+    nsURI="http://subsumption/1.0" nsPrefix="subsumption">
+  <eClassifiers xsi:type="ecore:EClass" name="System">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//Module" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="sample"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Module">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//Input" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//Output" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="period" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Output">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sink" upperBound="-1" eType="#//Input"
+        eOpposite="#//Input/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activates" upperBound="-1"
+        eType="#//Modifier" eOpposite="#//Modifier/controlledBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inhibitedBy" upperBound="-1"
+        eType="#//Inhibitor" containment="true" eOpposite="#//Inhibitor/inhibits"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Input">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Output"
+        eOpposite="#//Output/sink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suppressedBy" upperBound="-1"
+        eType="#//Suppressor" containment="true" eOpposite="#//Suppressor/suppress"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Suppressor" eSuperTypes="#//Modifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="0.0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suppress" lowerBound="1"
+        eType="#//Input" eOpposite="#//Input/suppressedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inhibitor" eSuperTypes="#//Modifier">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="0.0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inhibits" lowerBound="1"
+        eType="#//Output" eOpposite="#//Output/inhibitedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Modifier" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controlledBy" lowerBound="1"
+        eType="#//Output" eOpposite="#//Output/activates"/>
+  </eClassifiers>
+</ecore:EPackage>

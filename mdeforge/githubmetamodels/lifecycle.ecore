@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="lifecycle"
+    nsURI="http://www.thalesgroup.com/spem/2.0/lifecycle" nsPrefix="lifecycle">
+  <eClassifiers xsi:type="ecore:EClass" name="LifeCycle">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedState" upperBound="-1"
+        eType="#//AbstractState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTransition" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractState" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransition" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransition" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//AbstractState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="#//AbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//AbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//AbstractState" eOpposite="#//AbstractState/outgoingTransition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//AbstractState" eOpposite="#//AbstractState/incomingTransition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LifecycleElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lifecycle" eType="#//LifeCycle"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductUse" eSuperTypes="platform:/plugin/org.obeonetwork.dsl.spem/model/spem2.ecore#//WorkProductUse #//LifecycleElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkProductDefinition" eSuperTypes="platform:/plugin/org.obeonetwork.dsl.spem/model/spem2.ecore#//WorkProductDefinition #//LifecycleElement"/>
+</ecore:EPackage>

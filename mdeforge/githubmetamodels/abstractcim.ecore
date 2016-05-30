@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="abstractcim"
+    nsURI="http://www.reuseware.org/application/abstractcim" nsPrefix="abstractcim">
+  <eClassifiers xsi:type="ecore:EClass" name="CimModel">
+    <eAnnotations source="reuseware.root">
+      <details key="targetPort" value="extension"/>
+      <details key="sourcePort" value="contents"/>
+      <details key="targetUFI" value="abstractcim/EmptyCore.cim"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//CimModelElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CimModelElement" abstract="true">
+    <eAnnotations source="reuseware.fragment">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="reuseware.property">
+        <details key="port" value="name"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interface" abstract="true" eSuperTypes="#//CimModelElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IPInterface" abstract="true" eSuperTypes="#//Interface">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ipV4Address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="reuseware.property">
+        <details key="port" value="ipAddress"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subnetMask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="reuseware.property">
+        <details key="port" value="subnetMask"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Router" eSuperTypes="#//CimModelElement">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFI" value="abstractcim/Router.cim"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="devices" upperBound="-1"
+        eType="#//Interface">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="devices"/>
+        <details key="targetPort" value="device"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="services" eType="#//DHCPServer">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="services"/>
+        <details key="targetPort" value="service"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="forwardingServices" eType="#//NATService">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="forwardingServices"/>
+        <details key="targetPort" value="forwardingService"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filterList" eType="#//NATService">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="filterLists"/>
+        <details key="targetPort" value="filterList"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EthernetIPInterface" eSuperTypes="#//IPInterface">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFIExpr" value="&#xD;&#xA;&#x9;&#x9;if (self.numPort = 4) return 'abstractcim/4PortEthernetIPInterface.cim';&#xD;&#xA;&#x9;&#x9;if (self.numPort = 8) return 'abstractcim/8PortEthernetIPInterface.cim';"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ADSLIPInterface" eSuperTypes="#//IPInterface">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFI" value="abstractcim/ADSLIPInterface.cim"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WifiInterface" eSuperTypes="#//Interface">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFI" value="abstractcim/WifiInterface.cim"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPoint" eType="#//IPInterface">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="endPoint"/>
+        <details key="targetPort" value="ip"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DHCPServer" eSuperTypes="#//CimModelElement">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFI" value="abstractcim/DHCPServer.cim"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="reuseware.property">
+        <details key="port" value="startAddress"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="reuseware.property">
+        <details key="port" value="endAddress"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindsTo" eType="#//IPInterface">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="bindsTo"/>
+        <details key="targetPort" value="ip"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NATService" eSuperTypes="#//CimModelElement">
+    <eAnnotations source="reuseware.fragment">
+      <details key="UFI" value="abstractcim/NATService.cim"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPoint" eType="#//IPInterface">
+      <eAnnotations source="reuseware.link">
+        <details key="sourcePort" value="endPoint"/>
+        <details key="targetPort" value="ip"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

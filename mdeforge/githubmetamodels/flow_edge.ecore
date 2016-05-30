@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="flow_diagrams_with_edge"
+    nsURI="flow_diagrams_with_edge" nsPrefix="flow_diagrams_with_edge">
+  <eClassifiers xsi:type="ecore:EClass" name="FlowDiagram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+        eType="#//FlowEdge" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outs" upperBound="-1" eType="#//FlowEdge"
+        eOpposite="#//FlowEdge/in"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ins" upperBound="-1" eType="#//FlowEdge"
+        eOpposite="#//FlowEdge/out"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Node">
+    <eAnnotations source="cardinality">
+      <details key="min" value="0"/>
+      <details key="max" value="*"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowEdge">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//Node" eOpposite="#//Node/outs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//Node" eOpposite="#//Node/ins"/>
+  </eClassifiers>
+</ecore:EPackage>

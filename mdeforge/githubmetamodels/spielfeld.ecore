@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spielfeld"
+    nsURI="http://spielfeld/1.0" nsPrefix="spielfeld">
+  <eClassifiers xsi:type="ecore:EClass" name="Figur" eSuperTypes="#//ColoredSelectable">
+    <eOperations name="bewegen">
+      <eParameters name="zug" eType="#//Koordinate"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A unique id for the figure."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zugsetNormal" lowerBound="1"
+        eType="#//Zugset" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zugsetAngriff" lowerBound="1"
+        eType="#//Zugset" transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="True, if the Figure is still in the game (and not taken out already)."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Koordinate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ebene" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buchstabe" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zahl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zugset">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="straightLine" upperBound="-1"
+        eType="#//StraightLine" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="jumps" upperBound="-1"
+        eType="#//Jump" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Farbe">
+    <eLiterals name="orange"/>
+    <eLiterals name="grau" value="1"/>
+    <eLiterals name="beide" value="2"/>
+    <eLiterals name="unset" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StraightLine" eSuperTypes="#//EntityWithPosition">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The move is a straight line, which means it is a multiply of vector and a number. A stright line move stops, if one of the fields in the line is blocked."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxDist" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The maximum number, with which the inkrement vector is multiplied."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zug">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="figur" lowerBound="1" eType="#//Figur"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startPosition" lowerBound="1"
+        eType="#//Koordinate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endPosition" lowerBound="1"
+        eType="#//Koordinate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" eSuperTypes="#//ColoredSelectable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attackable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="possible" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EntityWithPosition" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
+        eType="#//Koordinate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Jump" eSuperTypes="#//EntityWithPosition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectablePosition" eSuperTypes="#//EntityWithPosition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selected" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColoredSelectable" eSuperTypes="#//SelectablePosition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="farbe" lowerBound="1" eType="#//Farbe"/>
+  </eClassifiers>
+</ecore:EPackage>

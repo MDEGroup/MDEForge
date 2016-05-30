@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="protein"
+    nsURI="http:///org/generationcp/model/data/expression/protein.ecore" nsPrefix="org.generationcp.model.data.expression.protein">
+  <eClassifiers xsi:type="ecore:EClass" name="AlphaHelix" eSuperTypes="#//ProteinDomain"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AminoAcid" eSuperTypes="ontology.ecore#//SimpleOntologyTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicPosition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="x" eType="ecore:EClass value.ecore#//Value"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="y" eType="ecore:EClass value.ecore#//Value"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="z" eType="ecore:EClass value.ecore#//Value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BetaSheet" eSuperTypes="#//ProteinDomain"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CatalyticMotif" eSuperTypes="#//ProteinMotif"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CysteineBridge" eSuperTypes="#//ResidueInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Loop" eSuperTypes="#//ProteinDomain"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PostTranslationalModificationSite" eSuperTypes="#//ProteinMotif"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Protein" eSuperTypes="expression.ecore#//GeneProduct">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="peptideSequences" upperBound="-1"
+        eType="ecore:EClass sequence.ecore#//PeptideSequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" upperBound="-1"
+        eType="#//ProteinStructure" eOpposite="#//ProteinStructure/protein"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteinDomain" eSuperTypes="sequence.ecore#//PeptideSequenceFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteinMotif" eSuperTypes="sequence.ecore#//PeptideSequenceFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteinNucleicAcidBindingMotif" eSuperTypes="#//ProteinMotif"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteinProteinBindingMotif" eSuperTypes="#//ProteinMotif"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteinStructure" eSuperTypes="core.ecore#//Entity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="protein" lowerBound="1"
+        eType="#//Protein" eOpposite="#//Protein/structures"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="origin" eType="#//AtomicPosition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="residueMappings" lowerBound="1"
+        upperBound="-1" eType="#//ResidueStructuralMapping" eOpposite="#//ResidueStructuralMapping/structure"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProteomicsExperiment" eSuperTypes="expression.ecore#//ExpressionStudy"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Residue" eSuperTypes="sequence.ecore#//PeptideSequenceFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="peptideSequence" lowerBound="1"
+        eType="ecore:EClass sequence.ecore#//PeptideSequence" eOpposite="sequence.ecore#//PeptideSequence/residues"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aminoAcid" lowerBound="1"
+        eType="#//AminoAcid" changeable="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="residueStructuralMappings"
+        upperBound="-1" eType="#//ResidueStructuralMapping" eOpposite="#//ResidueStructuralMapping/residue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResidueInteraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="residueStructuralMappings"
+        lowerBound="2" upperBound="2" eType="#//ResidueStructuralMapping" eOpposite="#//ResidueStructuralMapping/interactions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResidueStructuralMapping">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="residue" eType="#//Residue"
+        eOpposite="#//Residue/residueStructuralMappings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structure" eType="#//ProteinStructure"
+        eOpposite="#//ProteinStructure/residueMappings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" upperBound="-1"
+        eType="#//ResidueInteraction" eOpposite="#//ResidueInteraction/residueStructuralMappings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="coordinates" lowerBound="1"
+        upperBound="-1" eType="#//AtomicPosition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SaltBridge" eSuperTypes="#//ResidueInteraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Turn" eSuperTypes="#//ProteinDomain"/>
+</ecore:EPackage>

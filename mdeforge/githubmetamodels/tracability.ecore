@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="CacheTracability" nsURI="http://www.eclipse.org/tracability/1.0"
+    nsPrefix="CacheTracability">
+  <eClassifiers xsi:type="ecore:EClass" name="TraceabilityLink">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//TraceableElement" eOpposite="#//TraceableElement/outgoings"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targets" upperBound="-1"
+        eType="#//TraceableElement" eOpposite="#//TraceableElement/incomings"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="#//AnalyzedResource"
+        eOpposite="#//AnalyzedResource/links"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceableElement" eSuperTypes="#//URIElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoings" upperBound="-1"
+        eType="#//TraceabilityLink" eOpposite="#//TraceabilityLink/sources"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomings" upperBound="-1"
+        eType="#//TraceabilityLink" eOpposite="#//TraceabilityLink/targets"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="traceables" upperBound="-1"
+        eType="#//TraceableElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//AnalyzedResource" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnalyzedResource" eSuperTypes="#//URIElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="modificationTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contained" eType="#//TraceabilityLink"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//TraceabilityLink" containment="true" eOpposite="#//TraceabilityLink/resource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="URIElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

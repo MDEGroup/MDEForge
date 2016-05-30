@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="screens" nsURI="http://sigmax.nl/smp/screens/1.0" nsPrefix="screens">
+  <eClassifiers xsi:type="ecore:EClass" name="Application">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="screens" lowerBound="1"
+        upperBound="-1" eType="#//screen/Screen" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="screen" nsURI="http://sigmax.nl/smp/screens/1.0/screen" nsPrefix="screen">
+    <eClassifiers xsi:type="ecore:EClass" name="Screen" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" unique="false"
+          lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Dashboard" eSuperTypes="#//screen/Screen">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="screens" lowerBound="1"
+          upperBound="-1" eType="#//screen/Screen"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ListScreen" eSuperTypes="#//screen/Screen">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+          eType="#//entity/Entity"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="creatable" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="deletable" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailsScreen" eType="#//screen/DetailsScreen"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="showItemDetails" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="context"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DetailsScreen" eSuperTypes="#//screen/Screen">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+          eType="#//entity/Entity"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="refScreens" upperBound="-1"
+          eType="#//screen/DetailsScreen" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="entity" nsURI="http://sigmax.nl/smp/screens/1.0/entity" nsPrefix="entity">
+    <eClassifiers xsi:type="ecore:EClass" name="Entity">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+          eType="#//entity/EntityProperty" containment="true" eOpposite="#//entity/EntityProperty/entity"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHierarchical" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityProperty" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="binding" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isIdentifier" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+          eType="#//entity/Entity" eOpposite="#//entity/Entity/fields"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TextProperty" eSuperTypes="#//entity/EntityProperty"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BoolProperty" eSuperTypes="#//entity/EntityProperty"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RefProperty" eSuperTypes="#//entity/EntityProperty">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isMultiref" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="creatable" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="refEntityName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntProperty" eSuperTypes="#//entity/EntityProperty"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FloatProperty" eSuperTypes="#//entity/EntityProperty"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EnumProperty" eSuperTypes="#//entity/EntityProperty">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="options" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

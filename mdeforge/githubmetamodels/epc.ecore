@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="epc" nsURI="epc" nsPrefix="epc">
+  <eClassifiers xsi:type="ecore:EClass" name="EPCDiagram">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="flows" upperBound="-1"
+        eType="#//FlowConnector" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//ProcessObject" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
+        eType="#//OrganizationalUnit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowConnector" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ControlFlow" eSuperTypes="#//FlowConnector">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fsource" eType="#//Function"
+        eOpposite="#//Function/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ftarget" eType="#//Function"
+        eOpposite="#//Function/incoming"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lsource" eType="#//LogicalOperator"
+        eOpposite="#//LogicalOperator/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ltarget" eType="#//LogicalOperator"
+        eOpposite="#//LogicalOperator/incoming"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="esource" eType="#//Event"
+        eOpposite="#//Event/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="etarget" eType="#//Event"
+        eOpposite="#//Event/incoming"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationalFlow" eSuperTypes="#//FlowConnector">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Function"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" upperBound="-1"
+        eType="#//OrganizationalUnit" eOpposite="#//OrganizationalUnit/outgoing"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationalUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//OrganizationalFlow" eOpposite="#//OrganizationalFlow/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessObject" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" abstract="true" eSuperTypes="#//ProcessObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" lowerBound="1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/fsource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" lowerBound="1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/ftarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFunction" eSuperTypes="#//Function"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexFunction" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//EPCDiagram"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalOperator" abstract="true" eSuperTypes="#//ProcessObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/lsource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/ltarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="#//ProcessObject">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/esource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1"
+        eType="#//ControlFlow" eOpposite="#//ControlFlow/etarget"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="And" eSuperTypes="#//LogicalOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Or" eSuperTypes="#//LogicalOperator"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Xor" eSuperTypes="#//LogicalOperator"/>
+</ecore:EPackage>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sybasesqlmodel"
+    nsURI="http:///org/eclipse/datatools/enablement/sybase/sybasesqlmodel.ecore" nsPrefix="SybaseModel">
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseParameter" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//routines/Parameter">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class is introduced to work around the problem mentioned in BZ129326. When the desired attributes are added in the base model, this class can be removed."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="JDBCParameterType" eType="#//JDBCParameterType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseRoutine" abstract="true" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//routines/Routine #//SybaseAuthorizedObject">
+    <eOperations name="parseParameterDefaultValues">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Parses the source code to get parameter default values. Not intended for use by clients."/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseBaseTable" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/BaseTable #//SybaseAuthorizedObject">
+    <eOperations name="isSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="getCheckConstraints" eType="ecore:EDataType ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/List"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseViewTable" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/ViewTable #//SybaseAuthorizedObject">
+    <eOperations name="isSystem" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="JDBCParameterType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class maps to JDBC DatabaseMetadata.procedureColumnXXX types."/>
+    </eAnnotations>
+    <eLiterals name="Unknown" literal="Unknown"/>
+    <eLiterals name="In" value="1"/>
+    <eLiterals name="InOut" value="2"/>
+    <eLiterals name="Result" value="3"/>
+    <eLiterals name="Out" value="4"/>
+    <eLiterals name="Return" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseAuthorizationIdentifier" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//accesscontrol/AuthorizationIdentifier">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlContainer" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/SQLObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseIndexMember" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//constraints/IndexMember">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columnExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybaseAuthorizedObject" abstract="true"
+      interface="true" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/SQLObject">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="This class is introduced to work around the performance issue when loading privileges for an object"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SybasePrivilege" eSuperTypes="../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//accesscontrol/Privilege">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revoked" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+  </eClassifiers>
+</ecore:EPackage>

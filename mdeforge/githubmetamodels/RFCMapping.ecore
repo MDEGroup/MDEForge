@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mapping"
+    nsURI="http://www.sf.net/rcer/RFCMapping" nsPrefix="mapping">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" upperBound="-1"
+        eType="#//Structure" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="functionModules" upperBound="-1"
+        eType="#//FunctionModule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="BIG_DECIMAL" literal="BigDecimal"/>
+    <eLiterals name="BIG_INTEGER" value="1" literal="BigInteger"/>
+    <eLiterals name="BOOLEAN" value="2" literal="Boolean"/>
+    <eLiterals name="BYTE" value="3" literal="Byte"/>
+    <eLiterals name="BYTE_ARRAY" value="4" literal="ByteArray"/>
+    <eLiterals name="CHAR" value="5" literal="Char"/>
+    <eLiterals name="CHAR_ARRAY" value="6" literal="CharArray"/>
+    <eLiterals name="DATE" value="7" literal="Date"/>
+    <eLiterals name="DOUBLE" value="8" literal="Double"/>
+    <eLiterals name="FLOAT" value="9" literal="Float"/>
+    <eLiterals name="INTEGER" value="10" literal="Integer"/>
+    <eLiterals name="LONG" value="11" literal="Long"/>
+    <eLiterals name="SHORT" value="12" literal="Short"/>
+    <eLiterals name="STRING" value="13" literal="String"/>
+    <eLiterals name="TIME" value="14" literal="Time"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fullName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Structure">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//StructureMapping"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructureMapping"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructurePOJOMapping" eSuperTypes="#//StructureMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//StructureFieldPOJOMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructureFieldPOJOMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inactive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mapping" eType="#//FunctionModuleMapping"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModuleMapping"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOMapping" eSuperTypes="#//FunctionModuleMapping"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOCallMapping" eSuperTypes="#//FunctionModulePOJOMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="className" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//FunctionModulePOJOParameterMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJORequestResponseMapping"
+      eSuperTypes="#//FunctionModulePOJOMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="requestClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requestParameters" upperBound="-1"
+        eType="#//FunctionModulePOJOParameterMapping" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responseClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responseParameters" upperBound="-1"
+        eType="#//FunctionModulePOJOParameterMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inactive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structureMapping" eType="#//StructurePOJOMapping"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="external" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalClass" eType="#//Import"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOImportingParameter"
+      eSuperTypes="#//FunctionModulePOJOParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="structure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="table" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOExportingParameter"
+      eSuperTypes="#//FunctionModulePOJOParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="structure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="table" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOChangingParameter"
+      eSuperTypes="#//FunctionModulePOJOParameterMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="structure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="table" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionModulePOJOTablesParameter" eSuperTypes="#//FunctionModulePOJOParameterMapping"/>
+</ecore:EPackage>

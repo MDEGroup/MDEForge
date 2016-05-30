@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modulecore"
+    nsURI="modulecore.xmi" nsPrefix="org.eclipse.wst.common.modulecore">
+  <eClassifiers xsi:type="ecore:EClass" name="WorkbenchModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="handle" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deployedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//WorkbenchModuleResource" containment="true" eOpposite="#//WorkbenchModuleResource/module"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="moduleType" lowerBound="1"
+        eType="#//ModuleType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//DependentModule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkbenchModuleResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourcePath" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deployedPath" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exclusions" upperBound="-1"
+        eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+        eType="#//WorkbenchModule" transient="true" eOpposite="#//WorkbenchModule/resources"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModuleType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="metadataResources" upperBound="-1"
+        eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="moduleTypeId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="org.eclipse.emf.common.util.URI"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectModules">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workbenchModules" upperBound="-1"
+        eType="#//WorkbenchModule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependentModule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="handle" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deployedPath" eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dependencyType" eType="#//DependencyType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependencyType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="uses=0&#xD;&#xA;consumes=1"/>
+    </eAnnotations>
+    <eLiterals name="uses"/>
+    <eLiterals name="consumes" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

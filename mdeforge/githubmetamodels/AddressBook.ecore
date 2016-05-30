@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="addressbook"
+    nsURI="http://www.eclipse.org/example" nsPrefix="addressbook">
+  <eClassifiers xsi:type="ecore:EClass" name="AddressBook">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="persons" upperBound="-1"
+        eType="#//Person" containment="true" eOpposite="#//Person/addressBook"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="countries" upperBound="-1"
+        eType="#//Country" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addresses" upperBound="-1"
+        eType="#//Address" containment="true" eOpposite="#//Address/person"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addressBook" eType="#//AddressBook"
+        eOpposite="#//AddressBook/persons"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Address">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="street" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zip" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="city" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//Country"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="federalState" eType="#//FederalState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AddressType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" eType="#//Person"
+        eOpposite="#//Person/addresses"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Country">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="federalStates" upperBound="-1"
+        eType="#//FederalState" containment="true" eOpposite="#//FederalState/country"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addressBook" eType="#//AddressBook"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FederalState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//Country"
+        eOpposite="#//Country/federalStates"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AddressType">
+    <eLiterals name="PRIVATE"/>
+    <eLiterals name="BUSINESS" value="1"/>
+    <eLiterals name="DELIVERY" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ComBE" nsURI="ComBE" nsPrefix="ComBE">
+  <eAnnotations source="spoofax.config">
+    <details key="root" value="Specification"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="requirements"/>
+      <details key="1" value="components"/>
+      <details key="2" value="root"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"
+        eType="#//Requirement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//Component" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="root" eType="#//Root" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="id"/>
+      <details key="1" value="label"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="r">
+      <eAnnotations source="spoofax.def"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviorSeq">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="behaviortype"/>
+      <details key="1" value="behavior"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="behaviortype" lowerBound="1"
+        eType="#//BehaviorType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" upperBound="-1"
+        eType="#//Behavior" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Behavior">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="int"/>
+      <details key="1" value="label"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="int" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="b">
+      <eAnnotations source="spoofax.def"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Root">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="behaviortree"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviortree" lowerBound="1"
+        eType="#//BehaviorTree" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="c">
+      <eAnnotations source="spoofax.def"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behaviorseqs" upperBound="-1"
+        eType="#//BehaviorSeq" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StandardComponent" eSuperTypes="#//Component">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="id"/>
+      <details key="1" value="label"/>
+      <details key="2" value="behaviorseqs"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemComponent" eSuperTypes="#//Component">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="id"/>
+      <details key="1" value="label"/>
+      <details key="2" value="behaviorseqs"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BehaviorTree" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1" upperBound="-1"
+        eType="#//Node" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AtomicSequence" eSuperTypes="#//BehaviorTree">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="nodes"/>
+      <details key="1" value="child"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="child" eType="#//BehaviorTree"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlternativeBranch" eSuperTypes="#//BehaviorTree">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="nodes"/>
+      <details key="1" value="children"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//BehaviorTree" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParallelBranch" eSuperTypes="#//BehaviorTree">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="nodes"/>
+      <details key="1" value="children"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//BehaviorTree" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//Operator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StandardNode" eSuperTypes="#//Node">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="requirement"/>
+      <details key="1" value="traceabilitystatus"/>
+      <details key="2" value="component"/>
+      <details key="3" value="behavior"/>
+      <details key="4" value="label"/>
+      <details key="5" value="operator"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" lowerBound="1"
+        eType="#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceabilitystatus" eType="#//TraceabilityStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//Component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="behavior" lowerBound="1"
+        eType="#//Behavior"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmptyNode" eSuperTypes="#//Node">
+    <eAnnotations source="spoofax.term2feature">
+      <details key="0" value="label"/>
+      <details key="1" value="operator"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BehaviorType">
+    <eLiterals name="StateRealisation" literal="#S"/>
+    <eLiterals name="Selection" value="1" literal="#L"/>
+    <eLiterals name="Event" value="2" literal="#E"/>
+    <eLiterals name="Guard" value="3" literal="#G"/>
+    <eLiterals name="IIEvent" value="4" literal="#II"/>
+    <eLiterals name="IOEvent" value="5" literal="#IO"/>
+    <eLiterals name="EIEvent" value="6" literal="#EI"/>
+    <eLiterals name="EOEvent" value="7" literal="#EO"/>
+    <eLiterals name="Assertion" value="8" literal="#A"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TraceabilityStatus">
+    <eLiterals name="None" literal=""/>
+    <eLiterals name="Implied" value="1" literal="+"/>
+    <eLiterals name="Missing" value="2" literal="-"/>
+    <eLiterals name="Updated" value="3" literal="++"/>
+    <eLiterals name="Deleted" value="4" literal="--"/>
+    <eLiterals name="Refinement" value="5" literal="+-"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Operator">
+    <eLiterals name="None" literal=""/>
+    <eLiterals name="BranchKill" value="1" literal="--"/>
+    <eLiterals name="Conjunction" value="2" literal="&amp;"/>
+    <eLiterals name="Disjunction" value="3" literal="|"/>
+    <eLiterals name="May" value="4" literal="%"/>
+    <eLiterals name="Reference" value="5" literal="=>"/>
+    <eLiterals name="Reversion" value="6" literal="^"/>
+    <eLiterals name="StartNew" value="7" literal="^^"/>
+    <eLiterals name="Synchronisation" value="8" literal="="/>
+    <eLiterals name="XOR" value="9" literal="XOR"/>
+  </eClassifiers>
+</ecore:EPackage>

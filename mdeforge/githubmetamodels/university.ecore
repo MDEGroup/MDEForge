@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="universities"
+    nsURI="http://universities/1.0" nsPrefix="universities">
+  <eClassifiers xsi:type="ecore:EClass" name="University">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="associates" upperBound="-1"
+        eType="#//persons/Person" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modules" upperBound="-1"
+        eType="#//courses/Module" containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="persons">
+    <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="birthday" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Student" eSuperTypes="#//persons/Person">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="visitedCourses" upperBound="-1"
+          eType="#//courses/Events" eOpposite="#//courses/Events/visitors"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="passedExams" upperBound="-1"
+          eType="#//courses/PassedExam" eOpposite="#//courses/PassedExam/student"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="matriculationNumber"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Assistant" eSuperTypes="#//persons/Person">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="postDoc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tutorials" upperBound="-1"
+          eType="#//courses/Tutorial" eOpposite="#//courses/Tutorial/tutor"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Professor" eSuperTypes="#//persons/Person">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lectures" upperBound="-1"
+          eType="#//courses/Lecture" eOpposite="#//courses/Lecture/lecturer"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="infrastructure">
+    <eClassifiers xsi:type="ecore:EEnum" name="Building">
+      <eLiterals name="A"/>
+      <eLiterals name="B" value="1"/>
+      <eLiterals name="C" value="2"/>
+      <eLiterals name="D" value="3"/>
+      <eLiterals name="E" value="4"/>
+      <eLiterals name="F" value="5"/>
+      <eLiterals name="G" value="6"/>
+      <eLiterals name="H" value="7"/>
+      <eLiterals name="K" value="8"/>
+      <eLiterals name="M" value="9"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RoomBooking">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="building" eType="#//infrastructure/Building"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="roomNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dayOfWeek" eType="#//infrastructure/DayOfWeek"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="startHour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="endHour" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DayOfWeek">
+      <eLiterals name="MONDAY"/>
+      <eLiterals name="TUESDAY" value="1"/>
+      <eLiterals name="WEDNESDAY" value="2"/>
+      <eLiterals name="THURSDAY" value="3"/>
+      <eLiterals name="FRIDAY" value="4"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="courses">
+    <eClassifiers xsi:type="ecore:EClass" name="Module">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="events" lowerBound="1"
+          upperBound="-1" eType="#//courses/Events" containment="true" eOpposite="#//courses/Events/module"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Events" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="module" lowerBound="1"
+          eType="#//courses/Module" eOpposite="#//courses/Module/events"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="visitors" eType="#//persons/Student"
+          eOpposite="#//persons/Student/visitedCourses"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bookings" lowerBound="1"
+          upperBound="-1" eType="#//infrastructure/RoomBooking" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Lecture" eSuperTypes="#//courses/Events">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lecturer" lowerBound="1"
+          eType="#//persons/Professor" eOpposite="#//persons/Professor/lectures"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="topics" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Tutorial" eSuperTypes="#//courses/Events">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tutor" lowerBound="1"
+          upperBound="-1" eType="#//persons/Assistant" eOpposite="#//persons/Assistant/tutorials"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Exam" eSuperTypes="#//courses/Events">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="passingStudents" upperBound="-1"
+          eType="#//courses/PassedExam" eOpposite="#//courses/PassedExam/exam"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PassedExam">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="student" lowerBound="1"
+          eType="#//persons/Student" eOpposite="#//persons/Student/passedExams"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exam" lowerBound="1"
+          eType="#//courses/Exam" eOpposite="#//courses/Exam/passingStudents"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mark" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

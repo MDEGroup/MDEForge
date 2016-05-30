@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="yawl"
+    nsURI="http://www.cwi.nl/yawl" nsPrefix="yawl">
+  <eClassifiers xsi:type="ecore:EClass" name="SpecificationSet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specifications" upperBound="-1"
+        eType="#//Specification" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaData" eType="#//MetaData"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decompositions" upperBound="-1"
+        eType="#//Decomposition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Decomposition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//FactsType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootNet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processControlElements"
+        upperBound="-1" eType="#//ProcessControlElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FactsType">
+    <eLiterals name="NetFacts"/>
+    <eLiterals name="WebServiceGatewayFacts" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CombinationType">
+    <eLiterals name="AND"/>
+    <eLiterals name="OR" value="1"/>
+    <eLiterals name="XOR" value="2"/>
+    <eLiterals name="NORMAL" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProcessControlElement" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="flowsInto" upperBound="-1"
+        eType="#//ProcessControlElement" eOpposite="#//ProcessControlElement/flowsOutOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="flowsOutOf" upperBound="-1"
+        eType="#//ProcessControlElement" eOpposite="#//ProcessControlElement/flowsInto"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="decomposesTo" eType="#//Decomposition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//ProcessControlElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="joinType" eType="#//CombinationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="splitType" eType="#//CombinationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputCondition" eSuperTypes="#//ProcessControlElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputCondition" eSuperTypes="#//ProcessControlElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaData">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="validFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

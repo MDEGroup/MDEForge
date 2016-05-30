@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="captah" nsURI="http://captah/1.0" nsPrefix="captah">
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sensorUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataEncoding">
+    <eLiterals name="CSV"/>
+    <eLiterals name="SENML" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Widget" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Instance" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//Component"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//Component" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Composite" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instances" lowerBound="1"
+        upperBound="-1" eType="#//Instance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectors" upperBound="-1"
+        eType="#//Connector" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connector">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//Instance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//Instance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="#//Port"
+        eOpposite="#//Port/myConnection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portType" eType="#//SensorType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portEncoding" eType="#//DataEncoding"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="myConnection" eType="#//Connector"
+        eOpposite="#//Connector/port"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SensorType">
+    <eLiterals name="NUMERICAL_T"/>
+    <eLiterals name="BOOLEAN_T" value="1"/>
+    <eLiterals name="STRING_T" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dashboard" eSuperTypes="#//Composite"/>
+</ecore:EPackage>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sequenceDiagram"
+    nsURI="http://org.elsys.sequenceDiagram" nsPrefix="org.elsys.sequenceDiagram">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagram" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lifelines" upperBound="-1"
+        eType="#//Lifeline" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notes" upperBound="-1"
+        eType="#//Note" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="combinedFragments" upperBound="-1"
+        eType="#//CombinedFragment" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractDiagramElement" abstract="true"
+      eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Lifeline" eSuperTypes="#//AbstractDiagramElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Lifeline"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activationBars" upperBound="-1"
+        eType="#//ActivationBar" containment="true" eOpposite="#//ActivationBar/lifeline"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivationBar" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lifeline" eType="#//Lifeline"
+        eOpposite="#//Lifeline/activationBars"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sentConnections" upperBound="-1"
+        eType="#//Connection" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivedConnections" upperBound="-1"
+        eType="#//Connection"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="50"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sender" eType="#//ActivationBar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//ActivationBar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bendPoints" upperBound="-1"
+        eType="#//BendPoint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReturnConnection" eSuperTypes="#//Connection"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SendConnection" eSuperTypes="#//Connection">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//SendConnectionType"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SendConnectionType">
+    <eLiterals name="synchronous" value="1"/>
+    <eLiterals name="asynchronous"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResizableDiagramElement" abstract="true"
+      eSuperTypes="#//AbstractDiagramElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="100"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="50"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CombinedFragment" abstract="true" eSuperTypes="#//ResizableDiagramElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MidlineCombinedFragment" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="midlineY" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="25"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParallelCombinedFragment" eSuperTypes="#//CombinedFragment #//MidlineCombinedFragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalCombinedFragment" abstract="true"
+      eSuperTypes="#//CombinedFragment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlternativeCombinedFragment" eSuperTypes="#//OptionalCombinedFragment #//MidlineCombinedFragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BreakCombinedFragment" eSuperTypes="#//OptionalCombinedFragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopCombinedFragment" eSuperTypes="#//OptionalCombinedFragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionCombinedFragment" eSuperTypes="#//OptionalCombinedFragment"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Note" eSuperTypes="#//ResizableDiagramElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Note"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Note text"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BendPoint" eSuperTypes="#//AbstractElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+  </eClassifiers>
+</ecore:EPackage>

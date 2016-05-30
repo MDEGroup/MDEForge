@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0"
+  xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sdb"
+    nsURI="http://www.eclipse.org/hyades/models/SDB.xmi" nsPrefix="SDB">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="Internal package, please do not extend or use.&#xD;&#xA;The symptom data base is used to contain symptoms to be used by an analysis engine whne analyzing common base events"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="SDBRuntime">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A runtime instance typically represents a product or a system, such as a &#xD;&#xA;Relational Database or a web server.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Each runtime is uniquely identified by this value."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The name hold a short human readable title for the runtime. For example &quot;MyRDB product V6&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="symptomUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The symptom data base can have a URL associated with it to identify where it was downloaded from. This is a typical model to support refreshing of the DB."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="localExternalFileLocation"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A symptom DB for a given product can be provided as a local file, and this property captures the location as a convienence for refreshing."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A description of the runtime represented. This is humuan readable information and is determined by the runtime provider."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symptoms" upperBound="-1"
+        eType="#//SDBSymptom" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="solutions" upperBound="-1"
+        eType="#//SDBSolution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//SDBDirective" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDBSymptom">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A symptom is a unique set of match criteria that can be used to identify a &#xD;&#xA;problem. The uniqueness of the symptom is up ot the instance provider.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A human readable description of the problem is captured in this property. An example may be &quot;system hangs after loading file X&quot;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The id of a symptom uniquly identifies a symptom within a runtime. It is actually the only thing that must be unique within the  set of symptons for a given runtime."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="solutions" upperBound="-1"
+        eType="#//SDBSolution" eOpposite="#//SDBSolution/symptoms"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patterns" upperBound="-1"
+        eType="#//SDBMatchPattern" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Patterns are process in sequence to determine a complete match for a given symptom."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDBMatchPattern">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Match patterns are used in sequence to determine if a event being analyzed &#xD;&#xA;meets the criteria of a symptom.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="the name property hold the name of the field in an event that should be compared to the value as a test for this particular mathc pattern."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Value holds the literal string being used in the comparison."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDBSolution">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A solution is a action that can be taken to address the symptom. A solution can &#xD;&#xA;take the form of a message to a user or automated actions, and that is all &#xD;&#xA;defined by the directives.&#xD;&#xA;Solutions are owned by and unique to a runtime.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A human readable brief description an answer to the problem. For example a symptom that captures a performance throughput problem may have a solution of &quot;adjust the size fo the thread pool&quot;. This solution may be a fix for several different symptoms, and it may be detailed with several directives."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A solution is unque within a runtime environment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="directives" upperBound="-1"
+        eType="#//SDBDirective" eOpposite="#//SDBDirective/solutions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symptoms" upperBound="-1"
+        eType="#//SDBSymptom" eOpposite="#//SDBSymptom/solutions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SDBDirective">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Directives are the actual steps or actions that are recommended for a given &#xD;&#xA;solution.&#xD;&#xA;Although not required to be mutually exclusive the description and directive &#xD;&#xA;string are often not both used at the same time.&#xD;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A directtive has a unique identifier relative to the runtime that owns it."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="In the case that the action or directive take the form of a textual instruction for a user, that text would be held in this property. An example might be &quot;power on the server&quot;."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="directiveString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A directive string is intended to hold a meaningful string for the runtime to use in an automated or at least runtime unique reaction ot the symptom. &#xD;&#xA;For example the directive may contain a class name that the runtime could load and execute in order to collect more data or automate an adjustment."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="solutions" upperBound="-1"
+        eType="#//SDBSolution" eOpposite="#//SDBSolution/directives"/>
+  </eClassifiers>
+</ecore:EPackage>

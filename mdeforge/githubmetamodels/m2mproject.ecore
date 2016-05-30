@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
+    nsURI="http://www.anyware-tech.com/m2m/model/1.1" nsPrefix="m2m">
+  <eClassifiers xsi:type="ecore:EClass" name="M2MProject" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="LegalDataTypeDeclarations"/>
+    </eAnnotations>
+    <eOperations name="addComponentClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.M2MProjectOperations%>.addComponentClass(this, component);"/>
+      </eAnnotations>
+      <eParameters name="component" eType="#//ComponentClass"/>
+    </eOperations>
+    <eOperations name="removeComponentClass">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.M2MProjectOperations%>.removeComponentClass(this, component);"/>
+      </eAnnotations>
+      <eParameters name="component" eType="#//ComponentClass"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentClasses" upperBound="-1"
+        eType="#//ComponentClass" containment="true" eOpposite="#//ComponentClass/project"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainComponentClass" eType="#//ComponentClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypes" upperBound="-1"
+        eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dependencies" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataFlowComponentClass" eSuperTypes="#//ComponentClass">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="SynchronizationOfInternalPortsWithMethods"/>
+    </eAnnotations>
+    <eOperations name="addNode">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.ComponentClassOperations%>.addNode(this, node);"/>
+      </eAnnotations>
+      <eParameters name="node" eType="#//ComponentInstance"/>
+    </eOperations>
+    <eOperations name="remove">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.ComponentClassOperations%>.removeNode(this, node);"/>
+      </eAnnotations>
+      <eParameters name="node" eType="#//ComponentInstance"/>
+    </eOperations>
+    <eOperations name="getPort" eType="#//Port">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return &lt;%org.eclipse.koneki.mfe.model.operations.ComponentClassOperations%>.getPort(this, method);"/>
+      </eAnnotations>
+      <eParameters name="method" eType="#//Method"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//ComponentInstance" containment="true" eOpposite="#//ComponentInstance/containerClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/dataFlowComponentClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inlineClasses" upperBound="-1"
+        eType="#//ComponentClass" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputValuePort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receivers" upperBound="-1"
+        eType="#//InputValuePort" eOpposite="#//InputValuePort/emitter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="ClassPortSynchronizationWithMethod InstancePortSynchronizationWithMethod"/>
+    </eAnnotations>
+    <eOperations name="getArgumentDataTypes" unique="false" upperBound="-1" eType="#//DataTypeUse">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return &lt;%org.eclipse.koneki.mfe.model.operations.PortOperations%>.getArgumentDataTypes(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getResultDataType" eType="#//DataTypeUse">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return &lt;%org.eclipse.koneki.mfe.model.operations.PortOperations%>.getResultDataType(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentInstance" eType="#//ComponentInstance"
+        eOpposite="#//ComponentInstance/ports"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" lowerBound="1"
+        eType="#//Method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataFlowComponentClass"
+        eType="#//DataFlowComponentClass" eOpposite="#//DataFlowComponentClass/ports"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//PortType"
+        changeable="false" volatile="true" transient="true" defaultValueLiteral=""
+        derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputValuePort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emitter" lowerBound="1"
+        eType="#//OutputValuePort" eOpposite="#//OutputValuePort/receivers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutputEventPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="receiver" eType="#//InputEventPort"
+        eOpposite="#//InputEventPort/emitters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InputEventPort" eSuperTypes="#//Port">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="emitters" upperBound="-1"
+        eType="#//OutputEventPort" eOpposite="#//OutputEventPort/receiver"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceComponentClass" eSuperTypes="#//ComponentClass">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+        eType="#//ClassField" containment="true" eOpposite="#//ClassField/componentClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentClass" abstract="true" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="UniqueDataTypeVariableNames UniqueIdentConstructorParamNames NameUnique"/>
+    </eAnnotations>
+    <eOperations name="addMethod">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.ComponentClassOperations%>.addMethod(this, method);"/>
+      </eAnnotations>
+      <eParameters name="method" eType="#//Method"/>
+    </eOperations>
+    <eOperations name="removeMethod">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.ComponentClassOperations%>.removeMethod(this, method);"/>
+      </eAnnotations>
+      <eParameters name="method" eType="#//Method"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" lowerBound="1"
+        eType="#//M2MProject" eOpposite="#//M2MProject/componentClasses"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="methods" upperBound="-1"
+        eType="#//Method" containment="true" eOpposite="#//Method/componentClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructorParameters"
+        upperBound="-1" eType="#//ConstructorParameter" containment="true" eOpposite="#//ConstructorParameter/constructorClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataTypeVariables" upperBound="-1"
+        eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" eType="#//ComponentKind"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleInputValueMethod"
+        eType="#//Method"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="multipleOutputEventMethod"
+        eType="#//Method"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentInstance" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="SynchronizationOfPortsWithComponentClassMethods NameUnique LegalInstanceSubstitution SynchronizationOfContructorArgsAndParams"/>
+    </eAnnotations>
+    <eOperations name="resolveDataType" lowerBound="1" eType="#//DataTypeUse">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return &lt;%org.eclipse.koneki.mfe.model.operations.ComponentInstanceOperations%>.resolveDataType(this, datatype);"/>
+      </eAnnotations>
+      <eParameters name="datatype" eType="#//DataType"/>
+    </eOperations>
+    <eOperations name="setDataTypeSubstitution">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&lt;%org.eclipse.koneki.mfe.model.operations.ComponentInstanceOperations%>.setDataTypeSubstitution(this, variable, value);"/>
+      </eAnnotations>
+      <eParameters name="variable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/componentInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentClass" lowerBound="1"
+        eType="#//ComponentClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructorArguments" upperBound="-1"
+        eType="#//ConstructorArgument" containment="true" eOpposite="#//ConstructorArgument/containerInstance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerClass" lowerBound="1"
+        eType="#//DataFlowComponentClass" eOpposite="#//DataFlowComponentClass/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="substitution" lowerBound="1"
+        eType="#//InstanceSubstitution"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NameUnique LegalMethodDataTypeUse DatatypeNotEmpty LegalReturnType"/>
+    </eAnnotations>
+    <eOperations name="isMultiPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentClass" lowerBound="1"
+        eType="#//ComponentClass" eOpposite="#//ComponentClass/methods"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
+        eType="#//MethodDirection"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//MethodKind"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="argumentDataTypes" unique="false"
+        upperBound="-1" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resultDataType" eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MethodKind">
+    <eLiterals name="VALUE"/>
+    <eLiterals name="EVENT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MethodDirection">
+    <eLiterals name="INPUT"/>
+    <eLiterals name="OUTPUT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorParameter" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NameUnique"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructorClass" lowerBound="1"
+        eType="#//ComponentClass" eOpposite="#//ComponentClass/constructorParameters"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="nil"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructorArgument">
+    <eOperations name="getDataType" eType="#//DataTypeUse"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerInstance" lowerBound="1"
+        eType="#//ComponentInstance" eOpposite="#//ComponentInstance/constructorArguments"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DataType" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="INamedElement" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NameNotEmpty NameNotAKeyword"/>
+    </eAnnotations>
+    <eOperations name="getQualifiedName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metadata" upperBound="-1"
+        eType="#//Property" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PortType">
+    <eLiterals name="Undefined" literal="Undefined"/>
+    <eLiterals name="ClassPort" value="1"/>
+    <eLiterals name="InstancePort" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComponentKind">
+    <eLiterals name="BASIC"/>
+    <eLiterals name="SINGLETON" value="1"/>
+    <eLiterals name="INLINE" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RecordComponentClass" eSuperTypes="#//ComponentClass"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="InstanceSubstitution" instanceClassName="org.eclipse.koneki.mfe.model.datatypes.InstanceSubstitution"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Unification" instanceClassName="org.eclipse.koneki.mfe.model.datatypes.UnificationSubstitution"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassField" eSuperTypes="#//INamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="NameUnique"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="InitValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="componentClass" lowerBound="1"
+        eType="#//SourceComponentClass" eOpposite="#//SourceComponentClass/fields"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="DataTypeUse" instanceClassName="org.eclipse.koneki.mfe.model.datatypes.DataTypeUse"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

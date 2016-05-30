@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="BONModel"
+    nsURI="http://www.ucd.ie/bonide/BONModel" nsPrefix="BONModel">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eOperations name="covariant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="featureOne" eType="#//Feature"/>
+      <eParameters name="featureTwo" eType="#//Feature"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="closure" upperBound="-1"
+        eType="#//Inheritance"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractions" upperBound="-1"
+        eType="#//Abstraction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//Relationship" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Relationship" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//Abstraction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//Abstraction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Abstraction" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="relationships" upperBound="-1"
+        eType="#//Relationship"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contains" upperBound="-1"
+        eType="#//Abstraction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticRelationship" abstract="true"
+      eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StaticAbstraction" abstract="true" eSuperTypes="#//Abstraction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Inheritance" eSuperTypes="#//StaticRelationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ClientSupplier" abstract="true" eSuperTypes="#//StaticRelationship">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aggregation" eSuperTypes="#//ClientSupplier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Association" eSuperTypes="#//ClientSupplier"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Message" eSuperTypes="#//Relationship"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="#//StaticAbstraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//StaticAbstraction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BONClass" eSuperTypes="#//StaticAbstraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callsInInvariants" upperBound="-1"
+        eType="#//Call"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clientFeatures" upperBound="-1"
+        eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renamings" upperBound="-1"
+        eType="#//Renaming"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renameClassParents" upperBound="-1"
+        eType="#//BONClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDeferred" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEffective" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isPersistent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isExternal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRoot" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="redefined" upperBound="-1"
+        eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allNames" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invariant" eType="#//DoubleStateAssertion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//Feature" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Call" abstract="true">
+    <eOperations name="isValid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject">
+      <eParameters name="aClass" eType="#//BONClass"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+        eType="#//Parameter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="#//Feature"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" eType="#//Entity"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true">
+    <eOperations name="rename">
+      <eParameters name="newName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDeferred" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEffective" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isRedefined" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="accessors" upperBound="-1"
+        eType="#//BONClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callsInPrecondition" upperBound="-1"
+        eType="#//Call"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="callsInPostcondition" upperBound="-1"
+        eType="#//Call"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="frame" upperBound="-1"
+        eType="#//Query"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postCondition" eType="#//DoubleStateAssertion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preCondition" eType="#//SingleStateAssertion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preConditionString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="postConditionString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Renaming"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DynamicAbstraction" eSuperTypes="#//Abstraction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Object" eSuperTypes="#//DynamicAbstraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="class" eType="#//BONClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectCluster" eSuperTypes="#//DynamicAbstraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contents" upperBound="-1"
+        eType="#//DynamicAbstraction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Command" eSuperTypes="#//Feature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//Feature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="result" eType="#//BONClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="noContract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//BONClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectCall" eSuperTypes="#//Call"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ChainedCall" eSuperTypes="#//Call">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="chain" eType="#//Call"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultType" eType="#//BONClass"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contents" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//Expression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Assertion" eSuperTypes="#//BooleanExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SingleStateAssertion" eSuperTypes="#//Assertion"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DoubleStateAssertion" eSuperTypes="#//Assertion"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Entity"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="RelationshipType">
+    <eLiterals name="Inheritance"/>
+    <eLiterals name="Association"/>
+    <eLiterals name="Aggregation"/>
+  </eClassifiers>
+</ecore:EPackage>

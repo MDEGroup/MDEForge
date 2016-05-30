@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="typemodel"
+    nsURI="http://typemodel/1.0" nsPrefix="typemodel">
+  <eAnnotations source="oisad">
+    <details key="asd"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calendar" lowerBound="1"
+        eType="#//Calendar" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Calendar">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="appointments" upperBound="-1"
+        eType="#//Appointment" containment="true" eOpposite="#//Appointment/calendars"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Appointment">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//AppointmentType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calendar" upperBound="-1"
+        eType="#//Calendar"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="calendars" upperBound="-1"
+        eType="#//Calendar" containment="true" eOpposite="#//Calendar/appointments"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AppointmentType">
+    <eLiterals name="Free"/>
+    <eLiterals name="Blocked" value="1"/>
+    <eLiterals name="PotentiallyBlocked" value="2"/>
+    <eLiterals name="Away" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ICalendarManagement" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IUserManagement" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="" upperBound="-1" eType="#//User"
+        containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="CalendarManagement"/>
+</ecore:EPackage>

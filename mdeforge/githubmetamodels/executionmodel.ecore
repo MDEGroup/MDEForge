@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="executionmodel"
+    nsURI="http:///org/isistan/flabot/executionmodel.ecore" nsPrefix="org.isistan.flabot.executionmodel">
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionInfo">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executionSteps" upperBound="-1"
+        eType="#//ExecutionStep" containment="true" resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionInfoManager" eSuperTypes="#//Adapter">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executions" upperBound="-1"
+        eType="#//ExecutionInfo" containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentExecution" eType="#//ExecutionInfo"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fileModel" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/editormodel.ecore#//FlabotFileModel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependency" eType="#//Dependency"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceComponentToSource"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceComponentToTarget"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagnosticToSource" eType="ecore:EClass executionstate.ecore#//Diagnostic"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagnosticToTarget" eType="ecore:EClass executionstate.ecore#//Diagnostic"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="finalState" eType="ecore:EEnum executionstate.ecore#//ExecutionState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executionContext" eType="#//ExecutionContext"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResponsibilityNodeToExecutionStateMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//ResponsibilityNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EEnum executionstate.ecore#//ExecutionState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Adapter" instanceClassName="org.eclipse.emf.common.notify.Adapter"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionContext">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentResponsibility"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preResponsibility" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentStep" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentScenario" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dependencies" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentFamily" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="'Family'"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="family" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Family"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentTypeDependency"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="[]"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentDependency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="[]"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentAnalizeDependency"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="DEFAULT_DEPENDENCY"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="event" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="Event"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prologKnowledge" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentLogicModule" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityToExecute"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mappingFamily" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastMappingFamily" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stubNode" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="startNodeToStub" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="endNodeToStub" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityToStub" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preResponsibilityToStub"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopStep" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceComponentToSource"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanceComponentToTarget"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//ComponentRole"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsibilityToJoin" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preResponsibilityToJoin"
+        eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branchJoin" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EStringToStringMapEntry"
+        containment="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEObjectMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EStringToEJavaObjectMapEntry" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimplePathNodeToExecutionStateMapEntry"
+      instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EEnum executionstate.ecore#//ExecutionState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EvaluationStep">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../../../../../org.isistan.flabot/src/org/isistan/flabot/coremodel.ecore#//SimplePathNode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentFamily" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

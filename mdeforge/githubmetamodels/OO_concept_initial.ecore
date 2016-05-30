@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="OO_concept" nsURI="OO_concept" nsPrefix="OO_concept">
+  <eClassifiers xsi:type="ecore:EClass" name="PackageableElement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//PackageableElement #//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packagedElement" upperBound="-1"
+        eType="#//PackageableElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Class" eSuperTypes="#//PackageableElement #//Classifier #//Type">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedOperation" upperBound="-1"
+        eType="#//Operation" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedAttribute" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nestedClassifier" upperBound="-1"
+        eType="#//Classifier" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAbstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibility" eType="#//VisibilityKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Model" eSuperTypes="#//Package"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//TypedElement #//BehavioralFeature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedParameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Feature" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" eSuperTypes="#//TypedElement #//StructuralFeature"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//TypedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Generalization">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="general" lowerBound="1"
+        eType="#//Classifier"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specific" lowerBound="1"
+        eType="#//Classifier" eOpposite="#//Classifier/generalization"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="supplier" lowerBound="1"
+        upperBound="-1" eType="#//NamedElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="client" lowerBound="1"
+        upperBound="-1" eType="#//NamedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Classifier" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generalization" upperBound="-1"
+        eType="#//Generalization" containment="true" eOpposite="#//Generalization/specific"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BehavioralFeature" abstract="true" eSuperTypes="#//Feature">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="method" upperBound="-1"
+        eType="#//Behavior"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Behavior" eSuperTypes="#//Class"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralFeature" abstract="true" eSuperTypes="#//Feature"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="VisibilityKind">
+    <eLiterals name="public"/>
+    <eLiterals name="private" value="1"/>
+    <eLiterals name="protected" value="2"/>
+    <eLiterals name="package" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

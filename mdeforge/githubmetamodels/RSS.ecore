@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rss"
+    nsURI="http://rss/2.5.6" nsPrefix="rss">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="RSSModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pipes" lowerBound="1" upperBound="-1"
+        eType="#//Pipe" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" lowerBound="1"
+        upperBound="-1" eType="#//Source" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="presentation" lowerBound="1"
+        eType="#//Layout" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blocks" upperBound="-1"
+        eType="#//Block" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pipe">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//InTerminal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" lowerBound="1" eType="#//OutTerminal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" lowerBound="1"
+        upperBound="-1" eType="#//InTerminal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+        eType="#//OutTerminal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Layout">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="L1 L2 L3"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="L1" value="self.oclAsSet()->collect(cells)->forAll(c : PresentationCell | c.row &lt;= self.rows and c.row > 0)"/>
+      <details key="L2" value="self.oclAsSet()->collect(cells)->forAll(c : PresentationCell | c.column &lt;= self.columns and c.column > 0)"/>
+      <details key="L3" value="self.oclAsSet()->collect(cells)->forAll(c : PresentationCell | self.oclAsSet()->collect(cells)->select(pc : PresentationCell | (pc.row = c.row and pc.column = c.column))->size() = 1)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cells" lowerBound="1" upperBound="-1"
+        eType="#//PresentationCell" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rows" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="columns" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="theme" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sort" eSuperTypes="#//Block">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderType" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderDirection" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="#//Block">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="F1"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="F1" value="self.oclAsSet()->collect(text)->forAll(c : String | c.size() > 0)"/>
+    </eAnnotations>
+    <eOperations name="formattedFromDateString" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="formattedToDateString" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fromDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toDate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Source">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="S1 S2 S3"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="S1" value="self.name.size() > 0"/>
+      <details key="S2" value="self.url.size() > 0"/>
+      <details key="S3" value="let s : String = self.url.substring(1, 7) in s = 'http://'"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+        eType="#//OutTerminal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PresentationCell">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="row" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="theme" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" lowerBound="1"
+        upperBound="-1" eType="#//InTerminal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InTerminal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OutTerminal">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

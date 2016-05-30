@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_Tb04gXT5EeCrWsURfnMdtQ"
+    name="leaguetable" nsURI="platform:/plugin/org.eclipse.emf.js4emf.examples.leaguetable/model/leaguetable.ecore"
+    nsPrefix="leaguetable">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/Javascript"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" xmi:id="_621qUHT5EeCrWsURfnMdtQ" name="MatchResult">
+    <eOperations name="isDraw" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="return this.points1 == this.points2; "/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="isWinner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="if (participant == this.participant1) {&#xA;&#x9;return this.points1 > this.points2;&#xA;} else if (participant == this.participant2) {&#xA;&#x9;return this.points2 > this.points1;&#xA;}&#xA;return false;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="participant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="isParticipant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="return (participant == this.participant1 || participant == this.participant2);"/>
+      </eAnnotations>
+      <eParameters name="participant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="checkParticipantsSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="body" value="return this.participant1 != null &amp;&amp; this.participant2 != null;"/>
+      </eAnnotations>
+      <eParameters name="diagnostics" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDiagnosticChain"/>
+      <eParameters name="context" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participant1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participant2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LeagueTableRow">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LeagueTable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="matchResultsParticipants"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+      <details key="matchResultsParticipants" value="var leagueTable = this;&#xA;return this.matchResults.every(function (matchResult) {&#xA;&#x9;return leagueTable.participants.contains(matchResult.participant1) &amp;&amp; leagueTable.participants.contains(matchResult.participant2);&#xA;});&#xA;"/>
+    </eAnnotations>
+    <eOperations name="getMatchResultParticipantPoints" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="if (matchResult.isWinner(participant)) {&#xA;&#x9;return 3;&#xA;} else if (matchResult.isParticipant(participant) &amp;&amp; matchResult.isDraw()) {&#xA;&#x9;return 1;&#xA;}&#xA;return 0;&#xA;"/>
+      </eAnnotations>
+      <eParameters name="matchResult" eType="#_621qUHT5EeCrWsURfnMdtQ"/>
+      <eParameters name="participant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="participants" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="matchResults" upperBound="-1"
+        eType="#_621qUHT5EeCrWsURfnMdtQ" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableRows" eType="#//LeagueTableRow"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/Javascript">
+        <details key="Javascript" value="var leagueTable = this;&#xA;var tableRows = newList(this.participants.size());&#xA;var i;&#xA;for (i = 0; i &lt; this.participants.size(); i++) {&#xA;&#x9;var tableRow = $leaguetable.$LeagueTableRow.create();&#xA;&#x9;tableRow.participant = this.participants[i];&#xA;&#x9;tableRow.points = this.matchResults.sum(function (matchResult) {&#xA;&#x9;&#x9;return leagueTable.getMatchResultParticipantPoints(matchResult, tableRow.participant);&#xA;&#x9;});&#xA;&#x9;tableRows.add(tableRow);&#xA;}&#xA;return tableRows.sort('points').reverse();&#xA;"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

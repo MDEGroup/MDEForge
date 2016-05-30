@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.sourcepit.org/maven/dependency/model/0.1"
+    nsPrefix="maven-dependency-model">
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyNode">
+    <eOperations name="getGroupId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getArtifactId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getEffectiveScope" lowerBound="1" eType="ecore:EEnum ../../../../common-maven/src/main/emf/maven.ecore#//Scope"/>
+    <eOperations name="getEffectiveVersionConstraint" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getClassifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getType" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifact" lowerBound="1"
+        eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//DependencyNode" containment="true" eOpposite="#//DependencyNode/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="selected" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//DependencyNode"
+        eOpposite="#//DependencyNode/children"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inheritedScope" eType="ecore:EDataType ../../../../common-maven/src/main/emf/maven.ecore#//NullableScope"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="managedVersionConstraint"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="managedScope" eType="ecore:EDataType ../../../../common-maven/src/main/emf/maven.ecore#//NullableScope"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conflictNode" eType="#//DependencyNode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declaredDependency" lowerBound="1"
+        eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenDependency"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conflictVersionConstraint"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cycleNode" eType="#//DependencyNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyModel">
+    <eOperations name="getDependencyTree" eType="#//DependencyTree">
+      <eParameters name="artifact" eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact"/>
+    </eOperations>
+    <eOperations name="getDependencyTree" eType="#//DependencyTree">
+      <eParameters name="artifactKey" eType="ecore:EDataType ../../../../common-maven/src/main/emf/maven.ecore#//ArtifactKey"/>
+    </eOperations>
+    <eOperations name="getArtifact" eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact">
+      <eParameters name="artifactKey" eType="ecore:EDataType ../../../../common-maven/src/main/emf/maven.ecore#//ArtifactKey"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifacts" upperBound="-1"
+        eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencyTrees" upperBound="-1"
+        eType="#//DependencyTree" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootArtifacts" upperBound="-1"
+        eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DependencyTree">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifact" lowerBound="1"
+        eType="ecore:EClass ../../../../common-maven/src/main/emf/maven.ecore#//MavenArtifact"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencyNodes" upperBound="-1"
+        eType="#//DependencyNode" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

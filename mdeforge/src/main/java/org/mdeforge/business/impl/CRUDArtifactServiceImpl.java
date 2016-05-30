@@ -34,7 +34,6 @@ import org.mdeforge.integration.WorkspaceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -77,6 +76,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	protected Class<T> persistentClass;
+	@Override
+	
 	public void createIndex() {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 
@@ -147,7 +148,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c3 = Criteria.where("_id").is(artifact_id);
-		Criteria publicCriteria = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(
 					persistentClass.getCanonicalName());
@@ -161,6 +161,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		artifact.getFile().setByteArray(
 				gridFileMediaService.getFileByte(artifact));
 		Project proj = projectRepository.findOne(project_id);
+		artifact.setMetrics(metricRepository.findByArtifactId(new ObjectId(artifact_id)));
 		if(proj == null)
 			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
 		if(artifact.getProjects().contains(proj))
@@ -573,6 +574,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		T art = n.findOne(query, persistentClass);
 		if (art == null)
 			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		art.setMetrics(metricRepository.findByArtifactId(new ObjectId(id)));
 		return art;
 	}
 

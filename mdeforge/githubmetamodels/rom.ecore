@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rom"
+    nsURI="http://rcer.sf.net/rom" nsPrefix="net.sf.rcer">
+  <eClassifiers xsi:type="ecore:EDataType" name="Locale" instanceClassName="net.sf.rcer.conn.locales.Locale"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="IStatus" instanceClassName="org.eclipse.core.runtime.IStatus"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="JCoDestination" instanceClassName="com.sap.conn.jco.JCoDestination"
+      serializable="false"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ObjectNotFoundException" instanceClassName="net.sf.rcer.rom.util.ObjectNotFoundException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ObjectLoadingException" instanceClassName="net.sf.rcer.rom.util.ObjectLoadingException"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LocalizedString" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" ordered="false" unique="false"
+        lowerBound="1" eType="#//Locale"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryObjectKey">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="programID" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectTypeID" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RepositoryObjectType">
+    <eLiterals name="UNKNOWN"/>
+    <eLiterals name="PACKAGE" value="10"/>
+    <eLiterals name="DOMAIN" value="20"/>
+    <eLiterals name="DATA_ELEMENT" value="21"/>
+    <eLiterals name="TABLE" value="22" literal="TABLE"/>
+    <eLiterals name="STRUCTURE" value="23" literal="STRUCTURE"/>
+    <eLiterals name="TABLE_TYPE" value="24"/>
+    <eLiterals name="VIEW" value="25"/>
+    <eLiterals name="SEARCH_HELP" value="26"/>
+    <eLiterals name="ENQUEUE_OBJECT" value="27"/>
+    <eLiterals name="INTERFACE" value="40"/>
+    <eLiterals name="CLASS" value="41"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryObject" abstract="true">
+    <eOperations name="getCollection" ordered="false" unique="false" lowerBound="1"
+        eType="#//RepositoryObjectCollection"/>
+    <eOperations name="getPackage" ordered="false" unique="false" lowerBound="1" eType="#//RepositoryPackage"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getProgramID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getObjectTypeID" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eOperations name="getKey" ordered="false" unique="false" lowerBound="1" eType="#//RepositoryObjectKey"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectType" ordered="false"
+        unique="false" lowerBound="1" eType="#//RepositoryObjectType" changeable="false"
+        volatile="true" transient="true" defaultValueLiteral="" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" unique="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loaded" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceSystem" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generated" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalLocale" ordered="false"
+        unique="false" eType="#//Locale"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="softwareComponent" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentRelease" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryObjectCollection">
+    <eOperations name="loadObject" ordered="false" unique="false" lowerBound="1" eType="#//RepositoryObject"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="key" ordered="false" unique="false" lowerBound="1" eType="#//RepositoryObjectKey"/>
+    </eOperations>
+    <eOperations name="getPackage" ordered="false" unique="false" lowerBound="1" eType="#//RepositoryPackage"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getDomain" ordered="false" unique="false" lowerBound="1" eType="ecore:EClass ddic.ecore#//Domain"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getDataElement" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass ddic.ecore#//DataElement" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getStructure" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass ddic.ecore#//Structure" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getTable" ordered="false" unique="false" lowerBound="1" eType="ecore:EClass ddic.ecore#//Table"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getTableType" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass ddic.ecore#//TableType" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getView" ordered="false" unique="false" lowerBound="1" eType="ecore:EClass ddic.ecore#//View"
+        eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getSearchHelp" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass ddic.ecore#//SearchHelp" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getEnqueueObject" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass ddic.ecore#//EnqueueObject" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getABAPInterface" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass abapobj.ecore#//ABAPInterface" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getABAPClass" ordered="false" unique="false" lowerBound="1"
+        eType="ecore:EClass abapobj.ecore#//ABAPClass" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="name" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="load" ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceConnection" ordered="false"
+        unique="false" eType="#//JCoDestination" transient="true" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packages" ordered="false"
+        upperBound="-1" eType="#//RepositoryPackage" containment="true" eOpposite="#//RepositoryPackage/collection"
+        eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="domains" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//Domain" containment="true"
+        eOpposite="ddic.ecore#//Domain/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataElements" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//DataElement" containment="true"
+        eOpposite="ddic.ecore#//DataElement/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structures" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//Structure" containment="true"
+        eOpposite="ddic.ecore#//Structure/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//Table" containment="true"
+        eOpposite="ddic.ecore#//Table/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableTypes" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//TableType" containment="true"
+        eOpposite="ddic.ecore#//TableType/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//View" containment="true"
+        eOpposite="ddic.ecore#//View/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="seachHelps" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//SearchHelp" containment="true"
+        eOpposite="ddic.ecore#//SearchHelp/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="enqueueObjects" ordered="false"
+        upperBound="-1" eType="ecore:EClass ddic.ecore#//EnqueueObject" containment="true"
+        eOpposite="ddic.ecore#//EnqueueObject/collection" eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interfaces" ordered="false"
+        upperBound="-1" eType="ecore:EClass abapobj.ecore#//ABAPInterface" containment="true"
+        eKeys="#//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classes" ordered="false"
+        upperBound="-1" eType="ecore:EClass abapobj.ecore#//ABAPClass" containment="true"
+        eKeys="#//RepositoryObject/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PackageType">
+    <eLiterals name="STANDARD"/>
+    <eLiterals name="MAIN" value="1"/>
+    <eLiterals name="STRUCTURAL" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PackagePermittedObjectTypes">
+    <eLiterals name="ALL"/>
+    <eLiterals name="DESCRIPTIVE_OBJECTS_ONLY" value="1" literal="D"/>
+    <eLiterals name="FUNCTIONAL_OBJECTS_ONLY" value="2" literal="F"/>
+    <eLiterals name="OTR_OBJECTS_ONLY" value="3" literal="O"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryPackage" eSuperTypes="#//RepositoryObject">
+    <eOperations name="loadContents" eExceptions="#//ObjectNotFoundException #//ObjectLoadingException">
+      <eParameters name="failOnError" ordered="false" unique="false" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="description" ordered="false"
+        unique="false" upperBound="-1" eType="#//LocalizedString" changeable="false"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objectKeys" ordered="false"
+        upperBound="-1" eType="#//RepositoryObjectKey" eKeys="#//RepositoryObjectKey/programID #//RepositoryObjectKey/objectTypeID #//RepositoryObjectKey/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" ordered="false"
+        upperBound="-1" eType="#//RepositoryObject" eKeys="#//RepositoryObject/objectType #//RepositoryObject/name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subPackageNames" ordered="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="changeRecodingEnabled"
+        ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="responsibleUser" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transportLayer" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfacePrefix" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="permittedObjectTypes" ordered="false"
+        unique="false" lowerBound="1" eType="#//PackagePermittedObjectTypes" defaultValueLiteral="ALL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectCreationRestricted"
+        ordered="false" unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" unique="false"
+        lowerBound="1" eType="#//PackageType" defaultValueLiteral="STANDARD"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkedAsServer" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkedAsClient" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" ordered="false"
+        unique="false" eType="#//RepositoryObjectCollection" changeable="false" derived="true"
+        eOpposite="#//RepositoryObjectCollection/packages"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectsLoaded" ordered="false"
+        unique="false" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        transient="true" defaultValueLiteral="false"/>
+  </eClassifiers>
+</ecore:EPackage>

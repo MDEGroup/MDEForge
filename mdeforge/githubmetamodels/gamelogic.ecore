@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="gamelogic" nsURI="http://mmocore.ru/model/gamelogic/1.0.0" nsPrefix="mmocore-gamelogic">
+  <eClassifiers xsi:type="ecore:EClass" name="LogicBrick" abstract="true" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicObject" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensors" upperBound="-1"
+        eType="#//Sensor" containment="true" eOpposite="#//Sensor/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controllers" upperBound="-1"
+        eType="#//Controller" containment="true" eOpposite="#//Controller/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuators" upperBound="-1"
+        eType="#//Actuator" containment="true" eOpposite="#//Actuator/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true" eOpposite="#//Property/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//LogicProject"
+        eOpposite="#//LogicProject/objects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="script" eType="ecore:EClass ../../ru.mmocore.model/model/mmocore.ecore#//UrlResource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controls" upperBound="-1"
+        eType="#//LogicControl" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Controller" abstract="true" eSuperTypes="#//LogicBrick">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensors" upperBound="-1"
+        eType="#//Sensor" eOpposite="#//Sensor/controllers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuators" upperBound="-1"
+        eType="#//Actuator" eOpposite="#//Actuator/controllers"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateMask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//LogicObject"
+        eOpposite="#//LogicObject/controllers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sensor" abstract="true" eSuperTypes="#//LogicBrick">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controllers" upperBound="-1"
+        eType="#//Controller" eOpposite="#//Controller/sensors"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="positivePulseMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="negativePulseMode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="frequency" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="invert" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="level" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tap" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//LogicObject"
+        eOpposite="#//LogicObject/sensors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actuator" eSuperTypes="#//LogicBrick">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="controllers" upperBound="-1"
+        eType="#//Controller" eOpposite="#//Controller/actuators"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sensors" upperBound="-1"
+        eType="#//ActuatorSensor" containment="true" eOpposite="#//ActuatorSensor/actuator"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateMask" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maskOperation" eType="#//MaskOperation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//LogicObject"
+        eOpposite="#//LogicObject/actuators"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicController" eSuperTypes="#//Controller">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="#//LogicOperation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LogicOperation">
+    <eLiterals name="NOP"/>
+    <eLiterals name="AND" value="1"/>
+    <eLiterals name="OR" value="2"/>
+    <eLiterals name="XOR" value="3"/>
+    <eLiterals name="NAND" value="4"/>
+    <eLiterals name="NOR" value="5"/>
+    <eLiterals name="XNOR" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MaskOperation">
+    <eLiterals name="NOP"/>
+    <eLiterals name="ADD" value="1"/>
+    <eLiterals name="SUB" value="2"/>
+    <eLiterals name="CPY" value="3"/>
+    <eLiterals name="INV" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertySensor" eSuperTypes="#//Sensor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EqualPropertySensor" eSuperTypes="#//PropertySensor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntervalPropertySensor" eSuperTypes="#//PropertySensor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property" abstract="true" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Identifiable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//LogicObject"
+        eOpposite="#//LogicObject/properties"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notify" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="persist" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FloatProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanProperty" eSuperTypes="#//Property">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyActuator" eSuperTypes="#//Actuator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//PropertyMode"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PropertyMode">
+    <eLiterals name="Assign"/>
+    <eLiterals name="Add" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TriggerSensor" eSuperTypes="#//Sensor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//TriggerType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicProject" eSuperTypes="../../ru.mmocore.model/model/mmocore.ecore#//Project">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" upperBound="-1"
+        eType="#//LogicObject" containment="true" eOpposite="#//LogicObject/project"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScriptController" eSuperTypes="#//Controller">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="script" eType="ecore:EClass ../../ru.mmocore.model/model/mmocore.ecore#//UrlResource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlwaysSensor" eSuperTypes="#//Sensor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActuatorSensor" eSuperTypes="#//Sensor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actuator" eType="#//Actuator"
+        eOpposite="#//Actuator/sensors"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TriggerType">
+    <eLiterals name="After"/>
+    <eLiterals name="Before" value="1"/>
+    <eLiterals name="Both" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicControl">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activeState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

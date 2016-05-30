@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="predicates" nsURI="http://www.eclipse.org/reqcycle/predicates/1.0"
+    nsPrefix="predicates">
+  <eClassifiers xsi:type="ecore:EClass" name="IPredicate" abstract="true" interface="true">
+    <eOperations name="match" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="input" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="displayName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositePredicate" abstract="true"
+      eSuperTypes="#//IPredicate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
+        eType="#//IPredicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CustomPredicate" abstract="true" interface="true"
+      eSuperTypes="#//IEAttrPredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EqualPredicate" abstract="true" eSuperTypes="#//IEAttrPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/userInput"/>
+    <eTypeParameters name="T">
+      <eBounds eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eTypeParameters>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="input">
+      <eGenericType eTypeParameter="#//EqualPredicate/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedObject">
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/specificUserInput"/>
+      <eGenericType eTypeParameter="#//EqualPredicate/T"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringEqualPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="java.lang.String"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//EqualPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DateEqualPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="java.util.Date"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//EqualPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumEqualPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="org.eclipse.emf.common.util.Enumerator"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//EqualPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanEqualPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="java.lang.Boolean"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//EqualPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainsPatternPredicate" eSuperTypes="#//IEAttrPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/userInput"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="input" eType="#//CharSequence"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedPattern" eType="#//Pattern">
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/specificUserInput"/>
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/adaptInput"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntoPredicate" abstract="true" eSuperTypes="#//IEAttrPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/userInput"/>
+    <eTypeParameters name="T"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="input">
+      <eGenericType eTypeParameter="#//IntoPredicate/T"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowedEntries" upperBound="-1">
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/specificUserInput"/>
+      <eGenericType eTypeParameter="#//IntoPredicate/T"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringIntoPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="java.util.Collection"/>
+      <details key="objectType" value="java.lang.String"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//IntoPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumIntoPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/input_javaclass_type">
+      <details key="inputType" value="java.util.Collection"/>
+      <details key="objectType" value="java.lang.String"/>
+    </eAnnotations>
+    <eGenericSuperTypes eClassifier="#//IntoPredicate">
+      <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndPredicate" eSuperTypes="#//CompositePredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrPredicate" eSuperTypes="#//CompositePredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NotPredicate" eSuperTypes="#//CompositePredicate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CompareNumberPredicate" eSuperTypes="#//IEAttrPredicate">
+    <eAnnotations source="www.eclipse.org/reqcycle/predicates/userInput"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="input" eType="#//Number"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedValue" eType="#//Number">
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/specificUserInput"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//OPERATOR">
+      <eAnnotations source="www.eclipse.org/reqcycle/predicates/userInput"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ITypedPredicate" abstract="true" interface="true"
+      eSuperTypes="#//IPredicate">
+    <eTypeParameters name="T"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typedElement">
+      <eGenericType eTypeParameter="#//ITypedPredicate/T"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEAttrPredicate" abstract="true">
+    <eGenericSuperTypes eClassifier="#//ITypedPredicate">
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IEClassifierPredicate" abstract="true"
+      interface="true">
+    <eGenericSuperTypes eClassifier="#//ITypedPredicate">
+      <eTypeArguments eClassifier="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClassifier"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Pattern" instanceClassName="java.util.regex.Pattern"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="OPERATOR">
+    <eLiterals name="EQ" literal="="/>
+    <eLiterals name="NQ" value="1" literal="!="/>
+    <eLiterals name="GT" value="2" literal=">"/>
+    <eLiterals name="GET" value="3" literal=">="/>
+    <eLiterals name="LT" value="4" literal="&lt;"/>
+    <eLiterals name="LET" value="5" literal="&lt;="/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="CharSequence" instanceClassName="java.lang.CharSequence"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Number" instanceClassName="java.lang.Number"/>
+</ecore:EPackage>

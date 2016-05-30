@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cmengine"
+    nsURI="http://www.soyatec.com/TSC/CMEngine" nsPrefix="cme">
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicabilityCondition" abstract="true">
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="valueList" upperBound="-1" eType="#//ParameterValue"/>
+    </eOperations>
+    <eOperations name="evaluate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="theConf" eType="#//Configuration"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concernedVersion" eType="#//ElementVersion"
+        eOpposite="#//ElementVersion/applicabilityConstraints"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="parameterRefVisibilityControl"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicabilityParameterRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="#//VersionnableElement"
+        eOpposite="#//VersionnableElement/parameters"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+        eType="#//ApplicabilityCondition">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isLocal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApplicabilityInconsistencyBrowser">
+    <eOperations name="resolveByValues"/>
+    <eOperations name="resolveByConfDiff"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" lowerBound="1"
+        eType="#//Configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="proposedConfig" eType="#//Configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toReplace" upperBound="-1"
+        eType="#//ParameterValue">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unresolved" upperBound="-1"
+        eType="#//ApplicabilityCondition">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replacementProposals" upperBound="-1"
+        eType="#//ParameterValue">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CMRepository">
+    <eOperations name="init" eType="#//CMRepository">
+      <eParameters name="MD_StorageStrategy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      <eParameters name="VCS_Strategy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eOperations name="addElement" eType="#//VersionnableElement">
+      <eParameters name="type" eType="#//ElementType"/>
+    </eOperations>
+    <eOperations name="delete">
+      <eParameters name="vscDataAsWell" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configurationUnits" upperBound="-1"
+        eType="#//ConfigurationUnit" containment="true" eOpposite="#//ConfigurationUnit/primaryRepository">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="ConfigurationUnit"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalUnits" upperBound="-1"
+        eType="#//ExternalUnit" containment="true" eOpposite="#//ExternalUnit/secondaryRepositories">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="ExternalUnit"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//EnvironmentParamRef" containment="true" eOpposite="#//EnvironmentParamRef/environment">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="EnvironmentParamRef"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workspaces" upperBound="-1"
+        eType="#//CMWorkspace" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="CMWorkspace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="logicalRefConfs" upperBound="-1"
+        eType="#//LogicalVersionReferenceSet" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="LogicalVersionReferenceSet"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CMWorkspace" eSuperTypes="#//Configuration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workingElt" upperBound="-1"
+        eType="#//ElementVersion" eOpposite="#//ElementVersion/workingWorkspace">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedLogicalRefConf" upperBound="-1"
+        eType="#//LogicalVersionReferenceSet">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComparisonNavigator">
+    <eOperations name="getNotPresent" upperBound="-1" eType="#//ElementVersion">
+      <eParameters name="inConf" eType="#//Configuration"/>
+    </eOperations>
+    <eOperations name="getNewer" upperBound="-1" eType="#//ElementVersion">
+      <eParameters name="inConf" eType="#//Configuration"/>
+    </eOperations>
+    <eOperations name="getMergeCanditates" upperBound="-1" eType="#//DiffManager"/>
+    <eOperations name="syncConfigurations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allDiff" upperBound="-1"
+        eType="#//DiffManager" containment="true" eOpposite="#//DiffManager/comparison">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toConfElt" upperBound="-1"
+        eType="#//ElementVersion" changeable="false" transient="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromConfElt" upperBound="-1"
+        eType="#//ElementVersion" changeable="false" transient="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toConf" eType="#//Configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromConf" eType="#//Configuration"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="virtualConfCompared" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration" abstract="true">
+    <eOperations name="evaluateApplicabilities" eType="#//ApplicabilityInconsistencyBrowser"/>
+    <eOperations name="compare" eType="#//ComparisonNavigator">
+      <eParameters name="withConf" eType="#//Configuration"/>
+    </eOperations>
+    <eOperations name="subscribe">
+      <eParameters name="subscriber" eType="#//Configuration"/>
+      <eParameters name="event" eType="#//ConfigurationEvent"/>
+    </eOperations>
+    <eOperations name="clone" eType="#//Configuration"/>
+    <eOperations name="delete"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterValues" upperBound="-1"
+        eType="#//ParameterValue" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eltVersion" upperBound="-1"
+        eType="#//ElementVersion" eOpposite="#//ElementVersion/referredConf">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationEvent"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurationUnit" eSuperTypes="#//VersionnableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryRepository" eType="#//CMRepository"
+        eOpposite="#//CMRepository/configurationUnits"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DiffManager">
+    <eOperations name="replaceFromWithTo"/>
+    <eOperations name="replaceToWithFrom"/>
+    <eOperations name="compare"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comparison" eType="#//ComparisonNavigator"
+        eOpposite="#//ComparisonNavigator/allDiff"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inFromElt" eType="#//ElementVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inToElt" eType="#//ElementVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commonAncestor" eType="#//ElementVersion"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementVersion">
+    <eOperations name="use">
+      <eParameters name="anEltVersion" eType="#//ElementVersion"/>
+      <eParameters name="replaceExistingElement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="unUse">
+      <eParameters name="anEltVersion" eType="#//ElementVersion"/>
+    </eOperations>
+    <eOperations name="getHistory" eType="#//History"/>
+    <eOperations name="freeze"/>
+    <eOperations name="createNewVersion" eType="#//ElementVersion">
+      <eParameters name="workingConf" eType="#//CMWorkspace"/>
+    </eOperations>
+    <eOperations name="isApplicable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="aConf" eType="#//Configuration"/>
+    </eOperations>
+    <eOperations name="createBranch" eType="#//VersionBranch"/>
+    <eOperations name="compare">
+      <eParameters name="withVersion" eType="#//ElementVersion"/>
+    </eOperations>
+    <eOperations name="merge">
+      <eParameters name="withVersion" eType="#//ElementVersion"/>
+      <eParameters name="inWorkspace" eType="#//CMWorkspace"/>
+    </eOperations>
+    <eOperations name="getAncestorWith" eType="#//ElementVersion">
+      <eParameters name="otherVersion" eType="#//ElementVersion"/>
+    </eOperations>
+    <eOperations name="isWorking" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previous" eType="#//ElementVersion"
+        changeable="false" volatile="true" transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="next" eType="#//ElementVersion"
+        changeable="false" volatile="true" transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useEltVersion" upperBound="-1"
+        eType="#//ElementVersion" changeable="false" eOpposite="#//ElementVersion/usedByEltVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usedByEltVersion" upperBound="-1"
+        eType="#//ElementVersion" changeable="false" eOpposite="#//ElementVersion/useEltVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="myElement" eType="#//VersionnableElement"
+        changeable="false" volatile="true" transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicabilityConstraints"
+        upperBound="-1" eType="#//ApplicabilityCondition" containment="true" eOpposite="#//ApplicabilityCondition/concernedVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workingWorkspace" eType="#//CMWorkspace"
+        eOpposite="#//CMWorkspace/workingElt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredConf" upperBound="-1"
+        eType="#//Configuration" eOpposite="#//Configuration/eltVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="implications" upperBound="-1"
+        eType="#//LogicalDependence" eOpposite="#//LogicalDependence/justicationElement">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inDependences" upperBound="-1"
+        eType="#//LogicalDependence" eOpposite="#//LogicalDependence/toVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outDependences" upperBound="-1"
+        eType="#//LogicalDependence" eOpposite="#//LogicalDependence/fromVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        changeable="false" volatile="true" iD="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" eType="#//VersionState"
+        defaultValueLiteral="Working">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EnvironmentParamRef" eSuperTypes="#//ApplicabilityParameterRef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="environment" eType="#//CMRepository"
+        eOpposite="#//CMRepository/parameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalModelCheck" eSuperTypes="#//ApplicabilityCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalUnit" eSuperTypes="#//VersionnableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="secondaryRepositories"
+        eType="#//CMRepository" eOpposite="#//CMRepository/externalUnits"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="History">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branches" lowerBound="1"
+        upperBound="-1" eType="#//VersionBranch" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="VersionBranch"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trunk" eType="#//VersionBranch"
+        changeable="false" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="trunk"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalCondition" eSuperTypes="#//ApplicabilityCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalDependence">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="justicationElement" eType="#//ElementVersion"
+        eOpposite="#//ElementVersion/implications"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toVersion" eType="#//ElementVersion"
+        eOpposite="#//ElementVersion/inDependences"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromVersion" eType="#//ElementVersion"
+        eOpposite="#//ElementVersion/outDependences"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DependenceType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="justificationDescription"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LogicalVersionReferenceSet" eSuperTypes="#//Configuration"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ParameterValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cMWorkspace" eType="#//CMWorkspace"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VersionBranch">
+    <eOperations name="stopEvolutions"/>
+    <eOperations name="resumeEvolutions"/>
+    <eOperations name="addNewVersion" eType="#//ElementVersion"/>
+    <eOperations name="addNewVersion" eType="#//ElementVersion">
+      <eParameters name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versions" lowerBound="1"
+        upperBound="-1" eType="#//ElementVersion" changeable="false" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="elementOnly"/>
+        <details key="name" value="ElementVersion"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="firstVersion" lowerBound="1"
+        eType="#//ElementVersion" changeable="false" transient="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hookVersion" eType="#//ElementVersion">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="hookVersion"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VersionnableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="history" lowerBound="1"
+        eType="#//History" containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="History"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versions" upperBound="-1"
+        eType="#//ElementVersion" changeable="false" volatile="true" transient="true"
+        resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//ApplicabilityParameterRef" containment="true" eOpposite="#//ApplicabilityParameterRef/element">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canBeUsedBy" upperBound="-1"
+        eType="#//VersionnableElement" eOpposite="#//VersionnableElement/canUse">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canUse" upperBound="-1"
+        eType="#//VersionnableElement" eOpposite="#//VersionnableElement/canBeUsedBy">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//ElementType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ElementType">
+    <eLiterals name="text"/>
+    <eLiterals name="binary" value="1"/>
+    <eLiterals name="ecore" value="2"/>
+    <eLiterals name="xmi" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependenceType">
+    <eLiterals name="libraryInclude"/>
+    <eLiterals name="hasInterfaceWith" value="1"/>
+    <eLiterals name="undefined" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ConfigurationEventType">
+    <eLiterals name="VERSION_REF_MODIFICATION"/>
+    <eLiterals name="PARAMETER_VALUE_CHANGE" value="1"/>
+    <eLiterals name="CONF_CLONE" value="2"/>
+    <eLiterals name="CONF_DELETE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VersionState">
+    <eLiterals name="Working"/>
+    <eLiterals name="Frozen" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

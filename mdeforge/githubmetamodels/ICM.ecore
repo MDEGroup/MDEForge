@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	ArchE
+	Copyright (c) 2012 Carnegie Mellon University.
+	All Rights Reserved.
+
+	Redistribution and use in source and binary forms, with or without
+	modification, are permitted provided that the following conditions are met:
+
+	1. Redistributions of source code must retain the above copyright notice,
+	this list of conditions and the following acknowledgments and disclaimers.
+
+	2. Redistributions in binary form must reproduce the above copyright notice,
+	this list of conditions and the following disclaimer in the documentation
+	and/or other materials provided with the distribution.
+
+	3. All advertising materials for third-party software mentioning features or
+	use of this software must display the following disclaimer:
+
+	“Neither Carnegie Mellon University nor its Software Engineering Institute
+	have reviewed or endorsed this software”
+
+	4. The names “Carnegie Mellon University,” and/or “Software Engineering
+	Institute" shall not be used to endorse or promote products derived from
+	this software without prior written permission. For written permission,
+	please contact permission@sei.cmu.edu.
+
+	5. Redistributions of any form whatsoever must retain the following
+	acknowledgment:
+
+	Copyright 2012 Carnegie Mellon University.
+
+	This material is based upon work funded and supported by the United States
+	Department of Defense under Contract No. FA8721-05-C-0003 with Carnegie
+	Mellon University for the operation of the Software Engineering Institute, a
+	federally funded research and development center.
+
+	NO WARRANTY
+
+	THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING INSTITUTE MATERIAL
+	IS FURNISHED ON AN “AS-IS” BASIS. CARNEGIE MELLON UNIVERSITY MAKES NO
+	WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED, AS TO ANY MATTER
+	INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR PURPOSE OR
+	MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF THE MATERIAL.
+	CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF ANY KIND WITH
+	RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT INFRINGEMENT.
+-->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="icm"
+    nsURI="http:///edu.cmu.sei.pacc.perf.icm" nsPrefix="edu.cmu.sei.pacc.perf.icm">
+  <eClassifiers xsi:type="ecore:EClass" name="AssemblyInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+        eType="#//ElementInstance" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectionOverhead" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="#//Scenario" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mutexes" upperBound="-1"
+        eType="#//Mutex" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IcmComponent" eSuperTypes="#//ElementInstance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constant" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Distribution" abstract="true">
+    <eOperations name="add">
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementInstance" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeNodeNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pins" upperBound="-1" eType="#//PinInstance"
+        containment="true" eOpposite="#//PinInstance/elementInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Exponential" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Normal" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stdDev" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PinInstance" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nodeNum" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elementInstance" eType="#//ElementInstance"
+        transient="true" eOpposite="#//ElementInstance/pins"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarios" upperBound="-1"
+        eType="#//Scenario"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SSComponent" eSuperTypes="#//IcmComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="budget" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="replenishmentPeriod" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="backgroundPriority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IcmService" eSuperTypes="#//ElementInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceSourcePinIcm" eSuperTypes="#//SourcePinInstance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventDistribution" lowerBound="1"
+        eType="#//Distribution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="execTimeDistribution" eType="#//Distribution"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadline" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SinkPinInstance" eSuperTypes="#//PinInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//SinkPinMode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reactSources" upperBound="-1"
+        eType="#//SourcePinInstance" eOpposite="#//SourcePinInstance/reactSinks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linkSources" upperBound="-1"
+        eType="#//SourcePinInstance" eOpposite="#//SourcePinInstance/sinks"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="execTimeDistribution" lowerBound="1"
+        eType="#//Distribution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="downsamplingFactor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mutexes" upperBound="-1"
+        eType="#//Mutex"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SinkPinMode">
+    <eLiterals name="asynch"/>
+    <eLiterals name="mutex" value="1"/>
+    <eLiterals name="reenter" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourcePinInstance" eSuperTypes="#//PinInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="#//SourcePinMode"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sinks" upperBound="-1"
+        eType="#//SinkPinInstance" eOpposite="#//SinkPinInstance/linkSources"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reactSinks" unique="false"
+        upperBound="-1" eType="#//SinkPinInstance" eOpposite="#//SinkPinInstance/reactSources"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SourcePinMode">
+    <eLiterals name="unicast"/>
+    <eLiterals name="multicast" value="1"/>
+    <eLiterals name="synch" value="2"/>
+    <eLiterals name="reenter" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Uniform" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Unknown" eSuperTypes="#//Distribution">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mean" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="min" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="max" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Scenario">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="number" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Mutex">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

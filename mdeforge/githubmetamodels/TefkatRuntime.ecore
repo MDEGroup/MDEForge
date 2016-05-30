@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="runtime"
+    nsURI="http:///TefkatRuntime-1.0.ecore" nsPrefix="tefkat">
+  <eClassifiers xsi:type="ecore:EClass" name="Extent" abstract="true">
+    <eOperations name="contains" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="instance" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eOperations>
+    <eOperations name="getObjectsByClass" upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eParameters name="theClass" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+      <eParameters name="isExactly" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getAllContents" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ETreeIterator"/>
+    <eOperations name="add">
+      <eParameters name="obj" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eOperations>
+    <eOperations name="remove">
+      <eParameters name="obj" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContainerExtent" eSuperTypes="#//Extent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resource" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EResource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceExtent" eSuperTypes="#//Extent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resources" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EResource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Var">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scope" eType="#//VarScope"
+        eOpposite="#//VarScope/vars"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usages" ordered="false"
+        upperBound="-1" eType="#//VarUse" changeable="false" eOpposite="#//VarUse/var"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superseded" upperBound="-1"
+        eType="#//Var" eOpposite="#//Var/superseder"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superseder" upperBound="-1"
+        eType="#//Var" eOpposite="#//Var/superseded"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extended" upperBound="-1"
+        eType="#//Var" eOpposite="#//Var/extender"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extender" upperBound="-1"
+        eType="#//Var" eOpposite="#//Var/extended"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vars" upperBound="-1" eType="#//Var"
+        containment="true" eOpposite="#//Var/scope"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comments" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternScope" abstract="true" eSuperTypes="#//VarScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternDefn" upperBound="-1"
+        eType="#//PatternDefn" containment="true" eOpposite="#//PatternDefn/patternScope"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TRule" eSuperTypes="#//VarScope">
+    <eAnnotations source="22July2004 - Added abstract attribute and removed opposite ends for extended/superseded"/>
+    <eOperations name="getGoal" eType="#//Collection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transformation" lowerBound="1"
+        eType="#//Transformation" eOpposite="#//Transformation/tRule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" eType="#//SourceTerm"
+        containment="true" eOpposite="#//SourceTerm/tRuleSrc"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tgt" upperBound="-1" eType="#//TargetTerm"
+        containment="true" eOpposite="#//TargetTerm/tRuleTgt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extended" upperBound="-1"
+        eType="#//TRule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="superseded" upperBound="-1"
+        eType="#//TRule"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transformation" eSuperTypes="#//PatternScope">
+    <eOperations name="getStrata" eType="#//ListArray" eExceptions="#//TefkatException"/>
+    <eOperations name="addSupersedes">
+      <eParameters name="superseder" lowerBound="1" eType="#//TRule"/>
+      <eParameters name="superseded" lowerBound="1" eType="#//TRule"/>
+    </eOperations>
+    <eOperations name="removeSupersedes">
+      <eParameters name="superseder" lowerBound="1" eType="#//TRule"/>
+      <eParameters name="superseded" lowerBound="1" eType="#//TRule"/>
+    </eOperations>
+    <eOperations name="getSupersedingRules" lowerBound="1" eType="#//Collection">
+      <eParameters name="superseded" lowerBound="1" eType="#//TRule"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tRule" upperBound="-1"
+        eType="#//TRule" containment="true" eOpposite="#//TRule/transformation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="importedPackages" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="namespaceDeclarations"
+        upperBound="-1" eType="#//NamespaceDeclaration" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamespaceDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="URI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternDefn" eSuperTypes="#//VarScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternScope" lowerBound="1"
+        eType="#//PatternScope" eOpposite="#//PatternScope/patternDefn"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="#//Term"
+        containment="true" eOpposite="#//Term/patternDefn"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterVar" upperBound="-1"
+        eType="#//Var"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//PatternScope">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" lowerBound="1" eType="#//Term"
+        containment="true" eOpposite="#//Term/query"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameterVar" upperBound="-1"
+        eType="#//Var"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true">
+    <eOperations name="getExtent" eType="#//Var"/>
+    <eOperations name="isTarget" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="patternDefn" eType="#//PatternDefn"
+        eOpposite="#//PatternDefn/term"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//Query"
+        eOpposite="#//Query/term"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compoundTerm" eType="#//CompoundTerm"
+        eOpposite="#//CompoundTerm/term"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Var"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceTerm" abstract="true" eSuperTypes="#//Term">
+    <eOperations name="match" eExceptions="#//ResolutionException #//NotGroundException">
+      <eParameters name="context" eType="#//Context"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tRuleSrc" eType="#//TRule"
+        eOpposite="#//TRule/src"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetTerm" abstract="true" eSuperTypes="#//Term">
+    <eOperations name="ensure" eExceptions="#//ResolutionException #//NotGroundException">
+      <eParameters name="context" eType="#//Context"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tRuleTgt" eType="#//TRule"
+        eOpposite="#//TRule/tgt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompoundTerm" abstract="true" eSuperTypes="#//SourceTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="term" upperBound="-1" eType="#//Term"
+        containment="true" eOpposite="#//Term/compoundTerm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleTerm" abstract="true" eSuperTypes="#//SourceTerm #//TargetTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true">
+    <eOperations name="eval" eType="#//List" eExceptions="#//ResolutionException #//NotGroundException">
+      <eParameters name="context" eType="#//Context"/>
+    </eOperations>
+    <eOperations name="eval" eType="#//List" eExceptions="#//ResolutionException #//NotGroundException">
+      <eParameters name="context" eType="#//Context"/>
+      <eParameters name="binding" eType="#//Binding"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//CompoundExpr"
+        eOpposite="#//CompoundExpr/arg"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanceRef" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndTerm" eSuperTypes="#//CompoundTerm #//TargetTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrTerm" eSuperTypes="#//CompoundTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NotTerm" eSuperTypes="#//CompoundTerm">
+    <eOperations name="getNonLocalVars" upperBound="-1" eType="#//Var"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IfTerm" eSuperTypes="#//CompoundTerm #//TargetTerm">
+    <eOperations name="getNonLocalVars" upperBound="-1" eType="#//Var"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrackingUse" eSuperTypes="#//SimpleTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tracking" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+        eType="#//FeatureValuePair" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="trackingName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureValuePair" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PatternUse" eSuperTypes="#//SimpleTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defn" lowerBound="1" eType="#//PatternDefn"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arg" upperBound="-1" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MofTerm" abstract="true" eSuperTypes="#//SimpleTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//SimpleTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arg" upperBound="-1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MofInstance" eSuperTypes="#//MofTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeName" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exact" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MofOrder" eSuperTypes="#//MofTerm">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lesser" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="greater" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompoundExpr" abstract="true" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arg" upperBound="-1" eType="#//Expression"
+        containment="true" eOpposite="#//Expression/expr"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleExpr" abstract="true" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="representation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VarUse" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" lowerBound="1" eType="#//Var"
+        eOpposite="#//Var/usages"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionExpr" eSuperTypes="#//CompoundExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordered" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionExpr" eSuperTypes="#//CompoundExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="function" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FeatureExpr" eSuperTypes="#//CompoundExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="collect" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringConstant" eSuperTypes="#//SimpleExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IntConstant" eSuperTypes="#//SimpleExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RealConstant" eSuperTypes="#//SimpleExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanConstant" eSuperTypes="#//SimpleExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EnumConstant" eSuperTypes="#//CompoundExpr"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Injection" eSuperTypes="#//TargetTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sources" upperBound="-1"
+        eType="#//Expression" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//VarUse" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Collection" instanceClassName="java.util.Collection"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="List" instanceClassName="java.util.List"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ListArray" instanceClassName="java.util.List[]"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Binding" instanceClassName="tefkat.engine.runtime.Binding"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Context" instanceClassName="tefkat.engine.runtime.Context"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="TefkatException" instanceClassName="tefkat.engine.runtime.TefkatException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ResolutionException" instanceClassName="tefkat.engine.runtime.ResolutionException"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="NotGroundException" instanceClassName="tefkat.engine.runtime.NotGroundException"/>
+</ecore:EPackage>

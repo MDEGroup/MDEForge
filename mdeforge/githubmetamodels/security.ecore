@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="security" nsURI="http://www.eclipse.org/emf/CDO/security/4.1.0"
+    nsPrefix="security">
+  <eClassifiers xsi:type="ecore:EClass" name="SecurityElement" abstract="true" eSuperTypes="../../org.eclipse.emf.cdo/model/etypes.ecore#//ModelElement">
+    <eOperations name="getRealm" lowerBound="1" eType="#//Realm"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SecurityItem" abstract="true" eSuperTypes="#//SecurityElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Realm" eSuperTypes="#//SecurityElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//SecurityItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allUsers" upperBound="-1"
+        eType="#//User" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allGroups" upperBound="-1"
+        eType="#//Group" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRoles" upperBound="-1"
+        eType="#//Role" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allPermissions" upperBound="-1"
+        eType="#//Permission" changeable="false" volatile="true" transient="true"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultAccess" eType="#//AccessObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultUserDirectory" eType="#//Directory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultGroupDirectory"
+        eType="#//Directory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultRoleDirectory" eType="#//Directory"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Directory" eSuperTypes="#//SecurityItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="items" upperBound="-1"
+        eType="#//SecurityItem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//SecurityItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="permissions" upperBound="-1"
+        eType="#//Permission" containment="true" eOpposite="#//Permission/role"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignees" upperBound="-1"
+        eType="#//Assignee" eOpposite="#//Assignee/roles"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignee" abstract="true" eSuperTypes="#//SecurityItem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Role" eOpposite="#//Role/assignees"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Assignee">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+        eType="#//User" eOpposite="#//User/groups"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritedGroups" upperBound="-1"
+        eType="#//Group" eOpposite="#//Group/inheritingGroups"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritingGroups" upperBound="-1"
+        eType="#//Group" eOpposite="#//Group/inheritedGroups"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allInheritedGroups" upperBound="-1"
+        eType="#//Group" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allInheritingGroups" upperBound="-1"
+        eType="#//Group" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRoles" upperBound="-1"
+        eType="#//Role" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//Assignee">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//Group" eOpposite="#//Group/users"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultAccessOverride"
+        eType="#//AccessObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultAccess" eType="#//AccessObject"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locked" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="password" eType="#//UserPassword"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allGroups" upperBound="-1"
+        eType="#//Group" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRoles" upperBound="-1"
+        eType="#//Role" changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allPermissions" upperBound="-1"
+        eType="#//Permission" changeable="false" volatile="true" transient="true"
+        derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unassignedRoles" upperBound="-1"
+        eType="#//Role" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserPassword">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="encrypted" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Permission" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" lowerBound="1" eType="#//Role"
+        eOpposite="#//Role/permissions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="access" lowerBound="1"
+        eType="#//Access" defaultValueLiteral="WRITE"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClassPermission" eSuperTypes="#//Permission">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicableClass" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackagePermission" eSuperTypes="#//Permission">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="applicablePackage" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EPackage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourcePermission" eSuperTypes="#//Permission">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Access">
+    <eLiterals name="READ"/>
+    <eLiterals name="WRITE" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="AccessObject" instanceClassName="org.eclipse.emf.common.util.Enumerator">
+    <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+      <details key="name" value="Access:Object"/>
+      <details key="baseType" value="Access"/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

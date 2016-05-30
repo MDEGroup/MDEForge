@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="modelingunit" nsURI="http://www.eclipse.org/intent/modelingunit/0.8"
+    nsPrefix="intentMU">
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingUnit" eSuperTypes="document.ecore#//GenericUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingUnitInstruction" abstract="true"
+      eSuperTypes="document.ecore#//UnitInstruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDeclaration" eSuperTypes="#//ModelingUnitInstruction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType document.ecore#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+        eType="#//ModelingUnitInstructionReference" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractMetaTypeInstruction" abstract="true"
+      eSuperTypes="#//ModelingUnitInstruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaType" eType="#//TypeReference"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedType" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EClass"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanciationInstruction" eSuperTypes="#//AbstractMetaTypeInstruction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structuralFeatures" upperBound="-1"
+        eType="#//StructuralFeatureAffectation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StructuralFeatureAffectation" eSuperTypes="#//AbstractMetaTypeInstruction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usedOperator" lowerBound="1"
+        eType="#//AffectationOperator" defaultValueLiteral="SINGLE_VALUED_AFFECTATION"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="values" lowerBound="1"
+        upperBound="-1" eType="#//AbstractValue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractValue" abstract="true" eSuperTypes="#//ModelingUnitInstruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NativeValue" eSuperTypes="#//AbstractValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NewObjectValue" eSuperTypes="#//AbstractValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//InstanciationInstruction"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferenceValue" eSuperTypes="#//AbstractValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanciationReference"
+        lowerBound="1" eType="#//InstanciationInstructionReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referenceType" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstanciationInstructionReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="instanciation" eType="#//InstanciationInstruction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AffectationOperator">
+    <eLiterals name="SINGLE_VALUED_AFFECTATION"/>
+    <eLiterals name="MULTI_VALUED_AFFECTATION" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContributionInstruction" eSuperTypes="#//ModelingUnitInstruction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributionReference"
+        lowerBound="1" eType="#//ModelingUnitInstructionReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contributions" upperBound="-1"
+        eType="#//ModelingUnitInstruction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExternalContentReference" eSuperTypes="#//ResourceDeclaration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalContent" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="markedAsMerged" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelingUnitInstructionReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intentHref" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedInstruction"
+        eType="#//ModelingUnitInstruction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntentReferenceInModelingUnit" eSuperTypes="document.ecore#//IntentReferenceInstruction #//ModelingUnitInstruction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationDeclaration" eSuperTypes="#//ModelingUnitInstruction document.ecore#//IntentReference">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="annotationID" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="map" upperBound="-1" eType="#//KeyValForAnnotation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LabelInModelingUnit" eSuperTypes="document.ecore#//LabelDeclaration #//ModelingUnitInstruction document.ecore#//IntentReference"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyValForAnnotation" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

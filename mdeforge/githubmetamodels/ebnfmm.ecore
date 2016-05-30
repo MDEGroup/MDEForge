@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="ebnfmm" nsURI="http://melanee.org/ebnfmm" nsPrefix="ebnfmm">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="EBNFDescription">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" ordered="false"
+        upperBound="-1" eType="#//NonTerminal" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NonTerminal" eSuperTypes="#//Container">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Symbol" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Container"
+        eOpposite="#//Container/definitionList"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Terminal" eSuperTypes="#//SymbolWithFactor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="terminalString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Control" abstract="true" eSuperTypes="#//SymbolWithFactor #//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Optional" eSuperTypes="#//Control"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Repetition" eSuperTypes="#//Control"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NonTerminalReference" eSuperTypes="#//SymbolWithFactor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nonTerminal" lowerBound="1"
+        eType="#//NonTerminal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Control"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SpecialSequence" eSuperTypes="#//SymbolWithFactor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Except" eSuperTypes="#//Control">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="except" lowerBound="1"
+        eType="#//Symbol" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Choice" eSuperTypes="#//Symbol #//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolWithFactor" abstract="true" eSuperTypes="#//Symbol">
+    <eOperations name="isContainedByChoose" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
+        <details key="body" value="self.containingChoice != null"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="factor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definitionList" upperBound="-1"
+        eType="#//Symbol" containment="true" eOpposite="#//Symbol/container"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="elrGrammar" nsURI="elrGrammar/1.0" nsPrefix="elrGrammar">
+  <eClassifiers xsi:type="ecore:EClass" name="Grammar" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rules" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rules" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypReferenz">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//ETypedElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Lexical" abstract="true" eSuperTypes="#//RHS-Parser-Element #//RHS-Lexer-Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RHS-Parser-Element" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" lowerBound="1"
+        eType="#//Multiplicity" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//Lexical">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Block" eSuperTypes="#//RHS-Parser-Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blockElements" lowerBound="1"
+        upperBound="-1" eType="#//RHS-Parser-Element" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alternative" eSuperTypes="#//RHS-Parser-Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternatives" lowerBound="2"
+        upperBound="-1" eType="#//RHS-Parser-Element" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Epsilon" eSuperTypes="#//RHS-Parser-Element"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LexerRule" eSuperTypes="#//Rules">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" eType="#//RHS-Lexer-Element"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParserRule" eSuperTypes="#//Rules">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhs" lowerBound="1" upperBound="-1"
+        eType="#//RHS-Parser-Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" lowerBound="1"
+        eType="#//TypReferenz" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Multiplicity">
+    <eLiterals name="1"/>
+    <eLiterals name="?" value="1"/>
+    <eLiterals name="+" value="2"/>
+    <eLiterals name="*" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleReference" eSuperTypes="#//RHS-Parser-Element">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" lowerBound="1" eType="#//Rules"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WordClass" eSuperTypes="#//Lexical"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RHS-Lexer-Element" abstract="true"/>
+</ecore:EPackage>

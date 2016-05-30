@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mrdata"
+    nsURI="http://mrdata/1.0" nsPrefix="mrdata">
+  <eClassifiers xsi:type="ecore:EClass" name="Element" eSuperTypes="#//HierarchicalElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ProviderType">
+    <eLiterals name="test" value="2"/>
+    <eLiterals name="file"/>
+    <eLiterals name="database" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FilterType">
+    <eLiterals name="bt"/>
+    <eLiterals name="lt" value="1"/>
+    <eLiterals name="eq" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Filter">
+    <eOperations name="keep" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//FilterType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="combine" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="and"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumericFilter" eSuperTypes="#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compareTo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DateFilter" eSuperTypes="#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compareTo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringFilter" eSuperTypes="#//Filter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compareTo" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Provider" eSuperTypes="#//Statement">
+    <eOperations name="fillData" lowerBound="1" eType="#//Element"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ProviderType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" lowerBound="1"
+        eType="#//UnextractedElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnextractedElement" eSuperTypes="#//HierarchicalElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="names" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filter" upperBound="-1"
+        eType="#//Filter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="function" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fit" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+        eType="#//Function"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="x" lowerBound="1" eType="#//Action"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="y" lowerBound="1" eType="#//Action"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="z" eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DateConvert" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" lowerBound="1" eType="#//DateConverterTypes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="convertWhat" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Zero" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="zeroWhat" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForEach" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" lowerBound="1"
+        upperBound="-1" eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toplevel" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DateConverterTypes">
+    <eLiterals name="hours"/>
+    <eLiterals name="miliseconds" value="1"/>
+    <eLiterals name="days" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MrDataFile">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" upperBound="-1"
+        eType="#//Statement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" upperBound="-1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Load" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cluster" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="t1" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="t2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clusterMe" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Addition" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
+        eType="#//NumericOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addTo" lowerBound="1" eType="#//Action"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addWhat" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Shift" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" lowerBound="1"
+        eType="#//ShiftOperator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shiftWhat" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NumericOperator">
+    <eLiterals name="plus"/>
+    <eLiterals name="minus" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ShiftOperator">
+    <eLiterals name="left"/>
+    <eLiterals name="right" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchicalElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//HierarchicalElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//HierarchicalElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementReference" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Method" eSuperTypes="#//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Element" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Min" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="minOver" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementAssignment" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignment" lowerBound="1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

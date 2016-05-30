@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="score" nsURI="urn:org.ops4j.coro:score" nsPrefix="coro">
+  <eClassifiers xsi:type="ecore:EClass" name="Score">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partList" lowerBound="1"
+        eType="#//PartList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//Part" containment="true" eOpposite="#//Part/score"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Staff"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Part">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measures" upperBound="-1"
+        eType="#//Measure" containment="true" eOpposite="#//Measure/part"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="score" lowerBound="1" eType="#//Score"
+        eOpposite="#//Score/parts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StaffGroup"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PartList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//Part"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Measure">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notes" upperBound="-1"
+        eType="#//Note" containment="true" eOpposite="#//Note/measure"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="#//Key" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="time" eType="#//Time" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="clef" eType="#//Clef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" lowerBound="1" eType="#//Part"
+        eOpposite="#//Part/measures"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="marker" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="barLines" upperBound="-1"
+        eType="#//BarLine" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="divisions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Note">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pitch" eType="#//Pitch"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//NoteType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="accidental" eType="#//AccidentalType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="measure" eType="#//Measure"
+        eOpposite="#//Measure/notes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rest" eType="#//Rest" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dots" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pitch">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="octave" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alteration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="step" eType="#//Step"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Step">
+    <eLiterals name="C"/>
+    <eLiterals name="D" value="1"/>
+    <eLiterals name="E" value="2"/>
+    <eLiterals name="F" value="3"/>
+    <eLiterals name="G" value="4"/>
+    <eLiterals name="A" value="5"/>
+    <eLiterals name="B" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NoteType">
+    <eLiterals name="MAXIMA" literal=""/>
+    <eLiterals name="LONG" value="1"/>
+    <eLiterals name="BREVE" value="2"/>
+    <eLiterals name="WHOLE" value="3"/>
+    <eLiterals name="HALF" value="4"/>
+    <eLiterals name="QUARTER" value="5"/>
+    <eLiterals name="EIGHTH" value="6"/>
+    <eLiterals name="N16TH" value="7"/>
+    <eLiterals name="N32ND" value="8"/>
+    <eLiterals name="N64TH" value="9"/>
+    <eLiterals name="N128TH" value="10"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AccidentalType">
+    <eLiterals name="NATURAL"/>
+    <eLiterals name="FLAT" value="1"/>
+    <eLiterals name="SHARP" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Key">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fifths" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Time">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numerator" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="denominator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Clef">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sign" lowerBound="1" eType="#//ClefSign"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="line" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="octaveChange" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TimeSymbol">
+    <eLiterals name="COMMON"/>
+    <eLiterals name="CUT" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="ClefSign">
+    <eLiterals name="C"/>
+    <eLiterals name="F" value="1"/>
+    <eLiterals name="G" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="measure" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BarLine">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="#//Position"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Position">
+    <eLiterals name="LEFT"/>
+    <eLiterals name="MIDDLE" value="1"/>
+    <eLiterals name="RIGHT" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

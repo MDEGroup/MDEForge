@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="collection"
+    nsURI="http://madcow.magic.coll" nsPrefix="coll">
+  <eClassifiers xsi:type="ecore:EClass" name="Collection" eSuperTypes="#//CollectionElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containers" upperBound="-1"
+        eType="#//Container" containment="true" eOpposite="#//Container/collection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="database" eType="ecore:EClass magicDB.ecore#//core/Database"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Deck" eSuperTypes="#//Container"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Container" eSuperTypes="#//CollectionElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cards" upperBound="-1"
+        eType="#//CardInstance" containment="true" eOpposite="#//CardInstance/container"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="place" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collection" eType="#//Collection"
+        eOpposite="#//Collection/containers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CollectionElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="owner" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CardInstance" eSuperTypes="#//CollectionElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition" eType="#//CardCondition"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foil" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="card" lowerBound="1" eType="ecore:EClass magicDB.ecore#//card/Card"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="proxy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Container"
+        eOpposite="#//Container/cards"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CardCondition">
+    <eLiterals name="Mint"/>
+    <eLiterals name="NearMintPlus" value="1" literal="NearMintPlus"/>
+    <eLiterals name="NearMint" value="2" literal="NearMint"/>
+    <eLiterals name="NearMintMinus" value="3" literal="NearMintMinus"/>
+    <eLiterals name="ExcellentPlus" value="4"/>
+    <eLiterals name="Excellent" value="5"/>
+    <eLiterals name="ExcellentMinus" value="6"/>
+    <eLiterals name="Good" value="7"/>
+    <eLiterals name="Poor" value="8"/>
+    <eLiterals name="Played" value="9" literal="Played"/>
+  </eClassifiers>
+</ecore:EPackage>

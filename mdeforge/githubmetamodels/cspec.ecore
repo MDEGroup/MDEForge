@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="cspec"
+    nsURI="http://www.eclipse.org/buckminster/CSpec-2.0" nsPrefix="cs">
+  <eClassifiers xsi:type="ecore:EClass" name="CSpec" eSuperTypes="../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentIdentifier">
+    <eOperations name="getDerivedAttributes" upperBound="-1" eType="#//Attribute">
+      <eParameters name="context" eType="#//IContext"/>
+      <eParameters name="includePrivate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="getAttribute" eType="#//Attribute">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentRequest"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generators" upperBound="-1"
+        eType="#//Generator" containment="true" eOpposite="#//Generator/cspec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//Attribute" containment="true" eOpposite="#//Attribute/cspec"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//Documentation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortDesc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Filter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="projectInfo" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//URL"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="self" lowerBound="1" eType="#//SelfArtifact"
+        changeable="false" volatile="true" transient="true" unsettable="true" derived="true"
+        resolveProxies="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true">
+    <eOperations name="isDerived" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="context" eType="#//IContext"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="public" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Filter"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cspec" lowerBound="1" eType="#//CSpec"
+        eOpposite="#//CSpec/attributes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="documentation" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//Documentation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Attribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prerequisites" upperBound="-1"
+        eType="#//Prerequisite" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rebase" eType="#//IPath"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prerequisite">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentRequest"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contributor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="optional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Filter"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includePattern" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Pattern"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludePattern" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Pattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//Group">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//PropertyConstant"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actorProperties" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//PropertyConstant"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" eType="#//PathGroup"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+        eType="#//ActionAttribute" eOpposite="#//ActionAttribute/action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prerequisitesAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prerequisitesRebase" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productAlias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="upToDatePolicy" eType="#//UpToDatePolicy"
+        defaultValueLiteral="DEFAULT"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="productFileCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="ecore:EDataType ../../org.eclipse.buckminster.model.common/model/common.ecore#//Pattern"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="replacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Artifact" eSuperTypes="#//Attribute #//PathGroup"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionAttribute" eSuperTypes="#//Artifact">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" lowerBound="1"
+        eType="#//Action" eOpposite="#//Action/products"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PathGroup">
+    <eOperations name="resolve" eType="#//PathGroup">
+      <eParameters name="path" eType="#//IPath"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="base" lowerBound="1" eType="#//IPath"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paths" upperBound="-1"
+        eType="#//IPath"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Generator">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="attribute" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentRequest"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generates" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentIdentifier"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cspec" lowerBound="1" eType="#//CSpec"
+        eOpposite="#//CSpec/generators"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="UpToDatePolicy">
+    <eLiterals name="DEFAULT">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Never trust a product defined as a folder since the expected number of files is unknown"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="ACTOR" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Let the associated actor decide"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="COUNT" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Trust timestamp only when the product contains the number of files denoted in attribute 'count'"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="MAPPER" value="3">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Trust timestamp of a product that matches the action prerequisites in number and optional pattern. The 'count' attribute may be used to denote file additions"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NOT_EMPTY" value="4">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Trust timestamp of any product that contains at least one file"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NEVER" value="5">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The product is never up to date. The action must always be executed when its product is requested"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="EEnumLiteral0" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlterAttribute" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cspecext" lowerBound="1"
+        eType="#//CSpecExtension" eOpposite="#//CSpecExtension/attributeAlterations"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlterArtifact" eSuperTypes="#//Artifact #//AlterAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removePaths" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlterGroup" eSuperTypes="#//Group #//AlterAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replacePrerequisites" upperBound="-1"
+        eType="#//Prerequisite" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removePrerequisites" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlterAction" eSuperTypes="#//Action #//AlterGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replaceProperties" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//PropertyConstant"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replaceActorProperties"
+        upperBound="-1" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//PropertyConstant"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removeProperties" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removeActorProperties"
+        upperBound="-1" eType="#//Remove" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removeProducts" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removePaths" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rename">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Remove">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CSpecExtension" eSuperTypes="#//CSpec">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeAlterations" upperBound="-1"
+        eType="#//AlterAttribute" containment="true" eOpposite="#//AlterAttribute/cspecext"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renameAttributes" upperBound="-1"
+        eType="#//Rename" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removeDependencies" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="removeGenerators" upperBound="-1"
+        eType="#//Remove" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replaceGenerators" upperBound="-1"
+        eType="#//Generator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="replaceDependencies" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentRequest"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IPath" instanceClassName="org.eclipse.core.runtime.IPath"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IContext" abstract="true" interface="true">
+    <eOperations name="findBestMatch" eType="#//CSpec">
+      <eParameters name="request" eType="ecore:EClass ../../org.eclipse.buckminster.model.common/model/common.ecore#//ComponentRequest"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelfArtifact" eSuperTypes="#//Artifact"/>
+</ecore:EPackage>

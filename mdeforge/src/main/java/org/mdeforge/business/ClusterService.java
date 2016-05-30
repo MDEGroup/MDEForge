@@ -6,6 +6,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.Relation;
 
 public interface ClusterService {
 
@@ -20,4 +21,5 @@ public interface ClusterService {
 	Cluster getCluster(EcoreMetamodel ecore, Clusterizzation clusterizzation) throws BusinessException;
 	Clusterizzation joinCluster(Clusterizzation c, Cluster from, Cluster to);
 	Artifact getMostRepresentativeElement(Cluster c, ValuedRelationService valuedRelationService) throws BusinessException;
+	List<Relation> findInCluster(Artifact elem, Cluster cluster) throws BusinessException;
 }

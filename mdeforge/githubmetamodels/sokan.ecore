@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sokan"
+    nsURI="http://sokan.reuseware.org" nsPrefix="sokan">
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="id" lowerBound="1" eType="#//ID"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ID">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="segments" unique="false"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Artifact" eSuperTypes="#//IdentifiableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="model" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaInformation" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexRepresentation" lowerBound="1"
+        eType="#//IndexRow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IndexRow">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifactID" lowerBound="1"
+        eType="#//ID" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phyURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaData" lowerBound="1"
+        eType="#//IndexMetaData" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IndexMetaData">
+    <eOperations name="isEmpty" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eOperations name="putAll">
+      <eParameters name="metaData" eType="#//IndexMetaData"/>
+    </eOperations>
+    <eOperations name="putMultiple">
+      <eParameters name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="putSingle">
+      <eParameters name="field" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiValueFields" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="singleValueFields" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Store">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+        eType="#//Filter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uriBuffer" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Filter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IndexTransaction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="remArtifacts" upperBound="-1"
+        eType="#//ID" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="addArtifacts" upperBound="-1"
+        eType="#//IndexRow" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="updateArtifacts" upperBound="-1"
+        eType="#//IndexRow" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetedResponse">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valueCountMap" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="All the valueCounts the &lt;code>FacetedRequest&lt;/code>&#xD;&#xA;asked for. The map is structured like to following: &lt;br>&#xD;&#xA;&lt;br>&#xD;&#xA;String -> (String -> long) &lt;br>&#xD;&#xA;facetName -> (valueName -> valueCount)"/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+        </eTypeArguments>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="content" upperBound="-1"
+        eType="#//IndexRow" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The result set that fulfills the constraints of the faceted&#xD;&#xA;request taking the keywordSearchString into account.&#xD;&#xA;&lt;br>&#xD;&#xA;See &lt;code>FacetedRequest&lt;/code> for more &#xD;&#xA;information."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" lowerBound="1" eType="#//FacetedRequest"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The &lt;code>FacetedRequest&lt;/code> that was used to&#xD;&#xA;form this response."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FacetedRequest">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="facetFields" transient="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A list of facet names for which valueCounts are needed. &lt;br>&#xD;&#xA;See &lt;code>FacetedResponse.getValueCounts()&lt;/code> for more information"/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rows" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Limits the number of rows that are contained in the&#xD;&#xA;response content. This can be used to split-up query-result &#xD;&#xA;contents to handy parts which get shown in seperate pages.&#xD;&#xA; You can consider this &lt;code>int&lt;/code> value as the &#xD;&#xA;maximum number of results to appear in the page.&lt;br>&#xD;&#xA;&lt;br>&#xD;&#xA;Set to &lt;0, if the result's content should not be limited.&lt;br>&#xD;&#xA;Example: 50 values should be shown on the third&#xD;&#xA;page, then rows=50 and offset=101. &lt;br>&#xD;&#xA;See &lt;code>FacetedRequest.getOffset()&lt;/code> for more&#xD;&#xA;information"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="If the result of this faceted request should be &#xD;&#xA;presented in pages, the Offset can be used to &#xD;&#xA;specify the first value of the result set. The first record&#xD;&#xA;to appear in the result set is given by this value.&lt;br>&#xD;&#xA;&lt;br>&#xD;&#xA;Set to &lt;0, if an offset is not needed. &lt;br>&#xD;&#xA;Example: 50 values should be shown on the third&#xD;&#xA;page, then rows=50 and offset=101. &lt;br>&#xD;&#xA;See &lt;code>FacetedRequest.getOffset()&lt;/code> for &#xD;&#xA;more information."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keywordSearchString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+        eType="#//Constraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" transient="true">
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EEList">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericType>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

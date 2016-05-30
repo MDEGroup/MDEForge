@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pokerleague" nsURI="http://model.shared.league.poker.fhsoft.cz/v1"
+    nsPrefix="pl">
+  <eClassifiers xsi:type="ecore:EClass" name="Serializable" instanceClassName="java.io.Serializable"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Timestamp" instanceClassName="java.sql.Timestamp"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DataStructureVersion" eSuperTypes="#//Serializable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataVersion" eSuperTypes="#//Serializable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentVersion" eType="#//Timestamp"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Settings" eSuperTypes="#//Serializable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="adminPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultTimeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="GMT"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiableEntity" abstract="true"
+      eSuperTypes="#//Serializable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="proxy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="obsolete" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DescribedEntity" abstract="true" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Player" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="active" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nick" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="emailAddress" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrizeMoneyRuleSet" eSuperTypes="#//DescribedEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prizeMoneyRules" ordered="false"
+        upperBound="-1" eType="#//PrizeMoneyRule" containment="true" eOpposite="#//PrizeMoneyRule/prizeMoneyRuleSet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrizeMoneyRule" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prizeMoneyRuleSet" eType="#//PrizeMoneyRuleSet"
+        eOpposite="#//PrizeMoneyRuleSet/prizeMoneyRules"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfPlayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prizeMoneyFormulas" ordered="false"
+        upperBound="-1" eType="#//PrizeMoneyFormula" containment="true" eOpposite="#//PrizeMoneyFormula/prizeMoneyRule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrizeMoneyFormula" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prizeMoneyRule" eType="#//PrizeMoneyRule"
+        eOpposite="#//PrizeMoneyRule/prizeMoneyFormulas"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePrizeMoney" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Competition" eSuperTypes="#//DescribedEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minimalAttendance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="50"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultBuyIn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPrizeMoneyRuleSet"
+        eType="#//PrizeMoneyRuleSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultMinPlayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="3"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultMaxPlayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="10"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultTournamentAnnouncementLead"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="48"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tournaments" ordered="false"
+        upperBound="-1" eType="#//Tournament" containment="true" eOpposite="#//Tournament/competition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="players" ordered="false"
+        upperBound="-1" eType="#//Player"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tournament" eSuperTypes="#//DescribedEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultBuyIn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultPrizeMoneyRuleSet"
+        eType="#//PrizeMoneyRuleSet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tournamentAnnouncementLead"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tournamentStart" eType="#//Timestamp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tournamentEnd" eType="#//Timestamp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minPlayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxPlayers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invitations" ordered="false"
+        upperBound="-1" eType="#//Invitation" containment="true" eOpposite="#//Invitation/tournament"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="competition" eType="#//Competition"
+        eOpposite="#//Competition/tournaments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="games" ordered="false"
+        upperBound="-1" eType="#//Game" containment="true" eOpposite="#//Game/tournament"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Invitation" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tournament" eType="#//Tournament"
+        eOpposite="#//Tournament/invitations"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="#//Player"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reply" eType="#//InvitationReply"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uuid" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="events" ordered="false"
+        upperBound="-1" eType="#//InvitationEvent" containment="true" eOpposite="#//InvitationEvent/invitation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InvitationEvent" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="invitation" eType="#//Invitation"
+        eOpposite="#//Invitation/events"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventTime" eType="#//Timestamp"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="eventType" eType="#//InvitationEventType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InvitationEventType">
+    <eLiterals name="GENERATED"/>
+    <eLiterals name="CHANGED" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="InvitationReply">
+    <eLiterals name="NO_REPLY"/>
+    <eLiterals name="ACCEPTED" value="1"/>
+    <eLiterals name="REJECTED" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Game" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ordinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tournament" eType="#//Tournament"
+        eOpposite="#//Tournament/games"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="buyIn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prizeMoneyRuleSet" eType="#//PrizeMoneyRuleSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="playersInGame" ordered="false"
+        upperBound="-1" eType="#//PlayerInGame" containment="true" eOpposite="#//PlayerInGame/game"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlayerInGame" eSuperTypes="#//IdentifiableEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="player" eType="#//Player"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="game" eType="#//Game" eOpposite="#//Game/playersInGame"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+</ecore:EPackage>

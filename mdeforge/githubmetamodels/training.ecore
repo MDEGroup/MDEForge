@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="training"
+    nsURI="http://www.obeo.fr/training/training/1.0" nsPrefix="training">
+  <eClassifiers xsi:type="ecore:EClass" name="Session">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="training" lowerBound="1"
+        eType="#//Training"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trainer" lowerBound="1"
+        eType="#//Trainer"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Trainees" lowerBound="1"
+        upperBound="-1" eType="#//Person"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastname" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrainingOrganization">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="people" upperBound="-1"
+        eType="#//Person" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sessions" upperBound="-1"
+        eType="#//Session" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="training" upperBound="-1"
+        eType="#//Training" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Training">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canBeProvidedBy" lowerBound="1"
+        upperBound="-1" eType="#//Trainer" eOpposite="#//Trainer/canProvide"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trainer" eSuperTypes="#//Person">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="canProvide" lowerBound="1"
+        upperBound="-1" eType="#//Training" eOpposite="#//Training/canBeProvidedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trainee" eSuperTypes="#//Person"/>
+</ecore:EPackage>

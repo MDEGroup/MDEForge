@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="inventory"
+    nsURI="http://www.gastro.org/inventory/1.0" nsPrefix="inventory">
+  <eClassifiers xsi:type="ecore:EClass" name="Stock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+        eType="#//StockProduct" containment="true" eOpposite="#//StockProduct/stock"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="department" lowerBound="1"
+        eType="#//Department" eOpposite="#//Department/stocks"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Product" abstract="true">
+    <eOperations name="getCost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StockProduct" eSuperTypes="#//Product">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stock" lowerBound="1" eType="#//Stock"
+        eOpposite="#//Stock/products"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="available" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="orderLimit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Recipe" eSuperTypes="#//Product">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ingredients" upperBound="-1"
+        eType="#//Ingredient" containment="true" eOpposite="#//Ingredient/recipe"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="department" eType="#//Department"
+        eOpposite="#//Department/recipes"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Ingredient">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="recipe" lowerBound="1"
+        eType="#//Recipe" eOpposite="#//Recipe/ingredients"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" lowerBound="1"
+        eType="#//Product"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="quantity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MenuCard">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restaurant" lowerBound="1"
+        eType="#//Restaurant" eOpposite="#//Restaurant/menuCards"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sections" lowerBound="1"
+        upperBound="-1" eType="#//Section" containment="true" eOpposite="#//Section/menuCard"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Restaurant">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="departments" upperBound="-1"
+        eType="#//Department" containment="true" eOpposite="#//Department/restaurant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="menuCards" upperBound="-1"
+        eType="#//MenuCard" containment="true" eOpposite="#//MenuCard/restaurant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+        eType="#//Table" containment="true" eOpposite="#//Table/restaurant"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stations" upperBound="-1"
+        eType="#//Station" changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Department" eSuperTypes="#//Station">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="recipes" upperBound="-1"
+        eType="#//Recipe" containment="true" eOpposite="#//Recipe/department"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restaurant" lowerBound="1"
+        eType="#//Restaurant" eOpposite="#//Restaurant/departments"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="employees" upperBound="-1"
+        eType="#//Employee" containment="true" eOpposite="#//Employee/department"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stocks" lowerBound="1"
+        upperBound="-1" eType="#//Stock" containment="true" eOpposite="#//Stock/department"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Offering">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="product" lowerBound="1"
+        eType="#//Product"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="section" lowerBound="1"
+        eType="#//Section" eOpposite="#//Section/offerings"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" eSuperTypes="#//Station">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seats" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restaurant" lowerBound="1"
+        eType="#//Restaurant" eOpposite="#//Restaurant/tables"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Employee">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="department" eType="#//Department"
+        eOpposite="#//Department/employees"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Station" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stationID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="menuCard" lowerBound="1"
+        eType="#//MenuCard" eOpposite="#//MenuCard/sections"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offerings" lowerBound="1"
+        upperBound="-1" eType="#//Offering" containment="true" eOpposite="#//Offering/section"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

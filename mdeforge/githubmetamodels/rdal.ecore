@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="core"
+    nsURI="http:///www.open-people.fr/rdal/core" nsPrefix="core">
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContractualElement" abstract="true"
+      eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="changeUncertainty" lowerBound="1"
+        eType="#//Uncertainty" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sources" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="originDate" eType="#//Date"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scheduleDate" eType="#//Date"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stakeholders" upperBound="-1"
+        eType="#//StakeHolder" eOpposite="#//StakeHolder/contractualElements"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="evolvedTo" upperBound="-1"
+        eType="#//ContractualElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tracedTo" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="category" eType="ecore:EClass ../../../fr.labsticc.framework.settings.model/model/settings.ecore#//Category"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="satisfiedBy" upperBound="-1"
+        eType="#//ReferencedModelElements" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agents" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject" volatile="true"
+        transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivedFrom" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dropped" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="droppingReason" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfactionLevel" eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rationales" lowerBound="1"
+        upperBound="-1" eType="#//Rationale" containment="true" eOpposite="#//Rationale/contract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCriticality" eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contactInformation" upperBound="-1"
+        eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="ecore:EClass ../../../fr.labsticc.framework.constraints.model/model/constraints.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="ecore:EClass ../../../fr.labsticc.framework.constraints.model/model/constraints.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modes" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Uncertainty" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="volatility" lowerBound="1"
+        eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="costsImpact" lowerBound="1"
+        eType="#//PositiveFactor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scheduleImpact" lowerBound="1"
+        eType="#//PositiveFactor"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precedence" lowerBound="1"
+        eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="riskIndex" eType="#//Ratio"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="propRiskIndex" eType="#//Ratio"
+        volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maturityIndex" eType="#//Ratio"
+        volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VerifiableElement" abstract="true" eSuperTypes="#//ContractualElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Specification" eSuperTypes="#//VerifiableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actors" upperBound="-1"
+        eType="#//Actor" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systOverview" lowerBound="1"
+        eType="#//SystemOverview" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirementGroups" lowerBound="1"
+        upperBound="-1" eType="#//RequirementsGroup" containment="true" eOpposite="#//RequirementsGroup/specification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="verificationActivities"
+        upperBound="-1" eType="#//VerificationActivity" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conflicts" upperBound="-1"
+        eType="#//Conflict" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraintLanguagesSpecification"
+        lowerBound="1" eType="ecore:EClass ../../../fr.labsticc.framework.constraints.model/model/constraints.ecore#//ConstraintLanguagesSpecification"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specifies" lowerBound="1"
+        upperBound="-1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="primaryActors" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemOverview" eSuperTypes="#//ContractualElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goals" lowerBound="1" upperBound="-1"
+        eType="#//Goal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemToBe" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" lowerBound="1"
+        upperBound="-1" eType="#//SystemContext" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemBoundary" lowerBound="1"
+        upperBound="-1" eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="purpose" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemContext" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalSystem" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actors" upperBound="-1"
+        eType="#//Actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemBoundary" lowerBound="1"
+        upperBound="-1" eType="#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="systemModes" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="images" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" upperBound="-1"
+        eType="#//Interaction" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="address" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phoneNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interaction" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" lowerBound="1"
+        eType="#//Direction"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Goal" eSuperTypes="#//ContractualElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conflicts" upperBound="-1"
+        eType="#//Conflict" eOpposite="#//Conflict/goals"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" lowerBound="1"
+        eType="#//Ratio"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Conflict" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goals" lowerBound="2" upperBound="2"
+        eType="#//Goal" eOpposite="#//Goal/conflicts"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="degree" lowerBound="1"
+        eType="#//Ratio"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StakeHolder" eSuperTypes="#//Actor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contractualElements" lowerBound="1"
+        upperBound="-1" eType="#//ContractualElement" eOpposite="#//ContractualElement/stakeholders"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rationales" upperBound="-1"
+        eType="#//Rationale"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Ratio" instanceClassName="java.lang.Float">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="rangeZeroOne"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="PositiveFactor" instanceClassName="java.lang.Float"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Date" instanceClassName="java.util.Date"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Direction">
+    <eLiterals name="In"/>
+    <eLiterals name="Out" value="1"/>
+    <eLiterals name="InOut" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementsGroup" eSuperTypes="#//VerifiableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" lowerBound="1"
+        upperBound="-1" eType="#//AbstractRequirement" containment="true" eOpposite="#//AbstractRequirement/group"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+        eType="#//Specification" eOpposite="#//Specification/requirementGroups"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractRequirement" abstract="true"
+      eSuperTypes="#//VerifiableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containedRequirements"
+        upperBound="-1" eType="#//AbstractRequirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="verifiedBy" upperBound="-1"
+        eType="#//VerificationActivity" eOpposite="#//VerificationActivity/requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="group" lowerBound="1" eType="#//RequirementsGroup"
+        eOpposite="#//RequirementsGroup/requirements"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="risk" eType="#//RiskKind"
+        defaultValueLiteral="medium"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignedVariable" eType="#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="conditionVariables" upperBound="-1"
+        eType="#//Variable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" eSuperTypes="#//AbstractRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refinedBY" upperBound="-1"
+        eType="#//Requirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assumptions" upperBound="-1"
+        eType="#//Assumption" eOpposite="#//Assumption/requirements"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imageAssumption" eType="#//Assumption"
+        eOpposite="#//Assumption/imageRequirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="derivations" upperBound="-1"
+        eType="#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assumption" eSuperTypes="#//AbstractRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" eType="#//Requirement"
+        eOpposite="#//Requirement/assumptions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AssumptionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imageRequirement" eType="#//Requirement"
+        eOpposite="#//Requirement/imageAssumption"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AssumptionType">
+    <eLiterals name="Technical"/>
+    <eLiterals name="Organizational" value="1"/>
+    <eLiterals name="Managerial" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VerificationActivity" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" eType="#//AbstractRequirement"
+        eOpposite="#//AbstractRequirement/verifiedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verificationMethod" eType="#//VerificationMethod"
+        defaultValueLiteral="Test"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="externalRef" upperBound="-1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="passed" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RiskKind">
+    <eLiterals name="High"/>
+    <eLiterals name="Medium" value="1"/>
+    <eLiterals name="Low" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VerificationMethod">
+    <eLiterals name="Analysis"/>
+    <eLiterals name="Demonstration" value="1"/>
+    <eLiterals name="Inspection" value="2"/>
+    <eLiterals name="Test" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RefExpressionCollectedModelElements"
+      eSuperTypes="#//ReferencedModelElements">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queryExpression" lowerBound="1"
+        eType="ecore:EClass ../../../fr.labsticc.framework.constraints.model/model/constraints.ecore#//FormalLanguageExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RefUserSelectedModelElements" eSuperTypes="#//ReferencedModelElements">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="modelElementsCardinality"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReferencedModelElements" abstract="true"
+      eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElementReferences"
+        upperBound="-1" eType="#//ModelElementReference" containment="true" eOpposite="#//ModelElementReference/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="agregationType" lowerBound="1"
+        eType="#//AgregationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElementReference" eSuperTypes="#//IdentifiedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="modelElementsContainedInSpecifedArchSpecs"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modelElement" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//ReferencedModelElements" eOpposite="#//ReferencedModelElements/modelElementReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verifies" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="satisfactionLevel" eType="#//Ratio"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="reason" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trace" eSuperTypes="#//ReferencedModelElements">
+    <eOperations name="modelElementReference" eType="#//TraceModelElementReference">
+      <eParameters name="modelElement" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specifications" upperBound="-1"
+        eType="#//Specification"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TraceModelElementReference" eSuperTypes="#//ModelElementReference #//RequirementsCoverageData">
+    <eOperations name="merge">
+      <eParameters name="modelElementReference" eType="#//TraceModelElementReference"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="container" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementsCoverageData" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nbRequirements" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="verificationLevel" eType="#//Ratio"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AgregationType">
+    <eLiterals name="Composition"/>
+    <eLiterals name="Alternative" value="1" literal="Alternative"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="feature" lowerBound="1"
+        eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//VariableType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableType">
+    <eLiterals name="Monitored"/>
+    <eLiterals name="Controlled" value="1"/>
+    <eLiterals name="Both" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RefDerivedModelElements" eSuperTypes="#//ReferencedModelElements"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Rationale" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
+        eType="#//ContractualElement" eOpposite="#//ContractualElement/rationales"/>
+  </eClassifiers>
+</ecore:EPackage>

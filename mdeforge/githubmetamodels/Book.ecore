@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="book" nsURI="http://www.soyatec.com/ebook/1.0.0" nsPrefix="ebk">
+  <eClassifiers xsi:type="ecore:EClass" name="Book">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" upperBound="-1"
+        eType="#//Page" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="splash" eType="#//Splash"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="main" eType="#//Page" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="author" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bookId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolution" eType="#//Point"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="layers" upperBound="-1"
+        eType="#//Layer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Splash" eSuperTypes="#//Page">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Layer">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="control" eType="#//Control"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opacity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="background" eType="#//Color"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="foreground" eType="#//Color"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bounds" eType="#//Rectangle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Shape" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lineWidth" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="points" upperBound="-1"
+        eType="#//Point"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Control" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onExposed" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onTouched" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="image" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sound" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//Control">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//Node" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ImageFlash" eSuperTypes="#//Control">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="images" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="out" eType="#//Animation"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//Animation"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Media" eSuperTypes="#//Control">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoPlay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" eSuperTypes="#//Control">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="font" eType="#//Font"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenPage" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="page" eType="#//Page"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JSAction" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javaScript" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Animation" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoReverse" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repeat" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fade" eSuperTypes="#//Animation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fromValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Move" eSuperTypes="#//Animation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fromLocation" eType="#//Point"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toLocation" eType="#//Point"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rotation" eSuperTypes="#//Animation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toAngle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fromAngle" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Color" instanceClassName="org.eclipse.swt.graphics.RGB"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Font" instanceClassName="org.eclipse.swt.graphics.FontData"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.swt.graphics.Point"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Rectangle" instanceClassName="org.eclipse.swt.graphics.Rectangle"/>
+</ecore:EPackage>
