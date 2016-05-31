@@ -1,6 +1,6 @@
 <%@page import="java.util.Calendar"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-
+ 
 <div id="footer" class="hidden-print">
 			
 			<div class="container-960 innerTB">
@@ -43,7 +43,7 @@
 						</ul>
 						
 						<h4>Social</h4>
-						<a href="https://github.com/MDEGroup/MDEForge" class="glyphicons standard primary github"><i></i></a>
+						<a href="https://github.com/MDEGroup/MDEForge" class="glyphicons standard github"><i></i></a>
 						<a href="http://mdegroup.disim.univaq.it/" class="glyphicons standard link"><i></i></a>
 						<a href="#" class="glyphicons standard twitter"><i></i></a>					
 					</div>
@@ -52,7 +52,7 @@
 				<!--  Copyright Line -->
 				<div class="copy">
 					 &copy; <%=Calendar.getInstance().get(Calendar.YEAR)%> -- <spring:message code="common.footer"/>
-					<span class="appbrand"><spring:message code="common.title"/></span>										
+					<!-- <span class="appbrand"><spring:message code="common.title"/></span>	-->									
 				</div>
 				<!--  End Copyright Line -->
 				

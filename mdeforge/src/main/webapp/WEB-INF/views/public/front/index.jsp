@@ -1,6 +1,6 @@
 <div id="landing_2">
 	
-	
+	 
 <!-- 	<div class="mosaic-line mosaic-line-2">
 		<div class="container-960 center">
 			<h2 class="margin-none"><strong class="text-primary">MDE Forge</strong> <span class="hidden-phone"> an extensible Web-based modeling platform</span></h2>
@@ -36,17 +36,36 @@
 		<div class="container-960">
 			<div class="banner-wrapper banner-1">
 				<img class="logo-banner" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png">
-				<h2 class="title-banner"><span class="text-primary">MDE Forge</span></h2>
-				<p class="subtitle-banner">MDE Forge promotes the development of a software-as-a-service modeling platform: storing, sharing, analysing and execute modeling artifacts by harnessing third-party components and tools.</p>
+				<h2 class="title-banner"><span>MDE Forge</span></h2>
+				<p class="subtitle-banner">Software-As-A-Service Modeling Platform</p>
 			</div>
 		</div>
 	</div>
-	
+	<div class="mosaic-line mosaic-line-2" style="height: auto; background: #fff;">
+		<div class="container-960" style="padding: 60px 0">
+
+					<h2 class="header-h main-title text-black center">MDE Forge promotes the development of a software-as-a-service modeling platform:</h2>
+					<h2 class="header-h main-text center">storing, sharing, analysing and execute modeling artifacts <br> by harnessing third-party components and tools.</h2>
+		</div>
+	</div>
 	<div class="mosaic-line mosaic-line-2" style="height: auto">
-		<div class="container-960 center">
-			<h2 class="margin-none">MDE Forge is a project by The Model-Driven Engineering Group at the </h2>
-			<h2 class="margin-none"><strong>University of L'Aquila</strong></h2>
-			<span>Current supported standards <strong>Ecore</strong>, <strong>ATL</strong>, <strong>ETL</strong>. More to come.</span>
+		<div class="container-960" style="padding: 60px 0">
+		<div class="row-fluid">
+			<div class="span7">
+				<h2 class="header-h"> <span class="text-black">Forge</span> is a project developed by the <span class="text-black">Model-Driven Engineering Group</span><br> at the <span class="text-black">University of L'Aquila</span>.</h2>
+			</div>
+			<div class="span5">
+				<img width="250px" class="logo-banner image-banner" src="${pageContext.request.contextPath}/resources/theme/images/cloud.png">
+			</div>
+		</div>
+		<hr class="margin-hr">
+		<div class="row-fluid">
+			<div class="span5">
+				<img width="250px" class="logo-banner image-banner" src="${pageContext.request.contextPath}/resources/theme/images/map.png">
+			</div>
+			<div class="span7">
+				<h2 class="header-h text-right">Current supported standards <span class="text-black">Ecore</span>, <span class="text-black">ATL</span>, <span class="text-black">ETL</span>. More to come.</h2>
+			</div>
 		</div>
 	</div>
 	
@@ -147,13 +166,14 @@
 	</div>
 	--%>
 				 
-	 <div class="mosaic-line mosaic-line-2">
+	 <div class="mosaic-line mosaic-line-2" style="background: #fff">
 			<div class="container-960 innerTB center">
-				<h2 style="margin: 20px 0">MDE Group links</h2>
+				<h2 class="header-h main-title text-black center">MDE Forge Social Links</h2>
+				<h2 class="header-h main-text center">Check our webpage and GitHub repository and follow us on Twitter</h2>
 				<div class="social-large social-large-2 center">
-					<a href="https://github.com/MDEGroup" class="glyphicons github"><i></i>Github</a>
-					<a href="http://mdegroup.disim.univaq.it/" class="glyphicons link"><i></i>Web Site</a>
-					<a href="#" class="glyphicons twitter"><i></i>Twitter</a>					
+					<a href="https://github.com/MDEGroup" class="glyphicons github" target="_blank"><i></i>Github</a>
+					<a href="http://mdegroup.disim.univaq.it/" class="glyphicons link" target="_blank"><i></i>Web Site</a>
+					<a href="#" class="glyphicons twitter" target="_blank"><i></i>Twitter</a>					
 				</div>
 			</div>
 		</div>

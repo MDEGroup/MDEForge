@@ -3,7 +3,6 @@ package org.mdeforge.common.spring.security;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
