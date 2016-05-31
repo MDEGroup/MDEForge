@@ -2,8 +2,6 @@
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-
-
 <div class="navbar main">
 			
 			<!-- Menu Toggle Button -->
@@ -13,8 +11,11 @@
 			<!-- // Menu Toggle Button END -->
 			
 			
+						<!-- Not Blank page -->
 			
+						<!-- Full Top Style -->
 			<ul class="topnav pull-left">
+				<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard"><i></i> Dashboard</a></li>
 				
 				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons cloud-upload"><i></i>Artifact Upload <span class="caret"></span></a>
@@ -39,51 +40,28 @@
 				</li>
 				<li class="search open">
 					<form action="${pageContext.request.contextPath}/public/search" method="get" class="dropdown dd-1">
-						<input type="text" value="" placeholder="Search Artifacts.." name="search_string" data-toggle="typeahead" />
+						<input type="text" value="" placeholder="Search Artifacts.." name="search_string" />
 						<button type="button" class="glyphicons search"><i></i></button>
 					</form>
-				</li> 
-				
-			</ul>
-			
-			
-			
-			
-			<%-- <ul class="topnav pull-left">
-				<li><a href="${pageContext.request.contextPath}/private/execute_transformation.htm" class="glyphicons play"><i></i> Execute Transformation</a></li> 
-				<li><a href="${pageContext.request.contextPath}/private/transformation_chain.htm" class="glyphicons random"><i></i> Transformation Chain</a></li> 
-				
-				<li class="dropdown dd-1">
-					<a href="" data-toggle="dropdown" class="glyphicons cloud-upload"><i></i>Upload<span class="caret"></span></a>
-					<ul class="dropdown-menu pull-left">
-					
-					<security:authorize access="hasRole('admin')">
-						<li><a href="${pageContext.request.contextPath}/private/upload.htm" class="glyphicons cloud-upload"><i></i> Generico</a></li>	
-					</security:authorize>	
-						
-						<li><a href="${pageContext.request.contextPath}/private/metamodelInsertion.htm" class="glyphicons cloud-upload"><i></i>Metamodel</a></li>						
-						<li><a href="${pageContext.request.contextPath}/private/transformationInsertion.htm" class="glyphicons cloud-upload"><i></i>Transformation</a></li>
-						
-					
-					</ul>
 				</li>
-			</ul> --%>
+			</ul>
+			<!-- // Full Top Style END -->
+						
+						
+			<!-- // Not Blank Page END -->
+						
 						
 						<!-- Top Menu Right -->
-			 <ul class="topnav pull-right hidden-phone hidden-tablet hidden-desktop-1">								
-								
-				<%-- <security:authorize access="hasRole('admin')">
-				<li><a href="${pageContext.request.contextPath}/admin/admin_dashboard.htm" class="glyphicons settings"><i></i> Admin</a></li>
-				</security:authorize> --%>
+			<ul class="topnav pull-right">
 			
-				<!-- Profile / Logout menu -->
+								<!-- Themer -->
 				<li class="account dropdown dd-1">
 					<a data-toggle="dropdown" href="#" class="glyphicons logout lock">
 					<span class="hidden-tablet hidden-phone hidden-desktop-1">  
 					<security:authentication property="principal.user.username"/></span><i></i></a>
 					<ul class="dropdown-menu pull-right">
 						<li><a href="${pageContext.request.contextPath}/private/dashboard"
-												class="glyphicons edit" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title="">Dashboard</a></li>					
+												class="glyphicons edit">Dashboard</a></li>					
 								
 						<li class="profile">
 							<span>
@@ -108,7 +86,7 @@
 				</li>
 				<!-- // Profile / Logout menu END -->
 				
-			</ul> 
+			</ul>
 			<!-- // Top Menu Right END -->
 						<div class="clearfix"></div>
 			

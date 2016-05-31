@@ -18,14 +18,14 @@
 
 
 
-<h3>Dashboard</h3>
+<h2 class="header-h main-title">Dashboard</h2>
 
 
 <div class="innerLR">
 
 
 	<div class="row-fluid">
-		<div class="span4">
+		<div class="span6">
 			<div class="well margin-none">
 				<address class="margin-none">
 					<h2>${user.getLastname()} ${user.getFirstname()}</h2>
@@ -40,96 +40,7 @@
 		
 		</div>
 		
-		<div class="span8">
-			
-		
-		</div>
-	</div>
-
-<div class="separator bottom"></div>
-
-	<div class="row-fluid">
-		<div class="span4">
-			
-			<div class="widget widget-body-white">
-					<div class="widget-head">
-						<h4 class="heading glyphicons file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
-					</div>
-					<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								<table class="table table-condensed">
-			
-								<!-- Table heading -->
-								<thead>
-									<tr>
-										<th>Name</th>
-										<th>Type</th>
-										<th class="center">Last update</th>
-									</tr>
-								</thead>
-								<!-- // Table heading END -->
-								
-								<!-- Table body -->
-								<tbody>
-									<c:forEach items="${myArtifactsList}" var="artifact">
-										<!-- Table row -->
-										<tr>
-											<td>
-												<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
-												
-											</td>
-											<td>
-												<span class="badge badge-important">${artifact.getClass().getSimpleName() }</span>
-											</td>
-											<td class="center"><fmt:formatDate type="date" value="${artifact.getModified()}" /></td>
-										</tr>
-										<!-- // Table row END -->
-									</c:forEach>
-									
-								</tbody>
-								<!-- // Table body END -->
-								
-							</table>
-					</div>
-			</div>
-		</div>
-		<div class="span4">
-
-			<div class="widget widget-body-white">
-					<div class="widget-head">
-						<h4 class="heading glyphicons edit"><i></i>Recent Projects (${myProjectList.size()})</h4>
-					</div>
-								<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								<table class="table table-condensed">
-			
-								<!-- Table heading -->
-								<thead>
-									<tr>
-										<th>Project Name</th>
-										<th>Created date</th>
-									</tr>
-								</thead>
-								<!-- // Table heading END -->
-								
-								<!-- Table body -->
-								<tbody>
-									<c:forEach items="${myProjectList}" var="project">
-										<!-- Table row -->
-										<tr>
-											<td>${project.getName()}</td>
-											<td class="center">
-												<span class="label"><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
-											</td>
-										</tr>
-										<!-- // Table row END -->
-									</c:forEach>
-									<!-- Table row -->
-								</tbody>
-								<!-- // Table body END -->
-							</table>
-					</div>
-			</div>
-		</div>
-		<div class="span4">
+		<div class="span6">
 			<div class="widget widget-body-white">
 							<div class="widget-head">
 								<h4 class="heading glyphicons stats"><i></i>Repository Statistics</h4>
@@ -178,6 +89,92 @@
 						</div>
 		
 		</div>
+	</div>
+
+<div class="separator bottom"></div>
+
+	<div class="row-fluid">
+		<div class="span6">
+			
+			<div class="widget widget-body-white">
+					<div class="widget-head">
+						<h4 class="heading glyphicons file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
+					</div>
+					<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
+								<table class="table table-condensed">
+			
+								<!-- Table heading -->
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Type</th>
+										<th class="center">Last update</th>
+									</tr>
+								</thead>
+								<!-- // Table heading END -->
+								
+								<!-- Table body -->
+								<tbody>
+									<c:forEach items="${myArtifactsList}" var="artifact">
+										<!-- Table row -->
+										<tr>
+											<td>
+												<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName() }/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+												
+											</td>
+											<td>
+												<span class="badge badge-important">${artifact.getClass().getSimpleName() }</span>
+											</td>
+											<td class="center"><fmt:formatDate type="date" value="${artifact.getModified()}" /></td>
+										</tr>
+										<!-- // Table row END -->
+									</c:forEach>
+									
+								</tbody>
+								<!-- // Table body END -->
+								
+							</table>
+					</div>
+			</div>
+		</div>
+		<div class="span6">
+
+			<div class="widget widget-body-white">
+					<div class="widget-head">
+						<h4 class="heading glyphicons edit"><i></i>Recent Projects (${myProjectList.size()})</h4>
+					</div>
+								<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
+								<table class="table table-condensed">
+			
+								<!-- Table heading -->
+								<thead>
+									<tr>
+										<th>Project Name</th>
+										<th>Created date</th>
+									</tr>
+								</thead>
+								<!-- // Table heading END -->
+								
+								<!-- Table body -->
+								<tbody>
+									<c:forEach items="${myProjectList}" var="project">
+										<!-- Table row -->
+										<tr>
+											<td>${project.getName()}</td>
+											<td class="center">
+												<span class="label"><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
+											</td>
+										</tr>
+										<!-- // Table row END -->
+									</c:forEach>
+									<!-- Table row -->
+								</tbody>
+								<!-- // Table body END -->
+							</table>
+					</div>
+			</div>
+		</div>
+		
 	</div>
 
 

@@ -6,7 +6,7 @@
 <!--[if IE 7]>    <html class="ie lt-ie9 lt-ie8 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
 <!--[if IE 8]>    <html class="ie lt-ie9 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
 <!--[if gt IE 8]> <html class="ie gt-ie8 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
-<!--[if !IE]><!--><html class="fluid top-full sticky-top sidebar sidebar-full"><!-- <![endif]-->
+<!--[if !IE]><!--><html class="fluid top-full sticky-top sidebar sidebar-full sticky-sidebar js no-touch csstransforms3d csstransitions"><!-- <![endif]-->
 <head>
 	<title><spring:message code="mdeforge"/></title>
 	
@@ -36,7 +36,7 @@
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
-    
+     
     <!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -47,9 +47,9 @@
     <![endif]-->
 	
 	<!-- Main Theme Stylesheet :: CSS -->
-	<link href="${pageContext.request.contextPath}/resources/theme/css/style-default.css?1373029331" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/theme/css/style-flat.css?1373029331" rel="stylesheet" type="text/css" />
 	<%-- <link href="${pageContext.request.contextPath}/resources/theme/skins/css/android-green.css" rel="stylesheet" type="text/css" /> --%>
-	<link href="${pageContext.request.contextPath}/resources/theme/skins/css/bascio_template.css" rel="stylesheet" type="text/css" />
+	<!--  <link href="${pageContext.request.contextPath}/resources/theme/skins/css/bascio_template.css" rel="stylesheet" type="text/css" />-->
 	
 	
 	<!-- FireBug Lite -->

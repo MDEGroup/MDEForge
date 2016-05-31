@@ -23,15 +23,25 @@
 						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/members">MEMBERS</a></li>
 						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/public/publications">PUBLICATIONS</a></li>
 						<security:authorize access="isAnonymous()">
-						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
-						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/signin" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li>
-							<!-- 
+						<li class="hidden-phone"><a href="${pageContext.request.contextPath}/login" class="glyphicons "><spring:message code="public.menu.login" /></a></li>
+						<!--
+							<li class="hidden-phone"><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
+							<li class="hidden-phone"><a href="${pageContext.request.contextPath}/signin" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li>
+							 
 								</ul>
 								<li><a href="${pageContext.request.contextPath}/login" class="glyphicons unlock"><i></i><spring:message code="public.menu.login" /></a></li>
 								<li><a href="${pageContext.request.contextPath}/signin" class="glyphicons user_add"><i></i><spring:message code="public.menu.register" /></a></li>
 								</ul>
 							-->
 						</security:authorize>	
+						<security:authorize access="isAuthenticated()">
+						<li class="hidden-phone">
+							<a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons">
+								DashBoard
+								<!--<security:authentication property="principal.user.username"/>-->
+							</a>
+						</li>
+						</security:authorize>
 						
 					</ul>					
 					<!-- TOP Menu END -->
@@ -55,7 +65,7 @@
 				<li><a href="${pageContext.request.contextPath}/public/members" class="glyphicons group"><i></i>Members</a></li>
 				<li><a href="${pageContext.request.contextPath}/public/publications" class="glyphicons book"><i></i>Publications</a></li>
 				
-			</ul>
+			</ul> 
 			
 			<ul class="topnav pull-right border-none hidden-tablet">
 				<security:authorize access="isAuthenticated()">		
