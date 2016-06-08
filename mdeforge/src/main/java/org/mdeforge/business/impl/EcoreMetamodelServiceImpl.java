@@ -242,6 +242,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			logger.error("Some errors when try to calculate metric for metamodel");
 			throw new MetricEngineException("Some errors when try to calculate metric for metamodel", artifact.getId());
 		}
+		try {
+			createIndex(result);
+		} catch (Exception e) { throw new BusinessException(e.getMessage());}
 		artifactRepository.save(artifact);
 		return result;
 	}

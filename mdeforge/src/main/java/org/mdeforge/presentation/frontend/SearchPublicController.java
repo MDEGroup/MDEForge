@@ -54,15 +54,16 @@ public class SearchPublicController {
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
 	
-	@RequestMapping(value = "/search_start", method = { RequestMethod.GET })
+	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search() {
 		return "public.search";
 	}
-	@RequestMapping(value = "/search", method = { RequestMethod.GET })
+	@RequestMapping(value = "/search", method = { RequestMethod.POST })
 	public String search(Model model, 
 			@RequestParam(value = "search_string", required = false) String searchString) {
 		List<Artifact> al = artifactService.search(searchString);
 		model.addAttribute("artifactList", al);
+		model.addAttribute("search_string", searchString);
 		return "public.search";
 	}
 	
