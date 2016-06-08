@@ -18,25 +18,24 @@
 		<li class="divider"></li>
 		<li> Use</li>
 		<li class="divider"></li>
-		<li>Upload Page</li>
+		<li>${artifact.getClass().getSimpleName()} Upload</li>
 </ul>
 <!-- Breadcrumb END -->
 
 
-
-<h3>Upload Page</h3>
-
+<h3 class="header-h main-title">${artifact.getClass().getSimpleName()} Upload</h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 
 <div class="innerLR">
 
 <form:form cssClass="form-horizontal" modelAttribute="artifact" 
 	action="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/upload" role="form" method="POST" enctype="multipart/form-data">
-	<div class="widget widget-heading-simple widget-body-gray">
+	<div class="widget widget-heading-simple">
 		
-			<!-- Widget heading -->
+			<!-- Widget heading 
 			<div class="widget-head">
 				<h4 class="heading">Upload new ${artifact.getClass().getSimpleName()}</h4>
-			</div>
+			</div> -->
 			<!-- // Widget heading END -->
 			
 			<div class="widget-body">
@@ -47,111 +46,88 @@
 					<!-- Column -->
 					<div class="span6">
 						<!-- Group -->
-						<div class="control-group">
-							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Name</label>
-							<div class="controls">
+							<h5 class="input-name">${artifact.getClass().getSimpleName()} Name</h5>
 								<input type="text" name="name"/>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label" for="firstname">${artifact.getClass().getSimpleName()} Description</label>
-							<div class="controls">
-								<textarea class="span12" rows="5" cols="100" name="description"></textarea>
-							</div>
-						</div>
-						<!-- // Group END -->
-						
-					</div>
+							<h5 class="input-name">${artifact.getClass().getSimpleName()} Description</h5>
+								<textarea name="description"></textarea>
+							<!-- // Group END -->
+							<h5 class="input-name">Visibility</h5>
+									<select name="open">
+										<option value="true">Public</option>
+										<option value="false">Private</option>
+									</select>
 					<!-- // Column END -->
-					
-					<!-- Column -->
+					</div>
 					<div class="span6">
-						<div class="row-fluid uniformjs">
-				
-							<!-- Column -->
-							<div class="span4">
-								<h4 style="margin-bottom: 10px;">Private or Public</h4>
-								<div class="widget-body uniformjs collapse in">
-								<div class="radio" id="uniform-undefined">
-									<label class="radio">
-										<span>
-										<form:radiobutton cssClass="" path="open" value="true"/>Public
-										</span>
-									</label><br>
-								<label class="radio">
-									<form:radiobutton cssClass="" path="open" value="false"/>Private
-								</label><br>
-								</div>
-								
-							</div>
-							</div>
-							<!-- // Column END -->
-						</div>
-						<!-- // Row END -->
-					</div>
-					<!-- // Column END -->
-				</div>
-				<!-- // Row END -->
-				<hr class="separator">
-				<div class="row-fluid">
-					<div class="control-group span12">
-							<label class="control-label">${artifact.getClass().getSimpleName()} File</label>
-							<div class="fileupload fileupload-new controls" data-provides="fileupload">
-							  	<div class="input-append">
-							    	<div class="uneditable-input"><i class="icon-file fileupload-exists"></i> 
-							    		<span class="fileupload-preview"></span>
-							    	</div>
-							    	<span class="btn btn-default btn-file">
+						<h5 class="input-name center">Upload ${artifact.getClass().getSimpleName()} File</h5>
+						<label for="artifactName"><div><img width="150px" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/newfile.png"></div></label>
+						<div class="fileupload fileupload-new" data-provides="fileupload">
+							  	<div class="input-append center" style="width: 100%">
+							  		<span class="btn btn-default btn-file">
 								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
 								    	<span class="fileupload-exists">Change</span>
 								    	<input type="file" id="artifactName" class="margin-none" name="artifactfile" size="40"/>
 							    	</span>
-							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+							    	<div class="uneditable-input center"><i class="icon-file fileupload-exists"></i> 
+							    		<span class="fileupload-preview"></span>
+							    	</div>
+							    	
+							    	<!-- <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>-->
 							  	</div>
-							</div>
 						</div>
+						
 					</div>
-					<div class="row-fluid">
-				<!-- Row -->
+						<!-- // Row END -->
+					</div>
+					<!-- // Column END -->
+				
+				<!-- // Row END-->
+				
+				<hr class="separator">
+				<div class="row-fluid">
+					<!-- Row -->
 					<div class="span12">
-						<h4>Properties</h4>
+						<h5 class="input-name">Properties</h5>
 							<table>
 								<thead>
-									<tr>
+									<!-- <tr>
 										<th>Name</th>
 									
 										<th>Value</th>
 										<th>Action</th>
-									</tr>
+									</tr>-->
 								</thead>
 								<tbody id="propertiesTable">
 								</tbody>
 							</table>
-							<button type="button" id="addPropertyButton" class="btn btn-icon btn-success glyphicons circle_ok"><i></i>Add new property</button>
+							<button type="button" id="addPropertyButton" class="btn btn-primary">Add New Property</button>
 					</div>
-				</div>				
+				</div>	
+				<div class="separator"></div>		
 				<hr class="separator">
 				<div class="row-fluid">
 					<div class="span6">
-					<h4>Add to project</h4>
+					<h5 class="input-name">Add To Project</h5>
 						<form:select path="projects" multiple="true">
 									<form:options  items="${projecList}" itemValue="id" itemLabel="name"></form:options>
 						</form:select>
 					</div>			
 					
 					<div class="span6">
-					<h4>Share with:</h4>
+					<h5 class="input-name">Share With</h5>
 						<form:select path="shared" multiple="true">
 									<form:options  items="${userList}" itemValue="id" itemLabel="username"></form:options>
 						</form:select>
 					</div>				
 				</div>
 				<tiles:insertAttribute name="central" ignore="true"/>
+				<div class="separator"></div>
 				<div class="row-fluid">
-					
+					<div class="span12">
 					<div class="form-actions">
-						<button type="submit" class="btn btn-icon btn-primary glyphicons circle_ok"><i></i>Upload</button>
-						<button type="button" class="btn btn-icon btn-default glyphicons circle_remove"><i></i>Cancel</button>
+						<button type="submit" class="btn btn-large btn-primary glyphicons cloud-upload"><i></i> Upload</button>
+						<button type="button" class="btn btn-large btn-default">Cancel</button>
+					</div>
 					</div>
 				</div>
 				<!-- // Form actions END -->

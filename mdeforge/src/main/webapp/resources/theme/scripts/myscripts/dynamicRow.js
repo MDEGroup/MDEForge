@@ -18,7 +18,7 @@ $(function() {
 //		});
 //	});
 
-	
+	var idRow = 0;
 	$(document).on('click','.deletePropertyButton', function(e) {
 		console.log($(this).data('id'));
 		$('.propertyRow[data-id="' + $(this).data('id') + '"]').remove();
@@ -26,8 +26,6 @@ $(function() {
 		
 	});
 	$(document).on('click','#addPropertyButton', function(e) {
-		var idRow = $('.propertyRow.lastRow').data('id');
-		$('.propertyRow.lastRow').removeClass('lastRow');
 		if (idRow ==null)
 			idRow = -1;
 		var result = $('#propertiesTable');
@@ -43,7 +41,6 @@ $(function() {
 	});
 	$(document).on('click','#addPropertyButton2', function(e) {
 		var idRow = $('.propertyRow.lastRow').data('id');
-		$('.propertyRow.lastRow').removeClass('lastRow');
 		if (idRow ==null)
 			idRow = -1;
 		var result = $('#propertiesTable2');
@@ -61,8 +58,6 @@ $(function() {
 		
 	});
 	$(document).on('click','#addDomainConformToMetamodel', function(e) {
-		var idRow = $('.domainConformToRow.lastRow').data('id');
-		$('.domainonformToRow.lastRow').removeClass('lastRow');
 		if (idRow ==null)
 			idRow = -1;
 		var idMetamodel = $('#domainMetamodelSelect').val();
@@ -84,8 +79,6 @@ $(function() {
 	});
 	
 	$(document).on('click','#addCoDomainConformToMetamodel', function(e) {
-		var idRow = $('.coDomainConformToRow.lastRow').data('id');
-		$('.coDomainConformToRow.lastRow').removeClass('lastRow');
 		if (idRow ==null)
 			idRow = -1;
 		var result = $('#coDomainConformToTable');

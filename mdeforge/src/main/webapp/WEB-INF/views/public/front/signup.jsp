@@ -10,7 +10,7 @@
 	 
 		<div class="wrapper">
 		<img class="logo-banner" width="100px" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png">
-			<h3 class="header-h main-title text-black center">Sign In to MDE Forge</h3>
+			<h3 class="header-h main-title text-black center">Sign Up to MDE Forge</h3>
 			
 			<h2 class="header-h main-text center"></h2>
 			<!-- Box -->

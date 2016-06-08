@@ -32,11 +32,11 @@
 <div class="innerLR">
 
 	
-	<div class="widget widget-heading-simple widget-body-gray">
+	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 			
 			<!-- Table -->
-			<table class="dynamicTable tableTools table table-striped table-bordered table-condensed table-white">
+			<table class="dynamicTable tableTools table table-striped table-white">
 				<!-- Table heading -->
 				<thead>
 					<tr>						

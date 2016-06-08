@@ -21,84 +21,81 @@
 <h2 class="header-h main-title">Dashboard</h2>
 
 
-<div class="innerLR">
+<div class="innerLR" id="dashboard">
 
 
-	<div class="row-fluid">
-		<div class="span6">
+	<div class="row-fluid" style="background: url(/mdeforge/resources/theme/images/1.jpg) center center no-repeat;background-size: cover;">
+		<div class="span12">
 			<div class="well margin-none">
 				<address class="margin-none">
 					<h2>${user.getLastname()} ${user.getFirstname()}</h2>
-					<strong>${user.getUsername()}</strong> at 
-					<strong><a href="#">Business</a></strong><br> 
-					<abbr title="Work email">e-mail:</abbr> <a href="mailto:#">${user.getEmail()}</a><br> 
-					<abbr title="Work Phone">phone:</abbr> (+39) 0779 0987652<br>
-					<div class="separator line"></div>
+					<span>${user.getUsername()}</span> at 
+					<a href="#">Business</a><br> 
+					<span title="Work email">e-mail:</span> <a href="mailto:#">${user.getEmail()}</a><br> 
+					<span title="Work Phone">phone:</span> (+39) 0779 0987652<br>
 					
 				</address>
 			</div>
 		
 		</div>
-		
-		<div class="span6">
-			<div class="widget widget-body-white">
-							<div class="widget-head">
-								<h4 class="heading glyphicons stats"><i></i>Repository Statistics</h4>
-							</div>
-							<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								<div class="widget-body list collapse in">
-									<ul>
-									
-										<!-- List item -->
-										<li>
-											<span>Total Number of Transformations</span>
-											<span class="count">${totalNumberOfTransformations}</span>
-										</li>
-										<!-- // List item END -->
-										
-										<!-- List item -->
-										<li>
-											<span>Total Number of Metamodels</span>
-											<span class="count">${totalNumberOfMetamodels}</span>
-										</li>
-										<!-- // List item END -->
-										
-										<!-- List item -->
-										<li>
-											<span>Total Number of Models</span>
-											<span class="count">${totalNumberOfModels}</span>
-										</li>
-										<li>
-											<span>Total Number of Artifact</span>
-											<span class="count">${totalNumberOfArtifacts}</span>
-										</li>
-										<!-- // List item END -->
-										
-										<!-- List item -->
-										<li>
-											<span>Total Number of Projects</span>
-											<span class="count">${totalNumberOfProjects}</span>
-										</li>
-										<!-- // List item END -->
-										
-									</ul>
-						</div>
-								
-								
-							</div>
-						</div>
-		
-		</div>
 	</div>
-
-<div class="separator bottom"></div>
-
-	<div class="row-fluid">
-		<div class="span6">
-			
-			<div class="widget widget-body-white">
+<div class="separator line"></div>
+<div class="row-fluid">
+				<div class="span2">
+				
+					<!-- Stats Widget -->
+					<a href="#" class="widget-stats widget-stats-2">
+						<span class="count">${totalNumberOfTransformations}</span>
+						<span class="txt">Transformations</span>
+					</a>
+					<!-- // Stats Widget END -->
+					
+				</div>
+				<div class="span2">
+				
+					<!-- Stats Widget -->
+					<a href="#" class="widget-stats widget-stats-2">
+						<span class="count">${totalNumberOfMetamodels}</span>
+						<span class="txt">Metamodels</span>
+					</a>
+					<!-- // Stats Widget END -->
+					
+				</div>
+				<div class="span2">
+				
+					<!-- Stats Widget -->
+					<a href="#" class="widget-stats widget-stats-2">
+						<span class="count">${totalNumberOfModels}</span>
+						<span class="txt">Models</span>
+					</a>
+					<!-- // Stats Widget END -->
+					
+				</div>
+				<div class="span2">
+				
+					<!-- Stats Widget -->
+					<a href="#" class="widget-stats widget-stats-2">
+						<span class="count">${totalNumberOfArtifacts}</span>
+						<span class="txt">Artifacts</span>
+					</a>
+					<!-- // Stats Widget END -->
+					
+				</div>
+				<div class="span2">
+				
+					<!-- Stats Widget -->
+					<a href="#" class="widget-stats widget-stats-2">
+						<span class="count">${totalNumberOfProjects}</span>
+						<span class="txt">Projects</span>
+					</a>
+					<!-- // Stats Widget END -->
+					
+				</div>
+			</div>
+<div class="separator"></div>
+<div class="widget widget-body-white">
 					<div class="widget-head">
-						<h4 class="heading glyphicons file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
+						<h4 class="heading file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
 					</div>
 					<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
@@ -136,12 +133,10 @@
 							</table>
 					</div>
 			</div>
-		</div>
-		<div class="span6">
-
-			<div class="widget widget-body-white">
+<div class="separator"></div>
+	<div class="widget widget-body-white">
 					<div class="widget-head">
-						<h4 class="heading glyphicons edit"><i></i>Recent Projects (${myProjectList.size()})</h4>
+						<h4 class="heading folder_open"><i></i>Recent Projects (${myProjectList.size()})</h4>
 					</div>
 								<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
 								<table class="table table-condensed">
@@ -173,9 +168,19 @@
 							</table>
 					</div>
 			</div>
-		</div>
+	
+	<!-- Widget -->
+	<h3 class="header-h main-title" style="padding-left: 10px;">Graphs</h3>
+	<div class="widget widget-heading-simple widget-body-white">
+		<!-- // Widget heading END -->
 		
+		<div class="widget-body">
+		
+			<!-- Chart with lines and fill with no points -->
+			<div id="chart_lines_fill_nopoints" style="width: 100%; height: 250px;"></div>
+		</div>
 	</div>
+	<!-- // Widget END -->
 
 
 	
@@ -184,6 +189,20 @@
 
 
 
+<script>
+	$(document).ready(function(){
+		$(function()
+				  {
+				  	// initialize charts
+				  	if (typeof charts != 'undefined')
+				  		charts.initCharts();
+				  });
+		
+		
+	});
+	
+	  
+	</script>
 
 
 

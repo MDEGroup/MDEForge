@@ -28,28 +28,28 @@ var charts =
 	initCharts: function()
 	{
 		// init simple chart
-		this.chart_simple.init();
+		//this.chart_simple.init();
 
 		// init lines chart with fill & without points
 		this.chart_lines_fill_nopoints.init();
 
 		// init ordered bars chart
-		this.chart_ordered_bars.init();
+		//this.chart_ordered_bars.init();
 
 		// init donut chart
-		this.chart_donut.init();
+		//this.chart_donut.init();
 
 		// init stacked bars chart
-		this.chart_stacked_bars.init();
+		//this.chart_stacked_bars.init();
 
 		// init pie chart
-		this.chart_pie.init();
+		//this.chart_pie.init();
 
 		// init horizontal bars chart
-		this.chart_horizontal_bars.init();
+		//this.chart_horizontal_bars.init();
 
 		// init live chart
-		this.chart_live.init();
+		//this.chart_live.init();
 	},
 	
 	// init charts on dashboard

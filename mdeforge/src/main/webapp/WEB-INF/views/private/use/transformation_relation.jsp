@@ -1,73 +1,88 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<hr class="separator">
+<div class="separator"></div>
 <div class="row-fluid">
 	<div class="span12">
 		<button type="button" id="transformationModelInfo"
-			class="btn btn-icon btn-success glyphicons circle_ok">
+			class="btn btn-icon btn-large btn-primary glyphicons file">
 			<i></i>Parse ATL
 		</button>
 	</div>
 </div>
+<div class="separator"></div>
 <!-- Form actions -->
+<hr class="separator">
 <div class="row-fluid" id="transformationRelations">
-	<div class="row-fluid">
-		<div class="span12">
-			<h4>From Metamodels</h4>
+		<div class="span6">
+		<h5 class="input-name">From Metamodels</h5>
+		<div class="separator"></div>
+			<div id="defineDomainRelationTo">
+			<div class="span6">
+			<h6>Search Metamodels</h6>
+			<select id="domainMetamodelSelect" class="select-relation">
+				<c:forEach items="${metamodelList}" var="metamodel">
+					<option value="${metamodel.id }">${metamodel.name }</option>
+				</c:forEach>
+			</select> 
+			</div>
+			<div class="span6">
+			<h6>Filter</h6>
+				<input id="filterMMDomainTextBox" type="text" placeholder="Filter Metamodels by Name" />
+			</div>	
+
+			<button type="button" id="addDomainConformToMetamodel" class="btn btn-primary">
+				Select Metamodel
+			</button>
+			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">New metamodel</a> -->
+			</div>
+			<div class="separator"></div>
 			<table>
 				<thead>
 					<tr>
 						<th>Metamodel</th>
 						<th>Name</th>
 						<th>Reference Model Name</th>
-						<th>Action</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody id="domainConformToTable">
 				</tbody>
 			</table>
 		</div>
-		<div class="span12" id="defineDomainRelationTo">
-			<select id="domainMetamodelSelect">
-				<c:forEach items="${metamodelList}" var="metamodel">
-					<option value="${metamodel.id }">${metamodel.name }</option>
-				</c:forEach>
-			</select> <input id="filterMMDomainTextBox" type="text" />
-
-			<button type="button" id="addDomainConformToMetamodel"
-				class="btn btn-icon btn-success glyphicons circle_ok">
-				<i></i>Select metamodel
+		<div class="span6">
+			<h5 class="input-name">To Metamodels</h5>
+			<div class="separator"></div>
+			<div  id="defineCoDomainRelationTo">
+			<div class="span6">
+			<h6>Search Metamodels</h6>
+				<select id="coDomainMetamodelSelect" class="select-relation">
+					<c:forEach items="${metamodelList}" var="metamodel">
+						<option value="${metamodel.id }">${metamodel.name }</option>
+					</c:forEach>
+				</select>
+			</div>
+			<div class="span6">
+			<h6>Filter</h6>
+				<input id="filterMMCoDomainTextBox" type="text" placeholder="Filter Metamodels by Name"/>
+			</div>
+			<button type="button" id="addCoDomainConformToMetamodel"
+				class="btn btn-primary">
+				Select Metamodel
 			</button>
-			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">New metamodel</a> -->
+			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">Upload New metamodel</a> -->
 		</div>
-	</div>
-	<div class="row-fluid">
-		<div class="span12">
-			<h4>To Metamodels:</h4>
-			<table>
+		<div class="separator"></div>
+		<table>
 				<thead>
 					<tr>
 						<th>Metamodel</th>
 						<th>Name</th>
 						<th>Reference Model Name</th>
-						<th>Action</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody id="coDomainConformToTable">
 				</tbody>
 			</table>
-		</div>
-		<div class="span12" id="defineCoDomainRelationTo">
-			<select id="coDomainMetamodelSelect">
-				<c:forEach items="${metamodelList}" var="metamodel">
-					<option value="${metamodel.id }">${metamodel.name }</option>
-				</c:forEach>
-			</select> <input id="filterMMCoDomainTextBox" type="text" />
-			<button type="button" id="addCoDomainConformToMetamodel"
-				class="btn btn-icon btn-success glyphicons circle_ok">
-				<i></i>Select metamodel
-			</button>
-			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">Upload New metamodel</a> -->
-		</div>
 	</div>
 </div>
 <hr class="separator">
