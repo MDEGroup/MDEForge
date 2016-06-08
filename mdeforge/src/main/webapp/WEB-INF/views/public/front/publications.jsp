@@ -33,24 +33,21 @@
 				<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
-						<div class="separator bottom"></div>
-						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
 									<h3 class="header-h main-title text-black">MDEForge: an extensible Web-based modeling platform *</h3>
-									<br> 
 										<span style="text-decoration: underline;">Francesco Basciani</span>, 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
 										<span style="text-decoration: underline;">Amleto Di Salle</span>, 
 										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
 										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
-									<br>
+									<div class="separator bottom"></div>
 									<span class="">
 							        	<i>CloudMDE 2014, 66</i>
 							        </span>&nbsp;
 							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
-							        <br>
+							        <div class="separator bottom"></div>
 							        <strong>Abstract. </strong>
 							        Model-Driven Engineering (MDE) refers to the systematic use of models
 									as first class entities throughout the software development life cycle. Over the
@@ -81,22 +78,19 @@
 			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
-						<div class="separator bottom"></div>
-						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
 									<h3 class="header-h main-title text-black">Describing the correlations between metamodels and transformations aspects</h3>
-									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
 										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
 										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
-									<br>
+									<div class="separator bottom"></div>
 									<span class="">
 							        	<i>ceur-ws.org</i>
 							        </span>&nbsp;
 							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
-							        <br>
+							        <div class="separator bottom"></div>
 							        <strong>Abstract. </strong>
 							       Metamodels are a key concept in Model-Driven Engineering.
 									Any artifact in a modeling ecosystem has to be defined in accordance to
@@ -122,22 +116,19 @@
 			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
-						<div class="separator bottom"></div>
-						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
 									<h3 class="header-h main-title text-black">Collaborative Repositories in Model-Driven Engineering</h3>
-									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
 										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
 										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
-									<br>
+									<div class="separator bottom"></div>
 									<span class="">
 							        	<i>IEEE Software, vol.32, no. 3, pp. 28-34</i>
 							        </span>&nbsp;
 							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> May-June 2015</span>
-							        <br>
+							        <div class="separator bottom"></div>
 							        <strong>Abstract. </strong>
 							      Recently proposed model repositories aim to support specific needs--for example, collaborative modeling, the ability to use different modeling tools in software life-cycle management, tool interoperability, increased model reuse, and the integration of heterogeneous models.
 						        </div>
@@ -152,23 +143,20 @@
 			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
-						<div class="separator bottom"></div>
-						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
 									<h3 class="header-h main-title text-black">Qualifying chains of transformation with coverage based evaluation criteria</h3>
-									<br> 
 										<span style="text-decoration: underline;">Francesco Basciani</span>, 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
 										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
 										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
-									<br>
+									<div class="separator bottom"></div>
 									<span class="">
 							        	<i>ceur-ws.org</i>
 							        </span>&nbsp;
 							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2014</span>
-							        <br>
+							        <div class="separator bottom"></div>
 							        <strong>Abstract. </strong>
 							     	
 							     	In Model-Driven Engineering (MDE) the development of complex
@@ -200,22 +188,19 @@
 			<div class="widget widget-heading-simple widget-body-simple">
 				<div class="widget-body">
 					<div class="innerL">
-						<div class="separator bottom"></div>
-						
 						<div class="separator bottom">
 									<i class="icon-quote-right icon-5x pull-right icon-muted"></i>
 									<h3 class="header-h main-title text-black">Mining correlations of ATL model transformation and metamodel metrics</h3>
-									<br> 
 										<span style="text-decoration: underline;">Juri Di Rocco</span>, 
 										<span style="text-decoration: underline;">Davide Di Ruscio</span>, 
 										<span style="text-decoration: underline;">Ludovico Iovino</span>, 
 										<span style="text-decoration: underline;">Alfonso Pierantonio</span>
-									<br>
+									<div class="separator bottom"></div>
 									<span class="">
 							        	<i>IEEE Press Piscataway, NJ, USA</i>
 							        </span>&nbsp;
 							        <span class="text-faded"><i class="icon-fixed-width icon-calendar"></i> 2015</span>
-							        <br>
+							        <div class="separator bottom"></div>
 							        <strong>Abstract. </strong>
 							     	
 							     	Model transformations are considered to be the "heart" and "soul" of Model Driven Engineering, and as a such, advanced techniques and tools are needed for supporting the development, quality assurance, maintenance, and evolution of model transformations. Even though model transformation developers are gaining the availability of powerful languages and tools for developing, and testing model transformations, very few techniques are available to support the understanding of transformation characteristics. In this paper, we propose a process to analyze model transformations with the aim of identifying to what extent their characteristics depend on the corresponding input and target metamodels. The process relies on a number of transformation and metamodel metrics that are calculated and properly correlated. The paper discusses the application of the approach on a corpus consisting of more than 90 ATL transformations and 70 corresponding metamodels.

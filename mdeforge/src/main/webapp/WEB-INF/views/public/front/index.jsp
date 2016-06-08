@@ -49,22 +49,22 @@
 		</div>
 	</div>
 	<div class="mosaic-line mosaic-line-2" style="height: auto">
-		<div class="container-960" style="padding: 60px 0">
+		<div class="container-960">
 		<div class="row-fluid">
 			<div class="span7">
-				<h2 class="header-h"> <span class="text-black">Forge</span> is a project developed by the <span class="text-black">Model-Driven Engineering Group</span><br> at the <span class="text-black">University of L'Aquila</span>.</h2>
+				<h2 class="header-h" style="margin-top: 25%;"> <span class="text-black">Forge</span> is a project developed by the <span class="text-black">Model-Driven Engineering Group</span><br> at the <span class="text-black">University of L'Aquila</span>.</h2>
 			</div>
 			<div class="span5">
-				<img width="250px" class="logo-banner image-banner" src="${pageContext.request.contextPath}/resources/theme/images/cloud.png">
+				<img width="100%" src="${pageContext.request.contextPath}/resources/theme/images/cloud.png">
 			</div>
 		</div>
-		<hr class="margin-hr">
+		<hr>
 		<div class="row-fluid">
 			<div class="span5">
-				<img width="250px" class="logo-banner image-banner" src="${pageContext.request.contextPath}/resources/theme/images/map.png">
+				<img width="100%" src="${pageContext.request.contextPath}/resources/theme/images/map.png">
 			</div>
 			<div class="span7">
-				<h2 class="header-h text-right">Current supported standards <span class="text-black">Ecore</span>, <span class="text-black">ATL</span>, <span class="text-black">ETL</span>. More to come.</h2>
+				<h2 class="header-h text-right" style="margin-top: 25%;">Current supported standards <span class="text-black">Ecore</span>, <span class="text-black">ATL</span>, <span class="text-black">ETL</span>. More to come.</h2>
 			</div>
 		</div>
 	</div>

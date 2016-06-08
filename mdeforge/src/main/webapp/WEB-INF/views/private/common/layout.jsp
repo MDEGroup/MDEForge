@@ -36,6 +36,9 @@
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
+    
+    <!-- Easy-pie Plugin -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.css" rel="stylesheet" />
      
     <!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -98,7 +101,22 @@
 		
 	</div>
 	<!-- // Main Container Fluid END -->
-
+	<div class="modal hide fade" id="upload-artifact">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3>Upload Artifact</h3>
+	  </div>
+	  <div class="modal-body">
+	 	<p class="header-h title-modal">Choose which kind of artifact you would like to upload?</p>
+	    <h4><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload primary"><i></i> Metamodel</a></h4>
+		<h4><a href="${pageContext.request.contextPath}/private/ATLTransformation/upload" class="glyphicons cloud-upload primary"><i></i> ATL Transformation</a></h4>
+		<h4><a href="${pageContext.request.contextPath}/private/Model/upload" class="glyphicons cloud-upload primary"><i></i> Model</a></h4>
+	  </div>
+	  <div class="separator"></div>
+	  <div class="modal-footer center">
+	    <a href="#" class="btn btn-large" data-dismiss="modal">Cancel</a>
+	  </div>
+	</div>
 
 	
 	<!-- Code Beautify -->
@@ -132,17 +150,18 @@
 	<script>
 		Holder.add_theme("dark", {background:"#000", foreground:"#aaa", size:9});
 		Holder.add_theme("white", {background:"#fff", foreground:"#c9c9c9", size:9});
+		<!-- Colors -->
+		var primaryColor = '#4a8bc2',
+			dangerColor = '#b55151',
+			successColor = '#609450',
+			warningColor = '#ab7a4b',
+			inverseColor = '#45484d';
+		var themerPrimaryColor = primaryColor;
 	</script>
 	
 	<!-- Uniform Forms Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/pixelmatrix-uniform/jquery.uniform.min.js"></script>
 
-	
-	
-	
-	
-	
-	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/jquery.dataTables.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
@@ -157,6 +176,27 @@
 	
 	<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/bootbox.js"></script>
 	
+	
+	<!-- Easy-pie Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.js"></script>
+	
+	<!-- Sparkline Charts Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/sparkline/jquery.sparkline.min.js"></script>
+	
+	<!-- Ba-Resize Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery.ba-resize.js"></script>
+	
+	<!--  Flot Charts Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.pie.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.tooltip.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.selection.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.resize.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.orderBars.js"></script>
+	
+	
+	<!-- Charts Helper Demo Script -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/charts.helper.js?1373029294"></script>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -165,8 +205,19 @@
 	
 	  ga('create', 'UA-49762168-2', 'mdeforge.org');
 	  ga('send', 'pageview');
-	
 	</script>
+	<scrpt>
+		$('#upload-artifact').on('shown', function(){
+				var modal = $(this);
+				// load content with AJAX
+				$.ajax({
+					url: '/path/to/your/content/file',
+					success: function(data){
+			  			modal.find('.modal-body').html(data);
+					}
+				});
+			});
+	</scrpt>
 	
 </body>
 </html>

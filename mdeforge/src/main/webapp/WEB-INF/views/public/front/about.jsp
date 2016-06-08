@@ -2,7 +2,7 @@
 	<div class="main-banner">
 		<div class="container-960">
 			<div class="banner-wrapper banner-1">
-				<h2 class="title-banner"><span>About MDE Forge</span></h2>
+				<h2 class="title-banner"><span>About</span></h2>
 			</div>
 		</div>
 	</div> 
@@ -18,7 +18,7 @@
 		</div>
 		-->
 		<div class="lead center innerTB">
-		<h2 class="header-h main-title text-black center">MDEForge is anextensible
+		<h2 class="header-h main-title text-black center">MDE Forge is anextensible
 					Web-based modeling platform specifically conceived to foster a
 					community-based modeling repository, which underpins the
 					development, analysis and reuse of modeling artifacts.</h2>
@@ -30,7 +30,7 @@
 		</div>
 		<div class="separator bottom"></div>
 	</div>
-	<div class="page-banner">
+	<div class="page-banner" style="background-image: url(../resources/theme/images/4.jpg)">
 		<!-- Row -->
 		<div class="row-fluid">
 			<!-- Thumbnails -->
@@ -69,9 +69,11 @@
 					<h2 class="header-h main-text center">MDE Forge platform consists of a number of services that
 										can be used by means of both a Web access and programmatic
 										interfaces (API) that enable their adoption as software as a
-										service. In particular, core services are provided to enable the
+										service.</h2>
+					<h2 class="header-h main-text text-black center">In particular, core services are provided to enable the
 										management of modeling artifacts, namely transformations,
-										models, metamodels, and editors. Atop of such core services,
+										models, metamodels, and editors.</h2>
+					<h2 class="header-h main-text center">Atop of such core services,
 										extensions can be developed to add new functionalities.</h2>
 				</div>
 				<hr class="margin-hr">
@@ -83,22 +85,24 @@
 			</div>
 		</div>
 	</div>
+	
 		<!-- // Row END -->
 		<div id="features-banner-about" class="banner-wide">
 			<div class="container-960 innerTB">
 			<hr>
 			<div class="lead center innerTB">
+			<img class="logo-banner" src="/mdeforge/resources/theme/images/logo-small.png" style="margin: 20px auto">
 				<h2 class="header-h main-title text-black center">MDE Forge has been design for: </h2>
 			</div>
-			<hr class="margin-hr">
-			<h2 class="header-h main-title text-primary">Developers of modeling artifacts</h2>
-			<h2 class="header-h main-text">As previously said we envision a community of users that might want to share their tools and enable their adoption and refinement by other users. To this end the platform provides the means to add new modeling artifacts to the MDEForge repository.</h2>
+			<hr class="margin-hr" style="margin-top: 25px;">
+			<h3 class="header-h main-title text-primary">Developers of modeling artifacts</h3>
+			<p class="header-h main-text text-left">As previously said we envision a community of users that might want to share their tools and enable their adoption and refinement by other users. To this end the platform provides the means to add new modeling artifacts to the MDEForge repository.</p>
 			<div class="separator"></div>
-			<h2 class="header-h main-title text-primary">Developers of MDEForge extensions</h2>
-			<h2 class="header-h main-text">One of the requirements we identified when we started the development of MDEForge is about the modularity and extensibility of the platform. To this end we identified a set of core services that can be used to add new functionalities by means of platform extensions. In this respect, experienced users might contribute by proposing new extensions to be included in the platform.</h2>
+			<h3 class="header-h main-title text-primary">Developers of MDEForge extensions</h3>
+			<p class="header-h main-text text-left">One of the requirements we identified when we started the development of MDEForge is about the modularity and extensibility of the platform. To this end we identified a set of core services that can be used to add new functionalities by means of platform extensions. In this respect, experienced users might contribute by proposing new extensions to be included in the platform.</p>
 			<div class="separator"></div>
-			<h2 class="header-h main-title text-primary">End Users</h2>
-			<h2 class="header-h main-text">A Web application enables end-users to search and use (meta)models, transformations, and editors available in the MDEForge repository. Experienced users might use the REST API to exploit the functionalities provided by the platform in a programmatic way. For instance, tool vendors might exploit the functionalities provided by their tools by exploiting some of the transformations available in the MDEForge repository.</h2>
+			<h3 class="header-h main-title text-primary">End Users</h3>
+			<p class="header-h main-text text-left">A Web application enables end-users to search and use (meta)models, transformations, and editors available in the MDEForge repository. Experienced users might use the REST API to exploit the functionalities provided by the platform in a programmatic way. For instance, tool vendors might exploit the functionalities provided by their tools by exploiting some of the transformations available in the MDEForge repository.</p>
 				<%-- <div class="row-fluid">
 					<div class="span4">
 						<div class="separator bottom"></div>
