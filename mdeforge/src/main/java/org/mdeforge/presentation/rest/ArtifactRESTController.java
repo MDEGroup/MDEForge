@@ -99,17 +99,7 @@ public class ArtifactRESTController {
 			return new ResponseEntity<MetricList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	//create artifact index
-	@RequestMapping(value = "/createIndex", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<String> createIndex() {
-		try {
-			artifactService.createIndex();
-			
-			return new ResponseEntity<String>("OK", HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<String>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
+
 
 	// search artifacts ordered by score
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)

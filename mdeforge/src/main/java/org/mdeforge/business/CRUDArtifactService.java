@@ -35,7 +35,7 @@ public interface CRUDArtifactService <T extends Artifact> extends SearchProvider
 	void updateSimple(T artifact);
 
 	List<T> search(String searchString) throws BusinessException;
-	void createIndex();
+	void createIndex(T artifact);
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
 	long countAll() throws BusinessException;

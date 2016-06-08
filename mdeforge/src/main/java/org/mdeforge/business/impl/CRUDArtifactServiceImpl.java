@@ -17,6 +17,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
@@ -87,19 +88,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	protected Class<T> persistentClass;
-	@Override
 	
-	public void createIndex() {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-
-		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-			.onField("nameForIndex", 20F).onField("descriptionForIndex", 15F)
-			.onField("authors", 10F).onField("tags", 15F)
-			.onField("weightedContentsThree", 12F).onField("weightedContentsTwo", 10F)
-			.onField("weightedContentsOne", 7F).onField("defaultWeightedContents")
-			.named("ArtifactIndex").build();
-
-		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	@Override
+	public void createIndex(T ecore) {
+		return;
 	}
 
 	@Override
