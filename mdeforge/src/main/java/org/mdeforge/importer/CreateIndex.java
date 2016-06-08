@@ -11,7 +11,7 @@ public class CreateIndex {
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
 		EcoreMetamodelService ec = context
 				.getBean(EcoreMetamodelService.class);
-		ec.createIndex();
+		//ec.createIndex();
 		((ConfigurableApplicationContext)context).close();
 	}
 }

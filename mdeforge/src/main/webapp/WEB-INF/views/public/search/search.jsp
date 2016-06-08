@@ -44,7 +44,7 @@
 							<div class="widget-body">
 								<div class="row-fluid">
 									<form action="${pageContext.request.contextPath}/public/search"
-										method="get" class="form-search">
+										method="POST" class="form-search">
 										<div class="span6 center">
 											<div
 												class="widget widget-heading-simple widget-body-simple margin-none">
@@ -78,7 +78,7 @@
 
 												<input type="text" class="input-large"
 													placeholder="Type your keywords .. " name="search_string"
-													id="searchField">
+													id="searchField" value="${search_string}" style="width:90%">
 												<button type="submit" class="btn btn-inverse">
 													<spring:message code="mdeforge.common.action.search" />
 												</button>

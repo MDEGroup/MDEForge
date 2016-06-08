@@ -54,40 +54,16 @@ public class SearchPublicController {
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
 	
-	private static final String[] ARTIFACT_TYPE = {"models", "transformations", "metamodels"};
-	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
-	public String search(Model model, @RequestParam(value = "search_string", required = false) String searchString, 
-			@RequestParam(value = "artifactType", required = false) String artifactType) {
-		List<Artifact> al = new ArrayList<Artifact>();
-		String [] artifactTypes;
-		if(searchString != null && searchString != ""){
-			
-			if (!(artifactType == null || artifactType.equals("")))
-				artifactTypes = artifactType.split(",");
-			else
-				artifactTypes = ARTIFACT_TYPE;
-			for (String string : artifactTypes) {
-				if (string.equals("models"))
-					al.addAll(modelService.search(searchString));
-				if (string.equals("transformations"))
-					al.addAll(aTLTransformationService
-							.search(searchString));
-				if (string.equals("metamodels"))
-					al.addAll(ecoreMetamodelService
-							.search(searchString));
-			}
-		}
-		Collections.sort(al, new Comparator<Artifact>(){
-			@Override
-			public int compare(Artifact o1, Artifact o2) {
-				return o1.getScore().compareTo(o2.getScore());
-			}
-		  });
-		Collections.reverse(al);
-		
-		if(searchString != null && searchString != "")
-			model.addAttribute("artifactList", al);
+	public String search() {
+		return "public.search";
+	}
+	@RequestMapping(value = "/search", method = { RequestMethod.POST })
+	public String search(Model model, 
+			@RequestParam(value = "search_string", required = false) String searchString) {
+		List<Artifact> al = artifactService.search(searchString);
+		model.addAttribute("artifactList", al);
+		model.addAttribute("search_string", searchString);
 		return "public.search";
 	}
 	

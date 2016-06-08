@@ -12,4 +12,6 @@ public interface ModelService extends CRUDArtifactService<Model>,
 
 	List<org.mdeforge.business.model.Model> findByTransformation(
 			ATLTransformation atlTransformation);
+
+	void extractedContent(Model art) throws BusinessException;
 }

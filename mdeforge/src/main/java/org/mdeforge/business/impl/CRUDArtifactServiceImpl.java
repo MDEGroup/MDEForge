@@ -1,10 +1,29 @@
 package org.mdeforge.business.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.highlight.TextFragment;
+import org.apache.lucene.search.highlight.TokenSources;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
@@ -17,10 +36,13 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.SearchResult;
+import org.mdeforge.business.model.SearchResultComplete;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
@@ -35,6 +57,7 @@ import org.mdeforge.integration.WorkspaceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -47,18 +70,20 @@ import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
 
-public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
-		CRUDArtifactService<T>{
+public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	@Override
 	public void addComment(Comment comment, String idArtifact) throws BusinessException {
 		T art = findOne(idArtifact);
-		
+
 		comment.setUser(userService.findOne(comment.getUser().getId()));
 		art.getComments().add(comment);
 		artifactRepository.save(art);
 		return;
 	}
 
+	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
+	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
+	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
@@ -87,69 +112,114 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	protected GridFileMediaService gridFileMediaService;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	protected Class<T> persistentClass;
+	@Value("#{cfgproperties[basePathLucene]}")
+	protected String basePathLucene;
+
 	@Override
-	
-	public void createIndex() {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-
-		TextIndexDefinition textIndex = new TextIndexDefinitionBuilder()
-			.onField("nameForIndex", 20F).onField("descriptionForIndex", 15F)
-			.onField("authors", 10F).onField("tags", 15F)
-			.onField("weightedContentsThree", 12F).onField("weightedContentsTwo", 10F)
-			.onField("weightedContentsOne", 7F).onField("defaultWeightedContents")
-			.named("ArtifactIndex").build();
-
-		operations.indexOps(Artifact.class).ensureIndex(textIndex);
+	public void createIndex(T ecore) {
+		return;
 	}
 
 	@Override
-	public List<T> search(String text) throws BusinessException {
-		text = Tokenizer.tokenizeString(text);
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
+	public List<T> search(String queryString) throws BusinessException {
+		
+		List<T> artifacts = new ArrayList<T>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
 
-		TextCriteria criteria = TextCriteria.forDefaultLanguage().matchingAny(
-				text);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			// Utils utils = new Utils();
 
-		TextQuery query = new TextQuery(criteria);
-		query.setScoreFieldName("score");
-		query.sortByScore();
+			long duration = 0;
+			long startTime = System.nanoTime();
 
-		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
-			query.addCriteria(c2);
+			SearchResultComplete searchResultComplete = new SearchResultComplete();
 
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+
+			
+			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
+			System.out.println("Total hits: " + hits.totalHits);
+
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+
+			/*
+			 * Se il numero di documenti trovati è superiore al numero di
+			 * maxResult impostato non consentiamo di ciclare oltre il minimo
+			 * dei due valori quindi settiamo come limite per il ciclo for il
+			 * min dei due.
+			 */
+
+			for (int i = 0; i < hits.totalHits; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),
+						hits.scoreDocs[i].doc, "text", analyzer);
+
+				/*
+				 * (org.apache.lucene.analysis.TokenStream tokenStream, String
+				 * text, boolean mergeContiguousFragments, int maxNumFragments)
+				 */
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true,
+						MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+						System.out.println(frag[j].toString());
+					}
+				}
+				T art = findOne(doc.get("id"));
+				art.setScore(hits.scoreDocs[i].score);
+				artifacts.add(art);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidTokenOffsetsException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		List<T> artifacts = operations.find(query, persistentClass);
+
 		return artifacts;
 	}
 
 	@SuppressWarnings("unchecked")
 	public CRUDArtifactServiceImpl() {
-		this.persistentClass = (Class<T>) ((ParameterizedType) getClass()
-				.getGenericSuperclass()).getActualTypeArguments()[0];
+		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+				.getActualTypeArguments()[0];
 	}
 
 	@Override
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(
-				new ObjectId(user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
 		Criteria c3 = Criteria.where("_id").is(idArtifact);
 		Criteria publicCriteria = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c3.andOperator(c2.orOperator(c1, publicCriteria)));
 		} else
 			query.addCriteria(c3.orOperator(c1, publicCriteria));
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
-		artifact.getFile().setByteArray(
-				gridFileMediaService.getFileByte(artifact));
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
 		artifact.setMetrics(metricRepository.findByArtifactId(new ObjectId(idArtifact)));
 		return artifact;
 	}
@@ -160,26 +230,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c3 = Criteria.where("_id").is(artifact_id);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c3);
 			query.addCriteria(c2);
 		} else
 			query.addCriteria(c3);
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
-		artifact.getFile().setByteArray(
-				gridFileMediaService.getFileByte(artifact));
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
 		Project proj = projectRepository.findOne(project_id);
 		artifact.setMetrics(metricRepository.findByArtifactId(new ObjectId(artifact_id)));
-		if(proj == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
-		if(artifact.getProjects().contains(proj))
+		if (proj == null)
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
+		if (artifact.getProjects().contains(proj))
 			return artifact;
-		else throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		else
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 	}
-	
+
 	@Override
 	public T findOneByName(String name, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -188,17 +260,16 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Criteria c3 = Criteria.where("name").is(name);
 		Criteria c4 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c3.andOperator(c2.orOperator(c1, c4)));
 		} else
 			query.addCriteria(c3.orOperator(c1, c4));
 
 		T artifact = operations.findOne(query, persistentClass);
 		if (artifact == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
-		artifact.getFile().setByteArray(
-				gridFileMediaService.getFileByte(artifact));
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
+		artifact.getFile().setByteArray(gridFileMediaService.getFileByte(artifact));
 
 		return artifact;
 	}
@@ -209,8 +280,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
-			Criteria c = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			return n.find(query, persistentClass);
 		} else {
@@ -225,8 +295,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
-			Criteria c = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			query.limit(5);
 			query.with(new Sort(Sort.Direction.DESC, "created"));
@@ -246,8 +315,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
-			Criteria c = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			return n.count(query, persistentClass);
 		} else
@@ -285,10 +353,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		userRepository.save(artifact.getAuthor());
 		List<Relation> relations = crudRelationService.findRelationsByArtifact(artifact);
 		for (Relation us : relations) {
-			us.getFromArtifact().getRelations()
-					.remove(us);
-			us.getToArtifact().getRelations()
-					.remove(us);
+			us.getFromArtifact().getRelations().remove(us);
+			us.getToArtifact().getRelations().remove(us);
 			artifactRepository.save(us.getFromArtifact());
 			artifactRepository.save(us.getToArtifact());
 			relationRepository.delete(us);
@@ -308,12 +374,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifact.setAuthor(user);
 			T original = findOneByOwner(artifact.getId(), artifact.getAuthor());
 			// UploadFile
-			if (artifact.getFile() != null
-					&& artifact.getFile().getByteArray() != null) {
+			if (artifact.getFile() != null && artifact.getFile().getByteArray() != null) {
 				GridFileMedia fileMedia = new GridFileMedia();
 				fileMedia.setFileName("");
-				fileMedia.setByteArray(Base64.decode(artifact.getFile()
-						.getContent().getBytes()));
+				fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 				gridFileMediaService.delete(original.getFile());
 				gridFileMediaService.store(artifact.getFile());
 				artifact.setFile(fileMedia);
@@ -344,8 +408,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			}
 			for (Relation rel : relationTemp) {
 
-				Artifact toArtifact = artifactRepository.findOne(rel
-						.getToArtifact().getId());
+				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
 				// findOneById(rel.getToArtifact().getId(),
 				// artifact.getAuthor());
 				if (existRelation(toArtifact.getId(), artifact.getId())) {
@@ -353,8 +416,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 					artifact.getRelations().add(rel);
 					relationRepository.save(rel);
 					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel
-							.getToArtifact().getId());
+					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
 					if (temp.getRelations() == null)
 						temp.setRelations(new ArrayList<Relation>());
 					temp.getRelations().add(rel);
@@ -370,8 +432,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				}
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						artifact.getAuthor());
+				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				if (!isArtifactInProject(p.getId(), artifact.getId())) {
 					p.getArtifacts().add(artifact);
 					p.setModifiedDate(new Date());
@@ -395,10 +456,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	@Override
 	public T create(T artifact) throws BusinessException {
-//		if(findOneByName(artifact.getName())!=null) {
-//			logger.error("DuplicateName");
-//			throw new DuplicateNameException();
-//		}
+		// if(findOneByName(artifact.getName())!=null) {
+		// logger.error("DuplicateName");
+		// throw new DuplicateNameException();
+		// }
 		try {
 			if (artifactRepository.findByName(artifact.getName()) != null)
 				throw new DuplicateNameException();
@@ -411,8 +472,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			if (artifact.getFile().getByteArray() != null)
 				fileMedia.setByteArray(artifact.getFile().getByteArray());
 			else
-				fileMedia.setByteArray(Base64.decode(artifact.getFile()
-						.getContent().getBytes()));
+				fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
 			for (Workspace ws : artifact.getWorkspaces()) {
@@ -429,7 +489,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			}
 			artifact.setCreated(new Date());
 			artifact.setModified(new Date());
-			
+
 			User user = userRepository.findOne(artifact.getAuthor().getId());
 			artifact.setAuthor(user);
 			if (artifact.getShared() == null)
@@ -440,8 +500,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			artifactRepository.save(artifact);
 			// check relation
 			for (Relation rel : relationTemp) {
-				Artifact toArtifact = artifactRepository.findOne(rel
-						.getToArtifact().getId());
+				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
 
 				if (!existRelation(toArtifact.getId(), artifact.getId())) {
 					rel.setFromArtifact(artifact);
@@ -465,8 +524,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 				workspaceRepository.save(w);
 			}
 			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(),
-						artifact.getAuthor());
+				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				p.getArtifacts().add(artifact);
 				p.setModifiedDate(new Date());
 
@@ -482,7 +540,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			ToBeAnalyse art = new ToBeAnalyse();
 			art.setArtifact(artifact);
 			toBeAnalyzedRepository.save(art);
-			
+
 			return artifact;
 		} catch (Exception e) {
 			throw new BusinessException();
@@ -493,12 +551,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public List<T> findAllWithPublicByUser(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(
-				new ObjectId(user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
 		Criteria c2 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c3 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c3 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c3.orOperator(c2, c1));
 		} else
 			query.addCriteria(new Criteria().orOperator(c2));
@@ -509,15 +565,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	public List<T> findAllSharedByUser(User user) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(
-				new ObjectId(user.getId()));
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
 		Criteria c2 = Criteria.where("author.$id").is(new ObjectId(user.getId()));
 		if (persistentClass != Artifact.class) {
-			Criteria c3 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c3 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c3.orOperator(c2, c1));
 		} else
-			query.addCriteria(new Criteria().orOperator(c1,c2));
+			query.addCriteria(new Criteria().orOperator(c1, c2));
 		return n.find(query, persistentClass);
 	}
 
@@ -527,8 +581,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c2 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
 		} else
@@ -537,15 +590,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public T findOneByOwner(String idArtifact, User user)
-			throws BusinessException {
+	public T findOneByOwner(String idArtifact, User user) throws BusinessException {
 		T result = findOne(idArtifact);
 		if (result == null)
 			throw new BusinessException();
 		if (result.getAuthor().getId().equals(user.getId()))
 			return result;
 		else
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 	}
 
 	@Override
@@ -554,15 +607,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c2 = Criteria.where("id").is(id);
 		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c2);
 			query.addCriteria(c1);
 		} else
 			query.addCriteria(c2);
 		T art = n.findOne(query, persistentClass);
 		if (art == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 		return art;
 	}
 
@@ -573,25 +626,24 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Criteria c2 = Criteria.where("id").is(id);
 		Criteria c3 = Criteria.where("open").is(true);
 		if (persistentClass != Artifact.class) {
-			Criteria c1 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
 			query.addCriteria(c3);
-		} else{
+		} else {
 			query.addCriteria(c2);
 			query.addCriteria(c3);
 		}
 		T art = n.findOne(query, persistentClass);
 		if (art == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 		art.setMetrics(metricRepository.findByArtifactId(new ObjectId(id)));
 		return art;
 	}
 
 	@Override
-	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)
-			throws BusinessException {
+	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact) throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (Workspace workspace : artifact.getWorkspaces()) {
 			if (workspace.getId().equals(idWorkspace))
@@ -601,8 +653,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public boolean isArtifactInProject(String idProject, String idArtfact)
-			throws BusinessException {
+	public boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (Project workspace : artifact.getProjects()) {
 			if (workspace.getId().equals(idProject))
@@ -612,8 +663,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public boolean isArtifactInUser(User idUser, String idArtfact)
-			throws BusinessException {
+	public boolean isArtifactInUser(User idUser, String idArtfact) throws BusinessException {
 		Artifact artifact = findOne(idArtfact);
 		for (User user : artifact.getShared()) {
 			if (user.getId().equals(idUser.getId()))
@@ -623,10 +673,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public boolean existRelation(String idTo, String idFrom)
-			throws BusinessException {
-		List<Relation> r = relationRepository
-				.findByFromArtifactIdOrToArtifactId(idFrom, idTo);
+	public boolean existRelation(String idTo, String idFrom) throws BusinessException {
+		List<Relation> r = relationRepository.findByFromArtifactIdOrToArtifactId(idFrom, idTo);
 		return (r.size() == 0) ? false : true;
 	}
 
@@ -637,8 +685,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c1 = Criteria.where("projects.$id").is(idProject);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
 		} else
@@ -653,8 +700,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Query query = new Query();
 		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
 		} else
@@ -662,8 +708,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		return operations.find(query, persistentClass);
 	}
 
-	protected T findOneByName(String name, User user, Class<T> c)
-			throws BusinessException {
+	protected T findOneByName(String name, User user, Class<T> c) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users.$id").is(user.getId());
@@ -674,15 +719,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 			query.addCriteria(c1);
 			query.addCriteria(c2);
 			query.addCriteria(c3);
-		}
-		else {
+		} else {
 			query.addCriteria(c1);
 			query.addCriteria(c3);
-		
+
 		}
 		T project = operations.findOne(query, c);
 		if (project == null)
-			throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 		return project;
 	}
 
@@ -694,15 +739,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		Criteria c3 = Criteria.where("name").is(name);
 
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c2);
 			query.addCriteria(c3);
-		}
-		else query.addCriteria(c3);
+		} else
+			query.addCriteria(c3);
 		T artifact = operations.findOne(query, persistentClass);
-		 if (artifact == null)
-			 throw new ArtifactNotFoundException("Artifact not found", "You could be haven't permission to artifact operation");
+		if (artifact == null)
+			throw new ArtifactNotFoundException("Artifact not found",
+					"You could be haven't permission to artifact operation");
 		return artifact;
 	}
 
@@ -716,36 +761,31 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 
 	}
 
-
-
 	@Override
 	public List<T> findSharedNoProject(User user) throws BusinessException {
 
 		List<Project> projList = projectService.findByUser(user);
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c1 = Criteria.where("shared.$id").is(
-				new ObjectId(user.getId()));
-//		Criteria notPublic = Criteria.where("open").is(false);
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		// Criteria notPublic = Criteria.where("open").is(false);
 		Criteria notMine = Criteria.where("author.$id").ne(new ObjectId(user.getId()));
 		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);
 			query.addCriteria(c2);
-//			query.addCriteria(notPublic); 
+			// query.addCriteria(notPublic);
 			query.addCriteria(notMine);
-		}
-		else {
+		} else {
 			query.addCriteria(c1);
-//			query.addCriteria(notPublic);
+			// query.addCriteria(notPublic);
 			query.addCriteria(notMine);
 		}
 		List<T> artList = operations.find(query, persistentClass);
 		List<Artifact> toRemove = new ArrayList<Artifact>();
-		
-		for (T artifactTo : artList) 
-			for (Project p : projList) 
+
+		for (T artifactTo : artList)
+			for (Project p : projList)
 				if (artifactTo.getProjects().contains(p))
 					toRemove.add(artifactTo);
 		for (Project projectTo : projList)
@@ -759,12 +799,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	@Override
 	public List<T> findMyArtifacts(User user) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Criteria userCriteria = Criteria.where("author.$id").is(
-				new ObjectId(user.getId()));
+		Criteria userCriteria = Criteria.where("author.$id").is(new ObjectId(user.getId()));
 		Query query = new Query();
 		if (persistentClass != Artifact.class) {
-			Criteria c = Criteria.where("_class").is(
-					persistentClass.getCanonicalName());
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c);
 			query.addCriteria(userCriteria);
 			return n.find(query, persistentClass);
@@ -784,6 +822,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		userRepository.save(us);
 		return us;
 	}
+
 	@Override
 	public User addUserInPublicArtifact(String idUser, String idArtifact, User user) {
 		Artifact art = findOnePublic(idArtifact);
@@ -796,8 +835,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 	}
 
 	@Override
-	public void removeUserFromArtifact(String idUser, String idArtifact)
-			throws BusinessException {
+	public void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException {
 		User user = userRepository.findOne(idUser);
 		Artifact art = artifactRepository.findOne(idArtifact);
 		for (Project project : user.getSharedProject()) {
@@ -812,7 +850,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		userRepository.save(user);
 		artifactRepository.save(art);
 	}
-	
+
 	@Override
 	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
