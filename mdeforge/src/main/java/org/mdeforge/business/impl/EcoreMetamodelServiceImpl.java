@@ -10,11 +10,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -181,8 +183,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
 	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
 	private IndexWriter writer;
-	@Value("#{cfgproperties[basePathLucene]}")
-	protected String basePathLucene;
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -246,11 +246,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return result;
 	}
 
-	@Override
-	public void createIndex(TextIndexDefinition textIndex) {
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		operations.indexOps(Artifact.class).ensureIndex(textIndex);
-	}
+
 
 	@Override
 	public void extractedContent(EcoreMetamodel art) throws BusinessException {
@@ -1323,7 +1319,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		}
 	}
 
-	private Document getMetamodelDocument(EcoreMetamodel stream) {
+	private Document getMetamodelDocument(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
 		/*
 		 * FILE METADATA
@@ -1337,7 +1333,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		ParseContext context = new ParseContext();
 		Parser parser = new AutoDetectParser();
 		try {
-			parser.parse(gridFileMediaService.getFileInputStream(stream), handler, metadata, context);
+			parser.parse(gridFileMediaService.getFileInputStream(ecoreMetamodel), handler, metadata, context);
 		} catch (TikaException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (SAXException e) {
@@ -1346,12 +1342,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			throw new BusinessException(e.getMessage());
 		} finally {
 			try {
-				gridFileMediaService.getFileInputStream(stream).close();
+				gridFileMediaService.getFileInputStream(ecoreMetamodel).close();
 			} catch (IOException e) {
 				throw new BusinessException(e.getMessage());
 			}
 		}
-		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(stream));
+		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
 		Resource resource = resourceSet.getResource(fileURI, true);
@@ -1387,47 +1383,39 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 					}
 				} else if (next instanceof EClass) {
-					EClass eClass = (EClass) next;
-					Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
-					eClassField.setBoost(ECLASS_BOOST_VALUE);
-					// System.out.println("Class: " + eClass.getName());
-					doc.add(eClassField);
-					// Index EClass Attributes
-					for (EAttribute attribute : eClass.getEAttributes()) {
-						Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES,
-								Index.ANALYZED);
-						eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
-						// System.out.println("Attribute: " +
-						// attribute.getName());
-						doc.add(eClassAttributeField);
-					}
-					// Index EClass References
-					for (EReference reference : eClass.getEReferences()) {
-						Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES,
-								Index.ANALYZED);
-						eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
-						// System.out.println("Reference: " +
-						// reference.getName());
-						doc.add(eClassReferenceField);
-					}
+					try {
+						EClass eClass = (EClass) next;
+						Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
+						eClassField.setBoost(ECLASS_BOOST_VALUE);
+						// System.out.println("Class: " + eClass.getName());
+						doc.add(eClassField);
+						// Index EClass Attributes
+						for (EAttribute attribute : eClass.getEAttributes()) {
+							Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES,
+									Index.ANALYZED);
+							eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
+							// System.out.println("Attribute: " +
+							// attribute.getName());
+							doc.add(eClassAttributeField);
+						}
+						// Index EClass References
+						for (EReference reference : eClass.getEReferences()) {
+							try {
+							Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES,
+									Index.ANALYZED);
+							eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
+							// System.out.println("Reference: " +
+							// reference.getName());
+							doc.add(eClassReferenceField);
+							} catch (Exception e) {System.err.println("ERROR");}
+						}
+					} catch (Exception e){System.err.println("ERROR");}
 				} else if (next instanceof EEnum) {
 					EEnum eEnum = (EEnum) next;
 					Field eEnumField = new Field(EENUM_INDEX_CODE, eEnum.getName(), Store.YES, Index.ANALYZED);
 					eEnumField.setBoost(EENUM_BOOST_VALUE);
-					// System.out.println(eEnum.getName());
 					doc.add(eEnumField);
-					// Index EEnum Literals
-					// if(!eEnum.getELiterals().isEmpty()){
-					// for (EEnumLiteral literal : eEnum.getELiterals()) {
-					// Field eEnumLiteralField = new
-					// Field(ELITERAL_INDEX_CODE, literal.getName(),
-					// Store.YES, Index.ANALYZED);
-					// eEnumLiteralField.setBoost(eLiteralBoostValue);
-					// System.out.println("Literal: " + literal.getName());
-					// doc.add(eEnumLiteralField);
-					// }
-					//
-					// }
+					
 				} else if (next instanceof EDataType) {
 					EDataType eDataType = (EDataType) next;
 					Field eDataTypeField = new Field(EDATATYPE_INDEX_CODE, eDataType.getName(), Store.YES,
@@ -1441,26 +1429,38 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		String text = handler.toString();
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 		//TODO ADD ARTIFACT TAG
-		// String filenameWithExtension = file.getName();
-		// Field filenameWithExtensionField = new Field("filename",
-		// filenameWithExtension, Store.YES, Index.ANALYZED);
-		// doc.add(filenameWithExtensionField);
-		// String filename = FilenameUtils.getBaseName(file.getPath());
-		// Field filenameField = new Field("name", filename, Store.YES,
-		// Index.ANALYZED);
-		// String filetype = FilenameUtils.getExtension(filename);
-		// Field filetypeField = new Field("type", filetype, Store.YES,
-		// Index.ANALYZED);
-		// doc.add(filenameField);
-		// doc.add(filetypeField);
-		doc.add(textField);
+		String artifactName = ecoreMetamodel.getName();
+	 	Field artName = new Field("name",
+	 			artifactName, Store.YES, Index.ANALYZED);
+	 	
+	 	String author = ecoreMetamodel.getAuthor().getUsername();
+	 	Field authorField = new Field("author", author, Store.YES,
+			 Index.ANALYZED);
+	 	Date lastUpdate = ecoreMetamodel.getModified();
+	 	Field lastUpdateField = new Field("lastUpdate", lastUpdate.toString(), Store.YES,
+	 			Index.ANALYZED);
+	 	for (Property prop : ecoreMetamodel.getProperties()) {
+			String propName = prop.getName();
+			String propValue = prop.getValue();
+			Field propField = new Field(propName, propValue, Store.YES,
+					Index.ANALYZED);
+			doc.add(propField);
+		}
+	 	Field idField = new Field("id", ecoreMetamodel.getId(), Store.YES,
+	 			Index.ANALYZED);
+	 	
+	 	doc.add(textField);
+	 	doc.add(artName);
+	 	doc.add(authorField);
+	 	doc.add(lastUpdateField);
+		doc.add(idField);
 		return doc;
 	}
 
 	@Override
 	public void createIndex(EcoreMetamodel is) {
 		File indexDirFile = new File(basePathLucene);
-		// Imposta la directory in cui verra' creato l'indice
+		// Imposta la directory in cue verra' creato l'indice
 		Directory indexDir;
 		try {
 			indexDir = FSDirectory.open(indexDirFile);

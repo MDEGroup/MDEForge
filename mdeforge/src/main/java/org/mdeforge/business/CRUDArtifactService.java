@@ -9,7 +9,7 @@ import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 
 
-public interface CRUDArtifactService <T extends Artifact> extends SearchProvider<T>{
+public interface CRUDArtifactService <T extends Artifact> {
 	T create(T art) throws BusinessException;
 	//void delete(String idArtifact, User idUser) throws BusinessException;
 	void update(T artifact) throws BusinessException;

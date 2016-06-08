@@ -7,18 +7,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArtifactServiceImpl extends CRUDArtifactServiceImpl<Artifact> {
 
-	@Override
-	public void extractedContent(Artifact artifact) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void createIndex(TextIndexDefinition textIndex)
-			throws BusinessException {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 }

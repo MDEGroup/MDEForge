@@ -36,4 +36,5 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	String getJsonFormatFromResource(Resource metamodel)
 			throws BusinessException;
 	String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException;
+	void extractedContent(EcoreMetamodel art) throws BusinessException;
 }

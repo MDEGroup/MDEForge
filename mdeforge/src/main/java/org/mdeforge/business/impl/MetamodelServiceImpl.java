@@ -9,15 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetamodelServiceImpl extends CRUDArtifactServiceImpl<Metamodel> implements MetamodelService {
 
-	@Override
-	public void extractedContent(Metamodel artifact) {
-		
-	}
 
-	@Override
-	public void createIndex(TextIndexDefinition textIndex)
-			throws BusinessException {
-		
-	}
 
 }

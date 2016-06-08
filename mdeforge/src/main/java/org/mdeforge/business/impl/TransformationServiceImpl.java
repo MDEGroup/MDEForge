@@ -9,15 +9,4 @@ import org.springframework.stereotype.Service;
 @Service
 public class TransformationServiceImpl extends CRUDArtifactServiceImpl<Transformation> implements TransformationService {
 
-	@Override
-	public void extractedContent(Transformation artifact) {
-		
-	}
-
-	@Override
-	public void createIndex(TextIndexDefinition textIndex)
-			throws BusinessException {
-		
-	}
-
 }

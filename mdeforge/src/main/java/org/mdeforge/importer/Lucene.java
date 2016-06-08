@@ -21,7 +21,9 @@ public class Lucene {
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
+			System.out.println(ecoreMetamodel.getName());
 			ecoreMetamodelService.createIndex(ecoreMetamodel);
 		}
+//		ecoreMetamodelService.search("eClass:Family");
 	}
 }
