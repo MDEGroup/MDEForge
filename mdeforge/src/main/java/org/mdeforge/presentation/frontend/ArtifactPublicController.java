@@ -11,12 +11,16 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.Workspace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +39,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	public String details(Model model, @RequestParam String artifact_id) {
 		Artifact artifact = artifactService.findOnePublic(artifact_id);
 		model.addAttribute("artifact", artifact);
+		model.addAttribute("comment", new Comment());
 		String pathToDownload = gridFileMediaService.getFilePath(artifact);
 		File ecoreMetamodelFile = new File(pathToDownload);
 		model.addAttribute("artifactFile", ecoreMetamodelFile);
@@ -71,10 +76,34 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
 		return "public.browse.artifacts_list";
 	}
-		
+	
+	@RequestMapping(value = "/comment", method = { RequestMethod.POST })
+	public String create(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifat, Model model) {
+		//workspaceValidator.validate(comment, bindingResult);
+		//if (bindingResult.hasErrors()) {
+		comment.setUser(user);
+		artifactService.addComment(comment,idArtifat);
+		return "redirect:/public/EcoreMetamodel/artifact?artifact_id=" + idArtifat;
+//		} else {
+//			try {
+//				comment.setUser(user);
+//				//workspaceService.create(comment);
+//				artifactService.addComment(comment);
+//				return "redirect:/private/workspace/list";
+//			} catch (BusinessException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//				return "redirect:/admin/dashboard";
+//			}
+//		}
+			
+
+	}
+	
 	@RequestMapping(value = "/artifact_name", method = { RequestMethod.GET })
 	public String artifactFromName(@RequestParam String name,Model model) throws IOException{
 		Artifact ecoreMetamodel = artifactService.findOneByName(name);
 		return "redirect:/private/ATLTransformation/transformation_details?transformation_id=" + ecoreMetamodel.getId();
 	}
+	
 }

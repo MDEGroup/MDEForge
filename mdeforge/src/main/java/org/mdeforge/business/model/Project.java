@@ -24,7 +24,7 @@ public class Project implements java.io.Serializable{
 
 	
 	private static final long serialVersionUID = -717518242205317774L;
-
+	private boolean open;
 	private Date createdDate;
 	private Date modifiedDate;
 	@DBRef(lazy = true)
@@ -120,5 +120,13 @@ public class Project implements java.io.Serializable{
 		if (obj instanceof Project) 
 			return this.id.equals(((Project)obj).getId());
 		else return false;
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void setOpen(boolean _open) {
+		this.open = _open;
 	}
 }

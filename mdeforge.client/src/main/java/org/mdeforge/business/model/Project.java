@@ -23,6 +23,7 @@ public class Project implements java.io.Serializable{
 	private static final long serialVersionUID = -717518242205317774L;
 	private Date createdDate;
 	private Date modifiedDate;
+	private boolean open;
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
 
@@ -107,5 +108,13 @@ public class Project implements java.io.Serializable{
 
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
+	}
+
+	public boolean isOpen() {
+		return open;
+	}
+
+	public void setOpen(boolean _open) {
+		this.open = _open;
 	}
 }

@@ -45,6 +45,7 @@ public class Artifact implements java.io.Serializable{
 	private GridFileMedia file = null;
 	private boolean open = false;
 	private String name = null;
+	private List<Comment> comments = new ArrayList<Comment>();
 	@Transient
 	private List<Metric> metrics = new ArrayList<Metric>();
 	private String description = null;
@@ -331,5 +332,13 @@ public class Artifact implements java.io.Serializable{
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 }

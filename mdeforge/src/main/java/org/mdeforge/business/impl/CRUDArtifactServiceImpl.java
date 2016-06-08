@@ -16,6 +16,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
@@ -48,6 +49,16 @@ import org.springframework.security.crypto.codec.Base64;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements
 		CRUDArtifactService<T>{
+	@Override
+	public void addComment(Comment comment, String idArtifact) throws BusinessException {
+		T art = findOne(idArtifact);
+		
+		comment.setUser(userService.findOne(comment.getUser().getId()));
+		art.getComments().add(comment);
+		artifactRepository.save(art);
+		return;
+	}
+
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired

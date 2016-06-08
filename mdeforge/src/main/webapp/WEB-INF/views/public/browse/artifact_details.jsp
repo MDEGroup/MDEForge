@@ -205,7 +205,7 @@ function shareArtifact(){
 			<tiles:insertAttribute name="central" ignore="true"/>
 			<c:if test="${artifact.getMetrics().size()!=0}">
 			
-			<div class="row-flid">
+			<div class="row-fluid">
 				<div class="span12">
 					<h4>Metrics</h4>
 					<table class="table table-bordered table-striped table-white">
@@ -258,8 +258,44 @@ function shareArtifact(){
 				</div>
 			</div>
 			</c:if>
+			<security:authorize access="isAuthenticated()">
+			<div class="row-fluid">
+				<div class="span12">
+					<div class="widget widget-heading-simple widget-body-white">
+						<div><h4>Comments</h4></div>
+						<div>
+							<c:forEach items="${artifact.comments }" var="comment">
+								<div>
+									${comment.comment }
+									${comment.star }
+									${comment.user.username }
+									
+								</div>
+							</c:forEach>
+						</div>
+						<div>
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post">
+							 	<input type="hidden" value="${artifact.id}" name="idArtifact"/>
+							 	Comment
+							 	<input type="text" value="" name="comment"/>
+							 	Star
+							 	<select name="star">
+							 		<option value="1">1</option>
+							 		<option value="2">2</option>
+							 		<option value="3">3</option>
+							 		<option value="4">4</option>
+							 		<option value="5">5</option>
+							 	</select>
+							 	<input type="submit"/>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			</security:authorize>
 		</div>
 		<tiles:insertAttribute name="right" ignore="true"/>
+		
 	</div>
 </div>
 

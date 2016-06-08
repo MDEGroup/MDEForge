@@ -31,6 +31,7 @@ public class Artifact implements java.io.Serializable{
 	 */
 	private static final long serialVersionUID = -3383957950864305719L;
 	private String id = null;
+	private List<Comment> comments = new ArrayList<Comment>();
 	private Date created = null;
 	private Date modified = null;
 	private GridFileMedia file = null;
@@ -309,6 +310,14 @@ public class Artifact implements java.io.Serializable{
 	public boolean equals(Object obj) {
 		// TODO Auto-generated method stub
 		return this.getId().equals(((Artifact)obj).getId());
+	}
+
+	public List<Comment> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
 	}
 
 }

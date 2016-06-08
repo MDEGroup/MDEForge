@@ -27,7 +27,8 @@
 					</ul>
 				</li>
 				<li><a class="glyphicons random" href="${pageContext.request.contextPath}/public/ATLTransformation/artifacts"><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
-				<li><a class="glyphicons notes" href="${pageContext.request.contextPath}/public/Model/artifacts"><i></i><spring:message code="mdeforge.menu.models"/></a></li>				
+				<li><a class="glyphicons notes" href="${pageContext.request.contextPath}/public/Model/artifacts"><i></i><spring:message code="mdeforge.menu.models"/></a></li>
+				<li><a class="glyphicons notes" href="${pageContext.request.contextPath}/public/projects"><i></i><spring:message code="mdeforge.menu.projects"/></a></li>				
 				<!-- // Blank page template menu example END -->
 												
 				

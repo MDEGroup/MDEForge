@@ -3,6 +3,7 @@ package org.mdeforge.business;
 import java.util.List;
 
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
@@ -45,4 +46,5 @@ public interface CRUDArtifactService <T extends Artifact> extends SearchProvider
 	User addUserInPublicArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	T findOneInProject(String project_id, String artifact_id, User user) throws BusinessException;
 	List<Metric> findMetric(String idArtifact, User user) throws BusinessException;
+	void addComment(Comment comment, String idArtifat) throws BusinessException;
 }
