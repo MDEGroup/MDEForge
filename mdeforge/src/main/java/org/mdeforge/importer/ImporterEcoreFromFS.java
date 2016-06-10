@@ -10,8 +10,10 @@ import java.util.List;
 import org.eclipse.egit.github.core.RepositoryContents;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.RepositoryContentsRepository;
@@ -33,19 +35,33 @@ public class ImporterEcoreFromFS {
 		usr.setId("5514b943d4c6c379396fe8b7");
 		File folder = new File("githubmetamodels");
 		File[] listOfFiles = folder.listFiles();
+		EcoreMetamodel emm  = ecoreMetamodelService.findOne("");
 		for (File file : listOfFiles) {
 			if (file.toString().endsWith(".ecore")) {
 		        try {
-		        	EcoreMetamodel emm = new EcoreMetamodel();
-		        	emm.setName(file.getName());
-		        	emm.setAuthor(usr);
-		        	emm.setFile(gfms.createObjectFromFile(file.toString(), file.getName().toString()));
-		        	emm.setOpen(true);
-		        	Property p = new Property();
-		        	p.setName("imported");
-		        	p.setValue("github");
-		        	ecoreMetamodelService.create(emm);
-		        	System.out.println(file.getName().toString());
+//		        	EcoreMetamodel emm = new EcoreMetamodel();
+//		        	emm.setName(file.getName());
+//		        	emm.setAuthor(usr);
+//		        	emm.setFile(gfms.createObjectFromFile(file.toString(), file.getName().toString()));
+//		        	emm.setOpen(true);
+//		        	Property p = new Property();
+//		        	p.setName("imported");
+//		        	p.setValue("github");
+//		        	ecoreMetamodelService.create(emm);
+//		        	System.out.println(file.getName().toString());
+		        	Model m = new Model();
+		        	/**
+		        	 * Tutto quello che server
+		        	 */
+		        	m.setFile(gfms.createObjectFromFile(file.toString(), file.getName().toString()));
+//		        	emm.setOpen(true);
+		        	/**
+		        	 * 
+		        	 */
+		        	ConformToRelation ctr = new ConformToRelation();
+		        	ctr.setFromArtifact(m);
+		        	ctr.setToArtifact(emm);
+		        	m.getRelations().add(ctr);
 		        } catch (Exception e) {
 		        	System.out.println("ERROR: " + file);
 		        }

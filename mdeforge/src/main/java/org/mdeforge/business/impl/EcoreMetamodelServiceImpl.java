@@ -158,7 +158,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final String NsURI_INDEX_CODE = "nsuri";
 	private static final float NsURI_BOOST_VALUE = 1.7f;
 
-	private static final String EANNOTATION_INDEX_CODE = "nsuri";
+	private static final String EANNOTATION_INDEX_CODE = "eAnnotation";
 	private static final float EANNOTATION_BOOST_VALUE = 1.7f;
 
 	private static final String ECLASS_INDEX_CODE = "eClass";
@@ -169,10 +169,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	private static final String EREFERENCE_INDEX_CODE = "eReference";
 	private static final float EREFERENCE_BOOST_VALUE = 1.4f;
-
-	@Autowired
-	protected GridFileMediaService gridFileMediaService;
-
+	
 	private static final String EENUM_INDEX_CODE = "eEnum";
 	private static final float EENUM_BOOST_VALUE = 1.0f;
 
@@ -182,7 +179,11 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
 	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	
 	private IndexWriter writer;
+	
+	@Autowired
+	protected GridFileMediaService gridFileMediaService;
 	@Autowired
 	private Mongo mongo;
 	@Autowired
@@ -1322,7 +1323,51 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		}
 	}
 
-	private Document getMetamodelDocument(EcoreMetamodel ecoreMetamodel) {
+	
+	@Override
+	public void createIndex(EcoreMetamodel is) {
+		File indexDirFile = new File(basePathLucene);
+		// Imposta la directory in cue verra' creato l'indice
+		Directory indexDir;
+		try {
+			indexDir = FSDirectory.open(indexDirFile);
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			// Create a new index in the directory, removing any
+			// previously indexed documents:
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
+			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
+			// create the indexer
+			this.writer = new IndexWriter(indexDir, conf);
+			long duration = 0;
+			int numIndexedDocs = 0;
+			long startTime = System.nanoTime();
+
+			Document document = parseArtifactForIndex(is);
+			try {
+				// writer.updateDocument(new Term("path", file.getPath()),
+				// document);
+				writer.addDocument(document);
+			} catch (CorruptIndexException e) {
+				throw new BusinessException(e.getMessage());
+			} catch (IOException e) {
+				throw new BusinessException(e.getMessage());
+			}
+			long endTime = System.nanoTime();
+			duration = (endTime - startTime) / 1000000; // milliseconds(1000000)
+														// - seconds
+														// (1000000000)
+			numIndexedDocs = writer.numDocs();
+			writer.close();
+			System.out.println("Index of " + numIndexedDocs + " documents done in " + duration + " milliseconds.");
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			throw new BusinessException(e1.getMessage());
+		}
+
+	}
+	
+	private Document parseArtifactForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
 		/*
 		 * FILE METADATA
@@ -1330,7 +1375,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		Metadata metadata = new Metadata();
 		// By using the BodyContentHandler, you can request that Tika return
 		// only the content of the document's body as a plain-text string.
-		ContentHandler handler = new BodyContentHandler(5000000); // Parsing to
+		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); // Parsing to
 																	// Plain
 																	// Text
 		ParseContext context = new ParseContext();
@@ -1460,47 +1505,5 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return doc;
 	}
 
-	@Override
-	public void createIndex(EcoreMetamodel is) {
-		File indexDirFile = new File(basePathLucene);
-		// Imposta la directory in cue verra' creato l'indice
-		Directory indexDir;
-		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-			// Create a new index in the directory, removing any
-			// previously indexed documents:
-			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			// create the indexer
-			this.writer = new IndexWriter(indexDir, conf);
-			long duration = 0;
-			int numIndexedDocs = 0;
-			long startTime = System.nanoTime();
-			// indicizza tutti i documenti contenuti in documentsPath
-
-			Document document = getMetamodelDocument(is);
-			try {
-				// writer.updateDocument(new Term("path", file.getPath()),
-				// document);
-				writer.addDocument(document);
-			} catch (CorruptIndexException e) {
-				throw new BusinessException(e.getMessage());
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage());
-			}
-			long endTime = System.nanoTime();
-			duration = (endTime - startTime) / 1000000; // milliseconds(1000000)
-														// - seconds
-														// (1000000000)
-			numIndexedDocs = writer.numDocs();
-			writer.close();
-			System.out.println("Index of " + numIndexedDocs + " documents done in " + duration + " milliseconds.");
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			throw new BusinessException(e1.getMessage());
-		}
-
-	}
+	
 }

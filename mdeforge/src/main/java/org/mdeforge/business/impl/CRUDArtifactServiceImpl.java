@@ -149,13 +149,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
 
-			/*
-			 * Se il numero di documenti trovati è superiore al numero di
-			 * maxResult impostato non consentiamo di ciclare oltre il minimo
-			 * dei due valori quindi settiamo come limite per il ciclo for il
-			 * min dei due.
-			 */
-
 			for (int i = 0; i < hits.totalHits; i++) {
 				int id = hits.scoreDocs[i].doc;
 				Document doc = searcher.doc(id);
