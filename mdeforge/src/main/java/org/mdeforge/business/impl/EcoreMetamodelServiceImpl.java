@@ -1414,77 +1414,17 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				if (next instanceof EPackage) {
 					EPackage ePackage = (EPackage) next;
 					doc = ePackageIndex(ePackage, doc);
-//					Field ePackageField = new Field(EPACKAGE_INDEX_CODE, ePackage.getName(), Store.YES, Index.ANALYZED);
-//					ePackageField.setBoost(EPACKAGE_BOOST_VALUE);
-//					// System.out.println("Package: " + ePackage.getName());
-//					doc.add(ePackageField);
-//					// GET NsURI
-//					if (ePackage.getNsURI() != null && !ePackage.getNsURI().isEmpty()) {
-//						Field EPackageNsURIField = new Field(NsURI_INDEX_CODE, ePackage.getNsURI(), Store.YES, Index.ANALYZED);
-//						ePackageField.setBoost(NsURI_BOOST_VALUE);
-////						System.out.println("NsURI : " + ePackage.getNsURI());
-//						doc.add(EPackageNsURIField);
-//					}
-//					// GET EAnnotation
-//					EList<EAnnotation> annotations = ePackage.getEAnnotations();
-//					if (annotations != null && !annotations.isEmpty()) {
-//						for (EAnnotation eAnnotation : annotations) {
-//							if(getAnnotationValue(eAnnotation) != null){
-//								Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-//								doc.add(EPackageEAnnotationField);
-//							}
-//						}
-//					}
 				} else if (next instanceof EClass) {
 					try {
 						EClass eClass = (EClass) next;
 						doc = eClassIndex(eClass, doc);
-//						Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
-//						eClassField.setBoost(ECLASS_BOOST_VALUE);
-//						// System.out.println("Class: " + eClass.getName());
-//						doc.add(eClassField);
-//						
-//						// GET EAnnotation
-//						EList<EAnnotation> annotations = eClass.getEAnnotations();
-//						if (annotations != null && !annotations.isEmpty()) {
-//							for (EAnnotation eAnnotation : annotations) {
-//								if(getAnnotationValue(eAnnotation) != null){
-//									Field EClassEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-//									doc.add(EClassEAnnotationField);
-//								}
-//							}
-//						}
-//						
-//						// Index EClass Attributes
-//						for (EAttribute attribute : eClass.getEAttributes()) {
-//							Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES, Index.ANALYZED);
-//							eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
-//							// System.out.println("Attribute: " + attribute.getName());
-//							doc.add(eClassAttributeField);
-//						}
-//						// Index EClass References
-//						for (EReference reference : eClass.getEReferences()) {
-//							try {
-//							Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES, Index.ANALYZED);
-//							eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
-//							// System.out.println("Reference: " + reference.getName());
-//							doc.add(eClassReferenceField);
-//							} catch (Exception e) {System.err.println("ERROR");}
-//						}
 					} catch (Exception e){System.err.println("ERROR");}
 				} else if (next instanceof EEnum) {
 					EEnum eEnum = (EEnum) next;
 					doc = eEnumIndex(eEnum, doc);
-//					Field eEnumField = new Field(EENUM_INDEX_CODE, eEnum.getName(), Store.YES, Index.ANALYZED);
-//					eEnumField.setBoost(EENUM_BOOST_VALUE);
-//					doc.add(eEnumField);
-					
 				} else if (next instanceof EDataType) {
 					EDataType eDataType = (EDataType) next;
 					doc = eDataTypeIndex(eDataType, doc);
-//					Field eDataTypeField = new Field(EDATATYPE_INDEX_CODE, eDataType.getName(), Store.YES, Index.ANALYZED);
-//					eDataTypeField.setBoost(EDATATYPE_BOOST_VALUE);
-//					doc.add(eDataTypeField);
 				} else if (next instanceof EAnnotation) {
 					// GET all the EAnnotations
 					EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
@@ -1517,8 +1457,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
 			doc.add(propField);
 		}
-	 	Field idField = new Field("id", ecoreMetamodel.getId(), Store.YES,
-	 			Index.ANALYZED);
+	 	Field idField = new Field("id", ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
 	 	
 	 	doc.add(textField);
 	 	doc.add(artName);

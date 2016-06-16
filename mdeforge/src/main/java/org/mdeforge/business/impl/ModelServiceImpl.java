@@ -326,9 +326,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			}
 		}
 		
-		
-		
-//		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(model));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
 		ecoreMetamodelService.loadArtifact(emm);
@@ -345,7 +342,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			if(eClass instanceof EClass)  {
 				//CLASS ANNOTATIONS
 				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
-//				System.out.println("Number of class annotations = " + annotations.size());
+				//TODO index also the annotations
 				
 				//CLASS ATTRIBUTES
 				for (EAttribute attribute : eClass.getEAllAttributes()) {
@@ -354,7 +351,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 					// System.out.println(key);
 					// Object value = next.eGet(attribute);
 					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
-//					System.out.println("Attribute Name: " + attribute.getName() + " ### Value: " + attributeValue);
 
 					/*
 					 * Index className:classAttributeValue
@@ -373,73 +369,17 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 				
 				// EClass References
 				for (EReference reference : eClass.getEAllReferences()) {
-						EObject value = (EObject) next.eGet(reference);
-						String key = reference.getName();
-						
-						EClass referenceTo = (EClass) value.eClass();
-						
-//						try {
-							Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
-							// eClassReferenceField.setBoost(1.5f);
-//							System.out.println("Reference: key = " + key + "; value = " + value.toString());
-							doc.add(eClassReferenceField);
-//						} catch (Exception e) {
-//							System.err.println("ERROR");
-//						}
+					EObject value = (EObject) next.eGet(reference);
+					String key = reference.getName();
+					EClass referenceTo = (EClass) value.eClass();
+					Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
+					// eClassReferenceField.setBoost(1.5f);
+					doc.add(eClassReferenceField);
 					}
 			}
 			
 		}
-		
-		//Parse Model elements
-//		final EClass eClass = model.get
-//		final List<EAttribute> attributes = eClass.getEAllAttributes();
-//		final List<EReference> references = eClass.getEAllReferences();
-//		
-//		String classWeight = getAnnotation(eClass);
-//
-//		for (final EAttribute attribute : attributes) {
-//			if (EObjects.isCandidate(object, attribute)) {
-//				final String key = attribute.getName();
-//				final Object value = object.eGet(attribute);
-//				
-//				String attributeWeight = getAnnotation(attribute);
-//				
-//				if (classWeight != null && attributeWeight == null) {
-//					setAnnotation(attribute, classWeight);
-//				}
-//
-//				if (EObjects.isFeatureMap(attribute)) {
-//					wc = serializeFeatureMap(wc, attribute, object);
-//				} else {
-//					wc = serializeValues(wc, key, attribute, value);
-//				}
-//			}
-//		}
-//
-//		for (final EReference reference : references) {
-//			if (EObjects.isCandidate(object, reference)) {
-//				final Object value = object.eGet(reference);
-//				final String key = reference.getName();
-//				
-////				String referenceWeight = getAnnotation(reference);
-////				
-////				if (classWeight != null && referenceWeight == null) {
-////					setAnnotation(reference, classWeight);
-////				}
-//
-//				if (EObjects.isMapEntry(reference.getEReferenceType())) {
-//					wc = serializeMapEntry(wc, key, reference, value);
-//				} else if (!reference.isContainment()) {
-//					// don't take care about references which are not
-//					// containment
-//				} else {
-//					wc = serializeContainment(wc, key, reference, object, value);
-//				}
-//			}
-//		}
-//		
-		
+
 		String text = handler.toString();
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 //		textField.setBoost(2.0f);
