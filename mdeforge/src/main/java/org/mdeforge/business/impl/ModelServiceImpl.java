@@ -37,6 +37,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
@@ -49,6 +50,7 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.emfjson.common.EObjects;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
@@ -130,6 +132,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 	
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	@Value("#{cfgproperties[basePathLucene]}")
+	protected String basePathLucene;
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
@@ -263,7 +267,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 	@Override
 	public void createIndex(Model is) {
 		File indexDirFile = new File(basePathLucene);
-		// Imposta la directory in cue verra' creato l'indice
+		// set the directory for the index
 		Directory indexDir;
 		try {
 			indexDir = FSDirectory.open(indexDirFile);
@@ -275,30 +279,14 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 			// create the indexer
 			this.writer = new IndexWriter(indexDir, conf);
-			long duration = 0;
-			int numIndexedDocs = 0;
-			long startTime = System.nanoTime();
-			// indicizza tutti i documenti contenuti in documentsPath
 
 			Document document = parseArtifactForIndex(is);
-			try {
-				// writer.updateDocument(new Term("path", file.getPath()),
-				// document);
-				writer.addDocument(document);
-			} catch (CorruptIndexException e) {
-				throw new BusinessException(e.getMessage());
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage());
-			}
-			long endTime = System.nanoTime();
-			duration = (endTime - startTime) / 1000000; // milliseconds(1000000)
-														// - seconds
-														// (1000000000)
-			numIndexedDocs = writer.numDocs();
+			writer.addDocument(document);
+			
 			writer.close();
-			System.out.println("Index of " + numIndexedDocs + " documents done in " + duration + " milliseconds.");
+			System.out.println("---------------------------------------");
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			e1.printStackTrace();
 			throw new BusinessException(e1.getMessage());
 		}
 
@@ -309,8 +297,9 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 	 * @param ecoreMetamodel
 	 * @return
 	 */
-	public Document parseArtifactForIndex(Model model) {
+	private Document parseArtifactForIndex(Model model) {
 		
+		Document doc = new Document();
 		Metadata metadata = new Metadata();
 		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
 		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
@@ -337,6 +326,120 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 			}
 		}
 		
+		
+		
+//		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(model));
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
+		ecoreMetamodelService.loadArtifact(emm);
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
+		
+		TreeIterator<EObject> eAllContents = load_resource.getAllContents();
+		while (eAllContents.hasNext()) {
+			EObject next = eAllContents.next();
+			
+			EClass eClass = next.eClass();
+			if(eClass instanceof EClass)  {
+				//CLASS ANNOTATIONS
+				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
+//				System.out.println("Number of class annotations = " + annotations.size());
+				
+				//CLASS ATTRIBUTES
+				for (EAttribute attribute : eClass.getEAllAttributes()) {
+					// EAnnotation ann = attribute.getEAnnotation("searchindex");
+					// String key = eClass.getName() + "#" +attribute.getName();
+					// System.out.println(key);
+					// Object value = next.eGet(attribute);
+					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
+//					System.out.println("Attribute Name: " + attribute.getName() + " ### Value: " + attributeValue);
+
+					/*
+					 * Index className:classAttributeValue
+					 */
+					Field eClassWithAttributeField = new Field(eClass.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					// eClassWithAttributeField(1.5f);
+					doc.add(eClassWithAttributeField);
+
+					/*
+					 * Index className::classAttribute:attributeValue
+					 */
+					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + "_" + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					// eClassWithAttributeAndAttributeValueField(1.5f);
+					doc.add(eClassWithAttributeAndAttributeValueField);
+				}
+				
+				// EClass References
+				for (EReference reference : eClass.getEAllReferences()) {
+						EObject value = (EObject) next.eGet(reference);
+						String key = reference.getName();
+						
+						EClass referenceTo = (EClass) value.eClass();
+						
+//						try {
+							Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
+							// eClassReferenceField.setBoost(1.5f);
+//							System.out.println("Reference: key = " + key + "; value = " + value.toString());
+							doc.add(eClassReferenceField);
+//						} catch (Exception e) {
+//							System.err.println("ERROR");
+//						}
+					}
+			}
+			
+		}
+		
+		//Parse Model elements
+//		final EClass eClass = model.get
+//		final List<EAttribute> attributes = eClass.getEAllAttributes();
+//		final List<EReference> references = eClass.getEAllReferences();
+//		
+//		String classWeight = getAnnotation(eClass);
+//
+//		for (final EAttribute attribute : attributes) {
+//			if (EObjects.isCandidate(object, attribute)) {
+//				final String key = attribute.getName();
+//				final Object value = object.eGet(attribute);
+//				
+//				String attributeWeight = getAnnotation(attribute);
+//				
+//				if (classWeight != null && attributeWeight == null) {
+//					setAnnotation(attribute, classWeight);
+//				}
+//
+//				if (EObjects.isFeatureMap(attribute)) {
+//					wc = serializeFeatureMap(wc, attribute, object);
+//				} else {
+//					wc = serializeValues(wc, key, attribute, value);
+//				}
+//			}
+//		}
+//
+//		for (final EReference reference : references) {
+//			if (EObjects.isCandidate(object, reference)) {
+//				final Object value = object.eGet(reference);
+//				final String key = reference.getName();
+//				
+////				String referenceWeight = getAnnotation(reference);
+////				
+////				if (classWeight != null && referenceWeight == null) {
+////					setAnnotation(reference, classWeight);
+////				}
+//
+//				if (EObjects.isMapEntry(reference.getEReferenceType())) {
+//					wc = serializeMapEntry(wc, key, reference, value);
+//				} else if (!reference.isContainment()) {
+//					// don't take care about references which are not
+//					// containment
+//				} else {
+//					wc = serializeContainment(wc, key, reference, object, value);
+//				}
+//			}
+//		}
+//		
+		
 		String text = handler.toString();
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 //		textField.setBoost(2.0f);
@@ -354,7 +457,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 	 	Field lastUpdateField = new Field("lastUpdate", lastUpdate.toString(), Store.YES, Index.ANALYZED);
 //		filetypeField.setBoost(1.4f);
 		
-		Document doc = new Document();
 	 	for (Property prop : model.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
@@ -368,55 +470,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 	 	doc.add(authorField);
 	 	doc.add(lastUpdateField);
 		doc.add(idField);
-		
-//		for (String key : metadata.names()) {
-//			String name = key.toLowerCase();
-//			String value = metadata.get(key);
-////			System.out.println("["+name + " = " + value+"]");
-//			/*	Example:
-//			    [date = 2013-08-27T13:00:00Z]
-//				[total-time = 287]
-//				[creator = Utente Windows]
-//				[last-printed = 2013-11-05T10:41:00Z]
-//				[creation-date = 2013-08-27T13:00:00Z]
-//				[xmptpg:npages = 33]
-//				[word-count = 8892]
-//				[character-count-with-spaces = 61430]
-//				[last-author = massimo]
-//				[last-modified = 2013-11-13T07:38:00Z]
-//				[character count = 52660]
-//				[page-count = 33]
-//				[template = Normal]
-//				[revision-number = 51]
-//				[line-count = 438]
-//				[application-version = 12.0000]
-//				[paragraph-count = 122]
-//				[application-name = Microsoft Office Word]
-//				[author = Utente Windows]
-//				[publisher = ]
-//				[content-type = application/vnd.openxmlformats-officedocument.wordprocessingml.document]
-//				
-//				[keywords = ]
-//			 */
-//			
-//			if (StringUtils.isBlank(value)) {
-//				continue;
-//			}
-//			
-//			if ("last-modified".equalsIgnoreCase(key)) {
-//					doc.add(new Field("update", value, Store.YES, Index.NOT_ANALYZED));
-//			}
-//			else if ("title".equalsIgnoreCase(key)) {
-//				doc.add(new Field(name, value, Store.YES, Index.ANALYZED));
-//			}
-//			else {
-//				doc.add(new Field(name, artifactName, Store.YES, Index.NOT_ANALYZED));
-//			}
-//		}
-//		doc.add(textField);
-		
 	
-        return doc;
+		return doc;
 	}
 
 }

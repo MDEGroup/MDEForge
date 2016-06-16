@@ -3,7 +3,6 @@ package org.mdeforge.business.impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,17 +35,13 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SearchResult;
-import org.mdeforge.business.model.SearchResultComplete;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
@@ -62,12 +57,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
 
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
@@ -138,10 +129,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			long duration = 0;
 			long startTime = System.nanoTime();
 
-			SearchResultComplete searchResultComplete = new SearchResultComplete();
-
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-
 			
 			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
 			System.out.println("Total hits: " + hits.totalHits);
