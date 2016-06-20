@@ -1430,10 +1430,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 					EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
 					if (annotations != null && !annotations.isEmpty()) {
 						for (EAnnotation eAnnotation : annotations) {
-							if(getAnnotationValue(eAnnotation) != null){
-								Field generalEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-								doc.add(generalEAnnotationField);
-							}
+//							if(getAnnotationKey(eAnnotation).equals("weight")){
+								if(getAnnotationValue(eAnnotation) != null){
+									Field generalEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+									doc.add(generalEAnnotationField);
+								}
+//							}
 						}
 
 					}
@@ -1546,6 +1548,24 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 	
 	/**
+	 * Get the annotation key from an EAnnotation
+	 * @param eAnnotation
+	 * @return String
+	 */
+	private String getAnnotationKey(EAnnotation eAnnotation){
+		String result = null;
+		if (eAnnotation != null) {
+				EMap<String, String> annotationDetails = eAnnotation.getDetails();
+				for (Entry<String, String> entry : annotationDetails) {
+					if(entry.getKey() != null && entry.getValue() != null){
+						result = entry.getKey();
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Get the annotation value from an EAnnotation
 	 * @param eAnnotation
 	 * @return String
@@ -1553,10 +1573,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private String getAnnotationValue(EAnnotation eAnnotation){
 		String result = null;
 		if (eAnnotation != null) {
-				EMap<String, String> annotationDetails = eAnnotation.getDetails();
-				for (Entry<String, String> entry : annotationDetails) {
-					if(entry.getKey() != null && entry.getValue() != null){
-						result = entry.getValue();
+			EMap<String, String> annotationDetails = eAnnotation.getDetails();
+			for (Entry<String, String> entry : annotationDetails) {
+				if(entry.getKey() != null && entry.getValue() != null){
+					result = entry.getValue();
 				}
 			}
 		}
