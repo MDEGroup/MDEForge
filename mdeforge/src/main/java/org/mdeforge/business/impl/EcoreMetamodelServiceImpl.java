@@ -1336,38 +1336,27 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	@Override
 	public void createIndex(EcoreMetamodel is) {
 		File indexDirFile = new File(basePathLucene);
-		// Imposta la directory in cue verra' creato l'indice
+		// Set the directory in which will be created the index.
 		Directory indexDir;
 		try {
 			indexDir = FSDirectory.open(indexDirFile);
 			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-			// Create a new index in the directory, removing any
-			// previously indexed documents:
+			// Create an index in the directory, appending new index over previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
-			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
 			// create the indexer
 			this.writer = new IndexWriter(indexDir, conf);
-			long duration = 0;
-			int numIndexedDocs = 0;
-			long startTime = System.nanoTime();
 
 			Document document = parseArtifactForIndex(is);
 			try {
-				// writer.updateDocument(new Term("path", file.getPath()),
-				// document);
+				// writer.updateDocument(new Term("path", file.getPath()), document);
 				writer.addDocument(document);
 			} catch (CorruptIndexException e) {
 				throw new BusinessException(e.getMessage());
 			} catch (IOException e) {
 				throw new BusinessException(e.getMessage());
 			}
-			long endTime = System.nanoTime();
-			duration = (endTime - startTime) / 1000000; // milliseconds(1000000)
-														// (1000000000)
-			numIndexedDocs = writer.numDocs();
 			writer.close();
-//			System.out.println("Index of " + numIndexedDocs + " documents done in " + duration + " milliseconds.");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			throw new BusinessException(e1.getMessage());
@@ -1415,10 +1404,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 					EPackage ePackage = (EPackage) next;
 					doc = ePackageIndex(ePackage, doc);
 				} else if (next instanceof EClass) {
-					try {
-						EClass eClass = (EClass) next;
-						doc = eClassIndex(eClass, doc);
-					} catch (Exception e){System.err.println("ERROR");}
+					EClass eClass = (EClass) next;
+					doc = eClassIndex(eClass, doc);
 				} else if (next instanceof EEnum) {
 					EEnum eEnum = (EEnum) next;
 					doc = eEnumIndex(eEnum, doc);
@@ -1428,9 +1415,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				} else if (next instanceof EAnnotation) {
 					// GET all the EAnnotations
 					EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
-					if (annotations != null && !annotations.isEmpty()) {
-						doc = indexAnnotation(annotations, doc);
-					}
+					doc = indexAnnotations(annotations, doc);
 				}
 
 			}
@@ -1476,7 +1461,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		// GET EAnnotation
 		EList<EAnnotation> annotations = ePackage.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
-			doc = indexAnnotation(annotations, doc);
+			doc = indexAnnotations(annotations, doc);
 		}
 		
 		return doc;
@@ -1485,32 +1470,35 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	
 	private Document eClassIndex(EClass eClass, Document doc){
-		Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
-		eClassField.setBoost(ECLASS_BOOST_VALUE);
-		// System.out.println("Class: " + eClass.getName());
-		doc.add(eClassField);
+		try {
+			Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
+			eClassField.setBoost(ECLASS_BOOST_VALUE);
+			// System.out.println("Class: " + eClass.getName());
+			doc.add(eClassField);
+
+			// GET EAnnotation
+			EList<EAnnotation> annotations = eClass.getEAnnotations();
+			if (annotations != null && !annotations.isEmpty()) {
+				doc = indexAnnotations(annotations, doc);
+			}
+
+			// Index EClass Attributes
+			for (EAttribute attribute : eClass.getEAttributes()) {
+				Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES, Index.ANALYZED);
+				eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
+				// System.out.println("Attribute: " + attribute.getName());
+				doc.add(eClassAttributeField);
+			}
+			// Index EClass References
+			for (EReference reference : eClass.getEReferences()) {
+				Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES, Index.ANALYZED);
+				eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
+				// System.out.println("Reference: " + reference.getName());
+				doc.add(eClassReferenceField);
+			}
 		
-		// GET EAnnotation
-		EList<EAnnotation> annotations = eClass.getEAnnotations();
-		if (annotations != null && !annotations.isEmpty()) {
-			doc = indexAnnotation(annotations, doc);
-		}
-		
-		// Index EClass Attributes
-		for (EAttribute attribute : eClass.getEAttributes()) {
-			Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES, Index.ANALYZED);
-			eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
-			// System.out.println("Attribute: " + attribute.getName());
-			doc.add(eClassAttributeField);
-		}
-		// Index EClass References
-		for (EReference reference : eClass.getEReferences()) {
-			try {
-			Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES, Index.ANALYZED);
-			eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
-			// System.out.println("Reference: " + reference.getName());
-			doc.add(eClassReferenceField);
-			} catch (Exception e) {System.err.println("ERROR");}
+		} catch (Exception e) {
+			System.err.println("ERROR");
 		}
 		
 		return doc;
@@ -1538,16 +1526,18 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	 * @param doc
 	 * @return Document
 	 */
-	private Document indexAnnotation(List<EAnnotation> annotations, Document doc){
-		for (EAnnotation eAnnotation : annotations) {
-			if(getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")){
-				if(getAnnotationValue(eAnnotation) != null){
-					Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-					doc.add(EPackageEAnnotationField);
+	private Document indexAnnotations(List<EAnnotation> annotations, Document doc){
+		if (annotations != null && !annotations.isEmpty()) {
+			for (EAnnotation eAnnotation : annotations) {
+				if(getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")){
+					if(getAnnotationValue(eAnnotation) != null){
+						Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+						doc.add(EPackageEAnnotationField);
+					}
 				}
 			}
 		}
-			return doc;
+		return doc;
 	}
 	
 	
