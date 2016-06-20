@@ -92,8 +92,9 @@ import org.xml.sax.SAXException;
 import com.mongodb.Mongo;
 
 @Service
-public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
-		ModelService {
+public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
+	
+	private final String CUSTOM_LUCENE_SEPARATOR_CHARACTER = "_";
 	
 	private IndexWriter writer;
 
@@ -362,7 +363,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements
 					/*
 					 * Index className::classAttribute:attributeValue
 					 */
-					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + "_" + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
 					// eClassWithAttributeAndAttributeValueField(1.5f);
 					doc.add(eClassWithAttributeAndAttributeValueField);
 				}
