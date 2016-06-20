@@ -52,7 +52,7 @@ public class PrivateController {
 	public String dashboard(Model model) throws IOException {
 		
 		model.addAttribute("user",user);
-		
+		model.addAttribute("statistic", artifactService.statistic());
 //		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
 		List<Artifact> myArtifactsList = artifactService.findRecentArtifacts();
 		model.addAttribute("myArtifactsList",myArtifactsList);
