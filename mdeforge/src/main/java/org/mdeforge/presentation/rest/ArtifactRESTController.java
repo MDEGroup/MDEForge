@@ -5,7 +5,6 @@ import java.util.List;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
@@ -105,8 +104,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchProvider searchProvider = (SearchProvider) artifactService;
-			ArtifactList list = new ArtifactList(searchProvider.search(text));
+			ArtifactList list = new ArtifactList(artifactService.search(text));
 			
 			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 		} catch (BusinessException e) {

@@ -53,7 +53,6 @@ import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
-import org.mdeforge.business.SearchProvider;
 import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.UNIVAQTesterService;
 import org.mdeforge.business.anatlyzer.AnATLyzerUtils;
@@ -106,7 +105,7 @@ import transML.exceptions.transException;
 @Service
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
-		ATLTransformationService, SearchProvider<ATLTransformation> {
+		ATLTransformationService{
 
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
@@ -781,21 +780,10 @@ public class ATLTransformationServiceImpl extends
 					}
 				}
 			}
-			
-			
 			return 0;
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}
-	}
-
-	@Override
-	public void extractedContent(ATLTransformation artifact) {
-		
-	}
-
-	@Override
-	public void createIndex(TextIndexDefinition textIndex) throws BusinessException {		
 	}
 
 	// private InputStream getModulesList(String transformationPath) throws
