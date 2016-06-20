@@ -3,8 +3,8 @@ package org.mdeforge.business.impl;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,17 +36,14 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
-import org.mdeforge.business.model.SearchResult;
-import org.mdeforge.business.model.SearchResultComplete;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.search.Tokenizer;
+import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
@@ -59,17 +56,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition.TextIndexDefinitionBuilder;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.TextCriteria;
-import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.security.crypto.codec.Base64;
-
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	@Override
 	public void addComment(Comment comment, String idArtifact) throws BusinessException {
@@ -135,11 +135,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			// Utils utils = new Utils();
 
-			long duration = 0;
-			long startTime = System.nanoTime();
-
-			SearchResultComplete searchResultComplete = new SearchResultComplete();
-
+			
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 
 			
@@ -148,14 +144,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-
-			/*
-			 * Se il numero di documenti trovati è superiore al numero di
-			 * maxResult impostato non consentiamo di ciclare oltre il minimo
-			 * dei due valori quindi settiamo come limite per il ciclo for il
-			 * min dei due.
-			 */
-
 			for (int i = 0; i < hits.totalHits; i++) {
 				int id = hits.scoreDocs[i].doc;
 				Document doc = searcher.doc(id);
@@ -164,10 +152,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),
 						hits.scoreDocs[i].doc, "text", analyzer);
 
-				/*
-				 * (org.apache.lucene.analysis.TokenStream tokenStream, String
-				 * text, boolean mergeContiguousFragments, int maxNumFragments)
-				 */
+				
 				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true,
 						MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
 
@@ -181,18 +166,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				T art = findOne(doc.get("id"));
 				art.setScore(hits.scoreDocs[i].score);
 				artifacts.add(art);
+				searcher.close();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
 		} catch (InvalidTokenOffsetsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
 		} catch (org.apache.lucene.queryParser.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
 		}
-
 		return artifacts;
 	}
 
@@ -307,6 +289,49 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			return n.find(q, persistentClass);
 		}
 
+	}
+	
+	@Override
+	public List<Statistic> statistic() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, -30);
+		Date dateBefore30Days = cal.getTime();
+		List<Statistic> result = new ArrayList<Statistic>();
+		if (persistentClass != Artifact.class) {
+			Aggregation agg = newAggregation(
+					match((Criteria.where("created").gt(dateBefore30Days).
+							andOperator(
+									Criteria.where("_class").
+										is(persistentClass.getCanonicalName())
+										)
+							)
+					),
+					project("created").andExpression("month(created)").as("month_joined"),
+				    group("month_joined").count().as("total"),
+				    project("total").and("created").previousOperation(),	 
+				    sort(Direction.ASC, "created")			
+					);
+				AggregationResults<Statistic> groupResults 
+					= n.aggregate(agg, Artifact.class, Statistic.class);
+				result = groupResults.getMappedResults();
+				
+		} else {
+			Aggregation agg = newAggregation(
+					match(Criteria.where("created").gt(dateBefore30Days)),
+					project("created").andExpression("month(created)").as("month_joined"),
+				    group("month_joined").count().as("total"),
+				    project("total").and("created").previousOperation(),	 
+				    sort(Direction.ASC, "created")			
+					);
+				AggregationResults<Statistic> groupResults 
+					= n.aggregate(agg, Artifact.class, Statistic.class);
+				result = groupResults.getMappedResults();
+				
+		}
+		return result;
+		
 	}
 
 	@Override

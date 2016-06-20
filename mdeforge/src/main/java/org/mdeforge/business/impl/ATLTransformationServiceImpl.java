@@ -107,6 +107,7 @@ import transML.exceptions.transException;
 public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
 		ATLTransformationService, SearchProvider<ATLTransformation> {
+
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
@@ -138,6 +139,31 @@ public class ATLTransformationServiceImpl extends
 		return result;
 	}
 
+	@Override
+	public void createIndex(ATLTransformation ecore) {
+		super.createIndex(ecore);
+		AtlParser atlParser = new AtlParser();
+		ModelFactory modelFactory = new EMFModelFactory();
+		IReferenceModel atlMetamodel;
+		try {
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String filePath = gridFileMediaService.getFilePath(ecore);
+			EMFModel atlDynModel = (EMFModel) modelFactory
+					.newModel(atlMetamodel);
+			atlParser.inject(atlDynModel, filePath);
+			Resource originalTrafo = atlDynModel.getResource();
+			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+					.getURI().toFileString(), true);
+			List<ModelInfo> info = ATLUtils.getModelInfo(atlModel);
+//			atlModel.getModule().get
+			
+		} catch (ATLCoreException e) {
+			throw new BusinessException(e.getMessage());
+		}
+		
+		
+		
+	}
 	@Override
 	public ResponseGrid<ATLTransformation> findAllPaginated(
 			RequestGrid requestGrid) throws BusinessException {
