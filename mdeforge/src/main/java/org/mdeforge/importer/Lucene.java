@@ -53,13 +53,13 @@ public class Lucene {
 	
 	
 	
-	public void printLuceneFieldsName(){
+	public void printLuceneFieldsName(String indexDirectoryPath){
 		
 		System.out.println("---------------------------------");
 		System.out.println("List of Name Fields in the index:");
 		System.out.println("---------------------------------");
 		
-		File indexDirFile = new File("/Users/francesco/Desktop/newForgeDir/luceneIndex/");
+		File indexDirFile = new File(indexDirectoryPath);
 		try {
 			FSDirectory indexDir = FSDirectory.open(indexDirFile);
 			IndexReader luceneIndexReader = IndexReader.open(indexDir);
@@ -72,6 +72,9 @@ public class Lucene {
 
 	
 	public static void main(String[] args) {
+		
+		String indexDirectoryPath = "/Users/francesco/Desktop/newForgeDir/luceneIndex/";
+		
 		ApplicationContext context = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/root-context.xml");
 
 		Lucene lucene = new Lucene(context);
@@ -91,7 +94,7 @@ public class Lucene {
 		
 		System.out.println("End Model indexing in " + duration +" ms.");
 		
-		lucene.printLuceneFieldsName();
+		lucene.printLuceneFieldsName(indexDirectoryPath);
 
 	}
 }
