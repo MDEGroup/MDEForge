@@ -1429,15 +1429,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 					// GET all the EAnnotations
 					EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
 					if (annotations != null && !annotations.isEmpty()) {
-						for (EAnnotation eAnnotation : annotations) {
-//							if(getAnnotationKey(eAnnotation).equals("weight")){
-								if(getAnnotationValue(eAnnotation) != null){
-									Field generalEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-									doc.add(generalEAnnotationField);
-								}
-//							}
-						}
-
+						doc = indexAnnotation(annotations, doc);
 					}
 				}
 
@@ -1484,18 +1476,13 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		// GET EAnnotation
 		EList<EAnnotation> annotations = ePackage.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
-			for (EAnnotation eAnnotation : annotations) {
-//				if(getAnnotationKey(eAnnotation).equals("weight")){
-					if(getAnnotationValue(eAnnotation) != null){
-						Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-						doc.add(EPackageEAnnotationField);
-					}
-//				}
-			}
+			doc = indexAnnotation(annotations, doc);
 		}
 		
 		return doc;
 	}
+	
+
 	
 	private Document eClassIndex(EClass eClass, Document doc){
 		Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
@@ -1506,14 +1493,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		// GET EAnnotation
 		EList<EAnnotation> annotations = eClass.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
-			for (EAnnotation eAnnotation : annotations) {
-//				if(getAnnotationKey(eAnnotation).equals("weight")){
-					if(getAnnotationValue(eAnnotation) != null){
-						Field EClassEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-						doc.add(EClassEAnnotationField);
-					}
-//				}
-			}
+			doc = indexAnnotation(annotations, doc);
 		}
 		
 		// Index EClass Attributes
@@ -1550,6 +1530,26 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		doc.add(eDataTypeField);
 		return doc;
 	}
+	
+	
+	/**
+	 * Index the annotation list provided as input.
+	 * @param annotations
+	 * @param doc
+	 * @return Document
+	 */
+	private Document indexAnnotation(List<EAnnotation> annotations, Document doc){
+		for (EAnnotation eAnnotation : annotations) {
+			if(getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")){
+				if(getAnnotationValue(eAnnotation) != null){
+					Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+					doc.add(EPackageEAnnotationField);
+				}
+			}
+		}
+			return doc;
+	}
+	
 	
 	/**
 	 * Get the annotation key from an EAnnotation
