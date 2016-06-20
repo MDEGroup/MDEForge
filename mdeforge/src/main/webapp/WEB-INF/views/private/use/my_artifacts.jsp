@@ -34,12 +34,12 @@
 				<thead>
 					<tr>						
 						<th>Name</th>
-						<th>Description</th>
-						<th>Artifact Type</th>
-						<th>Open</th>
-						<th>Created</th>
-						<th>Modified</th>
-						<th>Action</th>
+						<!-- <th>Description</th>-->
+						<th class="center">Artifact Type</th>
+						<th class="center">Open</th>
+						<th class="center">Created</th>
+						<th class="center">Modified</th>
+						<th class="center">Action</th>
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -52,13 +52,13 @@
 						<td>
 							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
 						</td>
-						<td>
+						<!-- <td>
 							<c:forEach items="${artifact.properties}" var="property">
 								<c:if test="${property.getName() == 'Description '}">
 										${property.getValue()}
 								</c:if>
 							</c:forEach>
-						</td>
+						</td>-->
 						<td class="center">
 							<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}" title="See Artifact Details">${artifact.getClass().getSimpleName()}</a>
 							<c:choose>
@@ -71,9 +71,9 @@
 						<td class="center">${artifact.getCreated()}</td>
 						<td class="center">${artifact.getModified()}</td>
 						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons remove_2 btn-danger" title="Delete Artifact"><i></i></a>
-								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>
-								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact_download?artifact_id=${artifact.getId()}" class="btn-action glyphicons download_alt btn-success" title="Artifact Download"><i></i></a>
+								<!-- <a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn-action glyphicons remove_2 btn-danger" title="Delete Artifact"><i></i></a>
+								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>-->
+								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact_download?artifact_id=${artifact.getId()}" class="btn-action center download_alt" title="Artifact Download">Download</a>
 									
 								
 								

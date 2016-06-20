@@ -14,24 +14,22 @@
 </ul>
 <!-- Breadcrumb END -->
 
-
-
-<!-- Heading -->
-<div class="heading-buttons">
-	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
-	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
-	<div class="buttons pull-right">
-		<a href="${pageContext.request.contextPath}/private/workspace/create" class="btn btn-primary btn-icon glyphicons stats" title="Workspace Insert">Workspace Insert</a>
-		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
-	</div>
-	<div class="clearfix"></div>
-</div>
-<div class="separator bottom"></div>
 <!-- // Heading END -->
 
 <div class="innerLR">
-
-	
+<div class="box-generic">
+<div class="row-fluid">
+<div class="span8">
+	<h3 class="header-h main-title"><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+<span> Metamodels in the repository: ${numberOfMetamodels}</span>
+</div>
+	<div class="span4 buttons text-right" style="margin-top: 20px">
+		<a href="${pageContext.request.contextPath}/private/workspace/create" class="btn btn-success" title="New Workspace"><i class="icon-plus"></i> New Workspace</a>
+		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary"><i class="icon-cloud"></i> Graph View</a>			
+	</div>
+</div>
+</div>
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 			
@@ -43,9 +41,11 @@
 						<th>Name</th>
 <!-- 						<th>Description</th> -->
 <!-- 						<th>Open</th> -->
-<!-- 						<th>Created</th> -->
-<!-- 						<th>Modified</th> -->
-						<th>Action</th>
+						<th>Description</th>
+						<th>Last Update</th>
+						<th>Created</th>
+						
+						
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -66,9 +66,14 @@
 <%-- 						<td class="center">${ecoreMetamodel.getOpen()}</td> --%>
 <%-- 						<td class="center">${ecoreMetamodel.getCreated()}</td> --%>
 <%-- 						<td class="center">${ecoreMetamodel.getModified()}</td> --%>
-						<td class="center actions">
-								<a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-								<a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>																	
+						<td>
+								${workspace.getDescription()}																	
+						</td>
+						<td class="center">
+																								
+						</td>
+						<td class="center">
+																								
 						</td>
 					</tr>
 <!-- 					// Table row END -->

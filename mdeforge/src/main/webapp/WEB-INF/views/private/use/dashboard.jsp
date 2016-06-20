@@ -44,7 +44,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="#" class="widget-stats widget-stats-2">
+					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfTransformations}</span>
 						<span class="txt">Transformations</span>
 					</a>
@@ -54,7 +54,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="#" class="widget-stats widget-stats-2">
+					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfMetamodels}</span>
 						<span class="txt">Metamodels</span>
 					</a>
@@ -64,7 +64,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="#" class="widget-stats widget-stats-2">
+					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfModels}</span>
 						<span class="txt">Models</span>
 					</a>
@@ -74,7 +74,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="#" class="widget-stats widget-stats-2">
+					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfArtifacts}</span>
 						<span class="txt">Artifacts</span>
 					</a>
@@ -92,13 +92,52 @@
 					
 				</div>
 			</div>
+<hr class="separator">
+<div class="separator"></div>
+<div class="row-fluid">
+		<div class="span12 tablet-column-reset">
+			<div class="span2">
+				<a href="#upload-artifact" class="widget-stats widget-stats-2 btn" data-toggle="modal" style="background: #b94a48">
+						<span class="count icon-cloud-upload text-info"><i></i></span>
+						<span class="txt">Upload Artifact</span>
+					</a>
+			</div>
+			<div class="span2">
+					<a href="${pageContext.request.contextPath}/private/workspace/create" class="widget-stats widget-stats-2 btn" style="background: #53575d">
+						<!-- <span class="count icon-code-fork"><i></i></span> -->
+						<span class="count  icon-sitemap text-warning"><i></i></span>
+						<span class="txt">New Workspace</span>
+					</a>
+			</div>
+			<div class="span2">
+				<a href="${pageContext.request.contextPath}/public/browse" class="btn widget-stats widget-stats-2" style="background: #c09853">
+						<span class="count icon-folder-open text-success"><i></i></span>
+						<span class="txt">Browse Repository</span>
+					</a>
+			</div>
+			<div class="span2">
+				<a href="${pageContext.request.contextPath}/public/search" class="widget-stats widget-stats-2 btn" style="background: #3FAAE2">
+						<span class="count icon-search text-error"><i></i></span>
+						<span class="txt">Search</span>
+					</a>
+			</div>
+			<div class="span2">
+				<a href="${pageContext.request.contextPath}" class="widget-stats widget-stats-2 btn" style="background: #468847">
+						<span class="count icon-desktop text-error"><i></i></span>
+						<span class="txt">MDE Forge Home</span>
+					</a>
+			</div>
+				<div class="separator bottom"></div>
+			</div>
+</div>
+<div class="separator"></div>
 <div class="separator"></div>
 <div class="widget widget-body-white">
 					<div class="widget-head">
 						<h4 class="heading file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
 					</div>
-					<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								<table class="table table-condensed">
+					<div class="widget-body table-dashboard">
+								<table class="table table-striped">
 			
 								<!-- Table heading -->
 								<thead>
@@ -133,19 +172,20 @@
 							</table>
 					</div>
 			</div>
+
 <div class="separator"></div>
 	<div class="widget widget-body-white">
 					<div class="widget-head">
-						<h4 class="heading folder_open"><i></i>Recent Projects (${myProjectList.size()})</h4>
+						<h4 class="heading folder_open"><i></i>Recent Projects</h4>
 					</div>
-								<div class="widget-body" style="height: 200px; overflow-y: scroll;margin-bottom: 20px;">
-								<table class="table table-condensed">
+								<div class="widget-body table-dashboard">
+								<table class="table table-striped">
 			
 								<!-- Table heading -->
 								<thead>
 									<tr>
 										<th>Project Name</th>
-										<th>Created date</th>
+										<th class="center">Created date</th>
 									</tr>
 								</thead>
 								<!-- // Table heading END -->
@@ -157,7 +197,7 @@
 										<tr>
 											<td>${project.getName()}</td>
 											<td class="center">
-												<span class="label"><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
+												<span><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
 											</td>
 										</tr>
 										<!-- // Table row END -->
@@ -181,6 +221,63 @@
 		</div>
 	</div>
 	<!-- // Widget END -->
+	<h3 class="header-h main-title" style="padding-left: 10px;">Activities</h3>
+	<div class="separator bottom"></div>
+	<div class="widget-timeline">
+				<ul class="list-timeline">
+					
+															<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">Melisa Ragae</a> registered at <a href="">John Doe's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">Jane Doe</a> registered at <a href="">Melisa Ragae's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">Darius Jackson</a> registered at <a href="">Martin Glades's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">Darius Jackson</a> registered at <a href="">Melisa Ragae's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">Darius Jackson</a> registered at <a href="">John Doe's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										<!-- Item -->
+					<li>
+						<span class="date">21/03</span>
+						<span class="glyphicons activity-icon user_add"><i></i></span>
+						<span class="ellipsis"><a href="">John Doe</a> registered at <a href="">Jane Doe's</a> suggestion.</span>
+						<div class="clearfix"></div>
+					</li>
+					<!-- // Item END -->
+										
+				</ul>
+				<a href="#" class="btn btn-primary view-all">View all</a>
+			</div>
 
 
 	
