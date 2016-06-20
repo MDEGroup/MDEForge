@@ -9,14 +9,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -37,9 +35,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -47,10 +42,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.emfjson.common.EObjects;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
@@ -94,7 +87,8 @@ import com.mongodb.Mongo;
 @Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
 	
-	private final String CUSTOM_LUCENE_SEPARATOR_CHARACTER = "_";
+	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
+	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
 	
 	private IndexWriter writer;
 
@@ -129,7 +123,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Autowired
 	private UserService userService;
 	
-	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
 	
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
@@ -363,7 +356,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 					/*
 					 * Index className::classAttribute:attributeValue
 					 */
-					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
 					// eClassWithAttributeAndAttributeValueField(1.5f);
 					doc.add(eClassWithAttributeAndAttributeValueField);
 				}
