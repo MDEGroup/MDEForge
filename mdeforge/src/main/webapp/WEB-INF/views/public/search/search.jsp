@@ -43,36 +43,9 @@
 						<div class="widget widget-heading-simple widget-body-white">
 							<div class="widget-body">
 								<div class="row-fluid">
-									<form action="${pageContext.request.contextPath}/public/search"
-										method="POST" class="form-search">
-										<div class="span6 center">
-											<div
-												class="widget widget-heading-simple widget-body-simple margin-none">
-												<div class="uniformjs">
-													<label class="checkbox" style="display: inline-block;">
-														<div class="checker" id="uniform-undefined">
-															<span><input type="checkbox" class="checkbox"
-																name="artifactType" value="models" style="opacity: 0;"></span>
-														</div> Models
-													</label> <label class="checkbox"
-														style="display: inline-block; margin-left: 10px;">
-														<div class="checker" id="uniform-undefined">
-															<span class="checked"><input type="checkbox"
-																class="checkbox" name="artifactType" value="metamodels"
-																checked="checked" style="opacity: 0;"></span>
-														</div> Metamodels
-													</label> <label class="checkbox"
-														style="display: inline-block; margin-left: 10px;">
-														<div class="checker" id="uniform-undefined">
-															<span class="checked"><input type="checkbox"
-																class="checkbox" name="artifactType"
-																value="transformations" style="opacity: 0;"></span>
-														</div> Transformations
-													</label>
-												</div>
-											</div>
-										</div>
-										<div class="span6 center">
+									<form action="${pageContext.request.contextPath}/public/search" method="POST" class="form-search">
+										
+										<div class="center">
 											<div
 												class="widget widget-heading-simple widget-body-simple text-right">
 
@@ -85,6 +58,15 @@
 											</div>
 										</div>
 									</form>
+									
+									<div class="center">
+											<div class="widget widget-heading-simple widget-body-simple margin-none">
+												<c:forEach items="${indexFieldNames}" var="indexFieldName">
+													<span class="label">${indexFieldName}:</span>
+												</c:forEach>												
+											</div>
+										</div>
+									
 								</div>
 							</div>
 						</div>

@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.lucene.analysis.TokenStream;
@@ -875,5 +878,26 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
+	}
+	
+	@Override
+	public List<String> indexFieldNames(){
+		
+		HashSet<String> result = new HashSet<String>();
+		File indexDirFile = new File(basePathLucene);
+		try {
+			FSDirectory indexDir = FSDirectory.open(indexDirFile);
+			IndexReader luceneIndexReader = IndexReader.open(indexDir);
+			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Sort the result
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		return sortedList;
 	}
 }

@@ -48,4 +48,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<Metric> findMetric(String idArtifact, User user) throws BusinessException;
 	void addComment(Comment comment, String idArtifat) throws BusinessException;
 	List<Statistic> statistic();
+	
+	//Lucene
+	List<String> indexFieldNames() throws BusinessException;
 }
