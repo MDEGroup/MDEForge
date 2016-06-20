@@ -60,7 +60,9 @@ public class WeightedResourceSerializer {
 
 		return wc;
 	}
-
+	/*
+	 * DA VEDERE COME ESEMPIO
+	 */
 	public static WeightedContents serialize(WeightedContents wc, EObject object)
 			throws IOException {
 		final EClass eClass = object.eClass();

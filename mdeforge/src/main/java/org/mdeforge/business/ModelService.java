@@ -14,4 +14,5 @@ public interface ModelService extends CRUDArtifactService<Model>,
 			ATLTransformation atlTransformation);
 
 	void extractedContent(Model art) throws BusinessException;
+
 }

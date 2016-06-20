@@ -1,5 +1,11 @@
 package org.mdeforge.business.impl;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
@@ -65,11 +71,6 @@ import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	@Override
 	public void addComment(Comment comment, String idArtifact) throws BusinessException {
@@ -133,12 +134,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			IndexReader reader = IndexReader.open(directory);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
-			// Utils utils = new Utils();
-
-			
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-
-			
 			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
 			System.out.println("Total hits: " + hits.totalHits);
 
