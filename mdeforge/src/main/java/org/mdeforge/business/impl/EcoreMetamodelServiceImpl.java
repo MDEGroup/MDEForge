@@ -1485,10 +1485,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		EList<EAnnotation> annotations = ePackage.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
 			for (EAnnotation eAnnotation : annotations) {
-				if(getAnnotationValue(eAnnotation) != null){
-					Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-					doc.add(EPackageEAnnotationField);
-				}
+//				if(getAnnotationKey(eAnnotation).equals("weight")){
+					if(getAnnotationValue(eAnnotation) != null){
+						Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+						doc.add(EPackageEAnnotationField);
+					}
+//				}
 			}
 		}
 		
@@ -1505,10 +1507,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		EList<EAnnotation> annotations = eClass.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
 			for (EAnnotation eAnnotation : annotations) {
-				if(getAnnotationValue(eAnnotation) != null){
-					Field EClassEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
-					doc.add(EClassEAnnotationField);
-				}
+//				if(getAnnotationKey(eAnnotation).equals("weight")){
+					if(getAnnotationValue(eAnnotation) != null){
+						Field EClassEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+						doc.add(EClassEAnnotationField);
+					}
+//				}
 			}
 		}
 		
