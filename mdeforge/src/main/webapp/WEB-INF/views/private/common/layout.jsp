@@ -36,9 +36,9 @@
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
-    
-    <!-- Easy-pie Plugin -->
-	<link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.css" rel="stylesheet" />
+   
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/monokai-sublime.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/github.css" rel="stylesheet" />
      
     <!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -175,28 +175,25 @@
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
 	
 	<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/bootbox.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/Chart.js"></script>
 	
-	
-	<!-- Easy-pie Plugin -->
+	<!-- Easy-pie Plugin 
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.js"></script>
-	
-	<!-- Sparkline Charts Plugin -->
+	-->
+	<!-- Sparkline Charts Plugin 
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/sparkline/jquery.sparkline.min.js"></script>
-	
+	-->
 	<!-- Ba-Resize Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery.ba-resize.js"></script>
 	
-	<!--  Flot Charts Plugin -->
+	<!--  Flot Charts Plugin 
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.pie.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.tooltip.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.selection.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.resize.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.orderBars.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.orderBars.js"></script>-->
 	
-	
-	<!-- Charts Helper Demo Script -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/charts.helper.js?1373029294"></script>
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

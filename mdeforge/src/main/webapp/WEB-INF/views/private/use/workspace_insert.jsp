@@ -17,56 +17,51 @@
 	<li>Create Workspace</li>
 </ul>
 <!-- Breadcrumb END -->
-<h3>Create workspace</h3>
+
 <div class="innerLR">
+<div class="box-generic">
+<h3 class="header-h main-title">Create Workspace</h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+</div>
 	<form:form class="form-horizontal margin-none"
 		modelAttribute="workspace" id="validateSubmitForm" method="post"
 		action="${pageContext.request.contextPath}/private/workspace/create"
 		autocomplete="off">
-		<div class="widget widget-heading-simple widget-body-gray">
-			<div class="widget-body">
+		<div class="widget widget-heading-simple">
 				<div class="row-fluid">
 					<div class="span6">
-						<div class="control-group">
-							<form:label path="name" class="control-label" for="name">Name</form:label>
-							<div class="controls">
-								<form:input path="name" class="span12" id="name" name="name"
-									type="text"></form:input>
-								<p id="nameValidator" style="display: none;">Mandatory field</p>
-							</div>
-						</div>
-						<!-- Group -->
-						<div class="control-group">
-							<form:label path="description" class="control-label"
-								for="lastname">Description</form:label>
-							<div class="controls">
-								<form:input path="description" class="span12" id="description"
-									name="description" type="text"></form:input>
+					<div class="box-generic">
+						<h5 class="input-name">Name</h5>
+								<form:input path="name" id="name" name="name"
+									type="text" placeholder=""></form:input>
+								<p id="nameValidator"  class="text-error" style="display: none;">Mandatory field</p>
+						<h5 class="input-name">Description</h5>
+								<form:textarea path="description" id="description"
+									name="description" type="text"></form:textarea>
 								<p id="descriptionValidator" style="display: none;">Mandatory field</p>
-							</div>
-						</div>
+					</div>
 					</div>
 					<div class="span6">
-						<div class="innerAll">
-							<form:select path="projects" multiple="true">
+						<div class="box-generic">
+						<h5 class="input-name">Select Projects</h5>
+							<form:select path="projects" multiple="true" style="height: 215px">
 								<form:options items="${projectList}" itemValue="id"
-									itemLabel="name"></form:options>
+									itemLabel="name" ></form:options>
 							</form:select>
 						</div>
 					</div>
 				</div>
-
+				<div class="box-generic">
 				<div class="form-actions">
 					<button type="submit"
-						class="btn btn-icon btn-primary glyphicons circle_ok">
-						<i></i>Save
+						class="btn btn-primary btn-large">
+						<i class="icon-save"></i> Save
 					</button>
 					<button type="button"
-						class="btn btn-icon btn-default glyphicons circle_remove">
-						<i></i>Cancel
+						class="btn btn-default btn-large">
+						Cancel
 					</button>
 				</div>
-
 			</div>
 		</div>
 	</form:form>
