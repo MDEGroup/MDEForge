@@ -158,6 +158,12 @@ import anatlyzer.atlext.OCL.OclExpression;
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
 		implements EcoreMetamodelService {
 
+	private static final String TYPE_TAG = "forgeType";
+	private static final String NAME_TAG = "name";
+	private static final String AUTHOR_TAG = "author";
+	private static final String ID_TAG = "id";
+	private static final String LAST_UPDATE_TAG = "lastUpdate";
+	
 	private static final String EPACKAGE_INDEX_CODE = "ePackage";
 	private static final float EPACKAGE_BOOST_VALUE = 2.0f;
 
@@ -185,6 +191,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
 	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	
 	
 	private IndexWriter writer;
 	
@@ -1437,33 +1444,39 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			}
 		}
 		
-//		System.out.println(handler.toString());
+		//ID
+		Field idField = new Field(ID_TAG, ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
+	 	doc.add(idField);
+		
+		//Artifact TYPE
+		Field artifactType = new Field(TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		doc.add(artifactType);
 		
 //		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
-		//TODO ADD ARTIFACT TAG
-		String artifactName = ecoreMetamodel.getName();
-	 	Field artName = new Field("name", artifactName, Store.YES, Index.ANALYZED);
+		doc.add(textField);
+
+		
+		Field artName = new Field(NAME_TAG, ecoreMetamodel.getName(), Store.YES, Index.ANALYZED);
+	 	doc.add(artName);
 	 	
-	 	String author = ecoreMetamodel.getAuthor().getUsername();
-	 	Field authorField = new Field("author", author, Store.YES, Index.ANALYZED);
-	 	Date lastUpdate = ecoreMetamodel.getModified();
-	 	Field lastUpdateField = new Field("lastUpdate", lastUpdate.toString(), Store.YES, Index.ANALYZED);
+	 	Field authorField = new Field(AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+	 	doc.add(authorField);
+	 	
+	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, ecoreMetamodel.getModified().toString(), Store.YES, Index.ANALYZED);
+	 	doc.add(lastUpdateField);
+	 	
 	 	for (Property prop : ecoreMetamodel.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
 			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
 			doc.add(propField);
 		}
-	 	Field idField = new Field("id", ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
 	 	
-	 	doc.add(textField);
-	 	doc.add(artName);
-	 	doc.add(authorField);
-	 	doc.add(lastUpdateField);
-		doc.add(idField);
-		return doc;
+//		System.out.println(handler.toString());	 	
+
+	 	return doc;
 	}
 	
 	private String getTextFromInputStream(InputStream is){      
