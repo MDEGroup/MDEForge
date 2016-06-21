@@ -217,7 +217,7 @@
 		<div class="widget-body">
 		
 			<!-- Chart with lines and fill with no points -->
-			<div id="chart_lines_fill_nopoints" style="width: 100%; height: 250px;"></div>
+			<canvas id="myChart" width="100" height="400"></canvas>
 		</div>
 	</div>
 	<!-- // Widget END -->
@@ -285,20 +285,96 @@
 </div>	
 
 
-
-<script>
+<!-- Charts Helper Demo Script -->
+	<script>
 	$(document).ready(function(){
-		$(function()
-				  {
-				  	// initialize charts
-				  	if (typeof charts != 'undefined')
-				  		charts.initCharts();
-				  });
-		
-		
-	});
+		var ctx = document.getElementById("myChart");
+		var myChart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		        labels: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.created},
+		                 </c:forEach>
+		                 	"Today"],
+		        datasets: [{
+		            label: 'All',
+		            data: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 500,
+					backgroundColor: "rgba(255, 99, 132, 0.2)",
+					borderColor: "rgba(255,99,132,1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'ATL Transformations',
+		            data: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.total+10},
+		                 </c:forEach>
+					],
+					duration: 600,
+					backgroundColor: "rgba(54, 162, 235, 0.2)",
+					borderColor: "rgba(54, 162, 235, 1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'ECORE Metamodels',
+		            data: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.total+20},
+		                 </c:forEach>
+					],
+					duration: 700,
+					backgroundColor: "rgba(255, 206, 86, 0.2)",
+					borderColor: "rgba(255, 206, 86, 1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'Models',
+		            data: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.total+30},
+		                 </c:forEach>
+					],
+					duration: 800,
+					backgroundColor: "rgba(75, 192, 192, 0.2)",
+					borderColor: "rgba(75, 192, 192, 1)",
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+                legend: {
+                    position: 'top',
+                },
+                hover: {
+                    mode: 'label'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Day'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                },
+		    	maintainAspectRatio: false,
+		    	fullWidth: true
+		    }
+		});
+	})
 	
-	  
 	</script>
 
 

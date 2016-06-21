@@ -255,23 +255,28 @@
 <c:import var="fileToVisualize"
 	url="file:///${artifactFile.getAbsolutePath()}" />
 <!-- Modal -->
-<div class="modal hide fade" id="modal-simple"
-	style="width: 800px; left: 42%">
-	<pre class="prettyprint">
-${fn:escapeXml(fileToVisualize)}
-</pre>
-	<!-- Modal footer -->
-	<div class="modal-footer">
-		<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+<div class="modal modal-artifact hide fade" id="modal-simple">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3>Metamodel</h3>
+	  </div>
+	 	<pre class="prettyprint" style="margin: 0">
+	 		<code class="xml" style="font-size: 16px;line-height: 22px;font-weight: 400;">
+			${fn:escapeXml(fileToVisualize)}
+			</code>
+		</pre>
+	  <div class="modal-footer center">
+	    <a href="#" class="btn btn-large" data-dismiss="modal">Close</a>
+	  </div>
 	</div>
-	<!-- // Modal footer END -->
-</div>
 <!-- // Modal END -->
 
 
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/highlight/highlight.pack.js"></script>
 <script>
+	hljs.initHighlightingOnLoad();
 	var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 

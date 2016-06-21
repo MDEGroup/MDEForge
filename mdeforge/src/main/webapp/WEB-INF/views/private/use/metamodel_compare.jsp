@@ -268,7 +268,7 @@
 			
 							</div>
 						</div>
-					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="btn btn-default" style="width: width: 250px;; margin: 20px auto;padding: 15px 20px; display: block">Compare two more Metamodels</a>	
+					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="btn btn-default" style="width: 250px;; margin: 20px auto;padding: 15px 20px; display: block">Compare two more Metamodels</a>	
 		</c:when>
 </c:choose>
 

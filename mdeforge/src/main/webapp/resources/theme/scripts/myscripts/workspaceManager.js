@@ -332,13 +332,11 @@
 						$('#showUserList').hide();
 					$.each(data.users, function(i, user) {
 						if(data.owner.id != user.id) {
-							var  stringHead = '<li data-id="' + user.id + '" class="sharedUser"><span class="crt">' + (i + 1) + '</span><span class="strong">' +
-					           		user.firstname + '  ' + user.lastname + '</span>' + 
-					           		'<span class="muted"><a href="mailto:'+ user.email +
-					           		'">'+ user.username +' <i class="icon-envelope"></i></a>';
+							var  stringHead = '<li data-id="' + user.id + '" class="sharedUser UserLi"><span class="glyphicons activity-icon user"><i></i></span><span class="title">' +
+					           		user.username + ' <br><strong>' + user.firstname + ' ' + user.lastname + '</strong></span>';
 							var stringDelete = '';
 							if (guard)
-								stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser" data-id="' + user.id + '" ></span>';
+								stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser text-error" data-id="' + user.id + '" ></span>';
 							var stringTail = '</span></li>';
 							$('#users').append(stringHead + stringDelete + stringTail);
 						}
