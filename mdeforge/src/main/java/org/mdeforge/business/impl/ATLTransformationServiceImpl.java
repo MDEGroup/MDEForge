@@ -15,9 +15,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.bson.types.ObjectId;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Index;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.util.Version;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
@@ -72,6 +84,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
@@ -86,7 +99,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.stereotype.Service;
 
 import anatlyzer.atl.analyser.AnalysisResult;
@@ -99,7 +111,13 @@ import anatlyzer.atl.util.ATLUtils;
 import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
 import anatlyzer.atlext.ATL.Callable;
+import anatlyzer.atlext.ATL.Helper;
+import anatlyzer.atlext.ATL.ModuleElement;
+import anatlyzer.atlext.ATL.Rule;
+import anatlyzer.atlext.OCL.Attribute;
+import anatlyzer.atlext.OCL.OclFeatureDefinition;
 import anatlyzer.atlext.OCL.OclType;
+import anatlyzer.atlext.OCL.Operation;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
 import transML.exceptions.transException;
 @Service
@@ -107,6 +125,18 @@ public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
 		ATLTransformationService{
 
+	private static final String HELPER_TAG = "helper";
+	private static final float HELPER_BOOST_VALUE = 1.0f;
+	private static final String TEXT_TAG = "text";
+	private static final String FROM_METAMODEL_TAG = "fromMM";
+	private static final String TO_METAMODEL_TAG = "toMM";
+	private static final String TYPE_TAG = "forgeType";
+	private static final String NAME_TAG = "name";
+	private static final String AUTHOR_TAG = "author";
+	private static final String ID_TAG = "id";
+	private static final String LAST_UPDATE_TAG = "lastUpdate";
+	private static final String RULE_NAME_TAG = "rule";
+	
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
@@ -138,26 +168,114 @@ public class ATLTransformationServiceImpl extends
 		return result;
 	}
 
+
 	@Override
-	public void createIndex(ATLTransformation ecore) {
-		super.createIndex(ecore);
+	public void createIndex(ATLTransformation art) {
+//		super.createIndex(ecore);
+		Document doc = new Document();
 		AtlParser atlParser = new AtlParser();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IReferenceModel atlMetamodel;
 		try {
+			File indexDirFile = new File(basePathLucene);
+			// Set the directory in which will be created the index.
+			Directory indexDir;
+			indexDir = FSDirectory.open(indexDirFile);
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
+			IndexWriter writer = new IndexWriter(indexDir, conf);
+
 			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
-			String filePath = gridFileMediaService.getFilePath(ecore);
+			String filePath = gridFileMediaService.getFilePath(art);
 			EMFModel atlDynModel = (EMFModel) modelFactory
 					.newModel(atlMetamodel);
 			atlParser.inject(atlDynModel, filePath);
 			Resource originalTrafo = atlDynModel.getResource();
 			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
 					.getURI().toFileString(), true);
-			List<ModelInfo> info = ATLUtils.getModelInfo(atlModel);
 //			atlModel.getModule().get
+			EList<ModuleElement> eAllContents = atlModel.getModule().getElements();
+			for (ModuleElement moduleElement : eAllContents) {
+				if (moduleElement instanceof Helper) {
+					Helper h = (Helper) moduleElement;
+					if (h.getDefinition()!=null) {
+						OclFeatureDefinition def = h.getDefinition();
+						if(def.getFeature()!= null && def.getFeature() instanceof Attribute) {
+							Attribute attr = (Attribute) def.getFeature();
+							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							attribute.setBoost(HELPER_BOOST_VALUE);
+							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							doc.add(text);
+							doc.add(attribute);
+						}
+						if(def.getFeature()!= null && def.getFeature() instanceof Operation) {
+							Operation attr = (Operation) def.getFeature();
+							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							attribute.setBoost(HELPER_BOOST_VALUE);
+							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							doc.add(text);
+							doc.add(attribute);
+						}
+					}
+				}
+				if (moduleElement instanceof Rule)
+				{
+					Rule r = (Rule) moduleElement;
+					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
+							Store.YES,Index.ANALYZED);
+					doc.add(ruleName);
+				}
+				
+			}
+			Field type = new Field(TYPE_TAG, art.getClass().getSimpleName(), 
+					Store.YES, Index.ANALYZED);
+			doc.add(type);
 			
+			String artifactName = art.getName();
+		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
+		 	
+		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
+		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, dctr.getToArtifact().getName(), 
+		 				Store.YES, Index.ANALYZED);
+		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, dctr.getToArtifact().getId(), 
+		 				Store.YES, Index.ANALYZED);
+				doc.add(fromMMID);
+				doc.add(fromMMName);
+			}
+		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
+		 		Field fromMMName = new Field(TO_METAMODEL_TAG, dctr.getToArtifact().getName(), 
+		 				Store.YES, Index.ANALYZED);
+		 		Field fromMMID = new Field(TO_METAMODEL_TAG, dctr.getToArtifact().getId(), 
+		 				Store.YES, Index.ANALYZED);
+				doc.add(fromMMID);
+				doc.add(fromMMName);
+			}
+		 	String author = art.getAuthor().getUsername();
+		 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
+		 	Date lastUpdate = art.getModified();
+		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), 
+		 			Store.YES, Index.ANALYZED);
+		 	for (Property prop : art.getProperties()) {
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				Field propField = new Field(propName, propValue, 
+						Store.YES, Index.ANALYZED);
+				doc.add(propField);
+			}
+		 	Field idField = new Field(ID_TAG, art.getId(), 
+		 			Store.YES, Index.ANALYZED);
+		 	
+		 	doc.add(artName);
+		 	doc.add(authorField);
+		 	doc.add(lastUpdateField);
+			doc.add(idField);
+			writer.addDocument(doc);
+			writer.close();
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		
@@ -595,7 +713,6 @@ public class ATLTransformationServiceImpl extends
 		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);
-		String path = gridFileMediaService.getFilePath(atl);	
 		return r;	
 	}
 	@Override
@@ -610,7 +727,6 @@ public class ATLTransformationServiceImpl extends
 		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);
-		String path = gridFileMediaService.getFilePath(atl);	
 		return r;	
 	}
 
@@ -673,7 +789,6 @@ public class ATLTransformationServiceImpl extends
 				}
 				else forgeError.setStatus(problem.getStatus().getName());
 				problem.getSeverity();
-				//TODO change problem to problem2
 				forgeError.setDescription(AnalyserUtils
 						.getProblemDescription(problem));
 				forgeError.setProblemId(AnalyserUtils.getProblemId(problem));
@@ -738,6 +853,7 @@ public class ATLTransformationServiceImpl extends
 	@Override
 	public double metamodelCoverage(ATLTransformation atl) throws BusinessException{
 		try {
+			//TODO
 			AtlParser atlParser = new AtlParser();
 			ModelFactory modelFactory = new EMFModelFactory();
 			IReferenceModel atlMetamodel;
