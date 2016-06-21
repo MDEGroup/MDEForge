@@ -29,8 +29,8 @@ public class Lucene {
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
-			System.out.println("Indexing: " + ecoreMetamodel.getName());
-			ecoreMetamodelService.createIndex(ecoreMetamodel);
+				System.out.println("Indexing: " + ecoreMetamodel.getName());
+				ecoreMetamodelService.createIndex(ecoreMetamodel);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
@@ -91,13 +91,13 @@ public class Lucene {
 		
 		float duration = 0;
 		long startTime = System.nanoTime();
-//		
-//		System.out.println("Start Metamodel indexing...");
-//		lucene.metamodelIndex();
-//		System.out.println("End Metamodel indexing!");
-//		
-//		System.out.println("Start Model indexing...");
-//		lucene.modelIndex();
+		
+		System.out.println("Start Metamodel indexing...");
+		lucene.metamodelIndex();
+		System.out.println("End Metamodel indexing!");
+		
+		System.out.println("Start Model indexing...");
+		lucene.modelIndex();
 		
 		long endTime = System.nanoTime();
 		duration = (endTime - startTime) / 1000000; // milliseconds(1000000) - seconds (1000000000)

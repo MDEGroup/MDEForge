@@ -19,6 +19,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,9 +64,17 @@ public class SearchPublicController {
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.POST })
 	public String search(Model model, 
-			@RequestParam(value = "search_string", required = false) String searchString) {
-		List<Artifact> al = artifactService.search(searchString);
-		model.addAttribute("artifactList", al);
+			@RequestParam(value = "search_string", required = false) String searchString, 
+			@RequestParam(value = "isFuzzy", required = false) boolean isFuzzy) {
+		
+		System.out.println(searchString);
+		if(isFuzzy){
+			searchString += "~";
+		}
+		System.out.println(searchString);
+		
+		SearchResultComplete searchResultComplete = artifactService.search(searchString);
+		model.addAttribute("searchResultComplete", searchResultComplete);
 		model.addAttribute("search_string", searchString);
 		
 		List<String> indexFieldNames = artifactService.indexFieldNames();

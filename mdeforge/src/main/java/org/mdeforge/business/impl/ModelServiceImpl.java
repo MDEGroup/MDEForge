@@ -1,9 +1,11 @@
 package org.mdeforge.business.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -294,31 +296,31 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private Document parseArtifactForIndex(Model model) {
 		
 		Document doc = new Document();
-		Metadata metadata = new Metadata();
-		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
-		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
-		ParseContext context = new ParseContext();
-		Parser parser = new AutoDetectParser();
-		InputStream stream = gridFileMediaService.getFileInputStream(model);
-		try {
-			parser.parse(stream, handler, metadata, context);
-		}
-		catch (TikaException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				stream.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		Metadata metadata = new Metadata();
+//		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
+//		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
+//		ParseContext context = new ParseContext();
+//		Parser parser = new AutoDetectParser();
+//		InputStream stream = gridFileMediaService.getFileInputStream(model);
+//		try {
+//			parser.parse(stream, handler, metadata, context);
+//		}
+//		catch (TikaException e) {
+//			e.printStackTrace();
+//		} catch (SAXException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		finally {
+//			try {
+//				stream.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
@@ -374,7 +376,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			
 		}
 
-		String text = handler.toString();
+//		String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 //		textField.setBoost(2.0f);
 		
@@ -407,5 +410,25 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	
 		return doc;
 	}
+	
+	
+	private String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
 
 }

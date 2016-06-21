@@ -1,4 +1,4 @@
-package org.mdeforge.business.model;
+package org.mdeforge.business.model.form;
 
 import java.util.List;
 
