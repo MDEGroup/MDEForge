@@ -2,11 +2,15 @@ package org.mdeforge.business.impl;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -1366,32 +1370,44 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	
 	private Document parseArtifactForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
-		/*
-		 * FILE METADATA
-		 */
-		Metadata metadata = new Metadata();
-		// By using the BodyContentHandler, you can request that Tika return
-		// only the content of the document's body as a plain-text string.
-		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); // Parsing to
-																	// Plain
-																	// Text
-		ParseContext context = new ParseContext();
-		Parser parser = new AutoDetectParser();
-		try {
-			parser.parse(gridFileMediaService.getFileInputStream(ecoreMetamodel), handler, metadata, context);
-		} catch (TikaException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (SAXException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} finally {
-			try {
-				gridFileMediaService.getFileInputStream(ecoreMetamodel).close();
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage());
-			}
-		}
+		
+//		String textOfTheInputStream = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
+		
+//		InputStream is = null;
+//		try {
+//			is = new FileInputStream(gridFileMediaService.getFilePath(ecoreMetamodel));
+//		} catch (FileNotFoundException | BusinessException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		/*
+//		 * FILE METADATA
+//		 */
+//		Metadata metadata = new Metadata();
+//		// By using the BodyContentHandler, you can request that Tika return
+//		// only the content of the document's body as a plain-text string.
+//		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); // Parsing to
+//																	// Plain
+//																	// Text
+//		ParseContext context = new ParseContext();
+//		Parser parser = new AutoDetectParser();
+//		try {
+//			parser.parse(is, handler, metadata, context);
+//		} catch (TikaException e) {
+//			throw new BusinessException(e.getMessage());
+//		} catch (SAXException e) {
+//			throw new BusinessException(e.getMessage());
+//		} catch (IOException e) {
+//			throw new BusinessException(e.getMessage());
+//		} finally {
+//			try {
+//				is.close();
+//			} catch (IOException e) {
+//				throw new BusinessException(e.getMessage());
+//			}
+//		}
+		
 		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
@@ -1420,7 +1436,11 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 			}
 		}
-		String text = handler.toString();
+		
+//		System.out.println(handler.toString());
+		
+//		String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 		//TODO ADD ARTIFACT TAG
 		String artifactName = ecoreMetamodel.getName();
@@ -1445,6 +1465,25 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		doc.add(idField);
 		return doc;
 	}
+	
+	private String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
 	
 	private Document ePackageIndex(EPackage ePackage, Document doc){
 		Field ePackageField = new Field(EPACKAGE_INDEX_CODE, ePackage.getName(), Store.YES, Index.ANALYZED);
