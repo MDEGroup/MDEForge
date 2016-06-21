@@ -321,8 +321,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		cal.add(Calendar.DATE, -30);
+		int numDays = 28;
+		cal.add(Calendar.DAY_OF_MONTH, -numDays );
 		Date dateBefore30Days = cal.getTime();
+		
 		List<Statistic> result = new ArrayList<Statistic>();
 		if (persistentClass != Artifact.class) {
 			Aggregation agg = newAggregation(
@@ -355,7 +357,28 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				result = groupResults.getMappedResults();
 				
 		}
-		return result;
+		List<Statistic> stat = new ArrayList<Statistic>();
+		for(int k=0; k<numDays; k++ ) {
+			
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+			Statistic t = null;
+			System.out.println(cal.get(Calendar.DAY_OF_MONTH));
+			System.out.println("===");
+			for (Statistic statistic : result) {
+				if(cal.get(Calendar.DAY_OF_MONTH) == statistic.getCreated()){
+					t = statistic;
+				}
+			}
+			if(t != null)
+				stat.add(t);
+			else {
+				Statistic tempStat = new Statistic();
+				tempStat.setCreated(cal.get(Calendar.DAY_OF_MONTH));
+				tempStat.setTotal(0);
+				stat.add(tempStat);
+			}
+		}
+		return stat;
 		
 	}
 

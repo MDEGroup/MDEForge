@@ -258,7 +258,6 @@ function shareArtifact(){
 				</div>
 			</div>
 			</c:if>
-			<security:authorize access="isAuthenticated()">
 			<div class="row-fluid">
 				<div class="span12">
 					<div class="widget widget-heading-simple widget-body-white">
@@ -273,6 +272,7 @@ function shareArtifact(){
 								</div>
 							</c:forEach>
 						</div>
+						<security:authorize access="isAuthenticated()">
 						<div>
 							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post">
 							 	<input type="hidden" value="${artifact.id}" name="idArtifact"/>
@@ -289,10 +289,11 @@ function shareArtifact(){
 							 	<input type="submit"/>
 							</form>
 						</div>
+						</security:authorize>
 					</div>
 				</div>
 			</div>
-			</security:authorize>
+
 		</div>
 		<tiles:insertAttribute name="right" ignore="true"/>
 		

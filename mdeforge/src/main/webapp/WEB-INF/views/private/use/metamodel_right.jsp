@@ -4,45 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
-<div class="span3 tablet-column-reset">
+<div class="span4 tablet-column-reset">
+<div class="box-generic">
 	<!-- Latest Orders/List Widget -->
-	<div class="widget widget-heading-simple widget-body-gray"
-		data-toggle="collapse-widget">
-
-		<!-- Widget Heading -->
-		<div class="widget-head">
-			<h4 class="heading glyphicons link">
-				<i></i>URI
-			</h4>
-		</div>
-		<!-- // Widget Heading -->
-
-		<div class="widget-body list">
-			<table class="table table-condensed">
-
-				<!-- Table body -->
-				<tbody>
-					<c:choose>
-						<c:when test="${artifact.getUri().size() > 0}">
-							<c:forEach items="${artifact.getUri()}" var="uri">
-								<tr>
-									<td class="center">${uri}</td>
-								</tr>
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<tr>
-								<td class="center">It has not been assigned any URI</td>
-							</tr>
-						</c:otherwise>
-					</c:choose>
-
-				</tbody>
-				<!-- // Table body END -->
-
-			</table>
-		</div>
-	</div>
+	<h5 class="input-name center">Shared Users</h5>
+	<div class="separator bottom"></div>
+	<%-- Da Tagliare -->
+	
 	<!-- // Latest Orders/List Widget END -->
 	<!-- Widget -->
 	<div class="widget widget-heading-simple widget-body-white">
@@ -87,91 +55,52 @@
 			</div>
 		</c:if>
 	</div>
-	<!-- Widget -->
-	<div class="widget widget-heading-simple widget-body-white">
-		<!-- Widget Heading -->
-		<div class="widget-head">
-			<h4 class="heading glyphicons notes">
-				<i></i>Extracted Word Context
-			</h4>
-		</div>
-		<!-- // Widget Heading END -->
-		<div class="relativeWrap">
-			<div class="widget widget-tabs">
-
-				<!-- Tabs Heading -->
-				<div class="widget-head">
-					<ul>
-						<li class="active"><a class="glyphicons cloud" href="#cloud"
-							data-toggle="tab"><i></i>Word Cloud</a></li>
-						<li><a class="glyphicons font" href="#standard"
-							data-toggle="tab"><i></i>Standard</a></li>
-					</ul>
-				</div>
-				<!-- // Tabs Heading END -->
-
-				<div class="widget-body">
-					<div class="tab-content">
-
-						<!-- Tab content -->
-						<div class="tab-pane active" id="cloud">
-
-							<canvas id="my_canvas"></canvas>
-
-						</div>
-						<!-- // Tab content END -->
-
-						<!-- Tab content -->
-						<div class="tab-pane" id="standard">
-
-							<c:set var="serializedContext_trim"
-								value="${fn:trim(artifact.getDefaultWeightedContents())}" />
-							<c:set var="serializedContext_splitted"
-								value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
-							${serializedContext_splitted}
-
-						</div>
-						<!-- // Tab content END -->
-
-					</div>
-				</div>
+	<hr>
+	<!-- Da Tagliare End--%>
+	<p class="text-primary">${artifact.getShared().size()} people share this artifact</p>
+		<c:if test="${userId == artifact.getAuthor().getId()}">
+ 		<a class="btn btn-primary" href="#" id="showUserList">Add People</a>
+ 		</c:if>
+ 		<div class="widget">
+			
+			<div class="widget-body list products">
+				<ul id="users" class="team">
+					<c:forEach items="${artifact.getShared()}" var="user" varStatus="count">
+					<!-- List item -->
+					<li class="userLi" data-id="${user.getId()}">
+						<span class="glyphicons activity-icon user"><i></i></span>
+						<span class="title">${user.getUsername()}<br><strong>${user.getFirstname()}
+						${user.getLastname()}</strong></span>
+						<c:if test="${userId == artifact.getAuthor().getId()}">
+						<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+						</c:if>
+						<!--  <span class="count crt">${count.count}</span>-->
+					</li>
+					<!-- // List item END -->
+					</c:forEach>													
+				</ul>
 			</div>
 		</div>
-
-
-	</div>
-	<!-- // Widget END -->
+		<div id="userList" class="row-fluid" style="display: none">
+			<select id="userSelect">
+			</select>
+			<div>
+				<span class="btn btn-block btn-primary span4" id="addUserArtifact">Add</span>
+			</div>
+		</div>
+		
+		<%-- <ul id="users" class="team">
+			<c:forEach items="${artifact.getShared()}" var="user" varStatus="count">
+				<li class="userLi" data-id="${user.getId()}"><span class="crt">${count.count}</span><span
+					class="strong">${user.getUsername()}</span><span
+					class="muted">${user.getFirstname()}
+						${user.getLastname()}</span>
+					<span class="muted"><a href="mailto:${user.getEmail() }">${user.getEmail() } <i class="icon-envelope"></i></a></span>
+					<c:if test="${userId == artifact.getAuthor().getId()}">
+						<span class="pull-right glyphicons icon-remove removeArtifactSharedUser" data-id="${user.getId()}" ></span>
+					</c:if>
+				</li>
+			</c:forEach>
+		</ul> --%>
+</div>	
 </div>
-<script>
-	var res = '${artifact.getDefaultWeightedContents()}'.trim();
-	res = res.split(" ");
-
-	var wordlist = [];
-
-	for (var i = 0; i < res.length; ++i) {
-		var numOccurrences = 1;
-		for (var j = 0; j < res.length; ++j) {
-			if (res[j].toUpperCase() === res[i].toUpperCase()) {
-				numOccurrences++;
-				/*Elimino l'elemento ripetuto dall'array*/
-				res.splice(j, 1);
-			}
-		}
-		wordlist.push([ res[i], numOccurrences ]);
-	}
-
-	var options = {
-		list : wordlist,
-		gridSize : Math
-				.round(1 * document.getElementById('my_canvas').offsetWidth / 1024),
-		weightFactor : function(size) {
-			return Math.pow(size, 4.9)
-					* document.getElementById('my_canvas').offsetWidth / 1024;
-		},
-		fontFamily : 'Open Sans, sans-serif',
-		rotateRatio : 0.5
-
-	}
-
-	WordCloud(document.getElementById('my_canvas'), options);
-</script>

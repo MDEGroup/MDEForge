@@ -56,12 +56,12 @@
 								<!-- Themer -->
 				<li class="account dropdown dd-1">
 					<a data-toggle="dropdown" href="#" class="logout">
-					<span class="hidden-tablet hidden-phone hidden-desktop-1"> <security:authentication property="principal.user.username"/></span></a>
+					<span class="hidden-tablet hidden-phone hidden-desktop-1"><i class="icon-user"></i> <security:authentication property="principal.user.username"/></span></a>
 					<ul class="dropdown-menu pull-right">				
 								
 						<li class="profile">
 							<span>
-								<span class="heading">Profile <a href="#" class="pull-right">edit</a></span>
+								<span class="heading">Profile <a href="#" class="pull-right"></a></span>
 								<span class="img"></span>
 								<span class="details">
 									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
