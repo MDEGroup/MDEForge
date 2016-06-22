@@ -333,10 +333,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			Statistic t = null;
-			System.out.println(cal.get(Calendar.DAY_OF_MONTH));
-			System.out.println("===");
 			for (Statistic statistic : result) {
-				if(cal.get(Calendar.DAY_OF_MONTH) == statistic.getCreated()){
+				if(cal.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(statistic.getCreated())){
 					t = statistic;
 				}
 			}
@@ -344,8 +342,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				stat.add(t);
 			else {
 				Statistic tempStat = new Statistic();
-				tempStat.setCreated(cal.get(Calendar.DAY_OF_MONTH));
-				tempStat.setTotal(0);
+				tempStat.setCreated(cal.get(Calendar.DAY_OF_MONTH)+"");
+				tempStat.setTotal("0");
 				stat.add(tempStat);
 			}
 		}

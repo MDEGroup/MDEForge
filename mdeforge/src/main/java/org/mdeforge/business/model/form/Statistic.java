@@ -4,22 +4,22 @@ import java.util.Date;
 
 public class Statistic {
 
-	private int created;
-	private long total;
+	private String created;
+	private String total;
 
-	public int getCreated() {
+	public String getCreated() {
 		return created;
 	}
 
-	public void setCreated(int created) {
+	public void setCreated(String created) {
 		this.created = created;
 	}
 
-	public long getTotal() {
+	public String getTotal() {
 		return total;
 	}
 
-	public void setTotal(long total) {
+	public void setTotal(String total) {
 		this.total = total;
 	}
 

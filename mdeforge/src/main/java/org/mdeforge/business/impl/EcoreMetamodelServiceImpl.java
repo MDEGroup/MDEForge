@@ -1,5 +1,11 @@
 package org.mdeforge.business.impl;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -8,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -119,6 +126,7 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
+import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
@@ -131,10 +139,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -1575,6 +1588,24 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public List<Statistic> statistic2() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		List<Statistic> result = new ArrayList<Statistic>();
+		Aggregation agg = newAggregation(
+				match(Criteria.where("name").is("Number of concrete MetaClass")),
+				project("value").andExpression("value").as("created"),
+			    group("value").count().as("total"),
+			    project("total").and("created").previousOperation(),
+			    sort(Sort.Direction.DESC,"created")
+				);
+		AggregationResults<Statistic> groupResults 
+			= n.aggregate(agg, SimpleMetric.class, Statistic.class);
+		result = groupResults.getMappedResults();
+		return result;
+		
 	}
 	
 }

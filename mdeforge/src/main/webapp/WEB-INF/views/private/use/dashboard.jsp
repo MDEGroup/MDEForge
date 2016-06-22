@@ -219,6 +219,12 @@
 			<!-- Chart with lines and fill with no points -->
 			<canvas id="myChart" width="100" height="400"></canvas>
 		</div>
+		
+		<div class="widget-body">
+		
+			<!-- Chart with lines and fill with no points -->
+			<canvas id="myChart2" width="100" height="400"></canvas>
+		</div>
 	</div>
 	<!-- // Widget END -->
 	<h3 class="header-h main-title" style="padding-left: 10px;">Activities</h3>
@@ -345,6 +351,56 @@
 					borderColor: "rgba(75, 192, 192, 1)",
 		            borderWidth: 1
 		        }]
+		    },
+		    options: {
+                legend: {
+                    position: 'top',
+                },
+                hover: {
+                    mode: 'label'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Day'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                },
+		    	maintainAspectRatio: false,
+		    	fullWidth: true
+		    }
+		});
+		var ctx2 = document.getElementById("myChart2");
+		var myChart2 = new Chart(ctx2, {
+		    type: 'line',
+		    data: {
+		        labels: [
+		                 <c:forEach items="${statistic2}" var ="stat">
+		                 	${stat.created},
+		                 </c:forEach>
+		                 	"Today"],
+		        datasets: [{
+		            label: 'All',
+		            data: [
+		                 <c:forEach items="${statistic2}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 500,
+					backgroundColor: "rgba(255, 99, 132, 0.2)",
+					borderColor: "rgba(255,99,132,1)",
+		            borderWidth: 1
+		        }
+		      ]
 		    },
 		    options: {
                 legend: {
