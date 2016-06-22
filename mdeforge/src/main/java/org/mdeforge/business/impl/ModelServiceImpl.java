@@ -96,7 +96,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private static final String LAST_UPDATE_TAG = "lastUpdate";
 	
 	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
-	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+//	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	private static final String CONFORM_TO_TAG = "conformToMM";
 	
 	private IndexWriter writer;
 
@@ -412,6 +413,11 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		}
 	 	Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
 	 	
+	 	
+	 	Field conformToFieldName = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Store.YES, Index.ANALYZED);
+	 	doc.add(conformToFieldName);
+	 	Field conformToFieldId = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Store.YES, Index.ANALYZED);
+	 	doc.add(conformToFieldId);
 	 	doc.add(textField);
 	 	doc.add(artName);
 	 	doc.add(authorField);
