@@ -53,7 +53,9 @@ public class PrivateController {
 		
 		model.addAttribute("user",user);
 		model.addAttribute("statistic", artifactService.statistic());
-//		List<Artifact> myArtifactsList = artifactService.findMyArtifacts(user);
+		model.addAttribute("statisticMM", ecoreMetamodelService.statistic());
+		model.addAttribute("statisticM", modelService.statistic());
+		model.addAttribute("statisticT", aTLTransformationService.statistic());
 		List<Artifact> myArtifactsList = artifactService.findRecentArtifacts();
 		model.addAttribute("myArtifactsList",myArtifactsList);
 		

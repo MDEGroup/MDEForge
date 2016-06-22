@@ -112,18 +112,13 @@
 
 				<div class="widget-body">
 					<div class="tab-content">
-
 						<!-- Tab content -->
 						<div class="tab-pane active" id="cloud">
-
 							<canvas id="my_canvas"></canvas>
-
 						</div>
 						<!-- // Tab content END -->
-
 						<!-- Tab content -->
 						<div class="tab-pane" id="standard">
-
 							<c:set var="serializedContext_trim"
 								value="${fn:trim(artifact.getDefaultWeightedContents())}" />
 							<c:set var="serializedContext_splitted"

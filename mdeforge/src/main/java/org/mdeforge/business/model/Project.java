@@ -26,6 +26,7 @@ public class Project implements java.io.Serializable{
 	private static final long serialVersionUID = -717518242205317774L;
 	private boolean open;
 	private Date createdDate;
+	private String Description;
 	private Date modifiedDate;
 	@DBRef(lazy = true)
 	@JsonSerialize(using = ArtifactListSerializer.class)
@@ -128,5 +129,13 @@ public class Project implements java.io.Serializable{
 
 	public void setOpen(boolean _open) {
 		this.open = _open;
+	}
+
+	public String getDescription() {
+		return Description;
+	}
+
+	public void setDescription(String description) {
+		Description = description;
 	}
 }

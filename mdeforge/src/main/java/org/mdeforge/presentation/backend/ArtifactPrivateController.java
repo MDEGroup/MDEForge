@@ -81,8 +81,8 @@ public abstract class ArtifactPrivateController<T extends Artifact> {
 	
 	@RequestMapping(value = "/artifacts", method = { RequestMethod.GET })
 	public String artifactList(Model model) {
-		List<T> artifactList = artifactService.findAllSharedByUser(user);
-		model.addAttribute("ecoreMetamodelsList", artifactList);
+		List<T> artifactList = artifactService.findMyArtifacts(user);
+		model.addAttribute("sharedArtifactList", artifactList);
 		return "private.use.artifacts_list";
 	}
 	

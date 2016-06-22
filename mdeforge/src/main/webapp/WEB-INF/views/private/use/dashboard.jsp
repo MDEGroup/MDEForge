@@ -312,8 +312,8 @@
 		        {
 		            label: 'ATL Transformations',
 		            data: [
-		                 <c:forEach items="${statistic}" var ="stat">
-		                 	${stat.total+10},
+		                 <c:forEach items="${statisticT}" var ="stat">
+		                 	${stat.total},
 		                 </c:forEach>
 					],
 					duration: 600,
@@ -324,8 +324,8 @@
 		        {
 		            label: 'ECORE Metamodels',
 		            data: [
-		                 <c:forEach items="${statistic}" var ="stat">
-		                 	${stat.total+20},
+		                 <c:forEach items="${statisticMM}" var ="stat">
+		                 	${stat.total},
 		                 </c:forEach>
 					],
 					duration: 700,
@@ -336,8 +336,8 @@
 		        {
 		            label: 'Models',
 		            data: [
-		                 <c:forEach items="${statistic}" var ="stat">
-		                 	${stat.total+30},
+		                 <c:forEach items="${statisticM}" var ="stat">
+		                 	${stat.total},
 		                 </c:forEach>
 					],
 					duration: 800,
