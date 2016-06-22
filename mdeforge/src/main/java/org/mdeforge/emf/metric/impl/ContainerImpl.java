@@ -4,14 +4,16 @@ package org.mdeforge.emf.metric.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.Metric;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -22,16 +24,16 @@ import org.mdeforge.emf.metric.MetricPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.impl.ContainerImpl#getMetrics <em>Metrics</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */
 public class ContainerImpl extends EObjectImpl implements Container {
 	/**
-	 * The cached value of the '{@link #getMetrics() <em>Metrics</em>}' reference list.
+	 * The cached value of the '{@link #getMetrics() <em>Metrics</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getMetrics()
@@ -66,9 +68,23 @@ public class ContainerImpl extends EObjectImpl implements Container {
 	 */
 	public EList<Metric> getMetrics() {
 		if (metrics == null) {
-			metrics = new EObjectResolvingEList<Metric>(Metric.class, this, MetricPackage.CONTAINER__METRICS);
+			metrics = new EObjectContainmentEList<Metric>(Metric.class, this, MetricPackage.CONTAINER__METRICS);
 		}
 		return metrics;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case MetricPackage.CONTAINER__METRICS:
+				return ((InternalEList<?>)getMetrics()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

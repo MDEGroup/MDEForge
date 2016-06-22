@@ -86,7 +86,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		artifactRepository.save(art);
 		return;
 	}
-
+	protected static final String TYPE_TAG = "forgeType";
+	protected static final String NAME_TAG = "name";
+	protected static final String AUTHOR_TAG = "author";
+	protected static final String ID_TAG = "id";
+	protected static final String LAST_UPDATE_TAG = "lastUpdate";
 	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
 	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
 	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
@@ -328,11 +332,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		List<Statistic> result = new ArrayList<Statistic>();
 		if (persistentClass != Artifact.class) {
 			Aggregation agg = newAggregation(
-					match((Criteria.where("created").gt(dateBefore30Days).
-							andOperator(
-									Criteria.where("_class").
+					match(new Criteria().andOperator(
+							Criteria.where("created").gt(dateBefore30Days),
+							Criteria.where("_class").
 										is(persistentClass.getCanonicalName())
-										)
 							)
 					),
 					project("created").andExpression("month(created)").as("month_joined"),
@@ -362,11 +365,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			Statistic t = null;
-			System.out.println(cal.get(Calendar.DAY_OF_MONTH));
-			System.out.println("===");
+			
 			for (Statistic statistic : result) {
 				if(cal.get(Calendar.DAY_OF_MONTH) == statistic.getCreated()){
 					t = statistic;
+					System.out.println(statistic.getTotal());
 				}
 			}
 			if(t != null)

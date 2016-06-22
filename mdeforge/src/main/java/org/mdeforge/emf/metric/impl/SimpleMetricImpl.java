@@ -17,10 +17,10 @@ import org.mdeforge.emf.metric.SimpleMetric;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.impl.SimpleMetricImpl#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

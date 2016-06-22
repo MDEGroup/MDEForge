@@ -24,6 +24,7 @@ public class Project implements java.io.Serializable{
 	private Date createdDate;
 	private Date modifiedDate;
 	private boolean open;
+	private String description;
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
 
@@ -116,5 +117,13 @@ public class Project implements java.io.Serializable{
 
 	public void setOpen(boolean _open) {
 		this.open = _open;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

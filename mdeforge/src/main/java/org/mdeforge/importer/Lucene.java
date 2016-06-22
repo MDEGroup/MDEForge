@@ -83,7 +83,7 @@ public class Lucene {
 	
 	public static void main(String[] args) {
 		
-		String indexDirectoryPath = "/Users/francesco/Desktop/newForgeDir/luceneIndex/";
+		String indexDirectoryPath = "/Users/juri/development/forgeDir/luceneIndex/";
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/root-context.xml");
 

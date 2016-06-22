@@ -17,6 +17,7 @@ import org.mdeforge.emf.metric.MetricPackage;
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl#getMaximum <em>Maximum</em>}</li>
@@ -24,7 +25,6 @@ import org.mdeforge.emf.metric.MetricPackage;
  *   <li>{@link org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl#getAverage <em>Average</em>}</li>
  *   <li>{@link org.mdeforge.emf.metric.impl.AggregatedRealMetricImpl#getStandardDeviation <em>Standard Deviation</em>}</li>
  * </ul>
- * </p>
  *
  * @generated
  */

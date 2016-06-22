@@ -10,10 +10,10 @@ package org.mdeforge.emf.metric;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.SimpleMetric#getValue <em>Value</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.mdeforge.emf.metric.MetricPackage#getSimpleMetric()
  * @model

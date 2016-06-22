@@ -67,7 +67,7 @@ public interface MetricPackage extends EPackage {
 	int CONTAINER = 0;
 
 	/**
-	 * The feature id for the '<em><b>Metrics</b></em>' reference list.
+	 * The feature id for the '<em><b>Metrics</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -122,13 +122,22 @@ public interface MetricPackage extends EPackage {
 	int METRIC__DESCRIPTION = 1;
 
 	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METRIC__CODE = 2;
+
+	/**
 	 * The number of structural features of the '<em>Metric</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int METRIC_FEATURE_COUNT = 2;
+	int METRIC_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Metric</em>' class.
@@ -166,6 +175,15 @@ public interface MetricPackage extends EPackage {
 	 * @ordered
 	 */
 	int AGGREGATED_INTEGER_METRIC__DESCRIPTION = METRIC__DESCRIPTION;
+
+	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AGGREGATED_INTEGER_METRIC__CODE = METRIC__CODE;
 
 	/**
 	 * The feature id for the '<em><b>Minimum</b></em>' attribute.
@@ -259,6 +277,15 @@ public interface MetricPackage extends EPackage {
 	int AGGREGATED_REAL_METRIC__DESCRIPTION = METRIC__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AGGREGATED_REAL_METRIC__CODE = METRIC__CODE;
+
+	/**
 	 * The feature id for the '<em><b>Minimum</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -350,6 +377,15 @@ public interface MetricPackage extends EPackage {
 	int SIMPLE_METRIC__DESCRIPTION = METRIC__DESCRIPTION;
 
 	/**
+	 * The feature id for the '<em><b>Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_METRIC__CODE = METRIC__CODE;
+
+	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -388,10 +424,10 @@ public interface MetricPackage extends EPackage {
 	EClass getContainer();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.mdeforge.emf.metric.Container#getMetrics <em>Metrics</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.mdeforge.emf.metric.Container#getMetrics <em>Metrics</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Metrics</em>'.
+	 * @return the meta object for the containment reference list '<em>Metrics</em>'.
 	 * @see org.mdeforge.emf.metric.Container#getMetrics()
 	 * @see #getContainer()
 	 * @generated
@@ -429,6 +465,17 @@ public interface MetricPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getMetric_Description();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.mdeforge.emf.metric.Metric#getCode <em>Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Code</em>'.
+	 * @see org.mdeforge.emf.metric.Metric#getCode()
+	 * @see #getMetric()
+	 * @generated
+	 */
+	EAttribute getMetric_Code();
 
 	/**
 	 * Returns the meta object for class '{@link org.mdeforge.emf.metric.AggregatedIntegerMetric <em>Aggregated Integer Metric</em>}'.
@@ -615,7 +662,7 @@ public interface MetricPackage extends EPackage {
 		EClass CONTAINER = eINSTANCE.getContainer();
 
 		/**
-		 * The meta object literal for the '<em><b>Metrics</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Metrics</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -647,6 +694,14 @@ public interface MetricPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute METRIC__DESCRIPTION = eINSTANCE.getMetric_Description();
+
+		/**
+		 * The meta object literal for the '<em><b>Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute METRIC__CODE = eINSTANCE.getMetric_Code();
 
 		/**
 		 * The meta object literal for the '{@link org.mdeforge.emf.metric.impl.AggregatedIntegerMetricImpl <em>Aggregated Integer Metric</em>}' class.

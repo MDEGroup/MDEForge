@@ -130,11 +130,6 @@ public class ATLTransformationServiceImpl extends
 	private static final String TEXT_TAG = "text";
 	private static final String FROM_METAMODEL_TAG = "fromMM";
 	private static final String TO_METAMODEL_TAG = "toMM";
-	private static final String TYPE_TAG = "forgeType";
-	private static final String NAME_TAG = "name";
-	private static final String AUTHOR_TAG = "author";
-	private static final String ID_TAG = "id";
-	private static final String LAST_UPDATE_TAG = "lastUpdate";
 	private static final String RULE_NAME_TAG = "rule";
 	
 	@Autowired
@@ -240,6 +235,7 @@ public class ATLTransformationServiceImpl extends
 		 				Store.YES, Index.ANALYZED);
 		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, dctr.getToArtifact().getId(), 
 		 				Store.YES, Index.ANALYZED);
+		 		
 				doc.add(fromMMID);
 				doc.add(fromMMName);
 			}
@@ -265,7 +261,12 @@ public class ATLTransformationServiceImpl extends
 			}
 		 	Field idField = new Field(ID_TAG, art.getId(), 
 		 			Store.YES, Index.ANALYZED);
-		 	
+		 	for (Property prop : art.getProperties()) {
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+				doc.add(propField);
+			}
 		 	doc.add(artName);
 		 	doc.add(authorField);
 		 	doc.add(lastUpdateField);
