@@ -58,6 +58,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.LuceneTag;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
@@ -302,6 +303,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	 */
 	private Document parseArtifactForIndex(Model model) {
 		
+		LuceneTag luceneTag = new LuceneTag(); 
+		
 		Document doc = new Document();
 //		Metadata metadata = new Metadata();
 //		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
@@ -423,6 +426,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	 	doc.add(authorField);
 	 	doc.add(lastUpdateField);
 		doc.add(idField);
+		
 	
 		return doc;
 	}
