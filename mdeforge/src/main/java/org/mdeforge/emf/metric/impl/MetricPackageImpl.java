@@ -169,6 +169,15 @@ public class MetricPackageImpl extends EPackageImpl implements MetricPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getMetric_Code() {
+		return (EAttribute)metricEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAggregatedIntegerMetric() {
 		return aggregatedIntegerMetricEClass;
 	}
@@ -324,6 +333,7 @@ public class MetricPackageImpl extends EPackageImpl implements MetricPackage {
 		metricEClass = createEClass(METRIC);
 		createEAttribute(metricEClass, METRIC__NAME);
 		createEAttribute(metricEClass, METRIC__DESCRIPTION);
+		createEAttribute(metricEClass, METRIC__CODE);
 
 		aggregatedIntegerMetricEClass = createEClass(AGGREGATED_INTEGER_METRIC);
 		createEAttribute(aggregatedIntegerMetricEClass, AGGREGATED_INTEGER_METRIC__MINIMUM);
@@ -377,11 +387,12 @@ public class MetricPackageImpl extends EPackageImpl implements MetricPackage {
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(containerEClass, org.mdeforge.emf.metric.Container.class, "Container", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getContainer_Metrics(), this.getMetric(), null, "metrics", null, 0, -1, org.mdeforge.emf.metric.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContainer_Metrics(), this.getMetric(), null, "metrics", null, 0, -1, org.mdeforge.emf.metric.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(metricEClass, Metric.class, "Metric", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMetric_Name(), ecorePackage.getEString(), "name", null, 0, 1, Metric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMetric_Description(), ecorePackage.getEString(), "description", null, 0, 1, Metric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMetric_Code(), ecorePackage.getEString(), "code", null, 0, 1, Metric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(aggregatedIntegerMetricEClass, AggregatedIntegerMetric.class, "AggregatedIntegerMetric", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAggregatedIntegerMetric_Minimum(), ecorePackage.getEIntegerObject(), "minimum", null, 0, 1, AggregatedIntegerMetric.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

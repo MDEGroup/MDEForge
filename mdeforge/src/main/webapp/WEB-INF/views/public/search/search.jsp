@@ -43,82 +43,83 @@
 						<div class="widget widget-heading-simple widget-body-white">
 							<div class="widget-body">
 								<div class="row-fluid">
-									<form action="${pageContext.request.contextPath}/public/search"
-										method="POST" class="form-search">
-										<div class="span6 center">
-											<div
-												class="widget widget-heading-simple widget-body-simple margin-none">
-												<div class="uniformjs">
-													<label class="checkbox" style="display: inline-block;">
-														<div class="checker" id="uniform-undefined">
-															<span><input type="checkbox" class="checkbox"
-																name="artifactType" value="models" style="opacity: 0;"></span>
-														</div> Models
-													</label> <label class="checkbox"
-														style="display: inline-block; margin-left: 10px;">
-														<div class="checker" id="uniform-undefined">
-															<span class="checked"><input type="checkbox"
-																class="checkbox" name="artifactType" value="metamodels"
-																checked="checked" style="opacity: 0;"></span>
-														</div> Metamodels
-													</label> <label class="checkbox"
-														style="display: inline-block; margin-left: 10px;">
-														<div class="checker" id="uniform-undefined">
-															<span class="checked"><input type="checkbox"
-																class="checkbox" name="artifactType"
-																value="transformations" style="opacity: 0;"></span>
-														</div> Transformations
-													</label>
-												</div>
-											</div>
-										</div>
-										<div class="span6 center">
+									<form action="${pageContext.request.contextPath}/public/search" method="POST" class="form-search">
+										
+										<div class="span8 center">
 											<div
 												class="widget widget-heading-simple widget-body-simple text-right">
 
 												<input type="text" class="input-large"
 													placeholder="Type your keywords .. " name="search_string"
-													id="searchField" value="${search_string}" style="width:90%">
+													id="searchField" value="${search_string}" style="width:80%">
 												<button type="submit" class="btn btn-inverse">
 													<spring:message code="mdeforge.common.action.search" />
 												</button>
 											</div>
 										</div>
+										
+										<div class="span4 center">
+											<div class="widget widget-heading-simple widget-body-simple margin-none">
+												<div class="uniformjs">
+													<label class="checkbox" style="display: inline-block;">
+														<span><input type="checkbox" class="checkbox" name="isFuzzy" value=true></span>
+														Fuzzy
+													</label>
+												</div>
+											</div>
+										</div>
 									</form>
+									
 								</div>
+									<hr>
+								<div class="center">
+											<div class="widget widget-heading-simple widget-body-simple margin-none">
+												<c:forEach items="${indexFieldNames}" var="indexFieldName">
+													<span class="label">${indexFieldName}:</span>
+												</c:forEach>												
+											</div>
+										</div>
 							</div>
 						</div>
 
 						<c:choose>
-							<c:when test="${artifactList.size() > 0}">
-								<div
-									class="widget widget-heading-simple widget-body-white">
+							<c:when test="${searchResultComplete.results.size() > 0}">
+								<div class="widget widget-heading-simple widget-body-white">
 									<div class="widget-body">
-										<h5 class="text-uppercase strong separator bottom">${artifactList.size()}
-											Search results</h5>
-										<c:forEach items="${artifactList}" var="artifact">
+										<h5 class="text-uppercase strong separator bottom">${searchResultComplete.results.size()} results in ${searchResultComplete.getSearchTime()} ms.</h5> 
+										<c:forEach items="${searchResultComplete.results}" var="result">
 											<div class="row-fluid">
 												<div class="span12">
 													<h5 class="strong text-uppercase">
 														<c:choose>
-															<c:when test="${artifact.open == true}">
-																<a
-																	href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+															<c:when test="${result.artifact.open == true}">
+																<a href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
 															</c:when>
 															<c:otherwise>
-																<a
-																	href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
-
+																<a href="${pageContext.request.contextPath}/private/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
 															</c:otherwise>
 														</c:choose>
 													</h5>
-													<span class="badge badge-success">Score: <fmt:formatNumber
-															type="number" maxFractionDigits="3"
-															value="${artifact.getScore()}" /></span>
-													<p>
-														<c:set var="existDescription" value="false" />
+													<span class="badge badge-important">${result.artifact.getClass().getSimpleName()}</span>
+													
+													
+													<br>
+													
+													<c:choose>
+															<c:when test="${result.getFragments() != null}">
+																<c:forEach items="${result.getFragments()}" var="fragment">
+																	<p>... ${fragment} ...</p>
+														  		</c:forEach>
+															</c:when>
+															<c:otherwise>
+																<i>No description</i>
+															</c:otherwise>
+														</c:choose>
+													
+												<%-- <p>
+													 	<c:set var="existDescription" value="false" />
 														<c:set var="description" value="" />
-														<c:forEach items="${artifact.properties}" var="property">
+														<c:forEach items="${result.artifact.properties}" var="property">
 
 															<c:if test="${property.getName() == 'Description '}">
 																<c:set var="existDescription" value="true" />
@@ -135,17 +136,21 @@
 																<i>No description</i>
 															</c:otherwise>
 														</c:choose>
-
+ 
+ 												
 
 													</p>
-													<span class="badge badge-important">${artifact.getClass().getSimpleName() }</span>
-
-													<span class="label">Last update: <fmt:formatDate
-															type="date" value="${artifact.getModified()}" /></span>
+													--%>
+													
+													<br>
+													<p>
+														<span class="label">Last update: <fmt:formatDate type="date" value="${result.artifact.getModified()}" /></span>
+														<span class="badge badge-success">Score: <fmt:formatNumber type="number" maxFractionDigits="3" value="${result.getScore()}" /></span>
+													</p>
 													<p class="margin-none strong">
 														<a
-															href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName() }/ownload?artifact_id=${artifact.getId()}"
-															title="${artifact.getClass().getSimpleName() } Download"
+															href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName() }/ownload?artifact_id=${result.artifact.getId()}"
+															title="${result.artifact.getClass().getSimpleName() } Download"
 															class="glyphicons single download_alt"><i></i>Download</a>
 													</p>
 												</div>
@@ -154,8 +159,6 @@
 										</c:forEach>
 									</div>
 								</div>
-							</c:when>
-							<c:when test="${artifactList != null}">
 							</c:when>
 							<c:otherwise>
 								<div

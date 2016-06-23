@@ -1,5 +1,6 @@
 package org.mdeforge.presentation.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
@@ -8,6 +9,8 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.SearchResult;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,7 +107,12 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			ArtifactList list = new ArtifactList(artifactService.search(text));
+			SearchResultComplete searchResults = artifactService.searchForm(text);
+			List<Artifact> artifactList = new ArrayList<Artifact>();
+			for (SearchResult result : searchResults.getResults()) {
+				artifactList.add(result.getArtifact());
+			}
+			ArtifactList list = new ArtifactList(artifactList);
 			
 			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 		} catch (BusinessException e) {

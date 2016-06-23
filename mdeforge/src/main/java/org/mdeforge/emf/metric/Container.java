@@ -13,10 +13,10 @@ import org.eclipse.emf.ecore.EObject;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.Container#getMetrics <em>Metrics</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.mdeforge.emf.metric.MetricPackage#getContainer()
  * @model
@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface Container extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Metrics</b></em>' reference list.
+	 * Returns the value of the '<em><b>Metrics</b></em>' containment reference list.
 	 * The list contents are of type {@link org.mdeforge.emf.metric.Metric}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -32,9 +32,9 @@ public interface Container extends EObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Metrics</em>' reference list.
+	 * @return the value of the '<em>Metrics</em>' containment reference list.
 	 * @see org.mdeforge.emf.metric.MetricPackage#getContainer_Metrics()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<Metric> getMetrics();

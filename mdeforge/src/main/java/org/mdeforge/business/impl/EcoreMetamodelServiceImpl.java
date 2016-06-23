@@ -8,22 +8,22 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,12 +43,6 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.sax.BodyContentHandler;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
@@ -148,9 +142,8 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.Criteria;
+
 import org.springframework.stereotype.Service;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
 import com.apporiented.algorithm.clustering.DefaultClusteringAlgorithm;
@@ -167,6 +160,12 @@ import anatlyzer.atlext.OCL.OclExpression;
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
 		implements EcoreMetamodelService {
 
+	private static final String TYPE_TAG = "forgeType";
+	private static final String NAME_TAG = "name";
+	private static final String AUTHOR_TAG = "author";
+	private static final String ID_TAG = "id";
+	private static final String LAST_UPDATE_TAG = "lastUpdate";
+	
 	private static final String EPACKAGE_INDEX_CODE = "ePackage";
 	private static final float EPACKAGE_BOOST_VALUE = 2.0f;
 
@@ -194,6 +193,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
 	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	
 	
 	private IndexWriter writer;
 	
@@ -404,6 +404,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			if (at2 instanceof org.mdeforge.emf.metric.impl.SimpleMetricImpl) {
 				SimpleMetric metric2 = new SimpleMetric();
 				metric2.setName(at2.getName());
+				
 				metric2.setDescription(at2.getDescription());
 				metric2.setValue(((org.mdeforge.emf.metric.impl.SimpleMetricImpl) at2).getValue());
 				metric = metric2;
@@ -1379,32 +1380,44 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	
 	private Document parseArtifactForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
-		/*
-		 * FILE METADATA
-		 */
-		Metadata metadata = new Metadata();
-		// By using the BodyContentHandler, you can request that Tika return
-		// only the content of the document's body as a plain-text string.
-		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); // Parsing to
-																	// Plain
-																	// Text
-		ParseContext context = new ParseContext();
-		Parser parser = new AutoDetectParser();
-		try {
-			parser.parse(gridFileMediaService.getFileInputStream(ecoreMetamodel), handler, metadata, context);
-		} catch (TikaException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (SAXException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} finally {
-			try {
-				gridFileMediaService.getFileInputStream(ecoreMetamodel).close();
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage());
-			}
-		}
+		
+//		String textOfTheInputStream = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
+		
+//		InputStream is = null;
+//		try {
+//			is = new FileInputStream(gridFileMediaService.getFilePath(ecoreMetamodel));
+//		} catch (FileNotFoundException | BusinessException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
+//		/*
+//		 * FILE METADATA
+//		 */
+//		Metadata metadata = new Metadata();
+//		// By using the BodyContentHandler, you can request that Tika return
+//		// only the content of the document's body as a plain-text string.
+//		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); // Parsing to
+//																	// Plain
+//																	// Text
+//		ParseContext context = new ParseContext();
+//		Parser parser = new AutoDetectParser();
+//		try {
+//			parser.parse(is, handler, metadata, context);
+//		} catch (TikaException e) {
+//			throw new BusinessException(e.getMessage());
+//		} catch (SAXException e) {
+//			throw new BusinessException(e.getMessage());
+//		} catch (IOException e) {
+//			throw new BusinessException(e.getMessage());
+//		} finally {
+//			try {
+//				is.close();
+//			} catch (IOException e) {
+//				throw new BusinessException(e.getMessage());
+//			}
+//		}
+		
 		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
@@ -1433,31 +1446,60 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 			}
 		}
-		String text = handler.toString();
+		
+		//ID
+		Field idField = new Field(ID_TAG, ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
+	 	doc.add(idField);
+		
+		//Artifact TYPE
+		Field artifactType = new Field(TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		doc.add(artifactType);
+		
+//		String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
-		//TODO ADD ARTIFACT TAG
-		String artifactName = ecoreMetamodel.getName();
-	 	Field artName = new Field("name", artifactName, Store.YES, Index.ANALYZED);
+		doc.add(textField);
+
+		
+		Field artName = new Field(NAME_TAG, ecoreMetamodel.getName(), Store.YES, Index.ANALYZED);
+	 	doc.add(artName);
 	 	
-	 	String author = ecoreMetamodel.getAuthor().getUsername();
-	 	Field authorField = new Field("author", author, Store.YES, Index.ANALYZED);
-	 	Date lastUpdate = ecoreMetamodel.getModified();
-	 	Field lastUpdateField = new Field("lastUpdate", lastUpdate.toString(), Store.YES, Index.ANALYZED);
+	 	Field authorField = new Field(AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+	 	doc.add(authorField);
+	 	
+	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, ecoreMetamodel.getModified().toString(), Store.YES, Index.ANALYZED);
+	 	doc.add(lastUpdateField);
+	 	
 	 	for (Property prop : ecoreMetamodel.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
 			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
 			doc.add(propField);
 		}
-	 	Field idField = new Field("id", ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
 	 	
-	 	doc.add(textField);
-	 	doc.add(artName);
-	 	doc.add(authorField);
-	 	doc.add(lastUpdateField);
-		doc.add(idField);
-		return doc;
+//		System.out.println(handler.toString());	 	
+
+	 	return doc;
 	}
+	
+	private String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
 	
 	private Document ePackageIndex(EPackage ePackage, Document doc){
 		Field ePackageField = new Field(EPACKAGE_INDEX_CODE, ePackage.getName(), Store.YES, Index.ANALYZED);
@@ -1591,7 +1633,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 
 	@Override
-	public List<Statistic> statistic2() {
+	public List<Statistic> numberOfMCdistribution() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		List<Statistic> result = new ArrayList<Statistic>();
 		Aggregation agg = newAggregation(

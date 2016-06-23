@@ -12,6 +12,7 @@ public class Metric {
 
 	private String name;
 	private String id;
+	private String code;
 	@DBRef
 	@JsonIgnore
 	private Artifact artifact;
@@ -48,6 +49,14 @@ public class Metric {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	

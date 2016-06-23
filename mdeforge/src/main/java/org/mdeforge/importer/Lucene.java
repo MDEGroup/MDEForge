@@ -2,6 +2,9 @@ package org.mdeforge.importer;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.lucene.index.IndexReader;
@@ -26,8 +29,8 @@ public class Lucene {
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
-			System.out.println("Indexing: " + ecoreMetamodel.getName());
-			ecoreMetamodelService.createIndex(ecoreMetamodel);
+				System.out.println("Indexing: " + ecoreMetamodel.getName());
+				ecoreMetamodelService.createIndex(ecoreMetamodel);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
@@ -59,21 +62,28 @@ public class Lucene {
 		System.out.println("List of Name Fields in the index:");
 		System.out.println("---------------------------------");
 		
+		HashSet<String> result = new HashSet<String>();
+		
 		File indexDirFile = new File(indexDirectoryPath);
 		try {
 			FSDirectory indexDir = FSDirectory.open(indexDirFile);
 			IndexReader luceneIndexReader = IndexReader.open(indexDir);
-			luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL).forEach(x -> System.out.println(x));
+			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		sortedList.forEach(x -> System.out.println(x));
 	}
 
 	
 	public static void main(String[] args) {
 		
-		String indexDirectoryPath = "/Users/francesco/Desktop/newForgeDir/luceneIndex/";
+		String indexDirectoryPath = "/Users/juri/development/forgeDir/luceneIndex/";
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/root-context.xml");
 

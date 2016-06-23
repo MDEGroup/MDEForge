@@ -16,6 +16,8 @@ import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.SearchResult;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -250,8 +252,14 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/search/{search_string}", method = { RequestMethod.GET })
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
-		return new ResponseEntity<List<EcoreMetamodel>>(
-				ecoreMetamodelService.search(searchString), HttpStatus.OK);
+		
+		SearchResultComplete searchResults = ecoreMetamodelService.searchForm(searchString);
+		List<EcoreMetamodel> artifactList = new ArrayList<EcoreMetamodel>();
+		for (SearchResult result : searchResults.getResults()) {
+			artifactList.add((EcoreMetamodel) result.getArtifact());
+		}
+		
+		return new ResponseEntity<List<EcoreMetamodel>>(artifactList, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/search_by_example", method = { RequestMethod.POST })

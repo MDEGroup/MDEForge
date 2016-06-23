@@ -25,6 +25,6 @@ public class Statistic {
 
 	@Override
 	public String toString() {
-		return "{total:" + total  + ", created:" + created+ "}" ;
+		return "{total:" + total  + ", day:" + created+ "}" ;
 	}
 }

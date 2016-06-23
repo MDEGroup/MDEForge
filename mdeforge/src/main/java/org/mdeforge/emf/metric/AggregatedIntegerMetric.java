@@ -10,6 +10,7 @@ package org.mdeforge.emf.metric;
  *
  * <p>
  * The following features are supported:
+ * </p>
  * <ul>
  *   <li>{@link org.mdeforge.emf.metric.AggregatedIntegerMetric#getMinimum <em>Minimum</em>}</li>
  *   <li>{@link org.mdeforge.emf.metric.AggregatedIntegerMetric#getMaximum <em>Maximum</em>}</li>
@@ -17,7 +18,6 @@ package org.mdeforge.emf.metric;
  *   <li>{@link org.mdeforge.emf.metric.AggregatedIntegerMetric#getAverage <em>Average</em>}</li>
  *   <li>{@link org.mdeforge.emf.metric.AggregatedIntegerMetric#getStandardDeviation <em>Standard Deviation</em>}</li>
  * </ul>
- * </p>
  *
  * @see org.mdeforge.emf.metric.MetricPackage#getAggregatedIntegerMetric()
  * @model

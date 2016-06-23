@@ -6,6 +6,7 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
 
 
@@ -33,9 +34,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<Metric> findMetricForArtifact(Artifact a);
 	T findOnePublic(String id) throws BusinessException;
 	void updateSimple(T artifact);
-
-	List<T> search(String searchString) throws BusinessException;
-	void createIndex(T artifact);
+	
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
 	long countAll() throws BusinessException;
@@ -48,4 +47,10 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<Metric> findMetric(String idArtifact, User user) throws BusinessException;
 	void addComment(Comment comment, String idArtifat) throws BusinessException;
 	List<Statistic> statistic();
+	
+	//Search with Lucene
+	List<String> indexFieldNames() throws BusinessException;
+	SearchResultComplete searchForm(String searchString) throws BusinessException;
+	List<T> search(String searchString) throws BusinessException;
+	void createIndex(T artifact);
 }

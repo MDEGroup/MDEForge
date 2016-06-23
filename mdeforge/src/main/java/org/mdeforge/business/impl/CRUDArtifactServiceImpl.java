@@ -11,14 +11,16 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.Highlighter;
@@ -49,6 +51,8 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.model.form.SearchResult;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
@@ -81,7 +85,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		artifactRepository.save(art);
 		return;
 	}
-
+	protected static final String TYPE_TAG = "forgeType";
+	protected static final String NAME_TAG = "name";
+	protected static final String AUTHOR_TAG = "author";
+	protected static final String ID_TAG = "id";
+	protected static final String LAST_UPDATE_TAG = "lastUpdate";
 	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
 	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
 	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
@@ -122,9 +130,14 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
-	public List<T> search(String queryString) throws BusinessException {
+	public SearchResultComplete searchForm(String queryString) throws BusinessException {
 		
-		List<T> artifacts = new ArrayList<T>();
+		SearchResultComplete searchResultComplete = new SearchResultComplete();
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		
+		long duration = 0;
+		long startTime = System.nanoTime();
+		
 		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 		File indexDir = new File(basePathLucene);
 		Directory directory;
@@ -133,7 +146,12 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 			IndexReader reader = IndexReader.open(directory);
 			IndexSearcher searcher = new IndexSearcher(reader);
-			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			
+			//Get all indexed fields
+			String[] fields = indexFieldNames().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
 			System.out.println("Total hits: " + hits.totalHits);
@@ -145,25 +163,29 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				Document doc = searcher.doc(id);
 				
 				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),
-						hits.scoreDocs[i].doc, "text", analyzer);
-
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
 				
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true,
-						MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
 
 				String[] fragments = new String[frag.length];
 				for (int j = 0; j < frag.length; j++) {
 					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
 						fragments[j] = frag[j].toString();
-						System.out.println(frag[j].toString());
+//						System.out.println(frag[j].toString());
 					}
 				}
 				T art = findOne(doc.get("id"));
-				art.setScore(hits.scoreDocs[i].score);
-				artifacts.add(art);
-				searcher.close();
+				
+				SearchResult sr = new SearchResult();
+				sr.setArtifact(art);
+				sr.setScore(hits.scoreDocs[i].score);
+				sr.setFragments(fragments);
+				
+				searchResults.add(sr);
 			}
+			
+			searcher.close();
+			
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (InvalidTokenOffsetsException e) {
@@ -171,7 +193,64 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		} catch (org.apache.lucene.queryParser.ParseException e) {
 			throw new BusinessException(e.getMessage());
 		}
-		return artifacts;
+		
+		
+		long endTime = System.nanoTime();
+		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+//		System.out.println("Search done in " + duration + " milliseconds");
+		
+		searchResultComplete.setResults(searchResults);
+		searchResultComplete.setSearchTime(duration);
+		
+		
+		return searchResultComplete;
+	}
+	
+	@Override
+	public List<T> search(String queryString) throws BusinessException {
+		List<T> listArtifact = new ArrayList<T>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			//Get all indexed fields
+			String[] fields = indexFieldNames().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+			for (int i = 0; i < hits.totalHits; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+//						System.out.println(frag[j].toString());
+					}
+				}
+				T art = findOne(doc.get("id"));
+				listArtifact.add(art);
+			}
+			searcher.close();
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (InvalidTokenOffsetsException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+//		System.out.println("Search done in " + duration + " milliseconds");
+		return listArtifact;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -299,11 +378,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		List<Statistic> result = new ArrayList<Statistic>();
 		if (persistentClass != Artifact.class) {
 			Aggregation agg = newAggregation(
-					match((Criteria.where("created").gt(dateBefore30Days).
-							andOperator(
-									Criteria.where("_class").
+					match(new Criteria().andOperator(
+							Criteria.where("created").gt(dateBefore30Days),
+							Criteria.where("_class").
 										is(persistentClass.getCanonicalName())
-										)
 							)
 					),
 					project("created").andExpression("month(created)").as("month_joined"),
@@ -336,6 +414,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			for (Statistic statistic : result) {
 				if(cal.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(statistic.getCreated())){
 					t = statistic;
+					System.out.println(statistic.getTotal());
 				}
 			}
 			if(t != null)
@@ -896,5 +975,26 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
+	}
+	
+	@Override
+	public List<String> indexFieldNames(){
+		
+		HashSet<String> result = new HashSet<String>();
+		File indexDirFile = new File(basePathLucene);
+		try {
+			FSDirectory indexDir = FSDirectory.open(indexDirFile);
+			IndexReader luceneIndexReader = IndexReader.open(indexDir);
+			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Sort the result
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		return sortedList;
 	}
 }

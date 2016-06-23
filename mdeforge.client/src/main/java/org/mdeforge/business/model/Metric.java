@@ -9,6 +9,7 @@ public class Metric {
 
 	private String name;
 	private String id;
+	private String code;
 	private Artifact artifact;
 	private String description;
 	public Artifact getArtifact() {
@@ -41,6 +42,14 @@ public class Metric {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 	
 	

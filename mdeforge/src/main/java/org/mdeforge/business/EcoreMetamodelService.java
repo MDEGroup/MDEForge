@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.form.Statistic;
 
 import anatlyzer.atlext.OCL.OclExpression;
 
@@ -37,4 +38,5 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 			throws BusinessException;
 	String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException;
 	void extractedContent(EcoreMetamodel art) throws BusinessException;
+	List<Statistic> numberOfMCdistribution();
 }

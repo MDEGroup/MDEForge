@@ -1,9 +1,11 @@
 package org.mdeforge.business.impl;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,8 +89,15 @@ import com.mongodb.Mongo;
 @Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
 	
+	private static final String TYPE_TAG = "forgeType";
+	private static final String NAME_TAG = "name";
+	private static final String AUTHOR_TAG = "author";
+	private static final String ID_TAG = "id";
+	private static final String LAST_UPDATE_TAG = "lastUpdate";
+	
 	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
-	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+//	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	private static final String CONFORM_TO_TAG = "conformToMM";
 	
 	private IndexWriter writer;
 
@@ -294,31 +303,31 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private Document parseArtifactForIndex(Model model) {
 		
 		Document doc = new Document();
-		Metadata metadata = new Metadata();
-		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
-		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
-		ParseContext context = new ParseContext();
-		Parser parser = new AutoDetectParser();
-		InputStream stream = gridFileMediaService.getFileInputStream(model);
-		try {
-			parser.parse(stream, handler, metadata, context);
-		}
-		catch (TikaException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				stream.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+//		Metadata metadata = new Metadata();
+//		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
+//		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
+//		ParseContext context = new ParseContext();
+//		Parser parser = new AutoDetectParser();
+//		InputStream stream = gridFileMediaService.getFileInputStream(model);
+//		try {
+//			parser.parse(stream, handler, metadata, context);
+//		}
+//		catch (TikaException e) {
+//			e.printStackTrace();
+//		} catch (SAXException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		finally {
+//			try {
+//				stream.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
@@ -373,22 +382,27 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			}
 			
 		}
+		
+		//Artifact TYPE
+		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		doc.add(artifactType);
 
-		String text = handler.toString();
+//		String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
 		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
 //		textField.setBoost(2.0f);
 		
 //		System.out.println(identifyLanguage(text));
 		
 		String artifactName = model.getName();
-	 	Field artName = new Field("name", artifactName, Store.YES, Index.ANALYZED);
+	 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
 //		filenameField.setBoost(0.5f);
 		
 	 	String author = model.getAuthor().getUsername();
-	 	Field authorField = new Field("author", author, Store.YES, Index.ANALYZED);
+	 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
 	 	
 	 	Date lastUpdate = model.getModified();
-	 	Field lastUpdateField = new Field("lastUpdate", lastUpdate.toString(), Store.YES, Index.ANALYZED);
+	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), Store.YES, Index.ANALYZED);
 //		filetypeField.setBoost(1.4f);
 		
 	 	for (Property prop : model.getProperties()) {
@@ -397,8 +411,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
 			doc.add(propField);
 		}
-	 	Field idField = new Field("id", model.getId(), Store.YES, Index.ANALYZED);
+	 	Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
 	 	
+	 	
+	 	Field conformToFieldName = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Store.YES, Index.ANALYZED);
+	 	doc.add(conformToFieldName);
+	 	Field conformToFieldId = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Store.YES, Index.ANALYZED);
+	 	doc.add(conformToFieldId);
 	 	doc.add(textField);
 	 	doc.add(artName);
 	 	doc.add(authorField);
@@ -407,5 +426,25 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	
 		return doc;
 	}
+	
+	
+	private String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
 
 }
