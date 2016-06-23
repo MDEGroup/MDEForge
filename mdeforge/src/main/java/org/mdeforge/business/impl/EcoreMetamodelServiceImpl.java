@@ -113,6 +113,7 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
+import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.business.search.ResourceSerializer;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.form.Statistic;
 
 import anatlyzer.atlext.OCL.OclExpression;
 

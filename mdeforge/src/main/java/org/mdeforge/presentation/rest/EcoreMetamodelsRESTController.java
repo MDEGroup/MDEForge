@@ -253,7 +253,7 @@ public class EcoreMetamodelsRESTController {
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
 		
-		SearchResultComplete searchResults = ecoreMetamodelService.search(searchString);
+		SearchResultComplete searchResults = ecoreMetamodelService.searchForm(searchString);
 		List<EcoreMetamodel> artifactList = new ArrayList<EcoreMetamodel>();
 		for (SearchResult result : searchResults.getResults()) {
 			artifactList.add((EcoreMetamodel) result.getArtifact());

@@ -50,6 +50,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	
 	//Search with Lucene
 	List<String> indexFieldNames() throws BusinessException;
-	SearchResultComplete search(String searchString) throws BusinessException;
+	SearchResultComplete searchForm(String searchString) throws BusinessException;
+	List<T> search(String searchString) throws BusinessException;
 	void createIndex(T artifact);
 }

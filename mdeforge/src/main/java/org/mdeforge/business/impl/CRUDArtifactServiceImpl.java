@@ -131,7 +131,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
-	public SearchResultComplete search(String queryString) throws BusinessException {
+	public SearchResultComplete searchForm(String queryString) throws BusinessException {
 		
 		SearchResultComplete searchResultComplete = new SearchResultComplete();
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
@@ -205,6 +205,53 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		
 		
 		return searchResultComplete;
+	}
+	
+	@Override
+	public List<T> search(String queryString) throws BusinessException {
+		List<T> listArtifact = new ArrayList<T>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			//Get all indexed fields
+			String[] fields = indexFieldNames().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+			for (int i = 0; i < hits.totalHits; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+//						System.out.println(frag[j].toString());
+					}
+				}
+				T art = findOne(doc.get("id"));
+				listArtifact.add(art);
+			}
+			searcher.close();
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (InvalidTokenOffsetsException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+//		System.out.println("Search done in " + duration + " milliseconds");
+		return listArtifact;
 	}
 
 	@SuppressWarnings("unchecked")

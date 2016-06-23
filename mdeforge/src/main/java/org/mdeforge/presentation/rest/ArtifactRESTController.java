@@ -107,7 +107,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchResultComplete searchResults = artifactService.search(text);
+			SearchResultComplete searchResults = artifactService.searchForm(text);
 			List<Artifact> artifactList = new ArrayList<Artifact>();
 			for (SearchResult result : searchResults.getResults()) {
 				artifactList.add(result.getArtifact());
