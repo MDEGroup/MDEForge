@@ -16,18 +16,14 @@
 		<h5 class="input-name">From Metamodels</h5>
 		<div class="separator"></div>
 			<div id="defineDomainRelationTo">
-			<div class="span6">
-			<h6>Search Metamodels</h6>
+			<h6>Search Metamodels by name</h6>
 			<select id="domainMetamodelSelect" class="select-relation">
-				<c:forEach items="${metamodelList}" var="metamodel">
-					<option value="${metamodel.id }">${metamodel.name }</option>
-				</c:forEach>
+				 <option value="" selected disabled>Metamodels</option>
 			</select> 
-			</div>
-			<div class="span6">
-			<h6>Filter</h6>
-				<input id="filterMMDomainTextBox" type="text" placeholder="Filter Metamodels by Name" />
-			</div>	
+<!-- 			<div class="span6"> -->
+<!-- 			<h6>Filter</h6> -->
+<!-- 				<input id="filterMMDomainTextBox" type="text" placeholder="Filter Metamodels by Name" /> -->
+<!-- 			</div>	 -->
 
 			<button type="button" id="addDomainConformToMetamodel" class="btn btn-primary">
 				Select Metamodel
@@ -52,18 +48,14 @@
 			<h5 class="input-name">To Metamodels</h5>
 			<div class="separator"></div>
 			<div  id="defineCoDomainRelationTo">
-			<div class="span6">
-			<h6>Search Metamodels</h6>
-				<select id="coDomainMetamodelSelect" class="select-relation">
-					<c:forEach items="${metamodelList}" var="metamodel">
-						<option value="${metamodel.id }">${metamodel.name }</option>
-					</c:forEach>
+			<h6>Search Metamodels by name</h6>
+				<select id="coDomainMetamodelSelect">
+				  <option value="" selected disabled>Metamodels</option>
 				</select>
-			</div>
-			<div class="span6">
-			<h6>Filter</h6>
-				<input id="filterMMCoDomainTextBox" type="text" placeholder="Filter Metamodels by Name"/>
-			</div>
+<!-- 			<div class="span6"> -->
+<!-- 			<h6>Filter</h6> -->
+<!-- 				<input id="filterMMCoDomainTextBox" type="text" placeholder="Filter Metamodels by Name"/> -->
+<!-- 			</div> -->
 			<button type="button" id="addCoDomainConformToMetamodel"
 				class="btn btn-primary">
 				Select Metamodel

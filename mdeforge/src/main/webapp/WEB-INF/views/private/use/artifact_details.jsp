@@ -41,6 +41,7 @@
 		<span class="text-primary" style="font-size: 16px">Last Modified</span>
 		<h5><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getModified()}" /></h5>
 	<div class="separator bottom"></div>
+<<<<<<< Updated upstream
 	<c:if test="${artifact.getClass().getSimpleName()} == 'EcoreMetamodel'">
 		<c:choose>
 			<c:when test="${artifact.getUri().size() > 0}">
@@ -52,6 +53,20 @@
 					<p class="text-error">It has not been assigned any URI</p>
 			</c:otherwise>
 		</c:choose>
+=======
+	<c:catch var="exeption">${artifact.getUri()}</c:catch>
+	<c:if test="exception == null">
+	<c:choose>
+		<c:when test="${artifact.getUri().size() > 0}">
+			<c:forEach items="${artifact.getUri()}" var="uri">
+					<p><span class="text-primary">URI</span>: ${uri}</p>
+			</c:forEach>
+		</c:when>
+		<c:otherwise>
+				<p class="text-error">It has not been assigned any URI</p>
+		</c:otherwise>
+	</c:choose>
+>>>>>>> Stashed changes
 	</c:if>
 	<h5 class="input-name">Properties</h5>
 	<c:forEach items="${artifact.properties}" var="property">
@@ -99,7 +114,6 @@
 </div>
 <div class="innerLR">
 	<div class="row-fluid">
-		<div class="span12 tablet-column-reset">
 			<div class="box-generic">
 			<div class="span2">
 				<a href="#modal-simple" class="widget-stats widget-stats-2" data-toggle="modal">
@@ -130,9 +144,10 @@
 			</c:if>
 				<div class="separator bottom"></div>
 			</div>
-			<hr>
-			<tiles:insertAttribute name="central" ignore="true"/>
-			<div class="row-fluid">
+	</div>
+		<hr>
+	<tiles:insertAttribute name="central" ignore="true"/>
+	<div class="row-fluid">
 				<div class="span8">
 				<div class="box-generic">
 					<h5 class="input-name">Metrics</h5>
@@ -199,32 +214,8 @@
 							<!-- Widget Heading -->
 							<h5 class="input-name">Extracted Word Context</h5>
 							<div class="separator bottom"></div>
-							<!-- // Widget Heading END -->
-							<div class="relativeWrap">
-								<div class="widget widget-tabs">
 					
-									<!-- Tabs Heading -->
-									<div class="widget-head">
-										<ul>
-											<li class="active"><a class="glyphicons cloud" href="#cloud" data-toggle="tab"><i></i>Word Cloud</a></li>
-											<li><a class="glyphicons font" href="#standard" data-toggle="tab"><i></i>Standard</a></li>
-										</ul>
-									</div>
-									<!-- // Tabs Heading END -->
-					
-									<div class="widget-body">
-										<div class="tab-content">
-					
-											<!-- Tab content -->
-											<div class="tab-pane active" id="cloud">
-					
-												<canvas id="my_canvas"></canvas>
-					
-											</div>
-											<!-- // Tab content END -->
-					
-											<!-- Tab content -->
-											<div class="tab-pane" id="standard">
+									<div class="tab-pane" id="standard">
 					
 												<c:set var="serializedContext_trim"
 													value="${fn:trim(artifact.getDefaultWeightedContents())}" />
@@ -236,12 +227,6 @@
 											<!-- // Tab content END -->
 					
 										</div>
-									</div>
-								</div>
-							</div>
-					
-					
-						</div>
 						<!-- // Widget END -->
 				</div>
 				</div>
@@ -250,9 +235,6 @@
 			</div>
 
 		</div>
-		
-	</div>
-</div>
 
 <c:import var="fileToVisualize"
 	url="file:///${artifactFile.getAbsolutePath()}" />
@@ -309,5 +291,5 @@
 
 	}
 
-	WordCloud(document.getElementById('my_canvas'), options);
+	//WordCloud(document.getElementById('my_canvas'), options);
 </script>

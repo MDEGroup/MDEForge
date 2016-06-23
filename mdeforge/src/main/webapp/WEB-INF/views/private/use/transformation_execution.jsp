@@ -15,44 +15,35 @@
 	<li>Transformation Execution</li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-
-<h3>Transformation Execution</h3>
-
+<form action="${pageContext.request.contextPath}/private/ATLTransformation/result_transformation" method="POST">
 
 <div class="innerLR">
 
-
-
-
-
-
+<div class="box-generic">
+<h3 class="header-h main-title">Transformation Execution</h3>
+	<span class="muted">${atlTransformation.getName()}</span>
+	<div class="row-fluid">
+	<div class="span12">
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+	
+	</div>
+	</div>
+</div>
 
 
 <div class="widget widget-heading-simple widget-body-white">
 
-	<!-- Widget Heading -->
-	<div class="widget-head">
-		<h3 class="heading glyphicons show_thumbnails">
-			<i></i>Execute the Transformation
-		</h3>
-	</div>
-	<!-- // Widget Heading END -->
-
 	<div class="widget-body">
-		<form action="${pageContext.request.contextPath}/private/ATLTransformation/result_transformation"
-			method="POST">
-			<div class="row-fluid">
-				<div class="span4">
-					<table class="table table-bordered table-striped table-white">
-						<thead>
-							<tr>
-								<th class="center">Input Metamodels</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${atlTransformation.relations}" var="relation">
+		<div class="row-fluid">
+			<div class="span4">
+				<table class="table table-striped table-white">
+					<thead>
+						<tr>
+							<th class="center">Input Metamodels</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${atlTransformation.relations}" var="relation">
 								
 								<!-- Table row -->
 								<tr>
@@ -81,34 +72,29 @@
 								</tr>
 								<!-- // Table row END -->
 							</c:forEach>
-					</table>
+							</tbody>
+				</table>
+			</div>
+			<div class="span4">
+				<table class="table table-striped table-white">
+					<tbody>
+					<tr>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+							<td class="center strong">${atlTransformation.getName()}</td>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+					</tr>
+				</table>
+			</div>
+			<div class="span4">
 
-
-				</div>
-				<div class="span4">
-					<table class="table table-bordered table-striped table-white">
-						<tbody>
-							<tr>
-								<td class="center">${atlTransformation.getName()}</td>
-							</tr>
-					</table>
-					<input type="hidden" name="transformation_id" value ="${atlTransformation.getId()}"/>
-					<button class="btn btn-block btn-success" name="computation" value="1">Execute Transformation</button>
-<!-- 					<a -->
-<%-- 						href="${pageContext.request.contextPath}/private/use/restult_transformation?transformation_id=${atlTransformation.getId()}" --%>
-<!-- 						class="btn btn-success btn-small btn-block"><i -->
-<!-- 						class="icon-play icon-fixed-width"></i> Execute Transformation</a> -->
-				</div>
-				<div class="span4">
-
-					<table class="table table-bordered table-striped table-white">
-						<thead>
-							<tr>
-								<th class="center">Output Metamodels</th>
-							</tr>
-						</thead>
-						<tbody>
-							<c:forEach items="${atlTransformation.relations}" var="relation">
+				<table class="table table-striped table-white">
+					<thead>
+						<tr>
+							<th class="center">Output Metamodels</th>
+						</tr>
+					</thead>
+					<tbody>
+						<c:forEach items="${atlTransformation.relations}" var="relation">
 								<!-- Table row -->
 								<tr>
 									<c:choose>
@@ -121,11 +107,13 @@
 								</tr>
 								<!-- // Table row END -->
 							</c:forEach>
-					</table>
+							</tbody>
+				</table>
 
-				</div>
 			</div>
-		</form>
+		</div>
+		<input type="hidden" name="transformation_id" value ="${atlTransformation.getId()}"/>
+						<button class="btn btn-block btn-success" name="computation" value="1" style="padding: 10px 0"><i class="icon-play"></i> Execute Transformation</button>
 	</div>
 </div>
 
@@ -133,8 +121,7 @@
 
 </div>
 
-
-
+</form>
 
 
 

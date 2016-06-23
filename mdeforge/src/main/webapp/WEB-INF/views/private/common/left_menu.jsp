@@ -31,7 +31,19 @@
 						<li><a class="glyphicons file" href="${pageContext.request.contextPath}/private/shared_artifacts/"><i></i>ARTIFACTS</a></li>						
 					</ul>
 				</li>
-				<li><a class="glyphicons list" href="${pageContext.request.contextPath}/private/my_artifacts/"><i></i>My Artifacts</a></li>	
+				<li class="dropdown dd-1">
+					<a href="" data-toggle="dropdown" class="glyphicons list"><i></i><!--<spring:message code="mdeforge.menu.workspace"/>--> MY ARTIFACS <span class="icon-chevron-right"></span></a>
+					<ul class="dropdown-menu pull-left">											
+						<!--<c:forEach items="${workspaces_list}" var="workspace">
+							<li><a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="glyphicons folder_open"><i></i>${workspace.getName()}</a></li>
+						</c:forEach>-->
+							<li><a href="${pageContext.request.contextPath}/private/my_artifacts/">ALL</a></li>
+							<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifacts">METAMODELS</a></li>
+							<li><a href="${pageContext.request.contextPath}/private/ATLTransformation/artifacts">ATL TRANSFORMATIONS</a></li>
+							<li><a href="${pageContext.request.contextPath}/private/Model/artifacts">MODELS</a></li>
+					</ul>
+				</li>
+				<!-- <li><a class="glyphicons list" href="${pageContext.request.contextPath}/private/my_artifacts/"><i></i>My Artifacts</a></li>-->
 				<%-- <li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li> --%>
 				<li class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons inbox_plus"><i></i><!--<spring:message code="mdeforge.menu.workspace"/>--> WORKSPACES <span class="icon-chevron-right"></span></a>

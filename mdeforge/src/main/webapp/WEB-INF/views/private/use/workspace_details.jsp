@@ -92,7 +92,6 @@
 													<span class="muted">${proj.getOwner().getUsername() }</span>
 													<a href="mailto:${proj.getOwner().getEmail() }"><i
 																class="icon-envelope"></i></a>
-													<i class="icon-remove" data-id="${proj.getId() }" data-name="${proj.getName() }"></i> 
 												</div>
 											</div>
 											</li>
@@ -109,7 +108,7 @@
 	</div>
 					<!--  <span class="results">${workspace.getProjects().size() } Project <i class="icon-circle-arrow-down"></i></span>-->
 		<div class="separator"></div>
-			<div class="row-fluid">
+			<div class="row-fluid form-horizontal">
 				<div class="span12 detailsWrapper" id="details">
 					<div class="ajax-loading hide">
 						<i class="icon-spinner icon-spin icon-4x"></i>
@@ -117,13 +116,18 @@
 					<div class="innerAll" id="workspaceDetailsDiv" style="display: none;">
 						<div class="title">
 							<div class="row-fluid">
-								<div class="span12" id="projectId">
+								<div class="span8" id="projectId">
 									<h3 class="text-primary header-h main-title" id="projectName"></h3>
 									<div class="separator"></div>
+									<p class="muted" id="artifactsNumber"></p>
+									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
 								</div>
-								
-								<p class="muted" id="artifactsNumber"></p>
+								<div class="span4">
+									<span id="removeProject" class="btn btn-danger remove-project pull-right" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete</span>
+									<div class="separator"></div>
+								</div>
 							</div>
+							
 						</div>
 						<h5 class="input-name">Owner</h5>
 								<ul class="icons-ul" style="border-right: none;border-left: 2px solid #ededed;padding-left: 10px;margin: 10px 0;">
@@ -135,11 +139,11 @@
 						<div class="body">
 							<div class="row-fluid">
 								<div class="span3">
-									<h5 class="input-name">Ecore Metamodels <i class="pull-right icon-plus text-primary" id="showEcoreList"></i></h5>
+									<h5 class="input-name">Ecore Metamodels <i class="pull-right icon-plus text-primary button-toggle" id="showEcoreList"></i></h5>
 									<div id="ecoreToAdd" style="display: none">
 										<div class="separator bottom"></div>
-										<select class="span12" id="ecoreSelect">
-											<option value="pippo">pippo</option>
+										<select id="ecoreSelect">
+											<option value="" selected disabled>Search Metamodels</option>
 										</select>
 										<div>
 											<span class="btn btn-block btn-primary" id="addEcore">Add</span>
@@ -155,11 +159,12 @@
 									</table>
 								</div>
 								<div class="span3">
-									<h5 class="input-name">ATL Transformations <i class="pull-right icon-plus text-primary" id="showATLList"></i></h5>
+									<h5 class="input-name">ATL Transformations <i class="pull-right icon-plus text-primary button-toggle" id="showATLList"></i></h5>
 									
 									<div id="ATLToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<select class="span12" id="ATLSelect">
+										<select id="ATLSelect">
+											<option value="" selected disabled>Search Metamodels</option>
 										</select>
 										<div>
 											<span class="btn btn-block btn-primary" id="addATL">Add</span>
@@ -176,10 +181,11 @@
 
 								</div>
 								<div class="span3">
-									<h5 class="input-name">Models <i class="pull-right icon-plus text-primary" id="showModelList"></i></h5>
+									<h5 class="input-name">Models <i class="pull-right icon-plus text-primary button-toggle" id="showModelList"></i></h5>
 									<div id="modelToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<select class="span12" id="modelSelect">
+										<select id="modelSelect">
+											<option value="" selected disabled>Search Metamodels</option>
 										</select>
 										<div>
 											<span class="btn btn-block btn-primary" id="addModel">Add</span>
@@ -197,16 +203,16 @@
 								</div>
 								<div class="span3" id="userDiv" style="display: none;">
 									<!-- Latest Orders/List Widget -->
-									<h5 class="input-name">Shared Users <i class="pull-right icon-plus text-primary" id="showUserList"></i></h5>
+									<h5 class="input-name">Shared Users <i class="pull-right icon-plus text-primary button-toggle" id="showUserList"></i></h5>
 									<div id="userList" class="row-fluid" style="display: none">
 										<div class="separator bottom"></div>
-											<select id="userSelect" class="span12">
+											<select id="userSelect">
 											</select>
 												<span class="btn btn-block btn-primary" id="addUserArtifact">Add</span>
 												
 									</div>
 									<div class="separator bottom"></div>
-									<p class="text-primary"><span id="sharedNumber text-black strong">2</span> people share this artifact</p>
+									<p class="text-primary"><span id="sharedNumber" class="text-black strong"></span> people share this artifact</p>
 										
 								 		<div class="widget">
 											

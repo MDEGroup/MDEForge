@@ -11,7 +11,8 @@
 	<title><spring:message code="mdeforge"/></title>
 	
 	<!-- Meta -->
-	<meta charset="UTF-8" />
+	<meta charset="utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -34,6 +35,9 @@
 	
 	<!-- PrettyPhoto -->
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
+    
+    <!-- Select2 Plugin -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
     
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
    
@@ -185,7 +189,8 @@
 	-->
 	<!-- Ba-Resize Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery.ba-resize.js"></script>
-	
+	<!-- Select2 Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/selectize/js/standalone/selectize.min.js"></script>
 	<!--  Flot Charts Plugin 
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.pie.js"></script>

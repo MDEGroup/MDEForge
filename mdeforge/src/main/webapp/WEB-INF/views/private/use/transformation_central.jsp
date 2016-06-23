@@ -4,26 +4,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
-<c:if
-	test="${artifact.atlError.size()== 0 && artifact.atlTestError.size()==0}">
-	<div class="widget widget-heading-simple widget-body-white">
-		<div class="widget-body">
-			<a
-				href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${artifact.getId()}"
-				class="btn btn-success btn-small btn-block"><i
-				class="icon-play icon-fixed-width"></i> Analyze Transformation</a>
+<c:if test="${artifact.atlError.size()== 0 && artifact.atlTestError.size()==0}">
+<div class="separator"></div>
+<div class="innerLR">
+	<div class="row-fluid">
+		<div class="span2">
+			<a	href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${artifact.getId()}"
+					class="btn btn-primary btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
+		</div>
 		</div>
 	</div>
 </c:if>
 <c:if test="${artifact.atlError.size() != 0}">
-	<div class="widget widget-heading-simple widget-body-white">
-		<div class="widget-head">
-			<h3 class="heading glyphicons show_thumbnails">
-				<i></i>anATLyzer Transformation errors
-			</h3>
-		</div>
-
+	<div class="widget widget-heading-simple widget-body-white">		
 		<div class="widget-body">
+		<h5 class="input-name text-error">anATLyzer Transformation Errors</h5>
 			<div class="tab-content">
 				<div id="tabAll" class="tab-pane active">
 					<c:forEach items="${artifact.atlError}" var="error"
@@ -58,12 +53,8 @@
 <c:if test="${artifact.atlTestError.size() != 0}">
 
 	<div class="widget widget-heading-simple widget-body-white">
-		<div class="widget-head">
-			<h3 class="heading glyphicons show_thumbnails">
-				<i></i>Test service report
-			</h3>
-		</div>
 		<div class="widget-body">
+		<h5 class="input-name">Test service report</h5>
 			<c:forEach items="${artifact.atlTestError}" var="error"
 				varStatus="status">
 
@@ -101,18 +92,15 @@
 
 
 <div class="widget widget-heading-simple widget-body-white">
-	<!-- Widget Heading -->
-	<div class="widget-head">
-		<h3 class="heading glyphicons show_thumbnails">
-			<i></i>Execute the Transformation
-		</h3>
-	</div>
-	<!-- // Widget Heading END -->
 
 	<div class="widget-body">
+	<h5 class="input-name">Execute the Transformation</h5>
+	<div class="separator bottom"></div>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+	<div class="separator bottom"></div>
 		<div class="row-fluid">
 			<div class="span4">
-				<table class="table table-bordered table-striped table-white">
+				<table class="table table-striped table-white">
 					<thead>
 						<tr>
 							<th class="center">Input Metamodels</th>
@@ -143,20 +131,18 @@
 				</table>
 			</div>
 			<div class="span4">
-				<table class="table table-bordered table-striped table-white">
+				<table class="table table-striped table-white">
 					<tbody>
-						<tr>
-							<td class="center">${artifact.getName()}</td>
-						</tr>
+					<tr>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+							<td class="center strong">${artifact.getName()}</td>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+					</tr>
 				</table>
-				<a
-					href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
-					class="btn btn-success btn-small btn-block"><i
-					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 			</div>
 			<div class="span4">
 
-				<table class="table table-bordered table-striped table-white">
+				<table class="table table-striped table-white">
 					<thead>
 						<tr>
 							<th class="center">Output Metamodels</th>
@@ -188,6 +174,10 @@
 
 			</div>
 		</div>
+		<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
+					class="btn btn-success btn-block"><i
+					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 	</div>
 </div>
+<div class="separator"></div>
 <hr>

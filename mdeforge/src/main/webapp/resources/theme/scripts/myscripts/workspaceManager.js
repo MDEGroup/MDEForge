@@ -33,6 +33,7 @@
 						});
 				$("#ecoreSelect option[value='" + ecoreMetamodel.id + "']").remove();
 				$('#ecoreToAdd').hide();
+				$("#showEcoreList").removeClass("rotate-item");
 			},
 			error : function error(data) {
 				console.log('error');
@@ -61,6 +62,7 @@
 					});
 				$("#ATLSelect option[value='" + ATLTransormation.id + "']").remove();
 				$('#ATLToAdd').hide();
+				$("#showATLList").removeClass("rotate-item");
 			},
 			error : function error(data) {
 				console.log('error')
@@ -90,6 +92,7 @@
 					});
 				$("#modelSelect option[value='" + model.id + "']").remove();
 				$('#modelToAdd').hide();
+				$("#showModelList").removeClass("rotate-item");
 				
 			},
 			error : function error(data) {
@@ -99,103 +102,60 @@
 	});
 	
 	// SHOW ARTIFACT BY TYPE
-	$('#showModelList').one("click", showModelList);
+	$('#showModelList').click(showModelList);
 	function showModelList(event){
-		var spinner = new Spinner().spin();
-		$('#showModelList').parent().append(spinner.el);
-		if ($('#modelToAdd').css('display') == 'none') {
+		if (!($(this).hasClass("rotate-item"))) {
+			$(this).addClass("rotate-item");
 			var ids =[];
 			$('#modelTable > tbody  > tr').each(function() {
 				ids.push(this.id);
 			});
-			$.ajax({
-				url : ctx + "/private/Model/list",
-				success : function(data) {
-					$('#modelSelect').empty();
-					$.each(data, function(i, model){
-						if($.inArray(model.id, ids) < 0)
-							$('#modelSelect').append($('<option></option>').attr('value',model.id).text(model.name));
-					});
-					spinner.stop();
-					$('#modelToAdd').show();
-					$(document).on('click','#showModelList', showModelList);
-				},
-				error : function error(data) {
-					console.log('error');
-				}
-			});
+			$('#modelSelect').html('<option value="" selected disabled>Search Models</option>');
 			$('#modelToAdd').show();
+					//$(document).on('click','#showModelList', showModelList);
 		}
 		else {
 			$('#modelToAdd').hide();
-			spinner.stop();
+			$(this).removeClass("rotate-item");
 		}
 	}
 	
-	$('#showATLList').one("click", showATLList);
+	$('#showATLList').click(showATLList);
 	function showATLList(event){
-		var spinner = new Spinner().spin();
-		$('#showATLList').parent().append(spinner.el);
-		if ($('#ATLToAdd').css('display') == 'none') {
+		if (!($(this).hasClass("rotate-item"))) {
+			$(this).addClass("rotate-item");
 			var ids =[];
 			$('#atlTable > tbody  > tr').each(function() {
 				ids.push(this.id);
 			});
-			$.ajax({
-				url : ctx + "/private/ATLTransformation/list",
-				success : function(data) {
-					$('#ATLSelect').empty();
-					$.each(data, function(i, atl){
-						if( $.inArray(atl.id, ids) < 0)
-							$('#ATLSelect').append($('<option></option>').attr('value',atl.id).text(atl.name));
-					});
-					spinner.stop();
-					$('#ATLToAdd').show();
-					$(document).on('click','#showATLList', showATLList);
-				},
-				error : function error(data) {
-					console.log('error');
-				}
-			});
+			
+			$('#ATLSelect').html('<option value="" selected disabled>Search ATL Transformations</option>');
 			$('#ATLToAdd').show();
+					//$(document).on('click','#showATLList', showATLList); perchè altro listener?
 		}
 		else {
 			$('#ATLToAdd').hide();
-			spinner.stop();
+			$(this).removeClass("rotate-item");
 		}
 	}
-	$('#showEcoreList').one("click",showEcoreList);
+	$('#showEcoreList').click(showEcoreList);
+	
 	function showEcoreList(event){
-		var spinner = new Spinner().spin();
-		$('#showEcoreList').parent().append(spinner.el);
-		if ($('#ecoreToAdd').css('display') == 'none') {
+		if (!($(this).hasClass("rotate-item"))){
+			$(this).addClass("rotate-item");
 			var ids =[];
 			$('#ecoreMMTable > tbody  > tr').each(function() {
 				ids.push(this.id);
 			});
-			$.ajax({
-				url : ctx + "/private/EcoreMetamodel/list",
-				success : function(data) {
-					$('#ecoreSelect').empty();
-					$.each(data, function(i, ecore){
-						if($.inArray(ecore.id, ids) < 0)
-							$('#ecoreSelect').append($('<option></option>').attr('value',ecore.id).text(ecore.name));
-					});
-					spinner.stop();
-					$('#ecoreToAdd').show();
-					$(document).on('click','#showEcoreList', showEcoreList);
+			$('#ecoreSelect').html('<option value="" selected disabled>Search Metamodels</option>');
+			//inizialize plugin for this ajax select
+			$('#ecoreToAdd').show();
+					//$(document).on('click','#showEcoreList', showEcoreList); perchè altro listener?
 					//$('#showEcoreList').one(showEcoreList);
-				},
-				error : function error(data) {
-					console.log('error');
-					spinner.stop();
-				}
-			});
-			
 		}
 		else {
 			$('#ecoreToAdd').hide();
-			spinner.stop();
+			$(this).removeClass("rotate-item");
 		}
 	}
 	
@@ -216,6 +176,8 @@
 						});
 				$("#userSelect option[value='" + idUser + "']").remove();
 				$('#userList').hide();
+				$("#showUserList").removeClass("rotate-item");
+				
 			},
 			error : function error(data) {
 				console.log('error')
@@ -382,7 +344,10 @@
 								});
 						}
 					});
+					$('#removeProject').attr("data-id", data.id);
+					$('#removeProject').attr("data-name", data.name)
 					$('#projectName').text(data.name);
+					$('#sharedNumber').text(data.users.length);
 					$('#ownerEmail').text(data.owner.email);
 					$('#ownerName').text(data.owner.firstname + ' ' + data.owner.lastname);
 					$('#ownerUsername').text(data.owner.username);
@@ -436,24 +401,78 @@
 	});
 	
 	$(document).on('click','#showUserList',function(event){
-		$('#userSelect').empty();
-		if ($('#userList').css('display') == 'none') {
+		if (!($(this).hasClass("rotate-item"))) {
 			$.ajax({
 				url : ctx + "/private/user/list",
 				success : function(data) {
+					$('#showUserList').addClass("rotate-item");
+					$('#userSelect').empty();	
 					$.each(data, function(i, model){
 						if($("#loggedUserId").val() != model.id)
-							$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
+							$('#userSelect').append('<option value='+model.id+' >'+model.username+'</option>');
 					});
+					$('#userList').show();
 				},
 				error : function error(data) {
 					console.log('error');
 				}
 			});
-			$('#userList').show();
 		}
 		else {
 			$('#userList').hide();
+			$(this).removeClass('rotate-item');
 		}
 	});
 	
+/* SELECT AJAX */
+	
+	
+	$(document).ready(function(){
+		$('#ecoreSelect').selectize({
+		    valueField: 'id',
+		    labelField: 'name',
+		    searchField: 'name',
+		    create: false,
+		    highlight: false,
+		    maxOptions: 100,
+		    loadThrottle: 200,
+		    render: {
+		        option: function(item, escape) {
+		            return '<div>' +
+		                '<h5 class="text-black strong">' + escape(item.name) + '</h5>' +
+		                    '<span class="by">' + escape(item.username) + '</span>' +
+		            '</div>';
+		        }
+		    },
+		    /*score: function(search) {
+		        var score = this.getScoreFunction(search);
+		        return function(item) {
+		            return score(item) * (1 + Math.min(item.watchers / 100, 1));
+		        };
+		    },*/
+		    load: function(query, callback) {
+		        if (!query.length) return callback();
+		        $.ajax({
+		            url: 'http://localhost:8080/mdeforge/public/searchArtifact',
+		            type: 'POST',
+		            data: {
+		            	search_string: query
+		            },
+		            error: function(res) {
+		            	console.log(res)
+		                callback();
+		                //searching text gets
+		                //no data available
+		            },
+		            success: function(res) {
+		            	console.log(res)
+		            	//remove searching text
+		                callback(res.repositories.slice(0, 10));
+		            }
+		        });
+		    },
+		    onType: function(){
+		    	//searching
+		    }
+		});
+	})

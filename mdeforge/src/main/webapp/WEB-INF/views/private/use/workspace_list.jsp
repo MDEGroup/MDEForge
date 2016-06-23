@@ -25,8 +25,7 @@
 <span> Metamodels in the repository: ${numberOfMetamodels}</span>
 </div>
 	<div class="span4 buttons text-right" style="margin-top: 20px">
-		<a href="${pageContext.request.contextPath}/private/workspace/create" class="btn btn-success" title="New Workspace"><i class="icon-plus"></i> New Workspace</a>
-		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary"><i class="icon-cloud"></i> Graph View</a>			
+		<a href="${pageContext.request.contextPath}/private/workspace/create" class="btn btn-primary" title="New Workspace"><i class="icon-plus"></i> New Workspace</a>			
 	</div>
 </div>
 </div>

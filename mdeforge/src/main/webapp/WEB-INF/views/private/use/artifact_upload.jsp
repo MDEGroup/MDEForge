@@ -59,22 +59,30 @@
 					<!-- // Column END -->
 					</div>
 					<div class="span6">
-						<h5 class="input-name center">Upload ${artifact.getClass().getSimpleName()} File</h5>
-						<label for="artifactName"><div><img width="150px" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/newfile.png"></div></label>
-						<div class="fileupload fileupload-new" data-provides="fileupload">
-							  	<div class="input-append center" style="width: 100%">
-							  		<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
-								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" id="artifactName" class="margin-none" name="artifactfile" size="40"/>
-							    	</span>
-							    	<div class="uneditable-input center"><i class="icon-file fileupload-exists"></i> 
-							    		<span class="fileupload-preview"></span>
-							    	</div>
+					 <div class="box__input">
+					    <input class="box__file" type="file" name="files[]" id="file" data-multiple-caption="{count} files selected" multiple />
+					    <label for="file"><strong>Choose a file</strong><span class="box__dragndrop"> or drag it here</span>.</label>
+					    <button class="box__button" type="submit">Upload</button>
+					  </div>
+					  <div class="box__uploading">Uploading&hellip;</div>
+					  <div class="box__success">Done!</div>
+					  <div class="box__error">Error! <span></span>.</div>
+<%-- 						<h5 class="input-name center">Upload ${artifact.getClass().getSimpleName()} File</h5> --%>
+<%-- 						<label for="artifactName"><div><img width="150px" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/newfile.png"></div></label> --%>
+<!-- 						<div class="fileupload fileupload-new" data-provides="fileupload"> -->
+<!-- 							  	<div class="input-append center" style="width: 100%"> -->
+<!-- 							  		<span class="btn btn-default btn-file"> -->
+<%-- 								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span> --%>
+<!-- 								    	<span class="fileupload-exists">Change</span> -->
+<!-- 								    	<input type="file" id="artifactName" class="margin-none" name="artifactfile" size="40"/> -->
+<!-- 							    	</span> -->
+<!-- 							    	<div class="uneditable-input center"><i class="icon-file fileupload-exists"></i>  -->
+<!-- 							    		<span class="fileupload-preview"></span> -->
+<!-- 							    	</div> -->
 							    	
-							    	<!-- <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>-->
-							  	</div>
-						</div>
+<!-- 							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a> -->
+<!-- 							  	</div> -->
+<!-- 						</div> -->
 						
 					</div>
 						<!-- // Row END -->
@@ -140,4 +148,112 @@
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/dynamicRow.js"></script>
 <script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+	  $('#domainMetamodelSelect').selectize({
+		    valueField: 'username',
+		    labelField: 'name',
+		    searchField: 'name',
+		    create: false,
+		    highlight: false,
+		    maxOptions: 100,
+		    loadThrottle: 200,
+		    render: {
+		        option: function(item, escape) {
+		        	console.log(item)
+		            return '<div>' +
+		                '<h5 class="text-black strong">' + item.name + '</h5>' +
+		                    '<span class="by">' + item.username + '</span>' +
+		            '</div>';
+		        }
+		    },
+		    load: function(query, callback) {
+		        if (!query.length) return callback();
+		        $.ajax({
+		            url: 'https://api.github.com/legacy/repos/search/' + encodeURIComponent(query),
+		            type: 'GET',
+		            error: function() {
+		                callback();
+		            },
+		            success: function(res) {
+		                callback(res.repositories.slice(0, 10));
+		            }
+		        });
+		    }
+		});
+	  $('#coDomainMetamodelSelect').selectize({
+		    valueField: 'username',
+		    labelField: 'name',
+		    searchField: 'name',
+		    create: false,
+		    highlight: false,
+		    maxOptions: 100,
+		    loadThrottle: 200,
+		    render: {
+		        option: function(item, escape) {
+		            return '<div>' +
+		                '<h5 class="text-black strong">' + escape(item.name) + '</h5>' +
+		                    '<span class="by">' + escape(item.username) + '</span>' +
+		            '</div>';
+		        }
+		    },
+		    /*score: function(search) {
+		        var score = this.getScoreFunction(search);
+		        return function(item) {
+		            return score(item) * (1 + Math.min(item.watchers / 100, 1));
+		        };
+		    },*/
+		    load: function(query, callback) {
+		        if (!query.length) return callback();
+		        $.ajax({
+		            url: 'https://api.github.com/legacy/repos/search/' + encodeURIComponent(query),
+		            type: 'GET',
+		            error: function() {
+		                callback();
+		            },
+		            success: function(res) {
+		                callback(res.repositories.slice(0, 10));
+		            }
+		        });
+		    }
+		});
+	  $('#conformMetamodelSelect').selectize({
+		    valueField: 'username',
+		    labelField: 'name',
+		    searchField: 'name',
+		    create: false,
+		    highlight: false,
+		    maxOptions: 100,
+		    loadThrottle: 200,
+		    render: {
+		        option: function(item, escape) {
+		            return '<div>' +
+		                '<h5 class="text-black strong">' + escape(item.name) + '</h5>' +
+		                    '<span class="by">' + escape(item.username) + '</span>' +
+		            '</div>';
+		        }
+		    },
+		    /*score: function(search) {
+		        var score = this.getScoreFunction(search);
+		        return function(item) {
+		            return score(item) * (1 + Math.min(item.watchers / 100, 1));
+		        };
+		    },*/
+		    load: function(query, callback) {
+		        if (!query.length) return callback();
+		        $.ajax({
+		            url: 'https://api.github.com/legacy/repos/search/' + encodeURIComponent(query),
+		            type: 'GET',
+		            error: function() {
+		                callback();
+		            },
+		            success: function(res) {
+		                callback(res.repositories.slice(0, 10));
+		            }
+		        });
+		    }
+		});
+
+  })
+</script>
 	

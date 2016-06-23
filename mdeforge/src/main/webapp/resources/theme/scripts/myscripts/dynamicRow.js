@@ -128,10 +128,10 @@ $(function() {
     $('#conformMetamodelSelect').filterByText($('#filterMMTextBox'), true);
 });
 
-$(function() {
+/*$(function() {
 	$('#coDomainMetamodelSelect').filterByText($('#filterMMCoDomainTextBox'), true);
 });
 
 $(function() {
 	$('#domainMetamodelSelect').filterByText($('#filterMMDomainTextBox'), true);
-});
+});*/
