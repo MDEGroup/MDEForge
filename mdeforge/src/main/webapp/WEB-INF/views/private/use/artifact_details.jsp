@@ -41,7 +41,6 @@
 		<span class="text-primary" style="font-size: 16px">Last Modified</span>
 		<h5><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getModified()}" /></h5>
 	<div class="separator bottom"></div>
-<<<<<<< Updated upstream
 	<c:if test="${artifact.getClass().getSimpleName()} == 'EcoreMetamodel'">
 		<c:choose>
 			<c:when test="${artifact.getUri().size() > 0}">
@@ -53,20 +52,6 @@
 					<p class="text-error">It has not been assigned any URI</p>
 			</c:otherwise>
 		</c:choose>
-=======
-	<c:catch var="exeption">${artifact.getUri()}</c:catch>
-	<c:if test="exception == null">
-	<c:choose>
-		<c:when test="${artifact.getUri().size() > 0}">
-			<c:forEach items="${artifact.getUri()}" var="uri">
-					<p><span class="text-primary">URI</span>: ${uri}</p>
-			</c:forEach>
-		</c:when>
-		<c:otherwise>
-				<p class="text-error">It has not been assigned any URI</p>
-		</c:otherwise>
-	</c:choose>
->>>>>>> Stashed changes
 	</c:if>
 	<h5 class="input-name">Properties</h5>
 	<c:forEach items="${artifact.properties}" var="property">
