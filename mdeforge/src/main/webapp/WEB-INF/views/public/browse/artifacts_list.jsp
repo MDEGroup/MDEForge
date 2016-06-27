@@ -24,65 +24,16 @@
 		<div class="widget-body">
 		
 			<!-- Table -->
-			<table class="dynamicTable tableTools table table-striped table-bordered table-condensed table-white">
-			
-				<!-- Table heading -->
+			<table id="artList">
 				<thead>
-					<tr>						
-						<th>Name</th>
-						<th>Description</th>
-						<th>Author</th>
-						<th>Type</th>
-						<th>Open</th>
-						<th>Created</th>
-						<th>Modified</th>
+					<tr>
+						<th>First Column</th>
+						<th>Second Column</th>
 						<th>Action</th>
+						<th>Author</th>
 					</tr>
 				</thead>
-				<!-- // Table heading END -->
-				
-				<!-- Table body -->
-				<tbody>
-					<c:forEach items="${ecoreMetamodelsList}" var="ecoreMetamodel">
-					<!-- Table row -->
-					<tr class="gradeX">						
-						<td>
-							<c:choose>
-  								<c:when test="${ecoreMetamodel.getOpen()}">
-									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/artifact?artifact_id=${ecoreMetamodel.getId()}">${ecoreMetamodel.getName()}</a>
-								</c:when>
-								<c:otherwise>${ecoreMetamodel.getName()}</c:otherwise>
-							</c:choose>
-						</td>
-						<td>
-							<c:forEach items="${ecoreMetamodel.properties}" var="property">
-								<c:if test="${property.getName() == 'Description '}">
-										${property.getValue()}
-								</c:if>
-							</c:forEach>
-						</td>
-						
-						<td class="center">${ecoreMetamodel.getAuthor().getUsername()}</td>
-						<td class="center">${ecoreMetamodel.getClass().getSimpleName()}</td>
-						<td class="center">${ecoreMetamodel.getOpen()}</td>
-						<td class="center">${ecoreMetamodel.getCreated()}</td>
-						<td class="center">${ecoreMetamodel.getModified()}</td>
-						<td class="center actions">
-								<c:choose>
-  								<c:when test="${ecoreMetamodel.getOpen()}">
-									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/artifact?artifact_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons eye_open btn-default" title="Metamodel Details"><i></i></a>																	
-									<a href="${pageContext.request.contextPath}/public/${ecoreMetamodel.getClass().getSimpleName()}/download?artifact_id=${ecoreMetamodel.getId()}" class="btn-action glyphicons download_alt btn-success" title="Metamodel Download"><i></i></a>														
-								</c:when>
-								<c:otherwise>
-									<span class="glyphicons icon-lock" title="Metamodel Lock"><i></i></span>														
-								</c:otherwise>
-							</c:choose>
-						</td>
-					</tr>
-					<!-- // Table row END -->
-					</c:forEach>
-				</tbody>
-				<!-- // Table body END -->		
+				<tbody></tbody>			
 			</table>
 			<!-- // Table END -->
 			
@@ -90,4 +41,32 @@
 	</div>
 	
 </div>	
-	
+<script>
+$(document).ready(function () {
+	$('#artList').dataTable({
+		"sorting": [[ 0, "asc" ]],
+		"processing": true,
+		"serverSide": true,
+		"filter" : false,
+		"columns":[
+	                {"data":"id"},
+	                {"data":"name"},
+	                {"data": "action",
+	                    "searchable": false,
+	                    "sortable": false,
+	                    "defaultContent": "",
+	                    "render": function ( data, type, row, meta ) {
+	                    	return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
+	                     }
+	                 },
+	                 {"data": "author.username"}
+	                
+        ],
+        "ajax": {
+		    "url": "${pageContext.request.contextPath}/public/EcoreMetamodel/artifactsRest",
+		}		
+	});              
+});
+</script>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>	

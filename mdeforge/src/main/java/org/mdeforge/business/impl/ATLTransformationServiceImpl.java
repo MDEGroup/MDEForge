@@ -288,18 +288,18 @@ public class ATLTransformationServiceImpl extends
 		Page<ATLTransformation> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = ATLTransformationRepository.findAll(new PageRequest(
-					requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.ASC, requestGrid
+					requestGrid.getStart()
+							/ requestGrid.getLength(), requestGrid
+							.getLength(), Direction.ASC, requestGrid
 							.getSortCol()));
 		} else {
 			rows = ATLTransformationRepository.findAll(new PageRequest(
-					requestGrid.getiDisplayStart()
-							/ requestGrid.getiDisplayLength(), requestGrid
-							.getiDisplayLength(), Direction.DESC, requestGrid
+					requestGrid.getStart()
+							/ requestGrid.getLength(), requestGrid
+							.getLength(), Direction.DESC, requestGrid
 							.getSortCol()));
 		}
-		return new ResponseGrid<ATLTransformation>(requestGrid.getsEcho(),
+		return new ResponseGrid<ATLTransformation>(requestGrid.getDraw(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}

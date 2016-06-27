@@ -10,16 +10,21 @@ import javax.servlet.http.HttpServletResponse;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.RequestGrid;
+import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
+import org.mdeforge.integration.ArtifactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +39,8 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired 
 	protected User user;
+	@Autowired
+	private ArtifactRepository artifactRepository;
 
 	@RequestMapping(value = "/artifact", method =  RequestMethod.GET )
 	public String details(Model model, @RequestParam String artifact_id) {
@@ -72,32 +79,21 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 
 	@RequestMapping(value = "/artifacts", method = { RequestMethod.GET })
 	public String artifactList(Model model) {
-		List<T> ecoreMetamodelsList = artifactService.findAll();
-		model.addAttribute("ecoreMetamodelsList", ecoreMetamodelsList);
 		return "public.browse.artifacts_list";
+	}
+
+	@RequestMapping(value = "/artifactsRest", method = { RequestMethod.GET })
+	public  @ResponseBody ResponseGrid<T> artifactListPaginated(
+			@ModelAttribute RequestGrid requestGrid) {
+		return artifactService.findAll(requestGrid);
 	}
 	
 	@RequestMapping(value = "/comment", method = { RequestMethod.POST })
 	public String create(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifat, Model model) {
-		//workspaceValidator.validate(comment, bindingResult);
-		//if (bindingResult.hasErrors()) {
 		comment.setUser(user);
+		Artifact art = artifactService.findOne(idArtifat);
 		artifactService.addComment(comment,idArtifat);
-		return "redirect:/public/EcoreMetamodel/artifact?artifact_id=" + idArtifat;
-//		} else {
-//			try {
-//				comment.setUser(user);
-//				//workspaceService.create(comment);
-//				artifactService.addComment(comment);
-//				return "redirect:/private/workspace/list";
-//			} catch (BusinessException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//				return "redirect:/admin/dashboard";
-//			}
-//		}
-			
-
+		return "redirect:/public/"+ art.getClass().getSimpleName() +"/artifact?artifact_id=" + idArtifat;
 	}
 	
 	@RequestMapping(value = "/artifact_name", method = { RequestMethod.GET })

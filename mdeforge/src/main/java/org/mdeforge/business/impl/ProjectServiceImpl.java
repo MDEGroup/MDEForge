@@ -41,12 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectRepository projectRepository;
 
 	@Autowired
-	private EcoreMetamodelRepository ecoreMetamodelRepository;
-	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
-	
-	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
 	
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
@@ -106,14 +101,14 @@ public class ProjectServiceImpl implements ProjectService {
 		Page<Project> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = projectRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()));
 		} else {
 			rows = projectRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
 		}
-		return new ResponseGrid<Project>(requestGrid.getsEcho(),
+		return new ResponseGrid<Project>(requestGrid.getDraw(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}

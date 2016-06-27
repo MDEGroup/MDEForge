@@ -104,13 +104,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		Page<Workspace> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()));
 		} else
 			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
-		return new ResponseGrid<Workspace>(requestGrid.getsEcho(),
+		return new ResponseGrid<Workspace>(requestGrid.getDraw(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
@@ -121,13 +121,13 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		Page<Workspace> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()), user.getId());
 		} else
 			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart(), requestGrid.getiDisplayLength(),
+					.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
-		return new ResponseGrid<Workspace>(requestGrid.getsEcho(),
+		return new ResponseGrid<Workspace>(requestGrid.getDraw(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}

@@ -224,4 +224,9 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 		EcoreMetamodel ecoreMetamodel = ecoreMetamodelService.findOneByName(name);
 		return "redirect:/public/EcoreMetamodel/artifact?artifact_id="+ ecoreMetamodel.getId();
 	}
+	@Override
+	public String artifactList(Model model) {
+		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
+		return super.artifactList(model);
+	}
 }

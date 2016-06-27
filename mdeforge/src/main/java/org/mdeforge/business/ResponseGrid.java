@@ -4,53 +4,49 @@ import java.util.List;
 
 public class ResponseGrid<R> implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1995083614992165731L;
-	private String sEcho;
-	private long iTotalRecords;
-	private long iTotalDisplayRecords;
-	private List<R> rows;
+	private String draw;
+	private long recordsTotal;
+	private long recordsFiltered;
+	private List<R> data;
 
-	public ResponseGrid(String sEcho, long iTotalRecords, long iTotalDisplayRecords, List<R> rows) {
+	public ResponseGrid(String draw, long recordsTotal, long recordsFiltered, List<R> data) {
 		super();
-		this.sEcho = sEcho;
-		this.iTotalRecords = iTotalRecords;
-		this.iTotalDisplayRecords = iTotalDisplayRecords;
-		this.rows = rows;
+		this.draw = draw;
+		this.recordsTotal = recordsTotal;
+		this.recordsFiltered = recordsFiltered;
+		this.data = data;
 	}
 
-	public String getsEcho() {
-		return sEcho;
+	public String getDraw() {
+		return draw;
 	}
 
-	public void setsEcho(String sEcho) {
-		this.sEcho = sEcho;
+	public void setDraw(String draw) {
+		this.draw = draw;
 	}
 
-	public long getiTotalRecords() {
-		return iTotalRecords;
+	public long getRecordsTotal() {
+		return recordsTotal;
 	}
 
-	public void setiTotalRecords(long iTotalRecords) {
-		this.iTotalRecords = iTotalRecords;
+	public void setRecordsTotal(long recordsTotal) {
+		this.recordsTotal = recordsTotal;
 	}
 
-	public long getiTotalDisplayRecords() {
-		return iTotalDisplayRecords;
+	public long getRecordsFiltered() {
+		return recordsFiltered;
 	}
 
-	public void setiTotalDisplayRecords(long iTotalDisplayRecords) {
-		this.iTotalDisplayRecords = iTotalDisplayRecords;
+	public void setRecordsFiltered(long recordsFiltered) {
+		this.recordsFiltered = recordsFiltered;
 	}
 
-	public List<R> getRows() {
-		return rows;
+	public List<R> getData() {
+		return data;
 	}
 
-	public void setRows(List<R> rows) {
-		this.rows = rows;
+	public void setData(List<R> data) {
+		this.data = data;
 	}
 
 }

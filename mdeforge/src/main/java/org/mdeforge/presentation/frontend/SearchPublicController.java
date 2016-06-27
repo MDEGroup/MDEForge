@@ -34,23 +34,7 @@ public class SearchPublicController {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
-	private SimilarityRelationService similarityRelationService;
-	@Autowired
-	private ContainmentRelationService containmentRelationService;
-	@Autowired
-	private CosineSimilarityRelationService cosineSimilarityRelationService;
-	@Autowired
-	private DiceSimilarityRelationService diceSimilarityRelationService;
-	@Autowired
-	private GridFileMediaService gridFileMediaService;
-	@Autowired
-	private UserService userService;
-	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
-	@Autowired
-	private ModelService modelService;
-	@Autowired
-	private ATLTransformationService aTLTransformationService;
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model) {

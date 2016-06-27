@@ -40,6 +40,8 @@ import org.mdeforge.business.CRUDRelationService;
 import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.RequestGrid;
+import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
@@ -76,6 +78,157 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
+	@Override
+	public ResponseGrid<T> findAll(RequestGrid pag) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		List<T> res = null;
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			res = n.find(query, persistentClass);
+			total = n.count(new Query(c), persistentClass);
+			
+		} else {
+			res = n.find(query, persistentClass);
+			total = n.count(new Query(), persistentClass);
+		}
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+	
+
+	@Override
+	public ResponseGrid<T> findAllPublic(RequestGrid pag) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		Criteria c2 = Criteria.where("open").is(true);
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c1 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			Query q2 = new Query();
+			q2.addCriteria(c1);
+			q2.addCriteria(c2);
+			total = n.count(q2, persistentClass);
+		} else {
+			query.addCriteria(c2);
+			total = n.count(new Query(c2), persistentClass);
+		}
+		List<T> res = n.find(query, persistentClass);
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
+	public ResponseGrid<T> findAllSharedByUser(User user, RequestGrid pag) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		Criteria c2 = Criteria.where("author.$id").is(new ObjectId(user.getId()));
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c3 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c3.orOperator(c2, c1));
+			total = n.count(new Query(c3.orOperator(c2,c1)), persistentClass);
+		} else {
+			query.addCriteria(new Criteria().orOperator(c1, c2));
+			total = n.count(new Query(new Criteria().orOperator(c1, c2)), persistentClass);
+		}
+		List<T> res = n.find(query, persistentClass);
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
+	public ResponseGrid<T> findAllWithPublicByUser(User user, RequestGrid pag) throws BusinessException {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		Criteria c1 = Criteria.where("shared.$id").is(new ObjectId(user.getId()));
+		Criteria c2 = Criteria.where("open").is(true);
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c3 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c3.orOperator(c2, c1));
+			total = n.count(new Query(c3.orOperator(c2, c1)), persistentClass);
+		} else {
+			query.addCriteria(new Criteria().orOperator(c2));
+			total = n.count(new Query(new Criteria().orOperator(c2)), persistentClass);
+		}
+		List<T> res = n.find(query, persistentClass);
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
+	public ResponseGrid<T> findArtifactInProject(String idProject, User user, RequestGrid pag) {
+		projectService.findById(idProject, user);
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		Criteria c1 = Criteria.where("projects.$id").is(idProject);
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			total = n.count(new Query().addCriteria(c1).addCriteria(c2), persistentClass);
+		} else { 
+			query.addCriteria(c1);
+			total = n.count(new Query(c1), persistentClass);
+		}
+		List<T> res = n.find(query, persistentClass);
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
+	public ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag) {
+		workspaceService.findById(idWorkspace, user);
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c1);
+			query.addCriteria(c2);
+			total = n.count(new Query().addCriteria(c1).addCriteria(c2), persistentClass);
+		} else {
+			query.addCriteria(c1);
+			total = n.count(new Query(c1), persistentClass);
+		}
+		List<T> res = n.find(query, persistentClass);
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
+	public ResponseGrid<T> findSharedNoProject(User user, RequestGrid pag) throws BusinessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 	@Override
 	public void addComment(Comment comment, String idArtifact) throws BusinessException {
 		T art = findOne(idArtifact);

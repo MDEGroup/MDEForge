@@ -47,11 +47,11 @@ public class EditorServiceImpl implements EditorService {
 	public ResponseGrid<Editor> findAllPaginated(RequestGrid requestGrid) throws BusinessException {
 		Page<Editor>  rows = null;
 		if (requestGrid.getSortDir().compareTo("asc")==0){
-			rows = editorRepository.findAll(new PageRequest(requestGrid.getiDisplayStart(), requestGrid.getiDisplayLength(),Direction.ASC, requestGrid.getSortCol()));
+			rows = editorRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),Direction.ASC, requestGrid.getSortCol()));
 		}else{
-			rows = editorRepository.findAll(new PageRequest(requestGrid.getiDisplayStart(), requestGrid.getiDisplayLength(),Direction.DESC, requestGrid.getSortCol()));
+			rows = editorRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),Direction.DESC, requestGrid.getSortCol()));
 		}
-		return new ResponseGrid<Editor>(requestGrid.getsEcho(), rows.getNumberOfElements(), rows.getTotalElements(), rows.getContent());
+		return new ResponseGrid<Editor>(requestGrid.getDraw(), rows.getNumberOfElements(), rows.getTotalElements(), rows.getContent());
 	}
 	
 	@Override

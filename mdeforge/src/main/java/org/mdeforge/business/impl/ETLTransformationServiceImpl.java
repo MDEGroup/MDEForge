@@ -88,16 +88,16 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 		Page<ETLTransformation> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
 			rows = ETLTransformationRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart() / requestGrid.getiDisplayLength(),
-					requestGrid.getiDisplayLength(), Direction.ASC, requestGrid
+					.getStart() / requestGrid.getLength(),
+					requestGrid.getLength(), Direction.ASC, requestGrid
 							.getSortCol()));
 		} else {
 			rows = ETLTransformationRepository.findAll(new PageRequest(requestGrid
-					.getiDisplayStart() / requestGrid.getiDisplayLength(),
-					requestGrid.getiDisplayLength(), Direction.DESC,
+					.getStart() / requestGrid.getLength(),
+					requestGrid.getLength(), Direction.DESC,
 					requestGrid.getSortCol()));
 		}
-		return new ResponseGrid<ETLTransformation>(requestGrid.getsEcho(),
+		return new ResponseGrid<ETLTransformation>(requestGrid.getDraw(),
 				rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}

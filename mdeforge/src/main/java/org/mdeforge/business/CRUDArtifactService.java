@@ -15,12 +15,18 @@ public interface CRUDArtifactService <T extends Artifact> {
 	//void delete(String idArtifact, User idUser) throws BusinessException;
 	void update(T artifact) throws BusinessException;
 	List<T> findAll() throws BusinessException;
+	ResponseGrid<T> findAll(RequestGrid pag) throws BusinessException;
 	List<T> findSharedNoProject(User user) throws BusinessException;
+	ResponseGrid<T> findSharedNoProject(User user, RequestGrid pag) throws BusinessException;
 	T findOne(String id) throws BusinessException;	
 	List<T> findAllWithPublicByUser(User user) throws BusinessException;
+	ResponseGrid<T> findAllWithPublicByUser(User user, RequestGrid pag) throws BusinessException;
 	List<T> findAllPublic() throws BusinessException;
+	ResponseGrid<T> findAllPublic(RequestGrid pag) throws BusinessException;
 	List<T> findArtifactInProject(String idProject, User user);
+	ResponseGrid<T> findArtifactInProject(String idProject, User user, RequestGrid pag);
 	List<T> findArtifactInWorkspace(String idWorkspace, User user);
+	ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag);
 	boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)	throws BusinessException;
 	boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException;
 	boolean isArtifactInUser(User idUser, String idArtfact)	throws BusinessException;
@@ -42,6 +48,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
 	List<T> findAllSharedByUser(User user);
+	ResponseGrid<T> findAllSharedByUser(User user, RequestGrid pag);
 	User addUserInPublicArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	T findOneInProject(String project_id, String artifact_id, User user) throws BusinessException;
 	List<Metric> findMetric(String idArtifact, User user) throws BusinessException;
