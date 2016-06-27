@@ -51,7 +51,12 @@
 	<span class="btn btn-block btn-primary" id="showProjectAdd">Create New Project</span>
 	<div id="createProject" class="innerT form-horizontal" style="display: none">
 							<input type="text" placeholder="Project name"
-								id="createProjectName">
+								id="createProjectName" style="width: 70%">
+							<select name="public" style="width: 30%">
+								<option value="">Select Visibility</option>
+								<option value="false">Private</option>
+								<option value="true">Public</option>
+							</select>
 							<span class="btn btn-block btn-success" id="addNewProject">Create</span>
 					</div>
 </div>
@@ -75,8 +80,10 @@
 					<!-- Accordion Item -->
 					<div class="accordion-group">
 						<div class="accordion-heading">
-							<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-1">
+							<a class="accordion-toggle" id="navigator-accordion" data-toggle="collapse" data-parent="#accordion" href="#collapse-1">
 								<span class="results"><i class="icon-ellipsis-vertical"></i> Navigator</span>
+								<span id="navigator-open" class="pull-right">Open <i class="icon-angle-down"></i></span>
+								<span id="navigator-close" class="pull-right">Close <i class="icon-angle-up"></i></span>
 							</a>
 					    </div>
 					    <div id="collapse-1" class="accordion-body in collapse" style="height: auto;">
@@ -123,7 +130,7 @@
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
 								</div>
 								<div class="span4">
-									<span id="removeProject" class="btn btn-danger remove-project pull-right" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete</span>
+									<span id="removeProject" class="btn btn-danger remove-project pull-right" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>
 									<div class="separator"></div>
 								</div>
 							</div>
@@ -163,12 +170,8 @@
 									
 									<div id="ATLToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<select id="ATLSelect">
-											<option value="" selected disabled>Search Metamodels</option>
-										</select>
-										<div>
-											<span class="btn btn-block btn-primary" id="addATL">Add</span>
-										</div>
+										<input id="ATLSelect" class="my-select" type="text" data-type="atl">
+										<span class="btn btn-block btn-primary" id="addATL">Add</span>
 									</div>
 									<div class="separator bottom"></div>
 									<table class="table table-condensed" id="atlTable">
@@ -184,9 +187,7 @@
 									<h5 class="input-name">Models <i class="pull-right icon-plus text-primary button-toggle" id="showModelList"></i></h5>
 									<div id="modelToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<select id="modelSelect">
-											<option value="" selected disabled>Search Metamodels</option>
-										</select>
+										<input id="modelSelect" class="my-select" type="text" data-type="model">
 										<div>
 											<span class="btn btn-block btn-primary" id="addModel">Add</span>
 										</div>
@@ -232,6 +233,9 @@
 			</div>
 
 </div>
+<div class="separator "></div>
+<div class="separator "></div>
+<div class="separator "></div>
 <div class="separator "></div>
 <div class="separator "></div>
 <div class="separator "></div>

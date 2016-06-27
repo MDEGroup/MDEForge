@@ -23,10 +23,10 @@
 						<div class="span6"><label>Password</label></div> 
 						<div class="span6">
 						<a class="password forgot-password" href="#"><strong>Forgot your password?</strong></a>
-						</div> 
+						</div>  
 						</div>
 						<input type="password" name="j_password" class="input-block-level" placeholder="Your Password" />
-						<div class="uniformjs"><label class="checkbox"><input type="checkbox" value="remember-me">Remember me</label></div>
+						<div class="uniformjs"><label class="checkbox"><input type="checkbox" value="remember-me" style="margin: 4px 10px 0 0">Remember Me</label></div>
 						
 						<div class="separator bottom"></div> 
 						<div class="row-fluid">

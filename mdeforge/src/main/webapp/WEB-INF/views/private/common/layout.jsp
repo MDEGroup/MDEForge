@@ -190,7 +190,7 @@
 	<!-- Ba-Resize Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery.ba-resize.js"></script>
 	<!-- Select2 Plugin -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/selectize/js/standalone/selectize.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/selectize/js/standalone/selectize.js"></script>
 	<!--  Flot Charts Plugin 
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.pie.js"></script>

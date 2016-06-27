@@ -117,6 +117,7 @@
 		else {
 			$('#modelToAdd').hide();
 			$(this).removeClass("rotate-item");
+			modelselect[0].selectize.clearOptions()
 		}
 	}
 	
@@ -129,13 +130,14 @@
 				ids.push(this.id);
 			});
 			
-			$('#ATLSelect').html('<option value="" selected disabled>Search ATL Transformations</option>');
+			//$('#ATLSelect').html('<option value="" selected disabled>Search ATL Transformations</option>');
 			$('#ATLToAdd').show();
 					//$(document).on('click','#showATLList', showATLList); perchè altro listener?
 		}
 		else {
 			$('#ATLToAdd').hide();
 			$(this).removeClass("rotate-item");
+			atlselect[0].selectize.clearOptions()
 		}
 	}
 	$('#showEcoreList').click(showEcoreList);
@@ -156,6 +158,7 @@
 		else {
 			$('#ecoreToAdd').hide();
 			$(this).removeClass("rotate-item");
+			ecoreselect[0].selectize.clearOptions()
 		}
 	}
 	
@@ -423,56 +426,56 @@
 			$(this).removeClass('rotate-item');
 		}
 	});
-	
 /* SELECT AJAX */
-	
-	
-	$(document).ready(function(){
-		$('#ecoreSelect').selectize({
-		    valueField: 'id',
-		    labelField: 'name',
-		    searchField: 'name',
-		    create: false,
-		    highlight: false,
-		    maxOptions: 100,
-		    loadThrottle: 200,
-		    render: {
-		        option: function(item, escape) {
-		            return '<div>' +
+initSelects($('.my-select'));
+function initSelects(select){
+	//select is a text input
+	select.each(function(e){
+		$(this).after('<div class="my-select-control">' + 
+					'<div class="my-select-dropdown">' + 
+						'<div class="my-select-content">' + 
+		                '</div></div></div>');
+		$(this).data("target", $(this).next())
+	});
+}
+$('.my-select').focus(function(e){
+	var dropdown = $(this).data("target");
+	dropdown.show("fast")
+})
+$('.my-select').keypress(function(e){
+	getArtifactsForProject("ecore", $(this).data("project"), $(this).val())
+})
+function getArtifactsForProject(typeArtifact, project, query){
+	//project is to ignore artifacts for that project
+	//if project is null all artifacts will be retrived
+	//typeArtifact can be "ecore", "atl", "model"
+	//input is the html element where results will be append
+	$.ajax({
+	    type: "POST",
+	    url: 'http://localhost:8080/mdeforge/public/searchArtifact',
+	    data: {
+        	search_string: query,
+        	idProject: project,
+        	type: typeArtifact,
+        	limit: 50
+        },
+	    dataType:'json',
+	    success: function(data) {
+	    	console.log(data)
+	       var options = '';    
+
+	       for(var i=0;i<data.length; i++)
+	       {
+	        options += '<div>' +
 		                '<h5 class="text-black strong">' + escape(item.name) + '</h5>' +
 		                    '<span class="by">' + escape(item.username) + '</span>' +
-		            '</div>';
-		        }
-		    },
-		    /*score: function(search) {
-		        var score = this.getScoreFunction(search);
-		        return function(item) {
-		            return score(item) * (1 + Math.min(item.watchers / 100, 1));
-		        };
-		    },*/
-		    load: function(query, callback) {
-		        if (!query.length) return callback();
-		        $.ajax({
-		            url: 'http://localhost:8080/mdeforge/public/searchArtifact',
-		            type: 'POST',
-		            data: {
-		            	search_string: query
-		            },
-		            error: function(res) {
-		            	console.log(res)
-		                callback();
-		                //searching text gets
-		                //no data available
-		            },
-		            success: function(res) {
-		            	console.log(res)
-		            	//remove searching text
-		                callback(res.repositories.slice(0, 10));
-		            }
-		        });
-		    },
-		    onType: function(){
-		    	//searching
-		    }
-		});
-	})
+		            '</div>';              
+	       }
+
+	       //select.append(options);
+	    },
+	    error: function(res){
+	    	console.log(res)
+	    }
+	});
+}

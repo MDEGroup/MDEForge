@@ -17,7 +17,7 @@
 
 
 
-<h3 class="header-h main-title">${pageName}</h3>
+<h3 class="header-h main-title">${Title}</h3>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 
 	
@@ -75,7 +75,6 @@
 								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default" title="See Artifact Details"><i></i></a>-->
 								<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/artifact_download?artifact_id=${artifact.getId()}" class="btn-action center download_alt" title="Artifact Download">Download</a>
 									
-								
 								
 																									
 						</td>

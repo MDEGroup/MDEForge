@@ -2020,7 +2020,13 @@
 			return {
 				fields      : settings.searchField,
 				conjunction : settings.searchConjunction,
-				sort        : sort
+				sort        : sort,
+				// A patch to allow to disable native filtering, in the case,
+		        // when we want to provide search results on the server side.
+		        // Negative form of the setting is to avoid changing the standard
+		        // behaviour, (and, possibly, ruining the existing code), when this
+		        // parameter is missing.
+		        filter      : !settings.dontFilter
 			};
 		},
 	
