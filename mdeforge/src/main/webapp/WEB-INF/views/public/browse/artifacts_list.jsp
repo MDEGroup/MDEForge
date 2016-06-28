@@ -44,13 +44,14 @@
 <script>
 $(document).ready(function () {
 	$('#artList').dataTable({
-		"sorting": [[ 0, "asc" ]],
 		"processing": true,
 		"serverSide": true,
 		"filter" : false,
 		"columns":[
-	                {"data":"id"},
-	                {"data":"name"},
+	                {"data":"id",
+	                    "searchable": false,},
+	                {"data":"name",
+		                    "searchable": false,},
 	                {"data": "action",
 	                    "searchable": false,
 	                    "sortable": false,

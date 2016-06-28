@@ -105,4 +105,9 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 					}
 				});
 	}
+	@Override
+	public String artifactList(org.springframework.ui.Model model) {
+		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
+		return super.artifactList(model);
+	}
 }

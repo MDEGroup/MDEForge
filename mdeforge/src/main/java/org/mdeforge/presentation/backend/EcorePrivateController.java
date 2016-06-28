@@ -127,4 +127,10 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 		model.addAttribute("report", report);
 		return "redirect:/private/my_artifacts";
 	}
+	
+	@Override
+	public String artifactList(Model model) {
+		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
+		return super.artifactList(model);
+	}
 }

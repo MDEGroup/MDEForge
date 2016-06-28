@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.RequestGrid;
+import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,11 +84,13 @@ public abstract class ArtifactPrivateController<T extends Artifact> {
 	
 	@RequestMapping(value = "/artifacts", method = { RequestMethod.GET })
 	public String artifactList(Model model) {
-		List<T> artifactList = artifactService.findMyArtifacts(user);
-		model.addAttribute("sharedArtifactList", artifactList);
 		return "private.use.artifacts_list";
 	}
-	
+	@RequestMapping(value = "/artifactsRest", method = { RequestMethod.GET })
+	public  @ResponseBody ResponseGrid<T> artifactListPaginated(
+			@ModelAttribute RequestGrid requestGrid) {
+		return artifactService.findMyArtifacts(user, requestGrid);
+	}
 	@RequestMapping(value = "/upload", method = { RequestMethod.GET })
 	public String uploadNewArtifactStart(Model model) {
 		T emm;

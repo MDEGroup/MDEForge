@@ -226,4 +226,9 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 		return "private.use.transformation_details";
 	}
 
+	@Override
+	public String artifactList(Model model) {
+		model.addAttribute("type", ATLTransformation.class.getSimpleName());
+		return super.artifactList(model);
+	}
 }

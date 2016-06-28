@@ -79,6 +79,31 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	@Override
+	public ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Criteria userCriteria = Criteria.where("author.$id").is(new ObjectId(user.getId()));
+		Query query = new Query();
+		query.skip(pag.getStart());
+		query.limit(pag.getLength());
+		List<T> res;
+		long total = 0;
+		if (persistentClass != Artifact.class) {
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			query.addCriteria(userCriteria);
+			res = n.find(query, persistentClass);
+			total = n.count(new Query().addCriteria(c).addCriteria(userCriteria), persistentClass);
+		} else {
+			query.addCriteria(userCriteria);
+			res = n.find(query, persistentClass);
+			total = n.count(new Query().addCriteria(userCriteria), persistentClass);
+		}
+		return new ResponseGrid<>(pag.getDraw(), total, total, res);
+	}
+
+
+
+	@Override
 	public ResponseGrid<T> findAll(RequestGrid pag) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

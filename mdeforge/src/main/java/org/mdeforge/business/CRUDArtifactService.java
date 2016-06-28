@@ -43,6 +43,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	
 	T findOneByName(String name, User user) throws BusinessException;
 	List<T> findMyArtifacts(User user) throws BusinessException;
+	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag);
 	long countAll() throws BusinessException;
 	List<T> findRecentArtifacts() throws BusinessException;
 	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
