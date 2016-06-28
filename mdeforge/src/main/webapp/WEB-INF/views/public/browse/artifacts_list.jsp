@@ -27,8 +27,8 @@
 			<table id="artList">
 				<thead>
 					<tr>
-						<th>First Column</th>
-						<th>Second Column</th>
+						<th>Public</th>
+						<th>Name</th>
 						<th>Action</th>
 						<th>Author</th>
 					</tr>
@@ -48,20 +48,30 @@ $(document).ready(function () {
 		"serverSide": true,
 		"filter" : false,
 		"columns":[
-	                {"data":"id",
-	                    "searchable": false,},
-	                {"data":"name",
-		                    "searchable": false,},
-	                {"data": "action",
-	                    "searchable": false,
-	                    "sortable": false,
-	                    "defaultContent": "",
-	                    "render": function ( data, type, row, meta ) {
-	                    	return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
-	                     }
-	                 },
-	                 {"data": "author.username"}
-	                
+			{
+				"data":"open",
+			    "searchable": false,
+			    "sortable": false
+			},
+			{
+			    "data":"name",
+			    "searchable": false,
+			    "sortable": false
+			},
+			{
+				"data": "action",
+			    "searchable": false,
+			    "sortable": false,
+			    "defaultContent": "",
+			    "render": function ( data, type, row, meta ) {
+                	return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
+                 }
+			 },
+			 {
+				"data": "author.username",
+			    "searchable": false,
+			    "sortable": false
+			 }
         ],
         "ajax": {
 		    "url": "${pageContext.request.contextPath}/public/${type}/artifactsRest",

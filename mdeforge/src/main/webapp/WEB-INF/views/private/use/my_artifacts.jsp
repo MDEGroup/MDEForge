@@ -24,6 +24,14 @@
 		<div class="widget-body">
 			<!-- Table -->
 			<table id="artList">
+				<thead>
+					<tr>
+						<th>Public</th>
+						<th>Name</th>
+						<th>Action</th>
+						<th>Author</th>
+					</tr>
+				</thead>
 			</table>
 			<!-- // Table END -->
 		</div>
@@ -32,14 +40,22 @@
 <script>
 $(document).ready(function () {
 	$('#artList').dataTable({
-		"sorting": [[ 0, "asc" ]],
 		"processing": true,
 		"serverSide": true,
 		"filter" : false,
 		"columns":[
-	                {"data":"id"},
-	                {"data":"name"},
-	                {"data": "action",
+	                {
+	                	"data":"open",
+	                    "searchable": false,
+	                    "sortable": false
+	                },
+	                {
+	                    "data":"name",
+	                    "searchable": false,
+	                    "sortable": false
+	                },
+	                {
+	                	"data": "action",
 	                    "searchable": false,
 	                    "sortable": false,
 	                    "defaultContent": "",
@@ -47,8 +63,11 @@ $(document).ready(function () {
 	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
 	                     }
 	                 },
-	                 {"data": "author.username"}
-	                
+	                 {
+	                	"data": "author.username",
+	                    "searchable": false,
+	                    "sortable": false
+	                 }
         ],
         "ajax": {
 		    "url": "${pageContext.request.contextPath}/private/${type}/artifactsRest",

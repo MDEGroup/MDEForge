@@ -125,7 +125,7 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 			report = true;
 		}
 		model.addAttribute("report", report);
-		return "redirect:/private/my_artifacts";
+		return "/private/EcoreMetamodel/artifact?artifact_id=" + result.getId();
 	}
 	
 	@Override

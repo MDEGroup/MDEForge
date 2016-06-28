@@ -75,8 +75,8 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 		m.setCreated(new Date());
 		m.setAuthor(user);
 		m.setFile(gfm);
-		modelService.create(m);
-		return "redirect:/private/my_artifacts";
+		m = modelService.create(m);
+		return "/private/EcoreMetamodel/artifact?artifact_id=" + m.getId();
 	}
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {

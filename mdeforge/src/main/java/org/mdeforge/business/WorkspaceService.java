@@ -26,4 +26,5 @@ public interface WorkspaceService {
 	Project addNewProjectInWorkspace(String projectName, String idWorkspace,
 			User user) throws BusinessException;
 	List<Workspace> findByUser(User user) throws BusinessException;
+	Project addNewProjectInWorkspace(Project projectName, String idWorkspace, User user) throws BusinessException;
 }

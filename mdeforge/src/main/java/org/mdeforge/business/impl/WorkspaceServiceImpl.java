@@ -285,4 +285,18 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspaceRepository.save(w);
 		return p;
 	}
+	@Override
+	public Project addNewProjectInWorkspace(Project projectName,
+			String idWorkspace, User user) throws BusinessException {
+		user = userService.findOne(user.getId());
+		Workspace w = findById(idWorkspace, user);
+		
+		projectName.setModifiedDate(new Date());
+		projectName.setCreatedDate(new Date());
+		projectRepository.save(projectName);
+		user.getSharedProject().add(projectName);
+		w.getProjects().add(projectName);
+		workspaceRepository.save(w);
+		return projectName;
+	}
 }

@@ -80,6 +80,20 @@ public class WorkspaceController {
 		}
 	}
 	
+	////ù
+	@RequestMapping(value = "/{idWorkspace}/addNew", method=RequestMethod.POST, 
+			produces= MediaType.APPLICATION_JSON_VALUE)
+	
+	public @ResponseBody HttpEntity<Project> addNewProjectInWorkspace(@PathVariable("idWorkspace") String idWorkspace, @ModelAttribute Project projectName) {
+		try {
+			Project p = workspaceService.addNewProjectInWorkspace(projectName, idWorkspace, user);
+			return  new ResponseEntity<Project>(p, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return  new ResponseEntity<Project>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	
+	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model, @RequestParam String id) {
 
@@ -93,7 +107,9 @@ public class WorkspaceController {
 
 		Workspace workspace = workspaceService.findById(id, user);
 		List<Project> pl = projectService.findByUser(user);
-		
+		for (Project project : workspace.getProjects()) {
+			pl.remove(project);
+		}
 		model.addAttribute("workspace", workspace);
 		model.addAttribute("projects", pl);
 		
