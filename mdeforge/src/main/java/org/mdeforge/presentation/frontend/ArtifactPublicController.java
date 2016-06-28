@@ -3,7 +3,6 @@ package org.mdeforge.presentation.frontend;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,12 +14,7 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
-import org.mdeforge.integration.ArtifactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +33,7 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired 
 	protected User user;
-	@Autowired
-	private ArtifactRepository artifactRepository;
+
 
 	@RequestMapping(value = "/artifact", method =  RequestMethod.GET )
 	public String details(Model model, @RequestParam String artifact_id) {

@@ -1,16 +1,11 @@
 package org.mdeforge.presentation.backend;
 
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.CRUDArtifactService;
-import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.EditorService;
-import org.mdeforge.business.MetamodelService;
-import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Editor;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Project;
@@ -34,19 +29,19 @@ public class ProjectController {
 	
 	@Autowired
 	private WorkspaceService workspaceService;
-	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
-	
+//	@Autowired
+//	private EcoreMetamodelService ecoreMetamodelService;
+//	
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
 	private User user;
-	@Autowired
-	private MetamodelService metamodelService;
-	@Autowired
-	private ModelService modelService;
-	@Autowired
-	private CRUDArtifactService<Artifact> artifactService;
+//	@Autowired
+//	private MetamodelService metamodelService;
+//	@Autowired
+//	private ModelService modelService;
+//	@Autowired
+//	private CRUDArtifactService<Artifact> artifactService;
 	@Autowired
 	private EditorService editorService;
 	

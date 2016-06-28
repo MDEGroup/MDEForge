@@ -1,6 +1,5 @@
 package org.mdeforge.importer;
 
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -48,5 +47,6 @@ public class CountByMetric {
 		System.out.println("<15: " + count15 );
 		System.out.println("<20: " + count20 );
 		System.out.println("<25: " + count25 );
+		((ConfigurableApplicationContext)context).close();
 	}
 }

@@ -4,18 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mdeforge.business.ContainmentRelationService;
-import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SemanticSimilarityRelationService;
 import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ClusterizzationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -43,10 +39,10 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 	private SemanticSimilarityRelationService semanticSimilarityRelationService;
 	@Autowired
 	private DiceSimilarityRelationService diceSimilarityRelationService;
-	@Autowired
-	private GridFileMediaService gridFileMediaService;
-	@Autowired 
-	private User user;
+//	@Autowired
+//	private GridFileMediaService gridFileMediaService;
+//	@Autowired 
+//	private User user;
 
 	
 	

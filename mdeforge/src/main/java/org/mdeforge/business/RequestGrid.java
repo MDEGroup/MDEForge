@@ -1,6 +1,5 @@
 package org.mdeforge.business;
 
-import java.util.List;
 import java.util.Map;
 
 public class RequestGrid implements java.io.Serializable {

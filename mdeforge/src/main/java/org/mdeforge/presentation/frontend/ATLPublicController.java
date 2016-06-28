@@ -13,6 +13,7 @@ public class ATLPublicController extends ArtifactPublicController<ATLTransformat
 	@Override
 	public String artifactList(Model model) {
 		model.addAttribute("Title", "ATL Transformations");
+		model.addAttribute("type", ATLTransformation.class.getSimpleName());
 		return super.artifactList(model);
 	}
 	@Override

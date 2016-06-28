@@ -1,8 +1,6 @@
 package org.mdeforge.importer;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.integration.MetricRepository;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class ExtractATLMetricCSV {
@@ -70,6 +69,6 @@ public class ExtractATLMetricCSV {
 			out.println(body);
 		}
 		out.close();
-		
+		((ConfigurableApplicationContext)context).close();
 	}
 }

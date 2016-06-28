@@ -11,7 +11,6 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.User;
-import org.mdeforge.integration.RepositoryContentsRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -58,7 +57,7 @@ public class ImporterEcoreFromFS {
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
 		GridFileMediaService gfms = context.getBean(GridFileMediaService.class);
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
-		RepositoryContentsRepository repositoryContentsRepository = context.getBean(RepositoryContentsRepository.class);
+//		RepositoryContentsRepository repositoryContentsRepository = context.getBean(RepositoryContentsRepository.class);
 		User usr = new User();
 		usr.setId("5514b943d4c6c379396fe8b7");
 		File folder = new File("githubmetamodels");

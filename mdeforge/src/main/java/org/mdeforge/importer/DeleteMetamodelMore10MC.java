@@ -1,6 +1,5 @@
 package org.mdeforge.importer;
 
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -41,5 +40,6 @@ public class DeleteMetamodelMore10MC {
 				} catch (Exception e) {System.out.println("Error deleting");}
 			}
 		}
+		((ConfigurableApplicationContext)context).close();
 	}
 }

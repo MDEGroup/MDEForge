@@ -63,7 +63,7 @@ $(document).ready(function () {
 	                
         ],
         "ajax": {
-		    "url": "${pageContext.request.contextPath}/public/EcoreMetamodel/artifactsRest",
+		    "url": "${pageContext.request.contextPath}/public/${type}/artifactsRest",
 		}		
 	});              
 });

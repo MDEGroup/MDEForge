@@ -16,7 +16,6 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
-import org.mdeforge.integration.ATLTransformationRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -29,8 +28,8 @@ public class ImportTransformationFromFileSystem {
 				.getBean(EcoreMetamodelService.class);
 		ATLTransformationService atlTransformation = context
 				.getBean(ATLTransformationService.class);
-		ATLTransformationRepository atlRepo = context
-				.getBean(ATLTransformationRepository.class);
+//		ATLTransformationRepository atlRepo = context
+//				.getBean(ATLTransformationRepository.class);
 		GridFileMediaService gridFileMediaService = context
 				.getBean(GridFileMediaService.class);
 		User usr = new User();
