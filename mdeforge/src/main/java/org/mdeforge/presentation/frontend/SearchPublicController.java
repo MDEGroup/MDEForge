@@ -53,7 +53,7 @@ public class SearchPublicController {
 			 @RequestParam(value = "type") String type,
 			 @RequestParam(value = "limit") int limit,
 			 @RequestParam(value = "idProject", required = false) String idProject){
-	  searchString += " +forgeType:" + type;
+	  searchString += " AND forgeType:" + type;
 	  List<Artifact> searchResultComplete = artifactService.search(searchString, limit);
 	  
 	  //filter based on project: remove all the artifact present in the user project

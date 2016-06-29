@@ -403,7 +403,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			TopDocs hits = searcher.search(query, maxSearchResult);
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-			for (int i = 0; i < hits.totalHits; i++) {
+			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+			for (int i = 0; i < max; i++) {
 				int id = hits.scoreDocs[i].doc;
 				Document doc = searcher.doc(id);
 				String text = doc.get("text");
