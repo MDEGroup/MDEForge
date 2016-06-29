@@ -242,19 +242,9 @@ public class ProjectServiceImpl implements ProjectService {
 	public void removeArtifactFromProject(String idArtifact, String idProject,
 			User user) throws BusinessException {
 		Project proj = findById(idProject, user);
-		Artifact art = null;
-		for (Artifact project : proj.getArtifacts()) {
-			if (project.getId().equals(idArtifact))
-				art = project;
-		}
-		
-		Project projTemp = null;
-		for (Project project : art.getProjects()) {
-			if (project.getId().equals(idProject))
-				projTemp = project;
-		}
+		Artifact art = artifactService.findOneById(idArtifact, user);
 		proj.getArtifacts().remove(art);
-		art.getProjects().remove(projTemp);
+		art.getProjects().remove(proj);
 		artifactRepository.save(art);
 		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
@@ -265,21 +255,15 @@ public class ProjectServiceImpl implements ProjectService {
 			throws BusinessException {
 		Project proj = findById(idProject, user);
 		User userToDelete = userRepository.findOne(idUser);
-		User us = null;
-		for (User u : proj.getUsers()) {
-			if (u.equals(userToDelete))
-				us = userToDelete;
-		}
-		proj.getUsers().remove(us);
+		proj.getUsers().remove(userToDelete);
 		//TOGLIERE DAL PROGETTO IL WS
-		
-		us.getSharedProject().remove(proj);
-		for (Workspace w : us.getWorkspaces()) {
+		userToDelete.getSharedProject().remove(proj);
+		for (Workspace w : userToDelete.getWorkspaces()) {
 			w.getProjects().remove(proj);
 			workspaceRepository.save(w);
 			proj.getWorkspaces().remove(w);
 		}
-		userRepository.save(us);
+		userRepository.save(userToDelete);
 		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
 	}
