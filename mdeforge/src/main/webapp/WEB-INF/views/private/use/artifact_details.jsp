@@ -227,7 +227,7 @@
 <div class="modal modal-artifact hide fade" id="modal-simple">
 	  <div class="modal-header">
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    <h3>Metamodel</h3>
+	    <h3>${artifact.getName()}</h3>
 	  </div>
 	 	<pre class="prettyprint" style="margin: 0">
 	 		<code class="xml" style="font-size: 16px;line-height: 22px;font-weight: 400;">

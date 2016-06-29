@@ -37,8 +37,9 @@
 <div class="innerLR">
 <div class="row-fluid">
 <div class="span6">
-	<span class="btn btn-block btn-primary" id="showProjectList">Add Project</span>
+	<span class="btn btn-block btn-primary" id="showProjectList">Add Project <i class="icon-angle-down"></i></span>
 	<div id="projectsToAdd" class="innerT" style="display: none">
+	<h5 class="input-name center" style="margin: 0 0 10px;">Add Project to Workspace</h5>
 	<select id="projectSelect" style="width: 100%; margin-bottom: 15px;">
 		<c:forEach items="${projects}" var="proj">
 			<option value="${proj.getId() }">${proj.getName()}</option>
@@ -48,15 +49,16 @@
 	</div>
 </div>
 <div class="span6">
-	<span class="btn btn-block btn-primary" id="showProjectAdd">Create New Project</span>
+	<span class="btn btn-block btn-primary" id="showProjectAdd">Create New Project <i class="icon-angle-down"></i></span>
 	<div id="createProject" class="innerT form-horizontal" style="display: none">
-							<input type="text" placeholder="Project name"
-								id="createProjectName" style="width: 70%">
-							<select name="public" style="width: 30%">
-								<option value="">Select Visibility</option>
-								<option value="false">Private</option>
+	<h5 class="input-name center" style="margin: 0 0 10px;">Create New Project</h5>
+							<input type="text" placeholder="Project Name"
+								id="createProjectName" style="width: 65%; float: left;">
+							<select id="createProjectOpen" name="open" style="width: 30%; float: right;">
 								<option value="true">Public</option>
+								<option value="false">Private</option>
 							</select>
+							<textarea id="createProjectDesc" name="description" placeholder="Description"></textarea>
 							<span class="btn btn-block btn-success" id="addNewProject">Create</span>
 					</div>
 </div>
@@ -89,16 +91,14 @@
 					    <div id="collapse-1" class="accordion-body in collapse" style="height: auto;">
 					        	<div class="span12 listWrapper">							
 									
-									<ul class="list unstyled">
+									<ul class="list unstyled autoscroll" id="projectList">
 									<c:forEach items="${workspace.projects}" var="proj">
 											<li id="${proj.getId() }">
 											<div class="media innerAll">
 												<div class="media-object pull-left thumb"><img src="/mdeforge/resources/theme/images/logo-small.png" width="51px" height="51px"></div>
 												<div class="media-body">
-													<span class="strong text-black">${proj.getName()}</span>
+													<h5 class="strong text-black">${proj.getName()}</h5>
 													<span class="muted">${proj.getOwner().getUsername() }</span>
-													<a href="mailto:${proj.getOwner().getEmail() }"><i
-																class="icon-envelope"></i></a>
 												</div>
 											</div>
 											</li>
@@ -114,7 +114,7 @@
 	</div>
 	</div>
 					<!--  <span class="results">${workspace.getProjects().size() } Project <i class="icon-circle-arrow-down"></i></span>-->
-		<div class="separator"></div>
+		<hr class="separator">
 			<div class="row-fluid form-horizontal">
 				<div class="span12 detailsWrapper" id="details">
 					<div class="ajax-loading hide">
@@ -125,42 +125,42 @@
 							<div class="row-fluid">
 								<div class="span8" id="projectId">
 									<h3 class="text-primary header-h main-title" id="projectName"></h3>
-									<div class="separator"></div>
+									<div class="separator bottom"></div>
 									<p class="muted" id="artifactsNumber"></p>
 									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
 								</div>
-								<div class="span4">
-									<span id="removeProject" class="btn btn-danger remove-project pull-right" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>
-									<div class="separator"></div>
+								<div class="span4 text-right">
+								<h5 class="input-name">Visibility</h5>	
+								<div id="visibility">
+									<span class="btn btn-success"><i class="icon-cloud"></i> Public</span>
+								</div>					  												    
+								<div class="separator bottom"></div>
+								<h5 class="input-name">Owner</h5>
+								<!-- // Profile Photo END -->
+								<ul class="icons-ul">
+									<li><span id="ownerUsername"></span> <span class="icon-user text-primary"><i></i></span></li>
+									<li class="text-black" style="font-size: 14px" id="ownerName"></li>
+									<li><a href="#" id="ownerEmail"></a> <span class="icon-envelope text-primary"><i></i></span></li>
+								</ul>
+								<div class="separator"></div>
 								</div>
 							</div>
 							
 						</div>
-						<h5 class="input-name">Owner</h5>
-								<ul class="icons-ul" style="border-right: none;border-left: 2px solid #ededed;padding-left: 10px;margin: 10px 0;">
-									<li><span class="icon-user text-primary"><i></i></span> <span id="ownerUsername">Admin</span></li>
-									<li class="text-black" style="font-size: 14px" id="ownerName">Juri Di Rocco</li>
-									<li><span class="icon-envelope text-primary"><i></i></span> <a href="#" id="ownerEmail">juri.dirocco@univaq.it </a></li>
-								</ul>
-						<hr>
 						<div class="body">
 							<div class="row-fluid">
 								<div class="span3">
 									<h5 class="input-name">Ecore Metamodels <i class="pull-right icon-plus text-primary button-toggle" id="showEcoreList"></i></h5>
 									<div id="ecoreToAdd" style="display: none">
 										<div class="separator bottom"></div>
-										<select id="ecoreSelect">
-											<option value="" selected disabled>Search Metamodels</option>
-										</select>
-										<div>
-											<span class="btn btn-block btn-primary" id="addEcore">Add</span>
-										</div>
+										<input id="ecoreSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">
+										<span class="btn btn-block btn-primary" id="addEcore">Add</span>
 									</div>
 									<div class="separator bottom"></div>
-									<table class="table table-condensed" id="ecoreMMTable">
+									<table class="table table-striped" id="ecoreMMTable">
 										<tbody>
 											<tr>
-												<td>Lorem ipsum dolor</td>
+												<td></td>
 											</tr>
 										</tbody>
 									</table>
@@ -170,14 +170,14 @@
 									
 									<div id="ATLToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<input id="ATLSelect" class="my-select" type="text" data-type="atl">
+										<input id="ATLSelect" class="my-select" type="text" data-type="ATLTransformation" data-project="" placeholder="Search ATL Transformations">
 										<span class="btn btn-block btn-primary" id="addATL">Add</span>
 									</div>
 									<div class="separator bottom"></div>
-									<table class="table table-condensed" id="atlTable">
+									<table class="table table-striped" id="atlTable">
 										<tbody>
 											<tr>
-												<td>Lorem ipsum dolor</td>
+												<td></td>
 											</tr>
 										</tbody>
 									</table>
@@ -187,16 +187,16 @@
 									<h5 class="input-name">Models <i class="pull-right icon-plus text-primary button-toggle" id="showModelList"></i></h5>
 									<div id="modelToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<input id="modelSelect" class="my-select" type="text" data-type="model">
+										<input id="modelSelect" class="my-select" type="text" data-type="Model" placeholder="Search Models">
 										<div>
 											<span class="btn btn-block btn-primary" id="addModel">Add</span>
 										</div>
 									</div>
 									<div class="separator bottom"></div>
-									<table class="table table-condensed" id="modelTable">
+									<table class="table table-striped" id="modelTable">
 										<tbody>
 											<tr>
-												<td>Lorem ipsum dolor</td>
+												<td></td>
 											</tr>
 										</tbody>
 									</table>
@@ -209,11 +209,11 @@
 										<div class="separator bottom"></div>
 											<select id="userSelect">
 											</select>
-												<span class="btn btn-block btn-primary" id="addUserArtifact">Add</span>
+												<span class="btn btn-block btn-primary" id="addUser">Add</span>
 												
 									</div>
 									<div class="separator bottom"></div>
-									<p class="text-primary"><span id="sharedNumber" class="text-black strong"></span> people share this artifact</p>
+									<p class="text-primary" id="sharedNumber"></p>
 										
 								 		<div class="widget">
 											
@@ -228,6 +228,8 @@
 							</div>
 							
 						</div>
+						<hr class="separator">
+						<span id="removeProject" class="btn btn-danger remove-project" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>
 					</div>
 				</div>
 			</div>

@@ -36,6 +36,9 @@
 	<!-- PrettyPhoto -->
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
+    <!-- Gritter -->
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/css/jquery.gritter.css" rel="stylesheet" />
+    
     <!-- Select2 Plugin -->
 	<link href="${pageContext.request.contextPath}/resources/theme/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
     
@@ -173,7 +176,8 @@
 	
 	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.js"></script>
-
+	
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/js/jquery.gritter.min.js"></script>
 	
 	<!-- Tables Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
