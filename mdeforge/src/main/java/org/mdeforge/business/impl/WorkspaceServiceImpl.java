@@ -237,19 +237,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	@Override
 	public void removeProjectFromWorkspace(String idProject, String idWorkspace, User user) {
 		Workspace w = findById(idWorkspace, user);
-		Project p = null;
-		for (Project project : w.getProjects()) {
-			if (project.getId().equals(idProject))
-				p = project;
-		}
+		Project p = projectSerivce.findById(idProject, user);
+		p.getWorkspaces().remove(w);
 		w.getProjects().remove(p);
-		Workspace w1 = null;
-		for (Workspace workspace : p.getWorkspaces()) {
-			if (workspace.getId().equals(idWorkspace))
-				w1 = workspace;
-		}
-		p.getWorkspaces().remove(w1);
-		p.setModifiedDate(new Date());
 		projectRepository.save(p);
 		workspaceRepository.save(w);
 	}
@@ -290,7 +280,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 			String idWorkspace, User user) throws BusinessException {
 		user = userService.findOne(user.getId());
 		Workspace w = findById(idWorkspace, user);
-		
+		projectName.setOwner(user);
+		projectName.getUsers().add(user);
 		projectName.setModifiedDate(new Date());
 		projectName.setCreatedDate(new Date());
 		projectRepository.save(projectName);

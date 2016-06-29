@@ -308,7 +308,9 @@
 	
 	$(document).on('click', '.remove-project', function(event){
 		event.stopPropagation();
-		var idProject = $(this).data('id');
+		//var idProject = $(this).data('id');
+		var idProject = $('#projectId').data('id');
+		console.log(idProject);
 		var nameProject = $(this).data('name');
 		var idWorkspace = $("#workspaceId").data('id');
 		$.ajax({
@@ -366,7 +368,7 @@
 					
 					
 					if (data.users.length > 1)
-						$('#sharedNumber').html('<span  class="text-black strong">'+ data.users.length-1 +'</span> people share this artifact'");
+						$('#sharedNumber').html('<span  class="text-black strong">'+ data.users.length-1 +'</span> people share this artifact');
 					if (data.artifacts.length > 1)
 						$('#artifactsNumber').text(data.artifacts.length + " artifacts");
 					else
@@ -429,7 +431,6 @@
 								});
 						}
 					});
-					console.log(data.open)
 					if(data.open === true){
 						$('#visibility').html('<span class="btn btn-success"><i class="icon-cloud"></i> Public</span>')
 					}else{
