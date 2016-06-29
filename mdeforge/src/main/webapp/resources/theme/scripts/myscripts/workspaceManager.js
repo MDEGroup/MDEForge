@@ -225,25 +225,42 @@
 	//SHARE OR UNSHARE PROJECT
 	
 	$(document).on('click','#addUser', function(event){
-		debugger;
-		var idUser = $('#userSelect').val();
+		$("#addUserAlert").remove();
+		var button = $(this);
+		var select = $('#userSelect');
+		var idUser = select.val();
+		if(idUser == null || idUser == "" || idUser.length == 0){
+			select.before('<div id="addProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>No User Selected</span></div>')
+			return false;
+		}
+		button.addClass("disabled-button");
 		var nameModel = $("#userSelect option:selected").text();
 		var idProject = $("#projectId").attr('data-id');
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/addUser/" + idUser,
 			success : function(data) {
 				var result = $('#users');
+				debugger;
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/userBox.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
 							result.append(rendered);
-						});
-				$("#userSelect option[value='" + idUser + "']").remove();
+				});
+				//$("#userSelect option[value='" + idUser + "']").remove();
 				$('#userList').hide();
 				$("#showUserList").removeClass("rotate-item");
+				button.removeClass("disabled-button");
+				$.gritter.add({
+					title: 'Project has been shared with ' + data.firstname,
+					text: ""
+				});
+				shared_users += 1;
+				$('#sharedNumber').html('<span  class="text-black strong">'+ shared_users +'</span> people shares this project');
 				
 			},
 			error : function error(data) {
+				select.before('<div id="addUserAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>Ops! Something went wrong. Try Again.</span></div>')
+				button.removeClass("disabled-button");
 				console.log('error')
 			}
 		});
@@ -271,8 +288,13 @@
 		$("#addProjectAlert").remove();
 		var select = $('#projectSelect');
 		var idProject = select.val();
-		if(idProject == "" || idProject.length == 0){
-			select.before('<div id="addProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>No Project Selected</span></div>')
+		if(idProject == "" || idProject == null){
+			if(select.children().length > 0)
+				select.before('<div id="addProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>No Project Selected</span></div>')
+			else{
+				select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Project Available</span></div>')
+				button.addClass("disabled-button").removeClass("btn-success");
+			}
 			return false;
 		}else{
 			button.addClass("disabled-button");
@@ -363,10 +385,13 @@
 					$('#userList').hide();
 					//buttons
 					$('.button-toggle').removeClass("rotate-item");
-					
-					
+					//GLOBAL VARIABLE
+					shared_users = data.users.length-1;
 					if (data.users.length > 1)
-						$('#sharedNumber').html('<span  class="text-black strong">'+ data.users.length-1 +'</span> people share this artifact'");
+						$('#sharedNumber').html('<span  class="text-black strong">'+ shared_users +'</span> people shares this project');
+					else{
+						$('#sharedNumber').html('No one shares this project.');
+					}
 					if (data.artifacts.length > 1)
 						$('#artifactsNumber').text(data.artifacts.length + " artifacts");
 					else
@@ -383,7 +408,7 @@
 					           		user.username + ' <br><strong>' + user.firstname + ' ' + user.lastname + '</strong></span>';
 							var stringDelete = '';
 							if (guard)
-								stringDelete = '<span class="pull-right glyphicons icon-remove removeSharedUser text-error" data-id="' + user.id + '" ></span>';
+								stringDelete = '<span class="pull-right icon-remove removeSharedUser text-error" data-id="' + user.id + '" ></span>';
 							var stringTail = '</span></li>';
 							$('#users').append(stringHead + stringDelete + stringTail);
 						}
@@ -438,7 +463,7 @@
 					$('#removeProject').attr("data-id", data.id);
 					$('#removeProject').attr("data-name", data.name)
 					$('#projectName').text(data.name);
-					$('#sharedNumber').text(data.users.length);
+					$('#projectDesc').text(data.description);
 					$('#ownerEmail').text(data.owner.email);
 					$('#ownerName').text(data.owner.firstname + ' ' + data.owner.lastname);
 					$('#ownerUsername').text(data.owner.username);
@@ -518,15 +543,18 @@
 	});
 	
 	$(document).on('click','#showUserList',function(event){
+		var button = $(this);
 		if (!($(this).hasClass("rotate-item"))) {
 			$.ajax({
 				url : ctx + "/private/user/list",
 				success : function(data) {
-					$('#showUserList').addClass("rotate-item");
+					var select = $('#userSelect');
+					button.addClass("rotate-item");
+					var userid = $("#loggedUserId").val();
 					$('#userSelect').empty();	
 					$.each(data, function(i, model){
-						if($("#loggedUserId").val() != model.id)
-							$('#userSelect').append('<option value='+model.id+' >'+model.username+'</option>');
+						if(userid != model.id)
+							select.append('<option value='+model.id+' >'+model.username+'</option>');
 					});
 					$('#userList').show();
 				},
@@ -574,8 +602,8 @@ $("body").on("mousedown", ".my-select-item", function(e){
 
 $('.my-select')
 .focus(function(e){
-	$(this).removeClass("input-error");
-	$(this).data("target").addClass("dropdown-open").attr("placeholder", "Search Ecore Metamodels");
+	$(this).removeClass("input-error").attr("placeholder", "Search " + $(this).data("type") + "s");
+	$(this).data("target").addClass("dropdown-open");
 })
 .blur(function(e){
 	$(this).data("target").removeClass("dropdown-open")

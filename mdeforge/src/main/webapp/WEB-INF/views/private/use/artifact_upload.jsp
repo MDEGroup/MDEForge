@@ -47,7 +47,7 @@
 					<div class="span6">
 						<!-- Group -->
 							<h5 class="input-name">${artifact.getClass().getSimpleName()} Name</h5>
-								<input type="text" name="name"/>
+								<input type="text" name="name" id="artifactTitle"/>
 							<h5 class="input-name">${artifact.getClass().getSimpleName()} Description</h5>
 								<textarea name="description"></textarea>
 							<!-- // Group END -->
@@ -96,14 +96,14 @@
 					<!-- Row -->
 					<div class="span12">
 						<h5 class="input-name">Properties</h5>
-							<table>
+							<table id="propertiesT">
 								<thead>
-									<!-- <tr>
+									<tr>
 										<th>Name</th>
 									
 										<th>Value</th>
-										<th>Action</th>
-									</tr>-->
+										<th></th>
+									</tr>
 								</thead>
 								<tbody id="propertiesTable">
 								</tbody>
