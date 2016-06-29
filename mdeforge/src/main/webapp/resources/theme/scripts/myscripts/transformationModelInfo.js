@@ -6,7 +6,7 @@ $(function() {
 		$('#parseAlert').remove();
 		var files = document.getElementById('artifactName').files;
 		if(files.length == 0){
-			$(this).before('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;">x</button><span>You have to upload an ATL file before using this feature</span></div>')
+			$(this).before('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>You have to upload an ATL file before using this feature</span></div>')
 			return false;
 		}
 		var file = files[0];
@@ -28,11 +28,14 @@ $(function() {
 	            		var d = 0;
 	            		var coDomainConformToTable = $('#coDomainConformToTable');
 	            		var domainConformToTable = $('#domainConformToTable');
+	            		$(".domainConformToRowManual").remove();
+	            		$(".coDomainConformToRowManual").remove();
 	            		$(".showOnFillTablesMeta").addClass("visible");
 	            		$.each(data, function (index, value) {
 		            		if (value._class ==  "org.mdeforge.business.model.DomainConformToRelation") {
 		            			var selectDomain = $('defineDomainRelationTo').clone();
 		            			var toRender = new Object();
+		            			$(".domainConformToRowManual").remove();
 		            			toRender.idRow = d;
 		            			toRender.metamodelName = value.referenceModelName;
 		            			toRender.modelName = value.name;

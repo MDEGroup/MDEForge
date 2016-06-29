@@ -186,7 +186,7 @@ $(function() {
 	});
 });
 
-$('body').on('focus','.check-input, #artifactTitle', function(e) {
+$('body').on('focus','.check-input, #artifactTitle, .property-input', function(e) {
 	$(this).removeClass("input-error")
 })
 
@@ -230,7 +230,7 @@ $(function() {
 	$('#domainMetamodelSelect').filterByText($('#filterMMDomainTextBox'), true);
 });*/
 $('#artifact').submit(function(e){
-	e.preventDefault();
+	
 	debugger;
 	var valid = true;
 	$('.submitAlert').remove();
@@ -254,24 +254,26 @@ $('#artifact').submit(function(e){
 	})
 	if(!pvalid){
 		valid = false;
-		$("#propertiesT").after('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
+		$("#propertiesT").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
 
 	}
 	var check_input = $(".check-input");
+	var cvalid = true;
 	check_input.each(function(){
 		if($(this).val() == "" || $(this).val().length == 0){
 			$(this).addClass("input-error");
+			cvalid = false
 		}
 	})
-	if(check_input.length > 0){
+	if(!cvalid){
 		valid = false;
-		$("#transformationRelations").after('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
+		$("#transformationRelations").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
 
 	}
 	if(valid){
 		return true;
 	}else{
-		return false;
+		e.preventDefault();
 	}
 	
 	
