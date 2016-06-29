@@ -16,6 +16,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/public")
 public class SearchPublicController {
 	
+//	private static final int MAX_SEARCH_RESULT = 50;
 	
+	@Autowired
+	private User user;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
@@ -44,10 +48,22 @@ public class SearchPublicController {
 	}
 	
 	@RequestMapping(value="/searchArtifact", method = {RequestMethod.POST})
-	public @ResponseBody List<Artifact> searchArtifact(@RequestParam(value = "search_string", required = false)String searchString){
-		List<Artifact> searchResultComplete = artifactService.search(searchString);
-		return searchResultComplete;
-	}
+	 public @ResponseBody List<Artifact> searchArtifact(
+			 @RequestParam(value = "search_string") String searchString, 
+			 @RequestParam(value = "type") String type,
+			 @RequestParam(value = "limit") int limit,
+			 @RequestParam(value = "idProject", required = false) String idProject){
+	  searchString += " +forgeType:" + type;
+	  List<Artifact> searchResultComplete = artifactService.search(searchString, limit);
+	  
+	  //filter based on project: remove all the artifact present in the user project
+	  if(idProject != null){
+		  List<Artifact> artifactsInProject = artifactService.findArtifactInProject(idProject, user);
+		  searchResultComplete.removeAll(artifactsInProject);
+	  }
+	  
+	  return searchResultComplete;
+	 }
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.POST })
 	public String search(Model model, 

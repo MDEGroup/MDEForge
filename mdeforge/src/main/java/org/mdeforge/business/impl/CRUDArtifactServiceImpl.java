@@ -385,7 +385,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 	
 	@Override
-	public List<T> search(String queryString) throws BusinessException {
+	public List<T> search(String queryString, int maxSearchResult) throws BusinessException {
 		List<T> listArtifact = new ArrayList<T>();
 		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
 		File indexDir = new File(basePathLucene);
@@ -400,7 +400,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			//Query Parse over multiple Indexed Fields
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
+			TopDocs hits = searcher.search(query, maxSearchResult);
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
 			for (int i = 0; i < hits.totalHits; i++) {

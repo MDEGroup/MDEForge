@@ -386,7 +386,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			
 		}
 		
-		//Artifact TYPE
+		//Artifact TYPE: "Model"
 		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
 		doc.add(artifactType);
 

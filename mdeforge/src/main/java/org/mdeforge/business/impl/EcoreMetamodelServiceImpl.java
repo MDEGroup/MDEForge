@@ -1451,7 +1451,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		Field idField = new Field(ID_TAG, ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
 	 	doc.add(idField);
 		
-		//Artifact TYPE
+		//Artifact TYPE: "EcoreMetamodel"
 		Field artifactType = new Field(TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
 		doc.add(artifactType);
 		
