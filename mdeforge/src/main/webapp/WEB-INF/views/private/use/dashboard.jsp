@@ -210,7 +210,7 @@
 			</div>
 	
 	<!-- Widget -->
-	<h3 class="header-h main-title" style="padding-left: 10px;">Graphs</h3>
+	<!-- <h3 class="header-h main-title" style="padding-left: 10px;">Graphs</h3>-->
 	<div class="widget widget-heading-simple widget-body-white">
 		<!-- // Widget heading END -->
 		
@@ -302,7 +302,7 @@
 		                 <c:forEach items="${statistic}" var ="stat">
 		                 	${stat.created},
 		                 </c:forEach>
-		                 	"Today"],
+		                 	],
 		        datasets: [{
 		            label: 'All',
 		            data: [
@@ -387,7 +387,7 @@
 		                 <c:forEach items="${statistic2}" var ="stat">
 		                 	${stat.created},
 		                 </c:forEach>
-		                 	"Today"],
+		                 	],
 		        datasets: [{
 		            label: 'All',
 		            data: [
@@ -396,8 +396,8 @@
 		                 </c:forEach>
 					],
 					duration: 500,
-					backgroundColor: "rgba(255, 99, 132, 0.2)",
-					borderColor: "rgba(255,99,132,1)",
+					backgroundColor: "rgba(54, 162, 235, 0.2)",
+					borderColor: "rgba(54, 162, 235, 1)",
 		            borderWidth: 1
 		        }
 		      ]
