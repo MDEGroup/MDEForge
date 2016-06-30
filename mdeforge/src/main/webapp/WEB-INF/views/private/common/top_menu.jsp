@@ -34,7 +34,7 @@
 					<ul>
 						<li><a href="${pageContext.request.contextPath}/public/dashboard" class="glyphicons folder_open" data-toggle="tooltip" data-title="Browse the repository" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
 						<li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search" data-toggle="tooltip" data-title="Search Artifacts" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
-						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard" data-toggle="tooltip" data-title="Private Area" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
+						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard" data-toggle="tooltip" data-title="Dashboard" data-placement="bottom" data-original-title="" title=""><i></i></a></li>
 					</ul>
 				</li>
 				<li class="search open">
@@ -54,9 +54,14 @@
 			<ul class="topnav pull-right">
 			
 								<!-- Themer -->
+				<li class="">
+					<a href="${pageContext.request.contextPath}" target="_blank" ><span class="hidden-tablet hidden-phone">MDE Forge </span></a>
+				</li>
 				<li class="account dropdown dd-1">
+					
 					<a data-toggle="dropdown" href="#" class="logout">
-					<span class="hidden-tablet hidden-phone hidden-desktop-1"><i class="icon-user"></i> <security:authentication property="principal.user.username"/></span></a>
+					<span class="hidden-tablet hidden-phone"><security:authentication property="principal.user.username"/></span>
+					</a>
 					<ul class="dropdown-menu pull-right">				
 								
 						<li class="profile">
@@ -73,7 +78,7 @@
 							</span>
 						</li>
 						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="menu-right-dropdown pull-right">Dashboard</a></li>		
-						<li><a href="${pageContext.request.contextPath}" class="menu-right-dropdown pull-right">MDE Forge Home</a></li>
+						<li><a href="${pageContext.request.contextPath}" target="_blank" class="menu-right-dropdown pull-right">MDE Forge Home</a></li>
 						<hr>
 						<li>
 								<a id="logout" class="btn btn-default pull-right" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message code="common.logout"/></a>
