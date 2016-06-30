@@ -60,15 +60,7 @@
 	</c:forEach>
 	
 	<h5 class="input-name">Description</h5>
-	<p>	
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.									
-		<c:forEach items="${artifact.properties}"
-			var="property">
-			<c:if test="${property.getName() == 'Description '}">
-					${property.getValue()}
-				</c:if>
-		</c:forEach>
-	</p>
+	<p>${artifact.description}</p>
 	
 </div>
 </div>

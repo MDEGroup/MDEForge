@@ -37,7 +37,7 @@
 						<!--<c:forEach items="${workspaces_list}" var="workspace">
 							<li><a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="glyphicons folder_open"><i></i>${workspace.getName()}</a></li>
 						</c:forEach>-->
-							<li><a href="${pageContext.request.contextPath}/private/my_artifacts/">ALL</a></li>
+							<!-- <li><a href="${pageContext.request.contextPath}/private/my_artifacts/">ALL</a></li>-->
 							<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifacts">METAMODELS</a></li>
 							<li><a href="${pageContext.request.contextPath}/private/ATLTransformation/artifacts">ATL TRANSFORMATIONS</a></li>
 							<li><a href="${pageContext.request.contextPath}/private/Model/artifacts">MODELS</a></li>

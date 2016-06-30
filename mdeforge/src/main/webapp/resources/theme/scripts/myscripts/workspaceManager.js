@@ -328,22 +328,47 @@
 		});
 	});
 	
-	$(document).on('click', '.remove-project', function(event){
+	$(document).on('click', '#removeProject', function(event){
+		debugger;
 		event.stopPropagation();
+		$('#removeProjectAlert').remove();
+		var button = $(this);
+		button.addClass("disabled-button");
 		var idProject = $(this).data('id');
 		var nameProject = $(this).data('name');
 		var idWorkspace = $("#workspaceId").data('id');
 		$.ajax({
 			url : ctx + "/private/workspace/" + idWorkspace + "/remove/" + idProject,
 			success : function(data) {
-				$('#' + idProject).remove();
+				debugger;
+				var item = $('#item_' + idProject);
+				item.remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
 				$('#workspaceDetailsDiv').hide();
+				button.removeClass("disabled-button");
+				$.gritter.add({
+					title: nameProject + ' has been removed from Workspace',
+					text: ""
+				});
 			},
-			error : function error(data) {
-				$('#' + idProject).remove();
-				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
-				$('#workspaceDetailsDiv').hide();
+			error : function (err) {
+				debugger;
+				if(err.responseText == "ok"){
+					var item = $('#item_' + idProject);
+					item.remove();
+					$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
+					$('#workspaceDetailsDiv').hide();
+					$.gritter.add({
+						title: nameProject + ' has been removed from Workspace',
+						text: ""
+					});
+				}else{
+					console.log(err)
+					button.after('<div id="removeProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>Ops! Something went wrong. Try Again.</span></div>')
+					
+				}
+				button.removeClass("disabled-button");
+				
 			}
 			
 		});
@@ -372,10 +397,13 @@
 			var p = $(this).parents('.widget-employees:first');
 			p.find('.listWrapper li').removeClass('active');
 			$(this).addClass('active');
-			var id = $(this).attr('id');
+			var tagid = $(this).attr('id');
+			var id = $(this).data('id');
+			debugger;
 			$.ajax({
 				url : ctx + "/private/project/" + id,
 				success : function(data) {
+					debugger;
 					$('#projectId').attr('data-id',data.id)
 					$("#workspaceDetailsDiv").show();
 					$('#users').empty();
@@ -460,8 +488,8 @@
 					}else{
 						$('#visibility').html('<span class="btn btn-danger"><i class="icon-lock"></i> Private</span>')
 					}
-					$('#removeProject').attr("data-id", data.id);
-					$('#removeProject').attr("data-name", data.name)
+					$('#removeProject').data("id", data.id);
+					$('#removeProject').data("name", data.name)
 					$('#projectName').text(data.name);
 					$('#projectDesc').text(data.description);
 					$('#ownerEmail').text(data.owner.email);

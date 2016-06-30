@@ -93,7 +93,7 @@
 									
 									<ul class="list unstyled autoscroll" id="projectList">
 									<c:forEach items="${workspace.projects}" var="proj">
-											<li id="${proj.getId() }">
+											<li id="item_${proj.getId() }" data-id="${proj.getId()}">
 											<div class="media innerAll">
 												<div class="media-object pull-left thumb"><img src="/mdeforge/resources/theme/images/logo-small.png" width="51px" height="51px"></div>
 												<div class="media-body">

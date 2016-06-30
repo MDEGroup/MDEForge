@@ -23,7 +23,6 @@ $(function() {
 	                dataType: "json",
 	            	url : ctx + "/private/ATLTransformation/modelInfo",
 	            	success : function(data) {
-	            		debugger;
 	            		var c = 0;
 	            		var d = 0;
 	            		var coDomainConformToTable = $('#coDomainConformToTable');
