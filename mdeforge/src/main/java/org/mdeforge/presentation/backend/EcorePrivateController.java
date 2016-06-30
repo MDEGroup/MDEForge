@@ -1,6 +1,7 @@
 package org.mdeforge.presentation.backend;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.MetricRepository;
@@ -111,6 +113,13 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 	public String uploadNewArtifact(
 			Model model,@ModelAttribute EcoreMetamodel artifact,
 			@RequestParam("artifactfile") MultipartFile file) throws IOException {
+		//Temporary
+		List<Property> p = new ArrayList<Property>();
+		for (Property property : artifact.getProperties())
+			if(property.getName()!=null && !property.getName().equals(""))
+				p.add(property);
+		artifact.setProperties(p);
+		//END temporary
 		EcoreMetamodel m = artifact;
 		byte[] bytes = file.getBytes();
 		GridFileMedia gfm = new GridFileMedia();
@@ -125,7 +134,7 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 			report = true;
 		}
 		model.addAttribute("report", report);
-		return "/private/EcoreMetamodel/artifact?artifact_id=" + result.getId();
+		return "redirect:/private/EcoreMetamodel/artifact?artifact_id=" + result.getId();
 	}
 	
 	@Override

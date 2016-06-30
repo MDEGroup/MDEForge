@@ -113,7 +113,7 @@ public class PrivateController {
 	public String deleteArtifact(@RequestParam("idArtifact") String idArtifact, org.springframework.ui.Model model) {
 		Artifact artifact = artifactService.findOneById(idArtifact, user);
 		artifactService.delete(artifact, user);
-		return "redirect:/private/my_artifacts";
+		return "redirect:/private/dashboard";
 	}
 	
 	@RequestMapping(value = "/artifact/{idArtifact}/addUser/{idUser}", method=RequestMethod.GET)

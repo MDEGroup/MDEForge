@@ -2,6 +2,7 @@ package org.mdeforge.presentation.backend;
 
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,12 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ModelForm;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,8 +29,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-//@Controller
-//@RequestMapping("/private/Model")
+@Controller
+@RequestMapping("/private/Model")
 public class ModelPrivateController extends ArtifactPrivateController<Model> {
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
@@ -62,6 +65,13 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 			@ModelAttribute ("artifact") ModelForm modelIn,
 			@RequestParam("artifactfile") MultipartFile file)
 			throws IOException {
+		//TEMPORARY
+		List<Property> p = new ArrayList<Property>();
+		for (Property property : modelIn.getProperties())
+			if(property.getName()!=null && !property.getName().equals(""))
+				p.add(property);
+		modelIn.setProperties(p);
+		//END TEMPORARY
 		ConformToRelation ctr = new ConformToRelation();
 		ctr.setFromArtifact(modelIn);
 		ctr.setToArtifact(modelIn.getConformToRelation());
@@ -76,7 +86,12 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 		m.setAuthor(user);
 		m.setFile(gfm);
 		m = modelService.create(m);
-		return "/private/EcoreMetamodel/artifact?artifact_id=" + m.getId();
+		return "redirect:/private/Model/artifact?artifact_id=" + m.getId();
+	}
+	@Override
+	public String artifactList(org.springframework.ui.Model model) {
+		model.addAttribute("type", org.mdeforge.business.model.Model.class.getSimpleName());
+		return super.artifactList(model);
 	}
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {
@@ -104,10 +119,5 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 								.findOne(id));
 					}
 				});
-	}
-	@Override
-	public String artifactList(org.springframework.ui.Model model) {
-		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
-		return super.artifactList(model);
 	}
 }

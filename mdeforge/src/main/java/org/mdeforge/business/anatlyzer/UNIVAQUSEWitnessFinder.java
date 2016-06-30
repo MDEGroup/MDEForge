@@ -13,7 +13,7 @@ public class UNIVAQUSEWitnessFinder extends UseWitnessFinder {
 
 	@Override
 	public String getTempDirectory() {
-		return "/tmp/";
+		return "/Users/juri/development/forgeDir/anatlyze/tmp/";
 	}
 	
 

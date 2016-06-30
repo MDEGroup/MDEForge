@@ -16,8 +16,11 @@ import org.mdeforge.business.ModelService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
 import org.mdeforge.business.model.ATLTransformationTestServiceError;
+import org.mdeforge.business.model.CoDomainConformToRelation;
+import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import transML.exceptions.transException;
 
@@ -134,8 +138,23 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			//@ModelAttribute ArrayList<DomainConformToRelation> domainConformToRelationList,
 			@RequestParam("artifactfile") MultipartFile file)
 			throws IOException {
-		transformation.getRelations().addAll(transformation.getDomainConformToRelation());
-		transformation.getRelations().addAll(transformation.getCoDomainConformToRelation());
+		
+		//temporary
+		for (DomainConformToRelation it : transformation.getDomainConformToRelation()) {
+			if(it.getToArtifact()!=null)
+				transformation.getRelations().add(it);
+		}
+		for (CoDomainConformToRelation it : transformation.getCoDomainConformToRelation()) 
+			if(it.getToArtifact()!=null)
+				transformation.getRelations().add(it);
+		List<Property> p = new ArrayList<Property>();
+		for (Property property : transformation.getProperties())
+			if(property.getName()!=null && !property.getName().equals(""))
+				p.add(property);
+		transformation.setProperties(p);
+//		transformation.getRelations().addAll(transformation.getDomainConformToRelation());
+//		transformation.getRelations().addAll(transformation.getCoDomainConformToRelation());
+		//end temporary
 		ATLTransformation m = new ATLTransformation();
 		BeanUtils.copyProperties(transformation, m);
 		byte[] bytes = file.getBytes();
@@ -205,16 +224,19 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			@RequestParam String transformation_id) {
 		try {
 			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
+			Date d = new Date();
 			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id);
 			atlTransformation.setAtlTestError(r);
 			List<ATLTransformationError> errors =	aTLTransformationService
 					.anATLyzer(atlTransformation);
 			atlTransformation.setAtlError(errors);
+			System.out.println("Computation Time: " + (new Date().getTime()-d.getTime()));
 			String pathToDownload = gridFileMediaService
 					.getFilePath(atlTransformation);
 			File atlTransformationFile = new File(pathToDownload);
-			model.addAttribute("atlTransformation", atlTransformation);
-			model.addAttribute("atlTransformationFile", atlTransformationFile);
+			atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
+			model.addAttribute("artifact", atlTransformation);
+			model.addAttribute("artifactFile", atlTransformationFile);
 			
 		} catch (ATLTransformationCompilationError e) {
 			// TODO Auto-generated catch block
