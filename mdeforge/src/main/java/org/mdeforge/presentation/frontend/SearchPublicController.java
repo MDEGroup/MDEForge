@@ -67,18 +67,20 @@ public class SearchPublicController {
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.POST })
 	public String search(Model model, 
-			@RequestParam(value = "search_string", required = false) String searchString, 
+			@RequestParam(value = "search_string", required = true) String searchString, 
+			@RequestParam(value = "page", defaultValue = "1") int page, 
+			@RequestParam(value = "maxResult", defaultValue = "50") int maxResult,
+			@RequestParam(value = "hitPerPage", defaultValue = "5") int hitPerPage,
 			@RequestParam(value = "isFuzzy", required = false) boolean isFuzzy) {
 		
-		System.out.println(searchString);
 		if(isFuzzy){
 			searchString += "~";
 		}
-		System.out.println(searchString);
 		
-		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
+//		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
+		SearchResultComplete searchResultComplete = artifactService.searchWithPagination(searchString, maxResult, hitPerPage, page);
 		model.addAttribute("searchResultComplete", searchResultComplete);
-		model.addAttribute("search_string", searchString);
+//		model.addAttribute("search_string", searchString);
 		
 		List<String> indexFieldNames = artifactService.indexFieldNames();
 		model.addAttribute("indexFieldNames", indexFieldNames);
