@@ -1646,7 +1646,20 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		AggregationResults<Statistic> groupResults 
 			= n.aggregate(agg, SimpleMetric.class, Statistic.class);
 		result = groupResults.getMappedResults();
-		return result;
+		//Collections.sort(result, (Statistic p1, Statistic p2) -> p1.firstName.compareTo(p2.firstName));
+		List<Statistic> stat = new ArrayList<Statistic>(result);
+		Collections.sort(stat, new Comparator<Statistic>(){
+			  public int compare(Statistic p1, Statistic p2){
+				  int T1 = Integer.parseInt(p1.getCreated());
+				  int T2 = Integer.parseInt(p2.getCreated());
+				  int res = 0;
+				  res = (T1 > T2)?1:-1;
+				  if (T1  == T2 ) res = 0;
+				  return res;
+			  }
+			});
+		
+		return stat;
 		
 	}
 	
