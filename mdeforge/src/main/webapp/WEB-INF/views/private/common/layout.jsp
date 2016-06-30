@@ -176,7 +176,7 @@
 	
 	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.js"></script>
-	
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/js/jquery.gritter.min.js"></script>
 	
 	<!-- Tables Demo Script -->

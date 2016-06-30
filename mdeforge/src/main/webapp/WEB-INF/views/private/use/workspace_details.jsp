@@ -93,7 +93,7 @@
 									
 									<ul class="list unstyled autoscroll" id="projectList">
 									<c:forEach items="${workspace.projects}" var="proj">
-											<li id="${proj.getId() }">
+											<li id="item_${proj.getId() }" data-id="${proj.getId()}">
 											<div class="media innerAll">
 												<div class="media-object pull-left thumb"><img src="/mdeforge/resources/theme/images/logo-small.png" width="51px" height="51px"></div>
 												<div class="media-body">
@@ -127,7 +127,8 @@
 									<h3 class="text-primary header-h main-title" id="projectName"></h3>
 									<div class="separator bottom"></div>
 									<p class="muted" id="artifactsNumber"></p>
-									<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
+									<h5 class="input-name">Owner</h5>
+									<p id="projectDesc"></p>
 								</div>
 								<div class="span4 text-right">
 								<h5 class="input-name">Visibility</h5>	
@@ -153,7 +154,7 @@
 									<h5 class="input-name">Ecore Metamodels <i class="pull-right icon-plus text-primary button-toggle" id="showEcoreList"></i></h5>
 									<div id="ecoreToAdd" style="display: none">
 										<div class="separator bottom"></div>
-										<input id="ecoreSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">
+										<input id="ecoreSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 										<span class="btn btn-block btn-primary" id="addEcore">Add</span>
 									</div>
 									<div class="separator bottom"></div>
@@ -170,7 +171,7 @@
 									
 									<div id="ATLToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<input id="ATLSelect" class="my-select" type="text" data-type="ATLTransformation" data-project="" placeholder="Search ATL Transformations">
+										<input id="ATLSelect" class="my-select" type="text" data-type="ATLTransformation" data-project="" placeholder="Search ATLTransformations">
 										<span class="btn btn-block btn-primary" id="addATL">Add</span>
 									</div>
 									<div class="separator bottom"></div>

@@ -23,13 +23,13 @@
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 			<!-- Table -->
-			<table id="artList">
+			<table id="artList" class="responsive" width="100%">
 				<thead>
 					<tr>
-						<th>Public</th>
 						<th>Name</th>
-						<th>Action</th>
-						<th>Author</th>
+						<th class="center">Public</th>
+						<th class="center">Action</th>
+						<th class="center">Author</th>
 					</tr>
 				</thead>
 			</table>
@@ -43,30 +43,38 @@ $(document).ready(function () {
 		"processing": true,
 		"serverSide": true,
 		"filter" : false,
+		"responsive": true,
 		"columns":[
-	                {
-	                	"data":"open",
-	                    "searchable": false,
-	                    "sortable": false
-	                },
+	                
 	                {
 	                    "data":"name",
 	                    "searchable": false,
-	                    "sortable": false
+	                    "sortable": false,
+	                    "render": function ( data, type, row, meta ) {
+	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	                     }
+	                },
+	                {
+	                	"data": "author.username",
+	                    "searchable": false,
+	                    "sortable": false,
+	                    "className": "center"
+	                 },
+	                {
+	                	"data":"open",
+	                    "searchable": false,
+	                    "sortable": false,
+	                    "className": "center"
 	                },
 	                {
 	                	"data": "action",
 	                    "searchable": false,
 	                    "sortable": false,
 	                    "defaultContent": "",
+	                    "className": "center",
 	                    "render": function ( data, type, row, meta ) {
-	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
+	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>Download</a>";
 	                     }
-	                 },
-	                 {
-	                	"data": "author.username",
-	                    "searchable": false,
-	                    "sortable": false
 	                 }
         ],
         "ajax": {
@@ -75,5 +83,4 @@ $(document).ready(function () {
 	});              
 });
 </script>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>	

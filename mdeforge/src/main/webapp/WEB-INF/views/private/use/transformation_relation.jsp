@@ -1,25 +1,36 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="separator"></div>
+<hr class="separator">
+<div class="separator"></div>
 <div class="row-fluid">
-	<div class="span12">
+	<div class="span6">
 		<button type="button" id="transformationModelInfo"
 			class="btn btn-icon btn-large btn-primary glyphicons file">
 			<i></i>Parse ATL
 		</button>
 	</div>
+	<div class="span6 text-right">
+		<button type="button" id="expandTables"
+			class="btn btn-icon">
+			<i class="icon-resize-horizontal"></i>
+		</button>
+	</div>
 </div>
-<div class="separator"></div>
+<div class="separator bottom"></div>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. 
+		Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
 <!-- Form actions -->
-<hr class="separator">
 <div class="row-fluid" id="transformationRelations">
-		<div class="span6">
+		<div class="span6 expand-row">
 		<h5 class="input-name">From Metamodels</h5>
-		<div class="separator"></div>
+		
 			<div id="defineDomainRelationTo">
-			<h6>Search Metamodels by name</h6>
-			<select id="domainMetamodelSelect" class="select-relation">
+			<div class="separator bottom"></div>
+			<!-- <h6>Search Metamodels by name</h6>-->
+			<!-- <select id="domainMetamodelSelect" class="select-relation">
 				 <option value="" selected disabled>Metamodels</option>
-			</select> 
+			</select> -->
+			<input id="domainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 <!-- 			<div class="span6"> -->
 <!-- 			<h6>Filter</h6> -->
 <!-- 				<input id="filterMMDomainTextBox" type="text" placeholder="Filter Metamodels by Name" /> -->
@@ -29,12 +40,13 @@
 				Select Metamodel
 			</button>
 			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">New metamodel</a> -->
-			</div>
 			<div class="separator"></div>
-			<table>
+			</div>
+			
+			<table id="tableDefineDomainRelationTo" class="showOnFillTablesMeta">
 				<thead>
 					<tr>
-						<th>Metamodel</th>
+						<th class="span5">Metamodel</th>
 						<th>Name</th>
 						<th>Reference Model Name</th>
 						<th></th>
@@ -43,15 +55,19 @@
 				<tbody id="domainConformToTable">
 				</tbody>
 			</table>
-		</div>
-		<div class="span6">
-			<h5 class="input-name">To Metamodels</h5>
 			<div class="separator"></div>
+		<hr>
+		</div>
+		<div class="span6 expand-row">
+			<h5 class="input-name">To Metamodels</h5>
+			
 			<div  id="defineCoDomainRelationTo">
-			<h6>Search Metamodels by name</h6>
-				<select id="coDomainMetamodelSelect">
+			<div class="separator bottom"></div>
+			<!-- <h6>Search Metamodels by name</h6>-->
+				<!-- <select id="coDomainMetamodelSelect">
 				  <option value="" selected disabled>Metamodels</option>
-				</select>
+				</select>-->
+				<input id="coDomainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 <!-- 			<div class="span6"> -->
 <!-- 			<h6>Filter</h6> -->
 <!-- 				<input id="filterMMCoDomainTextBox" type="text" placeholder="Filter Metamodels by Name"/> -->
@@ -61,12 +77,13 @@
 				Select Metamodel
 			</button>
 			<!-- 							<a href="#new_metamodel_popup" data-toggle="modal" class="btn btn-primary">Upload New metamodel</a> -->
-		</div>
 		<div class="separator"></div>
-		<table>
+		</div>
+		
+		<table id="tableDefineCoDomainRelationTo" class="showOnFillTablesMeta">
 				<thead>
 					<tr>
-						<th>Metamodel</th>
+						<th class="span5">Metamodel</th>
 						<th>Name</th>
 						<th>Reference Model Name</th>
 						<th></th>
@@ -75,6 +92,7 @@
 				<tbody id="coDomainConformToTable">
 				</tbody>
 			</table>
+		<div class="separator"></div>
 	</div>
 </div>
 <hr class="separator">
