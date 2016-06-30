@@ -51,10 +51,10 @@ $(function() {
 			            				//'<input id="domainFilter' + index + '" type="text" />' +
 			            			'</td>' +  
 			            			'<td>' + 
-			            			'<input type="text" disabled name="domainConformToRelation['+ d +'].name" value="' + toRender.modelName  + '" />' +			  			
+			            			'<input type="text" name="domainConformToRelation['+ d +'].name" value="' + toRender.modelName  + '" />' +			  			
 			            			'</td>' +
 			            			'<td>' +
-			            				'<input type="text" disabled name="domainConformToRelation['+ d +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
+			            				'<input type="text" name="domainConformToRelation['+ d +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
 			            			'</td>' +
 			            			'<td>Disabled</td>' +
 		            			'</tr>';
