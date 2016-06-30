@@ -22,7 +22,9 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -430,6 +432,96 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		}
 //		System.out.println("Search done in " + duration + " milliseconds");
 		return listArtifact;
+	}
+	
+	
+	@Override
+	public SearchResultComplete searchWithPagination(String queryString, int maxSearchResult, int hitsPerPage, int pageNumber) throws BusinessException {
+		long duration = 0;
+		long startTime = System.nanoTime();
+		
+		int totalNumberOfHits;
+		
+		SearchResultComplete searchResultComplete = new SearchResultComplete();
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+			
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			//Get all indexed fields
+			String[] fields = indexFieldNames().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			
+			TopScoreDocCollector collector = TopScoreDocCollector.create(maxSearchResult, true);  // maxSearchResult is just an int limiting the total number of hits 
+
+			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
+			
+	        searcher.search(query, collector);
+
+	        totalNumberOfHits = (collector.getTotalHits() > maxSearchResult)?maxSearchResult:collector.getTotalHits();
+
+	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
+			
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+//			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
+			for (int i = 0; i < iterator; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+//						System.out.println(frag[j].toString());
+					}
+				}
+				T art = findOne(doc.get("id"));
+				
+				SearchResult sr = new SearchResult();
+				sr.setArtifact(art);
+				sr.setScore(hits.scoreDocs[i].doc);
+				sr.setFragments(fragments);
+				
+				searchResults.add(sr);
+			}
+			searcher.close();
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (InvalidTokenOffsetsException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+		
+		long endTime = System.nanoTime();
+		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+		
+		searchResultComplete.setResults(searchResults);
+		searchResultComplete.setSearchTime(duration);
+		searchResultComplete.setTotalHits(totalNumberOfHits);
+		searchResultComplete.setHitsPerPage(hitsPerPage);
+		searchResultComplete.setPageNumber(pageNumber);
+		searchResultComplete.setQueryString(queryString);
+		int numberOfPages = 0;
+		if(totalNumberOfHits % hitsPerPage == 0){
+			numberOfPages = totalNumberOfHits/hitsPerPage;
+		}else{
+			numberOfPages = (totalNumberOfHits/hitsPerPage) + 1;
+		}
+		searchResultComplete.setPages(numberOfPages);
+		
+		return searchResultComplete;
 	}
 
 	@SuppressWarnings("unchecked")

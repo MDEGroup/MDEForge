@@ -51,7 +51,7 @@
 
 												<input type="text" class="input-large"
 													placeholder="Type your keywords .. " name="search_string"
-													id="searchField" value="${search_string}" style="width:80%">
+													id="searchField" value="${searchResultComplete.getQueryString()}" style="width:80%">
 												<button type="submit" class="btn btn-inverse">
 													<spring:message code="mdeforge.common.action.search" />
 												</button>
@@ -86,7 +86,7 @@
 							<c:when test="${searchResultComplete.results.size() > 0}">
 								<div class="widget widget-heading-simple widget-body-white">
 									<div class="widget-body">
-										<h5 class="text-uppercase strong separator bottom">${searchResultComplete.results.size()} results in ${searchResultComplete.getSearchTime()} ms.</h5> 
+										<h5 class="text-uppercase strong separator bottom">${searchResultComplete.getTotalHits()} results in ${searchResultComplete.getSearchTime()} ms. (${searchResultComplete.getPages()} pagine)</h5> 
 										<c:forEach items="${searchResultComplete.results}" var="result">
 											<div class="row-fluid">
 												<div class="span12">
@@ -157,6 +157,64 @@
 											</div>
 											<hr class="separator">
 										</c:forEach>
+										
+										<!-- START Pagination -->
+										<div class="pagination margin-none">
+											<ul>
+												<li class="disable"><a href="#">&lt;</a></li>
+												<c:choose>
+													<!-- If we are in the first page disable the "back" button; otherwise request the previous page-->
+													<c:when test="${searchResultComplete.getPageNumber() != 1}">
+														<form action="${pageContext.request.contextPath}/public/search" method="POST">
+															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+															<input type="hidden" name="page" value="${searchResultComplete.getPageNumber()-1}">
+															<input type="submit" name="submit">
+														</form>
+													</c:when>
+													<c:otherwise>
+														<!-- Disabled button -->
+														<input type="submit" name="submit">
+													</c:otherwise>
+												</c:choose>
+
+												<c:forEach begin="1" end="${searchResultComplete.getPages()}" varStatus="loop">
+													<c:choose>
+														<!-- If we are in the same page we visualize disable the button; otherwise make clickable the button to request the proper page-->
+														<c:when test="${loop.index == searchResultComplete.getPageNumber()}">
+															<!-- Disabled button -->
+															<li class="active"><a href="#">${loop.index}</a></li>
+															<input type="submit" name="submit">
+														</c:when>
+														<c:otherwise>
+															<li><a href="#">${loop.index}</a>
+																<form action="${pageContext.request.contextPath}/public/search" method="POST">
+																	<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+																	<input type="hidden" name="page" value="${loop.index}">
+																	<input type="submit" name="submit">
+																</form></li>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+
+												<li class="disable"><a href="#">&gt;</a></li>
+												<c:choose>
+													<!-- If we are in the last page disable the "forward" button; otherwise request the subsequent page-->
+													<c:when test="${searchResultComplete.getPageNumber() != searchResultComplete.getPages()}">
+														<form action="${pageContext.request.contextPath}/public/search" method="POST">
+															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+															<input type="hidden" name="page" value="${searchResultComplete.getPageNumber()+1}">
+															<input type="submit" name="submit">
+														</form>
+													</c:when>
+													<c:otherwise>
+														<!-- Disabled button -->
+														<input type="submit" name="submit">
+													</c:otherwise>
+												</c:choose>
+											</ul>
+										</div>
+										<!-- END Pagination -->
+
 									</div>
 								</div>
 							</c:when>
