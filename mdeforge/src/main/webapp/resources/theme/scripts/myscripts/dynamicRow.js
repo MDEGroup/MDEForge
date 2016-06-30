@@ -230,7 +230,7 @@ $(function() {
 	$('#domainMetamodelSelect').filterByText($('#filterMMDomainTextBox'), true);
 });*/
 $('#artifact').submit(function(e){
-
+	debugger;
 	var valid = true;
 	$('.submitAlert').remove();
 	var name = $("#artifactTitle");
