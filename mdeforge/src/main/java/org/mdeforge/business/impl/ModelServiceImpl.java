@@ -181,6 +181,11 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
+		try {
+			createIndex(result);
+		} catch (Exception e) {
+			System.out.println("Unable to create index: " + e.getMessage());
+		}
 		return result;
 	}
 	@Override

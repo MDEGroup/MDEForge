@@ -30,7 +30,7 @@
 			<!-- <select id="domainMetamodelSelect" class="select-relation">
 				 <option value="" selected disabled>Metamodels</option>
 			</select> -->
-			<input id="domainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
+			<input autocomplete="off" id="domainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 <!-- 			<div class="span6"> -->
 <!-- 			<h6>Filter</h6> -->
 <!-- 				<input id="filterMMDomainTextBox" type="text" placeholder="Filter Metamodels by Name" /> -->
@@ -67,7 +67,7 @@
 				<!-- <select id="coDomainMetamodelSelect">
 				  <option value="" selected disabled>Metamodels</option>
 				</select>-->
-				<input id="coDomainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
+				<input autocomplete="off" id="coDomainMetamodelSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 <!-- 			<div class="span6"> -->
 <!-- 			<h6>Filter</h6> -->
 <!-- 				<input id="filterMMCoDomainTextBox" type="text" placeholder="Filter Metamodels by Name"/> -->

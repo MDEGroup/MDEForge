@@ -154,7 +154,7 @@
 									<h5 class="input-name">Ecore Metamodels <i class="pull-right icon-plus text-primary button-toggle" id="showEcoreList"></i></h5>
 									<div id="ecoreToAdd" style="display: none">
 										<div class="separator bottom"></div>
-										<input id="ecoreSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
+										<input autocomplete="off" id="ecoreSelect" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 										<span class="btn btn-block btn-primary" id="addEcore">Add</span>
 									</div>
 									<div class="separator bottom"></div>
@@ -171,7 +171,7 @@
 									
 									<div id="ATLToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<input id="ATLSelect" class="my-select" type="text" data-type="ATLTransformation" data-project="" placeholder="Search ATLTransformations">
+										<input autocomplete="off" id="ATLSelect" class="my-select" type="text" data-type="ATLTransformation" data-project="" placeholder="Search ATLTransformations">
 										<span class="btn btn-block btn-primary" id="addATL">Add</span>
 									</div>
 									<div class="separator bottom"></div>
@@ -188,7 +188,7 @@
 									<h5 class="input-name">Models <i class="pull-right icon-plus text-primary button-toggle" id="showModelList"></i></h5>
 									<div id="modelToAdd" style="display: none">
 									<div class="separator bottom"></div>
-										<input id="modelSelect" class="my-select" type="text" data-type="Model" placeholder="Search Models">
+										<input autocomplete="off" id="modelSelect" class="my-select" type="text" data-type="Model" placeholder="Search Models">
 										<div>
 											<span class="btn btn-block btn-primary" id="addModel">Add</span>
 										</div>

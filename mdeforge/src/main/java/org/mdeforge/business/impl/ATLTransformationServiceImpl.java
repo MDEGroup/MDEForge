@@ -153,11 +153,16 @@ public class ATLTransformationServiceImpl extends
 	public ATLTransformation create(ATLTransformation artifact) {
 		ATLTransformation result = super.create(artifact);
 		try {
-			artifact.setMetrics(calculateMetrics(artifact));
-			artifactRepository.save(artifact);
+			result.setMetrics(calculateMetrics(result));
+			artifactRepository.save(result);
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metric for metamodel");
 			throw new MetricEngineException(e.getMessage(), result.getId());
+		}
+		try {
+			createIndex(result);
+		}catch (Exception e) {
+			logger.error("Extact index error:" + e.getMessage());
 		}
 
 		return result;

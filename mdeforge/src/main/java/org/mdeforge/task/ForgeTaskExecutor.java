@@ -45,7 +45,6 @@ public class ForgeTaskExecutor {
 				}
 			}
 			if (toBeAnalyse.getArtifact() instanceof Model){
-				System.out.println(toBeAnalyse);
 				toBeAnalyseRepository.delete(toBeAnalyse);
 			}
 				

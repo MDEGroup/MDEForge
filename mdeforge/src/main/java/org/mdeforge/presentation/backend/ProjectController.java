@@ -129,7 +129,17 @@ public class ProjectController {
 //		}
 		return "redirect:/project/list";
 	}
-	
+	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+	public String delete(@RequestParam String project_id) {
+		Project p = projectService.findById(project_id, user);
+		projectService.delete(p, user);
+//		for(Workspace w : project.getWorkspaces())
+//		{
+//			Workspace workspace = workspaceService.findById(w.getId());
+//			model.addAttribute("workspacename", workspace.getName());
+//		}
+		return "redirect:/project/list";
+	}
 	
 	@RequestMapping(value = "/update", method = { RequestMethod.GET })
 	public String update_start(@RequestParam("name") String name, org.springframework.ui.Model model) {

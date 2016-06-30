@@ -76,7 +76,7 @@
 								<%-- 											anatlyserDoesNotFinish: ${error.anatlyserDoesNotFinish }<br/> --%>
 								errorKind: ${error.errorKind }<br /> errorMessage:
 								${error.errorMessage }<br /> model: <a
-									href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${error.model.id }">
+									href="${pageContext.request.contextPath}/private/Model/artifact?artifact_id=${error.model.id }">
 									${error.model.name }</a>
 							</div>
 						</div>
