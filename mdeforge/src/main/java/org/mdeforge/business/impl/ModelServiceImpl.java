@@ -191,11 +191,11 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 //		} catch (Exception e) {
 //			logger.error(e.getMessage());
 //		}
-//		try {
-//			createIndex(result);
-//		} catch (Exception e) {
-//			System.out.println("Unable to create index: " + e.getMessage());
-//		}
+		try {
+			createIndex(result);
+		} catch (Exception e) {
+			System.out.println("Unable to create index: " + e.getMessage());
+		}
 		return result;
 	}
 	@Override
@@ -236,6 +236,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				artifact.getRelations().add(relationTemp);
 				artifactRepository.save(artifact);
 				relList.add(relationTemp);
+				createIndex(artifact);
 			}
 			metamodel.getRelations().addAll(relList);
 			artifactRepository.save(metamodel);
@@ -396,7 +397,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 //				e.printStackTrace();
 //			}
 //		}
-		
+		try{
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
 		ecoreMetamodelService.loadArtifact(emm);
@@ -450,7 +451,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			}
 			
 		}
-		
+		}catch(Exception e) { logger.error("Same error when try to parse EMF index");}
 		//Artifact TYPE: "Model"
 		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
 		doc.add(artifactType);

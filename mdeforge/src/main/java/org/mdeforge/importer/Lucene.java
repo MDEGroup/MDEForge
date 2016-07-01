@@ -113,7 +113,7 @@ public class Lucene {
 		System.out.println("End Metamodel indexing!");
 		System.out.println("Start Model indexing...");
 		lucene.atlIndex();
-//		lucene.modelIndex();
+		lucene.modelIndex();
 		long endTime = System.nanoTime();
 		duration = (endTime - startTime) / 1000000; // milliseconds(1000000) - seconds (1000000000)
 		

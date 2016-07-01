@@ -29,9 +29,9 @@ public class LaunchTransformationTestFamilies2Person {
 
 	@BeforeClass
 	public static void setup() throws Exception {
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Juan", "test123");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Juan", "test123");
-		modelService = new ModelService("http://localhost:8080/mdeforge/", "Juan", "test123");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "juri");
 		mapper = new ObjectMapper();
 	}
 
@@ -39,12 +39,12 @@ public class LaunchTransformationTestFamilies2Person {
 	public void executeTransformationICMTDemo() throws Exception {
 		// Load metamodels from server
 		System.out.println("############ Load data ############");
-		EcoreMetamodel families = ecoreMetamodelService.getEcoreMetamodelByName("Families");
+		EcoreMetamodel families = ecoreMetamodelService.getEcoreMetamodelByName("FamiliesTC");
 		System.out.println("\t" + families.getName() + ": "	+ mapper.valueToTree(families).toString());
 		FileUtils.writeByteArrayToFile(new File(TEMP_FOLDER
 				+ families.getFile().getFileName()), families.getFile().getByteArray());
 
-		EcoreMetamodel person = ecoreMetamodelService.getEcoreMetamodelByName("Person");
+		EcoreMetamodel person = ecoreMetamodelService.getEcoreMetamodelByName("PersonTC");
 		System.out.println("\t" + person.getName() + ": " + mapper.valueToTree(person).toString());
 		FileUtils.writeByteArrayToFile(new File(TEMP_FOLDER	+ person.getFile().getFileName()), person.getFile()
 				.getByteArray());
@@ -61,7 +61,7 @@ public class LaunchTransformationTestFamilies2Person {
 		simpleFamilyModel.getRelations().add(ctr);
 
 		// Load Transformation
-		ATLTransformation atl = atlTransformationService.getATLTransformationByName("Families2Person");
+		ATLTransformation atl = atlTransformationService.getATLTransformationByName("families2personTC");
 		System.out.println("\tFamilies2Person: " + mapper.valueToTree(families).toString());
 		FileUtils.writeByteArrayToFile(new File(TEMP_FOLDER
 				+ atl.getFile().getFileName()), atl.getFile().getByteArray());
