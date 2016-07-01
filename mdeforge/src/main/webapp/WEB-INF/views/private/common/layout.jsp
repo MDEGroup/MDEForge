@@ -212,7 +212,7 @@
 	  ga('create', 'UA-49762168-2', 'mdeforge.org');
 	  ga('send', 'pageview');
 	</script>
-	<scrpt>
+	<script>
 		$('#upload-artifact').on('shown', function(){
 				var modal = $(this);
 				// load content with AJAX
@@ -223,7 +223,7 @@
 					}
 				});
 			});
-	</scrpt>
+	</script>
 	
 </body>
 </html>

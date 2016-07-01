@@ -34,7 +34,7 @@
 		
 			</div>
 			<div class="span6">
-				<input type="hidden" name="left_metamodel_id" value="">
+				<input type="hidden" name="right_metamodel_id" value="">
 				<input autocomplete="off" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 			</div>
 			</div>
@@ -84,7 +84,7 @@
 								<h5 class="muted">Shared by <strong class="text-black">${leftMetamodel.getShared().size()}</strong> users</h5>
 								<h5 class="input-name">Description</h5>
 								<p>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.
+								${leftMetamodel.description}
 									<c:forEach items="${leftMetamodel.properties}"
 										var="property">
 										<c:if test="${property.getName() == 'Description '}">
@@ -150,7 +150,7 @@
 															
 																<h5 class="input-name">Description</h5>
 															<p>
-															Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.
+															${rightMetamodel.description }
 																<c:forEach items="${rightMetamodel.properties}"
 																	var="property">
 																	<c:if test="${property.getName() == 'Description '}">

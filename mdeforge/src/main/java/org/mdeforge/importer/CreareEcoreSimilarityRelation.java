@@ -43,7 +43,7 @@ public class CreareEcoreSimilarityRelation {
 							System.out.println(ecoreMMArray[j].getName());
 							if(j % 100 == 0)
 								System.out.println("Coputed " + j + " of " + (ecoreMMlist.size()-i));
-//							double d = ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
+							double d = ecoreMetamodelService.calculateSimilarity(ecoreMMArray[i], ecoreMMArray[j]);
 						} catch (Exception e) {
 							System.err.println("ERROR: " + ecoreMMArray[i].getName() + " " + i  + " _ " + ecoreMMArray[j].getName() + " " + j);
 						}

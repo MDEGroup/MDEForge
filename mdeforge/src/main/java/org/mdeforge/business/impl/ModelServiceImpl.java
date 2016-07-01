@@ -354,7 +354,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			writer.addDocument(document);
 			
 			writer.close();
-			System.out.println("---------------------------------------");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			throw new BusinessException(e1.getMessage());
@@ -451,7 +450,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			}
 			
 		}
-		}catch(Exception e) { logger.error("Same error when try to parse EMF index");}
+		}catch(Exception e) { logger.error("Some error when try to parse EMF index");}
 		//Artifact TYPE: "Model"
 		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
 		doc.add(artifactType);

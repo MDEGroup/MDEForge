@@ -24,8 +24,7 @@
 	<span class="muted">${atlTransformation.getName()}</span>
 	<div class="row-fluid">
 	<div class="span12">
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
-	
+	<p>Model transformations can be remotely executed from the Execute the Transformation section. From this section, users can select input models already available in the repository or can upload new ones. Once the input models are selected, the transformation can be executed, and the link to download the generated target model is given back to the user </p>
 	</div>
 	</div>
 </div>
