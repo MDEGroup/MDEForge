@@ -140,7 +140,7 @@ function shareArtifact(){
 										</div>
 										<div class="span8">
 											<h5 class="strong">Description</h5>
-											<p>${artifact.Description}</p>
+											<p>${artifact.description}</p>
 											<div class="row-fluid">
 												<div class="span4">
 													<h5 class="strong">${artifact.getClass().getSimpleName() } File</h5>
