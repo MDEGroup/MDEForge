@@ -230,11 +230,11 @@
 							
 						</div>
 						<hr class="separator">
-						<span id="removeProject" class="btn btn-danger remove-project" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>
+						<span id="removeProject" class="btn btn-warning0 remove-project" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Remove Project from Workspace</span>
+						<span class="pull-right"></span>
 					</div>
 				</div>
 			</div>
-
 </div>
 <div class="separator "></div>
 <div class="separator "></div>

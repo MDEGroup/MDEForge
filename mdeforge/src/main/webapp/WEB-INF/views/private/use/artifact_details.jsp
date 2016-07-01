@@ -18,12 +18,12 @@
 <ul class="breadcrumb">
 	<li><spring:message
 			code="mdeforge.public.back.browse.breadcrumbs.you_are_here" /></li>
-	<li><a href="#" class="glyphicons dashboard"><i></i> <spring:message
-				code="mdeforge.public.back.browse.breadcrumbs.public_area" /></a></li>
+	<li><a href="#" class="glyphicons dashboard"><i></i> <spring:message code="mdeforge.public.back.browse.breadcrumbs.public_area" /></a></li>
 	<li class="divider"></li>
 	<li><spring:message code="mdeforge.public.back.browse" /></li>
 	<li class="divider"></li>
-	<li><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></li>
+	<!-- <li><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></li>-->
+	<li>${artifact.getClass().getSimpleName()} Details</li>
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
@@ -32,7 +32,8 @@
 <div class="span9">
 <div class="box-generic">
 	<h3 class="header-h main-title" id="artifactName" data-id="${artifact.getId()}">${artifact.getName()}</h3>
-	<h5 class="muted"><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></h5>
+	<!-- <h5 class="muted"><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></h5>-->
+	<h5 class="muted">${artifact.getClass().getSimpleName()} Details</h5>
 	<hr>
 	<h5 class="input-name">Used in ${artifact.getProjects().size()} projects</h5>
 	<div class="separator bottom"></div>
@@ -95,11 +96,11 @@
 			<div class="span2">
 				<a href="#modal-simple" class="widget-stats widget-stats-2" data-toggle="modal">
 						<span class="count  icon-desktop text-info"><i></i></span>
-						<span class="txt">Visualize Metamodel</span>
+						<span class="txt">Visualize ${artifact.getClass().getSimpleName()}</span>
 					</a>
 			</div>
 			<div class="span2">
-					<a href="#modal-simple" class="widget-stats widget-stats-2" data-toggle="modal">
+					<a href="#modal-simple" class="disabled-button widget-stats widget-stats-2" data-toggle="modal">
 						<!-- <span class="count icon-code-fork"><i></i></span> -->
 						<span class="count  icon-sitemap text-warning"><i></i></span>
 						<span class="txt">Visualize Tree View</span>
@@ -108,14 +109,14 @@
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/download?artifact_id=${artifact.getId()}" class="widget-stats widget-stats-2">
 						<span class="count icon-download-alt text-success"><i></i></span>
-						<span class="txt">Download Metamodel</span>
+						<span class="txt">Download ${artifact.getClass().getSimpleName()}</span>
 					</a>
 			</div>
 			<c:if test="${userId == artifact.getAuthor().getId()}">
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="widget-stats widget-stats-2">
 						<span class="count icon-remove text-error"><i></i></span>
-						<span class="txt">Delete Metamodel</span>
+						<span class="txt">Delete ${artifact.getClass().getSimpleName()}</span>
 					</a>
 			</div>
 			</c:if>
@@ -125,8 +126,10 @@
 		<hr>
 	<tiles:insertAttribute name="central" ignore="true"/>
 	<c:if test="${artifact.getMetrics().size()!=0}">
+
 	<div class="row-fluid">
 				<div class="span8">
+				<c:if test="${artifact.getMetrics().size()!=0}">
 				<div class="box-generic">
 					<h5 class="input-name">Metrics</h5>
 					<div class="separator bottom"></div>
@@ -207,12 +210,14 @@
 										</div>
 						<!-- // Widget END -->
 				</div>
+				</c:if>
 				</div>
 				<!-- span4 shared users -->
 				<tiles:insertAttribute name="right" ignore="true"/>
 			</div>
 			</c:if>
 		</div>
+
 
 <c:import var="fileToVisualize"
 	url="file:///${artifactFile.getAbsolutePath()}" />
@@ -268,6 +273,7 @@
 		rotateRatio : 0.5
 
 	}
+	
 
 	//WordCloud(document.getElementById('my_canvas'), options);
 </script>

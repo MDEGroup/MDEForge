@@ -80,7 +80,7 @@ function getMetamodels(typeArtifact, project, input){
     '</div>');
 	$.ajax({
 	    type: "POST",
-	    url: 'http://localhost:8080/mdeforge/public/searchArtifact',
+	    url: ctx + '/public/searchArtifact',
 	    data: {
         	search_string: query,
         	id_project: project,

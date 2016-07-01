@@ -11,13 +11,13 @@
 		<li class="divider"></li>
 		<li> Use</li>
 		<li class="divider"></li>
-		<li>My Artifacts</li>
+		<li>My ${type}s</li>
 </ul>
 <!-- Breadcrumb END -->
 
 
 
-<h3 class="header-h main-title">${Title}</h3>
+<h3 class="header-h main-title">My ${type}s</h3>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 	<div class="innerLR">
 	<div class="widget widget-heading-simple">
@@ -27,9 +27,10 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th class="center">Author</th>
 						<th class="center">Public</th>
 						<th class="center">Action</th>
-						<th class="center">Author</th>
+						
 					</tr>
 				</thead>
 			</table>
@@ -44,6 +45,11 @@ $(document).ready(function () {
 		"serverSide": true,
 		"filter" : false,
 		"responsive": true,
+		"language": {
+		    "lengthMenu": "Show _MENU_ <span class='strong text-primary'>${type}s</span> per page",
+		    "info": "Showing page <span class='text-primary'>_PAGE_</span> of <span class='text-primary'>_PAGES_</span>",
+		    "processing":'<img class="spinner" src="/mdeforge/resources/theme/images/spin.gif"></span>'
+		},
 		"columns":[
 	                
 	                {
@@ -73,7 +79,7 @@ $(document).ready(function () {
 	                    "defaultContent": "",
 	                    "className": "center",
 	                    "render": function ( data, type, row, meta ) {
-	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>Download</a>";
+	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/download?artifact_id=" + row.id + "'>Download</a>";
 	                     }
 	                 }
         ],
@@ -83,4 +89,5 @@ $(document).ready(function () {
 	});              
 });
 </script>
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>	
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/jquery.dataTables.js"></script>	
+<!-- <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script> -->

@@ -9,14 +9,13 @@
 
 <div class="row-fluid">
 	<div class="span12">
-		Conform to
+		<h5 class="input-name">Conform to</h5>
 		<c:forEach items="${artifact.relations}" var="relation">
 			<c:choose>
 				<c:when
 					test="${relation.getClass().name == 'org.mdeforge.business.model.ConformToRelation'}">
-					<a
-						href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.toArtifact.getId()}"
-						class="btn btn-success btn-small btn-block">${relation.toArtifact.getName()}</a>
+					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.toArtifact.getId()}"
+						class="btn btn-primary">${relation.toArtifact.getName()}</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>

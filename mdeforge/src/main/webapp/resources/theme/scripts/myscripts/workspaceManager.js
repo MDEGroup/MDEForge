@@ -240,7 +240,6 @@
 			url : ctx + "/private/project/" + idProject + "/addUser/" + idUser,
 			success : function(data) {
 				var result = $('#users');
-				debugger;
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/userBox.html',
 						function(template) {
 							var rendered = Mustache.render(template, data);
@@ -329,7 +328,6 @@
 	});
 	
 	$(document).on('click', '#removeProject', function(event){
-		debugger;
 		event.stopPropagation();
 
 		$('#removeProjectAlert').remove();
@@ -341,7 +339,6 @@
 		$.ajax({
 			url : ctx + "/private/workspace/" + idWorkspace + "/remove/" + idProject,
 			success : function(data) {
-				debugger;
 				var item = $('#item_' + idProject);
 				item.remove();
 				$('#projectSelect').append($('<option></option>').attr('value',idProject).text(nameProject));
@@ -353,7 +350,6 @@
 				});
 			},
 			error : function (err) {
-				debugger;
 				if(err.responseText == "ok"){
 					var item = $('#item_' + idProject);
 					item.remove();
@@ -365,7 +361,7 @@
 					});
 				}else{
 					console.log(err)
-					button.after('<div id="removeProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>Ops! Something went wrong. Try Again.</span></div>')
+					$('#details').append('<div id="removeProjectAlert" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">x</button><span>Ops! Something went wrong. Try Again.</span></div>')
 					
 				}
 				button.removeClass("disabled-button");
@@ -374,6 +370,53 @@
 			
 		});
 	});
+	/* DELETE PROJECT */
+	$(document).on('click', '#deleteProject', function(event){
+		event.stopPropagation();
+
+		$('#removeProjectAlert').remove();
+		var button = $(this);
+		button.addClass("disabled-button");
+		var idProject = $(this).data('id');
+		var nameProject = $(this).data('name');
+		var idWorkspace = $("#workspaceId").data('id');
+		$.ajax({
+			url : ctx + "private/project/delete",
+			type: "DELETE",
+			data: {
+				project_id: idProject 
+			},
+			success : function(data) {
+				var item = $('#item_' + idProject);
+				item.remove();
+				$('#workspaceDetailsDiv').hide();
+				button.removeClass("disabled-button");
+				$.gritter.add({
+					title: nameProject + ' has been deleted',
+					text: ""
+				});
+			},
+			error : function (err) {
+				if(err.responseText == "ok"){
+					var item = $('#item_' + idProject);
+					item.remove();
+					$('#workspaceDetailsDiv').hide();
+					$.gritter.add({
+						title: nameProject + ' has been deleted',
+						text: ""
+					});
+				}else{
+					console.log(err)
+					$('#details').append('<div id="removeProjectAlert" class="alert alert-error pull-right"><button type="button" class="close" data-dismiss="alert">x</button><span>Ops! Something went wrong. Try Again.</span></div>')
+					
+				}
+				button.removeClass("disabled-button");
+				
+			}
+			
+		});
+	});
+	/* END DELETE PROJECT */
 	
 	$('#showProjectList').click(function(event){
 		if ($('#projectsToAdd').css('display') == 'none') {
@@ -400,13 +443,12 @@
 			$(this).addClass('active');
 			var tagid = $(this).attr('id');
 			var id = $(this).data('id');
-			debugger;
 			$.ajax({
 				url : ctx + "/private/project/" + id,
 				success : function(data) {
-					debugger;
-					$('#projectId').attr('data-id',data.id)
-					$("#workspaceDetailsDiv").show();
+					$('#projectId').attr('data-id',data.id);
+					var workspace = $("#workspaceDetailsDiv");
+					workspace.show();
 					$('#users').empty();
 					$('#ATLToAdd').hide();
 					$('#modelToAdd').hide();
@@ -490,8 +532,12 @@
 					}else{
 						$('#visibility').html('<span class="btn btn-danger"><i class="icon-lock"></i> Private</span>')
 					}
-					$('#removeProject').data("id", data.id);
-					$('#removeProject').data("name", data.name)
+					var removeButton = $('#removeProject').data("id", data.id).data("name", data.name)
+					var userId = $("#loggedUserId").val();
+					if(userId == data.owner.id){
+						removeButton.next().html('<span id="deleteProject" class="btn btn-danger" data-id="'+ data.id +'" data-name="'+ data.name +'" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>')
+					}
+					
 					$('#projectName').text(data.name);
 					$('#projectDesc').text(data.description);
 					$('#ownerEmail').text(data.owner.email);
@@ -528,8 +574,10 @@
 		var button = $(this);
 		$("#addProjectAlert").remove();
 		var pname = $('#createProjectName');
-		var description = $('#createProjectDesc').val();
-		var open = $('#createProjectOpen').val();
+		var desc_obj = $('#createProjectDesc');
+		var description = desc_obj.val();
+		var open_obj = $('#createProjectOpen');
+		var open = open_obj.val();
 		pname.removeClass("input-error");
 		var idProject = pname.val();
 		if(idProject == "" || idProject.length == 0){
@@ -562,7 +610,9 @@
 					title: 'Project has been created and added to Workspace',
 					text: ""
 				});
-				
+				pname.val("");
+				desc_obj.val("");
+				open_obj.val("");
 			},
 			error : function error(data) {
 				console.log('error');
@@ -574,12 +624,13 @@
 	
 	$(document).on('click','#showUserList',function(event){
 		var button = $(this);
+		button.addClass("disabled-button");
 		if (!($(this).hasClass("rotate-item"))) {
 			$.ajax({
 				url : ctx + "/private/user/list",
 				success : function(data) {
 					var select = $('#userSelect');
-					button.addClass("rotate-item");
+					button.addClass("rotate-item").removeClass("disabled-button");
 					var userid = $("#loggedUserId").val();
 					$('#userSelect').empty();	
 					$.each(data, function(i, model){
@@ -595,7 +646,7 @@
 		}
 		else {
 			$('#userList').hide();
-			$(this).removeClass('rotate-item');
+			$(this).removeClass('rotate-item disabled-button');
 		}
 	});
 
@@ -664,7 +715,7 @@ function getArtifactsForProject(typeArtifact, project, input){
     '</div>');
 	$.ajax({
 	    type: "POST",
-	    url: 'http://localhost:8080/mdeforge/public/searchArtifact',
+	    url: ctx + '/public/searchArtifact',
 	    data: {
         	search_string: query,
         	id_project: project,
@@ -694,3 +745,4 @@ function getArtifactsForProject(typeArtifact, project, input){
 	    }
 	});
 }
+// /private/project/delete method:DELETE data:{ idProject: 
