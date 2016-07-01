@@ -14,8 +14,12 @@
 	});
 
 	$(document).on('click','#addUserArtifact', function(event){
-		var idUser = $('#userSelect').val();
-		var nameModel = $("#userSelect option:selected").text();
+		debugger;
+		var button = $(this);
+		button.addClass("disabled-button");
+		var select = $('#userSelect');
+		var idUser = select.val();
+		var nameUser = $("#userSelect option:selected").text();
 		var idArtifact = $("#artifactName").data('id');
 		$.ajax({
 			url : ctx + "/private/artifact/" + idArtifact + "/addUser/" + idUser,
@@ -28,30 +32,45 @@
 						});
 				$("#userSelect option[value='" + idUser + "']").remove();
 				$('#userList').hide();
+				button.removeClass("disabled-button");
+				$.gritter.add({
+					title: 'This artifact has been shared with '+ nameUser,
+					text: ""
+				});
+				$('#showUserList').removeClass("rotate-item");
+				
 			},
 			error : function error(data) {
 				console.log('error')
+				button.removeClass("disabled-button");
 			}
 		});
 	});
 	
 	$(document).on('click','#showUserList',function(event){
-		$('#userSelect').empty();
-		if ($('#userList').css('display') == 'none') {
+		var button = $(this);
+		button.addClass("disabled-button");
+		var select = $('#userSelect');
+		select.empty();
+		if (!(button.hasClass("rotate-item"))) {
 			$.ajax({
 				url : ctx + "/private/user/list",
 				success : function(data) {
+					button.addClass("rotate-item").removeClass("disabled-button");
+					var userid = $("#loggedUserId").val();	
 					$.each(data, function(i, model){
-						$('#userSelect').append($('<option></option>').attr('value',model.id).text(model.username));
+						if(userid != model.id)
+							select.append('<option value='+model.id+' >'+model.username+'</option>');
 					});
+					$('#userList').show();
 				},
 				error : function error(data) {
 					console.log('error');
 				}
 			});
-			$('#userList').show();
 		}
 		else {
 			$('#userList').hide();
+			$(this).removeClass('rotate-item disabled-button');
 		}
 	});

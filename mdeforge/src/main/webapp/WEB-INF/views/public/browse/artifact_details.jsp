@@ -40,7 +40,7 @@ function shareArtifact(){
 	<li class="divider"></li>
 	<li><spring:message code="mdeforge.public.back.browse" /></li>
 	<li class="divider"></li>
-	<li>${artifact.getClass().getSimpleName() } details</li>
+	<li>${artifact.getClass().getSimpleName() } Details</li>
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
@@ -140,14 +140,7 @@ function shareArtifact(){
 										</div>
 										<div class="span8">
 											<h5 class="strong">Description</h5>
-											<p>
-												<c:forEach items="${artifact.properties}"
-													var="property">
-													<c:if test="${property.getName() == 'Description '}">
-															${property.getValue()}
-														</c:if>
-												</c:forEach>
-											</p>
+											<p>${artifact.Description}</p>
 											<div class="row-fluid">
 												<div class="span4">
 													<h5 class="strong">${artifact.getClass().getSimpleName() } File</h5>
