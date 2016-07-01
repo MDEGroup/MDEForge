@@ -338,11 +338,11 @@ RelationType element. </p>
 																		</c:choose>
 																		
 																		<a
-																			href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/private/Model/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a></td>
 																	</c:when>
 																	<c:otherwise>
 																		<td><a
-																			href="${pageContext.request.contextPath}/private/Model/model_details?model_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
+																			href="${pageContext.request.contextPath}/private/Model/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a></td>
 																	</c:otherwise>
 																</c:choose>
 															</c:when>
