@@ -9,9 +9,11 @@ import java.util.List;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.FSDirectory;
+import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,6 +39,17 @@ public class Lucene {
 		// ecoreMetamodelService.search("eClass:Family");
 	}
 
+	public void atlIndex() {
+		ATLTransformationService ecoreMetamodelService = context.getBean(ATLTransformationService.class);
+		List<ATLTransformation> ecoreMMlist = ecoreMetamodelService.findAll();
+		for (ATLTransformation ecoreMetamodel : ecoreMMlist) {
+				System.out.println("Indexing: " + ecoreMetamodel.getName());
+				ecoreMetamodelService.createIndex(ecoreMetamodel);
+		}
+		System.out.println("------------------------------------------------");
+		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
+		// ecoreMetamodelService.search("eClass:Family");
+	}
 	
 	public void modelIndex(){
 		ModelService modelService = context.getBean(ModelService.class);
@@ -83,8 +96,11 @@ public class Lucene {
 	
 	public static void main(String[] args) {
 		
-		String indexDirectoryPath = "/Users/francesco/Desktop/newForgeDir/luceneIndex";
-		
+		String indexDirectoryPath = "/Users/juri/development/forgeDir/luceneIndex";
+		/*
+		 * FANCESCO URL
+		 * /Users/francesco/Desktop/newForgeDir/luceneIndex
+		 * */
 		ApplicationContext context = new ClassPathXmlApplicationContext("file:src/main/webapp/WEB-INF/spring/root-context.xml");
 
 		Lucene lucene = new Lucene(context);
@@ -95,10 +111,9 @@ public class Lucene {
 		System.out.println("Start Metamodel indexing...");
 		lucene.metamodelIndex();
 		System.out.println("End Metamodel indexing!");
-		
 		System.out.println("Start Model indexing...");
-		lucene.modelIndex();
-		
+		lucene.atlIndex();
+//		lucene.modelIndex();
 		long endTime = System.nanoTime();
 		duration = (endTime - startTime) / 1000000; // milliseconds(1000000) - seconds (1000000000)
 		
