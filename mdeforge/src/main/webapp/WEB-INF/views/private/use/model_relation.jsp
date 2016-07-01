@@ -3,7 +3,7 @@
 	<div class="span6">
 		<h5 class="input-name">Select Metamodel</h5>
 		<input id="conformMetamodelSelect" type="hidden"  name="conformToRelation" value="">
-		<input autocomplete="off" type="text" class="my-select" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
+		<input autocomplete="off" id="modelRelMetamodel" type="text" class="my-select" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 	</div>
 </div>
 <div class="separator"></div>
