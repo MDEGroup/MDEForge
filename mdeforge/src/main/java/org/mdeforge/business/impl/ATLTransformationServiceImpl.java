@@ -236,11 +236,11 @@ public class ATLTransformationServiceImpl extends
 		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
 		 	
 		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
-		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, dctr.getToArtifact().getName(), 
+		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, temp_art.getName(), 
 		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, dctr.getToArtifact().getId(), 
+		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, temp_art.getId(), 
 		 				Store.YES, Index.ANALYZED);
-		 		
 				doc.add(fromMMID);
 				doc.add(fromMMName);
 			}
