@@ -314,7 +314,7 @@ RelationType element. </p>
 											<!-- Table heading -->
 											<thead>
 												<tr>
-													<th class="center"><spring:message	code="mdeforge.relation.codomainconformto"></spring:message></th>
+													<th class="center">Models conforms to this metamodel</th>
 												</tr>
 											</thead>
 											<!-- // Table heading END -->

@@ -185,7 +185,7 @@ public class ATLTransformationServiceImpl extends
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
 			IndexWriter writer = new IndexWriter(indexDir, conf);
-
+			try {
 			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
 			String filePath = gridFileMediaService.getFilePath(art);
 			EMFModel atlDynModel = (EMFModel) modelFactory
@@ -245,9 +245,10 @@ public class ATLTransformationServiceImpl extends
 				doc.add(fromMMName);
 			}
 		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
-		 		Field fromMMName = new Field(TO_METAMODEL_TAG, dctr.getToArtifact().getName(), 
+		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+		 		Field fromMMName = new Field(TO_METAMODEL_TAG, temp_art.getName(), 
 		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(TO_METAMODEL_TAG, dctr.getToArtifact().getId(), 
+		 		Field fromMMID = new Field(TO_METAMODEL_TAG, temp_art.getId(), 
 		 				Store.YES, Index.ANALYZED);
 				doc.add(fromMMID);
 				doc.add(fromMMName);
@@ -258,29 +259,26 @@ public class ATLTransformationServiceImpl extends
 		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), 
 		 			Store.YES, Index.ANALYZED);
 		 	for (Property prop : art.getProperties()) {
+		 		
 				String propName = prop.getName();
 				String propValue = prop.getValue();
-				Field propField = new Field(propName, propValue, 
+				if(propName != null && propValue != null){
+					Field propField = new Field(propName, propValue, 
 						Store.YES, Index.ANALYZED);
-				doc.add(propField);
+					doc.add(propField);
+				}
 			}
 		 	Field idField = new Field(ID_TAG, art.getId(), 
 		 			Store.YES, Index.ANALYZED);
-		 	for (Property prop : art.getProperties()) {
-				String propName = prop.getName();
-				String propValue = prop.getValue();
-				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-				doc.add(propField);
-			}
 		 	doc.add(artName);
 		 	doc.add(authorField);
 		 	doc.add(lastUpdateField);
 			doc.add(idField);
 			writer.addDocument(doc);
+			}catch (Exception e) {logger.error(e.getMessage());e.printStackTrace();}
 			writer.close();
-		} catch (ATLCoreException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (IOException e) {
+		}
+		  catch (IOException e) {
 			e.printStackTrace();
 		}
 		
