@@ -710,12 +710,9 @@ public class ATLTransformationServiceImpl extends
 	public List<ATLTransformationTestServiceError> testServices(String transformation_id) throws ATLTransformationCompilationError, transException {
 		ATLTransformation atl = findOne(transformation_id);
 		EMFModel atlModel = injectATLModel(atl);
+		EcoreMetamodel ecore = (EcoreMetamodel) atl.getDomainConformToRelation().get(0).getToArtifact();
 		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
-		for (Model model : modelList) {
-			model.setAuthor(atl.getAuthor());
-			model.setOpen(true);
-			modelService.create(model);
-		}
+		modelService.createAll(modelList, ecore,atl.getAuthor());
 		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);
@@ -726,10 +723,8 @@ public class ATLTransformationServiceImpl extends
 		ATLTransformation atl = findOne(transformation_id.getId());
 		EMFModel atlModel = injectATLModel(atl);
 		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
-		for (Model model : modelList) {
-			model.setAuthor(atl.getAuthor());
-			modelService.create(model);
-		}
+		EcoreMetamodel ecore = (EcoreMetamodel) atl.getDomainConformToRelation().get(0).getToArtifact();
+		modelService.createAll(modelList, ecore,atl.getAuthor());
 		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);

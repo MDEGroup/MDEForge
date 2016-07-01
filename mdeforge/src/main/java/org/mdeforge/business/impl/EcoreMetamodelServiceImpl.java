@@ -1359,9 +1359,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			// Create an index in the directory, appending new index over previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
 			// create the indexer
+			Document document = parseArtifactForIndex(is);
 			this.writer = new IndexWriter(indexDir, conf);
 
-			Document document = parseArtifactForIndex(is);
 			try {
 				// writer.updateDocument(new Term("path", file.getPath()), document);
 				writer.addDocument(document);

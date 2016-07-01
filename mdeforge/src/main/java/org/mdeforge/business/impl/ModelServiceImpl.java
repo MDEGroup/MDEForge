@@ -47,6 +47,7 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
@@ -58,11 +59,16 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.ConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.LuceneTag;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
+import org.mdeforge.business.model.ToBeAnalyse;
+import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.WeightedContents;
 import org.mdeforge.business.search.WeightedResourceSerializer;
@@ -81,6 +87,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Service;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
@@ -168,26 +175,79 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Override
 	public Model create(Model artifact) {
 		EcoreMetamodel emm = (EcoreMetamodel)artifact.getMetamodel().getToArtifact();
-		if (emm == null)
-			throw new BusinessException();
-		artifact.setValid(isValid(artifact));
-		
-
-		EcoreMetamodel mmID = emm;
+		System.out.println(artifact.getName());
+//		if (emm == null)
+//			throw new BusinessException();
+//		artifact.setValid(isValid(artifact));
+//		
+//
+//		EcoreMetamodel mmID = emm;
+		if(artifact.getName().endsWith("m13.model"))
+			System.out.println("Perchè");
 		Model result = super.create(artifact);
-		try {
-			this.extractedContent(result);
-			modelRepository.save(result);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		try {
-			createIndex(result);
-		} catch (Exception e) {
-			System.out.println("Unable to create index: " + e.getMessage());
-		}
+//		try {
+//			this.extractedContent(result);
+//			modelRepository.save(result);
+//		} catch (Exception e) {
+//			logger.error(e.getMessage());
+//		}
+//		try {
+//			createIndex(result);
+//		} catch (Exception e) {
+//			System.out.println("Unable to create index: " + e.getMessage());
+//		}
 		return result;
 	}
+	@Override
+	public void createAll(List<Model> artifacts, EcoreMetamodel metamodel, User user) throws BusinessException {
+		// if(findOneByName(artifact.getName())!=null) {
+		// logger.error("DuplicateName");
+		// throw new DuplicateNameException();
+		// }
+		metamodel = (EcoreMetamodel) artifactRepository.findOne(metamodel.getId());
+		List<Relation> relList = new ArrayList<Relation>();
+		try {
+			for (Model artifact : artifacts) {
+				if (artifactRepository.findByName(artifact.getName()) != null)
+					throw new DuplicateNameException();
+				artifact.setAuthor(user);
+				GridFileMedia fileMedia = new GridFileMedia();
+				fileMedia.setFileName(artifact.getFile().getFileName());
+				if (artifact.getFile().getByteArray() != null)
+					fileMedia.setByteArray(artifact.getFile().getByteArray());
+				else
+					fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
+				artifact.setFile(fileMedia);
+				
+				if (artifact.getFile() != null) {
+					gridFileMediaService.store(artifact.getFile());
+				}
+				artifact.setCreated(new Date());
+				artifact.setModified(new Date());
+	
+				artifact.setAuthor(user);
+				if (artifact.getShared() == null)
+					artifact.setShared(new ArrayList<User>());
+				artifact.getShared().add(user);
+				Relation relationTemp = artifact.getMetamodel();
+				artifact.setRelations(new ArrayList<Relation>());
+				artifactRepository.save(artifact);
+				relationRepository.save(relationTemp);
+				artifact.getRelations().add(relationTemp);
+				artifactRepository.save(artifact);
+				relList.add(relationTemp);
+			}
+			metamodel.getRelations().addAll(relList);
+			artifactRepository.save(metamodel);
+			user.getSharedArtifact().addAll(artifacts);
+		} catch (Exception e) {
+			throw new BusinessException();
+		}
+	}
+	
+	
+	
+	
 	@Override
 	public void extractedContent(Model art) {
 		EcoreMetamodel mmID = (EcoreMetamodel) art.getMetamodel().getToArtifact();
