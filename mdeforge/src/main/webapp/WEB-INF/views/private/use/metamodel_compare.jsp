@@ -23,35 +23,23 @@
 
 <div class="separator"></div>
 <div class="innerLR">
-
-		<form action="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" method="POST">
+		<div class="row-fluid" style="background: url(/mdeforge/resources/theme/images/5.jpg) center center no-repeat;background-size: cover; height:200px"></div>
+		<div class="separator"></div>
+		<form id="form_compare" class="form-horizontal" action="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" method="POST">
 			<div class="row-fluid">
 			
 			<div class="span6">
-			<a href="#" class="widget-stats widget-stats-2" style="padding-bottom: 0;">
-						<!-- <span class="count icon-code-fork"><i></i></span> -->
-						<span class="count  icon-file-text-alt text-black"><i></i></span>
-					</a>
-				<select class="span12" name="left_metamodel_id">
-						<c:forEach items="${ecoreMetamodelList}" var="metamodel">
-							<option value="${metamodel.getId()}">${metamodel.getName()}</option>
-						</c:forEach>
-				</select>
+				<input type="hidden" name="left_metamodel_id" value="">
+				<input autocomplete="off" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
+		
 			</div>
 			<div class="span6">
-			<a href="#" class="widget-stats widget-stats-2" style="padding-bottom: 0;">
-						<!-- <span class="count icon-code-fork"><i></i></span> -->
-						<span class="count  icon-file-text-alt text-black"><i></i></span>
-					</a>
-				<select class="span12" name="right_metamodel_id">
-											<c:forEach items="${ecoreMetamodelList}" var="metamodel">
-												<option value="${metamodel.getId()}">${metamodel.getName()}</option>
-											</c:forEach>
-					</select>
+				<input type="hidden" name="left_metamodel_id" value="">
+				<input autocomplete="off" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search EcoreMetamodels">
 			</div>
 			</div>
 					
-				<button class="btn btn-primary" style="margin: 20px auto;padding: 15px 20px; display: block" name="compare" value="1">Compare Metamodels</button>
+				<button class="btn btn-primary" style="margin: 20px auto;padding: 15px 40px; display: block" name="compare" value="1">Compare Metamodels</button>
 		</form>
 
 
@@ -278,6 +266,146 @@
 
 </div>
 
+<script>
+/* SELECT AJAX INITIALIZATION*/
+var delay = null;
+$(document).ready(function(){
+	initSelects($('.my-select'));
+})
 
+
+function initSelects(select){
+	//select is a text input
+	select.each(function(e){
+		$(this).after('<div class="my-select-control"><div class="my-select-dropdown">' + 
+						'<div id="select-content" class="my-select-content">' + 
+		                '</div></div></div>');
+		var next = $(this).next();
+		var prev = $(this).prev();
+		$(this).data("target", next);
+		$(this).data("input", prev);
+		$(this).data("content", next.find("#select-content"))
+	});
+}
+
+/* MY SELECT EVENTS */
+$("body").on("mousedown", ".my-select-item", function(e){
+	e.preventDefault();
+	var input = $(this).closest(".my-select-control").prev();
+	
+	input
+		.data("id", $(this).data("id"))
+		.data("name", $(this).data("name"))
+		.val($(this).data("name"))
+		.blur()
+	
+	var value = input.data("input");
+	value.val($(this).data("id"));
+})
+
+
+$('body').on("focus", ".my-select", function(){
+	$(this).removeClass("input-error").attr("placeholder", "Search EcoreMetamodels");
+	$(this).data("target").addClass("dropdown-open");
+})
+.on("blur", ".my-select", function(){
+	$(this).data("target").removeClass("dropdown-open")
+})
+.on("keyup", ".my-select", function(){
+	if (delay !== null) {
+        clearTimeout(delay);
+    }
+	var type = $(this).data("type");
+	var project = $(this).data("project");
+	var that = $(this);
+	delay = setTimeout(
+			function(){
+				if(that.val().length > 0)
+					getMetamodels(type, project, that)
+	}, 500)
+})
+
+function getMetamodels(typeArtifact, project, input){
+	//project is to ignore artifacts for that project
+	//if project is null all artifacts will be retrived
+	//typeArtifact can be "EcoreMetamodel", "ATLTransformation", "Model"
+	//input is the html element
+	var select = input.data("content");
+	var query = input.val();
+	select.html('<div class="my-select-item-info">' +
+            '<span class="by loagind-select text-primary">Loading...</span>' +
+    '</div>');
+	$.ajax({
+	    type: "POST",
+	    url: ctx + '/public/searchArtifact',
+	    data: {
+        	search_string: query,
+        	id_project: project,
+        	type: typeArtifact,
+        	limit: 50
+        },
+	    dataType:'json',
+	    success: function(data) {
+	    	console.log(data)
+	    	var options = '';  
+			if(data.length > 0){
+				data.forEach(function(item, index, array){
+			    	   options += '<div class="my-select-item" data-id="'+ item.id +'" data-name="'+ item.name +'">' +
+				                '<h5 class="text-black strong">' + escape(item.name) + '</h5>' +
+				                    '<span class="by">' + escape(item.author.username) + '</span>' +
+				            '</div>';              
+			       }); 
+			}
+			else{
+				options = '<div class="my-select-item-info"><span class="by text-primary">No result found.</span></div>';
+			}
+			select.html(options);
+	    },
+	    error: function(res){
+	    	console.log(res);
+	    	select.html('<div class="my-select-item-info"><span class="by text-error">Ops. Something went wrong. Try Again</span></div>');
+	    }
+	});
+}
+
+$('#form_compare').submit(function(e){
+	debugger;
+	var valid = true;
+	var select = $('.my-select');
+	var  meta_id_l = $(select[0]).data("id");
+	var input_id_l = $(select[0]).prev().val();
+	var meta_name_l = $(select[0]).data("name");
+	var  meta_id_r = $(select[1]).data("id");
+	var input_id_r = $(select[1]).prev().val();
+	var meta_name_r = $(select[1]).data("name");
+	//when input is null
+	if(meta_id_l === "undefined" || $(select[0]).val().length == 0 || input_id_l == ""){
+		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+		$(select[0]).addClass("input-error").attr("placeholder", "No Metamodel Selected");
+		valid = false;
+	}
+	if(meta_id_r === "undefined" || $(select[1]).val().length == 0 || input_id_r == ""){
+		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+		$(select[1]).addClass("input-error").attr("placeholder", "No Metamodel Selected");
+		valid = false;
+	}
+	//when input has been edited
+	if(meta_id_l != input_id_l || meta_name_l === "undefined" || $(select[0]).val() != meta_name_l){
+		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+		$(select[0]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
+		valid = false;
+	}
+	if(meta_id_r != input_id_r || meta_name_r === "undefined" || $(select[1]).val() != meta_name_r){
+		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+		$(select[1]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
+		valid = false;
+	}
+	if(valid){
+		return true;
+	}else{
+		e.preventDefault();
+	}
+});
+</script>
 
 
