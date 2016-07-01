@@ -70,7 +70,7 @@ public abstract class ArtifactPrivateController<T extends Artifact> {
 		return "private.use.artifact_details";
 	}
 	
-	@RequestMapping(value = "/artifact_download", method = RequestMethod.GET)
+	@RequestMapping(value = "/download", method = RequestMethod.GET)
 	public void download(@RequestParam String artifact_id,
 			HttpServletResponse response) throws IOException {
 

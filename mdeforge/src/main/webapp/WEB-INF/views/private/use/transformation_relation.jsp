@@ -17,8 +17,11 @@
 	</div>
 </div>
 <div class="separator bottom"></div>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. 
-		Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
+<p>When uploading transformations, it is necessary to specify the source and target
+metamodels. It is possible to parse the transformation being uploaded to automatically
+search for candidate metamodels. If they are not
+available in the repository, users have to upload them before finalizing the addition of
+the new transformation.</p>
 <!-- Form actions -->
 <div class="row-fluid" id="transformationRelations">
 		<div class="span6 expand-row">

@@ -20,6 +20,7 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -436,7 +437,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	
 	
 	@Override
-	public SearchResultComplete searchWithPagination(String queryString, int maxSearchResult, int hitsPerPage, int pageNumber) throws BusinessException {
+	public SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException {
 		long duration = 0;
 		long startTime = System.nanoTime();
 		
@@ -459,13 +460,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 			
-			TopScoreDocCollector collector = TopScoreDocCollector.create(maxSearchResult, true);  // maxSearchResult is just an int limiting the total number of hits 
+			TopScoreDocCollector collector = TopScoreDocCollector.create(3000, true);  // maxSearchResult is just an int limiting the total number of hits 
 
 			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
 			
 	        searcher.search(query, collector);
 
-	        totalNumberOfHits = (collector.getTotalHits() > maxSearchResult)?maxSearchResult:collector.getTotalHits();
+	        totalNumberOfHits = collector.getTotalHits();
 
 	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
 			
@@ -488,6 +489,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				}
 				T art = findOne(doc.get("id"));
 				
+				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
 				SearchResult sr = new SearchResult();
 				sr.setArtifact(art);
 				sr.setScore(hits.scoreDocs[i].doc);
@@ -749,8 +751,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			us.getToArtifact().getRelations().remove(us);
 			artifactRepository.save(us.getFromArtifact());
 			artifactRepository.save(us.getToArtifact());
-			relationRepository.delete(us);
 		}
+		relationRepository.delete(relations);
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
@@ -1267,5 +1269,36 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Collections.sort(sortedList);
 		
 		return sortedList;
+	}
+	
+	@Override
+	/**
+	 * Delete a Term from Lucene index. It take as input the FIELD_NAME and the FILE_PATH of the file we want to delete.
+	 */
+	public boolean deleteTermFromIndex(String fieldName, String filePath){
+		int numberDeleteTerms = 0;
+		boolean result = false;
+
+		File indexDirFile = new File(basePathLucene);
+		FSDirectory indexDir;
+		IndexReader luceneIndexReader = null;
+		try {
+			indexDir = FSDirectory.open(indexDirFile);
+			luceneIndexReader = IndexReader.open(indexDir);
+			
+			Term termToDelete = new Term(fieldName, filePath); 
+			
+			numberDeleteTerms = luceneIndexReader.deleteDocuments(termToDelete);
+			luceneIndexReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(numberDeleteTerms > 0){
+			result = true;
+		}
+		
+		return result;
 	}
 }

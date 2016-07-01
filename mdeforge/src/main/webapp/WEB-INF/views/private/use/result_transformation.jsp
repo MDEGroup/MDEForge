@@ -18,7 +18,7 @@
 <div class="innerLR">
 	<div class="widget widget-heading-simple widget-body-white">
 		<div class="row-fluid">
-			<div class="span12">
+			<h4>Results</h4>
 				<table class="table table-bordered table-striped table-white">
 					<thead>
 						<tr>
@@ -39,12 +39,14 @@
 						</c:forEach>
 					</tbody>
 				</table>
-			</div>
 		</div>
+		</div>
+		<div class="widget widget-heading-simple widget-body-white">
 		<div class="row-fluid">
-			 <textarea name="errors" rows="4" style="width:100%">
-			 ${errors }
-			</textarea> 
+			<h4>Log:</h4>
+				 <textarea name="errors" rows="4" style="width:100%">
+				 ${errors }
+				</textarea> 
 		</div>
 	</div>
 

@@ -20,8 +20,8 @@
 <div class="box-generic">
 <div class="row-fluid">
 <div class="span8">
-	<h3 class="header-h main-title"><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+	<h3 class="header-h main-title">My workspaces</h3>
+<p>Resembling functionalities of desktop IDEs, like Eclipse, registered users have the possibility to create modeling artifacts and organize them in projects that are, in turn, contained in workspaces. Projects and artifacts can be shared with users of the same system installation.</p>
 <span> Metamodels in the repository: ${numberOfMetamodels}</span>
 </div>
 	<div class="span4 buttons text-right" style="margin-top: 20px">
