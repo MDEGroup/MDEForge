@@ -46,15 +46,15 @@ $(function() {
 			            				//'<select id="domain' + index + '" name="domainConformToRelation['+ d +'].toArtifact.id">' +
 			            				//	selectToAdd.html() + 
 			            				//'</select>' +
-			            				'<input id="ecoreSelectIdFrom" type="hidden" name="domainConformToRelation['+ d +'].toArtifact.id" value="">' +
-			            				'<input id="ecoreSelectFrom" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">' +
+			            				'<input autocomplete="off" id="ecoreSelectIdFrom" type="hidden" name="domainConformToRelation['+ d +'].toArtifact.id" value="">' +
+			            				'<input autocomplete="off" id="ecoreSelectFrom" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">' +
 			            				//'<input id="domainFilter' + index + '" type="text" />' +
 			            			'</td>' +  
 			            			'<td>' + 
-			            			'<input type="text" name="domainConformToRelation['+ d +'].name" value="' + toRender.modelName  + '" />' +			  			
+			            			'<input autocomplete="off" type="text" name="domainConformToRelation['+ d +'].name" value="' + toRender.modelName  + '" />' +			  			
 			            			'</td>' +
 			            			'<td>' +
-			            				'<input type="text" name="domainConformToRelation['+ d +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
+			            				'<input autocomplete="off" type="text" name="domainConformToRelation['+ d +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
 			            			'</td>' +
 			            			'<td>Disabled</td>' +
 		            			'</tr>';
@@ -75,15 +75,15 @@ $(function() {
 				            				//'<select id="coDomain' + index + '" name="coDomainConformToRelation['+ c +'].toArtifact.id">' +
 				            				//	selectToAdd.html() + 
 				            				//'</select>' +
-				            				'<input id="ecoreSelectIdTo" type="hidden" name="coDomainConformToRelation['+ c +'].toArtifact.id" value="">' +
-				            				'<input id="ecoreSelectTo" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">' +
+				            				'<input autocomplete="off" id="ecoreSelectIdTo" type="hidden" name="coDomainConformToRelation['+ c +'].toArtifact.id" value="">' +
+				            				'<input autocomplete="off" id="ecoreSelectTo" class="my-select" type="text" data-type="EcoreMetamodel" placeholder="Search Ecore Metamodels">' +
 				            				//'<input id="coDomainFilter' + index + '" type="text" />' +
 				            			'</td>' +  
 				            			'<td>' + 
-				            			'<input type="text" disabled name="coDomainConformToRelation['+ c +'].name" value="' + toRender.modelName  + '" />' +			  			
+				            			'<input autocomplete="off" type="text" name="coDomainConformToRelation['+ c +'].name" value="' + toRender.modelName  + '" />' +			  			
 				            			'</td>' +
 				            			'<td>' +
-				            				'<input type="text" disabled name="coDomainConformToRelation['+ c +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
+				            				'<input autocomplete="off" type="text" name="coDomainConformToRelation['+ c +'].referenceModelName" value="' + toRender.metamodelName + '" />' +
 				            			'</td>' +
 				            			'<td>Disabled</td>' +
 			            			'</tr>';

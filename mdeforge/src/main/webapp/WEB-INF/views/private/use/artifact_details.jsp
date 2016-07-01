@@ -124,6 +124,7 @@
 	</div>
 		<hr>
 	<tiles:insertAttribute name="central" ignore="true"/>
+	<c:if test="${artifact.getMetrics().size()!=0}">
 	<div class="row-fluid">
 				<div class="span8">
 				<div class="box-generic">
@@ -210,7 +211,7 @@
 				<!-- span4 shared users -->
 				<tiles:insertAttribute name="right" ignore="true"/>
 			</div>
-
+			</c:if>
 		</div>
 
 <c:import var="fileToVisualize"

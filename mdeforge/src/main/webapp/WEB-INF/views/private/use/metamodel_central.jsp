@@ -10,7 +10,11 @@
 <div class="span12">
 <div class="box-generic">
 <h5 class="input-name">Relations</h5>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
+<p> Each artifact refers to the
+corresponding type, e.g., model, transformation, metamodel, etc. The specification of
+the relation between a given artifact and the corresponding type is done by means of
+the Relation elements. In turn, each relation is typed by means of a corresponding
+RelationType element. </p>
 
 <div class="separator bottom"></div>
     <!-- Tabs Heading -->
