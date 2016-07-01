@@ -751,8 +751,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			us.getToArtifact().getRelations().remove(us);
 			artifactRepository.save(us.getFromArtifact());
 			artifactRepository.save(us.getToArtifact());
-			relationRepository.delete(us);
 		}
+		relationRepository.delete(relations);
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
 
