@@ -163,7 +163,6 @@
 											<ul>
 												<li class="disable"><a href="#">&lt;</a></li>
 												<c:choose>
-													<!-- If we are in the first page disable the "back" button; otherwise request the previous page-->
 													<c:when test="${searchResultComplete.getPageNumber() != 1}">
 														<form action="${pageContext.request.contextPath}/public/search" method="POST">
 															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
@@ -172,16 +171,13 @@
 														</form>
 													</c:when>
 													<c:otherwise>
-														<!-- Disabled button -->
 														<input type="submit" name="submit">
 													</c:otherwise>
 												</c:choose>
 
 												<c:forEach begin="1" end="${searchResultComplete.getPages()}" varStatus="loop">
 													<c:choose>
-														<!-- If we are in the same page we visualize disable the button; otherwise make clickable the button to request the proper page-->
 														<c:when test="${loop.index == searchResultComplete.getPageNumber()}">
-															<!-- Disabled button -->
 															<li class="active"><a href="#">${loop.index}</a></li>
 															<input type="submit" name="submit">
 														</c:when>
@@ -198,7 +194,6 @@
 
 												<li class="disable"><a href="#">&gt;</a></li>
 												<c:choose>
-													<!-- If we are in the last page disable the "forward" button; otherwise request the subsequent page-->
 													<c:when test="${searchResultComplete.getPageNumber() != searchResultComplete.getPages()}">
 														<form action="${pageContext.request.contextPath}/public/search" method="POST">
 															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
@@ -207,7 +202,6 @@
 														</form>
 													</c:when>
 													<c:otherwise>
-														<!-- Disabled button -->
 														<input type="submit" name="submit">
 													</c:otherwise>
 												</c:choose>

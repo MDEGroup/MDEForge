@@ -69,8 +69,7 @@ public class SearchPublicController {
 	public String search(Model model, 
 			@RequestParam(value = "search_string", required = true) String searchString, 
 			@RequestParam(value = "page", defaultValue = "1") int page, 
-			@RequestParam(value = "maxResult", defaultValue = "50") int maxResult,
-			@RequestParam(value = "hitPerPage", defaultValue = "5") int hitPerPage,
+			@RequestParam(value = "hitPerPage", defaultValue = "10") int hitPerPage,
 			@RequestParam(value = "isFuzzy", required = false) boolean isFuzzy) {
 		
 		if(isFuzzy){
@@ -78,7 +77,7 @@ public class SearchPublicController {
 		}
 		
 //		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
-		SearchResultComplete searchResultComplete = artifactService.searchWithPagination(searchString, maxResult, hitPerPage, page);
+		SearchResultComplete searchResultComplete = artifactService.searchWithPagination(searchString, hitPerPage, page);
 		model.addAttribute("searchResultComplete", searchResultComplete);
 //		model.addAttribute("search_string", searchString);
 		
