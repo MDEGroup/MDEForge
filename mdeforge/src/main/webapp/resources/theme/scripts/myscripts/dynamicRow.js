@@ -262,21 +262,21 @@ $('#artifact').submit(function(e){
 		$("#propertiesT").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
 
 	}
-	
+	//TODO Giuseppe
 	/* RELATIONS VALIDATION */
-	var cvalid = true;
-	
-	var domain_rows = $(".domainConformToRow");
-	if(domain_rows.length == 0){
-		valid = false;
-		$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>')
-	}else{
-		var coDomain_rows = $(".coDomainConformToRow");
-		if(coDomain_rows.length == 0){
-			valid = false;
-			$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px; margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>');
-		}
-	}
+//	var cvalid = true;
+//	
+//	var domain_rows = $(".domainConformToRow");
+//	if(domain_rows.length == 0){
+//		valid = false;
+//		$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>')
+//	}else{
+//		var coDomain_rows = $(".coDomainConformToRow");
+//		if(coDomain_rows.length == 0){
+//			valid = false;
+//			$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px; margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>');
+//		}
+//	}
 	
 	var check_input = $(".check-input");
 	check_input.each(function(){

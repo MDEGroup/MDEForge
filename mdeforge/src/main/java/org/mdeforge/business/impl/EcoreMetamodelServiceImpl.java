@@ -246,23 +246,20 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			this.extractedContent(result);
 		} catch (Exception e) {
 			logger.error("Some errors when try to extract content string from metamodel");
-			throw new ExtractContentEngineException(e.getMessage(), artifact.getId());
 		}
 		try {
 			artifact.getUri().addAll(getNSUris(result));
 		} catch (Exception e) {
 			logger.error("Error when try to extract URI from metamodel");
-			throw new BusinessException();
 		}
 		try {
 			artifact.setMetrics(calculateMetrics(artifact));
 		} catch (Exception e) {
-			logger.error("Some errors when try to calculate metric for metamodel");
-			throw new MetricEngineException("Some errors when try to calculate metric for metamodel", artifact.getId());
+			logger.error("Some errors when try to calculate metrics for metamodel");
 		}
 		try {
 			createIndex(result);
-		} catch (Exception e) { throw new BusinessException(e.getMessage());}
+		} catch (Exception e) { logger.error("Some errors when try to create lucene indexis.");}
 		artifactRepository.save(artifact);
 		return result;
 	}

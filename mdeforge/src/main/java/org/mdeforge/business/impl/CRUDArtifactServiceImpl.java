@@ -408,25 +408,24 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
 			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
 			for (int i = 0; i < max; i++) {
-				int id = hits.scoreDocs[i].doc;
-				Document doc = searcher.doc(id);
-				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-				String[] fragments = new String[frag.length];
-				for (int j = 0; j < frag.length; j++) {
-					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-						fragments[j] = frag[j].toString();
-//						System.out.println(frag[j].toString());
+				try {
+					int id = hits.scoreDocs[i].doc;
+					Document doc = searcher.doc(id);
+					String text = doc.get("text");
+					TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
+					TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+					String[] fragments = new String[frag.length];
+					for (int j = 0; j < frag.length; j++) {
+						if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+							fragments[j] = frag[j].toString();
+						}
 					}
-				}
-				T art = findOne(doc.get("id"));
-				listArtifact.add(art);
+					T art = findOne(doc.get("id"));	
+					listArtifact.add(art);
+				} catch (Exception e){}
 			}
 			searcher.close();
 		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (InvalidTokenOffsetsException e) {
 			throw new BusinessException(e.getMessage());
 		} catch (org.apache.lucene.queryParser.ParseException e) {
 			throw new BusinessException(e.getMessage());
