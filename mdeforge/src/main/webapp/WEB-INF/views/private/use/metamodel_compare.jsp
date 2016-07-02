@@ -378,33 +378,39 @@ $('#form_compare').submit(function(e){
 	var  meta_id_r = $(select[1]).data("id");
 	var input_id_r = $(select[1]).prev().val();
 	var meta_name_r = $(select[1]).data("name");
-	//when input is null
+	//when input 1 is null
 	if(meta_id_l === "undefined" || $(select[0]).val().length == 0 || input_id_l == ""){
 		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
 		$(select[0]).addClass("input-error").attr("placeholder", "No Metamodel Selected");
 		valid = false;
+	}else{
+		//when input 1 has been edited
+		if(meta_id_l != input_id_l || meta_name_l === "undefined" || $(select[0]).val() != meta_name_l){
+			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+			$(select[0]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
+			valid = false;
+		}
 	}
+	//when input 2 is null
 	if(meta_id_r === "undefined" || $(select[1]).val().length == 0 || input_id_r == ""){
 		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
 		$(select[1]).addClass("input-error").attr("placeholder", "No Metamodel Selected");
 		valid = false;
-	}
-	//when input has been edited
-	if(meta_id_l != input_id_l || meta_name_l === "undefined" || $(select[0]).val() != meta_name_l){
-		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
-		$(select[0]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
-		valid = false;
-	}
-	if(meta_id_r != input_id_r || meta_name_r === "undefined" || $(select[1]).val() != meta_name_r){
-		//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
-		$(select[1]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
-		valid = false;
-	}
+	}else{
+		//when input 2 has been edited
+		if(meta_id_r != input_id_r || meta_name_r === "undefined" || $(select[1]).val() != meta_name_r){
+			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+			$(select[1]).val("").addClass("input-error").attr("placeholder", "Invalid Input");
+			valid = false;
+		}
+	}	
+	
 	if(valid){
 		return true;
 	}else{
 		e.preventDefault();
 	}
+	
 });
 </script>
 

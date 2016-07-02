@@ -20,8 +20,9 @@
 <div class="innerLR">
 
 <div class="box-generic">
-<h3 class="header-h main-title">Transformation Execution</h3>
-	<span class="muted">${atlTransformation.getName()}</span>
+<h3 class="header-h main-title text-primary">${atlTransformation.getName()}</h3>
+	<h3 class="header-h main-title">Transformation Execution</h3>
+	<div class="separator bottom"></div>
 	<div class="row-fluid">
 	<div class="span12">
 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
