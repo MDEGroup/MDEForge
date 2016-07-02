@@ -20,8 +20,9 @@
 <div class="innerLR">
 
 <div class="box-generic">
-<h3 class="header-h main-title">Transformation Execution</h3>
-	<span class="muted">${atlTransformation.getName()}</span>
+<h3 class="header-h main-title text-primary">${atlTransformation.getName()}</h3>
+	<h3 class="header-h main-title">Transformation Execution</h3>
+	<div class="separator bottom"></div>
 	<div class="row-fluid">
 	<div class="span12">
 	<p>Model transformations can be remotely executed from the Execute the Transformation section. From this section, users can select input models already available in the repository or can upload new ones. Once the input models are selected, the transformation can be executed, and the link to download the generated target model is given back to the user </p>

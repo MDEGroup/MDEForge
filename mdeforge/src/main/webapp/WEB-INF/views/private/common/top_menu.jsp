@@ -50,7 +50,7 @@
 			<!-- // Not Blank Page END -->
 						
 						
-						<!-- Top Menu Right -->
+			<!-- Top Menu Right -->
 			<ul class="topnav pull-right">
 			
 								<!-- Themer -->
@@ -89,6 +89,6 @@
 				
 			</ul>
 			<!-- // Top Menu Right END -->
-						<div class="clearfix"></div>
+		<div class="clearfix"></div>
 			
 		</div>
