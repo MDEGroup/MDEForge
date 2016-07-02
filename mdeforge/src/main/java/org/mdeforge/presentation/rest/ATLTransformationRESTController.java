@@ -112,7 +112,7 @@ public class ATLTransformationRESTController {
 
 	}
 
-	@RequestMapping(value = "OLD/workspace/{id_workspace}", method = RequestMethod.POST)
+	@RequestMapping(value = "/workspace/{id_workspace}", method = RequestMethod.POST)
 	public @ResponseBody HttpEntity<String> createArtifactInWorkspace(
 			@ModelAttribute ATLTransformation transformation,
 			@PathVariable("id_workspace") String idWorkspace,
@@ -139,7 +139,7 @@ public class ATLTransformationRESTController {
 		}
 	}
 
-	@RequestMapping(value = "OLD/project/{id_project}", method = RequestMethod.POST)
+	@RequestMapping(value = "/project/{id_project}", method = RequestMethod.POST)
 	public @ResponseBody HttpEntity<String> createArtifactInPoject(
 			@ModelAttribute ATLTransformation ATLtransformation,
 			@PathVariable("id_project") String idProject,
