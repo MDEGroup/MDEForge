@@ -4,6 +4,7 @@ $(function() {
 		//$('#transformationRelations').parent().append(spinner.el);
 		e.preventDefault();
 		$('#parseAlert').remove();
+		var button = $(this)
 		var files = document.getElementById('artifactName').files;
 		if(files.length == 0){
 			$(this).before('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>You have to upload an ATL file before using this feature</span></div>')
@@ -98,6 +99,7 @@ $(function() {
 	    			},
 	    			error : function error(data) {
 	    				console.log('error');
+	    				$(this).before('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Ops! Something went wrong! Try Again.</span></div>')
 	    			}
 	            });
 	        }

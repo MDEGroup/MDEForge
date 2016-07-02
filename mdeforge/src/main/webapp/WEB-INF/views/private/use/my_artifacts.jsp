@@ -47,7 +47,7 @@ $(document).ready(function () {
 		"responsive": true,
 		"language": {
 		    "lengthMenu": "Show _MENU_ <span class='strong text-primary'>${type}s</span> per page",
-		    "info": "Showing page <span class='text-primary'>_PAGE_</span> of <span class='text-primary'>_PAGES_</span>",
+		    "info": "_TOTAL_ <span class='strong text-primary'>${type}s</span> found",
 		    "processing":'<img class="spinner" src="/mdeforge/resources/theme/images/spin.gif"></span>'
 		},
 		"columns":[
