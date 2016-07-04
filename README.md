@@ -22,10 +22,14 @@ MDEForge has been designed for:
 
 <ol>
 
+
+<li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, A Customizable Approach for the Automated Quality Assessment of Modelling Artefacts, in: 10th International Conference on the Quality of Information and Communications Technology (QUATIC 2016), Lisbon, Portugal, IEEE CPS, 2016
+
+<li>Juri Di Rocco, Davide Di Ruscio, Alfonso Pierantonio, JesusÂ Sanchez Cuadrado, Juan De Lara and Esther Guerra, Using ATL transformation services in the MDEForge collaborative modeling platform, in: 9th International Conference on Model Transformation (ICMT2016), Vienna (Austria), 2016
+
 <li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Automated Clustering of Metamodel Repositories</b>, in: 28th International Conference on Advanced Information Systems Engineering (CAiSE'16), 2016
 
 <li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>A Tool for Clustering Metamodel Repositories</b>, in: Demonstrations and Posters at MODELS2015, Ottawa, Canada, 2015
-
 
 <li>Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>Collaborative Repositories in Model-Driven Engineering</b> (2015), in: IEEE Software, 32:3(28-34)
 
