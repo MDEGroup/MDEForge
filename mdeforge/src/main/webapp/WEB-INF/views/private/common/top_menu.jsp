@@ -1,7 +1,7 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <div class="navbar main">
 			
 			<!-- Menu Toggle Button -->
@@ -67,7 +67,8 @@
 						<li class="profile">
 							<span>
 								<span class="heading">Profile <a href="#" class="pull-right"></a></span>
-								<span class="img"></span>
+								<c:url var="im" value="/private/getPhoto?id=${logged_user.image}" />
+								<img id="imagePreview" src="${im}"alt="Profile Photo"/>
 								<span class="details">
 									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
 									<a href="#"><security:authentication property="principal.user.email"/></a>

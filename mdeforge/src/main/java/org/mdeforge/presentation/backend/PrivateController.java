@@ -1,7 +1,13 @@
 package org.mdeforge.presentation.backend;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
@@ -13,6 +19,9 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mongodb.gridfs.GridFSDBFile;
 
 @Controller
 @RequestMapping("/private")
@@ -46,7 +57,8 @@ public class PrivateController {
 	
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-	
+	@Autowired
+	private GridFsTemplate operation;
 
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model) throws IOException {
@@ -138,5 +150,40 @@ public class PrivateController {
 		} catch (BusinessException e) {
 			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
+	}
+
+	@RequestMapping(value = "/getPhoto", method = RequestMethod.GET)
+	public @ResponseBody
+	void getPhoto(HttpServletRequest request,
+	        HttpServletResponse response, @RequestParam String id) {
+	    try {
+	    	
+	    	Query q = new Query();
+			q.addCriteria(Criteria.where("_id").is(id));
+            GridFSDBFile imageForOutput = operation.findOne(q); 
+            InputStream is = imageForOutput.getInputStream();
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[16384];
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            buffer.flush();
+            byte[]imagenEnBytes = buffer.toByteArray();
+            response.setHeader("Accept-ranges","bytes");
+            response.setContentType( "image/jpeg" );
+            response.setContentLength(imagenEnBytes.length);
+            response.setHeader("Expires","0");
+            response.setHeader("Cache-Control","must-revalidate, post-check=0, pre-check=0");
+            response.setHeader("Content-Description","File Transfer");
+            response.setHeader("Content-Transfer-Encoding:","binary");
+
+            OutputStream out = response.getOutputStream();
+            out.write( imagenEnBytes );
+            out.flush();
+            out.close();
+	    } catch (Exception e) {
+	        // TODO Auto-generated catch block
+	    }
 	}
 }

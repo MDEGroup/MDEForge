@@ -33,6 +33,7 @@ public class User implements java.io.Serializable{
 	private String lastname;
 	private String email;
 	private String username = null;
+	private String image = null;
 	@JsonIgnore
 	private String password = null;
 	private boolean enabled;
@@ -195,5 +196,15 @@ public class User implements java.io.Serializable{
 		if (obj instanceof User) 
 			return this.id.equals(((User)obj).getId());
 		else return false;
+	}
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 }

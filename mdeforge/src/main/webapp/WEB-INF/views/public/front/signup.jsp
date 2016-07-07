@@ -3,7 +3,10 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-
+	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/css/fileupload.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-wysihtml5/css/bootstrap-wysihtml5-0.0.2.css" rel="stylesheet">
+	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-select/bootstrap-select.css" rel="stylesheet" />
+	<link href="${pageContext.request.contextPath}/resources/bootstrap/extend/bootstrap-toggle-buttons/static/stylesheets/bootstrap-toggle-buttons.css" rel="stylesheet" />
 <div id="login">
 
 	<div class="container login">
@@ -19,7 +22,7 @@
 				<div class="widget-body" style="background: #fff">
 				
 					<!-- Form -->
-					<form method="post" action="${pageContext.request.contextPath}/signin">
+					<form method="post" action="${pageContext.request.contextPath}/signin" enctype="multipart/form-data">
 						<div class="row-fluid">
 						<div class="span6">
 						<label>Firstname</label>
@@ -45,7 +48,21 @@
 						<input type="password" name="password" class="input-block-level" placeholder="Your Password" />
 						<label>Repeat Password</label>
 						<input type="password" name="password_confirmation" class="input-block-level" placeholder="Repeat Your Password" />
-						
+						<label for="artifactName"><div><img width="150px" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/newfile.png"></div></label>
+						<div class="fileupload fileupload-new" data-provides="fileupload">
+							  	<div class="input-append center" style="width: 100%">
+							  		<span class="btn btn-default btn-file">
+								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
+								    	<span class="fileupload-exists">Change</span>
+								    	<input type="file" id="artifactName" class="margin-none" name="photo" size="40"/>
+							    	</span>
+							    	<div class="uneditable-input center"><i class="icon-file fileupload-exists"></i> 
+							    		<span class="fileupload-preview"></span>
+							    	</div>
+							    	
+							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+							  	</div>
+						</div>
 						<div class="separator bottom"></div> 
 						<label>Resolve Captcha</label>
 						<div class="row-fluid">
@@ -65,7 +82,7 @@
 								<button class="btn btn-block btn-large btn-primary" type="submit">Sign Up</button>
 							</div>
 						</div>
-						
+					 	
 					</form>
 					<!-- // Form END -->
 							
@@ -89,7 +106,6 @@
 			<!-- // Box END -->
 			
 		</div>
-		
 	</div>
-	
 </div>
+<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/jasny-fileupload/js/bootstrap-fileupload.js"></script>
