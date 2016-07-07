@@ -19,7 +19,7 @@
 				<div class="widget-body" style="background: #fff">
 				
 					<!-- Form -->
-					<form method="post" action="${pageContext.request.contextPath}/j_spring_security_check">
+					<form method="post" action="${pageContext.request.contextPath}/signin">
 						<div class="row-fluid">
 						<div class="span6">
 						<label>Firstname</label>
@@ -39,12 +39,12 @@
 						<label>Email</label>
 						<input type="email" name="email" class="input-block-level" placeholder="Your Email Address"/>
 						<label>Confirm Email</label>
-						<input type="email" name="email" class="input-block-level" placeholder="Confirm Your Email Address"/>
+						<input type="email" name="email_confirmation" class="input-block-level" placeholder="Confirm Your Email Address"/>
 						<p></p>
 						<label>Password</label>
 						<input type="password" name="password" class="input-block-level" placeholder="Your Password" />
 						<label>Repeat Password</label>
-						<input type="password" name="password" class="input-block-level" placeholder="Repeat Your Password" />
+						<input type="password" name="password_confirmation" class="input-block-level" placeholder="Repeat Your Password" />
 						
 						<div class="separator bottom"></div> 
 						<label>Resolve Captcha</label>

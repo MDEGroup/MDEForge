@@ -1,5 +1,11 @@
 package org.mdeforge.business.impl;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.group;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +14,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -88,6 +96,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -98,7 +107,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import anatlyzer.atl.analyser.AnalysisResult;
@@ -899,6 +914,36 @@ public class ATLTransformationServiceImpl extends
 		} catch (ATLCoreException e) {
 			throw new BusinessException(e.getMessage());
 		}
+	}
+	@Override
+	public List<Statistic> numberOfMCdistribution() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		List<Statistic> result = new ArrayList<Statistic>();
+		Aggregation agg = newAggregation(
+				match(Criteria.where("name").is("Number of Transformation Rules")),
+				project("value").andExpression("value").as("created"),
+			    group("value").count().as("total"),
+			    project("total").and("created").previousOperation(),
+			    sort(Sort.Direction.DESC,"created")
+				);
+		AggregationResults<Statistic> groupResults 
+			= n.aggregate(agg, SimpleMetric.class, Statistic.class);
+		result = groupResults.getMappedResults();
+		//Collections.sort(result, (Statistic p1, Statistic p2) -> p1.firstName.compareTo(p2.firstName));
+		List<Statistic> stat = new ArrayList<Statistic>(result);
+		Collections.sort(stat, new Comparator<Statistic>(){
+			  public int compare(Statistic p1, Statistic p2){
+				  int T1 = Integer.parseInt(p1.getCreated());
+				  int T2 = Integer.parseInt(p2.getCreated());
+				  int res = 0;
+				  res = (T1 > T2)?1:-1;
+				  if (T1  == T2 ) res = 0;
+				  return res;
+			  }
+			});
+		
+		return stat;
+		
 	}
 
 	// private InputStream getModulesList(String transformationPath) throws

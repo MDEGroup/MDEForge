@@ -54,10 +54,10 @@ public class ATLTransformationRESTController {
 	@Autowired
 	private User user;
 
-	@RequestMapping(value="/{id_ecoreMetamodel}/metrics", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel)
+	@RequestMapping(value="/{id_artifact}/metrics", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_artifact") String idArtifact)
 	{
-		ATLTransformation emm = ATLtransformationService.findOne(idEcoreMetamodel);
+		ATLTransformation emm = ATLtransformationService.findOne(idArtifact);
 		List<Metric> lm = ATLtransformationService.calculateMetrics(emm);
 		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
 	}

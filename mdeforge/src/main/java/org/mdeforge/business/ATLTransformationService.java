@@ -13,6 +13,7 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.form.Statistic;
 
 import transML.exceptions.transException;
 
@@ -33,4 +34,5 @@ public interface ATLTransformationService extends CRUDArtifactService<ATLTransfo
 	List<ATLTransformationTestServiceError> testServices(
 			ATLTransformation transformation)
 			throws ATLTransformationCompilationError, transException;
+	List<Statistic> numberOfMCdistribution();
 }

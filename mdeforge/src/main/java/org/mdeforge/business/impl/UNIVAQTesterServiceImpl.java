@@ -180,6 +180,15 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 							atlTransformationFile,
 							e.getDetails().length > 0 ? e.getDetails()[0] : e
 									.getMessage(), inputModel.getName());
+				} catch (Exception e) {
+					ATLTransformationTestServiceError errorForge = new ATLTransformationTestServiceError();
+					errorForge.setModel(inputModel);
+					errorForge.setErrorMessage("Unable TO determine");
+					errorForge.setErrorKind(ERROR_KIND.EXECUTION_RAISES_EXCEPTION);
+					result.add(errorForge);
+					report.setExecutionError(
+							atlTransformationFile,
+							"Unable to determine", inputModel.getName());
 				}
 
 				if (error && !exhaustive)
