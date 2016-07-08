@@ -10,7 +10,6 @@ import org.mdeforge.business.model.VerificationToken;
 import org.mdeforge.integration.RoleRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.VerificationTokenRepository;
-import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,7 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-	@Autowired
-	private WorkspaceRepository workspaceRepository;
+
 	@Autowired
 	private VerificationTokenRepository verificationTokentRepository;
 	@Override
@@ -88,6 +86,32 @@ public class UserServiceImpl implements UserService{
 		user = userRepository.save(user);
 		VerificationToken vt = new VerificationToken(token, user);
 		verificationTokentRepository.save(vt);
+	}
+
+	@Override
+	public void update(User user) throws BusinessException{
+		User u = userRepository.findOne(user.getId());
+		u.setEmail(user.getEmail());
+		u.setImage((user.getImage() == null)?
+				u.getImage():
+					user.getImage());
+		u.setFirstname(user.getFirstname());
+		u.setLastname(user.getLastname());
+		userRepository.save(u);
+	}
+
+	@Override
+	public void changePassword(User us, String password_old, String password_new, String password_new_r)
+			throws BusinessException {
+		if (!password_new.equals(password_new_r)) throw new BusinessException("New pw is different to retyped pw");
+		String bcrypt = new BCryptPasswordEncoder().encode(password_new);
+		if (us.getPassword().equals(bcrypt)) throw new BusinessException("Old password is wrong");
+		User u = userRepository.findOne(us.getId());
+		u.setPassword(bcrypt);
+		userRepository.save(u);
+		
+		
+		
 	}
 
 }

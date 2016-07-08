@@ -79,6 +79,8 @@
 							</span>
 						</li>
 						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="menu-right-dropdown pull-right">Dashboard</a></li>		
+						<li><a href="${pageContext.request.contextPath}/private/change_password" class="menu-right-dropdown pull-right">Change password</a></li>		
+						<li><a href="${pageContext.request.contextPath}/private/update_account" class="menu-right-dropdown pull-right">Update account</a></li>		
 						<li><a href="${pageContext.request.contextPath}" target="_blank" class="menu-right-dropdown pull-right">MDE Forge Home</a></li>
 						<hr>
 						<li>

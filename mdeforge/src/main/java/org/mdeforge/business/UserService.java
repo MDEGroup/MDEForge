@@ -24,4 +24,8 @@ public interface UserService {
 	VerificationToken getVerificationToken(String token);
 
 	void createVerificationToken(User user, String token);
+
+	void update(User user) throws BusinessException;
+
+	void changePassword(User us, String password_old, String password_new, String password_new_r) throws BusinessException;
 }
