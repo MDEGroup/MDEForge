@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.SemanticSimilarityRelationService;
@@ -33,6 +34,10 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 	private ClusterizzationRepository clusterizzationRepository;
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
+	@Autowired
+	private ContainmentRelationService containmentRelationService;
+	@Autowired
+	private SimilarityRelationService cosineRelationService;
 	@Autowired
 	private SemanticSimilarityRelationServiceV1 semanticSimilarityV1RelationService;
 	@Autowired
@@ -78,11 +83,11 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 			break;
 		case 2:
 			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, semanticSimilarityV1RelationService).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 			break;
 		case 3:
 			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, semanticSimilarityRelationService).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineRelationService).getClusters();
 			break;
 		case 4:
 			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
@@ -158,11 +163,11 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 			break;
 		case 2:
 			threshold = (threshold < thresholdContainmentRelation) ? thresholdContainmentRelation : threshold;			
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, semanticSimilarityV1RelationService).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, containmentRelationService).getClusters();
 			break;
 		case 3:
 			threshold = (threshold < thresholdCosineSimilarityRelation) ? thresholdCosineSimilarityRelation : threshold;
-			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, semanticSimilarityRelationService).getClusters();
+			clusters = ecoreMetamodelService.getSimilarityClusters(threshold, cosineRelationService).getClusters();
 			break;
 		case 4:
 			threshold = (threshold < thresholdDiceSimilarityRelation) ? thresholdDiceSimilarityRelation : threshold;
@@ -201,11 +206,11 @@ public class EcorePublicController extends ArtifactPublicController<EcoreMetamod
 			break;
 		case 2:
 			graph = ecoreMetamodelService.getSimilarityGraph(threshold,
-					semanticSimilarityV1RelationService);
+					containmentRelationService);
 			break;
 		case 3:
 			graph = ecoreMetamodelService.getSimilarityGraph(threshold,
-					semanticSimilarityRelationService);
+					cosineRelationService);
 			break;
 		case 4:
 			graph = ecoreMetamodelService.getSimilarityGraph(threshold,

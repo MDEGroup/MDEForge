@@ -50,7 +50,7 @@
 
 
 
-		<div class="hide" id="threshold_form">
+<div class="hide" id="threshold_form">
 		
 			<div class="row-fluid">
 				<div class="span2">
@@ -90,7 +90,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">EMFCompareStandard similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
 								</div>
 			
 							</form>
@@ -123,7 +123,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">EMFCompare Semantic (no-engine) similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
 								</div>
 			
 							</form>
@@ -157,7 +157,7 @@
 								</div>
 								
 								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">EMFCompare Semantic (engine) similarity</button>
+									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
 								</div>
 			
 							</form>
@@ -170,6 +170,37 @@
 						
 						<hr>
 					
+					<div class="widget-body">
+							<div class="row-fluid">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
+								<div class="span9">		
+											<!-- Slider -->
+											<div class="slider-range-min4 row-fluid">
+												<div class="span3">
+													<label class="span8">Threshold:</label> 
+													<input type="text" class="amount span4" name="threshold"/>
+												</div>
+												<div class="span9" style="padding: 5px 0 0;">
+													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+													<div class="slider slider-primary"></div>
+												</div>
+											</div>
+											<!-- // Slider END -->
+		
+								</div>
+								
+								<div class="span3">														
+									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
+								</div>
+			
+							</form>
+														
+								
+							</div>
+							
+						</div>
+						
+						<hr>
 						
 						<div class="widget-body">
 							<div class="row-fluid">
@@ -209,9 +240,6 @@
 		
 			<div class="separator bottom"></div>
 			<div class="separator bottom"></div>
-		
-		
-		
 		
 		
 		
