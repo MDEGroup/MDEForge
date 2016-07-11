@@ -137,6 +137,15 @@ public class PrivateController {
 		return "redirect:/private/dashboard";
 	}
 	
+	@RequestMapping(value="/artifact/name", method={RequestMethod.GET})
+	public @ResponseBody boolean findByName(@RequestParam String name) {
+		try {
+			artifactService.findOneByName(name);
+			return true;
+		}catch (Exception e){return false;}
+		
+	}
+	
 	@RequestMapping(value = "/artifact/{idArtifact}/addUser/{idUser}", method=RequestMethod.GET)
 	public @ResponseBody HttpEntity<User> addUserInArtifact(@PathVariable("idUser") String idUser, @PathVariable("idArtifact") String idArtifact) {
 		try {

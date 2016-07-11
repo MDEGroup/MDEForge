@@ -47,7 +47,6 @@ import org.eclipse.emf.ecore.util.Diagnostician;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
@@ -200,16 +199,10 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	}
 	@Override
 	public void createAll(List<Model> artifacts, EcoreMetamodel metamodel, User user) throws BusinessException {
-		// if(findOneByName(artifact.getName())!=null) {
-		// logger.error("DuplicateName");
-		// throw new DuplicateNameException();
-		// }
 		metamodel = (EcoreMetamodel) artifactRepository.findOne(metamodel.getId());
 		List<Relation> relList = new ArrayList<Relation>();
 		try {
 			for (Model artifact : artifacts) {
-				if (artifactRepository.findByName(artifact.getName()) != null)
-					throw new DuplicateNameException();
 				artifact.setAuthor(user);
 				GridFileMedia fileMedia = new GridFileMedia();
 				fileMedia.setFileName(artifact.getFile().getFileName());

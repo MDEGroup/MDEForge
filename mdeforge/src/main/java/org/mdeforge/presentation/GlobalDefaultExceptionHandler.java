@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.DuplicateNameException;
 import org.mdeforge.business.MetricEngineException;
 import org.springframework.stereotype.Controller;
 //import org.springframework.ui.Model;
@@ -34,6 +35,17 @@ public class GlobalDefaultExceptionHandler {
 	
 	@ExceptionHandler(MetricEngineException.class)
 	public ModelAndView handleMetricEngineException(MetricEngineException ex) {
+		ex.printStackTrace();
+		Map<String,String> errorModel = new HashMap<String,String>();
+		String errCode = ex.getErrCode();
+		errorModel.put("errCode", errCode);
+		String errMsg = ex.getErrMsg();
+		errorModel.put("errMsg", errMsg);
+		errorModel.put("artifatId", ex.getArtifatcId());
+		return new ModelAndView("error.custom_generic_exception", "errorModel", errorModel);
+	}
+	@ExceptionHandler(DuplicateNameException.class)
+	public ModelAndView handleDuplicateNameArtifactException(MetricEngineException ex) {
 		ex.printStackTrace();
 		Map<String,String> errorModel = new HashMap<String,String>();
 		String errCode = ex.getErrCode();

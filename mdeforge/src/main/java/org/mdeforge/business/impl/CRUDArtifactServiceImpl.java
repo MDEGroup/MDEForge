@@ -850,13 +850,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 	@Override
 	public T create(T artifact) throws BusinessException {
-		// if(findOneByName(artifact.getName())!=null) {
-		// logger.error("DuplicateName");
-		// throw new DuplicateNameException();
-		// }
 		try {
 			if (artifactRepository.findByName(artifact.getName()) != null)
-				throw new DuplicateNameException();
+				throw new DuplicateNameException("Duplicate","Duplicate artifact name");
 			// GetUser
 			if (artifact.getId() != null)
 				throw new BusinessException();

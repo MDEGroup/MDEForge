@@ -234,12 +234,23 @@ $('#artifact').submit(function(e){
 	var valid = true;
 	$('.submitAlert').remove();
 	
+	
+	
 	/* NAME VALIDATION */
 	var name = $("#artifactTitle");
 	if(name.val() == ""){
 		name.addClass("input-error").after('<div class="alert alert-error submitAlert"><button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button><span>This field is required</span></div>')
 		valid = false;
 	}
+	
+	/*Duplicate artifact name */
+	$.ajax({
+	url : ctx + "/private/artifact/name?name=" + name.val(),
+	success : function(eventData) {
+		name.addClass("input-error").after('<div class="alert alert-error submitAlert"><button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button><span>Duplicate name</span></div>')
+		valid = eventData;
+	}
+});
 	
 	/* FILE VALIDATION */
 	var input_file = document.getElementById('artifactName');
@@ -264,57 +275,57 @@ $('#artifact').submit(function(e){
 	}
 	
 	/* RELATIONS VALIDATION */
-	try{
-		var cvalid = true;
-		var domain_rows = $(".domainConformToRow");
-		if(domain_rows.length == 0){
-			valid = false;
-			$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>')
-		}else{
-			var coDomain_rows = $(".coDomainConformToRow");
-			if(coDomain_rows.length == 0){
-				valid = false;
-				$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px; margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>');
-			}
-		}
-		
-		var check_input = $(".check-input");
-		check_input.each(function(){
-			if($(this).val() == "" || $(this).val().length == 0){
-				$(this).addClass("input-error");
-				cvalid = false
-			}
-		})
-		if(!cvalid){
-			valid = false;
-			$("#transformationRelations").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
-	
-		}
-	}catch(err){
-		console.log(err)
-	}
-	
-	/* MODEL RELATION */
-	try{
-		var select = $('#modelRelMetamodel');
-		var  meta_id = select.data("id");
-		var input_id = select.prev().val();
-		var meta_name = select.data("name");
-		//when input is null
-		if(meta_id === "undefined" || select.val().length == 0 || input_id == ""){
-			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
-			select.addClass("input-error").attr("placeholder", "No Metamodel Selected");
-			valid = false;
-		}
-		//when input has been edited
-		if(meta_id != input_id || meta_name === "undefined" || select.val() != meta_name){
-			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
-			select.val("").addClass("input-error").attr("placeholder", "Invalid Input");
-			valid = false;
-		}
-	}catch(err){
-		console.log(err)
-	}
+//	try{
+//		var cvalid = true;
+//		var domain_rows = $(".domainConformToRow");
+//		if(domain_rows.length == 0){
+//			valid = false;
+//			$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>')
+//		}else{
+//			var coDomain_rows = $(".coDomainConformToRow");
+//			if(coDomain_rows.length == 0){
+//				valid = false;
+//				$("#transformationRelations").before('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px; margin-bottom: 0;"><i class="icon-remove"></i></button><span>Please, you have to specify metamodels relation.</span></div>');
+//			}
+//		}
+//		
+//		var check_input = $(".check-input");
+//		check_input.each(function(){
+//			if($(this).val() == "" || $(this).val().length == 0){
+//				$(this).addClass("input-error");
+//				cvalid = false
+//			}
+//		})
+//		if(!cvalid){
+//			valid = false;
+//			$("#transformationRelations").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
+//	
+//		}
+//	}catch(err){
+//		console.log(err)
+//	}
+//	
+//	/* MODEL RELATION */
+//	try{
+//		var select = $('#modelRelMetamodel');
+//		var  meta_id = select.data("id");
+//		var input_id = select.prev().val();
+//		var meta_name = select.data("name");
+//		//when input is null
+//		if(meta_id === "undefined" || select.val().length == 0 || input_id == ""){
+//			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+//			select.addClass("input-error").attr("placeholder", "No Metamodel Selected");
+//			valid = false;
+//		}
+//		//when input has been edited
+//		if(meta_id != input_id || meta_name === "undefined" || select.val() != meta_name){
+//			//select.before('<div id="addProjectAlert" class="alert alert-error"><span>No Metamodel Selected</span></div>')
+//			select.val("").addClass("input-error").attr("placeholder", "Invalid Input");
+//			valid = false;
+//		}
+//	}catch(err){
+//		console.log(err)
+//	}
 	if(valid){
 		return true;
 	}else{

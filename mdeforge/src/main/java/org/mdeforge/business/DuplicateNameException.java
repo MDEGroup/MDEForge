@@ -2,6 +2,9 @@ package org.mdeforge.business;
 
 public class DuplicateNameException extends BusinessException {
 
+	public DuplicateNameException(String errorCode, String errorMessage) {
+		super(errorCode,errorMessage);
+	}
 	/**
 	 * 
 	 */
