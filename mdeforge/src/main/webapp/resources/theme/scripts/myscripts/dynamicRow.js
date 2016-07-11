@@ -275,6 +275,7 @@ $('#artifact').submit(function(e){
 	}
 	
 	/* RELATIONS VALIDATION */
+
 //	try{
 //		var cvalid = true;
 //		var domain_rows = $(".domainConformToRow");
@@ -299,7 +300,6 @@ $('#artifact').submit(function(e){
 //		if(!cvalid){
 //			valid = false;
 //			$("#transformationRelations").after('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Fill the fields you have missed or delete the entire entry</span></div>')
-//	
 //		}
 //	}catch(err){
 //		console.log(err)

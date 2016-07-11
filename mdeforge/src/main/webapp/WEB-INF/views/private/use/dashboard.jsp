@@ -414,14 +414,14 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Day'
+                            labelString: 'Number of Metamodel'
                         }
                     }],
                     yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Value'
+                            labelString: 'Number of Metaclass'
                         }
                     }]
                 },
