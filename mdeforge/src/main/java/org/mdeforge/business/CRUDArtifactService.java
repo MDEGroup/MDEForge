@@ -63,4 +63,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> search(String searchString, int maxSearchResult) throws BusinessException;
 	void createIndex(T artifact);
 	boolean deleteTermFromIndex(String fieldName, String filePath);
+	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
 }

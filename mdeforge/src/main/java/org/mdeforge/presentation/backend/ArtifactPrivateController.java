@@ -84,10 +84,22 @@ public abstract class ArtifactPrivateController<T extends Artifact> {
 	
 	@RequestMapping(value = "/artifacts", method = { RequestMethod.GET })
 	public String artifactList(Model model) {
+		model.addAttribute("all",false);
 		return "private.use.artifacts_list";
 	}
+	@RequestMapping(value = "/artifactsWithGenerated", method = { RequestMethod.GET })
+	public String artifactListWithGenerated(Model model) {
+		model.addAttribute("all",true);
+		return "private.use.artifacts_list";
+	}
+	
 	@RequestMapping(value = "/artifactsRest", method = { RequestMethod.GET })
 	public  @ResponseBody ResponseGrid<T> artifactListPaginated(
+			@ModelAttribute RequestGrid requestGrid) {
+		return artifactService.findMyArtifacts(user, requestGrid, false);
+	}
+	@RequestMapping(value = "/artifactsRestWithGenerated", method = { RequestMethod.GET })
+	public  @ResponseBody ResponseGrid<T> artifactListPaginatedWithGenerated(
 			@ModelAttribute RequestGrid requestGrid) {
 		return artifactService.findMyArtifacts(user, requestGrid);
 	}

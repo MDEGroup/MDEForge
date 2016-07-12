@@ -72,6 +72,34 @@ public abstract class CRUDRelationServiceImpl<T extends Relation> implements CRU
 			return n.findAll(persistentClass);
 	}
 	@Override
+	public long countAll() {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		if(persistentClass!=Relation.class) {
+			Query query = new Query();
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			return n.count(query, persistentClass);
+		}
+		else 
+			return n.count(null, persistentClass);
+	}
+	@Override
+	public List<T> findAllPaginated(int start, int lenght) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		if(persistentClass!=Relation.class) {
+			Query query = new Query();
+			query.skip(start*lenght);
+			query.limit(lenght);
+			Criteria c = Criteria.where("_class").is(persistentClass.getCanonicalName());
+			query.addCriteria(c);
+			return n.find(query, persistentClass);
+		}
+		else 
+			return n.findAll(persistentClass);
+	}
+	
+	
+	@Override
 	public List<T> findByArtifacts(Artifact fromArt, Artifact toArt) throws BusinessException {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();

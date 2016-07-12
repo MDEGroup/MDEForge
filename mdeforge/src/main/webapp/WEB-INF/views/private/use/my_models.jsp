@@ -34,6 +34,7 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Conform to</th>
 						<th class="center">Author</th>
 						<th class="center">Public</th>
 						<th class="center">Action</th>
@@ -65,6 +66,15 @@ $(document).ready(function () {
 	                    "sortable": false,
 	                    "render": function ( data, type, row, meta ) {
 	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	                     }
+	                },
+	                {
+	                    "data":"metamodelArtifact",
+	                    "searchable": false,
+	                    "sortable": false,
+	                    "render": function ( data, type, row, meta ) {
+	                    	console.log(row);
+	                    	return "<a href='${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=" + row.metamodelArtifact.id + "'>" + row.metamodelArtifact.name + "</a>";
 	                     }
 	                },
 	                {
