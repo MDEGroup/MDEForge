@@ -19,6 +19,8 @@ public interface CRUDRelationService<T extends Relation> {
 			throws BusinessException;
 	List<T> findRelationsByFromArtifact(Artifact artifact)
 			throws BusinessException;
+	long countAll();
+	List<T> findAllPaginated(int start, int lenght);
 	
 
 }

@@ -25,6 +25,7 @@ import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+//import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
@@ -127,8 +128,13 @@ import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
 import anatlyzer.atlext.ATL.Callable;
 import anatlyzer.atlext.ATL.Helper;
+import anatlyzer.atlext.ATL.InPatternElement;
+import anatlyzer.atlext.ATL.MatchedRule;
 import anatlyzer.atlext.ATL.ModuleElement;
+import anatlyzer.atlext.ATL.OutPatternElement;
 import anatlyzer.atlext.ATL.Rule;
+import anatlyzer.atlext.ATL.SimpleInPatternElement;
+import anatlyzer.atlext.ATL.SimpleOutPatternElement;
 import anatlyzer.atlext.OCL.Attribute;
 import anatlyzer.atlext.OCL.OclFeatureDefinition;
 import anatlyzer.atlext.OCL.OclType;
@@ -146,6 +152,8 @@ public class ATLTransformationServiceImpl extends
 	private static final String FROM_METAMODEL_TAG = "fromMM";
 	private static final String TO_METAMODEL_TAG = "toMM";
 	private static final String RULE_NAME_TAG = "rule";
+	private static final String FROM_METACLASS = "fromMC";
+	private static final String FROM_TOCLASS = "toMC";
 	
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
@@ -186,7 +194,6 @@ public class ATLTransformationServiceImpl extends
 
 	@Override
 	public void createIndex(ATLTransformation art) {
-//		super.createIndex(ecore);
 		Document doc = new Document();
 		AtlParser atlParser = new AtlParser();
 		ModelFactory modelFactory = new EMFModelFactory();
@@ -239,6 +246,32 @@ public class ATLTransformationServiceImpl extends
 					Rule r = (Rule) moduleElement;
 					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
 							Store.YES,Index.ANALYZED);
+					if(r instanceof MatchedRule) {
+						MatchedRule mr = (MatchedRule) r;
+						EList<InPatternElement> si = mr.getInPattern().getElements();
+						for (InPatternElement inPatternElement : si) {
+							if(inPatternElement instanceof SimpleInPatternElement) {
+								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
+								Field fromMC = new Field(FROM_METACLASS, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+								doc.add(fromMC);
+								Field text = new Field(TEXT_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+								doc.add(text);
+								
+							}
+							
+						}
+						EList<OutPatternElement> so = mr.getOutPattern().getElements();
+						for (OutPatternElement outPatternElement : so) {
+							if(outPatternElement instanceof SimpleOutPatternElement) {
+								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
+								Field toMC = new Field(FROM_TOCLASS, sope.getType().getName(), Store.YES, Index.ANALYZED);
+								doc.add(toMC);
+								Field text = new Field(TEXT_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
+								doc.add(text);
+							}
+							
+						}
+					}
 					doc.add(ruleName);
 				}
 				

@@ -1,12 +1,9 @@
 package org.mdeforge.business.model;
 
-import org.mdeforge.business.model.serializer.json.ArtifactSerializer;
-import org.mdeforge.business.model.serializer.json.RelationSerializer;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * A representation of the model object '<em><b>Model</b></em>'. <!--

@@ -1416,7 +1416,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 //		}
 		
 		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("ecore", new EcoreResourceFactoryImpl());
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
 		Resource resource = resourceSet.getResource(fileURI, true);
 		if (resource.isLoaded() && resource.getErrors() != null) {
