@@ -142,4 +142,9 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
 		return super.artifactList(model);
 	}
+	@RequestMapping(value = "/artifactsWithGenerated", method = { RequestMethod.GET })
+	public String artifactListWithGenerated(Model model) {
+		model.addAttribute("type", EcoreMetamodel.class.getSimpleName());
+		return super.artifactListWithGenerated(model);
+	}
 }
