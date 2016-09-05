@@ -1,10 +1,14 @@
 package org.mdeforge.business.anatlyzer;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import anatlyzer.atl.witness.IWitnessFinder;
 import anatlyzer.atl.witness.UseWitnessFinder;
 
 public class UNIVAQUSEWitnessFinder extends UseWitnessFinder {
 
+	@Value("#{cfgproperties[basePath]}")
+	protected String basePath;
 	
 	@Override
 	protected void onUSEInternalError(Exception e) {
@@ -13,7 +17,7 @@ public class UNIVAQUSEWitnessFinder extends UseWitnessFinder {
 
 	@Override
 	public String getTempDirectory() {
-		return "/Users/juri/development/forgeDir/anatlyze/tmp/";
+		return basePath + "/anatlyze/tmp/";
 	}
 	
 

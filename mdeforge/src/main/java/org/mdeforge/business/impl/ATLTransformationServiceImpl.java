@@ -22,6 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -106,6 +110,7 @@ import org.mdeforge.integration.MetricRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -167,9 +172,10 @@ public class ATLTransformationServiceImpl extends
 	private UNIVAQTesterService univaqTesterService;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-//	@Value("#{cfgproperties[basePath]}")
-//	protected String basePath;
-	
+	@Autowired
+	private UNIVAQUSEWitnessFinder twf;
+	@Value("#{cfgproperties[testSericeTimeout]}")
+	protected int testServiceTimeout;
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
 
 	@Override
@@ -757,24 +763,24 @@ public class ATLTransformationServiceImpl extends
 		ATLTransformation atl = findOne(transformation_id);
 		EMFModel atlModel = injectATLModel(atl);
 		EcoreMetamodel ecore = (EcoreMetamodel) atl.getDomainConformToRelation().get(0).getToArtifact();
-		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
-		modelService.createAll(modelList, ecore,atl.getAuthor());
-		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
+		Future<List<Model>> futureModelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
+		List<Model> modelsList;
+		try {
+			modelsList = futureModelList.get(testServiceTimeout,TimeUnit.SECONDS);
+		} catch (InterruptedException | ExecutionException e) {
+			modelsList = new ArrayList<Model>();
+		} catch (TimeoutException e) {
+			modelsList = new ArrayList<Model>();
+		}
+		modelService.createAll(modelsList, ecore,atl.getAuthor());
+		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelsList, true);
 		atl.setAtlTestError(r);
 		ATLTransformationRepository.save(atl);
 		return r;	
 	}
 	@Override
 	public List<ATLTransformationTestServiceError> testServices(ATLTransformation transformation_id) throws ATLTransformationCompilationError, transException {
-		ATLTransformation atl = findOne(transformation_id.getId());
-		EMFModel atlModel = injectATLModel(atl);
-		List<Model> modelList = univaqTesterService.generateModel(atlModel, atl, ModelGenerationStrategy.STRATEGY.Lite);
-		EcoreMetamodel ecore = (EcoreMetamodel) atl.getDomainConformToRelation().get(0).getToArtifact();
-		modelService.createAll(modelList, ecore,atl.getAuthor());
-		List<ATLTransformationTestServiceError> r = univaqTesterService.executeTransformation(atlModel,atl, modelList, true);
-		atl.setAtlTestError(r);
-		ATLTransformationRepository.save(atl);
-		return r;	
+		return testServices(transformation_id.getId());	
 	}
 
 	@Override
@@ -823,7 +829,7 @@ public class ATLTransformationServiceImpl extends
 					forgeError.setFileLocation(lp.getFileLocation());
 					forgeError.setLocation(lp.getLocation());
 				}
-				UNIVAQUSEWitnessFinder twf = new UNIVAQUSEWitnessFinder();
+				
 				if (problem.getStatus() == ProblemStatus.WITNESS_REQUIRED) {
 					try {
 						ProblemStatus result2 = twf.find(problem, result);

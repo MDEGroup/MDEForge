@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.m2m.atl.common.ATLExecutionException;
 import org.eclipse.m2m.atl.core.ATLCoreException;
@@ -200,7 +201,8 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			@RequestParam String transformation_id) {
 		try {
 			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
-			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id);
+			List<ATLTransformationTestServiceError> r;
+			r = aTLTransformationService.testServices(transformation_id);
 			atlTransformation.setAtlTestError(r);
 			System.out.println(r);
 			String pathToDownload = gridFileMediaService
@@ -225,7 +227,9 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 		try {
 			ATLTransformation atlTransformation = aTLTransformationService.findOneById(transformation_id, user);
 			Date d = new Date();
-			List<ATLTransformationTestServiceError> r = aTLTransformationService.testServices(transformation_id);
+			List<ATLTransformationTestServiceError> r;
+			r = aTLTransformationService.testServices(transformation_id);
+			
 			atlTransformation.setAtlTestError(r);
 			List<ATLTransformationError> errors =	aTLTransformationService
 					.anATLyzer(atlTransformation);

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
@@ -41,6 +42,8 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import anatlyzer.atl.model.ATLModel;
@@ -203,8 +206,8 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 
 		return result;
 	}
-
-	public List<Model> generateModel(EMFModel atlModel, ATLTransformation trafo, ModelGenerationStrategy.STRATEGY modelGenerationStrategyBoolean) throws transException {
+	@Async
+	public Future<List<Model>> generateModel(EMFModel atlModel, ATLTransformation trafo, ModelGenerationStrategy.STRATEGY modelGenerationStrategyBoolean) throws transException {
 		List<Model> result = new ArrayList<Model>();
 		List<DomainConformToRelation> inputMetamodels = new ArrayList<DomainConformToRelation>();
 		List<CoDomainConformToRelation> outputMetamodels = new ArrayList<CoDomainConformToRelation>();
@@ -310,7 +313,8 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			e.printStackTrace();
 		}
 		resource.unload();
-		return result;
+		
+		return new AsyncResult<List<Model>>(result);
 	}
 
 	private void moveDirectory(String sourceDirectory, String targetDirectory)
