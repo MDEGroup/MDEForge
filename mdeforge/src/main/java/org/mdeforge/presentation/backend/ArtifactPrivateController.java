@@ -90,7 +90,7 @@ public abstract class ArtifactPrivateController<T extends Artifact> {
 	@RequestMapping(value = "/artifactsWithGenerated", method = { RequestMethod.GET })
 	public String artifactListWithGenerated(Model model) {
 		model.addAttribute("all",true);
-		return "private.use.artifacts_list";
+		return "private.use.artifacts_list_generated";
 	}
 	
 	@RequestMapping(value = "/artifactsRest", method = { RequestMethod.GET })

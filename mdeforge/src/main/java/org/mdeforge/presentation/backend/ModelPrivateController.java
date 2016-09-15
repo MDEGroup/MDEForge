@@ -98,7 +98,7 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 	public String artifactListWithGenerated(org.springframework.ui.Model model) {
 		model.addAttribute("type", org.mdeforge.business.model.Model.class.getSimpleName());
 		super.artifactListWithGenerated(model);
-		return "private.use.models_list";
+		return "private.use.models_list_generated";
 	}
 	@InitBinder
 	public void initBinder(WebDataBinder binder, WebRequest request) {

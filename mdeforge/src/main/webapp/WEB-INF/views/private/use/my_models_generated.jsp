@@ -19,13 +19,8 @@
 
 <h3 class="header-h main-title">My ${type}s</h3>
 <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
-	<div class="innerLR">
-	<div class="widget widget-heading-simple">
+<div class="innerLR">
 
-			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
-				class="btn btn-primary btn-block">Show with generated</a>
-
-	</div>
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 			<!-- Table -->
@@ -33,6 +28,7 @@
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Conform to</th>
 						<th class="center">Author</th>
 						<th class="center">Public</th>
 						<th class="center">Action</th>
@@ -67,6 +63,15 @@ $(document).ready(function () {
 	                     }
 	                },
 	                {
+	                    "data":"metamodelArtifact",
+	                    "searchable": false,
+	                    "sortable": false,
+	                    "render": function ( data, type, row, meta ) {
+	                    	console.log(row);
+	                    	return "<a href='${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=" + row.metamodelArtifact.id + "'>" + row.metamodelArtifact.name + "</a>";
+	                     }
+	                },
+	                {
 	                	"data": "author.username",
 	                    "searchable": false,
 	                    "sortable": false,
@@ -90,7 +95,7 @@ $(document).ready(function () {
 	                 }
         ],
         "ajax": {
-	    	"url": "${pageContext.request.contextPath}/private/${type}/artifactsRest"
+	    	"url": "${pageContext.request.contextPath}/private/${type}/artifactsRestWithGenerated"
 		}		
 	});              
 });
