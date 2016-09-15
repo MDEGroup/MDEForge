@@ -21,11 +21,8 @@
 <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
 	<div class="innerLR">
 	<div class="widget widget-heading-simple">
-		${all }
-		<c:if test="${!all}">
 			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
 				class="btn btn-primary btn-block">Show with generated</a>
-		</c:if>
 	</div>
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
