@@ -13,8 +13,11 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/public")
@@ -55,7 +58,15 @@ public class PublicController {
 	public String login() {
 		return "public.login";
 	}
-
+	@RequestMapping(value = "/exist_user", method = { RequestMethod.GET })
+	public @ResponseBody boolean existUser(@RequestParam("username") String username){
+		return (userService.findOneByUsername(username)==null)?false:true;
+	}
+	@RequestMapping(value = "/exist_mail", method = { RequestMethod.GET })
+	public @ResponseBody boolean existEmail(@RequestParam("email") String email){
+		return (userService.findOneByEmail(email)==null)?false:true;
+	}
+	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model) throws IOException {
 

@@ -587,8 +587,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	@Override
 	public double calculateSimilarity(Artifact art1, Artifact art2) {
-		URI uri1 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art1));
-		URI uri2 = URI.createFileURI("c:/" + gridFileMediaService.getFilePath(art2));
+		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		ResourceSet resourceSet1 = new ResourceSetImpl();
 		ResourceSet resourceSet2 = new ResourceSetImpl();
@@ -1470,8 +1470,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	 	for (Property prop : ecoreMetamodel.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
-			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-			doc.add(propField);
+			if(propName != null && propValue != null) {
+				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+				doc.add(propField);
+			}
 		}
 	 	
 //		System.out.println(handler.toString());	 	

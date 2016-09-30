@@ -28,4 +28,8 @@ public interface UserService {
 	void update(User user) throws BusinessException;
 
 	void changePassword(User us, String password_old, String password_new, String password_new_r) throws BusinessException;
+
+	User findOneByUsername(String username) throws BusinessException;
+
+	User findOneByEmail(String email) throws BusinessException;
 }

@@ -37,6 +37,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.ArtifactNotFoundException;
+import org.mdeforge.business.AuthorizzationException;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.CRUDRelationService;
@@ -743,6 +744,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public void delete(T artifact, User user) {
 		artifact = findOneById(artifact.getId(), user);
+		if(artifact.getAuthor().getId()!=user.getId())
+			throw new AuthorizzationException();
 		for (Project project : artifact.getProjects()) {
 			Artifact artToRemove = new Artifact();
 			for (Artifact art : project.getArtifacts())

@@ -137,6 +137,17 @@ public class PrivateController {
 		return "redirect:/private/dashboard";
 	}
 	
+	@RequestMapping(value = "/artifact/delete", method = RequestMethod.DELETE)
+	public @ResponseBody boolean deleteArtifactRest(@RequestParam("idArtifact") String idArtifact, org.springframework.ui.Model model) {
+		Artifact artifact = artifactService.findOneById(idArtifact, us);
+		try{ 
+			artifactService.delete(artifact, us);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+	}
+	
 	@RequestMapping(value="/artifact/name", method={RequestMethod.GET})
 	public @ResponseBody boolean findByName(@RequestParam String name) {
 		try {

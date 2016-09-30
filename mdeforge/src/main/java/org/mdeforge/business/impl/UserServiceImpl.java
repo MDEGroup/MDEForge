@@ -46,7 +46,16 @@ public class UserServiceImpl implements UserService{
 			throw new  BusinessException();
 		else return u;
 	}
-
+	@Override
+	public User findOneByUsername(String username) throws BusinessException{
+		User u = userRepository.findByUsername(username);
+		return u;
+	}
+	@Override
+	public User findOneByEmail(String email) throws BusinessException{
+		User u = userRepository.findByEmail(email);
+		return u;
+	}
 	@Override
 	public List<User> findAll() throws BusinessException {
 		return userRepository.findAll();
