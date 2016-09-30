@@ -16,24 +16,24 @@
 <!-- Breadcrumb END -->
 
 
-<h3>${Title}</h3>
+<h3>${type}s</h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 <div class="innerLR">
-
 	
-	<div class="widget widget-heading-simple widget-body-gray">
+	
+	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 		
 			<!-- Table -->
-			<table id="artList">
+			<table id="artList" class="responsive" width="100%">
 				<thead>
 					<tr>
-						<th>Public</th>
 						<th>Name</th>
-						<th>Action</th>
-						<th>Author</th>
+						<th class="center">Author</th>
+						<th class="center">Visibility</th>
+						<th class="center">Action</th>
 					</tr>
-				</thead>
-				<tbody></tbody>			
+				</thead>		
 			</table>
 			<!-- // Table END -->
 			
@@ -47,31 +47,60 @@ $(document).ready(function () {
 		"processing": true,
 		"serverSide": true,
 		"filter" : false,
+		"responsive": true,
+		"language": {
+		    "lengthMenu": "Show _MENU_ <span class='strong text-primary'>${type}s</span> per page",
+		    "info": "_TOTAL_ <span class='strong text-primary'>${type}s</span> found",
+		    "processing":'<img class="spinner" src="/mdeforge/resources/theme/images/spin.gif"></span>'
+		},
 		"columns":[
-			{
-				"data":"open",
-			    "searchable": false,
-			    "sortable": false
-			},
+			
 			{
 			    "data":"name",
 			    "searchable": false,
-			    "sortable": false
+			    "sortable": false,
+			    "render": function ( data, type, row, meta ) {
+			    	if(row.open){
+                		return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+			    	}else{
+			    		return "<span class='text-primary'>" + row.name + "</span>";
+			    	}
+                 }
+			},
+			{
+				"data": "author.username",
+			    "searchable": false,
+			    "sortable": false,
+			    "className": "center"
+			 },
+			{
+				"data":"open",
+			    "searchable": false,
+			    "sortable": false,
+			    "className": "center",
+			    "render": function ( data, type, row, meta ) {
+			    	if(row.open){
+			    		return "<span class='text-success'>Public</span>";
+			    	}else{
+			    		return "<span class='text-error'>Private</span>";
+			    	}
+                	
+                 }
 			},
 			{
 				"data": "action",
 			    "searchable": false,
 			    "sortable": false,
 			    "defaultContent": "",
+			    "className": "center",
 			    "render": function ( data, type, row, meta ) {
-                	return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>Details</a>";
+			    	if(row.open){
+			    		return "<a href='${pageContext.request.contextPath}/public/${type}/download?artifact_id=" + row.id + "'>Download</a>";
+			    	}
+                	
                  }
 			 },
-			 {
-				"data": "author.username",
-			    "searchable": false,
-			    "sortable": false
-			 }
+			 
         ],
         "ajax": {
 		    "url": "${pageContext.request.contextPath}/public/${type}/artifactsRest",
@@ -79,5 +108,4 @@ $(document).ready(function () {
 	});              
 });
 </script>
-<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-<script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.js"></script>	
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/jquery.dataTables.js"></script>		

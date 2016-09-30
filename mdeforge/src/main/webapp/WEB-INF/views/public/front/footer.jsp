@@ -49,13 +49,14 @@
 					</div>
 				</div>
 				
-				<!--  Copyright Line -->
+				
+			</div>
+		<!--  Copyright Line -->
 				<div class="copy">
+				<div class="container-960 innerB">
 					 &copy; <%=Calendar.getInstance().get(Calendar.YEAR)%> -- <spring:message code="common.footer"/>
 					<!-- <span class="appbrand"><spring:message code="common.title"/></span>	-->									
 				</div>
+				</div>
 				<!--  End Copyright Line -->
-				
-			</div>
-	
 		</div>

@@ -29,143 +29,46 @@
 		<li>Graph View</li>
 </ul>
 <!-- Breadcrumb END -->
+<div class="innerLR" id="dashboard">
 
-<!-- Heading -->
-<div class="heading-buttons">
-	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel" /> <spring:message code="mdeforge.public.back.browse.graph"/></h3>
-	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
-	<div class="buttons pull-right">
-		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
-		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons show_big_thumbnails"><i></i> Table View</a>				
+
+	<div class="row-fluid">
+		<div class="span6">
+			<h3 class="header-h main-title cluster-title">Cluster Metamodel Graph View</h3>
+		</div>
+		<div class="span6">
+			<h3 class="header-h main-title cluster-title text-right"><a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster?threshold=${threshold}&computation=${computation}">Cluster Metamodel Table View</a></h3>
+		</div>
 	</div>
-	<div class="clearfix"></div>
-</div>
-<div class="separator bottom"></div>
-<!-- // Heading END -->
-
-<div class="innerLR">
-	<div class="hide" id="threshold_form">
-			<div class="row-fluid">
-				<div class="span2">
-				</div>	
-				<div class="span8">	
-			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
-				<div class="widget-body">	
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-
-													<c:choose>
-													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
-													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
-													  </c:when>
-													  <c:otherwise>
-													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}"/>
-													  </c:otherwise>
-													</c:choose>																										
-													
-													<input type="hidden" id="actual_threshold" value="${newThreshold}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-								</div>
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">EMFCompareStandard similarity</button>
-								</div>
-							</form>
-							</div>
-						</div>
-					<hr>
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min2 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="0.3 - ${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-								</div>
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">EMFCompare Semantic(no-engine) similarity</button>
-								</div>
-							</form>
-							</div>
-						</div>
-						<hr>
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min3 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-								</div>
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">EMFCompare Semantic (engine) similarity</button>
-								</div>
-							</form>
-							</div>
-						</div>
-						<hr>
-						
-						<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-								</div>
-								<div class="span3" style="text-align:right;">		
-									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
-								</div>
-							</form>
-							</div>
-						</div>
-					
-			</div>
-			</div>
-		</div>
-		<div class="span2">
-		</div>	
-		</div>
-		</div>
-		<div class="separator bottom"></div>
-		<div class="separator bottom"></div>
+	<div class="separator bottom"></div>
+	<span> Metamodels in the repository: <strong class="text-primary">${numberOfMetamodels}</strong></span>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p>
+<div class="separator"></div>
+	
+	<div class="separator"></div>
 	<!-- Widget -->
-	<div class="widget widget-heading-simple widget-body-simple"> 
+	<div class="widget widget-heading-simple widget-body-simple" id="cluster">
+					
+		
+		
+							
 		<div class="widget-body">		
 			<!-- Row -->
 			<div class="row-fluid">
-				<div class="span6">
-					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Computation" data-placement="top">
+			
+					<div class="span3">
+						<div id="show-parameters" class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="collapse" data-target="#collapse-parameters">
+							<span class="txt">Edit Parameters</span>	
+							<div class="clearfix"></div>					
+							<span class="count text-primary glyphicons adjust_alt"><i></i></span>
+						</div>
+					</div>
+				
+					<div class="span6">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse">
 							<span class="txt">Similarity Measure</span>
 							<div class="clearfix"></div>
-							<span class="count" style="font-size:26px; line-height:28px;">								
+							<span class="count text-primary">								
 								<c:choose>
 								  <c:when test="${computation == '1'}">
 								 	 Match-based similarity								   
@@ -181,18 +84,63 @@
 								  </c:when>								  
 								</c:choose>							
 							</span>
+							</span>
 						</div>
 					</div>
 					
-					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Threshold of this cluster" data-placement="top">
-							<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
-							<div class="clearfix"></div>
-							<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
+					<div class="span3">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" >
+							<span class="txt">Threshold</span>	
+							<div class="clearfix"></div>					
+							<span class="count text-primary"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 						</div>
 					</div>
-					
-					<div class="span4">
+				</div>
+				<hr class="separator">
+				<div class="row-fluid row-merge">
+				<div class="accordion" id="accordion">
+				
+					<!-- Accordion Item -->
+					<div class="accordion-group">
+						
+					    <div id="collapse-parameters" class="accordion-body collapse">
+					    <form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">						
+								<!-- Slider -->
+								<div class="slider-range-min4 row-fluid">
+									<div class="span3 center">
+										<p>Threshold:</p> 
+									</div>
+									<div class="span6" >
+										<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+										<div class="slider slider-primary" style="margin-top:5px"></div>
+									</div>
+									<div class="span3 center">
+										<input id="input-threshold" type="text" class="amount center strong" name="threshold"/>
+									</div>
+								</div>
+								<!-- // Slider END -->
+								<div class="separator"></div>
+								
+								<div class="row-fluid">
+								
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="1">Match-based similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="2">Containment-based similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="3">Cosine similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="4">Dice's coefficient</button></div>
+								
+								</div>
+								
+								<hr class="separator top">
+						</form>	
+					    </div>
+				  	</div>
+				  	<!-- // Accordion Item END -->
+				  	
+				</div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span3">
 						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Number of clusters" data-placement="top">
 							<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
 							<div class="clearfix"></div>
@@ -200,23 +148,21 @@
 						</div>
 					</div>
 					
-				</div>
-				<div class="span6">
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Average number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Maximum number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${max}</span>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Number of metamodels that are not found in any cluster" data-placement="top">
 							<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
 							<div class="clearfix"></div>
@@ -231,14 +177,20 @@
 						</div>
 					</div>	
 					
-				</div>	
+					
 			</div>
 			<!-- // Row END -->									
 		</div>
+					
+					
+					
+		
+	
 	</div>
 	
+	
 	<div class="separator bottom"></div>
-	<!-- // Stats Widgets END -->
+	<!-- // Stats Widgets END -->	
 	
 	<!-- Tabs -->
 	<div class="">

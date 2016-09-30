@@ -23,15 +23,15 @@
 								<!-- // Quick Sidebar Style END -->
 				
 				<!-- Full Sidebar Style -->
-				<li><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard"><i></i> Dashboard</a></li>
-				<li class="dropdown dd-1">
+				<li id="menu-dashboard"><a href="${pageContext.request.contextPath}/private/dashboard" class="glyphicons dashboard"><i></i> Dashboard</a></li>
+				<li id="menu-shared" class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons share_alt"><i></i>Shared <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<li><a class="glyphicons file" href="${pageContext.request.contextPath}/private/shared_projects/"><i></i>PROJECTS</a></li>
 						<li><a class="glyphicons file" href="${pageContext.request.contextPath}/private/shared_artifacts/"><i></i>ARTIFACTS</a></li>						
 					</ul>
 				</li>
-				<li class="dropdown dd-1">
+				<li id="menu-artifacts" class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons list"><i></i><!--<spring:message code="mdeforge.menu.workspace"/>--> MY ARTIFACS <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<!--<c:forEach items="${workspaces_list}" var="workspace">
@@ -45,8 +45,8 @@
 				</li>
 				<!-- <li><a class="glyphicons list" href="${pageContext.request.contextPath}/private/my_artifacts/"><i></i>My Artifacts</a></li>-->
 				<%-- <li><a class="glyphicons dashboard" href="${pageContext.request.contextPath}/private/ATLTransformation/transformation_list/"><i></i>Transformations</a></li> --%>
-				<li class="dropdown dd-1">
-					<a href="" data-toggle="dropdown" class="glyphicons inbox_plus"><i></i><!--<spring:message code="mdeforge.menu.workspace"/>--> WORKSPACES <span class="icon-chevron-right"></span></a>
+				<li id="menu-workspaces"class="dropdown dd-1">
+					<a href="" data-toggle="dropdown" class="glyphicons inbox"><i></i><!--<spring:message code="mdeforge.menu.workspace"/>--> WORKSPACES <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<!--<c:forEach items="${workspaces_list}" var="workspace">
 							<li><a href="${pageContext.request.contextPath}/private/workspace?id=${workspace.getId()}" class="glyphicons folder_open"><i></i>${workspace.getName()}</a></li>
@@ -55,7 +55,7 @@
 							<li><a href="${pageContext.request.contextPath}/private/workspace/create" class="glyphicons circle_plus"><i></i>CREATE NEW</a></li>
 					</ul>
 				</li>
-				<li class="dropdown dd-1">
+				<li id="menu-services" class="dropdown dd-1">
 					<a href="" data-toggle="dropdown" class="glyphicons magic"><i></i><spring:message code="mdeforge.menu.services"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="glyphicons list">COMPARE METAMODEL</a></li>

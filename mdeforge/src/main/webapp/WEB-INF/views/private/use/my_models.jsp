@@ -18,17 +18,15 @@
 
 
 <h3 class="header-h main-title">My ${type}s</h3>
-<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
+ <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 	<div class="innerLR">
 	<div class="widget widget-heading-simple">
-		${all }
+		<div class="widget-body">
+		<!--  ${all } -->
 		<c:if test="${!all}">
 			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
-				class="btn btn-primary btn-block">Show with generated</a>
+				class="btn btn-success" style="margin: 5px 0 25px">Show with generated</a>
 		</c:if>
-	</div>
-	<div class="widget widget-heading-simple">
-		<div class="widget-body">
 			<!-- Table -->
 			<table id="artList" class="responsive" width="100%">
 				<thead>

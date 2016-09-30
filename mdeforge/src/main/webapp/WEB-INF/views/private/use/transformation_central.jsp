@@ -174,8 +174,9 @@
 
 			</div>
 		</div>
+		<div class="separator"></div>
 		<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
-					class="btn btn-success btn-block"><i
+					class="btn btn-success btn-block" style="padding: 10px; margin-bottom: 10px;"><i
 					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 	</div>
 </div>
