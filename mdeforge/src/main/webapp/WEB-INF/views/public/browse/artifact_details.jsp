@@ -297,31 +297,38 @@ function shareArtifact(){
 <c:import var="fileToVisualize"
 	url="file:///${artifactFile.getAbsolutePath()}" />
 <!-- Modal -->
-<div class="modal hide fade" id="modal-simple"
-	style="width: 800px; left: 42%">
-	<pre class="prettyprint">
-${fn:escapeXml(fileToVisualize)}
-</pre>
-	<!-- Modal footer -->
-	<div class="modal-footer">
-		<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+<div class="modal modal-artifact hide fade" id="modal-simple">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3>${artifact.getName()}</h3>
+	  </div>
+	 	<pre class="prettyprint" style="margin: 0">
+	 		<code class="xml" style="font-size: 16px;line-height: 22px;font-weight: 400;">
+			${fn:escapeXml(fileToVisualize)}
+			</code>
+		</pre>
+	  <div class="modal-footer center">
+	    <a href="#" class="btn btn-large" data-dismiss="modal">Close</a>
+	  </div>
 	</div>
-	<!-- // Modal footer END -->
-</div>
 <!-- // Modal END -->
 
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/highlight/highlight.pack.js"></script>
 <script>
-	var res = '${artifact.getDefaultWeightedContents()}'.trim();
+	hljs.initHighlightingOnLoad();
+	/*var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 
-	var wordlist = [];
+	 var wordlist = [];
 
 	for (var i = 0; i < res.length; ++i) {
 		var numOccurrences = 1;
 		for (var j = 0; j < res.length; ++j) {
 			if (res[j].toUpperCase() === res[i].toUpperCase()) {
 				numOccurrences++;
-				/*Elimino l'elemento ripetuto dall'array*/
+				//Elimino l'elemento ripetuto dall'array
 				res.splice(j, 1);
 			}
 		}
@@ -339,7 +346,8 @@ ${fn:escapeXml(fileToVisualize)}
 		fontFamily : 'Open Sans, sans-serif',
 		rotateRatio : 0.5
 
-	}
+	} */
+	
 
-	WordCloud(document.getElementById('my_canvas'), options);
+	//WordCloud(document.getElementById('my_canvas'), options);
 </script>

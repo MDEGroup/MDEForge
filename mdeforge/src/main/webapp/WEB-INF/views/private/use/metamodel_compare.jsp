@@ -39,7 +39,7 @@
 			</div>
 			</div>
 					
-				<button class="btn btn-primary" style="margin: 20px auto;padding: 15px 40px; display: block" name="compare" value="1">Compare Metamodels</button>
+				<button class="btn btn-primary btn-block" style="margin: 20px auto;padding: 15px 40px; display: block" name="compare" value="1">Compare Metamodels</button>
 		</form>
 
 

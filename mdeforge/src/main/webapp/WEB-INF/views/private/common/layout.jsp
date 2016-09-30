@@ -58,6 +58,7 @@
 	
 	<!-- Main Theme Stylesheet :: CSS -->
 	<link href="${pageContext.request.contextPath}/resources/theme/css/style-flat.css?1373029331" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 	<%-- <link href="${pageContext.request.contextPath}/resources/theme/skins/css/android-green.css" rel="stylesheet" type="text/css" /> --%>
 	<!--  <link href="${pageContext.request.contextPath}/resources/theme/skins/css/bascio_template.css" rel="stylesheet" type="text/css" />-->
 	
@@ -149,8 +150,6 @@
 	<!-- SlimScroll Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery-slimScroll/jquery.slimscroll.min.js"></script>
 	
-	<!-- Common Demo Script -->
-	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/common.js"></script>
 	
 	<!-- Holder Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/holder/holder.js"></script>
@@ -176,8 +175,12 @@
 	
 	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.js"></script>
-	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/js/jquery.gritter.min.js"></script>
+	
+	
+	<!-- Common Demo Script -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/common.js"></script>
 	
 	<!-- Tables Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
@@ -211,19 +214,9 @@
 	
 	  ga('create', 'UA-49762168-2', 'mdeforge.org');
 	  ga('send', 'pageview');
+	 
+	  
 	</script>
-	<script>
-		$('#upload-artifact').on('shown', function(){
-				var modal = $(this);
-				// load content with AJAX
-				$.ajax({
-					url: '/path/to/your/content/file',
-					success: function(data){
-			  			modal.find('.modal-body').html(data);
-					}
-				});
-			});
-	</script>
-	
+
 </body>
 </html>

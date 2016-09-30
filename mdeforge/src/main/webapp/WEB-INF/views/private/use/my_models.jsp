@@ -18,11 +18,11 @@
 
 
 <h3 class="header-h main-title">My ${type}s</h3>
-<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
+ <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 	<div class="innerLR">
 	<div class="widget widget-heading-simple">
 			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
-				class="btn btn-primary btn-block">Show with generated</a>
+				class="btn btn-success" style="margin: 5px 0 25px">Show with generated</a>
 	</div>
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">

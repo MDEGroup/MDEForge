@@ -55,7 +55,7 @@
 			
 								<!-- Themer -->
 				<li class="">
-					<a href="${pageContext.request.contextPath}" target="_blank" ><span class="hidden-tablet hidden-phone">MDE Forge </span></a>
+					<a href="${pageContext.request.contextPath}"><span class="hidden-tablet hidden-phone">MDE Forge Home</span></a>
 				</li>
 				<li class="account dropdown dd-1">
 					
@@ -66,11 +66,11 @@
 								
 						<li class="profile">
 							<span>
-								<span class="heading">Profile <a href="#" class="pull-right"></a></span>
 								<c:url var="im" value="/private/getPhoto?id=${logged_user.image}" />
 								<img id="imagePreview" src="${im}"alt="Profile Photo"/>
-								<span class="details">
+								<div class="details">
 									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
+									<br>
 									<a href="#"><security:authentication property="principal.user.email"/></a>
 									<!--<security:authentication property="principal.user.id" var="userId"/>-->
 									<input type="hidden" value="${userId}" id="loggedUserId">
@@ -79,9 +79,9 @@
 							</span>
 						</li>
 						<li><a href="${pageContext.request.contextPath}/private/dashboard" class="menu-right-dropdown pull-right">Dashboard</a></li>		
-						<li><a href="${pageContext.request.contextPath}/private/change_password" class="menu-right-dropdown pull-right">Change password</a></li>		
-						<li><a href="${pageContext.request.contextPath}/private/update_account" class="menu-right-dropdown pull-right">Update account</a></li>		
-						<li><a href="${pageContext.request.contextPath}" target="_blank" class="menu-right-dropdown pull-right">MDE Forge Home</a></li>
+						<!-- <li><a href="${pageContext.request.contextPath}/private/change_password" class="menu-right-dropdown pull-right">Change password</a></li>-->		
+						<li><a href="${pageContext.request.contextPath}/private/update_account" class="menu-right-dropdown pull-right">Account</a></li>		
+						<li><a href="${pageContext.request.contextPath}" class="menu-right-dropdown pull-right">MDE Forge Home</a></li>
 						<hr>
 						<li>
 								<a id="logout" class="btn btn-default pull-right" href="${pageContext.request.contextPath}/j_spring_security_logout"><spring:message code="common.logout"/></a>

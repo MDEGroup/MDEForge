@@ -11,10 +11,11 @@
 
 	<div class="container login">
 	 
-		<div class="wrapper">
-		<img class="logo-banner" width="100px" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png">
+		<div class="wrapper" style="max-width: none">
+		<img class="logo-banner" width="100px" style="margin-top: 10%" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png">
 			<h3 class="header-h main-title text-black center">Sign Up to MDE Forge</h3>
-			
+			<h4 class="center">Already a member? <a href="${pageContext.request.contextPath}/login" class="text-primary">Sign In</a></h4>
+			<div class="separator"></div>
 			<h2 class="header-h main-text center"></h2>
 			<!-- Box -->
 			<div class="widget widget-heading-simple widget-body-simple">
@@ -22,49 +23,50 @@
 				<div class="widget-body" style="background: #fff">
 				
 					<!-- Form -->
-					<form method="post" action="${pageContext.request.contextPath}/signin" enctype="multipart/form-data">
+					<form id="signin-form" method="post" action="${pageContext.request.contextPath}/signin" enctype="multipart/form-data">
 						<div class="row-fluid">
+						<div class="span12 center">
+						<label>Upload Your Picture</label>
+						<div class="separator bottom"></div>
+						<div class="box__input">
+							<label for="artifactName" id="label-img"><img id="img-signin" class="img-center" src="/mdeforge/resources/theme/images/blankuser.jpg"></label>
+							<input type="file" id="artifactName" style="display: none;" class="margin-none" name="artifactfile" size="40">
+							
+						</div>
+						
+						<div class="separator"></div> 
+						<label>Username</label>
+						<input id="username-input" type="text" name="username" class="input-block-level center" autocomplete="off" placeholder="Your Username"/>
+						<div class="separator"></div> 
+						</div>
+						</div>
+						<div class="row-fluid center">
 						<div class="span6">
 						<label>Firstname</label>
-						<input type="text" name="firstname" class="input-block-level" placeholder="Your Firstname"/>
+						<input type="text" name="firstname" class="input-block-level" autocomplete="false" placeholder="Your Firstname"/>
+						<label>Email</label>
+						<input type="email" name="email" class="input-block-level" autocomplete="new-password" placeholder="Your Email Address"/>
+						<label>Password</label>
+						<input type="password" name="password" class="input-block-level" autocomplete="new-password" placeholder="Your Password" />
 						</div>
 						<div class="span6">
 						<label>Lastname</label>
-						<input type="text" name="lastname" class="input-block-level" placeholder="Your Lastname"/>
-						</div>
-						</div>
-						<div class="row-fluid">
-						<div class="span12">
-						<label>Username</label>
-						<input type="text" name="username" class="input-block-level" placeholder="Your Username"/>
-						</div>
-						</div>
-						<label>Email</label>
-						<input type="email" name="email" class="input-block-level" placeholder="Your Email Address"/>
+						<input type="text" name="lastname" class="input-block-level" autocomplete="false" placeholder="Your Lastname"/>
 						<label>Confirm Email</label>
-						<input type="email" name="email_confirmation" class="input-block-level" placeholder="Confirm Your Email Address"/>
-						<p></p>
-						<label>Password</label>
-						<input type="password" name="password" class="input-block-level" placeholder="Your Password" />
+						<input type="text" name="email_confirmation" class="input-block-level" autocomplete="false" placeholder="Confirm Your Email Address"/>
 						<label>Repeat Password</label>
-						<input type="password" name="password_confirmation" class="input-block-level" placeholder="Repeat Your Password" />
-						<label for="artifactName"><div><img width="150px" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/newfile.png"></div></label>
-						<div class="fileupload fileupload-new" data-provides="fileupload">
-							  	<div class="input-append center" style="width: 100%">
-							  		<span class="btn btn-default btn-file">
-								    	<span class="fileupload-new">Select ${artifact.getClass().getSimpleName()} File</span>
-								    	<span class="fileupload-exists">Change</span>
-								    	<input type="file" id="artifactName" class="margin-none" name="photo" size="40"/>
-							    	</span>
-							    	<div class="uneditable-input center"><i class="icon-file fileupload-exists"></i> 
-							    		<span class="fileupload-preview"></span>
-							    	</div>
-							    	
-							    	<a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-							  	</div>
+						<input type="password" name="password_confirmation" class="input-block-level" autocomplete="new-password" placeholder="Repeat Your Password" />
 						</div>
-						<div class="separator bottom"></div> 
-						<label>Resolve Captcha</label>
+						</div>
+						
+						
+						
+						
+						
+						
+			
+						<div class="separator"></div> 
+						<label class="center" >Resolve Captcha</label>
 						<div class="row-fluid">
 							<c:if test="${not empty captcha}">
     							Wrong captcha code
@@ -76,10 +78,11 @@
 								out.print(c.createRecaptchaHtml(null, null));
 							%>
 						</div>
-						<div class="separator bottom"></div> 
+						<div class="separator"></div> 
+						<div class="separator"></div> 
 						<div class="row-fluid">
 						<div class="span12 center">
-								<button class="btn btn-block btn-large btn-primary" type="submit">Sign Up</button>
+								<button class="btn btn-block btn-large btn-primary my-button" type="submit">Sign Up</button>
 							</div>
 						</div>
 					 	

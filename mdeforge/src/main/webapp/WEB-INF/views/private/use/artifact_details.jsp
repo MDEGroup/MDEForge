@@ -35,7 +35,7 @@
 	<!-- <h5 class="muted"><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></h5>-->
 	<h5 class="muted">${artifact.getClass().getSimpleName()} Details</h5>
 	<hr>
-	<h5 class="input-name">Used in ${artifact.getProjects().size()} projects</h5>
+	<h5 class="input-name">Used in <span class="text-primary">${artifact.getProjects().size()}</span> projects</h5>
 	<div class="separator bottom"></div>
 		<span class="text-primary" style="font-size: 16px">Creation Date</span>
 		<h5><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getCreated()}" /></h5>
@@ -55,11 +55,14 @@
 		</c:choose>
 	</c:if>
 	<h5 class="input-name">Properties</h5>
+	<ul>
 	<c:forEach items="${artifact.properties}" var="property">
-		<h5>${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</h5>
-			<p>${property.getValue()}</p>
+	<li>
+		<p class="property-name-details text-primary">${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</p>
+			<h5 class="property-value-details">${property.getValue()}</h5>
+	</li>
 	</c:forEach>
-	
+	</ul>
 	<h5 class="input-name">Description</h5>
 	<p>${artifact.description}</p>
 	
@@ -190,9 +193,10 @@
 						<!-- End body -->
 					</table>
 				<div class="separator"></div>
-				<!-- Widget -->
+				
+				<!-- word context 
 						<div class="widget widget-heading-simple widget-body-white">
-							<!-- Widget Heading -->
+							
 							<h5 class="input-name">Extracted Word Context</h5>
 							<div class="separator bottom"></div>
 					
@@ -205,10 +209,9 @@
 												${serializedContext_splitted}
 					
 											</div>
-											<!-- // Tab content END -->
 					
 										</div>
-						<!-- // Widget END -->
+						<!-- word context END -->
 				</div>
 				</c:if>
 				</div>
@@ -244,17 +247,17 @@
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/highlight/highlight.pack.js"></script>
 <script>
 	hljs.initHighlightingOnLoad();
-	var res = '${artifact.getDefaultWeightedContents()}'.trim();
+	/*var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 
-	var wordlist = [];
+	 var wordlist = [];
 
 	for (var i = 0; i < res.length; ++i) {
 		var numOccurrences = 1;
 		for (var j = 0; j < res.length; ++j) {
 			if (res[j].toUpperCase() === res[i].toUpperCase()) {
 				numOccurrences++;
-				/*Elimino l'elemento ripetuto dall'array*/
+				//Elimino l'elemento ripetuto dall'array
 				res.splice(j, 1);
 			}
 		}
@@ -272,7 +275,7 @@
 		fontFamily : 'Open Sans, sans-serif',
 		rotateRatio : 0.5
 
-	}
+	} */
 	
 
 	//WordCloud(document.getElementById('my_canvas'), options);

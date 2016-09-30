@@ -2,24 +2,20 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@taglib uri="http://www.springframework.org/security/tags"
-	prefix="security"%>
-<script
-	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
+<%@taglib uri="http://www.springframework.org/security/tags" prefix="security"%>
 
 <div class="row-fluid">
-	<div class="span12">
-		<h5 class="input-name">Conform to</h5>
+		<div class="box-generic">
+		<h5 class="input-name">Conform to: </h5>
+		
 		<c:forEach items="${artifact.relations}" var="relation">
 			<c:choose>
-				<c:when
-					test="${relation.getClass().name == 'org.mdeforge.business.model.ConformToRelation'}">
-					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.toArtifact.getId()}"
-						class="btn btn-primary">${relation.toArtifact.getName()}</a>
+				<c:when test="${relation.getClass().name == 'org.mdeforge.business.model.ConformToRelation'}">
+					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.toArtifact.getId()}" class="btn btn-default">
+						${relation.toArtifact.getName()}
+					</a>
 				</c:when>
 			</c:choose>
 		</c:forEach>
-
-
-	</div>
+		</div>
 </div>

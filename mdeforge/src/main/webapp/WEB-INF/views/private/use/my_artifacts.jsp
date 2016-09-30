@@ -18,13 +18,12 @@
 
 
 <h3 class="header-h main-title">My ${type}s</h3>
-<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p>
 	<div class="innerLR">
+	
 	<div class="widget widget-heading-simple">
-
 			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
-				class="btn btn-primary btn-block">Show with generated</a>
-
+				class="btn btn-success" style="margin: 5px 0 25px">Show with generated</a>
 	</div>
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
@@ -34,7 +33,7 @@
 					<tr>
 						<th>Name</th>
 						<th class="center">Author</th>
-						<th class="center">Public</th>
+						<th class="center">Visibility</th>
 						<th class="center">Action</th>
 						
 					</tr>
@@ -63,7 +62,11 @@ $(document).ready(function () {
 	                    "searchable": false,
 	                    "sortable": false,
 	                    "render": function ( data, type, row, meta ) {
-	                    	return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	    			    	if(row.open){
+	                    		return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	    			    	}else{
+	    			    		return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	    			    	}
 	                     }
 	                },
 	                {
@@ -76,7 +79,15 @@ $(document).ready(function () {
 	                	"data":"open",
 	                    "searchable": false,
 	                    "sortable": false,
-	                    "className": "center"
+	                    "className": "center",
+	                    "render": function ( data, type, row, meta ) {
+	    			    	if(row.open){
+	    			    		return "<span class='text-success'>Public</span>";
+	    			    	}else{
+	    			    		return "<span class='text-error'>Private</span>";
+	    			    	}
+	                    	
+	                     }
 	                },
 	                {
 	                	"data": "action",

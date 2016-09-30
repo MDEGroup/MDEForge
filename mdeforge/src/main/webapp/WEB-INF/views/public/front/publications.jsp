@@ -28,6 +28,7 @@
 		<div class="separator bottom"></div>
 				
 		</div>
+<div id="publications">
 		<div class="banner-wide" style="background: #f0f0f0">
 		<div class="container-960 innerT">
 				<div class="widget widget-heading-simple widget-body-simple">
@@ -212,4 +213,4 @@
 			</div>
 			</div>	
 		
-
+</div>

@@ -33,9 +33,8 @@
 <!-- Breadcrumb END -->
 <h3 class="header-h main-title">Search Page</h3>
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p>
-
+<div class="separator"></div>
 <div class="innerLR">
-<div id="alert-box" style="margin: 20px 0 0"></div>
 <div class="box-generic">
 	<div class="row-fluid">
 		<form id="searchForm" action="${pageContext.request.contextPath}/public/search" method="POST" class="form-search form-horizontal">
@@ -95,36 +94,32 @@
 		</div>
 		</form>
 	</div>				
-	<div class="row-fluid" id="search-result">
+	<div class="row-fluid">
 		<div class="span12">
 			<div class="widget widget-tabs">
-				<div class="">
+				<div class="widget-body">
 					<div class="tab-content">
 
 
 						<c:choose>
 							<c:when test="${searchResultComplete.results.size() > 0}">
-							<div class="box-generic">
-								<h3 class="header-h main-title">Results for: <span class="strong text-primary">${searchResultComplete.getQueryString()}</span></h3>
-							</div>
 								<div class="widget widget-heading-simple widget-body-white">
 									<div class="widget-body">
-										<h5 class="strong separator bottom"><span class="strong text-primary">${searchResultComplete.getPageNumber()}</span> of ${searchResultComplete.getPages()} pages <strong class="pull-right"><span class="strong text-primary">${searchResultComplete.getTotalHits()}</span> results in ${searchResultComplete.getSearchTime()} ms. </strong></h5> 
-										<hr class="separator bottom">
+										<h5 class="text-uppercase strong separator bottom">${searchResultComplete.getTotalHits()} results in ${searchResultComplete.getSearchTime()} ms. (${searchResultComplete.getPages()} pagine)</h5> 
 										<c:forEach items="${searchResultComplete.results}" var="result">
 											<div class="row-fluid">
-												<div class="span10">
-													<h4>
+												<div class="span12">
+													<h5 class="strong text-uppercase">
 														<c:choose>
 															<c:when test="${result.artifact.open == true}">
-																<a class="result-entry" href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
+																<a href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
 															</c:when>
 															<c:otherwise>
-																<a class="result-entry" href="${pageContext.request.contextPath}/private/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
+																<a href="${pageContext.request.contextPath}/private/${result.artifact.getClass().getSimpleName()}/artifact?artifact_id=${result.artifact.getId()}">${result.artifact.getName()}</a>
 															</c:otherwise>
 														</c:choose>
-													</h4>
-													<span class="text-primary">${result.artifact.getClass().getSimpleName()}</span>
+													</h5>
+													<span class="badge badge-important">${result.artifact.getClass().getSimpleName()}</span>
 													
 													
 													<br>
@@ -167,23 +162,16 @@
 													--%>
 													
 													<br>
-													
-														
-														<span class="btn btn-success">Score: <fmt:formatNumber type="number" maxFractionDigits="3" value="${result.getScore()}" /></span>
-														<span class="separator top" >Last update: <strong><fmt:formatDate type="date" value="${result.artifact.getModified()}" /></strong></span>
-													
-													
-												</div>
-												<div class="span2">
-													<a		class="hidden-phone"
-															href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName() }/download?artifact_id=${result.artifact.getId()}"
+													<p>
+														<span class="label">Last update: <fmt:formatDate type="date" value="${result.artifact.getModified()}" /></span>
+														<span class="badge badge-success">Score: <fmt:formatNumber type="number" maxFractionDigits="3" value="${result.getScore()}" /></span>
+													</p>
+													<p class="margin-none strong">
+														<a
+															href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName() }/ownload?artifact_id=${result.artifact.getId()}"
 															title="${result.artifact.getClass().getSimpleName() } Download"
-															><button class="btn entry-button" type="button"><i class=" icon-cloud-download"></i></button></a>
-													
-													<a		class="hidden-desktop hidden-tablet"
-															href="${pageContext.request.contextPath}/public/${result.artifact.getClass().getSimpleName() }/download?artifact_id=${result.artifact.getId()}"
-															title="${result.artifact.getClass().getSimpleName() } Download"
-															><button class="btn btn-primary btn-small" type="button">Download</button></a>
+															class="glyphicons single download_alt"><i></i>Download</a>
+													</p>
 												</div>
 											</div>
 											<hr class="separator">
@@ -191,114 +179,71 @@
 										
 										<!-- START Pagination -->
 										<div class="pagination margin-none">
-											<form id="paginationForm" action="${pageContext.request.contextPath}/public/search#search-result" method="POST">
-												<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
-												<input id="pageInput" type="hidden" name="page" value="">
-												<ul>
-													<!--  Prev Page -->
-													<c:choose>
-														<c:when test="${searchResultComplete.getPageNumber() == 1 }">
-															<li class="disabled"><a href="#" class="disabled">&lt;</a></li>
-														</c:when>
-														<c:otherwise>
-															<li class="search-pagination" data-value="${searchResultComplete.getPageNumber()-1}"><a href="#">&lt;</a></li>
-														</c:otherwise>
-													</c:choose>
-													
-													<!-- Numbers -->
-													<c:set var="after" value="false"/>
-													<c:set var="before" value="false"/>
-													<c:choose>
-														<c:when test="${searchResultComplete.getPageNumber()+2 >= searchResultComplete.getPages()}">
-															<c:set var="begin" value="${searchResultComplete.getPages()-4}"/>
-															<c:set var="end" value="${searchResultComplete.getPages()}"/>
-														</c:when>
-														<c:otherwise>
-															<c:set var="after" value="true"/>
-															<c:set var="begin" value="${searchResultComplete.getPageNumber()-2}"/>
-															<c:set var="end" value="${searchResultComplete.getPageNumber()+2}"/>
-														</c:otherwise>
-													</c:choose>
-													<c:choose>
-														<c:when test="${searchResultComplete.getPageNumber()-2 > 1}">
-															<c:if test="${searchResultComplete.getPageNumber() - searchResultComplete.getPageNumber() > 3 }">
-																<c:set var="begin" value="${searchResultComplete.getPages()-2}"/>
-															</c:if>
-															<c:set var="before" value="true"/>
-														</c:when>
-														<c:otherwise>
-															<c:set var="begin" value="1"/>
-														</c:otherwise>
-													</c:choose>
-														
+											<ul>
+												<li class="disable"><a href="#">&lt;</a></li>
+												<c:choose>
+													<c:when test="${searchResultComplete.getPageNumber() != 1}">
+														<form action="${pageContext.request.contextPath}/public/search" method="POST">
+															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+															<input type="hidden" name="page" value="${searchResultComplete.getPageNumber()-1}">
+															<input type="submit" name="submit">
+														</form>
+													</c:when>
+													<c:otherwise>
+														<input type="submit" name="submit">
+													</c:otherwise>
+												</c:choose>
 
-													<c:if test="${before == true }">
-														<li class="disabled"><a href="#" class="disabled"><i class=" icon-ellipsis-horizontal"></i></a></li>
-													</c:if>
-													<c:forEach begin="${begin }" end="${end}" varStatus="loop">
-																<c:choose>
-																	<c:when test="${loop.index == searchResultComplete.getPageNumber()}">
-																		<li class="active"><a href="#">${loop.index}</a></li>
-																	</c:when>
-																	<c:otherwise>
-																		<li><a href="#" class="search-pagination" data-value="${loop.index}">${loop.index}</a></li>
-																	</c:otherwise>
-																</c:choose>
-													</c:forEach>
-													<c:if test="${after == true }">
-														<li class="disabled"><a href="#" class="disabled"><i class=" icon-ellipsis-horizontal"></i></a></li>
-													</c:if>
-													
-													<!-- Next Page -->
+												<c:forEach begin="1" end="${searchResultComplete.getPages()}" varStatus="loop">
 													<c:choose>
-														<c:when test="${searchResultComplete.getPageNumber() == searchResultComplete.getPages() }">
-															<li class="disabled"><a href="#" class="disabled">&gt;</a></li>
+														<c:when test="${loop.index == searchResultComplete.getPageNumber()}">
+															<li class="active"><a href="#">${loop.index}</a></li>
+															<input type="submit" name="submit">
 														</c:when>
 														<c:otherwise>
-															<li class="search-pagination" data-value="${searchResultComplete.getPageNumber()+1}"><a href="#">&gt;</a></li>
+															<li><a href="#">${loop.index}</a>
+																<form action="${pageContext.request.contextPath}/public/search" method="POST">
+																	<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+																	<input type="hidden" name="page" value="${loop.index}">
+																	<input type="submit" name="submit">
+																</form></li>
 														</c:otherwise>
 													</c:choose>
-												
-												</ul>
-												<h5 class="strong separator"><span class="strong text-primary">${searchResultComplete.getPageNumber()}</span> of <span class="strong text-primary">${searchResultComplete.getPages()}</span> pages</h5>
-												
-											
-											</form>
-											
-											<!-- End Pagination -->
-											
+												</c:forEach>
+
+												<li class="disable"><a href="#">&gt;</a></li>
+												<c:choose>
+													<c:when test="${searchResultComplete.getPageNumber() != searchResultComplete.getPages()}">
+														<form action="${pageContext.request.contextPath}/public/search" method="POST">
+															<input type="hidden" name="search_string" value="${searchResultComplete.getQueryString()}">
+															<input type="hidden" name="page" value="${searchResultComplete.getPageNumber()+1}">
+															<input type="submit" name="submit">
+														</form>
+													</c:when>
+													<c:otherwise>
+														<input type="submit" name="submit">
+													</c:otherwise>
+												</c:choose>
+											</ul>
 										</div>
+										<!-- END Pagination -->
 
 									</div>
 								</div>
 							</c:when>
 							<c:otherwise>
-								<c:if test="${not empty searchResultComplete.getQueryString()}">
-								<div class="row-fluid" id="search-result">
-									<div class="span12">
-										<div class="widget widget-tabs">
-											<div class="">
-												<div class="tab-content">
-													
-														<div class="box-generic">
-															<h3 class="header-h main-title">Results for: <span class="strong text-primary">${searchResultComplete.getQueryString()}</span></h3>
-															<hr class="separator">
-															<p>No Artifact Found</p>
-														</div>
-													</div>
-											</div>
-							
-										</div>
+								<div
+									class="widget widget-heading-simple widget-body-white">
+									<div class="widget-body">
+										<h5 class="text-uppercase strong separator bottom">No
+											Results</h5>
 									</div>
 								</div>
-								</c:if>
 							</c:otherwise>
 						</c:choose>
 					</div>
 
-					<!-- SEARCH BY FILE -->
-					
-					<%-- <div class="widget widget-heading-simple widget-body-white">
+					<div class="widget widget-heading-simple widget-body-white">
 						<div class="widget-body">
 							<form:form cssClass="form-horizontal" modelAttribute="metamodel"
 								action="${pageContext.request.contextPath}/public/search_metamodel_by_example/result"
@@ -410,59 +355,23 @@
 								</div>
 							</div>
 						</c:otherwise>
-					</c:choose> --%>
-					
-					<!-- END SEARCH BY FILE -->
+					</c:choose>
 				</div>
 
 			</div>
 		</div>
 	</div>
 </div>
+</div>
 <script>
 	$(document).ready(function(){
 		var search_input = $("#searchField")
 		var st = ""; //search string
-		var page_input = $("#pageInput");
-		var alert_box = $("#alert-box")
-		
-		search_input.focus(function(){
-			$(this).removeClass("error-border");
-		})
 		
 		$(".search-tag").click(function(){
 			st = search_input.val() + $(this).data("value");
 			search_input.val(st).focus();
 		})
-		
-		$('.search-pagination').click(function(e){
-			e.preventDefault();
-			page_input.val($(this).data("value"));
-			$("#paginationForm").submit()
-		})
-		
-		$("#searchForm").submit(function(e){
-			var valid = true;
-			var str = search_input.val();
-			var sub = str.substr(str.length - 1, 1)
-			if(str == ""){
-				alert_box.html('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 25px;"><i class="icon-remove"></i></button><span>Search string is empty.</span></div>')
-				valid = false;
-			}
-			if(sub == ":"){
-				alert_box.html('<div class="alert alert-error submitAlert"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 25px;"><i class="icon-remove"></i></button><span>Tags needs argument.</span></div>')
-				valid = false;
-			}
-			
-			if(!valid){
-				search_input.addClass("error-border")
-				e.preventDefault();
-			}
-			
-			
-		})
-		
-		
 	})
 	
 </script>

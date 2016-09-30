@@ -6,12 +6,13 @@
 <!--[if IE 7]>    <html class="ie lt-ie9 lt-ie8 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
 <!--[if IE 8]>    <html class="ie lt-ie9 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
 <!--[if gt IE 8]> <html class="ie gt-ie8 fluid top-full sticky-top sidebar sidebar-full"> <![endif]-->
-<!--[if !IE]><!--><html class="fluid top-full sticky-top sidebar sidebar-full"><!-- <![endif]-->
+<!--[if !IE]><!--><html class="fluid top-full sticky-top sidebar sidebar-full sticky-sidebar js no-touch csstransforms3d csstransitions"><!-- <![endif]-->
 <head>
 	<title><spring:message code="mdeforge"/></title>
 	
 	<!-- Meta -->
 	<meta charset="UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -35,7 +36,16 @@
 	<!-- PrettyPhoto -->
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/gallery/prettyphoto/css/prettyPhoto.css" rel="stylesheet" />
     
+    <!-- Gritter -->
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/css/jquery.gritter.css" rel="stylesheet" />
+    
+    <!-- Select2 Plugin -->
+	<link href="${pageContext.request.contextPath}/resources/theme/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
+    
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
+    
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/monokai-sublime.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/github.css" rel="stylesheet" />
     
     <!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
@@ -47,7 +57,8 @@
     <![endif]-->
 	
 	<!-- Main Theme Stylesheet :: CSS -->
-	<link href="${pageContext.request.contextPath}/resources/theme/css/style-default.css?1373029331" rel="stylesheet" type="text/css" />
+	<link href="${pageContext.request.contextPath}/resources/theme/css/style-flat.css?1373029331" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 	
 	
 	<!-- FireBug Lite -->
@@ -121,7 +132,7 @@
 	
 	<!-- SlimScroll Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery-slimScroll/jquery.slimscroll.min.js"></script>
-	
+	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 	<!-- Common Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/common.js?1373029331"></script>
 	
@@ -130,30 +141,51 @@
 	<script>
 		Holder.add_theme("dark", {background:"#000", foreground:"#aaa", size:9});
 		Holder.add_theme("white", {background:"#fff", foreground:"#c9c9c9", size:9});
+		<!-- Colors -->
+		var primaryColor = '#4a8bc2',
+			dangerColor = '#b55151',
+			successColor = '#609450',
+			warningColor = '#ab7a4b',
+			inverseColor = '#45484d';
+		var themerPrimaryColor = primaryColor;
 	</script>
 	
 	<!-- Uniform Forms Plugin -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/pixelmatrix-uniform/jquery.uniform.min.js"></script>
 
-	
-	
-	
-	
-	
-	
-<%-- 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/jquery.dataTables.min.js"></script> --%>
-<%-- 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/TableTools/media/js/TableTools.min.js"></script> --%>
-<%-- 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/ColVis/media/js/ColVis.min.js"></script> --%>
-<%-- 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/DT_bootstrap.js"></script> --%>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/jquery.dataTables.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/TableTools/media/js/TableTools.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/extras/ColVis/media/js/ColVis.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/tables/DataTables/media/js/DT_bootstrap.js"></script>
 	
 	
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.js"></script>
-
+	
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/notifications/Gritter/js/jquery.gritter.min.js"></script>
 	
 	<!-- Tables Demo Script -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/demo/tables.js"></script>
 	
 	<script src="${pageContext.request.contextPath}/resources/bootstrap/extend/bootbox.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/Chart.js"></script>
+	
+	<!-- Easy-pie Plugin 
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/easy-pie/jquery.easy-pie-chart.js"></script>
+	-->
+	<!-- Sparkline Charts Plugin 
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/sparkline/jquery.sparkline.min.js"></script>
+	-->
+	<!-- Ba-Resize Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/jquery.ba-resize.js"></script>
+	<!-- Select2 Plugin -->
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/selectize/js/standalone/selectize.js"></script>
+	<!--  Flot Charts Plugin 
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.pie.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.tooltip.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.selection.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.resize.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/charts/flot/jquery.flot.orderBars.js"></script>-->
 	
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -163,7 +195,6 @@
 	
 	  ga('create', 'UA-49762168-2', 'mdeforge.org');
 	  ga('send', 'pageview');
-	
 	</script>
 	
 </body>

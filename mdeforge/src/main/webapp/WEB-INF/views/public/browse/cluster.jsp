@@ -27,225 +27,31 @@
 
 
 
-<!-- Heading -->
-<div class="heading-buttons">
-	<h3><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
-	<span> Metamodels in the repository: ${numberOfMetamodels}</span>
-	<div class="buttons pull-right">
-		<span class="btn btn-success btn-icon glyphicons adjust_alt" data-toggle="hide" data-target="#threshold_form"><i></i> Set Parameters</span>			
-		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}" class="btn btn-primary btn-icon glyphicons stats"><i></i> Graph View</a>			
+
+
+
+
+
+
+<div class="innerLR" id="dashboard">
+
+
+	<div class="row-fluid">
+		<div class="span6">
+			<h3 class="header-h main-title cluster-title"><spring:message code="mdeforge.public.back.browse.menu.cluster_metamodel"/> <spring:message code="mdeforge.public.back.browse.table"/></h3>
+		</div>
+		<div class="span6">
+			<h3 class="header-h main-title cluster-title text-right"><a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph?threshold=${threshold}&computation=${computation}"><i></i>Cluster Metamodel Graph View</a></h3>
+		</div>
 	</div>
-	<div class="clearfix"></div>
-</div>
-<div class="separator bottom"></div>
-<!-- // Heading END -->
-
-
-
-
-
-<div class="innerLR">
-
-
-
-
-
-<div class="hide" id="threshold_form">
-		
-			<div class="row-fluid">
-				<div class="span2">
-				
-				</div>	
-			
-				<div class="span8">	
-			<div class="widget widget-heading-simple widget-body-white" data-toggle="collapse-widget">													
-					
-				<div class="widget-body">		
-					<div class="widget-body ">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">													
-													<c:choose>
-													  <c:when test="${fn:length(fn:substringAfter(threshold, '0.')) == 1}">
-													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}0"/>
-													  </c:when>
-													  <c:otherwise>
-													    <c:set var="newThreshold" value="${fn:substringAfter(threshold, '0.')}"/>
-													  </c:otherwise>
-													</c:choose>																										
-													
-													<input type="hidden" id="actual_threshold" value="${newThreshold}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-		
-								</div>
-								
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="1">Match-based similarity</button>
-								</div>
-			
-							</form>
-														
-								
-							</div>
-							
-						</div>
-					
-					
-					<hr>
-					
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min2 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-		
-								</div>
-								
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="2">Containment-based similarity</button>
-								</div>
-			
-							</form>
-														
-								
-							</div>
-							
-						</div>
-						
-						
-						
-						<hr>
-					
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min3 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-		
-								</div>
-								
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="3">Cosine similarity</button>
-								</div>
-			
-							</form>
-														
-								
-							</div>
-							
-						</div>
-						
-						
-						<hr>
-					
-					<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">
-								<div class="span9">		
-											<!-- Slider -->
-											<div class="slider-range-min4 row-fluid">
-												<div class="span3">
-													<label class="span8">Threshold:</label> 
-													<input type="text" class="amount span4" name="threshold"/>
-												</div>
-												<div class="span9" style="padding: 5px 0 0;">
-													<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
-													<div class="slider slider-primary"></div>
-												</div>
-											</div>
-											<!-- // Slider END -->
-		
-								</div>
-								
-								<div class="span3">														
-									<button class="btn btn-block btn-success" name="computation" value="4">Dice's coefficient</button>
-								</div>
-			
-							</form>
-														
-								
-							</div>
-							
-						</div>
-						
-						<hr>
-						
-						<div class="widget-body">
-							<div class="row-fluid">
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">
-								<div class="span9">		
-											
-		
-								</div>
-								
-								<div class="span3" style="text-align:right;">		
-																				
-									<span class="btn btn-default" data-toggle="hide" data-target="#threshold_form"> Close</span>	
-								</div>
-			
-							</form>
-														
-								
-							</div>
-							
-						</div>
-					</div>
-					
-					
-					
-			</div>
-		
-		</div>
-		
-		<div class="span2">
-				
-				</div>	
-		</div>
-		</div>
-		
-		
-		
-		
-			<div class="separator bottom"></div>
-			<div class="separator bottom"></div>
-		
-		
-		
-
+	<div class="separator bottom"></div>
+	<span> Metamodels in the repository: <strong class="text-primary">${numberOfMetamodels}</strong></span>
+	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p>
+<div class="separator"></div>
+	
+	<div class="separator"></div>
 	<!-- Widget -->
-	<div class="widget widget-heading-simple widget-body-simple">
+	<div class="widget widget-heading-simple widget-body-simple" id="cluster">
 					
 		
 		
@@ -254,13 +60,19 @@
 			<!-- Row -->
 			<div class="row-fluid">
 			
-			
-				<div class="span6">
-					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Computation" data-placement="top">
+					<div class="span3">
+						<div id="show-parameters" class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="collapse" data-target="#collapse-parameters">
+							<span class="txt">Edit Parameters</span>	
+							<div class="clearfix"></div>					
+							<span class="count text-primary glyphicons adjust_alt"><i></i></span>
+						</div>
+					</div>
+				
+					<div class="span6">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse">
 							<span class="txt">Similarity Measure</span>
 							<div class="clearfix"></div>
-							<span class="count" style="font-size:26px; line-height:28px;">								
+							<span class="count text-primary">								
 								<c:choose>
 								  <c:when test="${computation == '1'}">
 								 	 Match-based similarity								   
@@ -276,18 +88,63 @@
 								  </c:when>								  
 								</c:choose>							
 							</span>
+							</span>
 						</div>
 					</div>
 					
-					<div class="span4">
-						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Threshold of this cluster" data-placement="top">
-							<span class="glyphicons adjust_alt"><i></i><span class="txt">Threshold</span></span>
-							<div class="clearfix"></div>							
-							<span class="count"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
+					<div class="span3">
+						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" >
+							<span class="txt">Threshold</span>	
+							<div class="clearfix"></div>					
+							<span class="count text-primary"><fmt:formatNumber value="${threshold}" maxFractionDigits="3" /></span>
 						</div>
 					</div>
-					
-					<div class="span4">
+				</div>
+				<hr class="separator">
+				<div class="row-fluid row-merge">
+				<div class="accordion" id="accordion">
+				
+					<!-- Accordion Item -->
+					<div class="accordion-group">
+						
+					    <div id="collapse-parameters" class="accordion-body collapse">
+					    <form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">						
+								<!-- Slider -->
+								<div class="slider-range-min4 row-fluid">
+									<div class="span3 center">
+										<p>Threshold:</p> 
+									</div>
+									<div class="span6" >
+										<input type="hidden" id="actual_threshold" value="${fn:substringAfter(threshold, '0.')}">
+										<div class="slider slider-primary" style="margin-top:5px"></div>
+									</div>
+									<div class="span3 center">
+										<input id="input-threshold" type="text" class="amount center strong" name="threshold"/>
+									</div>
+								</div>
+								<!-- // Slider END -->
+								<div class="separator"></div>
+								
+								<div class="row-fluid">
+								
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="1">Match-based similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="2">Containment-based similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="3">Cosine similarity</button></div>
+									<div class="span3"><button class="btn btn-block btn-inverse" name="computation" value="4">Dice's coefficient</button></div>
+								
+								</div>
+								
+								<hr class="separator top">
+						</form>	
+					    </div>
+				  	</div>
+				  	<!-- // Accordion Item END -->
+				  	
+				</div>
+				</div>
+				
+				<div class="row-fluid">
+					<div class="span3">
 						<div class="widget-stats widget-stats-gray widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Number of clusters" data-placement="top">
 							<span class="glyphicons vector_path_polygon"><i></i><span class="txt">Clusters</span></span>
 							<div class="clearfix"></div>
@@ -295,26 +152,21 @@
 						</div>
 					</div>
 					
-				</div>
-					
-					
-				<div class="span6">
-					
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" class="btn btn-inverse" data-toggle="tooltip" data-original-title="Average number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons left_indent"><i></i><span class="txt">Avarage</span></span>
 							<div class="clearfix"></div>
 							<span class="count"><fmt:formatNumber value="${average}" maxFractionDigits="2" /></span>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Maximum number of metamodels in a cluster" data-placement="top">
 							<span class="glyphicons star"><i></i><span class="txt">Max Cluster</span></span>
 							<div class="clearfix"></div>
 							<span class="count">${max}</span>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="span2">
 						<div class="widget-stats widget-stats-1" data-toggle="tooltip" data-original-title="Number of metamodels that are not found in any cluster" data-placement="top">
 							<span class="glyphicons buoy"><i></i><span class="txt">Singleton</span></span>
 							<div class="clearfix"></div>
@@ -329,8 +181,9 @@
 						</div>
 					</div>	
 					
-				</div>	
+					
 			</div>
+			<hr>
 			<!-- // Row END -->									
 		</div>
 					
@@ -394,7 +247,7 @@
 			
 			<div class="widget-body span9">
 				<div class="tab-content">
-				
+				<div class="innerLR">
 					<c:forEach items="${clusters}"  var="cluster" varStatus="loop2">
 						<!-- Tab content -->
 						
@@ -415,17 +268,16 @@
 							
 							<div class="title">
 								<div class="row-fluid">
-									<div class="span8">
+									<div class="span12">
 										<h3 class="text-primary">Cluster  ${loop2.index}</h3>
 										<span class="muted">
 											<c:forEach items="${cluster.domains}" var="domain">															
 													${domain}
 											</c:forEach>		
 										</span>
+										<p><strong class="text-primary">${cluster.artifacts.size()}</strong> Metamodels </p>
 									</div>
-									<div class="span4 text-right">
-										<p class="muted">${cluster.artifacts.size()} Metamodels </p>										
-									</div>
+									
 								</div>
 							</div>
 							<hr/>
@@ -434,19 +286,18 @@
 							
 							<div class="row-fluid row-merge">
 							
-								<div class="innerLR">
+								
 									<div class="row-fluid innerB">
 										<div class="span5">
-											<div class="widget widget-heading-simple widget-body-gray" data-toggle="collapse-widget">
+											<div class="widget widget-heading-simple">
 				
 												<!-- Widget Heading -->
 												<div class="widget-head">
-													<h4 class="heading glyphicons history"><i></i>Measures</h4>
-													
+													<h5 class="input-name">Measures</h5>
 												</div>
 												<!-- // Widget Heading END -->
 												
-												<div class="widget-body list">
+												<div class="widget-body list simple-list">
 													<ul>
 													
 														<!-- List item -->
@@ -477,22 +328,28 @@
 										</div>
 										<div class="span7">											
 	
-											<div class="widget widget-heading-simple widget-body-gray">
+											<div class="widget widget-heading-simple">
 					
 												<!-- Widget Heading -->
 												<div class="widget-head">
-													<h4 class="heading glyphicons list"><i></i>Domain(s)</h4>
+													<h5 class="input-name">Domain(s)</h5>
 												</div>
 												<!-- // Widget Heading END -->
 												
-												<div class="widget-body list">
+												<div class="widget-body list simple-list">
 												
 													<!-- List -->
 													<ul>
-														<c:forEach items="${cluster.domains}" var="domain">															
-															<li>${domain}</li>
-														</c:forEach>																								
-														
+														<c:choose>
+															<c:when test="${empty cluster.domains}">
+																<li><span>NO DOMAIN</span></li>
+															</c:when>
+															<c:otherwise>
+																<c:forEach items="${cluster.domains}" var="domain">															
+																	<li><span>${domain}</span></li>
+																</c:forEach>																								
+															</c:otherwise>
+														</c:choose>
 													</ul>
 													<!-- // List END -->
 													
@@ -504,18 +361,18 @@
 									</div>
 									<div class="row-fluid">
 										<div class="span12">
-											
-											<table class="footable table table-striped table-bordered table-white table-primary table-pricing">	
+											<h5 class="input-name">Metamodels</h5>
+											<table class="footable table table-striped table-white table-metrics table-pricing">	
 													<!-- Table heading -->
 													<thead>
 														<tr>																						
 															<th data-class="expand">Name</th>
 <!-- 															<th data-hide="phone">Description</th> -->
-															<th data-hide="phone,tablet">Open</th>
-															<th data-hide="phone,tablet">Created</th>
-															<th data-hide="phone,tablet">Modified</th>
-															<th data-hide="phone,tablet">Most Representative</th>
-															<th data-hide="phone,tablet">Actions</th>
+															<th data-hide="phone,tablet" class="center">Visibility</th>
+															<th data-hide="phone,tablet" class="center">Created</th>
+															<th data-hide="phone,tablet" class="center">Modified</th>
+															<th data-hide="phone,tablet" class="center">Most Representative</th>
+															<th data-hide="phone,tablet" class="center">Actions</th>
 														</tr>
 													</thead>
 													<!-- // Table heading END -->
@@ -525,10 +382,28 @@
 														<c:forEach items="${cluster.artifacts}" var="artifact">
 															<!-- Table row -->
 															 <tr class="gradeX">
-																																														
-																<td>${artifact.getName()}</td>
+																<td>
+																<c:choose>
+																	<c:when test="${artifact.getOpen() == true}">
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+																		</c:when>
+																		<c:otherwise>
+																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
+																		</c:otherwise>
+																</c:choose>
+																</td>																													
+																
 <%-- 																<td>${artifact.getDescription()}</td> --%>
-																<td class="center">${artifact.getOpen()}</td>
+																<td class="center">
+																	<c:choose>
+																		<c:when test="${artifact.getOpen() == true}">
+																		<span class="text-success">Public</span>
+																		</c:when>
+																		<c:otherwise>
+																		<span class="text-error">Private</span>
+																		</c:otherwise>
+																	</c:choose>
+																</td>
 																<td class="center"><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getCreated()}" /></td>
 																<td class="center"><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getModified()}" /></td>
 																<c:choose>
@@ -541,10 +416,10 @@
 																</c:choose>
 																<td class="center actions">
 																	<c:if test="${artifact.getOpen()}">
-																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.getId()}" class="btn">View</a>
 																	</c:if>
 																	<c:if test="${not artifact.getOpen()}">																	
-																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${artifact.getId()}" class="btn-action glyphicons eye_open btn-default"><i></i></a>
+																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${artifact.getId()}" class="btn">View</a>
 																	</c:if>																	
 																</td>
 															</tr>
@@ -564,9 +439,11 @@
 											</div>
 											<hr>
 											<div class="row-fluid">
+											
 												<div class="span12">
+												<h5 class="input-name">Relations</h5>
 													<!-- Table -->
-													<table class="table table-bordered table-white">
+													<table class="table table-striped table-metrics table-white">
 													
 													    <!-- Table heading -->
 													    <thead>
@@ -583,9 +460,28 @@
 															<c:forEach items="${cluster.relations}" var="relation">
 													        <!-- Table row -->
 													        <tr>
-													            <td>${relation.getFromArtifact().getName()}</td>
+													        <td>
+																<c:choose>
+																	<c:when test="${relation.getFromArtifact().getOpen() == true}">
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a>
+																		</c:when>
+																		<c:otherwise>
+																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${relation.getFromArtifact().getId()}">${relation.getFromArtifact().getName()}</a>
+																		</c:otherwise>
+																</c:choose>
+																</td>	
 													            <td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="2" /></span></td>
-													            <td>${relation.getToArtifact().getName()}</td>
+													             <td>
+																<c:choose>
+																	<c:when test="${relation.getToArtifact().getOpen() == true}">
+																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																		</c:when>
+																		<c:otherwise>
+																		<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact_details?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+																		</c:otherwise>
+																</c:choose>
+																</td>
+													           
 													        </tr>
 													        <!-- // Table row END -->
 															</c:forEach>
@@ -595,13 +491,13 @@
 													<!-- // Table END -->
 												</div>
 											</div>
-										</div>
+										
 										
 									</div>
 						</div>
 						<!-- // Tab content END -->
 					</c:forEach>
-					
+					</div>
 					
 				</div>
 				

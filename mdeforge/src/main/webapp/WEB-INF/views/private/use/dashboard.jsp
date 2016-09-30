@@ -19,7 +19,7 @@
 
 
 <h2 class="header-h main-title">Dashboard</h2>
-
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim.</p>
 
 <div class="innerLR" id="dashboard">
 
@@ -44,7 +44,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
+					<a href="${pageContext.request.contextPath}/private/ATLTransformation/artifacts" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfTransformations}</span>
 						<span class="txt">Transformations</span>
 					</a>
@@ -54,7 +54,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
+					<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifacts" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfMetamodels}</span>
 						<span class="txt">Metamodels</span>
 					</a>
@@ -64,7 +64,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
+					<a href="${pageContext.request.contextPath}/private/Model/artifacts" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfModels}</span>
 						<span class="txt">Models</span>
 					</a>
@@ -74,7 +74,7 @@
 				<div class="span2">
 				
 					<!-- Stats Widget -->
-					<a href="/mdeforge/private/my_artifacts/" class="widget-stats widget-stats-2">
+					<a href="#" class="widget-stats widget-stats-2">
 						<span class="count">${totalNumberOfArtifacts}</span>
 						<span class="txt">Artifacts</span>
 					</a>
@@ -94,7 +94,7 @@
 			</div>
 <hr class="separator">
 <div class="separator"></div>
-<div class="row-fluid">
+<div class="row-fluid dashboard-buttons">
 		<div class="span12 tablet-column-reset">
 			<div class="span2">
 				<a href="#upload-artifact" class="widget-stats widget-stats-2 btn" data-toggle="modal" style="background: #b94a48">
@@ -110,7 +110,7 @@
 					</a>
 			</div>
 			<div class="span2">
-				<a href="${pageContext.request.contextPath}/public/browse" class="btn widget-stats widget-stats-2" style="background: #c09853">
+				<a href="${pageContext.request.contextPath}/public/dashboard" class="btn widget-stats widget-stats-2" style="background: #c09853">
 						<span class="count icon-folder-open text-success"><i></i></span>
 						<span class="txt">Browse Repository</span>
 					</a>
@@ -132,12 +132,10 @@
 </div>
 <div class="separator"></div>
 <div class="separator"></div>
+<h3 class="header-h main-title" style="padding-left: 15px;">Recent Artifacts (${myArtifactsList.size()})</h3>
 <div class="widget widget-body-white">
-					<div class="widget-head">
-						<h4 class="heading file"><i></i>Recent Artifacts (${myArtifactsList.size()})</h4>
-					</div>
-					<div class="widget-body table-dashboard">
-								<table class="table table-striped">
+					<div class="widget-body">
+								<table class="table table-striped table-metrics">
 			
 								<!-- Table heading -->
 								<thead>
@@ -170,16 +168,14 @@
 								<!-- // Table body END -->
 								
 							</table>
+						</div>
 					</div>
-			</div>
 
 <div class="separator"></div>
+<h3 class="header-h main-title" style="padding-left: 15px;">Recent Projects</h3>
 	<div class="widget widget-body-white">
-					<div class="widget-head">
-						<h4 class="heading folder_open"><i></i>Recent Projects</h4>
-					</div>
-								<div class="widget-body table-dashboard">
-								<table class="table table-striped">
+					<div class="widget-body">
+								<table class="table table-striped table-metrics">
 			
 								<!-- Table heading -->
 								<thead>
