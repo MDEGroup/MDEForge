@@ -104,7 +104,7 @@
 					<div class="accordion-group">
 						
 					    <div id="collapse-parameters" class="accordion-body collapse">
-					    <form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" method="get">						
+					    <form action="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster_graph" method="get">						
 								<!-- Slider -->
 								<div class="slider-range-min4 row-fluid">
 									<div class="span3 center">

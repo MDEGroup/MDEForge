@@ -298,7 +298,7 @@
 
 					<!-- SEARCH BY FILE -->
 					
-					<%-- <div class="widget widget-heading-simple widget-body-white">
+					<div class="widget widget-heading-simple widget-body-white">
 						<div class="widget-body">
 							<form:form cssClass="form-horizontal" modelAttribute="metamodel"
 								action="${pageContext.request.contextPath}/public/search_metamodel_by_example/result"
@@ -410,7 +410,7 @@
 								</div>
 							</div>
 						</c:otherwise>
-					</c:choose> --%>
+					</c:choose>
 					
 					<!-- END SEARCH BY FILE -->
 				</div>
