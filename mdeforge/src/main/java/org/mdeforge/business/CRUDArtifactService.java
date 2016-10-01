@@ -46,6 +46,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag);
 	long countAll() throws BusinessException;
 	List<T> findRecentArtifacts() throws BusinessException;
+	List<T> findRecentArtifactsPublic() throws BusinessException;
 	User addUserInArtifact(String idUser, String idArtifact, User user) throws BusinessException;
 	void removeUserFromArtifact(String idUser, String idArtifact) throws BusinessException;
 	List<T> findAllSharedByUser(User user);

@@ -75,9 +75,9 @@ public class PublicController {
 		long numEcore = ecoreMetamodelService.countAll();
 		long numModel = modelService.countAll();
 		long numProject = projectService.countAll();
-		List<EcoreMetamodel> recentsEcore = ecoreMetamodelService.findRecentArtifacts();
-		List<ATLTransformation> recentsATL = aTLTransformationService.findRecentArtifacts();
-		List<org.mdeforge.business.model.Model> recentsModel = modelService.findRecentArtifacts();
+		List<EcoreMetamodel> recentsEcore = ecoreMetamodelService.findRecentArtifactsPublic();
+		List<ATLTransformation> recentsATL = aTLTransformationService.findRecentArtifactsPublic();
+		List<org.mdeforge.business.model.Model> recentsModel = modelService.findRecentArtifactsPublic();
 		model.addAttribute("numArtifacts", numATL + numEcore + numModel);
 		model.addAttribute("numUsers", numUsers);
 		model.addAttribute("numATL", numATL);

@@ -58,6 +58,8 @@ public class ImporterFromEMFZoo {
 						String[] prop = element.text().split(":");
 						if(prop.length == 2) {
 							Property p = new Property();
+							if(prop[0].toLowerCase().contains("description"))
+								emm.setDescription(prop[1]);
 							p.setName(prop[0].replace(" ", "").replace("", ""));
 							p.setValue(prop[1]);
 							emm.getProperties().add(p);
