@@ -84,7 +84,7 @@ public class GlobalDefaultExceptionHandler {
 	public ModelAndView handleAllException(Exception ex) {
 		ex.printStackTrace();
 		Map<String,String> errorModel = new HashMap<String,String>();
-		String errMsg = "this is Exception.class";
+		String errMsg = "this is Exception.class  " + ex.getMessage();
 		errorModel.put("errMsg", errMsg);
 		
 		return new ModelAndView("error.custom_generic_exception", "errorModel", errorModel);
