@@ -4,7 +4,88 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <script
 	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
+<c:if test="${artifact.atlError.size()== 0 && artifact.atlTestError.size()==0}">
+<div class="separator"></div>
+<div class="innerLR">
+	<div class="row-fluid">
+		<div class="span2">
+			<a	href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${artifact.getId()}"
+					class="btn btn-primary btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
+		</div>
+		</div>
+	</div>
+</c:if>
+<c:if test="${artifact.atlError.size() != 0}">
+	<div class="widget widget-heading-simple widget-body-white">		
+		<div class="widget-body">
+		<h5 class="input-name text-error">anATLyzer Transformation Errors</h5>
+			<div class="tab-content">
+				<div id="tabAll" class="tab-pane active">
+					<c:forEach items="${artifact.atlError}" var="error"
+						varStatus="status">
+						<div class="accordion accordion-2" id="accordion">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle glyphicons font collapsed"
+										data-toggle="collapse" data-parent="#accordion"
+										href="#collapse-${status.index + 1 }"> <i></i>Error
+										${status.index + 1 }: ${error.description }
+									</a>
+								</div>
+								<div id="collapse-${status.index + 1 }"
+									class="accordion-body collapse" style="height: 0px;">
+									<div class="accordion-inner">
+										<b>Local problem: </b>${error.localProblem } <br /> <b>Element:
+										</b>${error.element }<br /> <b>File location: </b>${error.fileLocation }<br />
+										<b>Location: </b>${error.location }<br /> <b>Status: </b>${error.status }<br />
+										<b>ProblemId: </b>${error.problemId }<br /> <b>Description:
+										</b>${error.description }<br /> <b>Severity: </b>${error.severity }<br />
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
+			</div>
+		</div>
+	</div>
+</c:if>
+<c:if test="${artifact.atlTestError.size() != 0}">
 
+	<div class="widget widget-heading-simple widget-body-white">
+		<div class="widget-body">
+		<h5 class="input-name">Test service report</h5>
+			<c:forEach items="${artifact.atlTestError}" var="error"
+				varStatus="status">
+
+				<div class="accordion accordion-2" id="accordion">
+					<div class="accordion-group">
+						<div class="accordion-heading">
+							<a class="accordion-toggle glyphicons font collapsed"
+								data-toggle="collapse" data-parent="#accordion"
+								href="#collapse-${status.index + 2 }"> <i></i>Test
+								${status.index + 1 }: ${error.errorMessage }
+							</a>
+						</div>
+						<div id="collapse-${status.index + 2 }"
+							class="accordion-body collapse" style="height: 0px;">
+							<div class="accordion-inner">
+								executionRaisesException: ${error.executionRaisesException }<br />
+								executionYieldsIllTarget: ${error.executionYieldsIllTarget }<br />
+								<%-- 											anatlyserNotifiesError: ${error.anatlyserNotifiesError }<br/> --%>
+								<%-- 											anatlyserDoesNotFinish: ${error.anatlyserDoesNotFinish }<br/> --%>
+								errorKind: ${error.errorKind }<br /> errorMessage:
+								${error.errorMessage }<br /> model: <a
+									href="${pageContext.request.contextPath}/private/Model/artifact?artifact_id=${error.model.id }">
+									${error.model.name }</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</div>
+</c:if>
 <div class="widget widget-heading-simple widget-body-white">
 
 	<!-- Widget Heading -->
