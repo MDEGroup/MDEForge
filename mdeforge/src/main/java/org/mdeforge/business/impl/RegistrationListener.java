@@ -27,17 +27,18 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         User user = event.getUser();
         String token = UUID.randomUUID().toString();
         userService.createVerificationToken(user, token);
-         
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
-        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm?token=" + token;
-        String message = "Activation link: ";
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom("mdeforge.org@mdeforge.org");
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + "http://localhost:8080" + confirmationUrl);
-        mailSender.send(email);
+        try { 
+	        String recipientAddress = user.getEmail();
+	        String subject = "Registration Confirmation";
+	        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm?token=" + token;
+	        String message = "Activation link: ";
+	        SimpleMailMessage email = new SimpleMailMessage();
+	        email.setFrom("mdeforge.org@mdeforge.org");
+	        email.setTo(recipientAddress);
+	        email.setSubject(subject);
+	        email.setText(message + "http://localhost:8080" + confirmationUrl);
+	        mailSender.send(email);
+        } catch (Exception e) {System.out.println("Send mail error");}
     }
 }
 
