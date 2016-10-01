@@ -8,7 +8,7 @@
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 	<li>You are here</li>
-	<li><a href="#" class="glyphicons dashboard"><i></i> Private
+	<li><a href="#" class="glyphicons dashboard"><i></i> Public
 			Area</a></li>
 	<li class="divider"></li>
 	<li>Use</li>
@@ -153,7 +153,7 @@
 							<c:forEach items="${recentsEcore}" var="artifact">
 								<tr>
 									<td>
-										<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${artifact.id}">${artifact.name}</a>
+										<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.id}">${artifact.name}</a>
 									</td>
 									<td>
 										${artifact.author.username }
