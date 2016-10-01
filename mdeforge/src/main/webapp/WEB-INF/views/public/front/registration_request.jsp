@@ -7,7 +7,7 @@
 		<li class="divider"></li>
 		<li>Public</li>
 		<li class="divider"></li>
-		<li>REgistration</li>
+		<li>Registration request</li>
 </ul>
 <!-- Breadcrumb END -->
 
