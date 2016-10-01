@@ -22,7 +22,6 @@ MDEForge has been designed for:
 
 <ol>
 
-
 <li>Francesco Basciani, Juri Di Rocco, Davide Di Ruscio, Ludovico Iovino and Alfonso Pierantonio, <b>A Customizable Approach for the Automated Quality Assessment of Modelling Artefacts</b>, in: 10th International Conference on the Quality of Information and Communications Technology (QUATIC 2016), Lisbon, Portugal, IEEE CPS, 2016
 
 <li>Juri Di Rocco, Davide Di Ruscio, Alfonso Pierantonio, JesusÂ Sanchez Cuadrado, Juan De Lara and Esther Guerra, <b>Using ATL transformation services in the MDEForge collaborative modeling platform</b>, in: 9th International Conference on Model Transformation (ICMT2016), Vienna (Austria), 2016
