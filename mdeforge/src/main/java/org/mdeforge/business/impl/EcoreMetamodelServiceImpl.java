@@ -113,6 +113,9 @@ import org.mdeforge.business.model.AggregatedRealMetric;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
+import org.mdeforge.business.model.ContainmentRelation;
+import org.mdeforge.business.model.CosineSimilarityRelation;
+import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
@@ -122,6 +125,7 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.business.search.ResourceSerializer;
+import org.mdeforge.business.search.SimilarityMethods;
 import org.mdeforge.business.search.Tokenizer;
 import org.mdeforge.business.search.jsonMongoUtils.JsonMongoResourceSet;
 import org.mdeforge.emf.metric.Container;
@@ -155,6 +159,7 @@ import com.mongodb.Mongo;
 import anatlyzer.atl.util.ATLSerializer;
 import anatlyzer.atlext.ATL.ATLPackage;
 import anatlyzer.atlext.OCL.OclExpression;
+import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 @Service
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
@@ -585,8 +590,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return result;
 	}
 
-	@Override
-	public double calculateSimilarity(Artifact art1, Artifact art2) {
+	public double calculateSimilarity2(Artifact art1, Artifact art2) {
 		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
 		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
@@ -626,98 +630,102 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		}
 	}
 
-	// public double calculateSimilarity(Artifact art1, Artifact art2) {
-	// // try {
-	// URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
-	// URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
-	// Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
-	// "ecore", new XMIResourceFactoryImpl());
-	// ResourceSet resourceSet1 = new ResourceSetImpl();
-	// ResourceSet resourceSet2 = new ResourceSetImpl();
-	// resourceSet1.getResource(uri1, true);
-	// resourceSet2.getResource(uri2, true);
-	// IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
-	// resourceSet2, null);
-	// Comparison comparison = EMFCompare.builder().build().compare(scope);
-	// List<Match> matches = comparison.getMatches();
-	// int total = matches.size();
-	// int counter = 0;
-	// int counterLeft = 0;
-	// int counterRight = 0;
-	// for (Match match : matches) {
-	// List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
-	// total += lm.size();
-	// for (Match match2 : lm) {
-	// if (match2.getLeft() != null)
-	// counterLeft++;
-	// if (match2.getRight() != null)
-	// counterRight++;
-	// if (match2.getLeft() != null && match2.getRight() != null)
-	// counter++;
-	// }
-	// if (match.getLeft() != null && match.getRight() != null)
-	// counter++;
-	// }
-	// // to save diff file
-	// // List<Diff> differences = comparison.getDifferences();
-	// // // Let's merge every single diff
-	// // // IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
-	// // IMerger.Registry mergerRegistry = IMerger.RegistryImpl
-	// // .createStandaloneInstance();
-	// // IBatchMerger merger = new BatchMerger(mergerRegistry);
-	// // merger.copyAllLeftToRight(differences, new BasicMonitor());
-	// double containmentValue = (counter * 1.0)
-	// / ((counterLeft < counterRight) ? counterLeft : counterRight);
-	// double simValue = (counter * 1.0) / total;
-	// // Used to save Diff model
-	// Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-	// Map<String, Object> m = reg.getExtensionToFactoryMap();
-	// m.put("xmi", new XMIResourceFactoryImpl());
-	// ResourceSet resSet = new ResourceSetImpl();
-	// // create a resource
-	// Resource resource = resSet.createResource(URI.createURI("/compare.xmi"));
-	// resource.getContents().add(comparison);
-	// // try {
-	// // resource.save(Collections.EMPTY_MAP);
-	// // } catch (IOException e) {
-	// // e.printStackTrace();
-	// // throw new BusinessException();
-	// // }
-	// SimilarityRelation sr = new SimilarityRelation();
-	// sr.setFromArtifact(art1);
-	// sr.setToArtifact(art2);
-	// sr.setValue(simValue);
-	// relationRepository.save(sr);
-	// ContainmentRelation cr = new ContainmentRelation();
-	// cr.setFromArtifact(art1);
-	// cr.setToArtifact(art2);
-	// cr.setValue(containmentValue);
-	// relationRepository.save(cr);
-	// EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-	// EcoreMetamodel emm2 = (EcoreMetamodel) art2;
-	//
-	// String test = serializeContent(emm1);
-	// String test2 = serializeContent(emm2);
-	//
-	// double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
-	// test, test2);
-	// CosineSimilarityRelation csr = new CosineSimilarityRelation();
-	// csr.setFromArtifact(art1);
-	// csr.setToArtifact(art2);
-	// csr.setValue(cosineSimScore);
-	// relationService.save(csr);
-	//
-	// DiceSimilarity ds = new DiceSimilarity();
-	// double diceSimScore = ds.getSimilarity(test, test2);
-	// DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-	// dsr.setFromArtifact(art1);
-	// dsr.setToArtifact(art2);
-	// dsr.setValue(diceSimScore);
-	// relationService.save(dsr);
-	//
-	// return simValue;
-	// }
-
+	@Override
+	public double calculateSimilarity(Artifact art1, Artifact art2) {
+	// try {
+		URI uri1 = URI.createFileURI(gridFileMediaService.getFilePath(art1));
+		URI uri2 = URI.createFileURI(gridFileMediaService.getFilePath(art2));
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put(
+				"ecore", new XMIResourceFactoryImpl());
+		ResourceSet resourceSet1 = new ResourceSetImpl();
+		ResourceSet resourceSet2 = new ResourceSetImpl();
+		resourceSet1.getResource(uri1, true);
+		resourceSet2.getResource(uri2, true);
+		IComparisonScope scope = new DefaultComparisonScope(resourceSet1,
+		resourceSet2, null);
+		Comparison comparison = EMFCompare.builder().build().compare(scope);
+		List<Match> matches = comparison.getMatches();
+		int total = matches.size();
+		int counter = 0;
+		int counterLeft = 0;
+		int counterRight = 0;
+		for (Match match : matches) {
+			List<Match> lm = Lists.newArrayList(match.getAllSubmatches());
+			total += lm.size();
+			for (Match match2 : lm) {
+				if (match2.getLeft() != null)
+					counterLeft++;
+				if (match2.getRight() != null)
+					counterRight++;
+				if (match2.getLeft() != null && match2.getRight() != null)
+					counter++;
+			}
+			if (match.getLeft() != null && match.getRight() != null)
+					 counter++;
+		}
+		// to save diff file
+		// List<Diff> differences = comparison.getDifferences();
+		// // Let's merge every single diff
+		// // IMerger.Registry mergerRegistry = new IMerger.RegistryImpl();
+		// IMerger.Registry mergerRegistry = IMerger.RegistryImpl
+		// .createStandaloneInstance();
+		// IBatchMerger merger = new BatchMerger(mergerRegistry);
+		// merger.copyAllLeftToRight(differences, new BasicMonitor());
+		double containmentValue = (counter * 1.0)
+				/ ((counterLeft < counterRight) ? counterLeft : counterRight);
+		double simValue = (counter * 1.0) / total;
+		// Used to save Diff model
+//		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+//		Map<String, Object> m = reg.getExtensionToFactoryMap();
+//		m.put("xmi", new XMIResourceFactoryImpl());
+//		ResourceSet resSet = new ResourceSetImpl();
+//		// create a resource
+//		Resource resource = resSet.createResource(URI.createURI("/compare.xmi"));
+//		resource.getContents().add(comparison);
+//		// try {
+		// resource.save(Collections.EMPTY_MAP);
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// throw new BusinessException();
+		// }
+		if (simValue > 0){
+			SimilarityRelation sr = new SimilarityRelation();
+			sr.setFromArtifact(art1);
+			sr.setToArtifact(art2);
+			sr.setValue(simValue);
+			relationRepository.save(sr);
+		}
+		if (containmentValue>0) {
+			ContainmentRelation cr = new ContainmentRelation();
+			cr.setFromArtifact(art1);
+			cr.setToArtifact(art2);
+			cr.setValue(containmentValue);
+			relationRepository.save(cr);
+		}
+		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
+		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+		String test = serializeContent(emm1);
+		String test2 = serializeContent(emm2);
+		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(
+				test, test2);
+		if(cosineSimScore>0){
+			CosineSimilarityRelation csr = new CosineSimilarityRelation();
+			csr.setFromArtifact(art1);
+			csr.setToArtifact(art2);
+			csr.setValue(cosineSimScore);
+			relationService.save(csr);
+		}
+		DiceSimilarity ds = new DiceSimilarity();
+		double diceSimScore = ds.getSimilarity(test, test2);
+		if(diceSimScore > 0){
+			DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+			dsr.setFromArtifact(art1);
+			dsr.setToArtifact(art2);
+			dsr.setValue(diceSimScore);
+			relationService.save(dsr);
+		}
+		return simValue;
+	 }
 	// region Cluster
 	@Override
 	public String getSimilarityGraph(double threshold, ValuedRelationService valuedRelationService)
