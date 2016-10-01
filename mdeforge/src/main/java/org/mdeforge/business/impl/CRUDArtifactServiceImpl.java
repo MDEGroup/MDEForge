@@ -879,6 +879,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		try {
 			if (artifactRepository.findByName(artifact.getName()) != null)
 				throw new DuplicateNameException("Duplicate","Duplicate artifact name");
+			artifact.setGenerated(false);
 			// GetUser
 			if (artifact.getId() != null)
 				throw new BusinessException();
