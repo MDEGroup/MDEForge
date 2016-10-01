@@ -32,7 +32,7 @@
 </ul>
 <!-- Breadcrumb END -->
 <h3 class="header-h main-title">Search Page</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p>
+<!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p> -->
 
 <div class="innerLR">
 <div id="alert-box" style="margin: 20px 0 0"></div>

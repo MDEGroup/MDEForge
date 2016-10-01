@@ -46,7 +46,7 @@
 	</div>
 	<div class="separator bottom"></div>
 	<span> Metamodels in the repository: <strong class="text-primary">${numberOfMetamodels}</strong></span>
-	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p>
+<!-- 	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis.</p> -->
 <div class="separator"></div>
 	
 	<div class="separator"></div>
