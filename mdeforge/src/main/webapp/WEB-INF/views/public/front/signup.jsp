@@ -29,8 +29,8 @@
 						<label>Upload Your Picture</label>
 						<div class="separator bottom"></div>
 						<div class="box__input">
-							<label for="artifactName" id="label-img"><img id="img-signin" class="img-center" src="/mdeforge/resources/theme/images/blankuser.jpg"></label>
-							<input type="file" id="artifactName" style="display: none;" class="margin-none" name="artifactfile" size="40">
+							<label for="artifactName" id="label-img"><img id="img-signin" class="img-center" src="${pageContext.request.contextPath}/resources/theme/images/blankuser.jpg"></label>
+							<input type="file" id="artifactName" style="display: none;" class="margin-none" name="photo" size="40">
 							
 						</div>
 						
