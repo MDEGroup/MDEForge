@@ -361,7 +361,7 @@
 											<div class="span12">
 												<h5 class="strong text-uppercase">
 													<a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_details?metamodel_id=${artifact.getId()}">${artifact.getName()}</a>
+														href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${artifact.getId()}">${artifact.getName()}</a>
 												</h5>
 												<p>
 													<c:set var="existDescription" value="false" />
@@ -388,7 +388,7 @@
 												</p>
 												<p class="margin-none strong">
 													<a
-														href="${pageContext.request.contextPath}/public/browse/metamodel_download?metamodel_id=${artifact.getId()}"
+														href="${pageContext.request.contextPath}/public/EcoreMetamodel/download?artifact_id=${artifact.getId()}"
 														title="Metamodel Download"
 														class="glyphicons single download_alt"><i></i>Download</a>
 												</p>
