@@ -53,11 +53,11 @@
 						class="glyphicons glyphicon-xlarge glyphicon-top circle_question_mark">
 						<i></i>
 						<h4>Have a Question?</h4>
-						<p class="margin-none">
-							Lorem Ipsum is simply dummy text of the printing and typesetting
-							industry.<br /> <a href="" class="text-underline">Get your
-								answer</a>
-						</p>
+<!-- 						<p class="margin-none"> -->
+<!-- 							Lorem Ipsum is simply dummy text of the printing and typesetting -->
+<!-- 							industry.<br /> <a href="" class="text-underline">Get your -->
+<!-- 								answer</a> -->
+<!-- 						</p> -->
 					</div>
 				</div>
 			</div>
