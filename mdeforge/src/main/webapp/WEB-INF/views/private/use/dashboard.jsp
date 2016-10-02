@@ -30,9 +30,9 @@
 				<address class="margin-none">
 					<h2>${user.getLastname()} ${user.getFirstname()}</h2>
 					<span>${user.getUsername()}</span> at 
-					<a href="#">Business</a><br> 
+					<a href="http://www.di.univaq.it/home.php?users_username=alfonso">site</a><br> 
 					<span title="Work email">e-mail:</span> <a href="mailto:#">${user.getEmail()}</a><br> 
-					<span title="Work Phone">phone:</span> (+39) 0779 0987652<br>
+					<span title="Work Phone">phone:</span> (+39) +39 0862 43.3725<br>
 					
 				</address>
 			</div>
@@ -96,6 +96,12 @@
 <div class="separator"></div>
 <div class="row-fluid dashboard-buttons">
 		<div class="span12 tablet-column-reset">
+			<div class="span2">
+					<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" class="widget-stats widget-stats-2 btn" style="background: #fff;     border: 2px solid #3FAAE2 !Important;">
+						<span class="count glyphicons vector_path_polygon text-info"><i></i></span>
+						<span class="txt" style="color: #3FAAE2">Metamodels Cluster</span>
+					</a>
+				</div>
 			<div class="span2">
 				<a href="#upload-artifact" class="widget-stats widget-stats-2 btn" data-toggle="modal" style="background: #b94a48">
 						<span class="count icon-cloud-upload text-info"><i></i></span>

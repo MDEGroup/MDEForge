@@ -59,6 +59,7 @@
 					<a href="" data-toggle="dropdown" class="glyphicons magic"><i></i><spring:message code="mdeforge.menu.services"/> <span class="icon-chevron-right"></span></a>
 					<ul class="dropdown-menu pull-left">											
 						<li><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" class="glyphicons list">COMPARE METAMODEL</a></li>
+						<li><a href="${pageContext.request.contextPath}/public/EcoreMetamodel/cluster" class="glyphicons list">Cluster</a></li>
 					</ul>
 				</li>
 								<!-- // Full Sidebar Style END -->

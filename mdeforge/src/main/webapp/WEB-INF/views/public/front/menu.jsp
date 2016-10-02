@@ -20,7 +20,7 @@
 						<%-- <li class="hidden-phone"><a href="#" class="glyphicons shield"><i></i><spring:message code="public.menu.info" /></a></li> --%>
 						<li id="menu-home" class="hidden-phone"><a href="${pageContext.request.contextPath}/"><spring:message code="common.home" /></a></li>
 						<li id="menu-about" class="hidden-phone"><a href="${pageContext.request.contextPath}/public/about"><spring:message code="public.menu.about" /></a></li>
-						<li id="menu-members" class="hidden-phone"><a href="${pageContext.request.contextPath}/public/members">MEMBERS</a></li>
+						<li id="menu-members" class="hidden-phone"><a href="${pageContext.request.contextPath}/public/members">CONTRIBUTORS</a></li>
 						<li id="menu-publications" class="hidden-phone"><a href="${pageContext.request.contextPath}/public/publications">PUBLICATIONS</a></li>
 						<security:authorize access="isAnonymous()">
 						<li id="menu-login" class="hidden-phone"><a href="${pageContext.request.contextPath}/login" class="glyphicons "><spring:message code="public.menu.login" /></a></li>

@@ -100,56 +100,6 @@
 
 	</div>
 	<hr class="margin-hr">
-	
-	<!-- Row -->
-	<div class="row-fluid">
-		<!-- Thumbnail -->
-		<div class="span2">
-			<img class="img-thumb img-circle" src="${pageContext.request.contextPath}/resources/theme/images/members/juri_di_rocco.jpg" alt="Juri Di Rocco"/>
-			<h5 class="center website_link"><a href="http://www.di.univaq.it/diruscio/" class="primary" target="_blank">Website</a></h5>
-		</div>
-		<div class="span10">		
-					<div class="caption">
-						<h3 class="header-h main-title text-black">Juri Di Rocco</h3>
-						<div class="media">
-								<small class="author">
-									&nbsp;
-									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
-								</small>
-								<div class="media-object pull-left thumb">
-									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
-								</div>
-								<div class="media-body">
-									<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
-								</div>
-							</div>
-						<br>
-						 <p>
-							I am a Ph.D. student in Computer Science at the Department of Information Engineering Computer Science and Mathematics of the University of L'Aquila.
-						My research interests include Model-Driven Engineering (MDE) techinques like: software modelling, analysis and simulation, model-to-model transformation, model weaving, model generation,coupled evolution and model differencing.
-						I worked recently on .NET, JAVA and LAMP platform and I have experience with Entity Model Framework.
-						(<a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" target="_blank">continue to my website</a>)
-						</p> 
-						
-						<!--  <hr> -->
-						<!-- Social Icons -->
-						<!-- <a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>-->
-						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a> -->
-						<div class="clearfix"></div>
-						<!-- // Social Icons END -->
-					</div>
-		</div>
-		<!-- // Thumbnail END -->
-
-	</div>
-<div class="separator"></div>
-<div class="separator"></div>
-<div class="separator"></div>	
-	<div class="lead center innerTB">
-			<h2 class="header-h main-title text-black center">External Contributors</h2>
-	</div>
-	
 	<!-- Row -->
 	<div class="row-fluid">
 		<!-- Thumbnail -->
@@ -199,46 +149,6 @@
 	<div class="row-fluid">
 		<!-- Thumbnail -->
 		<div class="span2">
-			<img class="img-thumb img-circle" src="${pageContext.request.contextPath}/resources/theme/images/members/amleto.jpg" alt="Amleto Di Salle" />
-			<h5 class="center website_link"><a href="http://www.amletodisalle.it/" class="primary" target="_blank">Website</a></h5>
-		</div>
-		<div class="span10">		
-					<div class="caption">
-						<h3 class="header-h main-title text-black">Amleto Di Salle</h3>
-						<div class="media">
-								<small class="author">
-									&nbsp;
-									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
-								</small>
-								<div class="media-object pull-left thumb">
-									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
-								</div>
-								<div class="media-body">
-									<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
-								</div>
-							</div>
-						<br>
-						 <p>System Administrator
-						</p> 
-						
-						<!--  <hr> -->
-						<!-- Social Icons -->
-						<!-- <a href="http://www.amletodisalle.it/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>-->
-						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
-						<a href="" class="glyphicons standard linked_in"><i></i></a> -->
-						<div class="clearfix"></div>
-						<!-- // Social Icons END -->
-					</div>
-		</div>
-		<!-- // Thumbnail END -->
-
-	</div>
-	<hr class="margin-hr">
-	
-	<!-- Row -->
-	<div class="row-fluid">
-		<!-- Thumbnail -->
-		<div class="span2">
 			<img class="img-thumb img-circle" src="${pageContext.request.contextPath}/resources/theme/images/members/francesco_basciani.jpg" alt="Francesco Basciani" />
 			<h5 class="center website_link"><a href="http://www.basciani.it/" class="primary" target="_blank">Website</a></h5>
 		</div>
@@ -264,10 +174,47 @@
 							Currently I'm carrying out research on solving the problem of the automatic chaining of transformations (which uses a centralized repository of artifacts which, in turn, is under study and development).
 							(<a href="http://www.basciani.it/" target="_blank">continue to my website</a>)
 						</p> 
+						<div class="clearfix"></div>
+						<!-- // Social Icons END -->
+					</div>
+		</div>
+		<!-- // Thumbnail END -->
+
+	</div>
+	<hr class="margin-hr">
+	<!-- Row -->
+	<div class="row-fluid">
+		<!-- Thumbnail -->
+		<div class="span2">
+			<img class="img-thumb img-circle" src="${pageContext.request.contextPath}/resources/theme/images/members/juri_di_rocco.jpg" alt="Juri Di Rocco"/>
+			<h5 class="center website_link"><a href="http://www.di.univaq.it/diruscio/" class="primary" target="_blank">Website</a></h5>
+		</div>
+		<div class="span10">		
+					<div class="caption">
+						<h3 class="header-h main-title text-black">Juri Di Rocco</h3>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/affiliations/logo-univaq.png" alt="Universit&agrave; degli Studi dell'Aquila" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<span class="text-faded"><a href="http://www.disim.univaq.it/main/index.php" target="_blank">Universit&agrave; degli Studi dell'Aquila</a></span>
+								</div>
+							</div>
+						<br>
+						 <p>
+							I am a Ph.D. student in Computer Science at the Department of Information Engineering Computer Science and Mathematics of the University of L'Aquila.
+						My research interests include Model-Driven Engineering (MDE) techinques like: software modelling, analysis and simulation, model-to-model transformation, model weaving, model generation,coupled evolution and model differencing.
+						I worked recently on .NET, JAVA and LAMP platform and I have experience with Entity Model Framework.
+						(<a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" target="_blank">continue to my website</a>)
+						</p> 
 						
 						<!--  <hr> -->
 						<!-- Social Icons -->
-						<!-- <a href="http://www.basciani.it/" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>-->
+						<!-- <a href="http://www.di.univaq.it/home.php?users_username=juri.dirocco" class="glyphicons standard primary globe_af" target="_blank"><i></i></a>-->
 						<!-- <a href="" class="glyphicons standard twitter"><i></i></a>
 						<a href="" class="glyphicons standard linked_in"><i></i></a> -->
 						<div class="clearfix"></div>
@@ -279,30 +226,110 @@
 	</div>
 <div class="separator"></div>
 <div class="separator"></div>
-<div class="separator"></div>
-
-<div class="lead center innerTB">
-			<h2 class="header-h main-title text-black center">Institutions</h2>
-</div>
-	<!-- Row -->
+<div class="separator"></div>	
+	<div class="lead center innerTB">
+			<h2 class="header-h main-title text-black center">External Contributors</h2>
+	</div>
 	<div class="row-fluid">
-		<div class="span4">
-			<a href="http://www.univaq.it/" class="institution" target="_blank">
-				<img src="${pageContext.request.contextPath}/resources/theme/images/UnivaqLogo.png" alt="Università degli studi de L'Aquila" />
-			</a>
+		<!-- Thumbnail -->
+		
+		<div class="span4">		
+					<div class="caption">
+						<h3 class="header-h main-title text-black">Jesús Sánchez Cuadrado</h3>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/new_logo.png" alt="Universidad Autonoma de madrid" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<span class="text-faded"><a href="http://www.uam.es" target="_blank">Universidad Autonoma de madrid</a></span>
+								</div>
+							</div>
+						<br>
+						 
+						<div class="clearfix"></div>
+						<!-- // Social Icons END -->
+					</div>
 		</div>
-		<div class="span4">
-			<a href="http://uam.es/ss/Satellite/es/home/" class="institution" target="_blank">
-				<img src="${pageContext.request.contextPath}/resources/theme/images/new_logo.png" />
-			</a>
+		<div class="span4">		
+					<div class="caption">
+						<h3 class="header-h main-title text-black">Juan De Lara</h3>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/new_logo.png" alt="Universidad Autonoma de madrid" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<span class="text-faded"><a href="http://www.uam.es" target="_blank">Universidad Autonoma de madrid</a></span>
+								</div>
+							</div>
+						<br>
+						 
+						<div class="clearfix"></div>
+						<!-- // Social Icons END -->
+					</div>
+		</div>		
+		<div class="span4">		
+					<div class="caption">
+						<h3 class="header-h main-title text-black">Esther Guerra</h3>
+						<div class="media">
+								<small class="author">
+									&nbsp;
+									<!-- <span class="text-faded"><a href="http://www.gssi.infn.it/" target="_blank">GSSI (Gran Sasso Science Institute)</a></span> -->
+								</small>
+								<div class="media-object pull-left thumb">
+									<img src="${pageContext.request.contextPath}/resources/theme/images/new_logo.png" alt="Universidad Autonoma de madrid" style="width: 51px; height: 51px;">
+								</div>
+								<div class="media-body">
+									<span class="text-faded"><a href="http://www.uam.es" target="_blank">Universidad Autonoma de madrid</a></span>
+								</div>
+							</div>
+						<br>
+						 
+						<div class="clearfix"></div>
+						<!-- // Social Icons END -->
+					</div>
 		</div>
-		<div class="span4">
-			<a href="http://www.gssi.infn.it/" class="institution" target="_blank" style="margin-top: 15%" >
-				<img class="institution" src="${pageContext.request.contextPath}/resources/theme/images/gssi-logo.png"/>
-			</a>
-		</div>
+		<!-- // Thumbnail END -->
 
 	</div>
+	<hr class="margin-hr">
+	
+	
+	<!-- Row -->
+
+	<div class="separator"></div>
+<div class="separator"></div>
+<div class="separator"></div>
+
+<!-- <div class="lead center innerTB"> -->
+<!-- 			<h2 class="header-h main-title text-black center">Institutions</h2> -->
+<!-- </div> -->
+	<!-- Row -->
+<!-- 	<div class="row-fluid"> -->
+<!-- 		<div class="span4"> -->
+<!-- 			<a href="http://www.univaq.it/" class="institution" target="_blank"> -->
+<%-- 				<img src="${pageContext.request.contextPath}/resources/theme/images/UnivaqLogo.png" alt="Università degli studi de L'Aquila" /> --%>
+<!-- 			</a> -->
+<!-- 		</div> -->
+<!-- 		<div class="span4"> -->
+<!-- 			<a href="http://uam.es/ss/Satellite/es/home/" class="institution" target="_blank"> -->
+<%-- 				<img src="${pageContext.request.contextPath}/resources/theme/images/new_logo.png" /> --%>
+<!-- 			</a> -->
+<!-- 		</div> -->
+<!-- 		<div class="span4"> -->
+<!-- 			<a href="http://www.gssi.infn.it/" class="institution" target="_blank" style="margin-top: 15%" > -->
+<%-- 				<img class="institution" src="${pageContext.request.contextPath}/resources/theme/images/gssi-logo.png"/> --%>
+<!-- 			</a> -->
+<!-- 		</div> -->
+
+<!-- 	</div> -->
 </div>	
 <div class="separator"></div>
 <div class="separator"></div>

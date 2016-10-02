@@ -152,11 +152,11 @@
   $(document).ready(function(){
 	  var page = window.location.pathname;
 	  switch(page){
-	  case "/mdeforge/" : $("#menu-home").addClass("active"); break;
-	  case "/mdeforge/public/about" : $("#menu-about").addClass("active"); break;
-	  case "/mdeforge/public/members" : $("#menu-members").addClass("active"); break;
-	  case "/mdeforge/public/publications" : $("#menu-publications").addClass("active"); break;
-	  case "/mdeforge/login" : $("#menu-login").addClass("active"); break;
+	  case "/" : $("#menu-home").addClass("active"); break;
+	  case "/public/about" : $("#menu-about").addClass("active"); break;
+	  case "/public/members" : $("#menu-members").addClass("active"); break;
+	  case "/public/publications" : $("#menu-publications").addClass("active"); break;
+	  case "/login" : $("#menu-login").addClass("active"); break;
 	  }
   })
 </script>
