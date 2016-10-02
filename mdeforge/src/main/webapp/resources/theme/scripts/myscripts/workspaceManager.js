@@ -41,6 +41,7 @@
 			
 			url : ctx + "/private/project/" + idProject + "/add/" + ecoreMetamodel.id,
 			success : function(data) {
+				console.log('jjj' + ctx)
 				var result = $('#ecoreMMTable');
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 						function(template) {
