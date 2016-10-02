@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.List;
 
 import org.mdeforge.business.ATLTransformationService;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +35,9 @@ public class PublicController {
 	private ATLTransformationService aTLTransformationService;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
-
+	@Autowired
+	private CRUDArtifactService<Artifact> artifactService;
+	
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public String index() {
 		return "public.index";
@@ -69,7 +73,13 @@ public class PublicController {
 	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model) throws IOException {
-
+//		model.addAttribute("user",us);
+		model.addAttribute("statistic", artifactService.statistic());
+		model.addAttribute("statisticMM", ecoreMetamodelService.statistic());
+		model.addAttribute("statisticM", modelService.statistic());
+		model.addAttribute("statisticT", aTLTransformationService.statistic());
+		model.addAttribute("statistic2", ecoreMetamodelService.numberOfMCdistribution());
+		model.addAttribute("statisticATL", aTLTransformationService.numberOfMCdistribution());
 		long numUsers = userService.countUsers();
 		long numATL = aTLTransformationService.countAll();
 		long numEcore = ecoreMetamodelService.countAll();

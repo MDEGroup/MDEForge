@@ -509,6 +509,7 @@
 							var idProject = $("#projectId").data('id');
 							console.log("5 _ " + idProject);
 							artifact.projectId = idProject;
+							artifact.ctx = ctx;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);

@@ -235,10 +235,165 @@
 			<a href="${pageContext.request.contextPath}/public/Model/artifacts" class="btn btn-block">View All</a>
 		</div>
 	</div>
+	<div class="widget widget-heading-simple widget-body-white">
+		<!-- // Widget heading END -->
+		
+		<div class="widget-body">
+		
+			<!-- Chart with lines and fill with no points -->
+			<canvas id="myChart" width="100" height="400"></canvas>
+		</div>
+		
+		<div class="widget-body">
+		
+			<!-- Chart with lines and fill with no points -->
+			<canvas id="myChart2" width="100" height="400"></canvas>
+		</div>
+	</div>
 </div>
 
 
-
+<!-- Charts Helper Demo Script -->
+	<script>
+	$(document).ready(function(){
+		var ctx = document.getElementById("myChart");
+		var myChart = new Chart(ctx, {
+		    type: 'line',
+		    data: {
+		        labels: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.created},
+		                 </c:forEach>
+		                 	],
+		        datasets: [{
+		            label: 'All',
+		            data: [
+		                 <c:forEach items="${statistic}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 500,
+					backgroundColor: "rgba(255, 99, 132, 0.2)",
+					borderColor: "rgba(255,99,132,1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'ATL Transformations',
+		            data: [
+		                 <c:forEach items="${statisticT}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 600,
+					backgroundColor: "rgba(54, 162, 235, 0.2)",
+					borderColor: "rgba(54, 162, 235, 1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'ECORE Metamodels',
+		            data: [
+		                 <c:forEach items="${statisticMM}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 700,
+					backgroundColor: "rgba(255, 206, 86, 0.2)",
+					borderColor: "rgba(255, 206, 86, 1)",
+		            borderWidth: 1
+		        },
+		        {
+		            label: 'Models',
+		            data: [
+		                 <c:forEach items="${statisticM}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 800,
+					backgroundColor: "rgba(75, 192, 192, 0.2)",
+					borderColor: "rgba(75, 192, 192, 1)",
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+                legend: {
+                    position: 'top',
+                },
+                hover: {
+                    mode: 'label'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Day'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                },
+		    	maintainAspectRatio: false,
+		    	fullWidth: true
+		    }
+		});
+		var ctx2 = document.getElementById("myChart2");
+		var myChart2 = new Chart(ctx2, {
+		    type: 'line',
+		    data: {
+		        labels: [
+		                 <c:forEach items="${statistic2}" var ="stat">
+		                 	${stat.created},
+		                 </c:forEach>
+		                 	],
+		        datasets: [{
+		            label: 'All',
+		            data: [
+		                 <c:forEach items="${statistic2}" var ="stat">
+		                 	${stat.total},
+		                 </c:forEach>
+					],
+					duration: 500,
+					backgroundColor: "rgba(54, 162, 235, 0.2)",
+					borderColor: "rgba(54, 162, 235, 1)",
+		            borderWidth: 1
+		        }
+		      ]
+		    },
+		    options: {
+                legend: {
+                    position: 'top',
+                },
+                hover: {
+                    mode: 'label'
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Number of Metamodel'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Number of Metaclass'
+                        }
+                    }]
+                },
+		    	maintainAspectRatio: false,
+		    	fullWidth: true
+		    }
+		});
+	})
+	
+	</script>
 
 
 
