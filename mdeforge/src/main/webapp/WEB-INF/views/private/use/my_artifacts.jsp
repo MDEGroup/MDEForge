@@ -58,7 +58,7 @@ $(document).ready(function () {
 	                    "sortable": false,
 	                    "render": function ( data, type, row, meta ) {
 	    			    	if(row.open){
-	                    		return "<a href='${pageContext.request.contextPath}/public/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
+	                    		return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
 	    			    	}else{
 	    			    		return "<a href='${pageContext.request.contextPath}/private/${type}/artifact?artifact_id=" + row.id + "'>" + row.name + "</a>";
 	    			    	}

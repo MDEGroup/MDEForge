@@ -53,7 +53,7 @@ $(document).ready(function () {
 		"language": {
 		    "lengthMenu": "Show _MENU_ <span class='strong text-primary'>${type}s</span> per page",
 		    "info": "_TOTAL_ <span class='strong text-primary'>${type}s</span> found",
-		    "processing":'<img class="spinner" src="/mdeforge/resources/theme/images/spin.gif"></span>'
+		    "processing":'<img class="spinner" src="${pageContext.request.contextPath}/resources/theme/images/spin.gif"></span>'
 		},
 		"columns":[
 	                
