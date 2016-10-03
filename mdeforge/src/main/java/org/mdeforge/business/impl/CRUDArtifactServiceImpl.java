@@ -765,7 +765,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public void delete(T artifact, User user) {
 		artifact = findOneById(artifact.getId(), user);
-		if(artifact.getAuthor().getId()!=user.getId())
+		if(!artifact.getAuthor().getId().equals(user.getId()))
 			throw new AuthorizzationException();
 		for (Project project : artifact.getProjects()) {
 			Artifact artToRemove = new Artifact();

@@ -85,12 +85,7 @@
 								<h5 class="input-name">Description</h5>
 								<p>
 								${leftMetamodel.description}
-									<c:forEach items="${leftMetamodel.properties}"
-										var="property">
-										<c:if test="${property.getName() == 'Description '}">
-												${property.getValue()}
-											</c:if>
-									</c:forEach>
+									
 								</p>
 								<div class="separator"></div>
 								<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${leftMetamodel.getId()}"
@@ -151,12 +146,6 @@
 																<h5 class="input-name">Description</h5>
 															<p>
 															${rightMetamodel.description }
-																<c:forEach items="${rightMetamodel.properties}"
-																	var="property">
-																	<c:if test="${property.getName() == 'Description '}">
-																			${property.getValue()}
-																		</c:if>
-																</c:forEach>
 															</p>
 															<div class="separator"></div>
 															<a href="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_details?metamodel_id=${rightMetamodel.getId()}"

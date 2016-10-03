@@ -1,6 +1,6 @@
 	$(document).on('click', '.removeArtifact', function(event){
 		var idArtifact = $(this).data('id');
-		var idProject = $("#projectId").data('id');
+		var idProject = $('#projectId').attr('data-id');
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/remove/" + idArtifact,
 			success : function(data) {
@@ -33,7 +33,7 @@
 		}
 		button.addClass("disabled-button");
 		ecoreMetamodel.ecoreMetamdel = true;
-		var idProject = $("#projectId").data('id');
+		var idProject = $('#projectId').attr('data-id');
 		console.log("1 _ " + idProject);
 		ecoreMetamodel.projectId = idProject;
 		
@@ -86,7 +86,7 @@
 		}
 		button.addClass("disabled-button");
 		console.log("2 _ " + idProject);
-		var idProject = $("#projectId").data('id');
+		var idProject = $('#projectId').attr('data-id');
 		ATLTransormation.projectId = idProject;
 		ATLTransormation.ATLTransformation = true;
 		$.ajax({
@@ -138,7 +138,7 @@
 		}
 		button.addClass("disabled-button");
 		model.model = true;
-		var idProject = $("#projectId").data('id');
+		var idProject = $('#projectId').attr('data-id');
 		console.log("3 _ " + idProject);
 		model.projectId = idProject;
 		$.ajax({
@@ -267,7 +267,7 @@
 	});
 	
 	$(document).on('click','.removeSharedUser', function(event){
-		var idProject = $("#projectId").data('id');
+		var idProject = $('#projectId').attr('data-id');
 		var idUser = $(this).data('id');
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/removeUser/" + idUser,
@@ -448,6 +448,7 @@
 				url : ctx + "/private/project/" + id,
 				success : function(data) {
 					$('#projectId').attr('data-id',data.id);
+					console.log('kk ' + $('#projectId').attr('data-id'));
 					var workspace = $("#workspaceDetailsDiv");
 					workspace.show();
 					$('#users').empty();
@@ -496,8 +497,8 @@
 					$.each(data.artifacts, function(i, artifact) {
 						if(artifact._class == "org.mdeforge.business.model.EcoreMetamodel") {
 							artifact.ecoreMetamdel = true;
-							var idProject = $("#projectId").data('id');
-							console.log("4 _ " + idProject);
+							var idProject = $('#projectId').attr('data-id');
+							artifact.ctx = ctx;
 							artifact.projectId = idProject;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
@@ -507,8 +508,7 @@
 						}
 						if(artifact._class == "org.mdeforge.business.model.ATLTransformation") {
 							artifact.ATLTransformation = true;
-							var idProject = $("#projectId").data('id');
-							console.log("5 _ " + idProject);
+							var idProject = $('#projectId').attr('data-id');
 							artifact.projectId = idProject;
 							artifact.ctx = ctx;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
@@ -519,8 +519,7 @@
 						}
 						if(artifact._class == "org.mdeforge.business.model.Model") {
 							artifact.model = true;
-							var idProject = $("#projectId").data('id');
-							console.log("6 _ " + idProject);
+							var idProject = $('#projectId').attr('data-id');
 							artifact.projectId = idProject;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
