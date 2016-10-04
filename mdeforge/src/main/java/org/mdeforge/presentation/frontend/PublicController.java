@@ -12,6 +12,7 @@ import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -62,11 +63,16 @@ public class PublicController {
 	public String login() {
 		return "public.login";
 	}
-	@RequestMapping(value = "/exist_user", method = { RequestMethod.GET })
+	@RequestMapping(value = "/user/search", method = { RequestMethod.GET })
+	public @ResponseBody List<User> searchUsers(@RequestParam("username") String username){
+		return (userService.findByUsernameContaining(username));
+	}
+	
+	@RequestMapping(value = "/user/exist_username", method = { RequestMethod.GET })
 	public @ResponseBody boolean existUser(@RequestParam("username") String username){
 		return (userService.findOneByUsername(username)==null)?false:true;
 	}
-	@RequestMapping(value = "/exist_mail", method = { RequestMethod.GET })
+	@RequestMapping(value = "/user/exist_email", method = { RequestMethod.GET })
 	public @ResponseBody boolean existEmail(@RequestParam("email") String email){
 		return (userService.findOneByEmail(email)==null)?false:true;
 	}
