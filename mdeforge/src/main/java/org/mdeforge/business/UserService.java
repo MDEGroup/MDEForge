@@ -32,4 +32,6 @@ public interface UserService {
 	User findOneByUsername(String username) throws BusinessException;
 
 	User findOneByEmail(String email) throws BusinessException;
+
+	List<User> findByUsernameContaining(String name);
 }

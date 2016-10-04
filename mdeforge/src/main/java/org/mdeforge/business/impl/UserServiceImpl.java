@@ -11,12 +11,19 @@ import org.mdeforge.integration.RoleRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService{
 
+	@Autowired
+	protected SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -36,7 +43,10 @@ public class UserServiceImpl implements UserService{
 		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		return userRepository.save(user);
 	}
-
+	@Override
+	public List<User> findByUsernameContaining(String name) {
+		return userRepository.findByUsernameContaining(name);
+	}
 	
 	
 	@Override

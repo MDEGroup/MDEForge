@@ -18,9 +18,11 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
+import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.MetricRepository;
+import org.mdeforge.integration.RelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,6 +50,8 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 	private CosineSimilarityRelationService cosineSimilarityRelationService;
 	@Autowired
 	private MetricRepository metricRepository;
+	@Autowired
+	private RelationRepository relationRepository;
 		
 	public String details(Model model, @RequestParam String artifact_id) {
 		super.details(model, artifact_id);
@@ -68,7 +72,7 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 	public String metamodelCompareStart(Model model) {
 		
 		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAllWithPublicByUser(user);
-		model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
+		//model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
 				
 		return "private.use.metamodel_compare";
 	}
@@ -79,6 +83,12 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 		model.addAttribute("leftMetamodel", leftMetamodel);
 		EcoreMetamodel rightMetamodel = ecoreMetamodelService.findOne(right_metamodel_id);
 		model.addAttribute("rightMetamodel", rightMetamodel);
+		similarityRelationService.findOneByArtifacts(leftMetamodel, rightMetamodel);
+		model.addAttribute("similarityRelation", similarityRelationService.findOneByArtifacts(leftMetamodel, rightMetamodel));
+		model.addAttribute("cosineSimilarityRelation", cosineSimilarityRelationService.findOneByArtifacts(leftMetamodel, rightMetamodel));
+		model.addAttribute("diceSimilarityRelation", diceSimilarityRelationService.findOneByArtifacts(leftMetamodel, rightMetamodel));
+		model.addAttribute("containmentRelation", containmentRelationService.findOneByArtifacts(leftMetamodel, rightMetamodel));
+		
 		List<Metric> leftMetrics = metricRepository.findByArtifactId(new ObjectId(leftMetamodel.getId())); 
 		List<Metric> rightMetrics = metricRepository.findByArtifactId(new ObjectId(rightMetamodel.getId()));
 		leftMetamodel.getMetrics().addAll(leftMetrics);
@@ -97,8 +107,8 @@ public class EcorePrivateController extends ArtifactPrivateController<EcoreMetam
 		/*
 		 * List of metamodels
 		 */
-		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAllWithPublicByUser(user);
-		model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
+		//List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAllWithPublicByUser(user);
+		//model.addAttribute("ecoreMetamodelList", ecoreMetamodelList);
 		
 		return "private.use.metamodel_compare";
 	}
