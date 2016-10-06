@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -82,6 +83,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
+	
+	private List<String> transformationsTags = Arrays.asList("fromMM", "toMM", "helper", "fromMC", "toMC");
+	private List<String> metamodelsTags = Arrays.asList("eClass", "eAttribute", "ePackage", "eEnum");
+	
+	
 	@Override
 	public ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated) {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -1313,6 +1319,16 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Collections.sort(sortedList);
 		
 		return sortedList;
+	}
+	
+	@Override
+	public List<String> indexFieldNamesForMM(){
+		return this.metamodelsTags;
+	}
+	
+	@Override
+	public List<String> indexFieldNamesForT(){
+		return this.transformationsTags;
 	}
 	
 	@Override
