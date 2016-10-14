@@ -59,6 +59,8 @@ public interface CRUDArtifactService <T extends Artifact> {
 	
 	//Search with Lucene
 	List<String> indexFieldNames() throws BusinessException;
+	List<String> indexFieldNamesForMM() throws BusinessException;
+	List<String> indexFieldNamesForT() throws BusinessException;
 	SearchResultComplete searchForm(String searchString) throws BusinessException;
 	SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException;
 	List<T> search(String searchString, int maxSearchResult) throws BusinessException;

@@ -42,8 +42,27 @@ public class SearchPublicController {
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model) {
-		List<String> indexFieldNames = artifactService.indexFieldNames();
-		model.addAttribute("indexFieldNames", indexFieldNames);
+		// Tags for MM (statics)
+		// Get all Metamodels tags
+		List<String> indexFieldNamesForMM = artifactService.indexFieldNamesForMM();
+		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
+
+		// Tags for T. (statics)
+		// Get all Transformations tags
+		List<String> indexFieldNamesForT = artifactService.indexFieldNamesForT();
+		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
+
+		// Tags for M. (dinamics)
+		// Get all tags
+		List<String> indexFieldNamesForM = artifactService.indexFieldNames();
+
+		// Remove Metamodels and Transformations tags in order to find out only
+		// the model tags.
+		indexFieldNamesForM.removeAll(indexFieldNamesForMM);
+		indexFieldNamesForM.removeAll(indexFieldNamesForT);
+
+		model.addAttribute("indexFieldNamesForM", indexFieldNamesForM);
+
 		return "public.search";
 	}
 	
@@ -81,8 +100,29 @@ public class SearchPublicController {
 		model.addAttribute("searchResultComplete", searchResultComplete);
 //		model.addAttribute("search_string", searchString);
 		
-		List<String> indexFieldNames = artifactService.indexFieldNames();
-		model.addAttribute("indexFieldNames", indexFieldNames);
+		// Tags for MM (statics)
+		// Get all Metamodels tags
+		List<String> indexFieldNamesForMM = artifactService.indexFieldNamesForMM();
+		for (String string : indexFieldNamesForMM) {
+			System.out.println(string + "ggg");
+		}
+		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
+
+		// Tags for T. (statics)
+		// Get all Transformations tags
+		List<String> indexFieldNamesForT = artifactService.indexFieldNamesForT();
+		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
+
+		// Tags for M. (dinamics)
+		// Get all tags
+		List<String> indexFieldNamesForM = artifactService.indexFieldNames();
+
+		// Remove Metamodels and Transformations tags in order to find out only
+		// the model tags.
+		indexFieldNamesForM.removeAll(indexFieldNamesForMM);
+		indexFieldNamesForM.removeAll(indexFieldNamesForT);
+
+		model.addAttribute("indexFieldNamesForM", indexFieldNamesForM);
 		return "public.search";
 	}
 	
