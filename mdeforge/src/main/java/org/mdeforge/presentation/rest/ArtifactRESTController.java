@@ -7,6 +7,7 @@ import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResult;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -120,7 +122,15 @@ public class ArtifactRESTController {
 		}
 	}
 	
-	
+	@RequestMapping(value = "/comment/{idArtifact}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<Comment> postComment(@RequestBody Comment comment, 
+			@PathVariable("text") String idArtifact) {
+		comment.setUser(user);
+		Artifact art = artifactService.findOne(idArtifact);
+		artifactService.addComment(comment,idArtifact);
+		artifactService.update(art);
+		return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody HttpEntity<String> delete(
 			@PathVariable("id") String idArtifact) {
