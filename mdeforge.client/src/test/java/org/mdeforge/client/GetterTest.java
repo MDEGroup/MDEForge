@@ -27,14 +27,25 @@ public class GetterTest {
 	private static ArtifactService artifactService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		artifactService = new ArtifactService("http://localhost:8080/mdeforge/", "Admin", "test123");
+		modelService = new ModelService("http://www.mdeforge.org/", "Admin", "juri");
+		atlTransformationService = new ATLTransformationService("http://www.mdeforge.org/", "Admin", "juri");
+		etlTransformationService = new ETLTransformationService("http://www.mdeforge.org/", "Admin", "juri");
+		ecoreMetamodelService = new EcoreMetamodelService("http://www.mdeforge.org/", "Admin", "juri");
+		workspaceService = new WorkspaceService("http://www.mdeforge.org/", "Admin", "juri");
+		artifactService = new ArtifactService("http://www.mdeforge.org/", "Admin", "juri");
 	}
-	
+	@Test
+	public void getEcores() throws Exception {
+		List<EcoreMetamodel> t = ecoreMetamodelService.getEcoreMetamodels();
+		for (EcoreMetamodel ecoreMetamodel : t) {
+			System.out.println("Ecore: " + ecoreMetamodel.getId());
+		}
+		
+	}
+	@Test
+	public void getMetamodelJson() throws Exception{
+		System.out.println(ecoreMetamodelService.getEcoreMetamodelJsonFormat("57efef4ce4b0e7cbbfb53d00"));
+	}
 	@Ignore
 	@Test
 	public void getModelsTest() throws Exception {
@@ -182,20 +193,14 @@ public class GetterTest {
 		System.out.println("ATL: " + t.getClass().getCanonicalName());
 	}
 
-	@Test
-	public void getEcores() throws Exception {
-		List<EcoreMetamodel> t = ecoreMetamodelService.getEcoreMetamodels();
-		for (EcoreMetamodel ecoreMetamodel : t) {
-			System.out.println("Ecore: " + ecoreMetamodel.getName());
-		}
-		
-	}
+	
 	@Ignore
 	@Test
 	public void getModel() throws Exception {
 		Artifact t = modelService.getArtifact("557018084568bbd2c59f9145");
 		System.out.println("Model: " + t.getClass().getCanonicalName());
 	}
+	@Ignore
 	@Test
 	public void getEcore() throws Exception {
 		Artifact t = artifactService.getArtifact("552bbd16d4c659da8e19ed25");
