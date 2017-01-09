@@ -3,6 +3,7 @@ package org.mdeforge.presentation.frontend;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -82,11 +83,14 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	}
 	
 	@RequestMapping(value = "/comment", method = { RequestMethod.POST })
-	public String create(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifat, Model model) {
-		comment.setUser(user);
-		Artifact art = artifactService.findOne(idArtifat);
-		artifactService.addComment(comment,idArtifat);
-		return "redirect:/public/"+ art.getClass().getSimpleName() +"/artifact?artifact_id=" + idArtifat;
+	public @ResponseBody HttpEntity<String> create(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifat, Model model) {
+		try{
+			comment.setUser(user);
+			artifactService.addComment(comment,idArtifat);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Errors", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/artifact_name", method = { RequestMethod.GET })
