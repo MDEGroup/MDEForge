@@ -304,6 +304,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		Comment c = new Comment();
 		c.setId(idComment);
 		art.getComments().remove(c);
+		artifactRepository.save(art);
 		return;
 	}
 	
