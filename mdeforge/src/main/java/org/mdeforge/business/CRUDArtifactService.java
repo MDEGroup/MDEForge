@@ -67,4 +67,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void createIndex(T artifact);
 	boolean deleteTermFromIndex(String fieldName, String filePath);
 	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
+	void deleteComment(String idComment, String idArtifact);
 }

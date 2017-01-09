@@ -24,7 +24,6 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.apache.lucene.search.highlight.Highlighter;
@@ -83,6 +82,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
+	
 	
 	private List<String> transformationsTags = Arrays.asList("fromMM", "toMM", "helper", "fromMC", "toMC");
 	private List<String> metamodelsTags = Arrays.asList("eClass", "eAttribute", "ePackage", "eEnum");
@@ -291,12 +291,22 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public void addComment(Comment comment, String idArtifact) throws BusinessException {
 		T art = findOne(idArtifact);
-
+		comment.setId(new ObjectId().toString());
 		comment.setUser(userService.findOne(comment.getUser().getId()));
 		art.getComments().add(comment);
 		artifactRepository.save(art);
 		return;
 	}
+	
+	@Override
+	public void deleteComment(String idComment, String idArtifact) {
+		T art = findOne(idArtifact);
+		Comment c = new Comment();
+		c.setId(idComment);
+		art.getComments().remove(c);
+		return;
+	}
+	
 	protected static final String TYPE_TAG = "forgeType";
 	protected static final String NAME_TAG = "name";
 	protected static final String AUTHOR_TAG = "author";

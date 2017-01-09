@@ -83,16 +83,24 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	}
 	
 	@RequestMapping(value = "/comment", method = { RequestMethod.POST })
-	public @ResponseBody HttpEntity<String> create(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifat, Model model) {
+	public @ResponseBody HttpEntity<String> createComment(@ModelAttribute Comment comment, @RequestParam(value="idArtifact") String idArtifact, Model model) {
 		try{
 			comment.setUser(user);
-			artifactService.addComment(comment,idArtifat);
+			artifactService.addComment(comment,idArtifact);
 		}catch(Exception e){
 			return new ResponseEntity<String>("Errors", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>(HttpStatus.OK);
 	}
-	
+	@RequestMapping(value = "/comment", method = { RequestMethod.DELETE })
+	public @ResponseBody HttpEntity<String> deleteComment(@RequestParam(value="idComment") String idComment, @RequestParam(value="idArtifact") String idArtifact, Model model) {
+		try{
+			artifactService.deleteComment(idComment,idArtifact);
+		}catch(Exception e){
+			return new ResponseEntity<String>("Errors", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>(HttpStatus.OK);
+	}
 	@RequestMapping(value = "/artifact_name", method = { RequestMethod.GET })
 	public String artifactFromName(@RequestParam String name,Model model) throws IOException{
 		Artifact ecoreMetamodel = artifactService.findOneByName(name);
