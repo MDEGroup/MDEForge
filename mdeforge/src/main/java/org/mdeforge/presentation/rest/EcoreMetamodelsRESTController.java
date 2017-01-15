@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
+import com.google.gson.JsonObject;
 
 @Controller
 @RestController
@@ -157,7 +158,7 @@ public class EcoreMetamodelsRESTController {
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
-	public @ResponseBody HttpEntity<String> updateArtifact(
+	public @ResponseBody HttpEntity<Artifact> updateArtifact(
 			@RequestBody EcoreMetamodel ecoreMetamodel) {
 		try {
 			// SetAuthor
@@ -166,11 +167,13 @@ public class EcoreMetamodelsRESTController {
 			// ecoreMetamodel.getShared().add(user);
 			// metamodel save
 			ecoreMetamodelService.update(ecoreMetamodel);
-			return new ResponseEntity<String>("EcoreMetamodel updated.",
-					HttpStatus.OK);
+			/**
+			 * If the request has application/json Content Type it MUST return a Json.s
+			 */
+			
+			return new ResponseEntity<Artifact>(ecoreMetamodel, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("Erron: metamodel not updated",
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
@@ -211,7 +214,10 @@ public class EcoreMetamodelsRESTController {
 			EcoreMetamodel art = ecoreMetamodelService.findOneById(
 					idEcoreMetamodel, user);
 			ecoreMetamodelService.delete(art, user);
-			return new ResponseEntity<String>("EcoreMetamodel deleted",
+			JsonObject resp=new JsonObject();
+			resp.addProperty("status","Done");
+			resp.addProperty("message","Ecore MetaModel Deleted");
+			return new ResponseEntity<String>(resp.toString(),
 					HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("EcoreMetamodel not deleted",

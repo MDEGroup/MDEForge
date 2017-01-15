@@ -826,8 +826,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				fileMedia.setFileName("");
 				fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 				gridFileMediaService.delete(original.getFile());
-				gridFileMediaService.store(artifact.getFile());
+				//Todo: Check fix, inverted rows next two lines (Nicola Sacco)
 				artifact.setFile(fileMedia);
+				gridFileMediaService.store(artifact.getFile());
 			} else
 				artifact.setFile(original.getFile());
 
@@ -888,7 +889,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			}
 
 		} catch (Exception e) {
-			throw new BusinessException();
+			e.printStackTrace();
+			throw new BusinessException(e.getMessage());
 		}
 	}
 
