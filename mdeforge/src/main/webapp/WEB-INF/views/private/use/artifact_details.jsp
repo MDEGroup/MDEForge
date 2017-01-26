@@ -117,7 +117,7 @@
 			</div>
 			<c:if test="${userId == artifact.getAuthor().getId()}">
 			<div class="span2">
-				<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="widget-stats widget-stats-2">
+				<a href="#alert-modal" class="widget-stats widget-stats-2" data-toggle="modal">
 						<span class="count icon-remove text-error"><i></i></span>
 						<span class="txt">Delete ${artifact.getClass().getSimpleName()}</span>
 					</a>
@@ -292,7 +292,21 @@
 	  </div>
 	</div>
 <!-- // Modal END -->
-
+<div class="modal hide fade" id="alert-modal">
+		<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3>Delete ${artifact.getClass().getSimpleName()}</h3>
+	</div>
+	<div class="modal-body">
+		 	<h2 class="header-h title-modal text-danger" style="margin: 0">Are you sure to delete the ${artifact.getClass().getSimpleName()} 
+		 	<span class="text-error">${artifact.getName()}</span> ?</h2>
+	</div>
+	<div class="separator"></div>
+	<div class="modal-footer center">
+		    <a href="#" class="btn pull-left" data-dismiss="modal">Cancel</a>
+		    <a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn btn-danger pull-right" >Delete</a>
+	</div>
+</div>
 
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>

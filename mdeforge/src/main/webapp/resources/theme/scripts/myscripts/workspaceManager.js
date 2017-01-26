@@ -1,3 +1,27 @@
+	var modal = $("#alert-modal")
+	var modalTemplate;
+	$.get(ctx + '/resources/theme/scripts/plugins/forms/template/modal.html', function(template) {
+		modalTemplate = template;
+	});
+	
+	$("#deleteWorkspaceButton").click(function(){
+		var button = $(this);
+		var obj = {
+				"id": button.data("id"),
+				"name": button.data("name"),
+				"type": "Workspace",
+				"type2": "workspace"
+		}
+		var rendered = Mustache.render(modalTemplate, obj);
+		modal.html(rendered);
+		modal.modal("show")
+	})
+	
+	$(document).on('click', '#deleteWorkspace', function(event){
+		$("#deleteWorkspaceButton").addClass("disabled")
+		$("#deleteWorkspaceForm").submit()
+	})
+	
 	$(document).on('click', '.removeArtifact', function(event){
 		var idArtifact = $(this).data('id');
 		var idProject = $('#projectId').attr('data-id');
@@ -386,6 +410,21 @@
 			
 		});
 	});
+	
+	$(document).on('click', '#deleteProjectButton', function(event){
+		var button = $(this);
+		var obj = {
+				"id": button.data("id"),
+				"name": button.data("name"),
+				"type": "Project",
+				"type2": "project"
+		}
+		var rendered = Mustache.render(modalTemplate, obj);
+		modal.html(rendered);
+		modal.modal("show")
+	});
+	
+	
 	/* DELETE PROJECT */
 	$(document).on('click', '#deleteProject', function(event){
 		event.stopPropagation();
@@ -551,7 +590,7 @@
 					var removeButton = $('#removeProject').data("id", data.id).data("name", data.name)
 					var userId = $("#loggedUserId").val();
 					if(userId == data.owner.id){
-						removeButton.next().html('<span id="deleteProject" class="btn btn-danger" data-id="'+ data.id +'" data-name="'+ data.name +'" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>')
+						removeButton.next().html('<span id="deleteProjectButton" class="btn btn-danger" data-id="'+ data.id +'" data-name="'+ data.name +'" style="margin-top: 20px"><i class="icon-remove"></i> Delete Project</span>')
 					}
 					
 					$('#projectName').text(data.name);

@@ -10,7 +10,7 @@
 	<li><a href="#" class="glyphicons dashboard"><i></i> <spring:message
 				code="mdeforge.public.back.browse.breadcrumbs.public_area" /></a></li>
 	<li class="divider"></li>
-	<li>Use</li>
+	<li>Workspaces</li>
 	<li class="divider"></li>
 	<li>Workspace details</li>
 </ul>
@@ -25,9 +25,10 @@
 </div>
 	<div class="span4 buttons text-right" style="margin-top: 20px">
 		<form action="${pageContext.request.contextPath}/private/workspace/delete"
-			method="get">
+			method="get" id="deleteWorkspaceForm">
 			<input value="${workspace.getId()}" type="hidden" name="id" id="idWorkspaceHidden" > 
-			<button type="submit" class="btn btn-danger">
+			<input type="submit" value="1" style="display: none">
+			<button id="deleteWorkspaceButton" data-name="${workspace.getName()}" type="button" class="btn btn-danger">
 				<i class="icon-remove"></i> <spring:message code="mdeforge.common.action.delete.workspace" />
 			</button>
 		</form>	
@@ -242,6 +243,9 @@
 <div class="separator "></div>
 <div class="separator "></div>
 <div class="separator "></div>
+
+<div class="modal hide fade" id="alert-modal"></div>
+
 
 
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/spinner/spin.min.js"></script>
