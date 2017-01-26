@@ -4,10 +4,24 @@
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/remove/" + idArtifact,
 			success : function(data) {
-				$('#' + idArtifact).remove();
+				//debugger;
+				//$('#artifact-' + idArtifact).remove();
 			},
 			error : function error(data) {
-				$('#' + idArtifact).remove();
+				//debugger;
+				if(data.responseText == "ok"){
+					$('#artifact-' + idArtifact).remove();
+					$.gritter.add({
+						title: 'The artifact has been removed from the project',
+						text: ""
+					});
+				}else{
+					$.gritter.add({
+						title: "Ops! Something went wrong!",
+						text: "Try Later."
+					});
+				}
+				
 			}
 			
 		});
@@ -50,7 +64,7 @@
 				});
 				//$("#ecoreSelect option[value='" + ecoreMetamodel.id + "']").remove();
 				$('#ecoreToAdd').hide();
-				select.empty();
+				select.val("");
 				$("#showEcoreList").removeClass("rotate-item");
 				button.removeClass("disabled-button")
 				$.gritter.add({
