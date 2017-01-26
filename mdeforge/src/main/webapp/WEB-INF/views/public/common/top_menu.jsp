@@ -29,15 +29,14 @@
 								
 						<li class="profile">
 							<span>
-								<c:url var="im" value="/private/getPhoto?id=${logged_user.image}" />
-								<img id="imagePreview" src="${im}"alt="Profile Photo"/>
+								<img id="imagePreview" src="/private/getPhoto?id=${logged_user.image}"alt="Profile Photo"/>
 								<div class="details">
 									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
 									<br>
 									<a href="#"><security:authentication property="principal.user.email"/></a>
 									<!--<security:authentication property="principal.user.id" var="userId"/>-->
 									<input type="hidden" value="${userId}" id="loggedUserId">
-								</span>
+								</div>
 								<span class="clearfix"></span>
 							</span>
 						</li>

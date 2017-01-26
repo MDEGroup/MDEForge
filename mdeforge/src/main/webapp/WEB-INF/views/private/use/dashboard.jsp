@@ -117,7 +117,7 @@
 			</div>
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/public/dashboard" class="btn widget-stats widget-stats-2" style="background: #c09853">
-						<span class="count icon-folder-open text-success"><i></i></span>
+						<span class="count icon-folder-open"><i></i></span>
 						<span class="txt">Browse Repository</span>
 					</a>
 			</div>

@@ -2,15 +2,13 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<script
-	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
 <c:if test="${artifact.atlError.size()== 0 && artifact.atlTestError.size()==0}">
 <div class="separator"></div>
 <div class="innerLR">
 	<div class="row-fluid">
 		<div class="span2">
 			<a	href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${artifact.getId()}"
-					class="btn btn-primary btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
+					class="btn btn-success btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
 		</div>
 		</div>
 	</div>
@@ -82,24 +80,25 @@
 						</div>
 					</div>
 				</div>
+
+
+
 			</c:forEach>
 		</div>
 	</div>
 </c:if>
+
+
 <div class="widget widget-heading-simple widget-body-white">
 
-	<!-- Widget Heading -->
-	<div class="widget-head">
-		<h3 class="heading glyphicons show_thumbnails">
-			<i></i>Execute the Transformation
-		</h3>
-	</div>
-	<!-- // Widget Heading END -->
-
 	<div class="widget-body">
+	<h5 class="input-name">Execute the Transformation</h5>
+	<div class="separator bottom"></div>
+	<p>Model transformations can be remotely executed from the Execute the Transformation section. From this section, users can select input models already available in the repository or can upload new ones. Once the input models are selected, the transformation can be executed, and the link to download the generated target model is given back to the user </p>
+	<div class="separator bottom"></div>
 		<div class="row-fluid">
 			<div class="span4">
-				<table class="table table-bordered table-striped table-white">
+				<table class="table  table-white">
 					<thead>
 						<tr>
 							<th class="center">Input Metamodels</th>
@@ -128,24 +127,23 @@
 							<!-- // Table row END -->
 						</c:forEach>
 				</table>
-
-
 			</div>
 			<div class="span4">
-				<table class="table table-bordered table-striped table-white">
+				<table class="table table-striped table-white">
 					<tbody>
-						<tr>
-							<td class="center">${artifact.getName()}</td>
-						</tr>
+					<tr>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+							<td class="center strong">${artifact.getName()}</td>
+					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
+					</tr>
 				</table>
-				<a
-					href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
-					class="btn btn-success btn-small btn-block"><i
+				<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
+					class="btn btn-primary btn-block" style="margin-bottom: 10px;"><i
 					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 			</div>
 			<div class="span4">
 
-				<table class="table table-bordered table-striped table-white">
+				<table class="table  table-white">
 					<thead>
 						<tr>
 							<th class="center">Output Metamodels</th>
@@ -160,12 +158,12 @@
 										test="${relation.getClass().name == 'org.mdeforge.business.model.CoDomainConformToRelation'}">
 										<td class="center"><c:choose>
 												<c:when test="${relation.getToArtifact().getId()}">${relation.getToArtifact().open}">
-																<a
-														href="${pageContext.request.contextPath}/public/EcoreMetamodel/martifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+															<a
+														href="${pageContext.request.contextPath}/public/EcoreMetamodel/metamodel_details?metamodel_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 												</c:when>
 												<c:otherwise>
 													<a
-														href="${pageContext.request.contextPath}/private/EcoreMetamodel/martifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
+														href="${pageContext.request.contextPath}/private/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>
 												</c:otherwise>
 											</c:choose></td>
 									</c:when>
@@ -177,5 +175,9 @@
 
 			</div>
 		</div>
+		<div class="separator"></div>
+		
 	</div>
 </div>
+<div class="separator"></div>
+<hr>

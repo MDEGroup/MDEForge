@@ -4,32 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<script	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
-<script	type="text/javascript">
-function shareArtifact(){
-	
-	console.log("${artifact.id}");
-	$.ajax({
-		url : ctx + "/public/${artifact.getClass().getSimpleName() }/share/?metamodel_id=" + "${artifact.id}",
-		success : function(data) {
-			console.log("UEEEE")
-		},
-		error : function error(data) {
-			console.log('error');
-			
-		}
-	});
-}
-
-
-</script>
-
-<style type="text/css">
-#my_canvas {
-	width: 100%;
-	height: 200px;
-}
-</style>
+<!-- <script	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>-->
 
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
@@ -44,254 +19,251 @@ function shareArtifact(){
 </ul>
 <!-- Breadcrumb END -->
 <!-- Heading -->
-<div class="heading-buttons">
-	<h3>${artifact.getName()}
-		<span> <c:choose>
-				<c:when test="${artifact.getOpen()}">		
-							Public									  												    
+<div class="innerLR">
+<div class="row-fluid">
+<div class="span9">
+<div class="box-generic">
+	<h3 class="header-h main-title" id="artifactName" data-id="${artifact.getId()}">${artifact.getName()}</h3>
+	<!-- <h5 class="muted"><spring:message code="mdeforge.public.back.browse.metamodel_details.detail" /></h5>-->
+	<h5 class="muted">${artifact.getClass().getSimpleName()} Details</h5>
+	<hr>
+	<h5 class="input-name">Used in <span class="text-primary">${artifact.getProjects().size()}</span> projects</h5>
+	<div class="separator bottom"></div>
+		<span class="text-primary" style="font-size: 16px">Creation Date</span>
+		<h5><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getCreated()}" /></h5>
+		<span class="text-primary" style="font-size: 16px">Last Modified</span>
+		<h5><fmt:formatDate type="both" dateStyle="short" timeStyle="short" value="${artifact.getModified()}" /></h5>
+	<div class="separator bottom"></div>
+	<c:if test="${artifact.getClass().getSimpleName()} == 'EcoreMetamodel'">
+		<c:choose>
+			<c:when test="${artifact.getUri().size() > 0}">
+				<c:forEach items="${artifact.getUri()}" var="uri">
+						<p><span class="text-primary">URI</span>: ${uri}</p>
+				</c:forEach>
+			</c:when>
+			<c:otherwise>
+					<p class="text-error">It has not been assigned any URI</p>
+			</c:otherwise>
+		</c:choose>
+	</c:if>
+	<h5 class="input-name">Properties</h5>
+	<ul>
+	<c:forEach items="${artifact.properties}" var="property">
+	<li>
+		<p class="property-name-details text-primary">${fn:toUpperCase(fn:substring(property.getName(), 0, 1))}${fn:toLowerCase(fn:substring(property.getName(), 1,fn:length(property.getName())))}</p>
+			<h5 class="property-value-details">${property.getValue()}</h5>
+	</li>
+	</c:forEach>
+	</ul>
+	<h5 class="input-name">Description</h5>
+	<p>${artifact.description}</p>
+	
+</div>
+</div>
+<div class="span3 text-right">
+<div class="box-generic">
+<h5 class="input-name">Visibility</h5>
+	<c:choose>
+				<c:when test="${artifact.getOpen()}">	
+				<span class="btn btn-success">	
+							<span class="icon-cloud"><i></i></span> Public</span>						  												    
 				</c:when>
 				<c:otherwise>
-							Private										  
+				<span class="btn btn-danger">
+						<span class="icon-lock"><i></i></span> Private</span>							  
 				</c:otherwise>
 			</c:choose>
-		</span>
-	</h3>
-	<%-- <div class="buttons pull-right">
-					
-		<a href="${pageContext.request.contextPath}/#" class="btn btn-success btn-icon glyphicons download_alt"><i></i>Download Metamodel</a>			
-	</div> --%>
-	<div class="clearfix"></div>
+	<div class="separator bottom"></div>
+	<h5 class="input-name">Importer</h5>
+	<!-- // Profile Photo END -->
+	<ul class="icons-ul">
+		<li>${artifact.getAuthor().getUsername()} <span class="icon-user text-primary"><i></i></span></li>
+		<li class="text-black" style="font-size: 14px">${artifact.getAuthor().getFirstname()} ${artifact.getAuthor().getLastname()}</li>
+		<li><a href="#">${artifact.getAuthor().getEmail()}</a> <span class="icon-envelope text-primary"><i></i></span></li>
+	</ul>
 </div>
-<div class="separator bottom"></div>
-<!-- // Heading END -->
+</div>
+</div>
+</div>
 <div class="innerLR">
 	<div class="row-fluid">
-		<div class="span9 tablet-column-reset">
-			<div
-				class="widget widget-heading-simple widget-body-white widget-employees">
-				<div class="widget-body padding-none">
-
-					<div class="row-fluid row-merge">
-
-						<div class="span12 detailsWrapper">
-
-							<div class="innerAll">
-								<div class="title">
-									<div class="row-fluid">
-										<div class="span8">
-											<h3 class="text-primary">Info</h3>
-											<span class="muted">Artifact</span>
-										</div>
-										<div class="span4 text-right">
-											<p class="muted">
-												Used in ${artifact.getProjects().size()} projects <a
-													href=""><i class="icon-circle-arrow-right"></i></a>
-												<security:authorize access="isAuthenticated()">
-																<a id="publicShareButton" onclick="shareArtifact()" data-id="${artifact.getId()}"> Share</a>
-												</security:authorize>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								<hr />
-								<div class="body">
-									<div class="row-fluid">
-										<div class="span4 overflow-hidden">
-											<h5 class="strong">Importer</h5>
-											<!-- // Profile Photo END -->
-											<ul class="icons-ul">
-												<li><i class="icon-user icon-li icon-fixed-width"></i>
-													${artifact.getAuthor().getUsername()}</li>
-												<li><i class="icon-info icon-li icon-fixed-width"></i>
-													${artifact.getAuthor().getFirstname()}
-													${artifact.getAuthor().getLastname()}</li>
-												<li><i class="icon-envelope icon-li icon-fixed-width"></i>
-													${artifact.getAuthor().getEmail()}</li>
-											</ul>
-											<div class="separator bottom"></div>
-											<h5 class="strong">General</h5>
-											<div class="center">
-												<table class="table table-condensed">
-													<!-- Table body -->
-													<tbody>
-														<!-- Table row -->
-														<tr>
-															<td class="left">Creation Data</td>
-															<td class="right"><fmt:formatDate type="both"
-																	dateStyle="short" timeStyle="short"
-																	value="${artifact.getCreated()}" /></td>
-														</tr>
-														<!-- // Table row END -->
-
-														<!-- Table row -->
-														<tr>
-															<td class="left">Last Modified</td>
-															<td class="right"><fmt:formatDate type="both"
-																	dateStyle="short" timeStyle="short"
-																	value="${artifact.getModified()}" /></td>
-														</tr>
-														<!-- // Table row END -->
-													</tbody>
-													<!-- // Table body END -->
-
-												</table>
-											</div>
-										</div>
-										<div class="span8">
-											<h5 class="strong">Description</h5>
-											<p>${artifact.description}</p>
-											<div class="row-fluid">
-												<div class="span4">
-													<h5 class="strong">${artifact.getClass().getSimpleName() } File</h5>
-													<a href="#modal-simple"
-														class="btn btn-primary btn-small btn-block"
-														data-toggle="modal"><i
-														class="icon-eye-open icon-fixed-width"></i> Visualize
-														${artifact.getClass().getSimpleName() }</a> <a href="#"
-														class="btn btn-default btn-small btn-block"
-														onclick="return false;"><i
-														class="icon-eye-open icon-fixed-width"></i> Visualize Tree
-														View</a> <a
-														href="${pageContext.request.contextPath}/public/${artifact.getClass().getSimpleName() }/download?artifact_id=${artifact.getId()}"
-														class="btn btn-success btn-small btn-block"><i
-														class="icon-download-alt icon-fixed-width"></i> Download
-														${artifact.getClass().getSimpleName() }</a>
-													<!-- <a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> May</a>
-													<a href="" class="btn btn-default btn-small btn-block"><i class="icon-download-alt icon-fixed-width"></i> April</a> -->
-													<div class="separator bottom"></div>
-												</div>
-												<div class="span1"></div>
-												<div class="span6">
-													<h5 class="text-uppercase strong text-primary">
-														<i class="icon-group text-regular icon-fixed-width"></i>
-														
-														Shared Users <span
-															class="text-lowercase strong padding-none">Team</span> <span
-															class="text-lowercase padding-none">(${artifact.getShared().size()}
-															people)</span>
-															
-													</h5>
-													<ul class="team">
-														<c:forEach items="${artifact.getShared()}"
-															var="user" varStatus="count">
-															<li><span class="crt">${count.count}</span><span
-																class="strong">${user.getUsername()}</span><span
-																class="muted">${user.getFirstname()}
-																	${user.getLastname()}</span></li>
-														</c:forEach>
-													</ul>
-													
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
+			<div class="box-generic">
+			<div class="span2">
+				<a href="#modal-simple" class="widget-stats widget-stats-2" data-toggle="modal">
+						<span class="count  icon-desktop text-info"><i></i></span>
+						<span class="txt">Visualize ${artifact.getClass().getSimpleName()}</span>
+					</a>
 			</div>
-			<hr>
-			<tiles:insertAttribute name="central" ignore="true"/>
-			<c:if test="${artifact.getMetrics().size()!=0}">
-			
-			<div class="row-fluid">
-				<div class="span12">
-					<h4>Metrics</h4>
-					<table class="table table-bordered table-striped table-white">
-						<!-- Table heading -->
+			<div class="span2">
+					<a href="#modal-simple" class="disabled-button widget-stats widget-stats-2" data-toggle="modal">
+						<!-- <span class="count icon-code-fork"><i></i></span> -->
+						<span class="count  icon-sitemap text-warning"><i></i></span>
+						<span class="txt">Visualize Tree View</span>
+					</a>
+			</div>
+			<div class="span2">
+				<a href="${pageContext.request.contextPath}/private/${artifact.getClass().getSimpleName()}/download?artifact_id=${artifact.getId()}" class="widget-stats widget-stats-2">
+						<span class="count icon-download-alt text-success"><i></i></span>
+						<span class="txt">Download ${artifact.getClass().getSimpleName()}</span>
+					</a>
+			</div>
+			<c:if test="${userId == artifact.getAuthor().getId()}">
+			<div class="span2">
+				<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="widget-stats widget-stats-2">
+						<span class="count icon-remove text-error"><i></i></span>
+						<span class="txt">Delete ${artifact.getClass().getSimpleName()}</span>
+					</a>
+			</div>
+			</c:if>
+				<div class="separator bottom"></div>
+			</div>
+	</div>
+		<hr>
+	<tiles:insertAttribute name="central" ignore="true"/>
+
+	<div class="row-fluid">
+	
+				<div class="span8 tablet-column-reset">
+				<div class="box-generic">
+				<c:if test="${artifact.getMetrics().size()!=0}">
+					<h5 class="input-name">Metrics</h5>
+					<div class="separator bottom"></div>
+
+					<table class="table table-striped table-white table-metrics">
 						<thead>
 							<tr>
-								<th rowspan="2">Name</th>
-								<th class="center" colspan="5">Value</th>
-							</tr>
-							<tr>
+								<th>Name</th>
+								<!-- <th rowspan="2">Description</th>-->
+								<th class="center">Value</th>
 								<th>Max</th>
 								<th>Min</th>
 								<th>Avg</th>
 								<th>Median</th>
-								<th>Standard Deviation</th>
+								<th style="font-size: 12px;">Standard Deviation</th>
 							</tr>
 						</thead>
 						<!-- // Table heading END -->
-						<!-- Table body -->
 						<tbody>
 							<c:forEach items="${artifact.getMetrics()}" var="metric">
-													<!-- Table row -->
+								<!-- Table row -->
 								<tr>
+
 									<td class="left">${metric.getName()}</td>
+									<!-- <td>${metric.getDescription()}</td>-->
+
 									<c:choose>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
-									    <td colspan="5" class="center">${metric.getValue()}</td>
-									  </c:when>
-									  <c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:when>
-									  <c:otherwise>
-									    <td>${metric.getMaximum()}</td>
-									    <td>${metric.getMinimum()}</td>
-									    <td>${metric.getAverage()}</td>
-									    <td>${metric.getMedian()}</td>
-									    <td>${metric.getStandardDeviation()}</td>
-									  </c:otherwise>
-									</c:choose>														
-									
+										<c:when test="${metric.getClass().name == 'org.mdeforge.business.model.SimpleMetric'}">
+											<td class="number-table">${metric.getValue()}</td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</c:when>
+										<c:when test="${metric.getClass().name == 'org.mdeforge.business.modelAggregatedRealMatric'}">
+											<td></td>
+											<td class="number-table">${metric.getMaximum()}</td>
+											<td class="number-table">${metric.getMinimum()}</td>
+											<td class="number-table">${metric.getAverage()}</td>
+											<td class="number-table">${metric.getMedian()}</td>
+											<td class="number-table">${metric.getStandardDeviation()}</td>
+										</c:when>
+										<c:otherwise>
+											<td></td>
+											<td class="number-table">${metric.getMaximum()}</td>
+											<td class="number-table">${metric.getMinimum()}</td>
+											<td class="number-table">${metric.getAverage()}</td>
+											<td class="number-table">${metric.getMedian()}</td>
+											<td class="number-table">${metric.getStandardDeviation()}</td>
+										</c:otherwise>
+									</c:choose>
+
 								</tr>
 								<!-- // Table row END -->
 							</c:forEach>
+						</tbody>
+						<!-- End body -->
 					</table>
-
-				</div>
-			</div>
-			</c:if>
-			<div class="row-fluid">
-				<div class="span12">
-					<div class="widget widget-heading-simple widget-body-white">
-						<div><h4>Comments</h4></div>
-						<div>
-							<c:forEach items="${artifact.comments }" var="comment">
-								<div>
-									${comment.comment }
-									${comment.star }
-									${comment.user.username }
-									
+				<div class="separator"></div>
+				
+				</c:if>
+				<!-- Comments -->
+				<h5 class="input-name">Comments</h5>
+				<p>Share your opinion with other users. <a href="#" id="write-comment" class="text-primary ">Write a review</a></p>
+				<div class="separator bottom"></div>
+				
+				<div id="comment-list">
+				
+							<c:forEach items="${artifact.comments}" var="comment">
+							<div class="artifact-comment">
+						<div class="widget-body">
+							<div class="media">
+								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${comment.user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-body">
+									<a href="#" class="author">${comment.user.getFirstname() } ${comment.user.getLastname()}</a><br>
+									<span class="muted">${comment.user.username}</span>
 								</div>
-							</c:forEach>
+							</div>
+							<div>
+								<div class="rating text-faded read-only">
+								<c:forEach end="5" begin="1" var="stars">
+									<c:choose>
+										<c:when test="${comment.star == (6-stars) }">
+										<span class="star active"></span>
+										</c:when>
+										<c:otherwise>
+										<span class="star"></span>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+									
+					        	
+					       		 </div>
+								<p class="">${comment.comment}</p>
+							</div>
+							
 						</div>
-						<security:authorize access="isAuthenticated()">
-						<div>
-							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post">
+					</div>
+								
+							</c:forEach>
+				</div>
+				<security:authorize access="isAuthenticated()">
+						<div id="comment-box">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post" class="form-horizontal" id="comment-form">
 							 	<input type="hidden" value="${artifact.id}" name="idArtifact"/>
-							 	Comment
-							 	<input type="text" value="" name="comment"/>
-							 	Star
-							 	<select name="star">
-							 		<option value="1">1</option>
-							 		<option value="2">2</option>
-							 		<option value="3">3</option>
-							 		<option value="4">4</option>
-							 		<option value="5">5</option>
-							 	</select>
-							 	<input type="submit"/>
+							 	<div class="artifact-comment">
+						<div class="widget-body">
+							<div class="media">
+								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-body">
+									<a href="#" class="author"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a><br>
+									<span class="muted"><security:authentication property="principal.user.username"/></span>
+								</div>
+							</div>
+							<div>
+								<div id="stars" class="c-rating"></div>
+								<textarea type="text" value="" name="comment" placeholder="Write here your review..." id="comment-text"></textarea>
+								<span id="error-message" class="text-error"></span>
+							</div>
+							<input id="submit-comment" type="submit" class="btn btn-primary" value="Send"/>
+						</div>
+						</div>
+							 	
+							 	
+							 	
+							 	
+							 	
+							 	
 							</form>
 						</div>
-						</security:authorize>
-					</div>
+				</security:authorize>
+				<!-- Comments end -->
 				</div>
+				</div>
+			<!-- span4 shared users -->
+			<tiles:insertAttribute name="right" ignore="true"/>
 			</div>
-
 		</div>
-		<tiles:insertAttribute name="right" ignore="true"/>
-		
-	</div>
-</div>
 
 
 <c:import var="fileToVisualize"
@@ -315,9 +287,164 @@ function shareArtifact(){
 
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/rating/js/dist/rating.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/highlight/highlight.pack.js"></script>
 <script>
+$(document).ready(function(){
 	hljs.initHighlightingOnLoad();
+	var stars_value = 0;
+	var text = $("#comment-text");
+	var list = $("#comment-list");
+	var submit = $("#submit-comment");
+	var message = $("#error-message");
+	var stars = document.querySelector('#stars');
+	// current rating, or initial rating
+	var currentRating = 0;
+
+	// max rating, i.e. number of stars you want
+	var maxRating= 5;
+
+	// callback to run after setting the rating
+	var callback = function(rating) { stars_value=rating; };
+
+	// rating instance
+	var myRating = rating(stars, currentRating, maxRating, callback);
+	
+	$("#write-comment").click(function(e){
+		e.preventDefault();
+		$('#wrapper').animate({
+			scrollTop: $("#comment-box").offset().top - $('#content').offset().top
+		}, 400);
+		text.focus();
+	});
+	
+	$("#publicShareButton").click(shareArtifact);
+	
+	$("#comment-form").submit(function(e){
+		var msg = "";
+		message.empty();
+		e.preventDefault();
+		if(stars_value == 0){
+			msg += "Please, set the number of stars for this artifact. "
+		}
+		if(text.val().length == 0){
+			msg += "The comment is empty."
+		}
+		if(msg == ""){
+			InsertComment("${logged_user.getFirstname()} ${logged_user.getLastname()}", "${logged_user.username}", "/private/getPhoto?id=${logged_user.image}", text.val(), stars_value, "${artifact.id}")
+		}else{
+			message.text(msg)
+			return false;
+		}
+	})
+	
+	function InsertComment(autore, usern, immagine, testo, stelle, id){
+		submit.addClass("disabled-button");
+		$.ajax({
+			method: "POST",
+			url : ctx + "/public/${artifact.getClass().getSimpleName()}/comment",
+			data: {
+				comment: testo,
+				star: stelle,
+				idArtifact: "${artifact.getId()}"
+			},
+			success : function(eventData) {
+				//alert(eventData)
+				$("#comment-box").hide(500, function(){$(this).html('<p class="text-primary">Great! Your comment has been posted.</p>').show(500)});
+				var result = "";
+				for(var i = 1; i < 6; i++){
+					if(i == stelle){
+						result = '<span class="star active"></span>' + result;
+					}else{
+						result = '<span class="star"></span>' + result;
+					}
+				}
+				var toRender = {
+					author: autore,
+					username: usern,
+					image: immagine,
+					text: testo,
+					stars: result
+				};
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/comment.html',
+						function(template) {
+							var rendered = Mustache.render(template, toRender);
+							list.append(rendered);
+				});
+		},
+		error: function(err){
+			//alert(e)
+			message.text("Ops. Something went wrong! Try Later.")
+			submit.removeClass("disabled-button");
+		}
+		
+		});
+	}
+	function InsertComment(autore, usern, immagine, testo, stelle, id){
+		submit.addClass("disabled-button");
+		$.ajax({
+			method: "POST",
+			url : ctx + "/public/${artifact.getClass().getSimpleName()}/comment",
+			data: {
+				comment: testo,
+				star: stelle,
+				idArtifact: "${artifact.getId()}"
+			},
+			success : function(eventData) {
+				//alert(eventData)
+				$("#comment-box").hide(500, function(){$(this).html('<p class="text-primary">Great! Your comment has been posted.</p>').show(500)});
+				var result = "";
+				for(var i = 1; i < 6; i++){
+					if(i == stelle){
+						result = '<span class="star active"></span>' + result;
+					}else{
+						result = '<span class="star"></span>' + result;
+					}
+				}
+				var toRender = {
+					author: autore,
+					username: usern,
+					image: immagine,
+					text: testo,
+					stars: result
+				};
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/comment.html',
+						function(template) {
+							var rendered = Mustache.render(template, toRender);
+							list.append(rendered);
+				});
+		},
+		error: function(err){
+			//alert(e)
+			message.text("Ops. Something went wrong! Try Later.")
+			submit.removeClass("disabled-button");
+		}
+		
+		});
+	}
+	function shareArtifact(e){
+		var button = $(this);
+		button.addClass("disabled")
+		console.log("${artifact.id}");
+		$.ajax({
+			url : ctx + "/public/${artifact.getClass().getSimpleName() }/share/?metamodel_id=" + "${artifact.id}",
+			success : function(data) {
+				console.log(data)
+				button.remove()
+				var count = $("#numberUser");
+				var number = count.text();
+				count.text(number++);
+				$("#users").append('<li class="userLi"><span class="glyphicons activity-icon user"><i></i></span><span class="title"><strong><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></strong><br><security:authentication property="principal.user.username"/></span></li><p class="text-success">It is imported in Shared Artifact. You can see it at <a href="${pageContext.request.contextPath}/private/shared_artifacts">/private/shared_artifacts</a></p>')
+			},
+			error : function error(data) {
+				console.log('error');
+				button.removeClass("disabled")
+				
+			}
+		});
+	}
+	
+});
 	/*var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 

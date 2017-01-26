@@ -59,10 +59,10 @@
 			    <!-- Tabs Heading -->
 			    <div class="widget-head">
 			        <ul>
-			            <li class="active"><a href="#tab-1" data-toggle="tab">Atifacts Tags</a></li>
+			            <li class="active"><a href="#tab-1" data-toggle="tab">Artifacts Tags</a></li>
 			            <li><a href="#tab-2" data-toggle="tab">Metamodels Tags</a></li>
-			            <li><a href="#tab-2" data-toggle="tab">Transformations Tags</a></li>
-			            <li><a href="#tab-2" data-toggle="tab">Models Tags</a></li>
+			            <li><a href="#tab-3" data-toggle="tab">Transformations Tags</a></li>
+			            <li><a href="#tab-4" data-toggle="tab">Models Tags</a></li>
 			            <li style="border-right: none;"><label class="checkbox" style="margin-left: 10px; display: inline-block;">
 							<input type="checkbox" class="checkbox" name="isFuzzy" value=true>
 							Fuzzy
@@ -84,7 +84,27 @@
 			
 			            <!-- Tab content -->
 			            <div class="tab-pane" id="tab-2">
-			                <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.</p>
+			                <div class="tab-pane active" id="tab-1">
+			                <c:forEach items="${indexFieldNames}" var="indexFieldName">
+								<span class="label search-tag" data-value="${indexFieldName}:">${indexFieldName}:</span>
+							</c:forEach>
+							</div>
+			            </div>
+			            
+			            <div class="tab-pane" id="tab-3">
+			                <div class="tab-pane active" id="tab-1">
+			                <c:forEach items="${indexFieldNames}" var="indexFieldName">
+								<span class="label search-tag" data-value="${indexFieldName}:">${indexFieldName}:</span>
+							</c:forEach>
+							</div>
+			            </div>
+			            
+			            <div class="tab-pane" id="tab-4">
+			                <div class="tab-pane active" id="tab-1">
+			                <c:forEach items="${indexFieldNames}" var="indexFieldName">
+								<span class="label search-tag" data-value="${indexFieldName}:">${indexFieldName}:</span>
+							</c:forEach>
+							</div>
 			            </div>
 			            <!-- // Tab content END -->
 			
@@ -303,7 +323,7 @@
 							<form:form cssClass="form-horizontal" modelAttribute="metamodel"
 								action="${pageContext.request.contextPath}/public/search_metamodel_by_example/result"
 								role="form" method="POST" enctype="multipart/form-data">
-								<h4 class="separator bottom">Example Metamodel Upload</h4>
+								<h4 class="main-title header-h">Example Metamodel Upload</h4>
 								<div class="row-fluid">
 									<div class="span8">
 										<div

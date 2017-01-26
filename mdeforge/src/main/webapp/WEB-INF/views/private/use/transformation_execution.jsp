@@ -28,6 +28,8 @@
 	<p>Model transformations can be remotely executed from the Execute the Transformation section. From this section, users can select input models already available in the repository or can upload new ones. Once the input models are selected, the transformation can be executed, and the link to download the generated target model is given back to the user </p>
 	</div>
 	</div>
+	<div class="separator bottom"></div>
+	<button class="btn btn-large btn-primary" name="computation" value="1"><i class="icon-play"></i> Execute Transformation</button>
 </div>
 
 
@@ -36,7 +38,7 @@
 	<div class="widget-body">
 		<div class="row-fluid">
 			<div class="span4">
-				<table class="table table-striped table-white">
+				<table class="table table-white">
 					<thead>
 						<tr>
 							<th class="center">Input Metamodels</th>
@@ -87,7 +89,7 @@
 			</div>
 			<div class="span4">
 
-				<table class="table table-striped table-white">
+				<table class="table table-white">
 					<thead>
 						<tr>
 							<th class="center">Output Metamodels</th>
@@ -113,7 +115,7 @@
 			</div>
 		</div>
 		<input type="hidden" name="transformation_id" value ="${atlTransformation.getId()}"/>
-						<button class="btn btn-block btn-success" name="computation" value="1" style="padding: 10px 0"><i class="icon-play"></i> Execute Transformation</button>
+						
 	</div>
 </div>
 

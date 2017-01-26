@@ -110,19 +110,19 @@
 			</div>
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/public/Model/artifacts" class="btn widget-stats widget-stats-2" style="background: #c09853">
-						<span class="count icon-sitemap text-success"><i></i></span>
+						<span class="count icon-sitemap"><i></i></span>
 						<span class="txt">Models</span>
 					</a>
 			</div>
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/public/search" class="widget-stats widget-stats-2 btn" style="background: #3FAAE2">
-						<span class="count icon-search text-error"><i></i></span>
+						<span class="count icon-search"><i></i></span>
 						<span class="txt">Search</span>
 					</a>
 			</div>
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}" class="widget-stats widget-stats-2 btn" style="background: #468847">
-						<span class="count icon-desktop text-error"><i></i></span>
+						<span class="count icon-desktop"><i></i></span>
 						<span class="txt">MDE Forge Home</span>
 					</a>
 			</div>

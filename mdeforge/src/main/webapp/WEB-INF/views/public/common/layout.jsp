@@ -42,6 +42,8 @@
     <!-- Select2 Plugin -->
 	<link href="${pageContext.request.contextPath}/resources/theme/scripts/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
     
+    <link href="${pageContext.request.contextPath}/resources/theme/scripts/rating/css/rating.min.css" rel="stylesheet" />
+    
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/google-code-prettify/prettify.css" rel="stylesheet" />
     
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/monokai-sublime.css" rel="stylesheet" />

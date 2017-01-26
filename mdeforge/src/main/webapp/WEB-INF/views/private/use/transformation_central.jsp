@@ -10,7 +10,7 @@
 	<div class="row-fluid">
 		<div class="span2">
 			<a	href="${pageContext.request.contextPath}/private/ATLTransformation/analysis?transformation_id=${artifact.getId()}"
-					class="btn btn-primary btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
+					class="btn btn-success btn-block" style="padding: 10px;"><!-- <i class= "icon-cogs icon-fixed-width"></i>--> Analyze Transformation</a>
 		</div>
 		</div>
 	</div>
@@ -139,6 +139,9 @@
 					<td class="center"><i class=" icon-long-arrow-right text-primary"></i></td>
 					</tr>
 				</table>
+				<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
+					class="btn btn-primary btn-block" style="margin-bottom: 10px;"><i
+					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
 			</div>
 			<div class="span4">
 
@@ -175,9 +178,7 @@
 			</div>
 		</div>
 		<div class="separator"></div>
-		<a href="${pageContext.request.contextPath}/private/ATLTransformation/execute_transformation?transformation_id=${artifact.getId()}"
-					class="btn btn-success btn-block" style="padding: 10px; margin-bottom: 10px;"><i
-					class="icon-play icon-fixed-width"></i> Execute Transformation</a>
+		
 	</div>
 </div>
 <div class="separator"></div>

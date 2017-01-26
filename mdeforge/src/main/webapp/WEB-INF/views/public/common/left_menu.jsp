@@ -34,7 +34,7 @@
 				</li>
 				<li><a class="glyphicons random" href="${pageContext.request.contextPath}/public/ATLTransformation/artifacts" style="font-size: 14px"><i></i><spring:message code="mdeforge.menu.transformations"/></a></li>
 				<li><a class="glyphicons file" href="${pageContext.request.contextPath}/public/Model/artifacts"><i></i><spring:message code="mdeforge.menu.models"/></a></li>
-<%-- 				<li><a class="glyphicons inbox" href="${pageContext.request.contextPath}/public/projects"><i></i><spring:message code="mdeforge.menu.projects"/></a></li> --%>
+				<li><a class="glyphicons inbox" href="${pageContext.request.contextPath}/public/projects"><i></i><spring:message code="mdeforge.menu.projects"/></a></li>
 				
 			</ul>
 			<div class="clearfix"></div>
