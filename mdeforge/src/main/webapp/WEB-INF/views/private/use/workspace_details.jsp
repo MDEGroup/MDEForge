@@ -95,7 +95,7 @@
 									<c:forEach items="${workspace.projects}" var="proj">
 											<li id="item_${proj.getId() }" data-id="${proj.getId()}">
 											<div class="media innerAll">
-												<div class="media-object pull-left thumb"><img src="/mdeforge/resources/theme/images/logo-small.png" width="51px" height="51px"></div>
+												<div class="media-object pull-left thumb"><img src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png" width="51px" height="51px"></div>
 												<div class="media-body">
 													<h5 class="strong text-black">${proj.getName()}</h5>
 													<span class="muted">${proj.getOwner().getUsername() }</span>

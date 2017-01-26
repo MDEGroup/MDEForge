@@ -24,7 +24,7 @@
 <div class="innerLR" id="dashboard">
 
 
-	<div class="row-fluid" style="background: url(/mdeforge/resources/theme/images/1.jpg) center center no-repeat;background-size: cover;">
+	<div class="row-fluid" style="background: url(${pageContext.request.contextPath}/resources/theme/images/1.jpg) center center no-repeat;background-size: cover;">
 		<div class="span12">
 			<div class="well margin-none">
 				<address class="margin-none">

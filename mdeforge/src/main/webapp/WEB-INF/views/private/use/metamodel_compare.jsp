@@ -23,7 +23,7 @@
 
 <div class="separator"></div>
 <div class="innerLR">
-		<div class="row-fluid" style="background: url(/mdeforge/resources/theme/images/5.jpg) center center no-repeat;background-size: cover; height:200px"></div>
+		<div class="row-fluid" style="background: url(${pageContext.request.contextPath}/resources/theme/images/5.jpg) center center no-repeat;background-size: cover; height:200px"></div>
 		<div class="separator"></div>
 		<form id="form_compare" class="form-horizontal" action="${pageContext.request.contextPath}/private/EcoreMetamodel/metamodel_compare" method="POST">
 			<div class="row-fluid">

@@ -304,6 +304,7 @@
 		$.ajax({
 			url : ctx + "/private/workspace/" + idWorkspace + "/add/" + idProject,
 			success : function(data) {
+				data.ctx = ctx;
 				var result = $('#projectList');
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
 						function(template) {

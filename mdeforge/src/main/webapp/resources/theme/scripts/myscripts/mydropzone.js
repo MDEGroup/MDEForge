@@ -15,6 +15,7 @@ $(function() {
 						var v = new Object();
 						v.response = $.parseJSON(file.xhr.response);
 						console.log(v.response);
+						v.response.ctx = ctx;
 						$.get(ctx + '/resources/theme/scripts/plugins/forms/template/resultEcoreSearchByExampleTemplate.html',
 								function(template) {
 									var rendered = Mustache.render(template, v);
