@@ -29,8 +29,7 @@
 								
 						<li class="profile">
 							<span>
-								<c:url var="im" value="/public/getPhoto?id=${logged_user.image}" />
-								<img id="imagePreview" src="${im}"alt="Profile Photo"/>
+								<img id="imagePreview" src="/public/getPhoto?id=${logged_user.image}" alt="Profile Photo"/>
 								<div class="details">
 									<a href="#"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a>
 									<br>
