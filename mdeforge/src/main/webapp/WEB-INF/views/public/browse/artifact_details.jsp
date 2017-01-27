@@ -198,7 +198,7 @@
 							<div class="artifact-comment">
 						<div class="widget-body">
 							<div class="media">
-								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${comment.user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-object pull-left thumb"><img src="/public/getPhoto?id=${comment.user.image}" style="width: 51px; height: 51px;"></div>
 								<div class="media-body">
 									<a href="#" class="author">${comment.user.getFirstname() } ${comment.user.getLastname()}</a><br>
 									<span class="muted">${comment.user.username}</span>
@@ -234,7 +234,7 @@
 							 	<div class="artifact-comment">
 						<div class="widget-body">
 							<div class="media">
-								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-object pull-left thumb"><img src="/public/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
 								<div class="media-body">
 									<a href="#" class="author"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a><br>
 									<span class="muted"><security:authentication property="principal.user.username"/></span>
@@ -331,7 +331,7 @@ $(document).ready(function(){
 			msg += "The comment is empty."
 		}
 		if(msg == ""){
-			InsertComment("${logged_user.getFirstname()} ${logged_user.getLastname()}", "${logged_user.username}", "/private/getPhoto?id=${logged_user.image}", text.val(), stars_value, "${artifact.id}")
+			InsertComment("${logged_user.getFirstname()} ${logged_user.getLastname()}", "${logged_user.username}", "/public/getPhoto?id=${logged_user.image}", text.val(), stars_value, "${artifact.id}")
 		}else{
 			message.text(msg)
 			return false;

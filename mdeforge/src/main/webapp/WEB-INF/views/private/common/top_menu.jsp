@@ -18,14 +18,6 @@
 				
 				<li class="dropdown dd-1">
 					<a href="#upload-artifact" data-toggle="modal" class="glyphicons cloud-upload"><i></i> ARTIFACT UPLOAD <!--  <span class="caret"></span>--></a>
-					<%-- <ul class="dropdown-menu pull-left">
-						
-						<!-- Components Submenu Regular Items -->
-						<li class=""><a href="${pageContext.request.contextPath}/private/EcoreMetamodel/upload" class="glyphicons cloud-upload"><i></i> Metamodel</a></li>
-						<li class=""><a href="${pageContext.request.contextPath}/private/ATLTransformation/upload" class="glyphicons cloud-upload"><i></i> ATL Transformation</a></li>
-						<li class=""><a href="${pageContext.request.contextPath}/private/Model/upload" class="glyphicons cloud-upload"><i></i> Model</a></li>
-						
-					</ul>--%>
 				</li>
 				
 					<%-- <li><a href="${pageContext.request.contextPath}/public/search" class="glyphicons search"><i></i> Search</a></li>	 --%>
@@ -53,7 +45,7 @@
 			<!-- Top Menu Right -->
 			<ul class="topnav pull-right">
 			
-								<!-- Themer -->
+			<!-- Themer -->
 				<li class="">
 					<a href="${pageContext.request.contextPath}"><span class="hidden-tablet hidden-phone">MDE Forge Home</span></a>
 				</li>

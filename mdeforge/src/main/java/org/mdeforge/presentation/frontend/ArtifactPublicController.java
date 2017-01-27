@@ -12,6 +12,7 @@ import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.User;
@@ -34,7 +35,8 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired 
 	protected User user;
-
+	@Autowired 
+	protected UserService userService;
 
 	@RequestMapping(value = "/artifact", method =  RequestMethod.GET )
 	public String details(Model model, @RequestParam String artifact_id) {
@@ -48,12 +50,13 @@ public abstract class ArtifactPublicController<T extends Artifact> {
 	}
 	
 	@RequestMapping(value = "/share", method = { RequestMethod.GET })
-	public @ResponseBody HttpEntity<String> metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
+	public @ResponseBody HttpEntity<User> metamodelShareDetails(Model model, @RequestParam String metamodel_id) {
 		try {
 			artifactService.addUserInArtifact(user.getId(), metamodel_id, user);
-			return  new ResponseEntity<String>("ok", HttpStatus.OK);
+			User u = userService.findOne(user.getId());
+			return  new ResponseEntity<User>(u, HttpStatus.OK);
 		} catch (BusinessException e) {
-			return  new ResponseEntity<String>("ko", HttpStatus.UNPROCESSABLE_ENTITY);
+			return  new ResponseEntity<User>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 	

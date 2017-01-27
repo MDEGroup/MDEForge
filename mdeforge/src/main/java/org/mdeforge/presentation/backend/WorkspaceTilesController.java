@@ -23,9 +23,10 @@ public class WorkspaceTilesController implements ViewPreparer {
 
 	public void execute(Request tilesRequest, AttributeContext attributeContext)
 			throws PreparerException {
-		List<Workspace> wl = workspaceService.findByUser(user);
-		attributeContext.putAttribute("logged_user", new Attribute(user));
-		attributeContext.putAttribute("workspaces_list", new Attribute(wl));
+		//List<Workspace> wl = workspaceService.findByUser(user);
+		if(user != null)
+			attributeContext.putAttribute("logged_user", new Attribute(user));
+		//attributeContext.putAttribute("workspaces_list", new Attribute(wl));
 	}
 
 }
