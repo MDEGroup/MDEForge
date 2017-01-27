@@ -4,21 +4,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags"
 	prefix="security"%>
-<c:choose>
-<c:when test="${artifact.getMetrics().size()!=0}">	
+
+
+
 <div class="span4 tablet-column-reset">
 <div class="box-generic">
 	<!-- Latest Orders/List Widget -->
 	<h5 class="input-name center">Shared Users 
-</c:when>
-<c:otherwise>
-<div class="span12 tablet-column-reset">
-<div class="box-generic">
-	<!-- Latest Orders/List Widget -->
-	<h5 class="input-name">Shared Users 
-</c:otherwise>
-</c:choose>
-
 	<c:if test="${logged_user.id == artifact.getAuthor().getId()}">
 		<i class="pull-right icon-plus text-primary button-toggle" id="showUserList"></i>
 	</c:if>
@@ -39,8 +31,8 @@
 					<!-- List item -->
 					<li class="userLi" data-id="${user.getId()}">
 						<span class="glyphicons activity-icon user"><i></i></span>
-						<span class="title">${user.getUsername()}<br><strong>${user.getFirstname()}
-						${user.getLastname()}</strong></span>
+						<span class="title"><strong>${user.getFirstname()}
+						${user.getLastname()}</strong><br>${user.getUsername()}</span>
 						<c:if test="${logged_user.id == artifact.getAuthor().getId()}">
 							<span class="pull-right text-error removeArtifactSharedUser" data-id="${user.getId()}" ><i class="icon-remove"></i></span>
 						</c:if>
@@ -51,6 +43,5 @@
 				</ul>
 			</div>
 		</div>
-		
-</div>	
+</div>
 </div>

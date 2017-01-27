@@ -91,7 +91,7 @@
 			<div class="container-960 innerTB">
 			<hr>
 			<div class="lead center innerTB">
-			<img class="logo-banner" src="/mdeforge/resources/theme/images/logo-small.png" style="margin: 20px auto">
+			<img class="logo-banner" src="${pageContext.request.contextPath}/resources/theme/images/logo-small.png" style="margin: 20px auto">
 				<h2 class="header-h main-title text-black center">MDE Forge has been design for: </h2>
 			</div>
 			<hr class="margin-hr" style="margin-top: 25px;">

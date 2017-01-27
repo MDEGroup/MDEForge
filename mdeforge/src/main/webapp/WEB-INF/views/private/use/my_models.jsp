@@ -21,7 +21,7 @@
 <!--  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
 	<div class="innerLR">
 	<div class="widget widget-heading-simple">
-			<a href="/mdeforge/private/${type}/artifactsWithGenerated" 
+			<a href="${pageContext.request.contextPath}/private/${type}/artifactsWithGenerated" 
 				class="btn btn-success" style="margin: 5px 0 25px">Show with generated</a>
 	</div>
 	<div class="widget widget-heading-simple">

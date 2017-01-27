@@ -59,7 +59,7 @@ $(function() {
 			idRow = -1;
 		var result = $('#propertiesTable2');
 		toRender.idRow = idRow + 1;
-		$.get('/mdeforge/resources/theme/scripts/plugins/forms/template/rowProperty.html',
+		$.get(ctx + '/resources/theme/scripts/plugins/forms/template/rowProperty.html',
 				function(template) {
 			var rendered = Mustache.render(template, idRow);
 			result.append(rendered);

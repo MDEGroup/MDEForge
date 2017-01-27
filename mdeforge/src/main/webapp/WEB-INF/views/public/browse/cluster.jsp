@@ -450,7 +450,7 @@
 													        <tr>
 													            <th>Artifact</th>
 													            <th class="center">Similarity Value</th>
-													            <th>Artifact</th>
+													            <th class="text-right">Artifact</th>
 													        </tr>
 													    </thead>
 													    <!-- // Table heading END -->
@@ -471,7 +471,7 @@
 																</c:choose>
 																</td>	
 													            <td class="center"><span class="badge badge-success"><fmt:formatNumber value="${relation.getValue()}" maxFractionDigits="2" /></span></td>
-													             <td>
+													             <td class="text-right">
 																<c:choose>
 																	<c:when test="${relation.getToArtifact().getOpen() == true}">
 																		<a href="${pageContext.request.contextPath}/public/EcoreMetamodel/artifact?artifact_id=${relation.getToArtifact().getId()}">${relation.getToArtifact().getName()}</a>

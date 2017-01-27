@@ -249,7 +249,7 @@
 					springLength : 200
 				}
 			},
-			hideEdgesOnDrag : true
+			hideEdgesOnDrag : false
 		};
 		network = new vis.Network(container, data, options);
 		

@@ -48,6 +48,6 @@
 			
 		</div>
 		<!-- // Row END -->
-		<a href="/mdeforge/private/artifact/delete?idArtifact=5627b4df77c8fda04d2a058b" class="btn-action glyphicons remove_2 btn-danger"><i></i></a>
+		<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=5627b4df77c8fda04d2a058b" class="btn-action glyphicons remove_2 btn-danger"><i></i></a>
 	
 </div>

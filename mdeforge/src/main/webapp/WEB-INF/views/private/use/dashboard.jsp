@@ -24,7 +24,7 @@
 <div class="innerLR" id="dashboard">
 
 
-	<div class="row-fluid" style="background: url(/mdeforge/resources/theme/images/1.jpg) center center no-repeat;background-size: cover;">
+	<div class="row-fluid" style="background: url(${pageContext.request.contextPath}/resources/theme/images/1.jpg) center center no-repeat;background-size: cover;">
 		<div class="span12">
 			<div class="well margin-none">
 				<address class="margin-none">
@@ -117,7 +117,7 @@
 			</div>
 			<div class="span2">
 				<a href="${pageContext.request.contextPath}/public/dashboard" class="btn widget-stats widget-stats-2" style="background: #c09853">
-						<span class="count icon-folder-open text-success"><i></i></span>
+						<span class="count icon-folder-open"><i></i></span>
 						<span class="txt">Browse Repository</span>
 					</a>
 			</div>

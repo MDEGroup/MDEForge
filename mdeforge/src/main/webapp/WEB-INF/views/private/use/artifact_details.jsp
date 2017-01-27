@@ -4,15 +4,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
-<script
-	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>
+<!-- <script
+	src="${pageContext.request.contextPath}/resources/theme/scripts/wordcloud2.js"></script>-->
 
-<style type="text/css">
+<!-- <style type="text/css">
 #my_canvas {
 	width: 100%;
 	height: 200px;
 }
-</style>
+</style>-->
 <security:authentication property="principal.user.id" var="userId"/>
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
@@ -117,7 +117,7 @@
 			</div>
 			<c:if test="${userId == artifact.getAuthor().getId()}">
 			<div class="span2">
-				<a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="widget-stats widget-stats-2">
+				<a href="#alert-modal" class="widget-stats widget-stats-2" data-toggle="modal">
 						<span class="count icon-remove text-error"><i></i></span>
 						<span class="txt">Delete ${artifact.getClass().getSimpleName()}</span>
 					</a>
@@ -130,10 +130,10 @@
 	<tiles:insertAttribute name="central" ignore="true"/>
 
 	<div class="row-fluid">
-	<c:if test="${artifact.getMetrics().size()!=0}">
-				<div class="span8">
-				<c:if test="${artifact.getMetrics().size()!=0}">
+	
+				<div class="span8 tablet-column-reset">
 				<div class="box-generic">
+				<c:if test="${artifact.getMetrics().size()!=0}">
 					<h5 class="input-name">Metrics</h5>
 					<div class="separator bottom"></div>
 
@@ -194,30 +194,82 @@
 					</table>
 				<div class="separator"></div>
 				
-				<!-- word context 
-						<div class="widget widget-heading-simple widget-body-white">
-							
-							<h5 class="input-name">Extracted Word Context</h5>
-							<div class="separator bottom"></div>
-					
-									<div class="tab-pane" id="standard">
-					
-												<c:set var="serializedContext_trim"
-													value="${fn:trim(artifact.getDefaultWeightedContents())}" />
-												<c:set var="serializedContext_splitted"
-													value="${fn:replace(serializedContext_trim, ' ', ' - ')}" />
-												${serializedContext_splitted}
-					
-											</div>
-					
-										</div>
-						<!-- word context END -->
-				</div>
 				</c:if>
+				<!-- Comments -->
+				<h5 class="input-name">Comments</h5>
+				<p>Share your opinion with other users. <a href="#" id="write-comment" class="text-primary ">Write a review</a></p>
+				<div class="separator bottom"></div>
+				
+				<div id="comment-list">
+				
+							<c:forEach items="${artifact.comments}" var="comment">
+							<div class="artifact-comment">
+						<div class="widget-body">
+							<div class="media">
+								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${comment.user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-body">
+									<a href="#" class="author">${comment.user.getFirstname() } ${comment.user.getLastname()}</a><br>
+									<span class="muted">${comment.user.username}</span>
+								</div>
+							</div>
+							<div>
+								<div class="rating text-faded read-only">
+								<c:forEach end="5" begin="1" var="stars">
+									<c:choose>
+										<c:when test="${comment.star == (6-stars) }">
+										<span class="star active"></span>
+										</c:when>
+										<c:otherwise>
+										<span class="star"></span>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+									
+					        	
+					       		 </div>
+								<p class="">${comment.comment}</p>
+							</div>
+							
+						</div>
+					</div>
+								
+							</c:forEach>
 				</div>
-				<!-- span4 shared users -->
-			</c:if>
-				<tiles:insertAttribute name="right" ignore="true"/>
+				<security:authorize access="isAuthenticated()">
+						<div id="comment-box">
+							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post" class="form-horizontal" id="comment-form">
+							 	<input type="hidden" value="${artifact.id}" name="idArtifact"/>
+							 	<div class="artifact-comment">
+						<div class="widget-body">
+							<div class="media">
+								<div class="media-object pull-left thumb"><img src="/private/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
+								<div class="media-body">
+									<a href="#" class="author">${logged_user.getFirstname()} ${logged_user.getLastname()}</a><br>
+									<span class="muted">${logged_user.username}</span>
+								</div>
+							</div>
+							<div>
+								<div id="stars" class="c-rating"></div>
+								<textarea type="text" value="" name="comment" placeholder="Write here your review..." id="comment-text"></textarea>
+								<span id="error-message" class="text-error"></span>
+							</div>
+							<input id="submit-comment" type="submit" class="btn btn-primary" value="Send"/>
+						</div>
+						</div>
+							 	
+							 	
+							 	
+							 	
+							 	
+							 	
+							</form>
+						</div>
+				</security:authorize>
+				<!-- Comments end -->
+				</div>
+				</div>
+			<!-- span4 shared users -->
+			<tiles:insertAttribute name="right" ignore="true"/>
 			</div>
 		</div>
 
@@ -240,13 +292,160 @@
 	  </div>
 	</div>
 <!-- // Modal END -->
-
+<div class="modal hide fade" id="alert-modal">
+		<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		    <h3>Delete ${artifact.getClass().getSimpleName()}</h3>
+	</div>
+	<div class="modal-body">
+		 	<h2 class="header-h title-modal text-danger" style="margin: 0">Are you sure to delete the ${artifact.getClass().getSimpleName()} 
+		 	<span class="text-error">${artifact.getName()}</span> ?</h2>
+	</div>
+	<div class="separator"></div>
+	<div class="modal-footer center">
+		    <a href="#" class="btn pull-left" data-dismiss="modal">Cancel</a>
+		    <a href="${pageContext.request.contextPath}/private/artifact/delete?idArtifact=${artifact.getId()}" class="btn btn-danger pull-right" >Delete</a>
+	</div>
+</div>
 
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/forms/template/mustache.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/myscripts/shareArtifact.js"></script>
+<script src="${pageContext.request.contextPath}/resources/theme/scripts/rating/js/dist/rating.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/theme/scripts/highlight/highlight.pack.js"></script>
 <script>
+$(document).ready(function(){
 	hljs.initHighlightingOnLoad();
+	var stars_value = 0;
+	var text = $("#comment-text");
+	var list = $("#comment-list");
+	var submit = $("#submit-comment");
+	var message = $("#error-message");
+	var stars = document.querySelector('#stars');
+	// current rating, or initial rating
+	var currentRating = 0;
+
+	// max rating, i.e. number of stars you want
+	var maxRating= 5;
+
+	// callback to run after setting the rating
+	var callback = function(rating) { stars_value=rating; };
+
+	// rating instance
+	var myRating = rating(stars, currentRating, maxRating, callback);
+	
+	$("#write-comment").click(function(e){
+		e.preventDefault();
+		$('#wrapper').animate({
+			scrollTop: $("#comment-box").offset().top - $('#content').offset().top
+		}, 400);
+		text.focus();
+	});
+	
+	$("#comment-form").submit(function(e){
+		var msg = "";
+		message.empty();
+		e.preventDefault();
+		if(stars_value == 0){
+			msg += "Please, set the number of stars for this artifact. "
+		}
+		if(text.val().length == 0){
+			msg += "The comment is empty."
+		}
+		if(msg == ""){
+			InsertComment("${logged_user.getFirstname()} ${logged_user.getLastname()}", "${logged_user.username}", "/private/getPhoto?id=${logged_user.image}", text.val(), stars_value, "${artifact.id}")
+		}else{
+			message.text(msg)
+			return false;
+		}
+	})
+	
+	function InsertComment(autore, usern, immagine, testo, stelle, id){
+		submit.addClass("disabled-button");
+		$.ajax({
+			method: "POST",
+			url : ctx + "/public/${artifact.getClass().getSimpleName()}/comment",
+			data: {
+				comment: testo,
+				star: stelle,
+				idArtifact: "${artifact.getId()}"
+			},
+			success : function(eventData) {
+				//alert(eventData)
+				$("#comment-box").hide(500, function(){$(this).html('<p class="text-primary">Great! Your comment has been posted.</p>').show(500)});
+				var result = "";
+				for(var i = 1; i < 6; i++){
+					if(i == stelle){
+						result = '<span class="star active"></span>' + result;
+					}else{
+						result = '<span class="star"></span>' + result;
+					}
+				}
+				var toRender = {
+					author: autore,
+					username: usern,
+					image: immagine,
+					text: testo,
+					stars: result
+				};
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/comment.html',
+						function(template) {
+							var rendered = Mustache.render(template, toRender);
+							list.append(rendered);
+				});
+		},
+		error: function(err){
+			//alert(e)
+			message.text("Ops. Something went wrong! Try Later.")
+			submit.removeClass("disabled-button");
+		}
+		
+		});
+	}
+	function InsertComment(autore, usern, immagine, testo, stelle, id){
+		submit.addClass("disabled-button");
+		$.ajax({
+			method: "POST",
+			url : ctx + "/public/${artifact.getClass().getSimpleName()}/comment",
+			data: {
+				comment: testo,
+				star: stelle,
+				idArtifact: "${artifact.getId()}"
+			},
+			success : function(eventData) {
+				//alert(eventData)
+				$("#comment-box").hide(500, function(){$(this).html('<p class="text-primary">Great! Your comment has been posted.</p>').show(500)});
+				var result = "";
+				for(var i = 1; i < 6; i++){
+					if(i == stelle){
+						result = '<span class="star active"></span>' + result;
+					}else{
+						result = '<span class="star"></span>' + result;
+					}
+				}
+				var toRender = {
+					author: autore,
+					username: usern,
+					image: immagine,
+					text: testo,
+					stars: result
+				};
+				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/comment.html',
+						function(template) {
+							var rendered = Mustache.render(template, toRender);
+							list.append(rendered);
+				});
+		},
+		error: function(err){
+			//alert(e)
+			message.text("Ops. Something went wrong! Try Later.")
+			submit.removeClass("disabled-button");
+		}
+		
+		});
+	}
+	
+});
+	
 	/*var res = '${artifact.getDefaultWeightedContents()}'.trim();
 	res = res.split(" ");
 
