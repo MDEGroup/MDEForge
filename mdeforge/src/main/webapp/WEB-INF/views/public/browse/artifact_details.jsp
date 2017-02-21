@@ -231,28 +231,23 @@
 						<div id="comment-box">
 							<form action="${pageContext.request.contextPath}/public/EcoreMetamodel/comment" method="post" class="form-horizontal" id="comment-form">
 							 	<input type="hidden" value="${artifact.id}" name="idArtifact"/>
-							 	<div class="artifact-comment">
-						<div class="widget-body">
-							<div class="media">
-								<div class="media-object pull-left thumb"><img src="/public/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
-								<div class="media-body">
-									<a href="#" class="author"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a><br>
-									<span class="muted"><security:authentication property="principal.user.username"/></span>
-								</div>
-							</div>
-							<div>
-								<div id="stars" class="c-rating"></div>
-								<textarea type="text" value="" name="comment" placeholder="Write here your review..." id="comment-text"></textarea>
-								<span id="error-message" class="text-error"></span>
-							</div>
-							<input id="submit-comment" type="submit" class="btn btn-primary" value="Send"/>
-						</div>
-						</div>
-							 	
-							 	
-							 	
-							 	
-							 	
+								 	<div class="artifact-comment">
+										<div class="widget-body">
+											<div class="media">
+												<div class="media-object pull-left thumb"><img src="/public/getPhoto?id=${logged_user.image}" style="width: 51px; height: 51px;"></div>
+												<div class="media-body">
+													<a href="#" class="author"><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></a><br>
+													<span class="muted"><security:authentication property="principal.user.username"/></span>
+												</div>
+											</div>
+											<div>
+												<div id="stars" class="c-rating"></div>
+												<textarea type="text" value="" name="comment" placeholder="Write here your review..." id="comment-text"></textarea>
+												<span id="error-message" class="text-error"></span>
+											</div>
+											<input id="submit-comment" type="submit" class="btn btn-primary" value="Send"/>
+										</div>
+									</div>
 							 	
 							</form>
 						</div>
@@ -331,7 +326,9 @@ $(document).ready(function(){
 			msg += "The comment is empty."
 		}
 		if(msg == ""){
+			<security:authorize access="isAuthenticated()">
 			InsertComment("${logged_user.getFirstname()} ${logged_user.getLastname()}", "${logged_user.username}", "/public/getPhoto?id=${logged_user.image}", text.val(), stars_value, "${artifact.id}")
+			</security:authorize>
 		}else{
 			message.text(msg)
 			return false;
@@ -434,7 +431,9 @@ $(document).ready(function(){
 				var count = $("#numberUser");
 				var number = count.text();
 				count.text(number++);
+				<security:authorize access="isAuthenticated()">
 				$("#users").append('<li class="userLi"><span class="glyphicons activity-icon user"><i></i></span><span class="title"><strong><security:authentication property="principal.user.firstname"/> <security:authentication property="principal.user.lastname"/></strong><br><security:authentication property="principal.user.username"/></span></li><p class="text-success">It is imported in Shared Artifact. You can see it at <a href="${pageContext.request.contextPath}/private/shared_artifacts">/private/shared_artifacts</a></p>')
+				</security:authorize>
 			},
 			error : function error(data) {
 				console.log('error');
@@ -445,36 +444,4 @@ $(document).ready(function(){
 	}
 	
 });
-	/*var res = '${artifact.getDefaultWeightedContents()}'.trim();
-	res = res.split(" ");
-
-	 var wordlist = [];
-
-	for (var i = 0; i < res.length; ++i) {
-		var numOccurrences = 1;
-		for (var j = 0; j < res.length; ++j) {
-			if (res[j].toUpperCase() === res[i].toUpperCase()) {
-				numOccurrences++;
-				//Elimino l'elemento ripetuto dall'array
-				res.splice(j, 1);
-			}
-		}
-		wordlist.push([ res[i], numOccurrences ]);
-	}
-
-	var options = {
-		list : wordlist,
-		gridSize : Math
-				.round(1 * document.getElementById('my_canvas').offsetWidth / 1024),
-		weightFactor : function(size) {
-			return Math.pow(size, 4.9)
-					* document.getElementById('my_canvas').offsetWidth / 1024;
-		},
-		fontFamily : 'Open Sans, sans-serif',
-		rotateRatio : 0.5
-
-	} */
-	
-
-	//WordCloud(document.getElementById('my_canvas'), options);
 </script>

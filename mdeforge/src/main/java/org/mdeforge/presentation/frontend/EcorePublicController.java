@@ -24,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/public/EcoreMetamodel")
 public class EcorePublicController extends ArtifactPublicController<EcoreMetamodel> {
-	final double thresholdSimilarityRelation = 		0.0;
-	final double thresholdContainmentRelation = 		0.0;
-	final double thresholdCosineSimilarityRelation = 	0.0;
-	final double thresholdDiceSimilarityRelation = 	0.0;
+	final double thresholdSimilarityRelation = 		0.2;
+	final double thresholdContainmentRelation = 		0.6;
+	final double thresholdCosineSimilarityRelation = 	0.4;
+	final double thresholdDiceSimilarityRelation = 	0.3;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
