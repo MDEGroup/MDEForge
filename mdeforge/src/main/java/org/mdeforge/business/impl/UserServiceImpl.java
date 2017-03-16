@@ -4,12 +4,18 @@ import java.util.List;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.UserService;
+import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Role;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.VerificationToken;
+import org.mdeforge.business.model.Workspace;
+import org.mdeforge.integration.ArtifactRepository;
+import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.RoleRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.VerificationTokenRepository;
+import org.mdeforge.integration.WorkspaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,7 +34,12 @@ public class UserServiceImpl implements UserService{
 	private UserRepository userRepository;
 	@Autowired
 	private RoleRepository roleRepository;
-
+	@Autowired
+	private ArtifactRepository artifactRepository;
+	@Autowired
+	private ProjectRepository projectRepository;
+	@Autowired
+	private WorkspaceRepository workspaceRepository;
 	@Autowired
 	private VerificationTokenRepository verificationTokentRepository;
 	@Override
@@ -75,6 +86,17 @@ public class UserServiceImpl implements UserService{
 	public void delete(String id) throws BusinessException {
 		try{
 			User user = userRepository.findOne(id);
+			if(!user.getOwner().isEmpty())
+				throw new BusinessException("User has own artifacts");
+			for(Artifact art : user.getSharedArtifact()){
+				art.getShared().remove(user);
+				artifactRepository.save(art);
+			}
+			for(Project project : user.getSharedProject()){
+				project.getUsers().remove(user);
+				projectRepository.save(project);
+			}
+			workspaceRepository.delete(user.getWorkspaces());
 			userRepository.delete(user);
 		}catch(Exception e) {throw new BusinessException();}
 	}

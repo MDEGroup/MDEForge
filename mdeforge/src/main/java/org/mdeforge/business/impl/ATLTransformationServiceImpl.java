@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 //import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -68,7 +69,6 @@ import org.eclipse.m2m.atl.emftvm.compiler.AtlResourceImpl;
 import org.eclipse.m2m.atl.engine.compiler.atl2006.Atl2006Compiler;
 import org.eclipse.m2m.atl.engine.emfvm.launch.EMFVMLauncher;
 import org.eclipse.m2m.atl.engine.parser.AtlParser;
-import org.eclipse.ocl.ParserException;
 import org.mdeforge.business.ATLTransformationCompilationError;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
@@ -80,9 +80,6 @@ import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.TransformationException;
 import org.mdeforge.business.UNIVAQTesterService;
-import org.mdeforge.business.anatlyzer.AnATLyzerUtils;
-import org.mdeforge.business.anatlyzer.CallableVisitor;
-import org.mdeforge.business.anatlyzer.OutputMetamodelVisitor;
 import org.mdeforge.business.anatlyzer.UNIVAQUSEWitnessFinder;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
@@ -131,7 +128,6 @@ import anatlyzer.atl.tests.api.AnalysisLoader;
 import anatlyzer.atl.util.ATLUtils;
 import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
-import anatlyzer.atlext.ATL.Callable;
 import anatlyzer.atlext.ATL.Helper;
 import anatlyzer.atlext.ATL.InPatternElement;
 import anatlyzer.atlext.ATL.MatchedRule;
@@ -142,7 +138,6 @@ import anatlyzer.atlext.ATL.SimpleInPatternElement;
 import anatlyzer.atlext.ATL.SimpleOutPatternElement;
 import anatlyzer.atlext.OCL.Attribute;
 import anatlyzer.atlext.OCL.OclFeatureDefinition;
-import anatlyzer.atlext.OCL.OclType;
 import anatlyzer.atlext.OCL.Operation;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
 import transML.exceptions.transException;
@@ -861,46 +856,47 @@ public class ATLTransformationServiceImpl extends
 	@Override
 	public List<EcoreMetamodel> getPossibleMetamodel(ATLTransformation atl)
 			throws BusinessException {
-		try {
-			List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
-		List<EcoreMetamodel> listMetamodel = ecoreMetamodelService.findAll();
-		
-		AtlParser atlParser = new AtlParser();
-		ModelFactory modelFactory = new EMFModelFactory();
-		IReferenceModel atlMetamodel;
-		
-			atlMetamodel = modelFactory
-					.getBuiltInResource("ATL.ecore");
-		
-		EMFModel atlDynModel = (EMFModel) modelFactory.newModel(atlMetamodel);
-		atlParser.inject(atlDynModel, gridFileMediaService.getFilePath(atl));
-		Resource originalTrafo = atlDynModel.getResource();
-		ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo.getURI()
-				.toFileString(), true);
-		HashMap<Callable, OclType> callableElements = new HashMap<Callable, OclType>();
-		try {
-			List<Callable> callables = AnATLyzerUtils.getCallableElements(atlModel);
-			for (Callable callable : callables) {
-				CallableVisitor callableVisitor = new CallableVisitor();
-				callableVisitor.perform(callable);
-				callableElements.put(callableVisitor.getElement(), callableVisitor.getOclType());
-			}
-		} catch (ParserException e) {
-			System.err.println("UNABLE TO DISCOVER CALLABLE TYPE");
-		}
-		OutputMetamodelVisitor omv = new OutputMetamodelVisitor();
-		omv.perform(atlModel, callableElements);
-		for (EcoreMetamodel emm :listMetamodel) {
-			List<EPackage> ep = ecoreMetamodelService.getEPackageList(emm);
-			EPackage p = ep.get(0);
-			if(ecoreMetamodelService.checkConstraint(p, omv.getConstraint()))
-				result.add(emm);
-		}
-	    result.forEach(s -> System.out.println(s));
-		return result;
-		} catch (ATLCoreException e1) {
-			throw new BusinessException(e1.getMessage());
-		}
+//		try {
+//			List<EcoreMetamodel> result = new ArrayList<EcoreMetamodel>();
+//		List<EcoreMetamodel> listMetamodel = ecoreMetamodelService.findAll();
+//		
+//		AtlParser atlParser = new AtlParser();
+//		ModelFactory modelFactory = new EMFModelFactory();
+//		IReferenceModel atlMetamodel;
+//		
+//			atlMetamodel = modelFactory
+//					.getBuiltInResource("ATL.ecore");
+//		
+//		EMFModel atlDynModel = (EMFModel) modelFactory.newModel(atlMetamodel);
+//		atlParser.inject(atlDynModel, gridFileMediaService.getFilePath(atl));
+//		Resource originalTrafo = atlDynModel.getResource();
+//		ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo.getURI()
+//				.toFileString(), true);
+//		HashMap<Callable, OclType> callableElements = new HashMap<Callable, OclType>();
+//		try {
+//			List<Callable> callables = AnATLyzerUtils.getCallableElements(atlModel);
+//			for (Callable callable : callables) {
+//				CallableVisitor callableVisitor = new CallableVisitor();
+//				callableVisitor.perform(callable);
+//				callableElements.put(callableVisitor.getElement(), callableVisitor.getOclType());
+//			}
+//		} catch (ParserException e) {
+//			System.err.println("UNABLE TO DISCOVER CALLABLE TYPE");
+//		}
+//		OutputMetamodelVisitor omv = new OutputMetamodelVisitor();
+//		omv.perform(atlModel, callableElements);
+//		for (EcoreMetamodel emm :listMetamodel) {
+//			List<EPackage> ep = ecoreMetamodelService.getEPackageList(emm);
+//			EPackage p = ep.get(0);
+//			if(ecoreMetamodelService.checkConstraint(p, omv.getConstraint()))
+//				result.add(emm);
+//		}
+//	    result.forEach(s -> System.out.println(s));
+//		return result;
+//		} catch (ATLCoreException e1) {
+//			throw new BusinessException(e1.getMessage());
+//		}
+		throw new NotImplementedException();
 	}
 
 	@Override

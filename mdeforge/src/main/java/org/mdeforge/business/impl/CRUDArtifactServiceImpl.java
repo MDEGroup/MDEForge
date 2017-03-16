@@ -56,7 +56,6 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
@@ -254,29 +253,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		return new ResponseGrid<>(pag.getDraw(), total, total, res);
 	}
 
-
-
-	@Override
-	public ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag) {
-		workspaceService.findById(idWorkspace, user);
-		MongoOperations n = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		query.skip(pag.getStart());
-		query.limit(pag.getLength());
-		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
-		long total = 0;
-		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c1);
-			query.addCriteria(c2);
-			total = n.count(new Query().addCriteria(c1).addCriteria(c2), persistentClass);
-		} else {
-			query.addCriteria(c1);
-			total = n.count(new Query(c1), persistentClass);
-		}
-		List<T> res = n.find(query, persistentClass);
-		return new ResponseGrid<>(pag.getDraw(), total, total, res);
-	}
 
 
 
@@ -785,22 +761,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		if(!artifact.getAuthor().getId().equals(user.getId()))
 			throw new AuthorizzationException();
 		for (Project project : artifact.getProjects()) {
-			Artifact artToRemove = new Artifact();
-			for (Artifact art : project.getArtifacts())
-				if (art.getId().equals(artifact.getId()))
-					artToRemove = art;
-			project.getArtifacts().remove(artToRemove);
+			project.getArtifacts().remove(artifact);
 			project.setModifiedDate(new Date());
 			projectRepository.save(project);
-
-		}
-		for (Workspace workspace : artifact.getWorkspaces()) {
-			Artifact artToRemove = new Artifact();
-			for (Artifact art : workspace.getArtifacts())
-				if (art.getId().equals(artifact.getId()))
-					artToRemove = art;
-			workspace.getArtifacts().remove(artToRemove);
-			workspaceRepository.save(workspace);
 
 		}
 		for (User us : artifact.getShared()) {
@@ -819,7 +782,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		relationRepository.delete(relations);
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
-
 	}
 
 	@Override
@@ -843,9 +805,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			} else
 				artifact.setFile(original.getFile());
 
-			for (Workspace ws : artifact.getWorkspaces()) {
-				workspaceService.findById(ws.getId(), artifact.getAuthor());
-			}
+			
 			// check project Auth
 			for (Project p : artifact.getProjects()) {
 				projectService.findById(p.getId(), artifact.getAuthor());
@@ -883,13 +843,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				}
 			}
 
-			for (Workspace ws : artifact.getWorkspaces()) {
-				Workspace w = workspaceService.findOne(ws.getId());
-				if (!isArtifactInWorkspace(w.getId(), artifact.getId())) {
-					w.getArtifacts().add(artifact);
-					workspaceRepository.save(w);
-				}
-			}
+			
 			for (Project ps : artifact.getProjects()) {
 				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				if (!isArtifactInProject(p.getId(), artifact.getId())) {
@@ -932,14 +886,17 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 			artifact.setFile(fileMedia);
 			// check workspace Auth
-			for (Workspace ws : artifact.getWorkspaces()) {
-				workspaceService.findById(ws.getId(), artifact.getAuthor());
-			}
-			// check project Auth
 			if (artifact.getProjects() == null)
 				artifact.setProjects(new ArrayList<Project>());
 			for (Project p : artifact.getProjects()) {
-				projectService.findById(p.getId(), artifact.getAuthor());
+				try {
+					projectService.findById(p.getId(), artifact.getAuthor());
+				}
+				catch(BusinessException e) {
+					p.setOwner(artifact.getAuthor());
+					p.getUsers().add(artifact.getAuthor());
+					projectRepository.save(p);
+				}
 			}
 			if (artifact.getFile() != null) {
 				gridFileMediaService.store(artifact.getFile());
@@ -951,10 +908,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			artifact.setAuthor(user);
 			if (artifact.getShared() == null)
 				artifact.setShared(new ArrayList<User>());
-			artifact.getShared().add(user);
+			if(!artifact.getShared().contains(user))
+				artifact.getShared().add(user);
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
 			artifactRepository.save(artifact);
+			user.getOwner().add(artifact);
+			userRepository.save(user);
 			// check relation
 			for (Relation rel : relationTemp) {
 				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
@@ -973,13 +933,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			// Update bi-directional reference
 			artifact.setRelations(relationTemp);
 			artifactRepository.save(artifact);
-			for (Workspace ws : artifact.getWorkspaces()) {
-				Workspace w = workspaceService.findOne(ws.getId());
-				if (w == null)
-					throw new BusinessException();
-				w.getArtifacts().add(artifact);
-				workspaceRepository.save(w);
-			}
 			for (Project ps : artifact.getProjects()) {
 				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				p.getArtifacts().add(artifact);
@@ -1099,15 +1052,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		return art;
 	}
 
-	@Override
-	public boolean isArtifactInWorkspace(String idWorkspace, String idArtfact) throws BusinessException {
-		Artifact artifact = findOne(idArtfact);
-		for (Workspace workspace : artifact.getWorkspaces()) {
-			if (workspace.getId().equals(idWorkspace))
-				return true;
-		}
-		return false;
-	}
 
 	@Override
 	public boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException {
@@ -1141,21 +1085,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("projects.$id").is(idProject);
-		if (persistentClass != Artifact.class) {
-			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
-			query.addCriteria(c1);
-			query.addCriteria(c2);
-		} else
-			query.addCriteria(c1);
-		return operations.find(query, persistentClass);
-	}
-
-	@Override
-	public List<T> findArtifactInWorkspace(String idWorkspace, User user) {
-		workspaceService.findById(idWorkspace, user);
-		MongoOperations operations = new MongoTemplate(mongoDbFactory);
-		Query query = new Query();
-		Criteria c1 = Criteria.where("workspaces.$id").is(idWorkspace);
 		if (persistentClass != Artifact.class) {
 			Criteria c2 = Criteria.where("_class").is(persistentClass.getCanonicalName());
 			query.addCriteria(c1);

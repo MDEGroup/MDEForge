@@ -60,36 +60,17 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public void delete(Project project, User userId) throws BusinessException {
-		for (Workspace w : project.getWorkspaces())
-			for (Project p : w.getProjects()) {
-				Project appProg = findOne(p.getId());
-				if (p.getId().equals(project.getId())) {
-					Workspace app = workspaceService.findOne(w.getId());
-					app.getProjects().remove(appProg);
-					workspaceRepository.save(w);
-					break;
-				}
-			}
-		for (User u : project.getUsers())
-			for (Project p : u.getSharedProject()) {
-				Project appProg = findOne(p.getId());
-				if (p.getId().equals(project.getId())) {
-					User app = userService.findOne(u.getId());
-					app.getSharedProject().remove(appProg);
-					userRepository.save(u);
-					break;
-				}
-			}
-		for (Artifact u : project.getArtifacts())
-			for (Project p : u.getProjects()) {
-				Project appProg = findOne(p.getId());
-				if (p.getId().equals(project.getId())) {
-					Artifact app = artifactService.findOneById(u.getId(), userId);
-					app.getProjects().remove(appProg);
-					artifactRepository.save(u);
-					break;
-				}
-			}
+		for (Workspace w : project.getWorkspaces()){
+			w.getProjects().remove(project);
+			workspaceRepository.save(w);
+		}
+		for (User u : project.getUsers()) {
+			u.getSharedProject().remove(project);
+			userRepository.save(u);
+		}
+		for (Artifact u : project.getArtifacts()){
+			u.getProjects().remove(project);
+		}
 		projectRepository.delete(project);
 	}
 

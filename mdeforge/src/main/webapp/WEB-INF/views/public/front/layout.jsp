@@ -66,7 +66,7 @@
 		<div id="content">
 		
 		<!-- Top navbar (note: add class "navbar-hidden" to close the navbar by default) -->
-		<tiles:insertAttribute name="menu"/>
+<%-- 		<tiles:insertAttribute name="menu"/> --%>
 		<!-- Top navbar END -->
 		
 	
@@ -87,8 +87,8 @@
 
 	
 	<!-- JQuery -->
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	
 	<!-- Code Beautify -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/other/js-beautify/beautify.js"></script>

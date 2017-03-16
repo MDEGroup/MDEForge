@@ -1,6 +1,5 @@
 package org.mdeforge.presentation.rest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.m2m.atl.common.ATLExecutionException;
@@ -118,10 +117,8 @@ public class ATLTransformationRESTController {
 			@PathVariable("id_workspace") String idWorkspace,
 			@RequestParam("_file") MultipartFile file) {
 		try {
-			transformation.setWorkspaces(new ArrayList<Workspace>());
 			Workspace workspace = new Workspace();
 			workspace.setId(idWorkspace);
-			transformation.getWorkspaces().add(workspace);
 			transformation.setAuthor(user);
 			transformation.getShared().add(user);
 
@@ -145,7 +142,6 @@ public class ATLTransformationRESTController {
 			@PathVariable("id_project") String idProject,
 			@RequestParam("_file") MultipartFile file) {
 		try {
-			ATLtransformation.setWorkspaces(new ArrayList<Workspace>());
 			Project project = projectService.findById(idProject, user);
 			ATLtransformation.getProjects().add(project);
 			ATLtransformation.setAuthor(user);

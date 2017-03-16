@@ -305,6 +305,7 @@
 	});
 	
 	$(document).on('click','.removeSharedUser', function(event){
+		debugger;
 		var idProject = $('#projectId').attr('data-id');
 		var idUser = $(this).data('id');
 		$.ajax({

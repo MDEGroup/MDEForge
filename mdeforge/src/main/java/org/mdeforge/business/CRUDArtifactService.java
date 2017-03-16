@@ -25,9 +25,6 @@ public interface CRUDArtifactService <T extends Artifact> {
 	ResponseGrid<T> findAllPublic(RequestGrid pag) throws BusinessException;
 	List<T> findArtifactInProject(String idProject, User user);
 	ResponseGrid<T> findArtifactInProject(String idProject, User user, RequestGrid pag);
-	List<T> findArtifactInWorkspace(String idWorkspace, User user);
-	ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag);
-	boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)	throws BusinessException;
 	boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException;
 	boolean isArtifactInUser(User idUser, String idArtfact)	throws BusinessException;
 	boolean existRelation(String idTo, String idFrom) throws BusinessException;

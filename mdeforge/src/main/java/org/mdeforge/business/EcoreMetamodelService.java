@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.form.Statistic;
 
 import anatlyzer.atlext.OCL.OclExpression;
@@ -12,7 +13,7 @@ import anatlyzer.atlext.OCL.OclExpression;
 public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamodel>,
 		MetricProvider, SimilarityService, ValidateService, ClusterService {
 	
-	List<EcoreMetamodel> findEcoreMetamodelByURI(String URI);
+	List<EcoreMetamodel> findByURI(String URI);
 	//ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)  throws BusinessException;
 	List<String> getNSUris(EcoreMetamodel ecoreMetamodel)throws BusinessException;
 	
@@ -39,4 +40,5 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException;
 	void extractedContent(EcoreMetamodel art) throws BusinessException;
 	List<Statistic> numberOfMCdistribution();
+	void calculateSimilarities(ToBeAnalyse toBeAnalyse) throws BusinessException;
 }

@@ -1,4 +1,21 @@
 	$(document).on('click','.removeSharedUser', function(event){
+		debugger;
+		var idArtifact = $("#artifactName").data('id');
+		var idUser = $(this).data('id');
+		$.ajax({
+			url : ctx + "/private/artifact/" + idArtifact + "/removeUser/" + idUser,
+			success : function(data) {
+				$('.userLi[data-id="'+ idUser +'"]').remove();
+			},
+			error : function error(data) {
+				$('.userLi[data-id="'+ idUser +'"]').remove();
+				
+			}
+		});
+	});
+	
+	$(document).on('click','.removeArtifactSharedUser', function(event){
+		debugger;
 		var idArtifact = $("#artifactName").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({

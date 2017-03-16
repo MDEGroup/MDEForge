@@ -60,6 +60,20 @@ public class Artifact implements java.io.Serializable{
 	private String weightedContentsOne = null;
 	private String defaultWeightedContents = null;
 
+	@DBRef(lazy = true)
+	@JsonSerialize(using = RelationListSerializer.class)
+	private List<Relation> relations = new ArrayList<Relation>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = ProjectListSerializer.class)
+	private List<Project> projects = new ArrayList<Project>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserListSerializer.class)
+	private List<User> shared = new ArrayList<User>();
+	@DBRef(lazy = true)
+	@JsonSerialize(using = UserSerializer.class)
+	private User author = new User();	
+	private List<Property> properties = new ArrayList<Property>();
+
 	public String getNameForIndex() {
 		return nameForIndex;
 	}
@@ -116,30 +130,7 @@ public class Artifact implements java.io.Serializable{
 		this.score = score;
 	}
 	
-//	private @TextIndexed(weight=20) String name = null;
-//	private @TextIndexed(weight=10) String description = null;
-//	private @TextIndexed(weight=5) String authors = null;
-//	private @TextIndexed(weight=7) List<String> tags = null;
-//	private String version = null;
-//	private @TextIndexed(weight=1) String extractedContents = null;
-//	private @TextScore Float score;
 
-	@DBRef(lazy = true)
-	@JsonSerialize(using = RelationListSerializer.class)
-	private List<Relation> relations = new ArrayList<Relation>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = ProjectListSerializer.class)
-	private List<Project> projects = new ArrayList<Project>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserListSerializer.class)
-	private List<User> shared = new ArrayList<User>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
-	@DBRef(lazy = true)
-	@JsonSerialize(using = UserSerializer.class)
-	private User author = new User();	
-	private List<Property> properties = new ArrayList<Property>();
 
 	public String getVersion() {
 		return version;
@@ -148,13 +139,6 @@ public class Artifact implements java.io.Serializable{
 	public void setVersion(String version) {
 		this.version = version;
 	}
-//	private @TextIndexed(weight=20) String name = null;
-//	private @TextIndexed(weight=10) String description = null;
-//	private @TextIndexed(weight=5) String authors = null;
-//	private @TextIndexed(weight=7) List<String> tags = null;
-//	private String version = null;
-//	private @TextIndexed(weight=1) String extractedContents = null;
-//	private @TextScore Float score;
 	
 	public List<Metric> getMetrics() {
 		return metrics;
@@ -221,16 +205,6 @@ public class Artifact implements java.io.Serializable{
 	
 	public void setShared(List<User> newShared) {
 		shared = newShared;
-	}
-
-	
-	public List<Workspace> getWorkspaces() {
-		return workspaces;
-	}
-
-	
-	public void setWorkspaces(List<Workspace> newWorkspaces) {
-		workspaces = newWorkspaces;
 	}
 
 	

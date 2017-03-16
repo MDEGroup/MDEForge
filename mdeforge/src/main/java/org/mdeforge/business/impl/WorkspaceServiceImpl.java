@@ -85,10 +85,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 			p.setModifiedDate(new Date());
 			projectRepository.save(p);
 		}
-		for (Artifact a : workspace.getArtifacts()) {
-			a.getWorkspaces().add(workspace);
-			artifactRepository.save(a);
-		}
+		
 		user.getWorkspaces().add(workspace);
 		userRepository.save(user);
 	}
@@ -163,10 +160,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 			p.getWorkspaces().add(workspace);
 			p.setModifiedDate(new Date());
 			projectRepository.save(p);
-		}
-		for (Artifact a : workspace.getArtifacts()) {
-			a.getWorkspaces().add(workspace);
-			artifactRepository.save(a);
 		}
 		user.getWorkspaces().add(workspace);
 		userRepository.save(user);

@@ -3,14 +3,10 @@ package org.mdeforge.presentation.rest;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.CRUDArtifactService;
-import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
-import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -37,12 +33,6 @@ public class WorkspaceRESTController {
 	private User user;
 	@Autowired
 	private WorkspaceService workspaceService;
-
-	@Autowired
-	private TransformationService transformationService;
-
-	@Autowired
-	private CRUDArtifactService<Artifact> artifactService;
 
 	
 	@RequestMapping(value="temp", method = RequestMethod.GET)
@@ -80,43 +70,7 @@ public class WorkspaceRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	@RequestMapping(value = "/{id}/EcoreMetamodel/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findMetamodelsInWorkspace(
-			@PathVariable("id") String id) {
-		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
-			
-			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<ArtifactList>(
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
 	
-	@RequestMapping(value = "/{id}/artifact/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findArtifactsInWorkspace(
-			@PathVariable("id") String id) {
-		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
-			
-			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<ArtifactList>(
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
-	
-	@RequestMapping(value = "/{id}/ATLTransformation/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findATLTransformationInWorkspace(
-			@PathVariable("id") String id) {
-		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
-			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<ArtifactList>(
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
 	@RequestMapping(value = "/{id}/Project/", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<List<Project>> findProjectInWorkspace(
 			@PathVariable("id") String id) {
@@ -128,30 +82,7 @@ public class WorkspaceRESTController {
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	@RequestMapping(value = "/{id}/ETLTransformation/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findETLTransformationInWorkspace(
-			@PathVariable("id") String id) {
-		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
-			
-			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<ArtifactList>(
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
-	@RequestMapping(value = "/{id}/Model/", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<ArtifactList> findModelInWorkspace(
-			@PathVariable("id") String id) {
-		try {
-			ArtifactList workspace = new ArtifactList(artifactService.findArtifactInWorkspace(id, user));
-			
-			return new ResponseEntity<ArtifactList>(workspace, HttpStatus.OK);
-		} catch (BusinessException e) {
-			return new ResponseEntity<ArtifactList>(
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
+	
 	@RequestMapping(method = RequestMethod.POST, consumes="application/json")
 	public @ResponseBody HttpEntity<String> create(
 			@RequestBody Workspace workspace) {

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -100,9 +100,7 @@ import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.GridFileMediaService;
-import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.SemanticSimilarityRelationService;
 import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
 import org.mdeforge.business.SimilarityRelationService;
@@ -122,6 +120,7 @@ import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimilarityRelation;
 import org.mdeforge.business.model.SimpleMetric;
+import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.business.search.ResourceSerializer;
@@ -133,20 +132,18 @@ import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
 import org.mdeforge.integration.EcoreMetamodelRepository;
 import org.mdeforge.integration.MetricRepository;
+import org.mdeforge.integration.ToBeAnalyseRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.Criteria;
-
 import org.springframework.stereotype.Service;
 
 import com.apporiented.algorithm.clustering.ClusteringAlgorithm;
@@ -203,6 +200,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private IndexWriter writer;
 	
 	@Autowired
+	private ToBeAnalyseRepository tobeAnalyseRepository;
+	@Autowired
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired
 	private Mongo mongo;
@@ -243,29 +242,29 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	public EcoreMetamodel create(EcoreMetamodel artifact) {
 		EcoreMetamodel result = super.create(artifact);
 		try {
-			artifact.setValid(isValid(artifact));
+			result.setValid(isValid(result));
 		} catch (Exception e) {
-			System.err.println("KK");
+			logger.error("Validation error");
 		}
+//		try {
+//			this.extractedContent(result);
+//		} catch (Exception e) {
+//			logger.error("Some errors when try to extract content string from metamodel");
+//		}
 		try {
-			this.extractedContent(result);
-		} catch (Exception e) {
-			logger.error("Some errors when try to extract content string from metamodel");
-		}
-		try {
-			artifact.getUri().addAll(getNSUris(result));
+			result.getUri().addAll(getNSUris(result));
 		} catch (Exception e) {
 			logger.error("Error when try to extract URI from metamodel");
 		}
 		try {
-			artifact.setMetrics(calculateMetrics(artifact));
+			result.setMetrics(calculateMetrics(result));
 		} catch (Exception e) {
 			logger.error("Some errors when try to calculate metrics for metamodel");
 		}
 		try {
 			createIndex(result);
 		} catch (Exception e) { logger.error("Some errors when try to create lucene indexis.");}
-		artifactRepository.save(artifact);
+		artifactRepository.save(result);
 		return result;
 	}
 
@@ -293,15 +292,19 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		res.getContents().addAll(contents);
 		try {
 			res.save(null);
-
 		} catch (IOException e) {
 			throw new BusinessException();
 		}
 	}
 
 	@Override
-	public List<EcoreMetamodel> findEcoreMetamodelByURI(String URI) {
-		return null;
+	public List<EcoreMetamodel> findByURI(String URI) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		org.springframework.data.mongodb.core.query.Query query = 
+				new org.springframework.data.mongodb.core.query.Query();
+		Criteria c1 = Criteria.where("uri").is(URI);
+		query.addCriteria(c1);
+		return n.find(query, EcoreMetamodel.class);
 	}
 
 	// @Override
@@ -1483,8 +1486,10 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				doc.add(propField);
 			}
 		}
-	 	
-//		System.out.println(handler.toString());	 	
+	 	for(String nsUri : ecoreMetamodel.getUri()){
+	 		Field nsUris = new Field(NsURI_INDEX_CODE, nsUri, Store.YES, Index.ANALYZED);
+	 		doc.add(nsUris);
+	 	}
 
 	 	return doc;
 	}
@@ -1669,5 +1674,13 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		return stat;
 		
 	}
-	
+
+	@Override
+	public void calculateSimilarities(ToBeAnalyse toBeAnalyse) throws BusinessException {
+		List<Artifact> tba = tobeAnalyseRepository.findAll().stream().map(z -> z.getArtifact()).collect(Collectors.toList());
+		for (EcoreMetamodel ecoreMM : findAll()) {
+			if(!tba.contains(ecoreMM))
+				try{ calculateSimilarity(toBeAnalyse.getArtifact(), ecoreMM);}catch(Exception e){}
+		}
+	}
 }

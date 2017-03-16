@@ -50,8 +50,8 @@
     <link href="${pageContext.request.contextPath}/resources/theme/scripts/highlight/styles/github.css" rel="stylesheet" />
     
     <!-- JQuery -->
-	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script>var ctx = "${pageContext.request.contextPath}"</script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>

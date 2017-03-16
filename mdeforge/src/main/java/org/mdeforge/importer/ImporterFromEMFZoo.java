@@ -67,6 +67,7 @@ public class ImporterFromEMFZoo {
 					}
 					if (element.tagName().equals("li") ) {
 						String url = element.getElementsByTag("a").attr("href");
+						url = url.replace("http", "https");
 						System.out.println(emm.getName() + " _ " + url);
 						
 						URL url2 = new URL(url);
