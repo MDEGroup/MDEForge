@@ -62,9 +62,6 @@ public class CreateTest {
 		emm.setAuthors("Metamodels Authors");
 		emm.setOpen(false);	
 		List<Workspace> worspaces = workspaceService.getWorkspaces();
-		for (Workspace project : worspaces) {
-			emm.getWorkspaces().add(project);
-		}
 		ecoreMetamodelService.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");	
 	}
 	
@@ -89,7 +86,6 @@ public class CreateTest {
 			Workspace w = workspaceService.getWorkspace("5514aa53d4c67eee3e2c1b12");
 			ETLTransformation p = new ETLTransformation();
 			p.setName("Android2Web");
-			p.getWorkspaces().add(w);
 			etlTransformationService.addETLTransformation(p, "temp/Android2Web.etl");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
