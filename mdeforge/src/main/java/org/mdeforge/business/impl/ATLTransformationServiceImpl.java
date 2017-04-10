@@ -455,10 +455,13 @@ public class ATLTransformationServiceImpl extends
 			temp2.delete();
 			return result;
 		} catch (ATLCoreException e) {
+			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
+			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		}
 	}

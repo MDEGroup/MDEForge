@@ -59,15 +59,19 @@ public class SignIn {
 		} catch (IOException e1) {
 			System.out.println("ERROR");
 		}
+		System.out.println("Recapcha");
 		ReCaptchaResponse reCaptchaResponse = this.reCaptcha.checkAnswer(remoteAddress, challangeField, responseField);
 		if(reCaptchaResponse.isValid() ){
 			String appUrl = request.getContextPath();
 			try {
+				System.out.println("Resolved");
 				eventPublisher.publishEvent(new OnRegistrationCompleteEvent
 						(user, request.getLocale(), appUrl));
 			}catch (Exception e) {System.out.println(e.getMessage());}
 		}
 		else {
+			
+			System.out.println(reCaptchaResponse.getErrorMessage());
 			model.addAttribute("user", user);
 			model.addAttribute("captcha",true);
 			return "public.signin";

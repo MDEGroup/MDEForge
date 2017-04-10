@@ -54,7 +54,7 @@ public class PublicController {
 	
 	@RequestMapping(value = "/", method = { RequestMethod.GET })
 	public String index() {
-		return "public.index";
+		return "public.login";
 	}
 
 	@RequestMapping(value = "/about", method = { RequestMethod.GET })

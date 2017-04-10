@@ -2,6 +2,7 @@ $(function() {
 	$(document).on('click','#transformationModelInfo', function(e) {
 		//var spinner = new Spinner().spin();
 		//$('#transformationRelations').parent().append(spinner.el);
+		debugger;
 		e.preventDefault();
 		$('#parseAlert').remove();
 		var button = $(this)
@@ -98,6 +99,7 @@ $(function() {
 	            		initSelects($('.my-select'));
 	    			},
 	    			error : function error(data) {
+	    				debugger;
 	    				console.log('error');
 	    				$(this).before('<div id="parseAlert" class="alert alert-error"><button type="button" class="close pull-left" data-dismiss="alert" style="left: -12px; padding-left: 15px;"><i class="icon-remove"></i></button><span>Ops! Something went wrong! Try Again.</span></div>')
 	    			}

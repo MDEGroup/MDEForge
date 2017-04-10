@@ -33,12 +33,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	        String confirmationUrl = event.getAppUrl() + "/regitrationConfirm?token=" + token;
 	        String message = "Activation link: ";
 	        SimpleMailMessage email = new SimpleMailMessage();
-	        email.setFrom("mdeforge.org@mdeforge.org");
+	        email.setFrom("juri.dirocco@univaq.it");
 	        email.setTo(recipientAddress);
 	        email.setSubject(subject);
 	        email.setText(message + "http://localhost:8080" + confirmationUrl);
 	        mailSender.send(email);
-        } catch (Exception e) {System.out.println("Send mail error");}
+        } catch (Exception e) {System.out.println("Send mail error:" + e.getMessage());e.printStackTrace();}
     }
 }
 

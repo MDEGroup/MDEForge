@@ -17,7 +17,7 @@ public class UNIVAQUSEWitnessFinder extends UseWitnessFinder {
 
 	@Override
 	public String getTempDirectory() {
-		return basePath + "/anatlyze/tmp/";
+		return basePath + "anatlyze/tmp/";
 	}
 	
 

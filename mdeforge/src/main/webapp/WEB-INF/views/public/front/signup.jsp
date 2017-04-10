@@ -72,7 +72,7 @@
     							Wrong captcha code
 							</c:if>
 							<%
-								ReCaptcha c = ReCaptchaFactory.newReCaptcha(
+								ReCaptcha c = ReCaptchaFactory.newSecureReCaptcha(
 										"6LcaZBoTAAAAAFUsZE3TRO4OO-vnzanm69wbD-rx",
 										"6LcaZBoTAAAAAORXKj6dB9GrBgsAQw2jBotbNfoY", false);
 								out.print(c.createRecaptchaHtml(null, null));
