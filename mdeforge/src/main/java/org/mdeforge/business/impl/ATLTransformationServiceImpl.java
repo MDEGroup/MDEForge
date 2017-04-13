@@ -194,8 +194,7 @@ public class ATLTransformationServiceImpl extends
 
 	@Override
 	public void createIndex(ATLTransformation art) {
-		super.createIndex(art);
-		Document doc = new Document();
+		Document doc = getMetadataIndex(art);
 		AtlParser atlParser = new AtlParser();
 		ModelFactory modelFactory = new EMFModelFactory();
 		IReferenceModel atlMetamodel;
