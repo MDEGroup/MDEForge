@@ -15,8 +15,7 @@ public interface ModelService extends CRUDArtifactService<Model>,
 	List<org.mdeforge.business.model.Model> findByTransformation(
 			ATLTransformation atlTransformation);
 
-	void extractedContent(Model art) throws BusinessException;
-
 	void createAll(List<Model> artifacts, EcoreMetamodel metamodel, User user) throws BusinessException;
+	String getJsonFormat(Model model);
 
 }

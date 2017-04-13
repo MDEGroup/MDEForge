@@ -14,31 +14,23 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 		MetricProvider, SimilarityService, ValidateService, ClusterService {
 	
 	List<EcoreMetamodel> findByURI(String URI);
-	//ResponseGrid<EcoreMetamodel> findAllEcorePaginated(RequestGrid requestGrid)  throws BusinessException;
 	List<String> getNSUris(EcoreMetamodel ecoreMetamodel)throws BusinessException;
 	
 	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample) throws BusinessException;
 	List<EcoreMetamodel> searchByExample(EcoreMetamodel searchSample, double score) throws BusinessException;
 	double calculateContainment(EcoreMetamodel art1, EcoreMetamodel art2);
 	
-	Resource loadArtifact(EcoreMetamodel id);
-	@Deprecated
 	void registerMetamodel(String ecoreMetamodel) throws BusinessException;
-	@Deprecated
-	void registerMetamodel (EcoreMetamodel ecoreMetamodel) throws BusinessException;
-	String serializeContent(EcoreMetamodel emm) throws BusinessException;
+	Resource registerMetamodel (EcoreMetamodel ecoreMetamodel) throws BusinessException;
 	
 	List<EPackage> getEPackageList(EcoreMetamodel ecoreMetamodel)
 			throws BusinessException;
-	
-	
 	boolean checkConstraint(EPackage atlModel, List<OclExpression> expr) throws BusinessException;
 	boolean checkConstraint(EPackage atlModel, OclExpression expr) throws BusinessException;
 	
 	String getJsonFormatFromResource(Resource metamodel)
 			throws BusinessException;
 	String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException;
-	void extractedContent(EcoreMetamodel art) throws BusinessException;
 	List<Statistic> numberOfMCdistribution();
 	void calculateSimilarities(ToBeAnalyse toBeAnalyse) throws BusinessException;
 }

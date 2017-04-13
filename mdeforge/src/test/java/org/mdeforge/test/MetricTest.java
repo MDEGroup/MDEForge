@@ -86,18 +86,7 @@ public class MetricTest {
 			ecoreMetamodelService.updateSimple(ecoreMetamodel);
 		}
 	}
-	@Ignore
-	@Test
-	public void addSerializedContent() {
-		List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService
-				.findAllPublic();
-		for (EcoreMetamodel ecoreMetamodel : ecoreMetamodelList) {
-			String serializedContext = ecoreMetamodelService.serializeContent(ecoreMetamodel);		
-			ecoreMetamodel.setDefaultWeightedContents(serializedContext);
-			ecoreMetamodelService.updateSimple(ecoreMetamodel);
-			System.out.println(ecoreMetamodel.getName());
-		}
-	}
+	
 	private static String readFile(String path) throws IOException {
 		byte[] encoded = Files.readAllBytes(Paths.get(path));
 		return new String(Base64.encode(encoded));

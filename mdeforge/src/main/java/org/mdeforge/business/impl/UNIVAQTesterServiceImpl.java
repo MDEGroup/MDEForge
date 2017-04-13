@@ -214,12 +214,12 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 		inputMetamodels.addAll(trafo.getDomainConformToRelation());
 		outputMetamodels.addAll(trafo.getCoDomainConformToRelation());
 
-		String folderModels = basePath + "anatlyze/testmodels" + File.separator;
-		String folderTemp = basePath + "anatlyze/temp" + File.separator;
+		String folderModels = basePath + "anatlyzer/testmodels" + File.separator;
+		String folderTemp = basePath + "anatlyzer/temp" + File.separator;
 		EcoreMetamodel first = (EcoreMetamodel) inputMetamodels.get(0)
 				.getToArtifact();
 		EPackage metamodel = null;
-		Resource resource = ecoreMetamodelService.loadArtifact(first);
+		Resource resource = ecoreMetamodelService.registerMetamodel(first);
 		for (EObject obj : resource.getContents()) {
 			if (obj instanceof EPackage
 					&& ((EPackage) obj).getName().equals(

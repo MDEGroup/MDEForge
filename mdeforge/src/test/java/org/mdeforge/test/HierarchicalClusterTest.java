@@ -22,8 +22,7 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.model.CosineSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.search.ResourceSerializer;
-import org.mdeforge.business.search.SimilarityMethods;
+import org.mdeforge.business.utils.SimilarityMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
@@ -72,31 +71,7 @@ public class HierarchicalClusterTest {
 		}
 
 	}
-	@Ignore
-	@Test
-	public void extractContent() {
-		EcoreMetamodel emm1 = ecoreMetamodelService.findOne("552bbd40d4c659da8e19eead");
-		ResourceSet load_resourceSet = new ResourceSetImpl();
-		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(emm1)),
-				true);
 
-		EcoreMetamodel emm2 = ecoreMetamodelService.findOne("552bbd2fd4c659da8e19ee19");
-		ResourceSet load_resourceSet2 = new ResourceSetImpl();
-		load_resourceSet2.getResourceFactoryRegistry().getExtensionToFactoryMap()
-				.put("*", new XMIResourceFactoryImpl());
-		Resource load_resource2 = load_resourceSet2.getResource(URI.createURI(gridFileMediaService.getFilePath(emm2)),
-				true);
-
-		String test = ResourceSerializer.serialize(load_resource);
-		String test2 = ResourceSerializer.serialize(load_resource2);
-		System.out.println(test);
-		System.out.println(test2);
-		SimilarityMethods cs = new SimilarityMethods();
-		double sim_score = cs.cosineSimilarityScore(test, test2);
-		System.out.println("Vediamo: "+ sim_score );
-	}
-	
 	@Test
 	public void loadSimilarityRelations() {
 		 

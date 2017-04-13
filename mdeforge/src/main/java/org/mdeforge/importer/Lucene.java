@@ -96,7 +96,7 @@ public class Lucene {
 	
 	public static void main(String[] args) {
 		
-		String indexDirectoryPath = "/Users/juri/development/forgeDir/luceneIndex";
+		String indexDirectoryPath = "/home/juri/development/forgeDir/lucene";
 		/*
 		 * FANCESCO URL
 		 * /Users/francesco/Desktop/newForgeDir/luceneIndex

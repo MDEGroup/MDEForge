@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
-import org.mdeforge.business.MetamodelService;
 import org.mdeforge.business.ProjectService;
-import org.mdeforge.business.TransformationService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Project;
@@ -40,12 +38,8 @@ public class ProjectRESTController {
 	@Autowired
 	private User user;
 	@Autowired
-	private MetamodelService metamodelService;
-	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
 	
-	@Autowired
-	private TransformationService transformationService;
 	
 
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)

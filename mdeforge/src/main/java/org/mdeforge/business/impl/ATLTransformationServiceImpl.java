@@ -146,15 +146,20 @@ public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
 		ATLTransformationService{
 
-	private static final String HELPER_TAG = "helper";
 	private static final float HELPER_BOOST_VALUE = 1.0f;
+	private static final String HELPER_TAG = "helper";
 	private static final String TEXT_TAG = "text";
 	private static final String FROM_METAMODEL_TAG = "fromMM";
 	private static final String TO_METAMODEL_TAG = "toMM";
-	private static final String RULE_NAME_TAG = "rule";
-	private static final String FROM_METACLASS = "fromMC";
-	private static final String FROM_TOCLASS = "toMC";
-	
+	private static final String RULE_TAG = "rule";
+	private static final String FROM_METACLASS_TAG = "fromMC";
+	private static final String TO_METACLASS_TAG = "toMC";
+	@Override
+	public List<String> getIndexes() {
+		return Arrays.asList(FROM_METAMODEL_TAG, TO_METAMODEL_TAG, 
+						     HELPER_TAG, RULE_TAG,
+						     FROM_METACLASS_TAG, TO_METACLASS_TAG);
+	}
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
 	@Autowired
@@ -183,18 +188,13 @@ public class ATLTransformationServiceImpl extends
 			logger.error("Some errors when try to calculate metric for metamodel");
 			throw new MetricEngineException(e.getMessage(), result.getId());
 		}
-		try {
-			createIndex(result);
-		}catch (Exception e) {
-			logger.error("Extact index error:" + e.getMessage());
-		}
-
 		return result;
 	}
 
 
 	@Override
 	public void createIndex(ATLTransformation art) {
+		super.createIndex(art);
 		Document doc = new Document();
 		AtlParser atlParser = new AtlParser();
 		ModelFactory modelFactory = new EMFModelFactory();
@@ -245,7 +245,7 @@ public class ATLTransformationServiceImpl extends
 				if (moduleElement instanceof Rule)
 				{
 					Rule r = (Rule) moduleElement;
-					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
+					Field ruleName = new Field(RULE_TAG,r.getName(),
 							Store.YES,Index.ANALYZED);
 					if(r instanceof MatchedRule) {
 						MatchedRule mr = (MatchedRule) r;
@@ -253,7 +253,7 @@ public class ATLTransformationServiceImpl extends
 						for (InPatternElement inPatternElement : si) {
 							if(inPatternElement instanceof SimpleInPatternElement) {
 								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
-								Field fromMC = new Field(FROM_METACLASS, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+								Field fromMC = new Field(FROM_METACLASS_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
 								doc.add(fromMC);
 								Field text = new Field(TEXT_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
 								doc.add(text);
@@ -265,7 +265,7 @@ public class ATLTransformationServiceImpl extends
 						for (OutPatternElement outPatternElement : so) {
 							if(outPatternElement instanceof SimpleOutPatternElement) {
 								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
-								Field toMC = new Field(FROM_TOCLASS, sope.getType().getName(), Store.YES, Index.ANALYZED);
+								Field toMC = new Field(TO_METACLASS_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
 								doc.add(toMC);
 								Field text = new Field(TEXT_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
 								doc.add(text);

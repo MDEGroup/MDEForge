@@ -6,21 +6,30 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Field.Index;
+import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -53,6 +62,7 @@ import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
@@ -83,8 +93,6 @@ import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	
 	
-	private List<String> transformationsTags = Arrays.asList("fromMM", "toMM", "helper", "fromMC", "toMC");
-	private List<String> metamodelsTags = Arrays.asList("eClass", "eAttribute", "ePackage", "eEnum");
 	
 	
 	@Override
@@ -283,7 +291,10 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		artifactRepository.save(art);
 		return;
 	}
-	
+	@Override
+	public List<String> getIndexes() {
+		return Arrays.asList(TYPE_TAG, NAME_TAG, AUTHOR_TAG, ID_TAG, LAST_UPDATE_TAG);
+	}
 	protected static final String TYPE_TAG = "forgeType";
 	protected static final String NAME_TAG = "name";
 	protected static final String AUTHOR_TAG = "author";
@@ -322,12 +333,91 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	protected Class<T> persistentClass;
 	@Value("#{cfgproperties[basePathLucene]}")
 	protected String basePathLucene;
-
+	
 	@Override
-	public void createIndex(T ecore) {
-		return;
+	public void createIndex(T artifact) {
+		
+		// Set the directory in which will be created the index.
+		Directory indexDir;
+		try {
+			File indexDirFile = new File(basePathLucene);
+			indexDir = FSDirectory.open(indexDirFile);
+			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			// Create an index in the directory, appending new index over previously indexed documents:
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
+			// create the indexer
+		
+			Document doc = new Document();
+			//ID
+			Field idField = new Field(ID_TAG, artifact.getId(), Store.YES, Index.ANALYZED);
+		 	doc.add(idField);
+			
+			//Artifact TYPE: "EcoreMetamodel"
+			Field artifactType = new Field(TYPE_TAG, artifact.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+			doc.add(artifactType);
+			
+	//				String text = handler.toString();
+			String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(artifact));
+			Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+			doc.add(textField);
+	
+			
+			Field artName = new Field(NAME_TAG, artifact.getName(), Store.YES, Index.ANALYZED);
+		 	doc.add(artName);
+		 	
+		 	Field authorField = new Field(AUTHOR_TAG, artifact.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+		 	doc.add(authorField);
+		 	
+		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, artifact.getModified().toString(), Store.YES, Index.ANALYZED);
+		 	doc.add(lastUpdateField);
+		 	
+		 	for (Property prop : artifact.getProperties()) {
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				if(propName != null && propValue != null) {
+					Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+					doc.add(propField);
+				}
+			}
+		 	IndexWriter writer = new IndexWriter(indexDir, conf);
+
+			try {
+				// writer.updateDocument(new Term("path", file.getPath()), document);
+				writer.addDocument(doc);
+			} catch (CorruptIndexException e) {
+				writer.close();
+				throw new BusinessException(e.getMessage());
+			} catch (IOException e) {
+				writer.close();
+				throw new BusinessException(e.getMessage());
+			}
+			writer.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			throw new BusinessException(e1.getMessage());
+		}
 	}
 
+	private String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
+	
 	@Override
 	public SearchResultComplete searchForm(String queryString) throws BusinessException {
 		
@@ -348,7 +438,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 //			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			
 			//Get all indexed fields
-			String[] fields = indexFieldNames().toArray(new String[0]);
+			String[] fields = getIndexes().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
@@ -417,7 +507,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			IndexSearcher searcher = new IndexSearcher(reader);
 //			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			//Get all indexed fields
-			String[] fields = indexFieldNames().toArray(new String[0]);
+			String[] fields = getIndexes().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
@@ -472,7 +562,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			
 //			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			//Get all indexed fields
-			String[] fields = indexFieldNames().toArray(new String[0]);
+			String[] fields = getIndexes().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
@@ -951,6 +1041,11 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			art.setArtifact(artifact);
 			toBeAnalyzedRepository.save(art);
 
+			try{
+				createIndex(artifact);
+			} catch(Exception e) {
+				logger.error("Error during calculate indexes");
+			}
 			return artifact;
 		} catch (Exception e) {
 			throw new BusinessException();
@@ -1242,36 +1337,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
 	}
 	
-	@Override
-	public List<String> indexFieldNames(){
-		
-		HashSet<String> result = new HashSet<String>();
-		File indexDirFile = new File(basePathLucene);
-		try {
-			FSDirectory indexDir = FSDirectory.open(indexDirFile);
-			IndexReader luceneIndexReader = IndexReader.open(indexDir);
-			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		//Sort the result
-		List<String> sortedList = new ArrayList<String>(result);
-		Collections.sort(sortedList);
-		
-		return sortedList;
-	}
 	
-	@Override
-	public List<String> indexFieldNamesForMM(){
-		return this.metamodelsTags;
-	}
-	
-	@Override
-	public List<String> indexFieldNamesForT(){
-		return this.transformationsTags;
-	}
 	
 	@Override
 	/**

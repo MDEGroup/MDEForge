@@ -1,9 +1,5 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-
-
-
 <!-- Breadcrumb START -->
 <ul class="breadcrumb">
 		<li>You are here</li>
@@ -14,16 +10,9 @@
 		<li>Shared Projects</li>
 </ul>
 <!-- Breadcrumb END -->
-
-
-
 <h3 class="header-h main-title">Shared Projects</h3>
 <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam mi elit, laoreet ac turpis ac, vulputate lacinia turpis. Vestibulum eu augue massa. Curabitur a quam sed turpis pharetra finibus. In purus nulla, tristique eu pulvinar ut, lacinia ut ligula. Proin ac neque neque. Sed vitae egestas enim. </p> -->
-
-	
 	<div class="innerLR">
-
-	
 	<div class="widget widget-heading-simple">
 		<div class="widget-body">
 		
@@ -35,8 +24,7 @@
 					<tr>						
 						<th>Name</th>
 						<th>Created</th>
-						<th>Owner</th>
-						
+						<th>Owner</th>				
 					</tr>
 				</thead>
 				<!-- // Table heading END -->
@@ -52,16 +40,11 @@
 						<td>${project.getOwner().getUsername() }</td>
 					</tr>
 					<!-- // Table row END -->
-					</c:forEach>
-					
-					
+					</c:forEach>	
 				</tbody>
 				<!-- // Table body END -->
-				
 			</table>
 			<!-- // Table END -->
-			
 		</div>
-	</div>
-	
+	</div
 </div>	
