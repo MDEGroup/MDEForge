@@ -16,6 +16,6 @@ public interface ModelService extends CRUDArtifactService<Model>,
 			ATLTransformation atlTransformation);
 
 	void createAll(List<Model> artifacts, EcoreMetamodel metamodel, User user) throws BusinessException;
-	String getJsonFormat(Model model);
+	String getJson(Model model);
 
 }

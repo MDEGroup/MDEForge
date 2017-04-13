@@ -8,6 +8,7 @@ import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValidateService;
@@ -151,8 +152,8 @@ public class EcoreMetamodelsRESTController {
 			Artifact s = ecoreMetamodelService.create(ecoreMetamodel);
 			// Response success
 			return new ResponseEntity<Artifact>(s, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
+		}
+		catch (Exception e) {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
@@ -280,10 +281,17 @@ public class EcoreMetamodelsRESTController {
 	@RequestMapping(value = "/metamodelJsonFormat/{id_ecoreMetamodel}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<String> getMetamodelInJsonFormat(
 			@PathVariable("id_ecoreMetamodel") String idEcoreMetamodel) {
-		EcoreMetamodel ecoreMM = ecoreMetamodelService.findOneById(idEcoreMetamodel, user);
-		String result = ecoreMetamodelService
-				.getMetamodelInJsonFormat(ecoreMM);
-		return new ResponseEntity<String>(result, HttpStatus.OK);
+		try{
+			EcoreMetamodel ecoreMM = ecoreMetamodelService.findOneById(idEcoreMetamodel, user);
+			if(!ecoreMetamodelService.isValid(ecoreMM))
+				throw new InvalidArtifactException();
+			String result = ecoreMetamodelService
+					.getJson(ecoreMM);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("EcoreMetamodel is invalid",
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 	}
 
 }

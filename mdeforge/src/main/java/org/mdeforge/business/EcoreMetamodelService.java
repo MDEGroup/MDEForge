@@ -30,7 +30,7 @@ public interface EcoreMetamodelService extends CRUDArtifactService<EcoreMetamode
 	
 	String getJsonFormatFromResource(Resource metamodel)
 			throws BusinessException;
-	String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException;
+	String getJson(EcoreMetamodel id) throws BusinessException;
 	List<Statistic> numberOfMCdistribution();
 	void calculateSimilarities(ToBeAnalyse toBeAnalyse) throws BusinessException;
 }

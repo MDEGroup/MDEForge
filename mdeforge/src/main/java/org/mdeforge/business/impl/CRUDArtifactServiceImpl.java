@@ -18,18 +18,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -295,6 +290,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	public List<String> getIndexes() {
 		return Arrays.asList(TYPE_TAG, NAME_TAG, AUTHOR_TAG, ID_TAG, LAST_UPDATE_TAG);
 	}
+	protected static final String INVOLVED_TAG = "involved";
 	protected static final String TYPE_TAG = "forgeType";
 	protected static final String NAME_TAG = "name";
 	protected static final String AUTHOR_TAG = "author";
@@ -334,69 +330,54 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Value("#{cfgproperties[basePathLucene]}")
 	protected String basePathLucene;
 	
-	@Override
-	public void createIndex(T artifact) {
+	protected Document getMetadataIndex (Artifact artifact){
+		Document doc = new Document();
+		//ID
+		Field idField = new Field(ID_TAG, artifact.getId(), Store.YES, Index.ANALYZED);
+	 	doc.add(idField);
 		
-		// Set the directory in which will be created the index.
-		Directory indexDir;
-		try {
-			File indexDirFile = new File(basePathLucene);
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-			// Create an index in the directory, appending new index over previously indexed documents:
-			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
-			// create the indexer
+		//Artifact TYPE: "EcoreMetamodel"
+		Field artifactType = new Field(TYPE_TAG, artifact.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		doc.add(artifactType);
 		
-			Document doc = new Document();
-			//ID
-			Field idField = new Field(ID_TAG, artifact.getId(), Store.YES, Index.ANALYZED);
-		 	doc.add(idField);
-			
-			//Artifact TYPE: "EcoreMetamodel"
-			Field artifactType = new Field(TYPE_TAG, artifact.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
-			doc.add(artifactType);
-			
-	//				String text = handler.toString();
-			String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(artifact));
-			Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
-			doc.add(textField);
-	
-			
-			Field artName = new Field(NAME_TAG, artifact.getName(), Store.YES, Index.ANALYZED);
-		 	doc.add(artName);
-		 	
-		 	Field authorField = new Field(AUTHOR_TAG, artifact.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
-		 	doc.add(authorField);
-		 	
-		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, artifact.getModified().toString(), Store.YES, Index.ANALYZED);
-		 	doc.add(lastUpdateField);
-		 	
-		 	for (Property prop : artifact.getProperties()) {
-				String propName = prop.getName();
-				String propValue = prop.getValue();
-				if(propName != null && propValue != null) {
-					Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-					doc.add(propField);
-				}
-			}
-		 	IndexWriter writer = new IndexWriter(indexDir, conf);
+//				String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(artifact));
+		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+		doc.add(textField);
 
-			try {
-				// writer.updateDocument(new Term("path", file.getPath()), document);
-				writer.addDocument(doc);
-			} catch (CorruptIndexException e) {
-				writer.close();
-				throw new BusinessException(e.getMessage());
-			} catch (IOException e) {
-				writer.close();
-				throw new BusinessException(e.getMessage());
+		
+		Field artName = new Field(NAME_TAG, artifact.getName(), Store.YES, Index.ANALYZED);
+	 	doc.add(artName);
+	 	
+	 	Field authorField = new Field(AUTHOR_TAG, artifact.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+	 	doc.add(authorField);
+	 	
+	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, artifact.getModified().toString(), Store.YES, Index.ANALYZED);
+	 	doc.add(lastUpdateField);
+	 	
+	 	for (Property prop : artifact.getProperties()) {
+			String propName = prop.getName();
+			String propValue = prop.getValue();
+			if(propName != null && propValue != null) {
+				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+				doc.add(propField);
 			}
-			writer.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			throw new BusinessException(e1.getMessage());
 		}
+	 	for (Relation rel : artifact.getRelations()) {
+			if(rel.getFromArtifact()!=artifact){
+				Field involvedName = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
+			 	doc.add(involvedName);
+			 	Field involvedId = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
+			 	doc.add(involvedId);
+			}
+			if(rel.getToArtifact()!=artifact){
+				Field involvedName = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
+			 	doc.add(involvedName);
+			 	Field involvedId = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
+			 	doc.add(involvedId);
+			}
+		}
+	 	return doc;
 	}
 
 	private String getTextFromInputStream(InputStream is){      
@@ -560,7 +541,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			IndexReader reader = IndexReader.open(directory);
 			IndexSearcher searcher = new IndexSearcher(reader);
 			
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			//Get all indexed fields
 			String[] fields = getIndexes().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
@@ -578,43 +558,43 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
 			
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-//			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+			//Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
 			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
 			for (int i = 0; i < iterator; i++) {
 				int id = hits.scoreDocs[i].doc;
 				Document doc = searcher.doc(id);
-				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-				String[] fragments = new String[frag.length];
-				for (int j = 0; j < frag.length; j++) {
-					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-						fragments[j] = frag[j].toString();
-//						System.out.println(frag[j].toString());
-					}
-				}
+//				String text = doc.get("text");
+//				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
+//				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+//				String[] fragments = new String[frag.length];
+//				for (int j = 0; j < frag.length; j++) {
+//					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+//						fragments[j] = frag[j].toString();
+//					}
+//				}
 				T art = findOne(doc.get("id"));
 				
 				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
 				SearchResult sr = new SearchResult();
 				sr.setArtifact(art);
 				sr.setScore(hits.scoreDocs[i].doc);
-				sr.setFragments(fragments);
+//				sr.setFragments(fragments);
 				
 				searchResults.add(sr);
 			}
 			searcher.close();
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (InvalidTokenOffsetsException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
+		} 
+//		catch (InvalidTokenOffsetsException e) {
+//			throw new BusinessException(e.getMessage());
+//		} 
+		catch (org.apache.lucene.queryParser.ParseException e) {
 			throw new BusinessException(e.getMessage());
 		}
 		
 		long endTime = System.nanoTime();
-		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+		duration = (endTime - startTime)/1000000;
 		
 		searchResultComplete.setResults(searchResults);
 		searchResultComplete.setSearchTime(duration);

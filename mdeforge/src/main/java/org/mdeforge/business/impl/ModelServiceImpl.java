@@ -22,10 +22,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.Diagnostic;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -41,6 +39,7 @@ import org.emfjson.jackson.resource.JsonResourceFactory;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
@@ -50,6 +49,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ArtifactRepository;
@@ -189,36 +189,28 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 
 
 	@Override
-	public boolean isValid(Artifact art) throws BusinessException {
-		EcoreMetamodel emm = null;
-		for (Relation rel : art.getRelations()) {
-			if (rel instanceof ConformToRelation) {
-				Artifact temm = rel.getToArtifact();
-				emm = ecoreMetamodelService.findOne(temm.getId());
-			}
-		}
-		if (emm == null)
-			throw new BusinessException();
-		if (art instanceof Model) {
-			try {
-				ecoreMetamodelService.registerMetamodel(emm);
-//				ecoreMetamodelService.registerMetamodel(emm);
-				XMIResourceImpl resource = new XMIResourceImpl();
-				File temp = new File(gridFileMediaService.getFilePath(art));
-				resource.load(new FileInputStream(temp),
-						new HashMap<Object, Object>());
-				EObject data = resource.getContents().get(0);
-				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(data);
-				if (diagnostic.getSeverity() == Diagnostic.ERROR)
-					return false;
-				else
-					return true;
+	public boolean isValid(Artifact artifact) throws BusinessException {
+		Model art = (Model) artifact;
+		EcoreMetamodel emm = (EcoreMetamodel) art.getMetamodel().getToArtifact();
+		if (!ecoreMetamodelService.isValid(emm))
+			throw new InvalidArtifactException();
+		try {
+			ecoreMetamodelService.registerMetamodel(emm);
+			XMIResourceImpl resource = new XMIResourceImpl();
+			File temp = new File(gridFileMediaService.getFilePath(art));
+			resource.load(new FileInputStream(temp),
+					new HashMap<Object, Object>());
+			EObject data = resource.getContents().get(0);
+			Diagnostic diagnostic = Diagnostician.INSTANCE.validate(data);
+			if (diagnostic.getSeverity() == Diagnostic.ERROR){
+				System.out.println(diagnostic.getMessage());
+				return false;}
+			else
+				return true;
 
-			} catch (Exception e) {
-				return false;
-			}
-		} else
+		} catch (Exception e) {
 			return false;
+		}
 	}
 
 	@Override
@@ -241,7 +233,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Override
 	public void createIndex(Model is) {
 		// set the directory for the index
-		super.createIndex(is);
 		Directory indexDir;
 		try {
 			File indexDirFile = new File(basePathLucene);
@@ -273,15 +264,52 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	 */
 	private Document parseArtifactForIndex(Model model) {
 		
-		Document doc = new Document();
+		Document doc = getMetadataIndex(model);
 		try{
 			Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
 			ecoreMetamodelService.registerMetamodel(emm);
 			ResourceSet load_resourceSet = new ResourceSetImpl();
-	
+			/**/
+			Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
+		 	doc.add(idField);
+			
+			Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+			doc.add(artifactType);
+			
+			Field artName = new Field(NAME_TAG, model.getName(), Store.YES, Index.ANALYZED);
+		 	doc.add(artName);
+		 	
+		 	Field authorField = new Field(AUTHOR_TAG, model.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+		 	doc.add(authorField);
+		 	
+		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, model.getModified().toString(), Store.YES, Index.ANALYZED);
+		 	doc.add(lastUpdateField);
+		 	
+		 	for (Property prop : model.getProperties()) {
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				if(propName != null && propValue != null) {
+					Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+					doc.add(propField);
+				}
+			}
+			
+			/**/
+			
+			
+			Field conformToName = new Field(CONFORM_TO_TAG, emm.getName(), Store.YES, Index.ANALYZED);
+			doc.add(conformToName);
+			
+			Field conformToId = new Field(CONFORM_TO_TAG, emm.getId(), Store.YES, Index.ANALYZED);
+			doc.add(conformToId);
 			load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 			Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
+			
+			
+			
+			
+			
 			
 			TreeIterator<EObject> eAllContents = load_resource.getAllContents();
 			while (eAllContents.hasNext()) {
@@ -289,10 +317,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				
 				EClass eClass = next.eClass();
 				if(eClass instanceof EClass)  {
-					//CLASS ANNOTATIONS
-					EList<EAnnotation> annotations = next.eClass().getEAnnotations();
-					//TODO index also the annotations
-					
 					//CLASS ATTRIBUTES
 					for (EAttribute attribute : eClass.getEAllAttributes()) {
 						if(next.eGet(attribute) != null){
@@ -348,9 +372,10 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	}
 
 	@Override
-	public String getJsonFormat(Model model) {
+	public String getJson(Model model) {
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
 		ecoreMetamodelService.registerMetamodel(emm);
+		@SuppressWarnings("unused")
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 		JsonResourceFactory factory = new JsonResourceFactory();
@@ -363,9 +388,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			return jsonString;
 		} catch (JsonProcessingException e1) {
 			throw new BusinessException();
-		} catch (IOException e) {
-			throw new BusinessException();
-
-		}
+		} 
 	}
 }

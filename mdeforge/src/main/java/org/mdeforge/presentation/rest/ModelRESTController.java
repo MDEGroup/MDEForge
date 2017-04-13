@@ -3,9 +3,9 @@ package org.mdeforge.presentation.rest;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
-import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.ValidateService;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -37,8 +37,6 @@ public class ModelRESTController {
 
 	@Autowired
 	private ModelService modelService;
-	@Autowired
-	private ProjectService projectService;
 	
 	@Autowired
 	private User user;
@@ -180,6 +178,22 @@ public class ModelRESTController {
 			return new ResponseEntity<String>("Model deleted", HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>("Model not deleted", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/modelJsonFormat/{id_ecoreMetamodel}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> getMetamodelInJsonFormat(
+			@PathVariable("id_model") String idModel) {
+		try{
+			
+			Model model = modelService.findOneById(idModel, user);
+			if(modelService.isValid(model))
+				throw new InvalidArtifactException();
+			String result = modelService
+					.getJson(model);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("Model or metamodel is invalid",
+					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 

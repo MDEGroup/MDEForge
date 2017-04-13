@@ -103,6 +103,7 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.SemanticSimilarityRelationService;
 import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
 import org.mdeforge.business.SimilarityRelationService;
@@ -531,8 +532,12 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				EcoreUtil.resolveAll(resourceSet);
 				EObject eo = resource.getContents().get(0);
 				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
-				if (diagnostic.getSeverity() == Diagnostic.ERROR)
+				if (diagnostic.getSeverity() == Diagnostic.ERROR){
+					diagnostic.getChildren().forEach(s -> System.out.println(s.getMessage()));
+					System.out.println(diagnostic.getChildren().size());
 					return false;
+					
+				}
 				else
 					return true;
 			} catch (Exception e) {
@@ -1204,6 +1209,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		mapper.registerModule(emfModule);
 
 		try {
+			
 			String jsonString = mapper.writeValueAsString(metamodel);
 			return jsonString;
 		} catch (JsonProcessingException e1) {
@@ -1213,7 +1219,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 
 	@Override
-	public String getMetamodelInJsonFormat(EcoreMetamodel id) throws BusinessException {
+	public String getJson(EcoreMetamodel id) throws BusinessException {
+		if(!isValid(id))
+				throw new InvalidArtifactException();
 		Resource resource = this.registerMetamodel(id);
 		return getJsonFormatFromResource(resource);
 	}
@@ -1281,7 +1289,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	@Override
 	public void createIndex(EcoreMetamodel is) {
-		super.createIndex(is);
 		File indexDirFile = new File(basePathLucene);
 		// Set the directory in which will be created the index.
 		Directory indexDir;
@@ -1316,7 +1323,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	}
 
 	private Document parseArtifactForIndex(EcoreMetamodel ecoreMetamodel) {
-		Document doc = new Document();
+		Document doc = getMetadataIndex(ecoreMetamodel);
 		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl());
 		ResourceSet resourceSet = new ResourceSetImpl();
