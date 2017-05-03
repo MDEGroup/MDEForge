@@ -101,9 +101,7 @@ public class SearchPublicController {
 		// Tags for MM (statics)
 		// Get all Metamodels tags
 		List<String> indexFieldNamesForMM = ecoreMetamodelService.getIndexes();
-		for (String string : indexFieldNamesForMM) {
-			System.out.println(string + "ggg");
-		}
+		
 		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
 
 		// Tags for T. (statics)

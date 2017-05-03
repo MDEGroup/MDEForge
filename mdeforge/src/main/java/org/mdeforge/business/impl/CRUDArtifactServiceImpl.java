@@ -424,7 +424,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
-			System.out.println("Total hits: " + hits.totalHits);
 
 			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
 			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
@@ -441,7 +440,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				for (int j = 0; j < frag.length; j++) {
 					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
 						fragments[j] = frag[j].toString();
-//						System.out.println(frag[j].toString());
 					}
 				}
 				T art = findOne(doc.get("id"));
@@ -467,7 +465,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		
 		long endTime = System.nanoTime();
 		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
-//		System.out.println("Search done in " + duration + " milliseconds");
 		
 		searchResultComplete.setResults(searchResults);
 		searchResultComplete.setSearchTime(duration);
@@ -519,7 +516,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		} catch (org.apache.lucene.queryParser.ParseException e) {
 			throw new BusinessException(e.getMessage());
 		}
-//		System.out.println("Search done in " + duration + " milliseconds");
 		return listArtifact;
 	}
 	
@@ -612,6 +608,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		
 		return searchResultComplete;
 	}
+
+	
 
 	@SuppressWarnings("unchecked")
 	public CRUDArtifactServiceImpl() {
@@ -793,10 +791,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			cal.add(Calendar.DAY_OF_MONTH, 1);
 			Statistic t = null;
 			for (Statistic statistic : result) {
-				if(cal.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(statistic.getCreated())){
+				if(cal.get(Calendar.DAY_OF_MONTH) == Integer.parseInt(statistic.getCreated()))
 					t = statistic;
-					System.out.println(statistic.getTotal());
-				}
 			}
 			if(t != null)
 				stat.add(t);

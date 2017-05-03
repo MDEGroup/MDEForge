@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="urml"
+    nsURI="http://unicase.org/model/urml" nsPrefix="org.unicase.model.urml">
+  <eClassifiers xsi:type="ecore:EClass" name="UrmlModelElement" abstract="true" eSuperTypes="../../org.unicase.model/model/model.ecore#//UnicaseModelElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Stakeholder" eSuperTypes="#//UrmlModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="goals" upperBound="-1"
+        eType="#//goal/Goal" eOpposite="#//goal/Goal/stakeholders"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="URMLDiagram" eSuperTypes="../../org.unicase.diagram/model/diagram.ecore#//MEDiagram"/>
+  <eSubpackages name="goal" nsURI="http://unicase.org/model/urml/goal" nsPrefix="org.unicase.model.urml.goal">
+    <eClassifiers xsi:type="ecore:EClass" name="Goal" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="soft" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//goal/GoalType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stakeholders" upperBound="-1"
+          eType="#//Stakeholder" eOpposite="#//Stakeholder/goals"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="realizedFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/goals"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailingUseCases" eType="#//usecase/ApplicationDomainUseCase"
+          eOpposite="#//usecase/ApplicationDomainUseCase/detailedGoal"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subGoals" upperBound="-1"
+          eType="#//goal/Goal" containment="true" eOpposite="#//goal/Goal/parentGoal"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentGoal" eType="#//goal/Goal"
+          eOpposite="#//goal/Goal/subGoals"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="influencingGoals" upperBound="-1"
+          eType="#//goal/GoalReference" eOpposite="#//goal/GoalReference/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="influencedGoals" upperBound="-1"
+          eType="#//goal/GoalReference" containment="true" eOpposite="#//goal/GoalReference/source"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GoalReference" eSuperTypes="#//UrmlModelElement ../../org.unicase.metamodel/model/metamodel.ecore#//AssociationClassElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//goal/Goal"
+          eOpposite="#//goal/Goal/influencedGoals"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//goal/Goal"
+          eOpposite="#//goal/Goal/influencingGoals"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" eType="#//goal/GoalReferenceType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="GoalType">
+      <eLiterals name="BUSINESS_GOAL" literal="Business Goal"/>
+      <eLiterals name="PRODUCT_GOAL" value="1" literal="Product Goal"/>
+      <eLiterals name="CUSTOMER_GOAL" value="2" literal="Customer Goal"/>
+      <eLiterals name="END_USER_GOAL" value="3" literal="End User Goal"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="GoalReferenceType">
+      <eLiterals name="PLUS_PLUS" literal="++"/>
+      <eLiterals name="PLUS" value="1" literal="+"/>
+      <eLiterals name="MINUS" value="2" literal="-"/>
+      <eLiterals name="MINUS_MINUS" value="3" literal="--"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="requirement" nsURI="http://unicase.org/model/urml/requirement"
+      nsPrefix="org.unicase.model.urml.requirement">
+    <eClassifiers xsi:type="ecore:EClass" name="Requirement" abstract="true" eSuperTypes="#//danger/Mitigation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="implementingServices"
+          upperBound="-1" eType="#//service/Service" eOpposite="#//service/Service/satisfiedRequirements"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="terminal" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionalRequirement" eSuperTypes="#//requirement/Requirement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailedFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/detailingFunctionalRequirements"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subFunctionalRequirements"
+          upperBound="-1" eType="#//requirement/FunctionalRequirement" containment="true"
+          eOpposite="#//requirement/FunctionalRequirement/parentFunctionalRequirement"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentFunctionalRequirement"
+          eType="#//requirement/FunctionalRequirement" eOpposite="#//requirement/FunctionalRequirement/subFunctionalRequirements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NonFunctionalRequirement" eSuperTypes="#//requirement/Requirement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constrainedFeatures"
+          upperBound="-1" eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/constrainingNonFunctionalRequirements"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subNonFunctionalRequirements"
+          upperBound="-1" eType="#//requirement/NonFunctionalRequirement" containment="true"
+          eOpposite="#//requirement/NonFunctionalRequirement/parentNonFunctionalRequirement"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentNonFunctionalRequirement"
+          eType="#//requirement/NonFunctionalRequirement" eOpposite="#//requirement/NonFunctionalRequirement/subNonFunctionalRequirements"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="usecase" nsURI="http://unicase.org/model/urml/usecase" nsPrefix="org.unicase.model.urml.usecase">
+    <eClassifiers xsi:type="ecore:EClass" name="UseCase" abstract="true" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+          eType="ecore:EClass ../../org.unicase.model/model/model.ecore#//requirement/Step"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actors" upperBound="-1"
+          eType="#//usecase/Actor" eOpposite="#//usecase/Actor/useCases"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApplicationDomainUseCase" eSuperTypes="#//usecase/UseCase">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailedGoal" upperBound="-1"
+          eType="#//goal/Goal" eOpposite="#//goal/Goal/detailingUseCases"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SolutionDomainUseCase" eSuperTypes="#//usecase/UseCase">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailedFeature" eType="#//feature/AbstractFeature"
+          eOpposite="#//feature/AbstractFeature/detailingUseCases"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//danger/Asset">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="useCases" upperBound="-1"
+          eType="#//usecase/UseCase" eOpposite="#//usecase/UseCase/actors"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="service" nsURI="http://unicase.org/model/urml/service" nsPrefix="org.unicase.model.urml.service">
+    <eClassifiers xsi:type="ecore:EClass" name="Service" eSuperTypes="#//danger/Asset">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="satisfiedRequirements"
+          upperBound="-1" eType="#//requirement/Requirement" eOpposite="#//requirement/Requirement/implementingServices"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentService" eType="#//service/Service"
+          eOpposite="#//service/Service/subServices"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subServices" upperBound="-1"
+          eType="#//service/Service" containment="true" eOpposite="#//service/Service/parentService"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="danger" nsURI="http://unicase.org/model/urml/danger" nsPrefix="org.unicase.model.urml.danger">
+    <eClassifiers xsi:type="ecore:EClass" name="Asset" abstract="true" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggeredDangers" upperBound="-1"
+          eType="#//danger/Danger" eOpposite="#//danger/Danger/triggeringAssets"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="harmingDangers" upperBound="-1"
+          eType="#//danger/Danger" eOpposite="#//danger/Danger/harmedAssets"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Danger" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggeringAssets" upperBound="-1"
+          eType="#//danger/Asset" eOpposite="#//danger/Asset/triggeredDangers"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="harmedAssets" upperBound="-1"
+          eType="#//danger/Asset" eOpposite="#//danger/Asset/harmingDangers"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mitigations" upperBound="-1"
+          eType="#//danger/Mitigation" eOpposite="#//danger/Mitigation/mitigatedDangers"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Mitigation" abstract="true" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="mitigatedDangers" upperBound="-1"
+          eType="#//danger/Danger" eOpposite="#//danger/Danger/mitigations"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ProceduralMitigation" eSuperTypes="#//danger/Mitigation">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mitigationProcedure"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="feature" nsURI="http://unicase.org/model/urml/feature" nsPrefix="org.unicase.model.urml.feature">
+    <eClassifiers xsi:type="ecore:EClass" name="AbstractFeature" abstract="true" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="goals" upperBound="-1"
+          eType="#//goal/Goal" eOpposite="#//goal/Goal/realizedFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailingFunctionalRequirements"
+          upperBound="-1" eType="#//requirement/FunctionalRequirement" eOpposite="#//requirement/FunctionalRequirement/detailedFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constrainingNonFunctionalRequirements"
+          upperBound="-1" eType="#//requirement/NonFunctionalRequirement" eOpposite="#//requirement/NonFunctionalRequirement/constrainedFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="detailingUseCases" upperBound="-1"
+          eType="#//usecase/SolutionDomainUseCase" eOpposite="#//usecase/SolutionDomainUseCase/detailedFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parentFeature" eType="#//feature/AbstractFeature"
+          eOpposite="#//feature/AbstractFeature/subFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" containment="true" eOpposite="#//feature/AbstractFeature/parentFeature"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="excludingFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/excludedFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="excludedFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/excludingFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiringFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/requiredFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requiredFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/requiringFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="optionalParentVariationPoint"
+          eType="#//feature/VariationPoint" eOpposite="#//feature/VariationPoint/optionalSubFeatures"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variationPointInstances"
+          upperBound="-1" eType="#//feature/VariationPointInstance" eOpposite="#//feature/VariationPointInstance/selectedFeatures"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Feature" eSuperTypes="#//feature/AbstractFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+          eType="#//feature/Product" eOpposite="#//feature/Product/features"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariationPoint" eSuperTypes="#//feature/AbstractFeature">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="optionalSubFeatures"
+          upperBound="-1" eType="#//feature/AbstractFeature" containment="true" eOpposite="#//feature/AbstractFeature/optionalParentVariationPoint"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplicity" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instances" upperBound="-1"
+          eType="#//feature/VariationPointInstance" eOpposite="#//feature/VariationPointInstance/variationPoint"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VariationPointInstance" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variationPoint" eType="#//feature/VariationPoint"
+          eOpposite="#//feature/VariationPoint/instances"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="products" upperBound="-1"
+          eType="#//feature/Product" eOpposite="#//feature/Product/variationPointInstances"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selectedFeatures" upperBound="-1"
+          eType="#//feature/AbstractFeature" eOpposite="#//feature/AbstractFeature/variationPointInstances"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Product" eSuperTypes="#//UrmlModelElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variationPointInstances"
+          upperBound="-1" eType="#//feature/VariationPointInstance" eOpposite="#//feature/VariationPointInstance/products"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="features" upperBound="-1"
+          eType="#//feature/Feature" eOpposite="#//feature/Feature/products"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

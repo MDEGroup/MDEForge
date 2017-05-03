@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mtpusecase" nsURI="br.uneb/mtp/usecase" nsPrefix="mtp">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="packableElements" upperBound="-1"
+        eType="#//PackableElement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PackableElement" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HasInheritance" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inheritances" upperBound="-1"
+        eType="#//Generalization" eOpposite="#//Generalization/src"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Generalization" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" eType="#//HasInheritance"
+        eOpposite="#//HasInheritance/inheritances"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//HasInheritance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comment" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//PackableElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UseCase" eSuperTypes="#//HasInheritance">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="includes" eType="#//Include"
+        eOpposite="#//Include/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extends" eType="#//Extend"
+        eOpposite="#//Extend/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//HasInheritance"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Relation" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//PackableElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//PackableElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectedAssociation" eSuperTypes="#//Relation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Association" eSuperTypes="#//Relation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Include" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//UseCase"
+        eOpposite="#//UseCase/includes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//UseCase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Extend" eSuperTypes="#//PackableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//UseCase"
+        eOpposite="#//UseCase/extends"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//UseCase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransformationActor" eSuperTypes="#//Actor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementUseCase" eSuperTypes="#//UseCase"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstraintComment" eSuperTypes="#//Comment"/>
+</ecore:EPackage>

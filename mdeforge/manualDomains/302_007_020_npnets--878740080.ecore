@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="highlevelnets" nsURI="mathtech.ru/npntool/nets/" nsPrefix="nets">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+    <details key="documentation" value="An instance of TokenTypeElementNet with marking.&#xD;&#xA;It corresponds to a net token in Nested Petri Nets."/>
+  </eAnnotations>
+  <eSubpackages name="marking" nsURI="http://mathtech.ru/npntool/nets/marking" nsPrefix="marking">
+    <eClassifiers xsi:type="ecore:EClass" name="Marking" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="map" upperBound="-1"
+          eType="#//marking/PlaceMarking" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PlaceMarking" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="place" lowerBound="1"
+          eType="#//hlpn/Place"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="marking" lowerBound="1"
+          eType="#//tokenexpressions/TokenMultiSet" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="HighLevelPetriNetMarked" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="net" lowerBound="1" eType="#//hlpn/HighLevelPetriNet"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="marking" lowerBound="1"
+          eType="#//marking/Marking" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="tokentypes" nsURI="http://mathtech.ru/npntool/nets/tokentypes"
+      nsPrefix="tokentypes">
+    <eClassifiers xsi:type="ecore:EClass" name="TokenType" abstract="true" eSuperTypes="#//common/INetElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenTypeAtomic" eSuperTypes="#//tokentypes/TokenType">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+          eType="#//tokentypes/Atom" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="atom" lowerBound="1"
+          eType="#//tokentypes/TokenAtomic" containment="true" eOpposite="#//tokentypes/TokenAtomic/type"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenTypeElementNet" eSuperTypes="#//tokentypes/TokenType #//common/IDiagramHolder">
+      <eOperations name="getInstanceByID" lowerBound="1">
+        <eParameters name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eOperations>
+      <eOperations name="createInstance"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elementNetMarkeds" upperBound="-1"
+          eType="#//tokentypes/ElementNetMarked" containment="true" eOpposite="#//tokentypes/ElementNetMarked/type"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="net" lowerBound="1" eType="#//hlpn/HighLevelPetriNet"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tokenNets" upperBound="-1"
+          eType="#//tokentypes/TokenNet" containment="true" eOpposite="#//tokentypes/TokenNet/type"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Token" abstract="true" eSuperTypes="#//common/INetElement">
+      <eOperations name="getType" lowerBound="1" eType="#//tokentypes/TokenType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+          eType="#//tokentypes/TokenAttribute" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenAtomic" eSuperTypes="#//tokentypes/Token">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenTypeAtomic" eOpposite="#//tokentypes/TokenTypeAtomic/atom"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="#//tokentypes/Atom"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenNet" eSuperTypes="#//tokentypes/Token">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenTypeElementNet" eOpposite="#//tokentypes/TokenTypeElementNet/tokenNets"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//tokentypes/ElementNetMarked"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenAttribute" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ElementNetMarked" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenTypeElementNet" eOpposite="#//tokentypes/TokenTypeElementNet/elementNetMarkeds"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="marking" lowerBound="1"
+          eType="#//marking/Marking" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Atom" eSuperTypes="#//common/INetElement"/>
+  </eSubpackages>
+  <eSubpackages name="tokenexpressions" nsURI="mathtech.ru/npntool/tokenexpressions"
+      nsPrefix="tokenexpressions">
+    <eClassifiers xsi:type="ecore:EClass" name="TokenWeight" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="token" lowerBound="1"
+          eType="#//tokentypes/Token"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenMultisetExpression" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="#//tokenexpressions/TokenMultiSet" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenMultiSet" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="weight" upperBound="-1"
+          eType="#//tokenexpressions/TokenWeight" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="context" unique="false"
+          lowerBound="1" eType="#//hlpn/ContextVariable" eOpposite="#//hlpn/ContextVariable/variables"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenVariadicExpression" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="monoms" lowerBound="1"
+          upperBound="-1" eType="#//tokenexpressions/Monom" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="monomConstants" upperBound="-1"
+          eType="#//tokenexpressions/MonomConstant" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Monom" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+          eType="#//tokenexpressions/Variable"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+          defaultValueLiteral="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenExpressionBinding" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//tokenexpressions/TokenVariadicExpression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="bindingTokens" upperBound="-1"
+          eType="#//tokenexpressions/TokenBinding" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TokenBinding" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+          eType="#//tokenexpressions/Variable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="#//tokentypes/Token"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MonomConstant" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constant" lowerBound="1"
+          eType="#//tokenexpressions/Variable"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          eType="#//tokentypes/Token"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="power" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"
+          defaultValueLiteral="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NetConstant" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="binding" lowerBound="1"
+          eType="#//tokenexpressions/TokenBinding" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="hlpn" nsURI="mathtech.ru/npntool/hlpn" nsPrefix="hlpn">
+    <eClassifiers xsi:type="ecore:EClass" name="HighLevelPetriNet" eSuperTypes="#//common/INetElement #//hlpn/ContextVariable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+          eType="#//hlpn/Node" containment="true" eOpposite="#//hlpn/Node/net"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arcs" upperBound="-1"
+          eType="#//hlpn/Arc" containment="true" eOpposite="#//hlpn/Arc/net"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Place" eSuperTypes="#//hlpn/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outArcs" upperBound="-1"
+          eType="#//hlpn/ArcPT" eOpposite="#//hlpn/ArcPT/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inArcs" upperBound="-1"
+          eType="#//hlpn/ArcTP" eOpposite="#//hlpn/ArcTP/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//tokentypes/TokenType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//hlpn/ContextVariable #//hlpn/Node">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inArcs" upperBound="-1"
+          eType="#//hlpn/ArcPT" eOpposite="#//hlpn/ArcPT/target"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outArcs" upperBound="-1"
+          eType="#//hlpn/ArcTP" eOpposite="#//hlpn/ArcTP/source"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArcPT" eSuperTypes="#//hlpn/Arc">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//hlpn/Place" eOpposite="#//hlpn/Place/outArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//hlpn/Transition" eOpposite="#//hlpn/Transition/inArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inscription" lowerBound="1"
+          eType="#//tokenexpressions/TokenVariadicExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArcTP" eSuperTypes="#//hlpn/Arc">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//hlpn/Transition" eOpposite="#//hlpn/Transition/outArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//hlpn/Place" eOpposite="#//hlpn/Place/inArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inscription" lowerBound="1"
+          eType="#//tokenexpressions/TokenVariadicExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContextVariable" abstract="true" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+          eType="#//tokenexpressions/Variable" containment="true" eOpposite="#//tokenexpressions/Variable/context"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="net" lowerBound="1" eType="#//hlpn/HighLevelPetriNet"
+          eOpposite="#//hlpn/HighLevelPetriNet/nodes"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Arc" abstract="true" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="net" lowerBound="1" eType="#//hlpn/HighLevelPetriNet"
+          eOpposite="#//hlpn/HighLevelPetriNet/arcs"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="npnets" nsURI="mathtech.ru/npntool/npnets" nsPrefix="npnets">
+    <eClassifiers xsi:type="ecore:EClass" name="NPnet" eSuperTypes="#//common/IDiagramHolder">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="netSystem" lowerBound="1"
+          eType="#//hlpn/HighLevelPetriNet" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="typeElementNet" upperBound="-1"
+          eType="#//tokentypes/TokenTypeElementNet" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="typeAtomic" lowerBound="1"
+          eType="#//tokentypes/TokenTypeAtomic" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="netConstants" upperBound="-1"
+          eType="#//tokenexpressions/NetConstant" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="synchronizations" upperBound="-1"
+          eType="#//npnets/Synchronization" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="host" lowerBound="1"
+          eType="#//npnets/NPnetMarked" eOpposite="#//npnets/NPnetMarked/net"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPnetMarked" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="net" lowerBound="1" eType="#//npnets/NPnet"
+          containment="true" eOpposite="#//npnets/NPnet/host"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="marking" lowerBound="1"
+          eType="#//marking/Marking" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Synchronization" eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//npnets/ESynchronizationKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="involved" upperBound="-1"
+          eType="#//npnets/TransitionSynchronized" eOpposite="#//npnets/TransitionSynchronized/synchronization"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ESynchronizationKind">
+      <eLiterals name="VerticalSynchronization" value="1"/>
+      <eLiterals name="HorizontalSynchronization" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TransitionSynchronized" eSuperTypes="#//hlpn/Transition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="synchronization" eType="#//npnets/Synchronization"
+          eOpposite="#//npnets/Synchronization/involved"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="common" nsURI="http:/mathtech.ru/npntool/common" nsPrefix="common">
+    <eClassifiers xsi:type="ecore:EClass" name="INetElement" abstract="true" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" unique="false"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+          <details key="kind" value="element"/>
+          <details key="targetspace"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IEntityIdentifiable" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral="" iD="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Rectangle" instanceClassName="org.eclipse.draw2d.geometry.Rectangle"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="Point" instanceClassName="org.eclipse.draw2d.geometry.Point"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IDiagramHolder" abstract="true" interface="true"
+        eSuperTypes="#//common/INetElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+          eType="#//npndiagrams/NPNDiagramNetSystem" containment="true" eOpposite="#//npndiagrams/NPNDiagramNetSystem/host"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="npndiagrams" nsURI="http:/mathtech.ru/npntool/npndiagrams" nsPrefix="npndiagrams">
+    <eClassifiers xsi:type="ecore:EClass" name="NPNDiagramNetSystem" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="host" lowerBound="1"
+          eType="#//common/IDiagramHolder" eOpposite="#//common/IDiagramHolder/diagram"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolNodeSN" containment="true" eOpposite="#//npndiagrams/NPNSymbolNodeSN/diagram"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arcs" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolArcSN" containment="true" eOpposite="#//npndiagrams/NPNSymbolArcSN/diagram"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1"
+          eType="#//hlpn/HighLevelPetriNet"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolPlaceSN" eSuperTypes="#//npndiagrams/NPNSymbolNodeSN">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outArcs" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolArcPTSN" eOpposite="#//npndiagrams/NPNSymbolArcPTSN/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inArcs" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolArcTPSN" eOpposite="#//npndiagrams/NPNSymbolArcTPSN/target"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolTransitionSN" eSuperTypes="#//npndiagrams/NPNSymbolNodeSN">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outArcs" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolArcTPSN" eOpposite="#//npndiagrams/NPNSymbolArcTPSN/source"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inArcs" upperBound="-1"
+          eType="#//npndiagrams/NPNSymbolArcPTSN" eOpposite="#//npndiagrams/NPNSymbolArcPTSN/target"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolArcPTSN" eSuperTypes="#//npndiagrams/NPNSymbolArcSN">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//npndiagrams/NPNSymbolTransitionSN" eOpposite="#//npndiagrams/NPNSymbolTransitionSN/inArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//npndiagrams/NPNSymbolPlaceSN" eOpposite="#//npndiagrams/NPNSymbolPlaceSN/outArcs"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolArcTPSN" eSuperTypes="#//npndiagrams/NPNSymbolArcSN">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//npndiagrams/NPNSymbolPlaceSN" eOpposite="#//npndiagrams/NPNSymbolPlaceSN/inArcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+          eType="#//npndiagrams/NPNSymbolTransitionSN" eOpposite="#//npndiagrams/NPNSymbolTransitionSN/outArcs"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolNodeSN" abstract="true" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+          eType="#//npndiagrams/NPNDiagramNetSystem" eOpposite="#//npndiagrams/NPNDiagramNetSystem/nodes"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="constraints" lowerBound="1"
+          eType="#//common/Rectangle"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1"
+          eType="#//hlpn/Node"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NPNSymbolArcSN" abstract="true" eSuperTypes="#//common/IEntityIdentifiable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="diagram" lowerBound="1"
+          eType="#//npndiagrams/NPNDiagramNetSystem" eOpposite="#//npndiagrams/NPNDiagramNetSystem/arcs"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="model" lowerBound="1"
+          eType="#//hlpn/Arc"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="bendpoints" upperBound="-1"
+          eType="#//common/Point"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

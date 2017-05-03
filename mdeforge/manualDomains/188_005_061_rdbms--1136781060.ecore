@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rdbms" nsURI="http://rdbms/1.0" nsPrefix="rm">
+  <eClassifiers xsi:type="ecore:EClass" name="Database" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="userDefinedDataTypes" upperBound="-1"
+        eType="#//UserDefinedDataType" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+        eType="#//Table" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataTypes" upperBound="-1"
+        eType="#//SystemDataType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableFKs" upperBound="-1"
+        eType="#//ForeignKey" containment="true" eOpposite="#//ForeignKey/FKTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tablePK" lowerBound="1"
+        eType="#//PrimaryKeyCon" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableUQ" upperBound="-1"
+        eType="#//UniqueCon" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+        upperBound="-1" eType="#//Column" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableCHs" upperBound="-1"
+        eType="#//CheckCon" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnInPKandUQ" eType="#//PKeyAndUnique"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnInFK" eType="#//ForeignKey"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnDataType" lowerBound="1"
+        eType="#//DataType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForeignKey" eSuperTypes="#//Constraints">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rhsKey" lowerBound="1"
+        eType="#//PKeyAndUnique"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lhsAttr" lowerBound="1"
+        upperBound="-1" eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="refersTo" lowerBound="1"
+        eType="#//Table"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deleteActionRHS" eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="updateActionRHS" eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FKTable" lowerBound="1"
+        eType="#//Table" eOpposite="#//Table/tableFKs"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="match" eType="#//ReferencingType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="inverseReferentialIntegrityCon"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraints" abstract="true" eSuperTypes="#//ModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deferrable" eType="#//DeferrableAct"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deferred" eType="#//DeferredAct"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CheckCon" eSuperTypes="#//Constraints">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PKeyAndUnique" abstract="true" eSuperTypes="#//Constraints">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="PKandUQColumns" lowerBound="1"
+        upperBound="-1" eType="#//Column"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PrimaryKeyCon" eSuperTypes="#//PKeyAndUnique"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UniqueCon" eSuperTypes="#//PKeyAndUnique"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="Action">
+    <eLiterals name="RESTRICT"/>
+    <eLiterals name="NO_ACTION" value="1"/>
+    <eLiterals name="SET_NULL" value="2"/>
+    <eLiterals name="SET_DEFAULT" value="4"/>
+    <eLiterals name="CASCADE" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DeferrableAct">
+    <eLiterals name="DEFFERABLE" literal="DEFFERABLE"/>
+    <eLiterals name="NOT_DEFFERABLE" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DeferredAct">
+    <eLiterals name="INITIALLY_IMMEDIATE" literal="INITIALLY_IMMEDIATE"/>
+    <eLiterals name="INITIALLY_DEFERRED" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemDataType" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="predefinedLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="predefinedDecPlaces" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UserDefinedDataType" eSuperTypes="#//DataType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1"
+        eType="#//SystemDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true" eSuperTypes="#//ModelElement"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ReferencingType">
+    <eLiterals name="DEFAULT"/>
+    <eLiterals name="PARTIAL" value="1"/>
+    <eLiterals name="FULL" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

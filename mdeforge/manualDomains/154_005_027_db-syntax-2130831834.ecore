@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="syntax" nsURI="http://www.asup.org/db/syntax" nsPrefix="db-syntax">
+  <eClassifiers xsi:type="ecore:EClass" name="BindingParseError"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingParser" abstract="true" eSuperTypes="#//StatementParser">
+    <eOperations name="parseBinding" eType="#//BindingParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="stream" lowerBound="1" eType="ecore:EDataType ../../org.asup.fw.java/model/fw-java.ecore#//JavaInputStream"/>
+    </eOperations>
+    <eOperations name="parseBinding" eType="#//BindingParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="sql" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingParserRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//BindingParser">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//BindingParser"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingParseResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindingStatement" eType="#//BindingStatement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorList" upperBound="-1"
+        eType="#//BindingParseError"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BindingStatement" abstract="true">
+    <eOperations name="getStatementType" lowerBound="1" eType="#//StatementType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionParser" abstract="true" eSuperTypes="#//StatementParser">
+    <eOperations name="parseDefinition" eType="#//DefinitionParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="stream" lowerBound="1" eType="ecore:EDataType ../../org.asup.fw.java/model/fw-java.ecore#//JavaInputStream"/>
+    </eOperations>
+    <eOperations name="parseDefinition" eType="#//DefinitionParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="sql" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionParserRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//DefinitionParser">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//DefinitionParser"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionParseError"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionParseResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="definitionStatement" eType="#//DefinitionStatement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="errorList" upperBound="-1"
+        eType="#//DefinitionParseError"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionWriter" abstract="true" eSuperTypes="#//StatementWriter">
+    <eOperations name="createSchema" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eParameters name="schema" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//SchemaDef"/>
+    </eOperations>
+    <eOperations name="createTable" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="schema" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/Schema"/>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//TableDef"/>
+    </eOperations>
+    <eOperations name="createView" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="schema" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/Schema"/>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eParameters name="view" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ViewDef"/>
+    </eOperations>
+    <eOperations name="createIndex" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/Table"/>
+      <eParameters name="name" lowerBound="1" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eParameters name="index" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//IndexDef"/>
+    </eOperations>
+    <eOperations name="dropSchema" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="schema" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//schema/Schema"/>
+      <eParameters name="ignoreFailOnNonEmpty" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eOperations name="dropTable" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/Table"/>
+    </eOperations>
+    <eOperations name="dropView" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="view" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/ViewTable"/>
+    </eOperations>
+    <eOperations name="dropIndex" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="index" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//constraints/Index"/>
+    </eOperations>
+    <eOperations name="deleteData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/Table"/>
+    </eOperations>
+    <eOperations name="insertData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/Table"/>
+    </eOperations>
+    <eOperations name="selectData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="table" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql/model/sqlmodel.ecore#//tables/Table"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionWriterRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//DefinitionWriter">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//DefinitionWriter"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefinitionStatement" abstract="true">
+    <eOperations name="getStatementType" lowerBound="1" eType="#//StatementType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EmbeddedStatement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//StatementType"
+        defaultValueLiteral="DBL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NameHelper" abstract="true" eSuperTypes="../../org.asup.fw.core/model/fw-core.ecore#//Plugin ../../org.asup.fw.core/model/fw-core.ecore#//Service #//SQLObjectNameHelper">
+    <eOperations name="resolveContainers" lowerBound="1">
+      <eParameters name="query" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql.query/model/SQLQueryModel.ecore#//QueryStatement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NameHelperRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//NameHelper">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//NameHelper"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryWriter" abstract="true" eSuperTypes="#//StatementWriter">
+    <eOperations name="writeQuery" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eParameters name="statement" lowerBound="1" eType="ecore:EClass ../../org.eclipse.datatools.modelbase.sql.query/model/SQLQueryModel.ecore#//QueryStatement"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryWriterRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//QueryWriter">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//QueryWriter"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryParser" abstract="true" eSuperTypes="#//StatementParser">
+    <eOperations name="parseQuery" eType="#//SQLQueryParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="stream" lowerBound="1" eType="ecore:EDataType ../../org.asup.fw.java/model/fw-java.ecore#//JavaInputStream"/>
+    </eOperations>
+    <eOperations name="parseQuery" eType="#//SQLQueryParseResult" eExceptions="ecore:EDataType ../../org.asup.db.core/model/db-core.ecore#//DatabaseException">
+      <eParameters name="sql" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryParserRegistry" abstract="true">
+    <eOperations name="lookup" lowerBound="1" eType="#//QueryParser">
+      <eParameters name="connectionConfig" lowerBound="1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//ConnectionConfig"/>
+    </eOperations>
+    <eGenericSuperTypes eClassifier="ecore:EClass ../../org.asup.fw.core/model/fw-core.ecore#//PluginRegistry">
+      <eTypeArguments eClassifier="#//QueryParser"/>
+    </eGenericSuperTypes>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLObjectNameHelper" instanceClassName="org.eclipse.datatools.modelbase.sql.schema.helper.ISQLObjectNameHelper"
+      abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="SQLQueryParseResult" instanceClassName="org.eclipse.datatools.sqltools.parsers.sql.query.SQLQueryParseResult"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StatementWriter" abstract="true" eSuperTypes="../../org.asup.fw.core/model/fw-core.ecore#//Plugin ../../org.asup.fw.core/model/fw-core.ecore#//Service">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nameHelper" eType="#//NameHelper"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StatementParser" abstract="true" eSuperTypes="../../org.asup.fw.core/model/fw-core.ecore#//Plugin ../../org.asup.fw.core/model/fw-core.ecore#//Service"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="StatementType">
+    <eLiterals name="DML"/>
+    <eLiterals name="DDL" value="1"/>
+    <eLiterals name="DBL" value="2"/>
+  </eClassifiers>
+  <eSubpackages name="ddl" nsURI="http://www.asup.org/db/syntax/ddl" nsPrefix="db-syntax-ddl">
+    <eClassifiers xsi:type="ecore:EClass" name="CallStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="procedureName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="parms" upperBound="-1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CommitStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hold" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConnectStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pwd" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="reset" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="to" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateAliasStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="aliasName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tableName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateIndexStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="indexName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="onTable" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sortBy" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//IndexDef"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateTableStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tableName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" lowerBound="1"
+          upperBound="-1" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//TableColumnDef"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CreateViewStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="viewName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="fields" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="query" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DisconnectStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="#//ddl/TargetItem"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DropRange">
+      <eLiterals name="RESTRICT"/>
+      <eLiterals name="CASCADE" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TargetElement">
+      <eLiterals name="ALIAS"/>
+      <eLiterals name="INDEX" value="1"/>
+      <eLiterals name="VIEW" value="2"/>
+      <eLiterals name="TABLE" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ShareMode">
+      <eLiterals name="SHARE"/>
+      <eLiterals name="EXCLUSIVE" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TargetItem">
+      <eLiterals name="ALL"/>
+      <eLiterals name="CURRENT" value="1"/>
+      <eLiterals name="ALLSQL" value="2" literal="ALL SQL"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DropStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="#//ddl/DropRange"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targetName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="#//ddl/TargetElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LockTableStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="allowRead" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="shareMode" eType="#//ddl/ShareMode"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tableName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReleaseStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RenameStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="newName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="originalName" eType="ecore:EClass ../../org.asup.db.core/model/db-core.ecore#//QualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" eType="#//ddl/TargetElement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RollbackStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hold" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetConnectionStatement" eSuperTypes="#//DefinitionStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="databaseName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="dml" nsURI="http://www.asup.org/db/syntax/dml" nsPrefix="db-syntax-dml">
+    <eClassifiers xsi:type="ecore:EClass" name="ExtendedQuerySelect" eSuperTypes="#//dml/ExtendedQueryExpressionBody ../../org.eclipse.datatools.modelbase.sql.query/model/SQLQueryModel.ecore#//QuerySelect"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExtendedQueryExpressionBody" eSuperTypes="../../org.eclipse.datatools.modelbase.sql.query/model/SQLQueryModel.ecore#//QueryExpressionBody">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="optimizeRecordsNumber"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EInt"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="dbl" nsURI="http://www.asup.org/db/syntax/dbl" nsPrefix="db-syntax-dbl">
+    <eClassifiers xsi:type="ecore:EEnum" name="CursorType">
+      <eLiterals name="NOTSCROLL" value="10" literal="NOTSCROLL"/>
+      <eLiterals name="SCROLL" value="20"/>
+      <eLiterals name="DYNSCROLL" value="30"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeclareCursorStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursorName" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursorType" eType="#//dbl/CursorType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="forQuery" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="forStatementName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="hold" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DescribeStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="into" eType="#//dbl/IntoClause"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="statementName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExecuteImmediateStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="variable" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExecuteStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="statementName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="FetchPosition">
+      <eLiterals name="NEXT" literal="NEXT"/>
+      <eLiterals name="PRIOR" value="1"/>
+      <eLiterals name="FIRST" value="3" literal="FIRST"/>
+      <eLiterals name="LAST" value="4" literal="LAST"/>
+      <eLiterals name="BEFORE" value="5" literal="BEFORE"/>
+      <eLiterals name="AFTER" value="6" literal="AFTER"/>
+      <eLiterals name="CURRENT" value="7" literal="CURRENT"/>
+      <eLiterals name="RELATIVE" value="8" literal="RELATIVE"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FetchStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursorName" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="into" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="#//dbl/FetchPosition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativePosition" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="multipleRowClause" eType="#//dbl/MultipleRowFetchClause"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntoClause">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="descriptorName" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="using" eType="#//dbl/UsingType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="IsolationLevel">
+      <eLiterals name="NONE" value="10" literal="NONE"/>
+      <eLiterals name="SERIALIZABLE" value="20" literal="SERIALIZABLE"/>
+      <eLiterals name="NO_COMMIT" value="30"/>
+      <eLiterals name="READ_UNCOMMITTED" value="40"/>
+      <eLiterals name="READ_COMMITTED" value="50"/>
+      <eLiterals name="REPEATABLE_READ" value="60"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MultipleRowFetchClause">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="descriptor" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowsNumber" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="usingDescriptor" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EBoolean"
+          defaultValueLiteral="false"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="RWOperation">
+      <eLiterals name="READ_ONLY" literal="READ_ONLY"/>
+      <eLiterals name="READ_WRITE" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SetTransactionStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isolationLevel" eType="#//dbl/IsolationLevel"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rwOperation" eType="#//dbl/RWOperation"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursor" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="using" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="usingType" eType="#//dbl/OpenUsingType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="OpenUsingType">
+      <eLiterals name="NONE" value="10" literal="NONE"/>
+      <eLiterals name="DESCRIPTOR" value="20"/>
+      <eLiterals name="VARIABLE" value="30" literal="VARIABLE"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="UsingType">
+      <eLiterals name="NONE" value="10" literal="NONE"/>
+      <eLiterals name="NAMES" value="20" literal="names"/>
+      <eLiterals name="SYSTEM_NAMES" value="30"/>
+      <eLiterals name="LABELS" value="40"/>
+      <eLiterals name="ANY" value="50"/>
+      <eLiterals name="BOTH" value="60"/>
+      <eLiterals name="ALL" value="70"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrepareStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" lowerBound="1"
+          eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="into" eType="#//dbl/IntoClause"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="statementName" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CloseStatement" eSuperTypes="#//BindingStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursor" eType="ecore:EDataType ../../org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

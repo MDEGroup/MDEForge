@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fsm" nsURI="http://www.kermeta.org/fsm" nsPrefix="fsm">
+  <eClassifiers xsi:type="ecore:EClass" name="FSM">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" upperBound="-1"
+        eType="#//State" containment="true" eKeys="#//State/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intialState" lowerBound="1"
+        eType="#//InitialState" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//SuperState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" eType="#//Action"
+        containment="true" eKeys="#//Action/entryLabel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" eType="#//eAction"
+        containment="true" eKeys="#//eAction/exitLabel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SteadyState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TransientState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//SuperState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="src" eType="#//SuperState"
+        eOpposite="#//SuperState/outTrans"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="#//SuperState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SuperState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outTrans" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/src"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entryLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="eAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exitLabel" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

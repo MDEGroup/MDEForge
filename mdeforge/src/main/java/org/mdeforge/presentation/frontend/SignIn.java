@@ -6,10 +6,11 @@ import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.VerificationToken;
 import org.mdeforge.common.spring.security.OnRegistrationCompleteEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
@@ -30,6 +31,7 @@ import net.tanesha.recaptcha.ReCaptchaResponse;
 @Controller
 public class SignIn {
 	
+	Logger logger = LoggerFactory.getLogger(SignIn.class);
 	@Autowired
     protected AuthenticationManager authenticationManager;
 	@Autowired
@@ -54,24 +56,24 @@ public class SignIn {
 		String remoteAddress = request.getServerName();
 		try {
 			GridFSFile s = operations.store(photo.getInputStream(), photo.getOriginalFilename(),"");
-			System.out.println(s.getId());
+			logger.info(s.getId().toString());
 			user.setImage(operations.store(photo.getInputStream(), photo.getOriginalFilename(),"").getId().toString());
 		} catch (IOException e1) {
-			System.out.println("ERROR");
+			logger.info("ERROR");
 		}
-		System.out.println("Recapcha");
+		logger.info("Recapcha");
 		ReCaptchaResponse reCaptchaResponse = this.reCaptcha.checkAnswer(remoteAddress, challangeField, responseField);
 		if(reCaptchaResponse.isValid() ){
 			String appUrl = request.getContextPath();
 			try {
-				System.out.println("Resolved");
+				logger.info("Resolved");
 				eventPublisher.publishEvent(new OnRegistrationCompleteEvent
 						(user, request.getLocale(), appUrl));
-			}catch (Exception e) {System.out.println(e.getMessage());}
+			}catch (Exception e) {logger.error(e.getMessage());}
 		}
 		else {
 			
-			System.out.println(reCaptchaResponse.getErrorMessage());
+			logger.info(reCaptchaResponse.getErrorMessage());
 			model.addAttribute("user", user);
 			model.addAttribute("captcha",true);
 			return "public.signin";

@@ -204,7 +204,6 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			List<ATLTransformationTestServiceError> r;
 			r = aTLTransformationService.testServices(transformation_id);
 			atlTransformation.setAtlTestError(r);
-			System.out.println(r);
 			String pathToDownload = gridFileMediaService
 					.getFilePath(atlTransformation);
 			File atlTransformationFile = new File(pathToDownload);
@@ -234,7 +233,6 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			List<ATLTransformationError> errors =	aTLTransformationService
 					.anATLyzer(atlTransformation);
 			atlTransformation.setAtlError(errors);
-			System.out.println("Computation Time: " + (new Date().getTime()-d.getTime()));
 			String pathToDownload = gridFileMediaService
 					.getFilePath(atlTransformation);
 			File atlTransformationFile = new File(pathToDownload);

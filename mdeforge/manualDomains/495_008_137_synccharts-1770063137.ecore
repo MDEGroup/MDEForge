@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="synccharts"
+    nsURI="http://kieler.cs.cau.de/synccharts/0.2.4" nsPrefix="synccharts">
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="annotations.ecore#//Annotatable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Action represents some effect that is executed under some&#xA;certain condition. The condition or sometimes called guard is&#xA;the trigger which simply is any boolean {@link Expression} over&#xA;{@link Signal}s or {@link Variable}s. Note that Actions may also be used&#xA;in contexts, where no trigger or resp. effects are allowed. E.g.&#xA;a suspensionTrigger has no effect.&#xA;&lt;p>&#xA;The effects of an Action are either {@link Assignment}, {@link Emission} or escaping&#xA;to an {@link TextEffect}.&#xA;&lt;p>&#xA;An Action has a String label that represents the trigger and the effects&#xA;list in a textual representation. The user of the &#xA;model is required to synchronize the label with the actual&#xA;trigger and effects objects. For the SyncCharts graphical editor&#xA;this is done by using an Xtext grammar/parser."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effects" upperBound="-1"
+        eType="#//Effect" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" eType="ecore:EClass kexpressions.ecore#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="delay" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isImmediate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" ordered="false"
+        unique="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Assignment" eSuperTypes="#//Effect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Assignment assigns a new value to a {@link Variable}.&#xA;It carries a reference to a Variable and an {@link Expression} &#xA;that represents the new value for that Variable."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variable" lowerBound="1"
+        eType="ecore:EClass kexpressions.ecore#//Variable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+        eType="ecore:EClass kexpressions.ecore#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Effect" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Effect is something executed by an {@link Action}.&#xA;"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Emission" eSuperTypes="#//Effect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An Emission represents setting an {@link Signal}&#xA;from &quot;absent&quot; to &quot;present&quot; in a tick.&#xA;An Emission has a reference to the Signal&#xA;that it emits.&#xA;For valued Signals, an Emission may carry an&#xA;{@link Expression} that represents the new&#xA;value for that signal."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" lowerBound="1"
+        eType="ecore:EClass kexpressions.ecore#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newValue" eType="ecore:EClass kexpressions.ecore#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region" eSuperTypes="#//Scope">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Regions represent a parallelism in SyncCharts. A {@link State} may contain&#xA;multiple Regions and each Region may contain multiple States. The Regions&#xA;are then logically executed in parallel. A SyncChart gets represented by one root Region &#xA;that contains exactly one root State.&#xA;&lt;p>&#xA;A Region is a {@link Scope} and therefore gets identified by label and id&#xA;and carries an interface declaration. Hence a Region may declare&#xA;local signals or variables."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true" eOpposite="#//State/parentRegion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentState" eType="#//State"
+        eOpposite="#//State/regions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Substitution">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentScope" lowerBound="1"
+        eType="#//Scope" eOpposite="#//Scope/renamings"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formal" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actual" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A type for a State to specify some special properties.&#xA;&#xA;  "/>
+    </eAnnotations>
+    <eLiterals name="NORMAL">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Simple or&#xA;macro States are of type NORMAL."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="CONDITIONAL" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A CONDITIONAL State is only a&#xA;pseudostate in a sense that it will be left immediately within&#xA;one tick. Its outgoing transitions have to be immediate."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="REFERENCE">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A REFERENCE&#xA;state carries a bodyReference to an arbitrary EObject. If this object is another&#xA;State, e.g. from another file, this reference can be used to modularize&#xA;SyncCharts. In such case all original interface of the referenced state&#xA;needs to be redefined by {@link Substitution} objects."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="TEXTUAL">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A TEXTUAL&#xA;state will be defined not by child Regions but by bodyText that represents&#xA;its behavior, e.g. in the language Esterel or something similar. "/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//Scope">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A State is the main entity in a SyncChart. States are located in a {@link Region}.&#xA;A SyncChart itself is represented by a top-level root Region that contains&#xA;exactly one root State. Every State may contain multiple parallel Regions&#xA;whereas a Region contains multiple States. This allows nested State&#xA;machines with parallelism.&#xA;&lt;p>&#xA;A State may be initial or final or both. An initial State is the entry State of a Region.&#xA;SyncCharts may only have one initial State per Region. A final State indcates that&#xA;its parent Region has terminated and nothing needs to be done in that Region&#xA;and its parent State may be left via a normal termination transition.&#xA;&lt;p>&#xA;A State is also a Scope and hence may carry an interface declaration and is&#xA;identified by id and label.&#xA;&lt;p>&#xA;States have a type to indicate different properties of States. See {@link StateType}."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//StateType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1"
+        eType="#//Region" containment="true" eOpposite="#//Region/parentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentRegion" lowerBound="1"
+        eType="#//Region" eOpposite="#//Region/states"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFinal" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/sourceState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/targetState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//Action">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Transition represents a connection between two {@link State}s and the&#xA;shift from the source to the target State. In SyncCharts Transitions may&#xA;only be specified between States on the same Regions. Inter-level&#xA;Transitions are not allowed.&#xA;&lt;p>&#xA;A Transition is an {@link Action} and therefore may contain a trigger condition&#xA;which guards the Transition and effects that get executed when the transition&#xA;is taken.&#xA;&lt;p>&#xA;Transitions have an integer priority. If there are multiple outgoing &#xA;transitions of a States and multiple triggers are evaluated to true, then&#xA;the transition with lowest priority is taken.&#xA;&lt;p>&#xA;A history transition will enter its source state in its containing Regions at the states that&#xA;it has left them before. So it does not start at the initial states in all circumstances but&#xA;in the states that the source state was left in some earlier tick. Only when a State is entered&#xA;for the first time (i.e. there is no history) then it is always entered in its initial States.&#xA;&lt;p>&#xA;A transition has a type {@link TransitionType}."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//TransitionType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/incomingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isHistory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outgoingTransitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransitionType">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Transition has a type specifying some special property.&#xA;"/>
+    </eAnnotations>
+    <eLiterals name="WEAKABORT" literal="WEAKABORT">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A WEAKABORT transition allows the&#xA;exited State to execute its contents in that tick."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="STRONGABORT" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A STRONGABORT will immediately&#xA;leave the state and not allow any actions in&#xA;the source State in that tick. "/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="NORMALTERMINATION" value="2" literal="NORMALTERMINATION">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A NORMALTERMINATION will leave a State whenever all contained&#xA;Regions are in final States. A normal termination may not define a guard trigger."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Scope" abstract="true" eSuperTypes="annotations.ecore#//Annotatable">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Scope is the abstract superclass for State and Region. &#xA;&lt;p>&#xA;The fields label and id are there to identify such object, where the label&#xA;may be an arbitrary String and the id may be used as identifier in programming languages. Therefore the&#xA;id should be unique within its containing scope, should start with a word character (letter, underscore) and should not&#xA;contain whitespace.&#xA;&lt;p>&#xA;The interfaceDeclaration is a String text field containing the interface declaration in a textual representation. &#xA;The user of a model instance needs to take care that this textual representation gets parsed correctly and &#xA;translated into proper Interface objects (e.g. Signals and Variables). For example the SyncCharts editor uses&#xA;an Xtext grammar/parser to do this.&#xA;&lt;p>&#xA;A Scope may carry lists of entry-, inner- or exit {@link Action}s that are executed on either Scope entry, staying a tick&#xA;in the Scope or exiting the Scope. A suspensionTrigger Action guards the suspension of a Scope. When this trigger&#xA;is evaluated to true, then the contents of the Scope is no longer evaluated until the guard gets false again."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="ecore:EClass kexpressions.ecore#//Signal" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="ecore:EClass kexpressions.ecore#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="suspensionTrigger" eType="#//Action"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exitActions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="innerActions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entryActions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyReference" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyContents" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bodyText" upperBound="-1"
+        eType="ecore:EClass kexpressions.ecore#//TextualCode" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="renamings" upperBound="-1"
+        eType="#//Substitution" containment="true" eOpposite="#//Substitution/parentScope"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interfaceDeclaration" eType="#//Parsable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Parsable" instanceClassName="java.lang.String">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="A Parsable is a String that represents model information&#xA;that can be parsed by some external parser. It is used to&#xA;technically distinguish simple Strings from information&#xA;that will be post processed by a parser and hence does not&#xA;carry semantical information in its own.&#xA;"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextEffect" eSuperTypes="kexpressions.ecore#//TextualCode #//Effect">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="An TextEffect is a {@link TextualCode} that allows to&#xA;escape to some textual host code in an effect. This&#xA;can be any arbitrary String."/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

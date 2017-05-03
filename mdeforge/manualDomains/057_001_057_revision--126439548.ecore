@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="revision"
+    nsURI="http://revision.example" nsPrefix="revision">
+  <eClassifiers xsi:type="ecore:EEnum" name="SequenceType">
+    <eLiterals name="startToStart"/>
+    <eLiterals name="finishToStart" value="1"/>
+    <eLiterals name="startToFinish" value="2"/>
+    <eLiterals name="finishToFinish" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PublicationProcess" eSuperTypes="#//Named">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="kref=publicationRules" value=""/>
+      <details key="kref=phases" value=""/>
+      <details key="pov:process" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="phases" upperBound="-1"
+        eType="#//PublicationPhase" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publicationRules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PublicationPhase">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="label=name" value=""/>
+      <details key="ref=neededPerson" value=""/>
+      <details key="kref=placeholder"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="linksToSuccessors" upperBound="-1"
+        eType="#//Sequence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxTime" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="neededPerson" upperBound="-1"
+        eType="#//Researcher" eOpposite="#//Researcher/phaseParticipation"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" eType="#//PlaceHolderPP"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence">
+    <eAnnotations source="diagraph">
+      <details key="link=sequence" value=""/>
+      <details key="lsrc=predecessor" value=""/>
+      <details key="ltrg=successor" value=""/>
+      <details key="cont=PublicationPhase.linksToSuccessors" value=""/>
+      <details key="label=sequenceType" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" lowerBound="1"
+        eType="#//SequenceType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="successor" lowerBound="1"
+        eType="#//PublicationPhase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predecessor" lowerBound="1"
+        eType="#//PublicationPhase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="label=key" value=""/>
+      <details key="label=text"/>
+      <details key="kref=placeholder"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" eType="#//PlaceHolderRule"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Researcher">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="lnk=writes" value=""/>
+      <details key="lnk=reviews" value=""/>
+      <details key="label=name" value=""/>
+      <details key="label=position"/>
+      <details key="kref=placeholder"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="phaseParticipation" upperBound="-1"
+        eType="#//PublicationPhase" eOpposite="#//PublicationPhase/neededPerson"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="forName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="position" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="writes" upperBound="-1"
+        eType="#//Write" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reviews" upperBound="-1"
+        eType="#//Review" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="papers" upperBound="-1"
+        eType="#//Paper" eOpposite="#//Paper/authors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" eType="#//PlaceHolderRs"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paper" eSuperTypes="#//Named">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="kref=paragraphs" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paragraphs" upperBound="-1"
+        eType="#//Paragraph" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="progress" upperBound="-1"
+        eType="#//Progress" containment="true" eOpposite="#//Progress/paper"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="authors" upperBound="-1"
+        eType="#//Researcher" eOpposite="#//Researcher/papers"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paragraph" eSuperTypes="#//Counted #//Named">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="kref=reviews" value=""/>
+      <details key="cont=Paper.paragraphs" value=""/>
+      <details key="label=name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reviews" upperBound="-1"
+        eType="#//ReviewNote" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ReviewNote" eSuperTypes="#//Named">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="kref=placeholder"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="placeholder" eType="#//PlaceHolderRn"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Progress" eSuperTypes="#//Labelled">
+    <eAnnotations source="diagraph">
+      <details key="link" value=""/>
+      <details key="cont=Paper.progress" value=""/>
+      <details key="ltrg=process" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//PublicationProcess"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paper" eType="#//Paper"
+        eOpposite="#//Paper/progress"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="percent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Write" eSuperTypes="#//Labelled">
+    <eAnnotations source="diagraph"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paragraph" eType="#//Paragraph"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Review" eSuperTypes="#//Labelled">
+    <eAnnotations source="diagraph"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reviewNote" eType="#//ReviewNote"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PublicationStructure" eSuperTypes="#//Named">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="kref=researchers" value=""/>
+      <details key="kref=papers" value=""/>
+      <details key="pov:structure" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="researchers" upperBound="-1"
+        eType="#//Researcher" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="papers" upperBound="-1"
+        eType="#//Paper" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PublicationSystem">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+      <details key="cref=processView" value=""/>
+      <details key="cref=structuralView" value=""/>
+      <details key="pov" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processView" eType="#//PublicationProcess"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="structuralView" eType="#//PublicationStructure"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Named" abstract="true">
+    <eAnnotations source="diagraph">
+      <details key="label=name" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Counted" abstract="true">
+    <eAnnotations source="diagraph">
+      <details key="label=id" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Labelled" abstract="true">
+    <eAnnotations source="diagraph">
+      <details key="label=lname" value=""/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceHolderRs" eSuperTypes="#//PlaceHolder">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceHolderRule" eSuperTypes="#//PlaceHolder">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceHolder" abstract="true">
+    <eAnnotations source="diagraph"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceHolderRn" eSuperTypes="#//PlaceHolder">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceHolderPP" eSuperTypes="#//PlaceHolder">
+    <eAnnotations source="diagraph">
+      <details key="node" value=""/>
+    </eAnnotations>
+  </eClassifiers>
+</ecore:EPackage>

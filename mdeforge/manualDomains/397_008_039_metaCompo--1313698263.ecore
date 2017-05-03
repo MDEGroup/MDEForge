@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="metaCompo"
+    nsURI="http://metaCompo/1.0" nsPrefix="metaCompo">
+  <eClassifiers xsi:type="ecore:EClass" name="mComp">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subComps" upperBound="-1"
+        eType="#//mComp" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//mPort" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="FSMs" lowerBound="1" upperBound="-1"
+        eType="#//mFSM" containment="true" eOpposite="#//mFSM/component"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compVar" upperBound="-1"
+        eType="#//mVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="mPort">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="io" lowerBound="1" eType="#//mIO"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectedTo" eType="#//mPort"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connToVar" eType="#//mVariable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="mIO">
+    <eLiterals name="in"/>
+    <eLiterals name="out" value="1"/>
+    <eLiterals name="inout" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="mFSM">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" lowerBound="1"
+        eType="#//mComp" eOpposite="#//mComp/FSMs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fsmVar" upperBound="-1"
+        eType="#//mVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//mState" containment="true" eOpposite="#//mState/owningFSM"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+        eType="#//mState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalState" eType="#//mState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="mVariable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="mState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningFSM" lowerBound="1"
+        eType="#//mFSM" eOpposite="#//mFSM/states"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateVar" upperBound="-1"
+        eType="#//mVariable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"
+        eType="#//mTransition" containment="true" eOpposite="#//mTransition/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransitions" upperBound="-1"
+        eType="#//mTransition" eOpposite="#//mTransition/destination"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subStates" upperBound="-1"
+        eType="#//mState" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="mTransition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//mState" eOpposite="#//mState/outgoingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="destination" lowerBound="1"
+        eType="#//mState" eOpposite="#//mState/incomingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="triggerExp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigerringVar" upperBound="-1"
+        eType="#//mVariable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggeringPort" upperBound="-1"
+        eType="#//mPort"/>
+  </eClassifiers>
+</ecore:EPackage>

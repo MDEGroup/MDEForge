@@ -122,7 +122,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	@Override
 	public Model create(Model artifact) {
 		EcoreMetamodel emm = (EcoreMetamodel)artifact.getMetamodel().getToArtifact();
-		System.out.println(artifact.getName());
 		Model result = super.create(artifact);
 		try{
 			ecoreMetamodelService.registerMetamodel(emm);
@@ -203,7 +202,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			EObject data = resource.getContents().get(0);
 			Diagnostic diagnostic = Diagnostician.INSTANCE.validate(data);
 			if (diagnostic.getSeverity() == Diagnostic.ERROR){
-				System.out.println(diagnostic.getMessage());
 				return false;}
 			else
 				return true;

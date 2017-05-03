@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="textualusecase" nsURI="http://www.levysiqueira.com.br/TextualUseCase"
+    nsPrefix="br.com.levysiqueira.textualusecase">
+  <eClassifiers xsi:type="ecore:EClass" name="UseCaseModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCase" ordered="false"
+        upperBound="-1" eType="#//UseCase" containment="true" eOpposite="#//UseCase/useCaseModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" ordered="false"
+        upperBound="-1" eType="#//Actor" containment="true" eOpposite="#//Actor/useCaseModel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" ordered="false"
+        lowerBound="1" eType="#//Subject" containment="true" eOpposite="#//Subject/useCasemodel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UseCase">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternativeFlow" ordered="false"
+        upperBound="-1" eType="#//AlternativeFlow" containment="true" eOpposite="#//AlternativeFlow/useCase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="basicFlow" ordered="false"
+        lowerBound="1" eType="#//BasicFlow" containment="true" eOpposite="#//BasicFlow/useCase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actor" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//Actor" eOpposite="#//Actor/useCase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postCondition" ordered="false"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preCondition" ordered="false"
+        eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCaseModel" ordered="false"
+        lowerBound="1" eType="#//UseCaseModel" eOpposite="#//UseCaseModel/useCase"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="includes" upperBound="-1"
+        eType="#//Include" eOpposite="#//Include/useCase"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AlternativeFlow" eSuperTypes="#//FlowOfEvents">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="self.extensionPoint.flowOfEvents &lt;> self"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branchingStep" ordered="false"
+        lowerBound="1" eType="#//Step" eOpposite="#//Step/alternativeFlow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" ordered="false"
+        lowerBound="1" eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCase" ordered="false"
+        lowerBound="1" eType="#//UseCase" eOpposite="#//UseCase/alternativeFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FlowOfEvents" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" lowerBound="1" upperBound="-1"
+        eType="#//Step" containment="true" eOpposite="#//Step/flowOfEvents"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Step" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="self.statement &lt;> null  xor self.flowOfEvents &lt;> null"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternativeFlow" ordered="false"
+        upperBound="-1" eType="#//AlternativeFlow" eOpposite="#//AlternativeFlow/branchingStep"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" ordered="false"
+        eType="#//Statement" eOpposite="#//Statement/steps"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Changed &quot;order&quot; to EString to allow referencing"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="flowOfEvents" ordered="false"
+        eType="#//FlowOfEvents" eOpposite="#//FlowOfEvents/steps"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Agent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" eOpposite="#//Action/agent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" eSuperTypes="#//Step">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="self.block.steps->excludes(self)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" ordered="false"
+        lowerBound="1" eType="#//Condition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" lowerBound="1" upperBound="-1"
+        eType="#//Step" containment="true" eOpposite="#//Step/statement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Condition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicFlow" eSuperTypes="#//FlowOfEvents">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCase" ordered="false"
+        lowerBound="1" eType="#//UseCase" eOpposite="#//UseCase/basicFlow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Actor" eSuperTypes="#//Agent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCaseModel" ordered="false"
+        lowerBound="1" eType="#//UseCaseModel" eOpposite="#//UseCaseModel/actor"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCase" ordered="false"
+        upperBound="-1" eType="#//UseCase" eOpposite="#//UseCase/actor"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Subject" eSuperTypes="#//Agent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCasemodel" ordered="false"
+        lowerBound="1" eType="#//UseCaseModel" eOpposite="#//UseCaseModel/subject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" eSuperTypes="#//Step">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="agent" lowerBound="1" eType="#//Agent"
+        eOpposite="#//Agent/actions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalStatement" eSuperTypes="#//Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LoopStatement" eSuperTypes="#//Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Include" eSuperTypes="#//Step">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="useCase" lowerBound="1"
+        eType="#//UseCase" eOpposite="#//UseCase/includes"/>
+  </eClassifiers>
+</ecore:EPackage>

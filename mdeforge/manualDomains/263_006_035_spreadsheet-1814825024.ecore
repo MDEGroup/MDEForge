@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="spreadsheet" nsURI="http://com.misc.common.moplaf.spreadsheet.emf"
+    nsPrefix="spsh">
+  <eClassifiers xsi:type="ecore:EClass" name="Spreadsheet" abstract="true">
+    <eOperations name="getSheet" eType="#//Sheet">
+      <eParameters name="sheetname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getSheet" eType="#//Sheet">
+      <eParameters name="sheetindex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="readFile"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sheet" upperBound="-1"
+        eType="#//Sheet" containment="true" eOpposite="#//Sheet/Spreadsheet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="FilePath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sheet">
+    <eOperations name="getColumn" eType="#//Column">
+      <eParameters name="columnindex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="getRow" eType="#//Row">
+      <eParameters name="rowindex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Row" upperBound="-1" eType="#//Row"
+        containment="true" eOpposite="#//Row/Sheet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Column" upperBound="-1"
+        eType="#//Column" containment="true" eOpposite="#//Column/Sheet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SheetName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="SheetIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Spreadsheet" eType="#//Spreadsheet"
+        eOpposite="#//Spreadsheet/Sheet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Row">
+    <eOperations name="getCell" eType="#//Cell">
+      <eParameters name="columnindex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="getCell" eType="#//Cell">
+      <eParameters name="column" eType="#//Column"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Cell" upperBound="-1" eType="#//Cell"
+        containment="true" eOpposite="#//Cell/Row"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sheet" lowerBound="1" eType="#//Sheet"
+        eOpposite="#//Sheet/Row"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="RowIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eOperations name="getCell" eType="#//Cell">
+      <eParameters name="rowindex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eOperations name="getCell" eType="#//Cell">
+      <eParameters name="row" eType="#//Row"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Cell" upperBound="-1" eType="#//Cell"
+        eOpposite="#//Cell/Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Sheet" lowerBound="1" eType="#//Sheet"
+        eOpposite="#//Sheet/Column"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ColumnIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cell">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Row" lowerBound="1" eType="#//Row"
+        eOpposite="#//Row/Cell"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Column" lowerBound="1"
+        eType="#//Column" eOpposite="#//Column/Cell"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ValueFormatted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CellType" eType="#//CellType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="DoubleValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="StringValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CellType">
+    <eLiterals name="CellTypeNumeric"/>
+    <eLiterals name="CellTypeFormula" value="1"/>
+    <eLiterals name="CellTypeString" value="2"/>
+    <eLiterals name="CellTypeDate" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://www.fortiss.org/ttc" nsPrefix="org-fortiss-ttc">
+  <eClassifiers xsi:type="ecore:EClass" name="INamedElement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="expression" nsURI="http://www.fortiss.org/af3/expression" nsPrefix="org-fortiss-af3-expression">
+    <eClassifiers xsi:type="ecore:EClass" name="IExpressionTerm" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="#//expression/IExpressionTerm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BoolConst" eSuperTypes="#//expression/IExpressionTerm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IntConst" eSuperTypes="#//expression/IExpressionTerm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Operation" eSuperTypes="#//expression/IExpressionTerm">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//expression/EOperator"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//expression/IExpressionTerm" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EOperator">
+      <eLiterals name="Add" literal="Add"/>
+      <eLiterals name="Subtract" value="1" literal="Subtract"/>
+      <eLiterals name="Multiply" value="2" literal="Multiply"/>
+      <eLiterals name="Divide" value="3" literal="Divide"/>
+      <eLiterals name="LowerThan" value="5" literal="LowerThan"/>
+      <eLiterals name="GreaterThan" value="6" literal="GreaterThan"/>
+      <eLiterals name="LowerEqual" value="7" literal="LowerEqual"/>
+      <eLiterals name="GreaterEqual" value="8" literal="GreaterEqual"/>
+      <eLiterals name="Equal" value="9" literal="Equal"/>
+      <eLiterals name="NotEqual" value="10" literal="NotEqual"/>
+      <eLiterals name="Not" value="11" literal="Not"/>
+      <eLiterals name="Negate" value="12" literal="Negate"/>
+      <eLiterals name="Or" value="13" literal="Or"/>
+      <eLiterals name="And" value="14" literal="And"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="EType">
+      <eLiterals name="TBool"/>
+      <eLiterals name="TInt" value="1"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="component" nsURI="http://www.fortiss.org/af3/component" nsPrefix="org-fortiss-af3-component">
+    <eClassifiers xsi:type="ecore:EClass" name="Component" eSuperTypes="#//INamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="inputPorts" upperBound="-1"
+          eType="#//component/Port" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="outputPorts" upperBound="-1"
+          eType="#//component/Port" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="stateAutomaton" eType="#//state/StateAutomaton"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Port" abstract="true" eSuperTypes="#//INamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialValue" eType="#//expression/IExpressionTerm"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/EType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InputPort" eSuperTypes="#//component/Port"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OutputPort" eSuperTypes="#//component/Port"/>
+  </eSubpackages>
+  <eSubpackages name="state" nsURI="http://www.fortiss.org/af3/state" nsPrefix="org-fortiss-af3-state">
+    <eClassifiers xsi:type="ecore:EClass" name="StateAutomaton">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+          eType="#//state/State" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+          eType="#//state/TransitionSegment" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//INamedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="idleTransitionsSpecifications"
+          upperBound="-1" eType="#//state/TransitionSegmentSpecification" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TransitionSegment" eSuperTypes="#//INamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="sourceState" eType="#//state/State"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" eType="#//state/State"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transitionSegmentSpecification"
+          eType="#//state/TransitionSegmentSpecification" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TransitionSegmentSpecification">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//expression/IExpressionTerm"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+          eType="#//state/Action" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataStateVariable" eSuperTypes="#//INamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initialValue" eType="#//expression/IExpressionTerm"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/EType"
+          iD="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Action">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//expression/Var"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//expression/IExpressionTerm"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="statemachine"
+    nsURI="http://example.org/statemachine" nsPrefix="com.googlecode.gridme.simstate.statemachine">
+  <eClassifiers xsi:type="ecore:EEnum" name="ActionKind">
+    <eLiterals name="ENTRY" value="1"/>
+    <eLiterals name="EXIT" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Named">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GAbstractState" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//GAbstractAction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GAbstractAction" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="Root class for all types of actions.&#xD;&#xA;Add AOP support?"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1" eType="#//ActionKind"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GState" eSuperTypes="#//Named #//GAbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//Named">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//GAbstractState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//GAbstractState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//Value"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="delay" eType="#//Value"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signals" upperBound="-1"
+        eType="#//Value" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="preserveTimers" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GCompositeState" eSuperTypes="#//GState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+        upperBound="-1" eType="#//GAbstractState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GStartState" eSuperTypes="#//GAbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GStopState" eSuperTypes="#//GAbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GStatemachine" eSuperTypes="#//GCompositeState">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="State machine definition of behavior."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="package" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="com.googlecode.gridme.simstate.generated"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallAction" eSuperTypes="#//GAbstractAction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="call" lowerBound="1" eType="#//Call"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//Named"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="GetParameter" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" lowerBound="1"
+        eType="#//Parameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Call" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="actionId" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstantValue" abstract="true" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringValue" eSuperTypes="#//ConstantValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberValue" abstract="true" eSuperTypes="#//ConstantValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanValue" eSuperTypes="#//ConstantValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LongValue" eSuperTypes="#//NumberValue"/>
+</ecore:EPackage>

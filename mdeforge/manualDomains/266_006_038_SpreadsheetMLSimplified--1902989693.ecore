@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="SpreadsheetMLSimplified" nsURI="www.spreadsheet.com" nsPrefix="www.spreadsheet.com">
+  <eClassifiers xsi:type="ecore:EClass" name="DateTimeType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="year" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="month" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="day" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hour" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minute" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="second" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueType" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vt_data" ordered="false"
+        lowerBound="1" eType="#//Data" eOpposite="#//Data/value"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringValue" eSuperTypes="#//ValueType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberValue" eSuperTypes="#//ValueType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DateTimeTypeValue" eSuperTypes="#//ValueType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+        lowerBound="1" eType="#//DateTimeType" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BooleanValue" eSuperTypes="#//ValueType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorValue" eSuperTypes="#//ValueType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Workbook">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="wb_worksheets" upperBound="-1"
+        eType="#//Worksheet" containment="true" eOpposite="#//Worksheet/ws_workbook"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Worksheet">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ws_workbook" ordered="false"
+        lowerBound="1" eType="#//Workbook" eOpposite="#//Workbook/wb_worksheets"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ws_table" ordered="false"
+        eType="#//Table" containment="true" eOpposite="#//Table/t_worksheet"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="t_worksheet" ordered="false"
+        lowerBound="1" eType="#//Worksheet" eOpposite="#//Worksheet/ws_table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="t_cols" upperBound="-1"
+        eType="#//Column" containment="true" eOpposite="#//Column/c_table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="t_rows" upperBound="-1"
+        eType="#//Row" containment="true" eOpposite="#//Row/r_table"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColOrRowElement" abstract="true" eSuperTypes="#//TableElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="span" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//ColOrRowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="c_table" ordered="false"
+        lowerBound="1" eType="#//Table" eOpposite="#//Table/t_cols"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoFitWidth" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Row" eSuperTypes="#//ColOrRowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="r_table" ordered="false"
+        lowerBound="1" eType="#//Table" eOpposite="#//Table/t_rows"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="r_cells" upperBound="-1"
+        eType="#//Cell" containment="true" eOpposite="#//Cell/c_row"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="autoFitHeight" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cell" eSuperTypes="#//TableElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="c_row" ordered="false"
+        lowerBound="1" eType="#//Row" eOpposite="#//Row/r_cells"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="arrayRange" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formula" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hRef" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mergeAcross" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mergeDown" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="c_data" ordered="false"
+        eType="#//Data" containment="true" eOpposite="#//Data/d_cell"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Data">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="d_cell" ordered="false"
+        lowerBound="1" eType="#//Cell" eOpposite="#//Cell/c_data"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" ordered="false"
+        lowerBound="1" eType="#//ValueType" containment="true" eOpposite="#//ValueType/vt_data"/>
+  </eClassifiers>
+</ecore:EPackage>

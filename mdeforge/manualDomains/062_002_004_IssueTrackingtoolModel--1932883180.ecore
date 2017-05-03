@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="itm" nsURI="http://spi-fm.uca.es/spdef/models/genericTools/itm/1.0"
+    nsPrefix="itm">
+  <eClassifiers xsi:type="ecore:EClass" name="IssueTrackingDatabase">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase contenedora de todos los proyectos software gestionados en la herramienta."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" upperBound="-1"
+        eType="#//Project" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trackers" lowerBound="1"
+        upperBound="-1" eType="#//Tracker" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" lowerBound="1" upperBound="-1"
+        eType="#//Role" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="users" lowerBound="1" upperBound="-1"
+        eType="#//User" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase que representa a un proyecto software controlado desde la herramienta."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versions" lowerBound="1"
+        upperBound="-1" eType="#//Version" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issueCategories" upperBound="-1"
+        eType="#//IssueCategory" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" upperBound="-1"
+        eType="#//Member" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Version">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase que describe cada una de las versiones del software objeto del proyecto gestionado en la herramienta."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//VersionStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completedDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="issues" upperBound="-1"
+        eType="#//Issue" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Issue">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase para describir una tarea o unidad concreta de trabajo, necesaria para evolucionar un sistema informático, como añadir una nueva característica, arreglo de un fallo, etc."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="doneRatio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="estimatedHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="elapsedHours" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tracker" lowerBound="1"
+        eType="#//Tracker"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//IssueStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//IssueDependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="category" eType="#//IssueCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="#//IssuePriority"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dueDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="completedDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1" eType="#//Member"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="responsible" lowerBound="1"
+        eType="#//Member"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tracker">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase utilizada para identificar el listado de issues o tareas de un determinado tipo, típicamente bugs, features, o patchs."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IssueStatus">
+    <eAnnotations source="comment">
+      <details key="comment" value="Enumeración con los diferentes estados por lo que puede pasar una determinada tarea."/>
+    </eAnnotations>
+    <eLiterals name="OPEN"/>
+    <eLiterals name="CLOSED" value="1"/>
+    <eLiterals name="ASSIGNED" value="2"/>
+    <eLiterals name="RESOLVED" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VersionStatus">
+    <eAnnotations source="comment">
+      <details key="comment" value="Enumeración con los diferentes estados por lo que puede pasar una determinada versión."/>
+    </eAnnotations>
+    <eLiterals name="CLOSED" value="1"/>
+    <eLiterals name="OPEN"/>
+    <eLiterals name="INPROGRESS" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IssueDependency">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//DependencyType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependentTask" lowerBound="1"
+        eType="#//Issue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DependencyType">
+    <eAnnotations source="comment">
+      <details key="comment" value="Enumeración con los diferentes tipos de dependencia entre issues."/>
+    </eAnnotations>
+    <eLiterals name="START_START"/>
+    <eLiterals name="START_END" value="1"/>
+    <eLiterals name="END_START" value="2"/>
+    <eLiterals name="END_END" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IssueCategory">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase que permite realizar una clasificación específica de los issues de un determinado proyecto."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Member">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase utilizada para asociar un determinado usuario a un proyecto, haciendo uso de un rol determinado."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="user" lowerBound="1" eType="#//User"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="role" lowerBound="1" eType="#//Role"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="User">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase que representa a un usuario registrado en la herramienta."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="login" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="language" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Role">
+    <eAnnotations source="comment">
+      <details key="comment" value="Clase que representa el rol que juega un usuario en los proyectos."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="permissions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="IssuePriority">
+    <eAnnotations source="comment">
+      <details key="comment" value="Enumeración con los diferentes niveles de prioridad que puede tomar un issue."/>
+    </eAnnotations>
+    <eLiterals name="HIGHER"/>
+    <eLiterals name="HIGH" value="1"/>
+    <eLiterals name="NORMAL" value="2"/>
+    <eLiterals name="LOW" value="3"/>
+    <eLiterals name="LOWER" value="4"/>
+  </eClassifiers>
+</ecore:EPackage>

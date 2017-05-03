@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="build"
+    nsURI="http://build/1.0" nsPrefix="build">
+  <eClassifiers xsi:type="ecore:EClass" name="IBuildUnit" abstract="true" interface="true"
+      eSuperTypes="#//ICapability #//PropertyScope #//IGenericUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="#//FilterString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parts" upperBound="-1"
+        eType="#//IBuildPart" containment="true" eOpposite="#//IBuildPart/buildUnit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredCapabilities" upperBound="-1"
+        eType="#//IRequiredCapability" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#allRequiredCapabilities"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="metaRequiredCapabilities"
+        upperBound="-1" eType="#//IRequiredCapability" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#allRequiredCapabilities"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="allRequiredCapabilities"
+        upperBound="-1" eType="#//IRequiredCapability" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="group"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="providedCapabilities" upperBound="-1"
+        eType="#//ICapability" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="group"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selfCapability" eType="#//IBuildUnit"
+        containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#providedCapabilities"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partCapabilities" upperBound="-1"
+        eType="#//PartCapability" containment="true">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="group" value="#providedCapabilities"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="circularityAllowed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="instanceLocation" eType="#//URI"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IProvidedCapability" abstract="true"
+      interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IRequiredCapability" abstract="true"
+      interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="#//NameSpace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//Name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="#//p2/VersionRange"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="#//FilterString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IBuildPart" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//Name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publishedCapabilities"
+        upperBound="-1" eType="#//PartCapability" eOpposite="#//PartCapability/buildPart"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildUnit" eType="#//IBuildUnit"
+        eOpposite="#//IBuildUnit/parts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IArtifactsPart" abstract="true" interface="true"
+      eSuperTypes="#//IBuildPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paths" upperBound="-1"
+        eType="#//IPathGroup" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IActionPart" abstract="true" interface="true"
+      eSuperTypes="#//IClosurePart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="produces" eType="#//IActionResult"
+        containment="true" eOpposite="#//IActionResult/producedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="upToDatePolicy" eType="#//IUpToDatePolicy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IClosure" abstract="true" interface="true"
+      eSuperTypes="#//IPrerequisites #//PropertyScope">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="executeOnce" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="advice" upperBound="-1"
+        eType="#//command/IAdvise" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A closure can add dynamic advice - the advice is activated/deactivated with the closure.&#xD;Relative advice is relative to the closure."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ICapability" abstract="true" interface="true">
+    <eOperations name="satisfies" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="required" eType="#//IRequiredCapability"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="namespace" eType="#//NameSpace"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//Name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="#//p2/Version"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPrerequisites" abstract="true" interface="true"
+      eSuperTypes="#//IBuildPart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredParts" upperBound="-1"
+        eType="#//IRequirement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="#//Alias"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rebasePath" eType="#//Path"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPartGroup" abstract="true" interface="true"
+      eSuperTypes="#//IClosurePart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IRequirement" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The memberName is the name of a member to get from the requested capability.&#xD;When a requirement is resolved an ICapability is returned - this is the capability that is the provider of the requested capability (not always the same as the actual thing being required) - the user of the capability must know how to access what the capability consists of (if it consists of something tangible).&#xD;&#xD;For a requirement to be included in the prerequisites the following conditions apply:&#xD;- The contributor flag of the IRequirement must be true&#xD;- The requirement must be resolved&#xD;- The partName must reference a property of the returned capability, if blank, &quot;self&quot; is assumed.&#xD;- The resolution for the required capability must return an ICapability that returns an interface derived from IGenericUnit."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="#//Alias"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contributor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="#//FilterString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includePattern" eType="#//Pattern"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludePattern" eType="#//Pattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PartRequirement" eSuperTypes="#//IRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredPart" lowerBound="1"
+        eType="#//IBuildPart"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IPathGroup" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="basePath" eType="#//Path"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="paths" upperBound="-1"
+        eType="#//Path"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IActionResult" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producedBy" lowerBound="1"
+        eType="#//IActionPart" eOpposite="#//IActionPart/produces"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IProducedPart" abstract="true" interface="true"
+      eSuperTypes="#//IClosurePart">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paths" eType="#//IPathGroup"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producedBy" lowerBound="1"
+        eType="#//IResultingParts" eOpposite="#//IResultingParts/producedParts"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IResultingParts" abstract="true" eSuperTypes="#//IActionResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producedParts" upperBound="-1"
+        eType="#//IProducedPart" eOpposite="#//IProducedPart/producedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IClosurePart" abstract="true" interface="true"
+      eSuperTypes="#//IClosure #//IBuildPart"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" eSuperTypes="#//IRequirement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requiredCapability" lowerBound="1"
+        eType="#//IRequiredCapability"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Name" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="NameSpace" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ResultingPathGroup" eSuperTypes="#//IActionResult">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paths" eType="#//IPathGroup"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringProperties" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="immutable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Path" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IUpToDatePolicy" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PartCapability" eSuperTypes="#//ICapability">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildPart" lowerBound="1"
+        eType="#//IBuildPart" eOpposite="#//IBuildPart/publishedCapabilities"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Alias" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Pattern" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="FilterString" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyScope" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unsetProperties" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//StringProperties"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="java.net.URI"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IGenericUnit" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="self" lowerBound="1" eType="#//IPathGroup"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+  </eClassifiers>
+  <eSubpackages name="p2" nsURI="p2" nsPrefix="p2">
+    <eClassifiers xsi:type="ecore:EDataType" name="Version" instanceClassName="org.eclipse.equinox.internal.provisional.p2.core.Version"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="VersionRange" instanceClassName="org.eclipse.equinox.internal.provisional.p2.core.VersionRange"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IInstallableUnit" instanceClassName="org.eclipse.equinox.p2.provisional.IInstallableUnit"/>
+  </eSubpackages>
+  <eSubpackages name="context" nsURI="context" nsPrefix="context">
+    <eClassifiers xsi:type="ecore:EClass" name="IBuildContext" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requests" upperBound="-1"
+          eType="#//command/IUnitRequest" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolutions" upperBound="-1"
+          eType="#//context/IResolution" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="units" upperBound="-1"
+          eType="#//IBuildUnit" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="advice" upperBound="-1"
+          eType="#//command/IAdvise" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolver" eType="#//resolver/IResolver"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IResolution" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolves" lowerBound="1"
+          eType="#//IRequiredCapability"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolution" eType="#//ICapability"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subResolutions" upperBound="-1"
+          eType="#//context/IResolution" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//context/ImportOptions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResolutionOptions" abstract="true"
+        interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="source" eType="#//context/Disposition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="mutable" eType="#//context/Disposition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="branchTagPath" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="revision" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resolverFilter" eType="#//FilterString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterGroups" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="overlayPath" eType="#//Path"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeParts" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If not empty, specifies a list of parts which requirements should be considered when resolving. If empty, all parts are considered."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludeParts" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="If not empty, specifies a list of parts which requirements should be excluded when resolving. If empty, no exclusion takes place.&#xD;If a part is mentioned in both includeParts and excludeParts, the exclusion has precedence."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="prune" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Prunes the resulting build unit to only include the parts specified with include and exclude parts."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ImportOptions" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="materializer" eType="#//materializer/IMaterializer"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="conflictResolution" eType="#//materializer/ConflictResolution"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="resourcePath" eType="#//Path"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unpack" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="expand" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="suffix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Disposition">
+      <eLiterals name="required"/>
+      <eLiterals name="desired" value="1"/>
+      <eLiterals name="unbiassed" value="2"/>
+      <eLiterals name="undesired" value="3"/>
+      <eLiterals name="rejected" value="4"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="runtime" nsURI="runtime" nsPrefix="runtime">
+    <eClassifiers xsi:type="ecore:EClass" name="BuildRuntime">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upToDatePolicies" upperBound="-1"
+          eType="#//runtime/UpToDateExtension" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="materializers" upperBound="-1"
+          eType="#//runtime/MaterializerExtension" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="unitTypes" upperBound="-1"
+          eType="#//runtime/MetaDataTranslatorFactoryExtension" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolvers" upperBound="-1"
+          eType="#//runtime/ResolverExtension" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UpToDateExtension" eSuperTypes="#//runtime/IHumanSelectable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+          eType="#//IUpToDatePolicy"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IHumanSelectable" abstract="true"
+        interface="true" eSuperTypes="#//runtime/IExtension">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MaterializerExtension" eSuperTypes="#//runtime/IHumanSelectable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+          eType="#//materializer/IMaterializer"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MetaDataTranslatorFactoryExtension"
+        eSuperTypes="#//runtime/IExtension">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" eType="#//resolver/IMetaDataTranslatorFactory"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ResolverExtension" eSuperTypes="#//runtime/IHumanSelectable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
+          eType="#//resolver/IResolver"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IExtension" abstract="true" interface="true"/>
+  </eSubpackages>
+  <eSubpackages name="resolver" nsURI="resolver" nsPrefix="resolver">
+    <eClassifiers xsi:type="ecore:EClass" name="IResolver" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A Resolver is reponsible for resolving a request for a build unit.&#xD;As an attempt to resolve can be time consuming (or simply not wanted) all resolvers have the possibility to filter out requests (this also means that it is possible to avoid activation of unused bundles just to be informed that the resolver should not be used).&#xD;"/>
+      </eAnnotations>
+      <eOperations name="resolve" eType="#//context/IResolution">
+        <eParameters name="IResolutionContext" eType="#//resolver/IResolutionContext"/>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="failOnError" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filter" eType="#//resolver/Filter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="location" eType="#//properties/IExpr"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IResourceMap" abstract="true" interface="true">
+      <eOperations name="lookup" eType="#//context/IResolution">
+        <eParameters name="request" eType="#//command/IUnitRequest"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ILocation" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ResolverGroup" abstract="true" eSuperTypes="#//resolver/IResolver">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolvers" upperBound="-1"
+          eType="#//resolver/IResolver" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FirstChoice" eSuperTypes="#//resolver/ResolverGroup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BestChoice" eSuperTypes="#//resolver/ResolverGroup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IMetaDataTranslatorFactory" abstract="true"
+        interface="true">
+      <eOperations name="getTranslator" eType="#//resolver/IMetaDataTranslator">
+        <eParameters name="resolver" eType="#//resolver/IResolver"/>
+        <eParameters name="nameSpace" eType="#//NameSpace"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IMetaDataTranslator" abstract="true"
+        interface="true">
+      <eOperations name="resolve" eType="#//context/IResolution">
+        <eParameters name="resolver" eType="#//resolver/IResolver"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IEFSBasedAccess" abstract="true" interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="An EFS based resolver presents a (read only) EFS interface to the root of a component.&#xD;Clients should expect that directories may not be browseable.&#xD;It is the responsabiity of an implementation to translate the combination of the location string and request information (name, namespace, version, etc) into an&#xD;EFS {@link org.eclipse.core.filesystem.FileStore}."/>
+      </eAnnotations>
+      <eOperations name="getFileStore" eType="#//resolver/FileStore"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="FileStore" instanceClassName="org.eclipse.core.filesystem.FileStore"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultResolver" abstract="true" eSuperTypes="#//resolver/IResolver">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Gets the connector by looking up the connectorType in the Runtime (getConnectorFor(connectorType)).&#xD;This connecor can be cached for subsequent resolutions.&#xD;Evaluates the location using the current IPropertyScope => useLocation&#xD;Creates an instance that implements TranslationRequest (has reference to IConnector, and possibly IQuery, and IRequest)&#xD;&#xD;Obtains an IMetaDataTranslator from the Runtime MetaDataTranslatorFactory using the TranslationRequest.&#xD;Calls resolve on the IMetaDataTranslator with the TranslantionRequest as argument.&#xD;TranslationRequest implements IAdaptable.&#xD;The IMetaDataTranslator adapts the TranslationRequest to the Accessor interface it is interested in - e.g. EFSBasedAccess.&#xD;Specializations of MetaDataTranslators can thus implement new interfaces and classes that b3 has no knowledge of.&#xD;&#xD;"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="translator" eType="#//resolver/IMetaDataTranslator"
+          containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="documentation" value="Obtained from Runtime IMetaDataTranslatorFactory to suit the particular Resolver."/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="WorspaceResolver" eSuperTypes="#//resolver/EFSResolver">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This resolver uses the current active workspace, and can thus use EFS to access all material in the workspace (resource: URI). &#xD;The workspace resolver thus benefits from EFS mapping of artifacts external to the workspace location.&#xD;If the location is empty, the workspace resolver assumes resource:/{b3.bu.name} to be the EFS URI.&#xD;If the location is a path, it is assumed to be a resource path.&#xD;&#xD;TODO: If a scheme is used (other than resource) - what should happen - if a workspace layout &quot;on disk&quot; is being appointed for instance - it would need to interpret workspace meta data to understand mapped parts in that workspace's virtual filesystem (complex).&#xD;"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EFSResolver" eSuperTypes="#//resolver/DefaultResolver #//resolver/IEFSBasedAccess">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="This resolver interprets the location as either a path or an EFS URI - i.e. it can point to anything &quot;mounted&quot; in the EFS filesystem.&#xD;If a path is used - a file: scheme is used."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="P2Resolver" eSuperTypes="#//resolver/IResolver">
+      <eOperations name="resolve" eType="#//context/IResolution">
+        <eParameters name="IResolutionContext" eType="#//resolver/IResolutionContext"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Filter" instanceClassName="todo.package.Filter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IResolutionContext" abstract="true"
+        interface="true"/>
+  </eSubpackages>
+  <eSubpackages name="materializer" nsURI="materializer" nsPrefix="materializer">
+    <eClassifiers xsi:type="ecore:EClass" name="IMaterializer" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="ConflictResolution">
+      <eLiterals name="keep"/>
+      <eLiterals name="update" value="1"/>
+      <eLiterals name="replace" value="3"/>
+      <eLiterals name="fail" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FileSystemMaterializer" eSuperTypes="#//materializer/IMaterializer"/>
+    <eClassifiers xsi:type="ecore:EClass" name="P2Materializer" eSuperTypes="#//materializer/IMaterializer"/>
+    <eClassifiers xsi:type="ecore:EClass" name="WorkspaceMaterializer" eSuperTypes="#//materializer/IMaterializer"/>
+  </eSubpackages>
+  <eSubpackages name="properties" nsURI="properties" nsPrefix="properties">
+    <eClassifiers xsi:type="ecore:EClass" name="IExpr" abstract="true" interface="true">
+      <eOperations name="eval" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+        <eParameters name="scope" eType="#//PropertyScope"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Literal" eSuperTypes="#//properties/IExpr">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IFunction" abstract="true" interface="true"
+        eSuperTypes="#//properties/IExpr">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="operands" upperBound="-1"
+          eType="#//properties/IExpr" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyRef" eSuperTypes="#//properties/IFunction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Format" eSuperTypes="#//properties/IFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="formatString" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ToUpper" eSuperTypes="#//properties/IFunction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="toLower" eSuperTypes="#//properties/IFunction"/>
+    <eClassifiers xsi:type="ecore:EClass" name="replace" eSuperTypes="#//properties/IFunction">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="matchers" upperBound="-1"
+          eType="#//properties/Match" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Match">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="#//Pattern"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="replacement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="quotePattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Split" eSuperTypes="#//properties/IFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" eType="#//Pattern"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="#//properties/SplitStyle"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="limit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="SplitStyle">
+      <eLiterals name="unquoted"/>
+      <eLiterals name="quoted" value="1"/>
+      <eLiterals name="groups" value="2"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="command" nsURI="command" nsPrefix="command">
+    <eClassifiers xsi:type="ecore:EClass" name="IUnitRequest" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//Name"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameSpace" eType="#//NameSpace"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="#//p2/VersionRange"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="options" eType="#//context/ResolutionOptions"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BuildUnitCommand" abstract="true"
+        interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A BuildUnit command represents an invocation of a b3 command. &#xD;Such a command acts on build units (one or several), and these are described with an IUnitRequest.&#xD;An action could resolve and import the build units, another could invoke an action on a particular build unit.&#xD;The Command is executed with some additional information:&#xD;- a reference to a resolver determines from which &quot;repositories/resolvers&quot; the requet should be satisfied. This makes it possible to to describe and invokation of an action on a build unit that is not yet present in the local environment (provided it can be found in the IResolver used). A different configuration could use the default IResolver that only looks in the workspace and target platform, etc.&#xD;&#xD;When a command is executed, it can also define a set of properties, and advice to be applied to instances in the build model being constructed.&#xD;Such advice is provided by an IPointCut."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="requests" lowerBound="1"
+          upperBound="-1" eType="#//command/IUnitRequest" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//PropertyScope"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="resolver" eType="#//resolver/IResolver"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="advice" upperBound="-1"
+          eType="#//command/IAdvise" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IAdvise" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selector" eType="#//command/ContextNodeSelector"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ImportCommand" eSuperTypes="#//command/BuildUnitCommand"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyAdvice" eSuperTypes="#//command/IAdvise">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//PropertyScope"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ContextNodeSelector" abstract="true"
+        interface="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A selector of nodes in the IBuildContext. Probably based on XPath. &#xD;This selector defines what the advice is applied to in the IBuildContext."/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringAdvice" eSuperTypes="#//command/IAdvise">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VersionAdvice" eSuperTypes="#//command/IAdvise">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="#//p2/Version"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VersionRangeAdvice" eSuperTypes="#//command/IAdvise">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionRange" eType="#//p2/VersionRange"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanAdvice" eSuperTypes="#//command/IAdvise">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UnsetAdvice" eSuperTypes="#//command/IAdvise"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NewInstanceAdvice" eSuperTypes="#//command/AdviceGroup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clazz" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InvokeCommand" eSuperTypes="#//command/BuildUnitCommand">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="action" eType="#//Name"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FilterAdvice" eSuperTypes="#//command/IAdvise">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Advices on a filter. The filterOp controls if the advice should replace the current value, or be combined using AND or OR."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="filterOp" eType="#//command/FilterAdviceOperation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="remove" eType="#//filter/IFilter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="add" eType="#//filter/IFilter"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="FilterAdviceOperation">
+      <eLiterals name="AND"/>
+      <eLiterals name="OR" value="1"/>
+      <eLiterals name="REPLACE" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AdviceGroup">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Makes nestede advice relative to the featurePath of the group."/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="advice" upperBound="-1"
+          eType="#//command/IAdvise" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="filter" nsURI="filter" nsPrefix="filter">
+    <eClassifiers xsi:type="ecore:EClass" name="IFilter" abstract="true" interface="true">
+      <eOperations name="match" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eParameters name="matched" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+        <eParameters name="properties" eType="#//PropertyScope"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="OSGiBasedFilter" eSuperTypes="#//filter/IFilter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AndFilter" eSuperTypes="#//filter/FilterGroup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OrFilter" eSuperTypes="#//filter/FilterGroup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FilterGroup" eSuperTypes="#//filter/IFilter">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="filters" upperBound="-1"
+          eType="#//filter/IFilter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RegexpFilter" eSuperTypes="#//filter/SinglePropertyFilter"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SinglePropertyFilter" eSuperTypes="#//filter/IFilter">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="property" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SimplePatternFIlter" eSuperTypes="#//filter/SinglePropertyFilter">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="A pattern filter simpler than a full regexp. This class is useful to capture patterns without having to express them as regular expressions.&#xD;(i.e. if someone wants to translate ANT or Shell scripts into this model).&#xD;"/>
+      </eAnnotations>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

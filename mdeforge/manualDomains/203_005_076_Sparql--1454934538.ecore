@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sparql"
+    nsURI="http://www.emftriple.com/2009/Sparql" nsPrefix="sparql">
+  <eClassifiers xsi:type="ecore:EClass" name="SPARQLQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prefixes" upperBound="-1"
+        eType="#//Prefix" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prefix">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iref" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Base">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="iref" eType="#//IRI" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectionQuery" eSuperTypes="#//SPARQLQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="base" eType="#//Base" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="datasetClause" upperBound="-1"
+        eType="#//DatasetClause" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="#//WhereClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupClause" eType="#//GroupClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingClause" eType="#//HavingClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="limitClause" eType="#//LimitClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectQuery" eSuperTypes="#//SelectionQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDistinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isReduced" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="all" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AskQuery" eSuperTypes="#//SelectionQuery"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DescribeQuery" eSuperTypes="#//SelectionQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//GraphNode" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstructQuery" eSuperTypes="#//SelectionQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constructTemplate" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateQuery" eSuperTypes="#//SPARQLQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="operations" upperBound="-1"
+        eType="#//UpdateOperation" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpdateOperation"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ModifyQuery" eSuperTypes="#//UpdateOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="withGraph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CreateGraphQuery" eSuperTypes="#//UpdateOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSilent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DropGraphQuery" eSuperTypes="#//UpdateOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isSilent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LoadGraphQuery" eSuperTypes="#//UpdateOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intoGraph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ClearGraphQuery" eSuperTypes="#//UpdateOperation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDefault" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UsingGraph">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="named" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InsertQuery" eSuperTypes="#//ModifyQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="#//WhereClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InsertDataQuery" eSuperTypes="#//ModifyQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteQuery" eSuperTypes="#//ModifyQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="insertPattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="#//WhereClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteDataQuery" eSuperTypes="#//ModifyQuery">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="graph" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DeleteWhereQuery" eSuperTypes="#//ModifyQuery"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DatasetClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dataSet" eType="#//IRI"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultDataSet" eSuperTypes="#//DatasetClause"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedDataSet" eSuperTypes="#//DatasetClause"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceDataSet" eSuperTypes="#//DatasetClause"/>
+  <eClassifiers xsi:type="ecore:EClass" name="WhereClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupGraphPattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//GroupCondition"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupCondition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HavingClause">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//Constraint"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LimitClause">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="limit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupGraphPattern"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SubSelectQuery" eSuperTypes="#//GroupGraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="variables" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereClause" eType="#//WhereClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupClause" eType="#//GroupClause"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingClause" eType="#//HavingClause"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupGraphPatternSub" eSuperTypes="#//GroupGraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graphPatterns" upperBound="-1"
+        eType="#//GraphPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphPattern"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TriplesSameSubject" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subject" eType="#//GraphNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="propertyList" upperBound="-1"
+        eType="#//PropertyList" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupOrUnionGraphPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graphPatterns" upperBound="-1"
+        eType="#//GroupGraphPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OptionalGraphPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="graphPattern" upperBound="-1"
+        eType="#//GroupGraphPattern" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertyList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="property" eType="#//GraphNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="object" eType="#//GraphNode"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphGraphPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="#//GraphNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ServiceGraphPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="#//GraphNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExistsPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NotExistsPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MinusPattern" eSuperTypes="#//GraphPattern">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" eType="#//GroupGraphPattern"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpressionFilterExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//FilterNode"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//Operator"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//FilterNode"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FilterNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Function" eSuperTypes="#//GroupCondition #//Constraint #//FilterNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Variable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedFunction" eSuperTypes="#//Function">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prefix" eType="#//Prefix"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SparqlFunction" eSuperTypes="#//Function"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BuiltInCall" eSuperTypes="#//GroupCondition #//Constraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="#//Variable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ifExpr" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="thenExpr" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="elseExpr" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Aggregate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprAggArg">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDistinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Operator">
+    <eLiterals name="lessThen" literal="&lt;"/>
+    <eLiterals name="greaterThen" value="1" literal=">"/>
+    <eLiterals name="lessEqual" value="2" literal="&lt;="/>
+    <eLiterals name="greaterEqual" value="3" literal=">="/>
+    <eLiterals name="equal" value="4" literal="="/>
+    <eLiterals name="notEqual" value="5" literal="!="/>
+    <eLiterals name="sum" value="6" literal="+"/>
+    <eLiterals name="div" value="7" literal="/"/>
+    <eLiterals name="sub" value="8" literal="-"/>
+    <eLiterals name="multiplicity" value="9" literal="*"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GraphNode" eSuperTypes="#//FilterNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable" eSuperTypes="#//GroupCondition #//GraphNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UnNamedVariable" eSuperTypes="#//Variable"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedVariable" eSuperTypes="#//Variable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prefix" eType="#//Prefix"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BlankNode" eSuperTypes="#//GraphNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" eSuperTypes="#//GraphNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//GraphNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tag" eType="#//RDFTag"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IRI" eSuperTypes="#//GraphNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringValue" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerValue" eSuperTypes="#//Value">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RDFTag"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeTag" eSuperTypes="#//RDFTag">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//GraphNode"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LangTag" eSuperTypes="#//RDFTag">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lang" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrFilterExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AndFilterExpression" eSuperTypes="#//Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Expression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CountAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDistinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isAll" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SumAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ExprAggArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MinAgregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ExprAggArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaxAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ExprAggArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AvgAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ExprAggArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SampleAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//ExprAggArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupAggregate" eSuperTypes="#//Aggregate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isDistinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//Expression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

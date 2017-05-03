@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="setup" nsURI="http://www.eclipse.org/CDO/releng/setup/1.0" nsPrefix="setup">
+  <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+    <details key="nsURIs" value="http://www.eclipse.org/oomph/base/1.0 http://www.eclipse.org/oomph/resources/1.0 http://www.eclipse.org/oomph/p2/1.0 http://www.eclipse.org/oomph/targlets/1.0 http://www.eclipse.org/oomph/setup/1.0 http://www.eclipse.org/oomph/setup/p2/1.0 http://www.eclipse.org/oomph/setup/jdt/1.0 http://www.eclipse.org/oomph/setup/git/1.0 http://www.eclipse.org/oomph/setup/maven/1.0 http://www.eclipse.org/oomph/setup/mylyn/1.0 http://www.eclipse.org/oomph/setup/pde/1.0 http://www.eclipse.org/oomph/setup/projects/1.0 http://www.eclipse.org/oomph/setup/projectset/1.0 http://www.eclipse.org/oomph/setup/targlets/1.0 http://www.eclipse.org/oomph/setup/workingsets/1.0 http://www.eclipse.org/oomph/setup/workbench/1.0"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="MetaIndex">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//Index" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Index">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRI" lowerBound="1" eType="#//URI">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="uri"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="oldURIs" upperBound="-1"
+        eType="#//URI"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Eclipse" eSuperTypes="#//ConfigurableItem">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Product"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        eOpposite="#//Configuration/eclipseVersions"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="name"/>
+        <details key="targetName" value="ProductVersion"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration" eSuperTypes="#//ScopeRoot">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Index"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eclipseVersions" lowerBound="1"
+        upperBound="-1" eType="#//Eclipse" containment="true" eOpposite="#//Eclipse/configuration"
+        eKeys="#//Eclipse/version">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="products"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="projects" lowerBound="1"
+        upperBound="-1" eType="#//Project" containment="true" eOpposite="#//Project/configuration"
+        eKeys="#//Project/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfigurableItem" abstract="true" eSuperTypes="#//ScopeRoot">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Scope"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//ConfigurableItem">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        transient="true" eOpposite="#//Configuration/projects"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branches" lowerBound="1"
+        upperBound="-1" eType="#//Branch" containment="true" eOpposite="#//Branch/project"
+        eKeys="#//Branch/name">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="streams"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictions" upperBound="-1"
+        eType="#//Eclipse">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Branch" eSuperTypes="#//ConfigurableItem">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Stream"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//Project"
+        eOpposite="#//Project/branches"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictions" upperBound="-1"
+        eType="#//Eclipse">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Preferences" eSuperTypes="#//ScopeRoot">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="User"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="installFolder" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acceptedLicenses" upperBound="-1"
+        eType="#//LicenseInfo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Setup">
+    <eOperations name="getSetupTasks" upperBound="-1" eType="#//SetupTask">
+      <eParameters name="filterRestrictions" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eParameters name="trigger" eType="#//Trigger"/>
+      <eParameters name="preferences" eType="#//Preferences"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="branch" lowerBound="1"
+        eType="#//Branch"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eclipseVersion" lowerBound="1"
+        eType="#//Eclipse"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetupTask" abstract="true">
+    <eOperations name="getScopeRoot" eType="#//ScopeRoot"/>
+    <eOperations name="requires" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eParameters name="setupTask" eType="#//SetupTask"/>
+    </eOperations>
+    <eOperations name="getValidTriggers" lowerBound="1" eType="#//TriggerSet"/>
+    <eOperations name="getTriggers" lowerBound="1" eType="#//TriggerSet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirements" upperBound="-1"
+        eType="#//SetupTask">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="predecessors"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictions" upperBound="-1"
+        eType="#//ConfigurableItem"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="disabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" eType="#//SetupTaskScope"
+        changeable="false" volatile="true" transient="true" derived="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludedTriggers" lowerBound="1"
+        eType="#//TriggerSet" defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="documentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="description"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetupTaskContainer" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="setupTasks" upperBound="-1"
+        eType="#//SetupTask" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScopeRoot" abstract="true" interface="true"
+      eSuperTypes="#//SetupTaskContainer">
+    <eOperations name="getScope" lowerBound="1" eType="#//SetupTaskScope"/>
+    <eOperations name="getParentScopeRoot" eType="#//ScopeRoot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompoundSetupTask" eSuperTypes="#//SetupTask #//SetupTaskContainer">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="CompoundTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ContextVariableTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="VariableTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//VariableType"
+        defaultValueLiteral="STRING"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stringSubstitution" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="source"/>
+        <details key="targetName" value="Annotation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="choices" upperBound="-1"
+        eType="#//VariableChoice" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VariableChoice">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RedirectionTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EclipseIniTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="option" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LinkLocationTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="path" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="P2Task" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="installableUnits" lowerBound="1"
+        upperBound="-1" eType="#//InstallableUnit" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="requirements"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="p2Repositories" lowerBound="1"
+        upperBound="-1" eType="#//P2Repository" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="repositories"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="licenseConfirmationDisabled"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mergeDisabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InstallableUnit">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Requirement"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionRange" eType="#//VersionRange"
+        defaultValueLiteral="0.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="P2Repository">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Repository"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="url"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GitCloneTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/CDO/releng/setup/enablement">
+      <details key="variableName" value="setup.egit.p2"/>
+      <details key="repository" value="http://download.eclipse.org/egit/updates"/>
+      <details key="installableUnits" value="org.eclipse.egit.feature.group"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="origin"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="remoteURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pushURI" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="${git.user.id}"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="checkoutBranch" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BasicMaterializationTask" abstract="true"
+      eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/CDO/releng/setup/enablement">
+      <details key="variableName" value="setup.buckminster.p2"/>
+      <details key="repository" value="http://download.eclipse.org/tools/buckminster/updates-4.3"/>
+      <details key="installableUnits" value="org.eclipse.buckminster.ant org.eclipse.buckminster.core org.eclipse.buckminster.sax org.eclipse.buckminster.download org.eclipse.buckminster.generic org.eclipse.buckminster.executor org.eclipse.buckminster.fetcher org.eclipse.buckminster.osgi.filter org.eclipse.buckminster.jarprocessor org.eclipse.buckminster.jdt org.eclipse.buckminster.junit org.eclipse.buckminster.pde org.eclipse.buckminster.git org.eclipse.buckminster.mspec org.eclipse.buckminster.rmap"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetPlatform" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="${setup.branch.dir/tp}"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bundlePool" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="${setup.state.dir/buckminster/pool}"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuckminsterImportTask" eSuperTypes="#//BasicMaterializationTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="TargletTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mspec" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="source"/>
+        <details key="targetName" value="Annotation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MaterializationTask" eSuperTypes="#//BasicMaterializationTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="TargletTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootComponents" lowerBound="1"
+        upperBound="-1" eType="#//Component" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="targlets"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" upperBound="-1"
+        eType="#//SourceLocator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="p2Repositories" upperBound="-1"
+        eType="#//P2Repository" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="repositories"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Requirement"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="iD"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1" eType="#//ComponentType">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="source"/>
+        <details key="targetName" value="Annotation"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionRange" eType="#//VersionRange"
+        defaultValueLiteral="0.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SourceLocator" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ManualSourceLocator" eSuperTypes="#//SourceLocator">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="SourceLocator"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentNamePattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="componentTypes" lowerBound="1"
+        upperBound="-1" eType="#//ComponentType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AutomaticSourceLocator" eSuperTypes="#//SourceLocator">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="SourceLocator"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rootFolder" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locateNestedProjects" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="predicates" upperBound="-1"
+        eType="ecore:EClass predicates.ecore#//Predicate" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentExtension">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//InstallableUnit" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentDefinition" eSuperTypes="#//ComponentExtension">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" eType="#//Version"
+        defaultValueLiteral="1.0.0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MavenImportTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" lowerBound="1"
+        upperBound="-1" eType="#//AutomaticSourceLocator" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargletImportTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targletURI" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargletTask" eSuperTypes="#//SetupTask #//TargletData"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Targlet" eSuperTypes="#//TargletData"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TargletData" abstract="true">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="Targlet"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roots" lowerBound="1" upperBound="-1"
+        eType="#//InstallableUnit" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="requirements"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" upperBound="-1"
+        eType="#//AutomaticSourceLocator" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="repositoryLists" upperBound="-1"
+        eType="#//RepositoryList" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activeRepositoryList" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activeP2Repositories" upperBound="-1"
+        eType="#//P2Repository" changeable="false" volatile="true" transient="true"
+        derived="true" resolveProxies="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeSources" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includeAllPlatforms" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RepositoryList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="p2Repositories" upperBound="-1"
+        eType="#//P2Repository" containment="true">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="repositories"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectsImportTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceLocators" lowerBound="1"
+        upperBound="-1" eType="#//AutomaticSourceLocator" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProjectSetImportTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TargetPlatformTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ApiBaselineTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="APIBaselineTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="containerFolder" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="${setup.project.dir/.baselines}"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="zipLocation" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EclipsePreferenceTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="PreferenceTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileAssociationTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultEditorID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editors" upperBound="-1"
+        eType="#//FileEditor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileAssociationsTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappings" lowerBound="1"
+        upperBound="-1" eType="#//FileMapping" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileMapping">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="filePattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultEditorID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editors" upperBound="-1"
+        eType="#//FileEditor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FileEditor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkingSetTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workingSets" upperBound="-1"
+        eType="ecore:EClass workingsets.ecore#//WorkingSet" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceCopyTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sourceURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceCreationTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="content" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="targetURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextModifyTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="url"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifications" upperBound="-1"
+        eType="#//TextModification" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="encoding" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextModification">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pattern" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="substitutions" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyBindingTask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scheme" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="org.eclipse.ui.defaultAcceleratorConfiguration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="contexts" lowerBound="1"
+        upperBound="-1" eType="#//KeyBindingContext" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="platform" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="locale" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="keys" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="command" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commandParameters" upperBound="-1"
+        eType="#//CommandParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="KeyBindingContext">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral="org.eclipse.ui.contexts.window">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommandParameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="iD" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="id"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MylynQueryTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/CDO/releng/setup/enablement">
+      <details key="variableName" value="setup.mylyn.p2"/>
+      <details key="repository" value="http://download.eclipse.org/mylyn/releases/latest"/>
+      <details key="installableUnits" value="org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+      <details key="name" value="MylynQueriesTask"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectorKind" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="bugzilla"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="summary" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="relativeURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/oomph/Migrator">
+        <details key="name" value="uRL"/>
+        <details key="targetName" value="Query"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MylynQueriesTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/CDO/releng/setup/enablement">
+      <details key="variableName" value="setup.mylyn.p2"/>
+      <details key="repository" value="http://download.eclipse.org/mylyn/releases/latest"/>
+      <details key="installableUnits" value="org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectorKind" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="bugzilla"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="repositoryURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queries" upperBound="-1"
+        eType="#//Query" containment="true" eOpposite="#//Query/task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="#//MylynQueriesTask"
+        eOpposite="#//MylynQueriesTask/queries"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="summary" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="uRL" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="attribute"/>
+        <details key="name" value="url"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributes" upperBound="-1"
+        eType="#//QueryAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryAttribute" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MylynBuildsTask" eSuperTypes="#//SetupTask">
+    <eAnnotations source="http://www.eclipse.org/CDO/releng/setup/enablement">
+      <details key="variableName" value="setup.mylyn.p2"/>
+      <details key="repository" value="http://download.eclipse.org/mylyn/releases/latest"/>
+      <details key="installableUnits" value="org.eclipse.mylyn.tasks.core org.eclipse.mylyn.tasks.ui"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="connectorKind" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral="org.eclipse.mylyn.hudson"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serverURL" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="userID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="buildPlans" lowerBound="1"
+        upperBound="-1" eType="#//BuildPlan" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="BuildPlan">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JRETask" eSuperTypes="#//SetupTask">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SetupTaskScope">
+    <eLiterals name="None"/>
+    <eLiterals name="Eclipse" value="2" literal="Eclipse"/>
+    <eLiterals name="Project" value="3"/>
+    <eLiterals name="Branch" value="4"/>
+    <eLiterals name="User" value="5"/>
+    <eLiterals name="Configuration" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Trigger">
+    <eLiterals name="BOOTSTRAP"/>
+    <eLiterals name="STARTUP" value="1"/>
+    <eLiterals name="MANUAL" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="TriggerSet" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Exception" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="ComponentType">
+    <eLiterals name="ECLIPSE_FEATURE" literal="eclipse.feature"/>
+    <eLiterals name="OSGI_BUNDLE" value="1" literal="osgi.bundle"/>
+    <eLiterals name="BUCKMINSTER" value="2" literal="buckminster"/>
+    <eLiterals name="JAR" value="3" literal="jar"/>
+    <eLiterals name="BOM" value="4" literal="bom"/>
+    <eLiterals name="UNKNOWN" value="5" literal="unknown"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableType">
+    <eLiterals name="STRING"/>
+    <eLiterals name="TEXT" value="1"/>
+    <eLiterals name="PASSWORD" value="2"/>
+    <eLiterals name="PATTERN" value="3"/>
+    <eLiterals name="URI" value="4"/>
+    <eLiterals name="FILE" value="5"/>
+    <eLiterals name="FOLDER" value="6"/>
+    <eLiterals name="RESOURCE" value="7"/>
+    <eLiterals name="CONTAINER" value="8"/>
+    <eLiterals name="PROJECT" value="9"/>
+    <eLiterals name="BOOLEAN" value="10"/>
+    <eLiterals name="INTEGER" value="11"/>
+    <eLiterals name="FLOAT" value="12"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="LicenseInfo" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Version" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="VersionRange" instanceClassName="java.lang.String"/>
+</ecore:EPackage>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pnextensions" nsURI="https://es.unizar.disco/pnextensions/1.0"
+    nsPrefix="pnextensions">
+  <eSubpackages name="pnconstants" nsURI="http://es.unizar.disco/pnconstants/1.0"
+      nsPrefix="pnconstants">
+    <eClassifiers xsi:type="ecore:EEnum" name="ToolInfoConstants">
+      <eLiterals name="toolName" literal="DICE PNML Extensions"/>
+      <eLiterals name="toolVersion" value="1" literal="0.1"/>
+      <eLiterals name="uri" value="2" literal="http://es.unizar.disco/DICE"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TransitionKind">
+      <eLiterals name="Immediate" literal="http://es.unizar.dsico/pnconstants/tkind/immediate"/>
+      <eLiterals name="Exponential" value="1" literal="http://es.unizar.dsico/pnconstants/tkind/exponential"/>
+      <eLiterals name="Deterministic" value="2" literal="http://es.unizar.dsico/pnconstants/tkind/deterministic"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ServerType">
+      <eLiterals name="InfiniteServer" literal="http://es.unizar.dsico/pnconstants/tserv/infinite"/>
+      <eLiterals name="OneServer" value="1" literal="http://es.unizar.dsico/pnconstants/tserv/one"/>
+      <eLiterals name="LoadDependent" value="2" literal="http://es.unizar.dsico/pnconstants/tserv/loaddep"/>
+      <eLiterals name="MarkingDependent" value="3" literal="http://es.unizar.dsico/pnconstants/tserv/markingddep"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="pnutils" nsURI="http://es.unizar.disco/pnutils/1.0" nsPrefix="pnutils">
+    <eClassifiers xsi:type="ecore:EClass" name="PnUtils">
+      <eOperations name="layout">
+        <eParameters name="petriNet" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DataTypeUtils">
+      <eOperations name="createURI" eType="#//pnutils/URI" eExceptions="#//pnutils/URISyntaxException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return new URI(stringUri);"/>
+        </eAnnotations>
+        <eParameters name="stringUri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="createLongString" eType="#//pnutils/StringBuffer">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return new StringBuffer(string);"/>
+        </eAnnotations>
+        <eParameters name="string" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ToolInfoUtils">
+      <eOperations name="isEObjectValidPnObject" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="// Get the Transition EClass&#xD;&#xA;EPackage ePackage = eObject.eClass().getEPackage();&#xD;&#xA;&#xD;&#xA;// Get the PnObject EClass&#xD;&#xA;EClass pnObjectEClass = (EClass) ePackage.getEClassifier(PnmlcoremodelPackage.eINSTANCE.getPnObject().getName());&#xD;&#xA;&#xD;&#xA;try {&#xD;&#xA;&#x9;if (pnObjectEClass.isSuperTypeOf(eObject.eClass())) {&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;}&#xD;&#xA;} catch (NullPointerException e) {&#xD;&#xA;}&#xD;&#xA;return false;"/>
+        </eAnnotations>
+        <eParameters name="eObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </eOperations>
+      <eOperations name="isEObjectValidTransition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="// Get the Transition EClass&#xD;&#xA;EPackage ePackage = eObject.eClass().getEPackage();&#xD;&#xA;&#xD;&#xA;// Get the Transition EClass&#xD;&#xA;EClass transitionEClass = (EClass) ePackage.getEClassifier(PnmlcoremodelPackage.eINSTANCE.getTransition().getName());&#xD;&#xA;&#xD;&#xA;try {&#xD;&#xA;&#x9;if (transitionEClass.isInstance(eObject)) {&#xD;&#xA;&#x9;&#x9;return true;&#xD;&#xA;&#x9;}&#xD;&#xA;} catch (NullPointerException e) {&#xD;&#xA;}&#xD;&#xA;return false;"/>
+        </eAnnotations>
+        <eParameters name="eObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </eOperations>
+      <eOperations name="getToolInfoEntryByGrammarUri" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidPnObject(pnObject)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'PnObject'&quot;);&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;// Get the Transition EClass&#xD;&#xA;EClass transEClass = pnObject.eClass();&#xD;&#xA;&#xD;&#xA;// Get the PnObject.toolSpecifics EStructuralFeature&#xD;&#xA;EStructuralFeature toolSpecificsEStructuralFeature = transEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getPnObject_Toolspecifics().getName());&#xD;&#xA;&#xD;&#xA;// Get the ToolInfo EClass&#xD;&#xA;EClass toolInfoEClass = (EClass) transEClass.getEPackage().getEClassifier(PnmlcoremodelPackage.eINSTANCE.getToolInfo().getName());&#xD;&#xA;&#xD;&#xA;// Get the ToolInfo.toolInfoGrammrURI EStructuralFeature&#xD;&#xA;EStructuralFeature toolInfoGrammarUriEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_ToolInfoGrammarURI().getName());&#xD;&#xA;&#xD;&#xA;@SuppressWarnings(&quot;unchecked&quot;)&#xD;&#xA;EList&lt;EObject> toolSpecifics = (EList&lt;EObject>) pnObject.eGet(toolSpecificsEStructuralFeature);&#xD;&#xA;for (EObject toolInfo : toolSpecifics) {&#xD;&#xA;&#x9;java.net.URI grammarUri = (java.net.URI) toolInfo.eGet(toolInfoGrammarUriEStructuralFeature);&#xD;&#xA;&#x9;if (grammarUri != null &amp;&amp; grammarUri.toString().equals(uri)) {&#xD;&#xA;&#x9;&#x9;return toolInfo;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;"/>
+        </eAnnotations>
+        <eParameters name="pnObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="deleteToolInfoEntryByGrammarUri" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidPnObject(pnObject)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'PnObject'&quot;);&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;// Get the Transition EClass&#xD;&#xA;EClass transEClass = pnObject.eClass();&#xD;&#xA;&#xD;&#xA;// Get the PnObject.toolSpecifics EStructuralFeature&#xD;&#xA;EStructuralFeature toolSpecificsEStructuralFeature = transEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getPnObject_Toolspecifics().getName());&#xD;&#xA;&#xD;&#xA;// Get the ToolInfo EClass&#xD;&#xA;EClass toolInfoEClass = (EClass) transEClass.getEPackage().getEClassifier(PnmlcoremodelPackage.eINSTANCE.getToolInfo().getName());&#xD;&#xA;&#xD;&#xA;// Get the ToolInfo.toolInfoGrammrURI EStructuralFeature&#xD;&#xA;EStructuralFeature toolInfoGrammarUriEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_ToolInfoGrammarURI().getName());&#xD;&#xA;&#xD;&#xA;@SuppressWarnings(&quot;unchecked&quot;)&#xD;&#xA;EList&lt;EObject> toolSpecifics = (EList&lt;EObject>) pnObject.eGet(toolSpecificsEStructuralFeature);&#xD;&#xA;for (EObject toolInfo : toolSpecifics) {&#xD;&#xA;&#x9;java.net.URI grammarUri = (java.net.URI) toolInfo.eGet(toolInfoGrammarUriEStructuralFeature);&#xD;&#xA;&#x9;if (grammarUri != null &amp;&amp; grammarUri.equals(uri)) {&#xD;&#xA;&#x9;&#x9;return toolInfo;&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;"/>
+        </eAnnotations>
+        <eParameters name="pnObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="setToolInfoEntryByGrammarUri">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidPnObject(pnObject)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'PnObject'&quot;);&#xD;&#xA;}&#xD;&#xA;&#xD;&#xA;EObject toolInfo = getToolInfoEntryByGrammarUri(pnObject, uri);&#xD;&#xA;if (toolInfo != null) {&#xD;&#xA;&#x9;// Get the ToolInfo EClass&#xD;&#xA;&#x9;EClass toolInfoEClass = toolInfo.eClass();&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo.formattedXMLBuffer EStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature formattedXMLBufferEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_FormattedXMLBuffer().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;toolInfo.eSet(formattedXMLBufferEStructuralFeature, new StringBuffer(&quot;&lt;value>&quot; + value + &quot;&lt;/value>&quot;));&#xD;&#xA;} else {&#xD;&#xA;&#x9;// Get the EFactory of the package of this Transition&#xD;&#xA;&#x9;EFactory eFactoryInstance = pnObject.eClass().getEPackage().getEFactoryInstance();&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the Transition EClass&#xD;&#xA;&#x9;EClass transEClass = pnObject.eClass();&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the PnObject.toolSpecifics EStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature toolSpecificsEStructuralFeature = transEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getPnObject_Toolspecifics().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo EClass&#xD;&#xA;&#x9;EClass toolInfoEClass = (EClass) transEClass.getEPackage().getEClassifier(PnmlcoremodelPackage.eINSTANCE.getToolInfo().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo.tool EStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature toolInfoToolEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_Tool().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo.versionEStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature toolInfoVersionEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_Version().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo.toolInfoGrammrURI EStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature toolInfoGrammarUriEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_ToolInfoGrammarURI().getName());&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Get the ToolInfo.formattedXMLBuffer EStructuralFeature&#xD;&#xA;&#x9;EStructuralFeature formattedXMLBufferEStructuralFeature = toolInfoEClass.getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_FormattedXMLBuffer().getName());&#xD;&#xA;&#xD;&#xA;&#x9;// Finally, add a fresh new ToolInfo entry for the desired TransitionKind&#xD;&#xA;&#x9;toolInfo = eFactoryInstance.create(toolInfoEClass);&#xD;&#xA;&#x9;toolInfo.eSet(toolInfoToolEStructuralFeature, ToolInfoConstants.TOOL_NAME.getLiteral());&#xD;&#xA;&#x9;toolInfo.eSet(toolInfoVersionEStructuralFeature,  ToolInfoConstants.TOOL_VERSION.getLiteral());&#xD;&#xA;&#x9;try {&#xD;&#xA;&#x9;&#x9;toolInfo.eSet(toolInfoGrammarUriEStructuralFeature, new java.net.URI(uri));&#xD;&#xA;&#x9;} catch (URISyntaxException e) {&#xD;&#xA;&#x9;&#x9;throw new RuntimeException(&quot;Unable to convert argument 'uri' to a valid URI&quot;);&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;toolInfo.eSet(formattedXMLBufferEStructuralFeature, new StringBuffer(&quot;&lt;value>&quot; + value + &quot;&lt;/value>&quot;));&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;@SuppressWarnings(&quot;unchecked&quot;)&#xD;&#xA;&#x9;EList&lt;EObject> toolSpecifics = (EList&lt;EObject>) pnObject.eGet(toolSpecificsEStructuralFeature);&#xD;&#xA;&#x9;toolSpecifics.add(toolInfo);&#xD;&#xA;}"/>
+        </eAnnotations>
+        <eParameters name="pnObject" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="uri" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eOperations>
+      <eOperations name="isTransitionKind" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          eExceptions="#//pnutils/IllegalArgumentException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidTransition(transition)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'Transition'&quot;);&#xD;&#xA;}&#xD;&#xA;return getToolInfoEntryByGrammarUri(transition, transitionKind.getLiteral()) != null;"/>
+        </eAnnotations>
+        <eParameters name="transition" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="transitionKind" eType="#//pnconstants/TransitionKind"/>
+      </eOperations>
+      <eOperations name="isTransitionServerType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+          eExceptions="#//pnutils/IllegalArgumentException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidTransition(transition)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'Transition'&quot;);&#xD;&#xA;}&#xD;&#xA;return getToolInfoEntryByGrammarUri(transition, serverType.getLiteral()) != null;"/>
+        </eAnnotations>
+        <eParameters name="transition" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="serverType" eType="#//pnconstants/ServerType"/>
+      </eOperations>
+      <eOperations name="setTransitionKind" eExceptions="#//pnutils/IllegalArgumentException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidTransition(transition)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'Transition'&quot;);&#xD;&#xA;}&#xD;&#xA;for (TransitionKind kind : TransitionKind.VALUES) {&#xD;&#xA;&#x9;deleteToolInfoEntryByGrammarUri(transition, kind.getLiteral());&#xD;&#xA;}&#xD;&#xA;setToolInfoEntryByGrammarUri(transition, transitionKind.getLiteral(), value.toString());"/>
+        </eAnnotations>
+        <eParameters name="transition" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="transitionKind" eType="#//pnconstants/TransitionKind"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      </eOperations>
+      <eOperations name="setTransitionServerType" eExceptions="#//pnutils/IllegalArgumentException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidTransition(transition)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'Transition'&quot;);&#xD;&#xA;}&#xD;&#xA;for (ServerType type : ServerType.VALUES) {&#xD;&#xA;&#x9;deleteToolInfoEntryByGrammarUri(transition, type.getLiteral());&#xD;&#xA;}&#xD;&#xA;setToolInfoEntryByGrammarUri(transition, serverType.getLiteral(), value.toString());"/>
+        </eAnnotations>
+        <eParameters name="transition" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+        <eParameters name="serverType" eType="#//pnconstants/ServerType"/>
+        <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+      </eOperations>
+      <eOperations name="getTransitionRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"
+          eExceptions="#//pnutils/IllegalArgumentException">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="if (!isEObjectValidTransition(transition)) {&#xD;&#xA;&#x9;throw new IllegalArgumentException(&quot;Argument is not a valid 'Transition'&quot;);&#xD;&#xA;}&#xD;&#xA;// We only return a rate for Exponential and Immediate Transitions&#xD;&#xA;EObject toolInfo = getToolInfoEntryByGrammarUri(transition, TransitionKind.EXPONENTIAL.getLiteral());&#xD;&#xA;if (toolInfo == null) {&#xD;&#xA;&#x9;toolInfo = getToolInfoEntryByGrammarUri(transition, TransitionKind.IMMEDIATE.getLiteral());&#xD;&#xA;}&#xD;&#xA;if (toolInfo != null) {&#xD;&#xA;&#x9;Object stringValue = toolInfo.eGet(toolInfo.eClass().getEStructuralFeature(PnmlcoremodelPackage.eINSTANCE.getToolInfo_FormattedXMLBuffer().getName()));&#xD;&#xA;&#x9;if (stringValue != null) {&#xD;&#xA;&#x9;&#x9;try {&#xD;&#xA;&#x9;&#x9;&#x9;Pattern pattern = Pattern.compile(&quot;&lt;value>(.+)&lt;/value>&quot;);&#xD;&#xA;&#x9;&#x9;&#x9;Matcher matcher = pattern.matcher(stringValue.toString().trim());&#xD;&#xA;&#x9;&#x9;&#x9;matcher.matches();&#xD;&#xA;&#x9;&#x9;&#x9;return Float.valueOf(matcher.group(1));&#xD;&#xA;&#x9;&#x9;} catch (IllegalStateException | NullPointerException | NumberFormatException e) {&#xD;&#xA;&#x9;&#x9;&#x9;String message = MessageFormat.format(&quot;Expected a float value in ''{0}'' but ''{1}'' found instead&quot;, transition, stringValue);&#xD;&#xA;&#x9;&#x9;&#x9;if (PnextensionsPlugin.getPlugin() != null) {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;PnextensionsPlugin.getPlugin().log(new Status(IStatus.ERROR, &#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;PnextensionsPlugin.getPlugin().getBundle().getSymbolicName(),&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;message,&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;e));&#xD;&#xA;&#x9;&#x9;&#x9;} else {&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;Logger.getLogger(this.getClass().getCanonicalName()).log(Level.SEVERE, message, e);&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;return null;"/>
+        </eAnnotations>
+        <eParameters name="transition" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="java.net.URI"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="URISyntaxException" instanceClassName="java.net.URISyntaxException"
+        serializable="false"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="StringBuffer" instanceClassName="java.lang.StringBuffer"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="IllegalArgumentException" instanceClassName="java.lang.IllegalArgumentException"
+        serializable="false"/>
+  </eSubpackages>
+</ecore:EPackage>

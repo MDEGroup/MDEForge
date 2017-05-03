@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="luniferadoc" nsURI="http://www.lunifera.org/luniferadoc" nsPrefix="luniferadoc">
+  <eClassifiers xsi:type="ecore:EEnum" name="DocType">
+    <eLiterals name="ENTITY"/>
+    <eLiterals name="DTO" value="1"/>
+    <eLiterals name="BPM_PROCESS" value="2" literal=""/>
+    <eLiterals name="BPM_TASK" value="3"/>
+    <eLiterals name="VAACLIPSE_VIEW" value="4"/>
+    <eLiterals name="UI" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedDocument" abstract="true" interface="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentInclude">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="include" eType="#//document/LuniferaDocDocument"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="varName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eSubpackages name="document" nsURI="http://www.lunifera.org/luniferadoc/document"
+      nsPrefix="document">
+    <eClassifiers xsi:type="ecore:EClass" name="LuniferaDocDocument" abstract="true"
+        interface="true" eSuperTypes="#//NamedDocument"/>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityDocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/EntityDescription"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" eType="#//document/EntityFields"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityFields">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="fields" upperBound="-1"
+          eType="#//document/EntityField" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityField">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="pk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DTODocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="dtoClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/DTODescription"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" eType="#//document/DTOProperties"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DTODescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DTOProperties">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+          eType="#//document/DTOProperty" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DTOProperty">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMProcessDocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="process" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/BPMProcessDescription"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMProcessDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMHumanTaskDocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="task" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/BPMHumanTaskDescription"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMHumanTaskDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VaaclipseViewDocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="view" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/VaaclipseViewDescription"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VaaclipseViewDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UIDocument" eSuperTypes="#//document/LuniferaDocDocument">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="ui" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="description" eType="#//document/UIDescription"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UIDescription">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GeneralDocument" eSuperTypes="#//document/LuniferaDocLayout">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="includes" upperBound="-1"
+          eType="#//DocumentInclude" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LuniferaDocLayout" abstract="true"
+        interface="true" eSuperTypes="#//NamedDocument">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="#//richstring/RichString"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+          eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xtype.ecore#//XImportDeclaration"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="EntityLayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DTOLayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMProcessLayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BPMHumanTaskLayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+    <eClassifiers xsi:type="ecore:EClass" name="VaaclipseViewLayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UILayout" eSuperTypes="#//document/LuniferaDocLayout"/>
+  </eSubpackages>
+  <eSubpackages name="richstring" nsURI="http://www.lunifera.org/luniferadoc/richstring"
+      nsPrefix="richstring">
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringElseIf">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="then" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichString" eSuperTypes="../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XBlockExpression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringLiteral" eSuperTypes="../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XStringLiteral"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringForLoop" eSuperTypes="../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XForLoopExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="before" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="separator" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="after" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringIf" eSuperTypes="../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="then" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elseIfs" upperBound="-1"
+          eType="#//richstring/RichStringElseIf" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringMarkup" eSuperTypes="../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="styleClass" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringExample" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH1" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH2" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH3" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH4" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH5" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringH6" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringChapter" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringSection" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringSubsection" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringURL" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="location" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="text" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="refId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringBold" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringUnderline" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringItalic" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringImg" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="src" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="alt" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringMailto" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringSkype" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="target" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringMovie" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="src" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="height" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringCode" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="lang" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="content" eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringTable" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1"
+          eType="#//richstring/RichStringTableRow" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+          eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringTableRow" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+          eType="#//richstring/RichStringTableData" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+          eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringTableData" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringOpenView" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="viewId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringStartProcess" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="processId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringEntityRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entityDoc" eType="#//document/EntityDocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringDTORef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dtoDoc" eType="#//document/DTODocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringProcessRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processDoc" eType="#//document/BPMProcessDocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringTaskRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="taskDoc" eType="#//document/BPMHumanTaskDocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringViewRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="viewDoc" eType="#//document/VaaclipseViewDocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringUIRef" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="uiDoc" eType="#//document/UIDocument"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringList" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//richstring/RichStringListElement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+          eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringOrderedList" eSuperTypes="#//richstring/RichStringMarkup">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" upperBound="-1"
+          eType="#//richstring/RichStringListElement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+          eType="ecore:EClass ../../org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringListElement" eSuperTypes="#//richstring/RichStringMarkup"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RichStringSpan" eSuperTypes="#//richstring/RichStringMarkup"/>
+  </eSubpackages>
+</ecore:EPackage>

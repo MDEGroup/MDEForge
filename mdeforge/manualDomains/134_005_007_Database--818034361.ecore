@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="database"
+    nsURI="http://database/1.0" nsPrefix="database">
+  <eClassifiers xsi:type="ecore:EClass" name="Database">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DbFK" upperBound="-1" eType="#//ForeignKey"
+        containment="true" eOpposite="#//ForeignKey/DbFkRoot"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DbTable" upperBound="-1"
+        eType="#//Table" containment="true" eOpposite="#//Table/DbTableRoot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Table">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DbTableRoot" lowerBound="1"
+        eType="#//Database" eOpposite="#//Database/DbTable"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TableColumn" lowerBound="1"
+        upperBound="-1" eType="#//Column" containment="true" eOpposite="#//Column/ColumnTable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Column">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ColumnTable" lowerBound="1"
+        eType="#//Table" eOpposite="#//Table/TableColumn"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Type" eType="#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="IsPrimaryKey" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ForeignKey">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SourceTable" lowerBound="1"
+        eType="#//Table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TargetTable" lowerBound="1"
+        eType="#//Table"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="SourceColumn" lowerBound="1"
+        upperBound="-1" eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="TargetColumn" lowerBound="1"
+        upperBound="-1" eType="#//Column"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="DbFkRoot" lowerBound="1"
+        eType="#//Database" eOpposite="#//Database/DbFK"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="Name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+    <eLiterals name="String"/>
+    <eLiterals name="Int" value="1"/>
+    <eLiterals name="Float" value="2"/>
+    <eLiterals name="Date" value="3"/>
+  </eClassifiers>
+</ecore:EPackage>

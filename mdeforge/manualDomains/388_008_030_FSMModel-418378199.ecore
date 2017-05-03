@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="FSMModel" nsURI="http://org.gemoc.moccml.fsmmodel/1.0" nsPrefix="org.gemoc.moccml.fsmmodel">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="fr.inria.aoste.timemodel" value="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#/"/>
+    <details key="fr.inria.aoste.timemodel.ccslmodel.clockexpressionandrelation" value="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClockExpressionAndRelation"/>
+    <details key="fr.inria.aoste.timemodel.classicalexpression" value="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClassicalExpression"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The notion of State in FSMModel is a description of a state of control. A control state contributes in regulating incoming and outgoing requests of various concurrent&#xA;entities. It allows defining the order in which the various requests must precede or succeed. This is done by describing in each state the authorized events / requests, and by defining the successors and predecessors states (of each state) that are part of the synchronization process."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="documentation" value="The concept of Transition is used to describe the relationships between the various states of the control FSM. They are used to define relations of succession and precedence between the control states. Specifically, FSMModel transitions define references source, target to denote the &lt; source > states and &lt; target > states for a given transition."/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outputTransitions" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//State" eOpposite="#//State/inputTransitions" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//AbstractGuard"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The conditions on transitions are referenced as the &quot;guard&quot;. A &quot;guard&quot; is placed on the transition expression and its evaluation is mandatory for the state change."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" eType="#//AbstractTrigger"
+        containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Transitions have &quot;trigger&quot; reference that is of type Event. The occurrence of an event called the &quot;trigger&quot; may involve state change during the control process if all additional conditions on the transition are verified.&#xA;In the context of FSMModel, occurrences of events that are &quot;trigger&quot; are MoCInterfaces (Send / Receive / Ack) and MoCEvents."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//AbstractAction" containment="true">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Action: The action function is defined for the State and Transition. In both cases, the function references the Block they integrate. In the notation of action, a stands for State or Transition. The Blocks define the sequences of instructions for internal and external communication. The internal communication is the communication between control FSM and external control is the answer provided to each requesting concurrent entity."/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachineDefinition" eSuperTypes="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="declarationBlock" eType="#//DeclarationBlock"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+        upperBound="-1" eType="#//State" containment="true" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialStates" lowerBound="1"
+        upperBound="-1" eType="#//State" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="finalStates" upperBound="-1"
+        eType="#//State" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTrigger" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractAction" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractGuard" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard" eSuperTypes="#//AbstractGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="ecore:EClass ../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClassicalExpression/BooleanExpression"
+        containment="true" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//AbstractTrigger">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trueTriggers" upperBound="-1"
+        eType="ecore:EClass ../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClockExpressionAndRelation/BindableEntity"
+        eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="falseTriggers" upperBound="-1"
+        eType="ecore:EClass ../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClockExpressionAndRelation/BindableEntity"
+        eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntegerAssignement" eSuperTypes="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClassicalExpression/BinaryIntegerExpression #//AbstractAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DeclarationBlock">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concreteEntities" upperBound="-1"
+        eType="ecore:EClass ../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClockExpressionAndRelation/ConcreteEntity"
+        containment="true" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="classicalExpressions" upperBound="-1"
+        eType="ecore:EClass ../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//CCSLModel/ClassicalExpression/ClassicalExpression"
+        containment="true" eKeys="../../fr.inria.aoste.timesquare.ccslkernel.model/model/TimeModel.ecore#//NamedElement/name"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dataflownet" nsURI="http://dataflownet/1.0" nsPrefix="dataflownet">
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//DataflowNet"
+        eOpposite="#//DataflowNet/nodes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" lowerBound="1" upperBound="-1"
+        eType="#//StateMachineState" containment="true" eOpposite="#//StateMachineState/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+        eType="#//StateMachineState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="firingRules" upperBound="-1"
+        eType="#//FiringRule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataflowNet" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputChannels" upperBound="-1"
+        eType="#//Channel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputChannels" upperBound="-1"
+        eType="#//Channel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//Node" containment="true" eOpposite="#//Node/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownChannels" upperBound="-1"
+        eType="#//Channel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="process" eType="#//Process"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachineState" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputTransitions" upperBound="-1"
+        eType="#//StateMachineTransition" containment="true" eOpposite="#//StateMachineTransition/fromState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputTransitions" upperBound="-1"
+        eType="#//StateMachineTransition" eOpposite="#//StateMachineTransition/toState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+        eType="#//StateMachine" eOpposite="#//StateMachine/nodes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachineTransition" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromState" lowerBound="1"
+        eType="#//StateMachineState" eOpposite="#//StateMachineState/outputTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toState" lowerBound="1"
+        eType="#//StateMachineState" eOpposite="#//StateMachineState/inputTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" upperBound="-1"
+        eType="#//FiringRule"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" upperBound="-1"
+        eType="#//FiringRule"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Channel" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass TypeHierarchy.ecore#//Type"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FiringRule" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channel" lowerBound="1"
+        eType="#//Channel"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" lowerBound="1"
+        eType="#//Token" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="compType" eType="#//Comparation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Token">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass TypeHierarchy.ecore#//Type"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" unique="false" lowerBound="1"
+        upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DataflowSystem" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="-1"
+        eType="ecore:EClass TypeHierarchy.ecore#//Type" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nets" lowerBound="1" upperBound="-1"
+        eType="#//DataflowNet" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="channels" upperBound="-1"
+        eType="#//Channel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="processes" lowerBound="1"
+        upperBound="-1" eType="#//Process" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="protocol" lowerBound="1"
+        eType="#//Protocol"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Comparation">
+    <eLiterals name="Equal"/>
+    <eLiterals name="NotEqual" value="1"/>
+    <eLiterals name="Less" value="2"/>
+    <eLiterals name="Greater" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Process" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="host" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Protocol">
+    <eLiterals name="Paho"/>
+    <eLiterals name="Akka" value="1"/>
+  </eClassifiers>
+</ecore:EPackage>

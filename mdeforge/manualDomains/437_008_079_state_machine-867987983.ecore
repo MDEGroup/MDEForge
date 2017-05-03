@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="statemachine" nsURI="org.eclipse.tracecompass.tmf.statemachine"
+    nsPrefix="statemachine">
+  <eClassifiers xsi:type="ecore:EClass" name="Statemachine" eSuperTypes="#//Named">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//AbstractState" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associatedTree" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="associatedAttribute" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Named">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractState" abstract="true" eSuperTypes="#//Named">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//AbstractTransition" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTransition" abstract="true"
+      eSuperTypes="#//Named">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="state" eType="#//AbstractState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateChange" upperBound="-1"
+        eType="#//StateChange" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="#//AbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//AbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//AbstractState">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stateColor" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//AbstractTransition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalTransition" eSuperTypes="#//AbstractTransition"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateValueType">
+    <eLiterals name="int"/>
+    <eLiterals name="null" value="1"/>
+    <eLiterals name="string" value="2"/>
+    <eLiterals name="long" value="3"/>
+    <eLiterals name="eventField" value="4"/>
+    <eLiterals name="eventName" value="5"/>
+    <eLiterals name="delete" value="6"/>
+    <eLiterals name="query" value="7"/>
+    <eLiterals name="definedState" value="8"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="StateAttributeType">
+    <eLiterals name="null"/>
+    <eLiterals name="constant"/>
+    <eLiterals name="eventField"/>
+    <eLiterals name="location"/>
+    <eLiterals name="query"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//StateValueType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//StateAttributeType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateAttributeQuery" upperBound="-1"
+        eType="#//StateAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConditionalState" eSuperTypes="#//AbstractState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="condition" upperBound="-1"
+        eType="#//AbstractCondition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="andExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionsOrganization"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateChange">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateAttribute" upperBound="-1"
+        eType="#//StateAttribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateValue" eType="#//StateValue"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractCondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateValue" eType="#//StateValue"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isNotCondition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FieldCondition" eSuperTypes="#//AbstractCondition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fieldName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeCondition" eSuperTypes="#//AbstractCondition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateAttribute" upperBound="-1"
+        eType="#//StateAttribute" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

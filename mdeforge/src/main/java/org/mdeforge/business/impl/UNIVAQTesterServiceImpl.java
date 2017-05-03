@@ -40,6 +40,8 @@ import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.ERROR_KIND;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -66,6 +68,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 	EcoreMetamodelService ecoreMetamodelService;
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
+	Logger logger = LoggerFactory.getLogger(UNIVAQTesterServiceImpl.class);
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 	public List<ATLTransformationTestServiceError> executeTransformation(EMFModel atlModel, ATLTransformation transformation, List<Model> models,
@@ -198,7 +201,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 					break;
 			}
 		} catch (transException e) {
-			System.out.println("******** REVISE: EXECUTION_ERROR ("
+			logger.error("******** REVISE: EXECUTION_ERROR ("
 					+ transformation + ")");
 		} finally {
 			deleteDirectory(oFolder, true);
@@ -276,7 +279,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			try {
 				saveTransMLProperties(propertiesUse, folderTemp);
 				String model = solver.find(metamodel, preconditions); // Collections.<String>emptyList());
-				System.out.println("generated model: "
+				logger.info("generated model: "
 						+ (model != null ? model : "NONE"));
 				if (model != null) {
 					Model m = new Model();
@@ -298,7 +301,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 						: e.getMessage();
 				if (error.endsWith("\n"))
 					error = error.substring(0, error.lastIndexOf("\n"));
-				System.out.println("[ERROR] " + error);
+				logger.error("[ERROR] " + error);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://ynn.org/sqlitedb/modeler/model" nsPrefix="org.ynn.sqlitedb.modeler">
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseVersions">
+    <eOperations name="getFirstVersion" lowerBound="1" eType="#//DatabaseVersion"/>
+    <eOperations name="getLastVersion" lowerBound="1" eType="#//DatabaseVersion"/>
+    <eOperations name="createVersion" lowerBound="1" eType="#//DatabaseVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versions" lowerBound="1"
+        upperBound="-1" eType="#//DatabaseVersion" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="packageName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DatabaseVersion">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+        eType="#//Database" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="previousVersion" eType="#//DatabaseVersion"
+        eOpposite="#//DatabaseVersion/nextVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nextVersion" eType="#//DatabaseVersion"
+        eOpposite="#//DatabaseVersion/previousVersion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tableMapping" eType="#//common/TableMapping"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columnMapping" eType="#//common/ColumnMapping"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Database" eSuperTypes="#//common/NameProvider">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tables" upperBound="-1"
+        eType="#//table/Table" containment="true" eOpposite="#//table/Table/database"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="views" upperBound="-1"
+        eType="#//view/View" containment="true" eOpposite="#//view/View/database"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//trigger/Trigger" containment="true" eOpposite="#//trigger/Trigger/database"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="indexes" upperBound="-1"
+        eType="#//index/Index" containment="true" eOpposite="#//index/Index/database"/>
+  </eClassifiers>
+  <eSubpackages name="common" nsURI="http://ynn.org/sqlitedb/modeler/model/common"
+      nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="NameProvider" abstract="true" interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="MappingEntry">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="previous">
+        <eGenericType eTypeParameter="#//common/MappingEntry/T"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="current">
+        <eGenericType eTypeParameter="#//common/MappingEntry/T"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringToTableMappingEntryMap" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1">
+        <eGenericType eClassifier="#//common/MappingEntry">
+          <eTypeArguments eClassifier="#//table/Table"/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringToColumnMappingEntryMap" instanceClassName="java.util.Map$Entry">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1">
+        <eGenericType eClassifier="#//common/MappingEntry">
+          <eTypeArguments eClassifier="#//column/Column"/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableMapping">
+      <eOperations name="getPrevious" eType="#//table/Table">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="String currKey = current.getName();&#xD;&#xA;MappingEntry&lt;Table> mappingEntry = getCurr2entryMap().get(currKey);&#xD;&#xA;if (mappingEntry == null) return null;&#xD;&#xA;return mappingEntry.getPrevious();"/>
+        </eAnnotations>
+        <eParameters name="current" lowerBound="1" eType="#//table/Table"/>
+      </eOperations>
+      <eOperations name="getAllPrevious" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="Collection&lt;Table> all = new &lt;%java.util.ArrayList%>&lt;Table>(getEntries().size());&#xD;&#xA;for (MappingEntry&lt;Table> entry : getEntries()) {&#xD;&#xA;&#x9;all.add(entry.getPrevious());&#xD;&#xA;}&#xD;&#xA;return all;"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//table/Table"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getCurrent" eType="#//table/Table">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="String prevKey = previous.getName();&#xD;&#xA;MappingEntry&lt;Table> mappingEntry = getPrev2entryMap().get(prevKey);&#xD;&#xA;if (mappingEntry == null) return null;&#xD;&#xA;return mappingEntry.getCurrent();"/>
+        </eAnnotations>
+        <eParameters name="previous" lowerBound="1" eType="#//table/Table"/>
+      </eOperations>
+      <eOperations name="getAllCurrent" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="Collection&lt;Table> all = new ArrayList&lt;Table>(getEntries().size());&#xD;&#xA;for (MappingEntry&lt;Table> entry : getEntries()) {&#xD;&#xA;&#x9;all.add(entry.getCurrent());&#xD;&#xA;}&#xD;&#xA;return all;"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//table/Table"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="put">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="MappingEntry&lt;Table> entry = CommonFactory.eINSTANCE.createMappingEntry();&#xD;&#xA;entry.setPrevious(previous);&#xD;&#xA;entry.setCurrent(current);&#xD;&#xA;String prevKey = previous.getName();&#xD;&#xA;String currKey = current.getName();&#xD;&#xA;// TODO - Do it in a transaction&#xD;&#xA;// If there is already a mapping for previous or current - remove it&#xD;&#xA;if (getPrev2entryMap().containsKey(prevKey) || getCurr2entryMap().containsKey(currKey)) {&#xD;&#xA;&#x9;MappingEntry&lt;Table> oldEntry;&#xD;&#xA;&#x9;oldEntry = getPrev2entryMap().removeKey(prevKey);&#xD;&#xA;&#x9;if (oldEntry != null) getEntries().remove(oldEntry);&#xD;&#xA;&#x9;oldEntry = getCurr2entryMap().removeKey(currKey);&#xD;&#xA;&#x9;if (oldEntry != null) getEntries().remove(oldEntry);&#xD;&#xA;}&#xD;&#xA;getEntries().add(entry);&#xD;&#xA;getPrev2entryMap().put(prevKey, entry);&#xD;&#xA;getCurr2entryMap().put(currKey, entry);"/>
+        </eAnnotations>
+        <eParameters name="previous" eType="#//table/Table"/>
+        <eParameters name="current" eType="#//table/Table"/>
+      </eOperations>
+      <eOperations name="entries" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return &lt;%java.util.Collections%>.unmodifiableCollection(getEntries());"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//common/MappingEntry">
+            <eTypeArguments eClassifier="#//table/Table"/>
+          </eTypeArguments>
+        </eGenericType>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="prev2entryMap" upperBound="-1"
+          eType="#//common/StringToTableMappingEntryMap" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="curr2entryMap" upperBound="-1"
+          eType="#//common/StringToTableMappingEntryMap" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+          containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/MappingEntry">
+          <eTypeArguments eClassifier="#//table/Table"/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColumnMapping">
+      <eOperations name="getPrevious" eType="#//column/Column">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="String currKey = current.getName();&#xD;&#xA;MappingEntry&lt;Column> mappingEntry = getCurr2entryMap().get(currKey);&#xD;&#xA;if (mappingEntry == null) return null;&#xD;&#xA;return mappingEntry.getPrevious();"/>
+        </eAnnotations>
+        <eParameters name="current" lowerBound="1" eType="#//column/Column"/>
+      </eOperations>
+      <eOperations name="getAllPrevious" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="Collection&lt;Column> all = new &lt;%java.util.ArrayList%>&lt;Column>(getEntries().size());&#xD;&#xA;for (MappingEntry&lt;Column> entry : getEntries()) {&#xD;&#xA;&#x9;all.add(entry.getPrevious());&#xD;&#xA;}&#xD;&#xA;return all;"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//column/Column"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="getCurrent" eType="#//column/Column">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="String prevKey = previous.getName();&#xD;&#xA;MappingEntry&lt;Column> mappingEntry = getPrev2entryMap().get(prevKey);&#xD;&#xA;if (mappingEntry == null) return null;&#xD;&#xA;return mappingEntry.getCurrent();"/>
+        </eAnnotations>
+        <eParameters name="previous" lowerBound="1" eType="#//column/Column"/>
+      </eOperations>
+      <eOperations name="getAllCurrent" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="Collection&lt;Column> all = new ArrayList&lt;Column>(getEntries().size());&#xD;&#xA;for (MappingEntry&lt;Column> entry : getEntries()) {&#xD;&#xA;&#x9;all.add(entry.getCurrent());&#xD;&#xA;}&#xD;&#xA;return all;"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//column/Column"/>
+        </eGenericType>
+      </eOperations>
+      <eOperations name="put">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="MappingEntry&lt;Column> entry = CommonFactory.eINSTANCE.createMappingEntry();&#xD;&#xA;entry.setPrevious(previous);&#xD;&#xA;entry.setCurrent(current);&#xD;&#xA;String prevKey = previous.getName();&#xD;&#xA;String currKey = current.getName();&#xD;&#xA;// TODO - Do it in a transaction&#xD;&#xA;// If there is already a mapping for previous or current - remove it&#xD;&#xA;if (getPrev2entryMap().containsKey(prevKey) || getCurr2entryMap().containsKey(currKey)) {&#xD;&#xA;&#x9;MappingEntry&lt;Column> oldEntry;&#xD;&#xA;&#x9;oldEntry = getPrev2entryMap().removeKey(prevKey);&#xD;&#xA;&#x9;if (oldEntry != null) getEntries().remove(oldEntry);&#xD;&#xA;&#x9;oldEntry = getCurr2entryMap().removeKey(currKey);&#xD;&#xA;&#x9;if (oldEntry != null) getEntries().remove(oldEntry);&#xD;&#xA;}&#xD;&#xA;getEntries().add(entry);&#xD;&#xA;getPrev2entryMap().put(prevKey, entry);&#xD;&#xA;getCurr2entryMap().put(currKey, entry);"/>
+        </eAnnotations>
+        <eParameters name="previous" eType="#//column/Column"/>
+        <eParameters name="current" eType="#//column/Column"/>
+      </eOperations>
+      <eOperations name="entries" lowerBound="1">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return &lt;%java.util.Collections%>.unmodifiableCollection(getEntries());"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/Collection">
+          <eTypeArguments eClassifier="#//common/MappingEntry">
+            <eTypeArguments eClassifier="#//column/Column"/>
+          </eTypeArguments>
+        </eGenericType>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="prev2entryMap" upperBound="-1"
+          eType="#//common/StringToColumnMappingEntryMap" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="curr2entryMap" upperBound="-1"
+          eType="#//common/StringToColumnMappingEntryMap" containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+          containment="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="suppressedGetVisibility" value="true"/>
+          <details key="suppressedSetVisibility" value="true"/>
+        </eAnnotations>
+        <eGenericType eClassifier="#//common/MappingEntry">
+          <eTypeArguments eClassifier="#//column/Column"/>
+        </eGenericType>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="Collection" instanceClassName="java.util.Collection">
+      <eTypeParameters name="T"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="table" nsURI="http://ynn.org/sqlitedb/modeler/model/table" nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="Table" eSuperTypes="#//common/NameProvider">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+          eType="#//Database" eOpposite="#//Database/tables"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+          eType="#//column/Column" containment="true" eOpposite="#//column/Column/table"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//table/TableConstraint" containment="true" eOpposite="#//table/TableConstraint/table"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableConstraint" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1"
+          eType="#//table/Table" eOpposite="#//table/Table/constraints"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryKeyTableConstraint" eSuperTypes="#//table/TableConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          eType="#//column/IndexedColumn" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueTableConstraint" eSuperTypes="#//table/TableConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          eType="#//column/IndexedColumn" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckTableConstraint" eSuperTypes="#//table/TableConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForeignKeyTableConstraint" eSuperTypes="#//table/TableConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          upperBound="-1" eType="#//column/Column"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="foreignTable" lowerBound="1"
+          eType="#//table/Table"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="foreignColumns" lowerBound="1"
+          upperBound="-1" eType="#//column/Column"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="column" nsURI="http://ynn.org/sqlitedb/modeler/model/column"
+      nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//common/NameProvider">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1"
+          eType="#//table/Table" eOpposite="#//table/Table/columns"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1"
+          eType="#//column/DataType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraints" upperBound="-1"
+          eType="#//column/ColumnConstraint" containment="true" eOpposite="#//column/ColumnConstraint/column"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DataType">
+      <eLiterals name="NULL"/>
+      <eLiterals name="INTEGER" value="1"/>
+      <eLiterals name="REAL" value="2"/>
+      <eLiterals name="TEXT" value="3"/>
+      <eLiterals name="BLOB" value="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndexedColumn">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="column" lowerBound="1"
+          eType="#//column/Column"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColumnConstraint" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="column" lowerBound="1"
+          eType="#//column/Column" eOpposite="#//column/Column/constraints"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PrimaryKeyColumnConstraint" eSuperTypes="#//column/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NotNullColumnConstraint" eSuperTypes="#//column/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueColumnConstraint" eSuperTypes="#//column/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CheckColumnConstraint" eSuperTypes="#//column/ColumnConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expression/Expression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultValueColumnConstraint" abstract="true"
+        eSuperTypes="#//column/ColumnConstraint">
+      <eTypeParameters name="T"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
+          containment="true">
+        <eGenericType eTypeParameter="#//column/DefaultValueColumnConstraint/T"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultExpressionValueColumnConstraint">
+      <eGenericSuperTypes eClassifier="#//column/DefaultValueColumnConstraint">
+        <eTypeArguments eClassifier="#//expression/Expression"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultStringValueColumnConstraint">
+      <eGenericSuperTypes eClassifier="#//column/DefaultValueColumnConstraint">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultIntegerValueColumnConstraint">
+      <eGenericSuperTypes eClassifier="#//column/DefaultValueColumnConstraint">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultRealValueColumnConstraint">
+      <eGenericSuperTypes eClassifier="#//column/DefaultValueColumnConstraint">
+        <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDoubleObject"/>
+      </eGenericSuperTypes>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="view" nsURI="http://ynn.org/sqlitedb/modeler/model/view" nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="View" eSuperTypes="#//common/NameProvider">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+          eType="#//Database" eOpposite="#//Database/views"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="index" nsURI="http://ynn.org/sqlitedb/modeler/model/index" nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+          eType="#//Database" eOpposite="#//Database/indexes"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="trigger" nsURI="http://ynn.org/sqlitedb/modeler/model/trigger"
+      nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="Trigger" eSuperTypes="#//common/NameProvider">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="database" lowerBound="1"
+          eType="#//Database" eOpposite="#//Database/triggers"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="expression" nsURI="http://ynn.org/sqlitedb/modeler/model/expression"
+      nsPrefix="org.ynn.sqlitedb.modeler.model">
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+  </eSubpackages>
+</ecore:EPackage>

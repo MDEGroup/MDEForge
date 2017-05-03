@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="EventAutomatonModel" nsURI="http://www.example.org/EventAutomatonModel"
+    nsPrefix="EventAutomatonModel">
+  <eClassifiers xsi:type="ecore:EClass" name="Automaton">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+        eType="#//Token"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1"
+        eType="#//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symbolicTokenParameters"
+        upperBound="-1" eType="#//SymbolicParameter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timers" upperBound="-1"
+        eType="#//SymbolicTimer" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trapState" lowerBound="1"
+        eType="#//State"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TokenParameterBinding" eSuperTypes="#//Binding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundTo" lowerBound="1"
+        eType="#//SymbolicTokenParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResetTimerAction" eSuperTypes="#//TimerAction"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicInputEvent" eSuperTypes="#//SymbolicEvent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicTimer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeoutEvent" lowerBound="1"
+        eType="#//SymbolicTimeoutEvent" containment="true" eOpposite="#//SymbolicTimeoutEvent/timer"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicTokenParameter" eSuperTypes="#//SymbolicParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ComplexEventProcessor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="automata" upperBound="-1"
+        eType="#//Automaton" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symbolicEvents" upperBound="-1"
+        eType="#//SymbolicInputEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicEvent" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="symbolicParameters" upperBound="-1"
+        eType="#//SymbolicParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Parameter" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//SymbolicParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+        eType="#//Token" containment="true" eOpposite="#//Token/on"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acceptor" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransitions" upperBound="-1"
+        eType="#//AbstractTransition" eOpposite="#//AbstractTransition/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"
+        eType="#//AbstractTransition" containment="true" eOpposite="#//AbstractTransition/from"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConstantBinding" eSuperTypes="#//Binding">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="boundTo" lowerBound="1"
+        eType="#//FixParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicEventParameter" eSuperTypes="#//SymbolicParameter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FreeParameter" eSuperTypes="#//Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="excludedValues" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SetTimerAction" eSuperTypes="#//TimerAction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="100"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicTimeoutEvent" eSuperTypes="#//SymbolicEvent">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timer" lowerBound="1" eType="#//SymbolicTimer"
+        eOpposite="#//SymbolicTimer/timeoutEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Binding" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="binds" lowerBound="1" eType="#//SymbolicEventParameter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FixParameter" eSuperTypes="#//Parameter">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimerAction" abstract="true" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timer" lowerBound="1" eType="#//SymbolicTimer"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EpsilonTransition" eSuperTypes="#//AbstractTransition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SymbolicParameter" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Event">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="#//SymbolicEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//FixParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Token">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="on" lowerBound="1" eType="#//State"
+        eOpposite="#//State/tokens"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//Parameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//AbstractTransition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventguard" lowerBound="1"
+        eType="#//EventGuard" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventGuard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" upperBound="-1"
+        eType="#//Binding" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//SymbolicEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTransition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//State"
+        eOpposite="#//State/incomingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="#//State"
+        eOpposite="#//State/outgoingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

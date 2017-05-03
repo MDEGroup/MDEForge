@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="requirements_editor" nsURI="http://www.example.org/requirements_editor"
+    nsPrefix="requirements_editor">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" abstract="true" interface="true">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="differentResponsible notItself"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="differentResponsible" value="self.requirementOwnedBy.personOwnsCategory->forAll(c | not c.requirement->includes(self))"/>
+      <details key="notItself" value="self.dependencySource->select(oclIsTypeOf(Requires))->forAll(requires: Dependency | findLeafNodes(requires.oclAsType(Requires).argument)->forAll(ra: RequirementArgument | ra.requirement &lt;> self))"/>
+    </eAnnotations>
+    <eOperations name="findLeafNodes" ordered="false" upperBound="-1" eType="#//RequirementArgument">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="body" value="&#xA;&#x9;&#x9;&#x9;if argument.oclIsKindOf(BinaryOperatorArgument) then&#xA;&#x9;&#x9;&#x9;&#x9;findLeafNodes(argument.oclAsType(BinaryOperatorArgument).leftSideArgument)->union(findLeafNodes(argument.oclAsType(BinaryOperatorArgument).rightSideArgument))&#xA;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;if argument.oclIsKindOf(NOTOperator) then&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;findLeafNodes(argument.oclAsType(NOTOperator).argument)&#xA;&#x9;&#x9;&#x9;&#x9;else&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;Set{argument.oclAsType(RequirementArgument)}&#xA;&#x9;&#x9;&#x9;&#x9;endif&#xA;&#x9;&#x9;&#x9;endif"/>
+      </eAnnotations>
+      <eParameters name="argument" eType="#//Argument"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isMandatory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="description" lowerBound="1"
+        eType="#//Description" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirementOwnedBy" lowerBound="1"
+        eType="#//Person" eOpposite="#//Person/personOwnsRequirement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencySource" upperBound="-1"
+        eType="#//Dependency" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Category">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="moreRequirementsThanCategories"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="moreRequirementsThanCategories" value="Category.allInstances()->size() &lt;= Requirement.allInstances()->size()"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subcategoryOf" upperBound="-1"
+        eType="#//Category" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="categoryOwnedBy" lowerBound="1"
+        eType="#//Person" eOpposite="#//Person/personOwnsCategory"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" upperBound="-1"
+        eType="#//Requirement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Description" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TextualDescription" eSuperTypes="#//Description">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QualityRequirement" eSuperTypes="#//Requirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FunctionalRequirement" eSuperTypes="#//Requirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="isResponsible"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="isResponsible" value="self.personOwnsCategory->size() + self.personOwnsRequirement->size() > 0"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="personOwnsRequirement"
+        upperBound="-1" eType="#//Requirement" eOpposite="#//Requirement/requirementOwnedBy"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="personOwnsCategory" upperBound="-1"
+        eType="#//Category" eOpposite="#//Category/categoryOwnedBy"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dependency" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SimpleDependency" abstract="true" eSuperTypes="#//Dependency">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="targetNotSource"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="targetNotSource" value="not self.dependencyTarget.dependencySource->includes(self)"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencyTarget" lowerBound="1"
+        eType="#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Refines" eSuperTypes="#//SimpleDependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ICost" eSuperTypes="#//SimpleDependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CValue" eSuperTypes="#//SimpleDependency"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Requires" eSuperTypes="#//Dependency">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="selfDependency"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+      <details key="selfDependency" value="self.argument.oclAsSet()->closure(arg : Argument | &#xA;&#x9;&#x9;&#x9;if arg.oclIsKindOf(BinaryOperatorArgument) then arg.oclAsType(BinaryOperatorArgument).leftSideArgument.oclAsSet()->including(arg.oclAsType(BinaryOperatorArgument).rightSideArgument) &#xA;&#x9;&#x9;&#x9;else &#xA;&#x9;&#x9;&#x9;&#x9;if arg.oclIsKindOf(NOTOperator) then arg.oclAsType(NOTOperator).argument.oclAsSet() &#xA;&#x9;&#x9;&#x9;&#x9;else arg.oclAsSet() &#xA;&#x9;&#x9;&#x9;&#x9;endif &#xA;&#x9;&#x9;&#x9;endif&#xA;&#x9;&#x9;)->select(arg : Argument | arg.oclIsKindOf(RequirementArgument))->forAll(arg : Argument | not arg.oclAsType(RequirementArgument).requirement.dependencySource->includes(self))"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" lowerBound="1"
+        eType="#//Argument" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Argument" abstract="true" interface="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BinaryOperatorArgument" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rightSideArgument" lowerBound="1"
+        eType="#//Argument" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="leftSideArgument" lowerBound="1"
+        eType="#//Argument" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//BinaryOperator"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementArgument" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" lowerBound="1"
+        eType="#//Requirement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
+    <eLiterals name="OR"/>
+    <eLiterals name="AND" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DocumentRoot">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootCategories" upperBound="-1"
+        eType="#//Category" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="person" upperBound="-1"
+        eType="#//Person" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NOTOperator" eSuperTypes="#//Argument">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" lowerBound="1"
+        eType="#//Argument" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

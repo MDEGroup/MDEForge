@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="tfsm" nsURI="http://tfsmconcurrentmt/" nsPrefix="org.gemoc.sample.tfsm">
+  <eClassifiers xsi:type="ecore:EClass" name="TFSM" eSuperTypes="//NamedElement">
+    <eOperations name="init">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="changeCurrentState">
+      <eAnnotations source="dynamic"/>
+      <eParameters name="newState" eType="//State"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedStates" upperBound="-1" eType="//State" containment="true" eOpposite="//State/owningFSM"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initialState" lowerBound="1" eType="//State"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localEvents" upperBound="-1" eType="//FSMEvent" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="localClock" lowerBound="1" eType="//FSMClock" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedTransitions" upperBound="-1" eType="//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentState" eType="//State">
+      <eAnnotations source="dynamic"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="//NamedElement">
+    <eOperations name="onEnter">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="onLeave">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="owningFSM" lowerBound="1" eType="//TFSM" eOpposite="//TFSM/ownedStates"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1" eType="//Transition" eOpposite="//Transition/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransitions" upperBound="-1" eType="//Transition" eOpposite="//Transition/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="//NamedElement">
+    <eOperations name="fire">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1" eType="//State" eOpposite="//State/outgoingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1" eType="//State" eOpposite="//State/incomingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedGuard" lowerBound="1" eType="//Guard" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="generatedEvents" upperBound="-1" eType="//FSMEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="action">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard" abstract="true" eSuperTypes="//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TemporalGuard" eSuperTypes="//Guard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onClock" lowerBound="1" eType="//FSMClock"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="afterDuration" lowerBound="1">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventGuard" eSuperTypes="//Guard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggeringEvent" lowerBound="1" eType="//FSMEvent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FSMEvent" eSuperTypes="//NamedElement">
+    <eOperations name="occurs">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sollicitingTransitions" upperBound="-1" eType="//Transition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FSMClock" eSuperTypes="//NamedElement">
+    <eOperations name="ticks">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="numberOfTicks">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimedSystem" eSuperTypes="//NamedElement">
+    <eOperations name="init">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tfsms" upperBound="-1" eType="//TFSM" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalClocks" upperBound="-1" eType="//FSMClock" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="globalEvents" upperBound="-1" eType="//FSMEvent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EvaluateGuard" eSuperTypes="//Guard">
+    <eOperations name="evaluate">
+      <eAnnotations source="dynamic"/>
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="condition">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>

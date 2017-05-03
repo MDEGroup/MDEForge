@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Meta-model for PNML specification -->
+<!-- Provided by www.pnml.org -->
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="pnmlcoremodel"
+    nsURI="http:///pnmlcoremodel.ecore" nsPrefix="pnmlcoremodel">
+  <eClassifiers xsi:type="ecore:EClass" name="PetriNetDoc">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nets" ordered="false" lowerBound="1"
+        upperBound="-1" eType="#//PetriNet" containment="true" eOpposite="#//PetriNet/containerPetriNetDoc"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xmlns" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" changeable="false"
+        defaultValueLiteral="http://www.pnml.org/version-2009/grammar/pnml"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PetriNet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" lowerBound="1"
+        eType="#//PNType">
+      <eAnnotations source="http://www.pnml.org/models/ToPNML">
+        <details key="tag" value="type"/>
+        <details key="kind" value="attribute"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" ordered="false"
+        lowerBound="1" upperBound="-1" eType="#//Page" containment="true" eOpposite="#//Page/containerPetriNet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" ordered="false" eType="#//Name"
+        containment="true" eOpposite="#//Name/containerNamePetriNet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toolspecifics" ordered="false"
+        upperBound="-1" eType="#//ToolInfo" containment="true" eOpposite="#//ToolInfo/containerPetriNet"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPetriNetDoc" ordered="false"
+        lowerBound="1" eType="#//PetriNetDoc" eOpposite="#//PetriNetDoc/nets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PNType">
+    <eLiterals name="COREMODEL" literal="http://www.pnml.org/version-2009/grammar/pnmlcoremodel"/>
+    <eLiterals name="PTNET" value="1" literal="http://www.pnml.org/version-2009/grammar/ptnet"/>
+    <eLiterals name="SYMNET" value="2" literal="http://www.pnml.org/version-2009/grammar/symmetricnet"/>
+    <eLiterals name="HLPN" value="3" literal="http://www.pnml.org/version-2009/grammar/highlevelnet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="#//PnObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="objects" ordered="false"
+        upperBound="-1" eType="#//PnObject" containment="true" eOpposite="#//PnObject/containerPage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPetriNet" ordered="false"
+        eType="#//PetriNet" eOpposite="#//PetriNet/pages"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodegraphics" eType="#//NodeGraphics"
+        containment="true" eOpposite="#//NodeGraphics/containerPage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PnObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="name" ordered="false" eType="#//Name"
+        containment="true" eOpposite="#//Name/containerNamePnObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toolspecifics" ordered="false"
+        upperBound="-1" eType="#//ToolInfo" containment="true" eOpposite="#//ToolInfo/containerPnObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPage" ordered="false"
+        eType="#//Page" eOpposite="#//Page/objects"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Name" eSuperTypes="#//Annotation">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerNamePetriNet"
+        eType="#//PetriNet" eOpposite="#//PetriNet/name"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerNamePnObject"
+        eType="#//PnObject" eOpposite="#//PnObject/name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ToolInfo">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tool" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="formattedXMLBuffer" ordered="false"
+        eType="#//LongString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="toolInfoGrammarURI" ordered="false"
+        eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPetriNet" ordered="false"
+        eType="#//PetriNet" eOpposite="#//PetriNet/toolspecifics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPnObject" ordered="false"
+        eType="#//PnObject" eOpposite="#//PnObject/toolspecifics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerLabel" ordered="false"
+        eType="#//Label" eOpposite="#//Label/toolspecifics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toolInfoModel" eType="#//AnyObject"
+        containment="true" eOpposite="#//AnyObject/containerToolInfo"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Label" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toolspecifics" ordered="false"
+        upperBound="-1" eType="#//ToolInfo" containment="true" eOpposite="#//ToolInfo/containerLabel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NodeGraphics" eSuperTypes="#//Graphics">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" ordered="false"
+        eType="#//Position" containment="true" eOpposite="#//Position/containerPNodeGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dimension" ordered="false"
+        eType="#//Dimension" containment="true" eOpposite="#//Dimension/containerDNodeGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fill" ordered="false" eType="#//Fill"
+        containment="true" eOpposite="#//Fill/containerNodeGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="line" ordered="false" eType="#//Line"
+        containment="true" eOpposite="#//Line/containerNodeGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerNode" eType="#//Node"
+        eOpposite="#//Node/nodegraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPage" eType="#//Page"
+        eOpposite="#//Page/nodegraphics"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Graphics" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Coordinate" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="x" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="y" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Position" eSuperTypes="#//Coordinate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerPNodeGraphics"
+        eType="#//NodeGraphics" eOpposite="#//NodeGraphics/position"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerArcGraphics" ordered="false"
+        eType="#//ArcGraphics" eOpposite="#//ArcGraphics/positions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Offset" eSuperTypes="#//Coordinate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerAnnotationGraphics"
+        ordered="false" eType="#//AnnotationGraphics" eOpposite="#//AnnotationGraphics/offset"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Dimension" eSuperTypes="#//Coordinate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerDNodeGraphics"
+        ordered="false" eType="#//NodeGraphics" eOpposite="#//NodeGraphics/dimension"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnnotationGraphics" eSuperTypes="#//Graphics">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="offset" ordered="false"
+        eType="#//Offset" containment="true" eOpposite="#//Offset/containerAnnotationGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fill" ordered="false" eType="#//Fill"
+        containment="true" eOpposite="#//Fill/containerAnnotationGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="line" ordered="false" eType="#//Line"
+        containment="true" eOpposite="#//Line/containerAnnotationGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="font" ordered="false" eType="#//Font"
+        containment="true" eOpposite="#//Font/containerAnnotationGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerAnnotation" eType="#//Annotation"
+        eOpposite="#//Annotation/annotationgraphics"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fill">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" ordered="false"
+        eType="#//CSS2Color" defaultValueLiteral="BLACK"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradientcolor" ordered="false"
+        eType="#//CSS2Color" defaultValueLiteral="BLACK"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="gradientrotation" ordered="false"
+        eType="#//Gradient"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="image" ordered="false"
+        eType="#//URI"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerNodeGraphics"
+        ordered="false" eType="#//NodeGraphics" eOpposite="#//NodeGraphics/fill"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerAnnotationGraphics"
+        ordered="false" eType="#//AnnotationGraphics" eOpposite="#//AnnotationGraphics/fill"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSS2Color">
+    <eLiterals name="AQUA" literal="aqua"/>
+    <eLiterals name="BLACK" value="1" literal="black"/>
+    <eLiterals name="BLUE" value="2" literal="blue"/>
+    <eLiterals name="FUCHSIA" value="3" literal="fuchsia"/>
+    <eLiterals name="GRAY" value="4" literal="gray"/>
+    <eLiterals name="GREEN" value="5" literal="green"/>
+    <eLiterals name="LIME" value="6" literal="lime"/>
+    <eLiterals name="MAROON" value="7" literal="maroon"/>
+    <eLiterals name="NAVY" value="8" literal="navy"/>
+    <eLiterals name="OLIVE" value="9" literal="olive"/>
+    <eLiterals name="ORANGE" value="10" literal="orange"/>
+    <eLiterals name="PURPLE" value="11" literal="purple"/>
+    <eLiterals name="RED" value="12" literal="red"/>
+    <eLiterals name="SILVER" value="13" literal="silver"/>
+    <eLiterals name="TEAL" value="14" literal="teal"/>
+    <eLiterals name="WHITE" value="15" literal="white"/>
+    <eLiterals name="YELLOW" value="16" literal="yellow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="Gradient">
+    <eLiterals name="HORIZONTAL" literal="horizontal"/>
+    <eLiterals name="VERTICAL" value="1" literal="vertical"/>
+    <eLiterals name="DIAGONAL" value="2" literal="diagonal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Line">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" ordered="false"
+        eType="#//CSS2Color" defaultValueLiteral="BLACK"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shape" ordered="false"
+        eType="#//LineShape" defaultValueLiteral="LINE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerNodeGraphics"
+        ordered="false" eType="#//NodeGraphics" eOpposite="#//NodeGraphics/line"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerArcGraphics" ordered="false"
+        eType="#//ArcGraphics" eOpposite="#//ArcGraphics/line"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerAnnotationGraphics"
+        ordered="false" eType="#//AnnotationGraphics" eOpposite="#//AnnotationGraphics/line"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" eType="#//LineStyle"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="LineShape">
+    <eLiterals name="LINE" literal="line"/>
+    <eLiterals name="CURVE" value="1" literal="curve"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArcGraphics" eSuperTypes="#//Graphics">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="positions" upperBound="-1"
+        eType="#//Position" containment="true" eOpposite="#//Position/containerArcGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="line" ordered="false" eType="#//Line"
+        containment="true" eOpposite="#//Line/containerArcGraphics"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerArc" eType="#//Arc"
+        eOpposite="#//Arc/arcgraphics"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Arc" eSuperTypes="#//PnObject">
+   <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="constraints" value="samePageSourceTarget"/>
+    </eAnnotations>
+    <eAnnotations source="http://www.pnml.org/models/OCL">
+      <details key="samePageSourceTarget" value="self.source.containerPage = self.target.containerPage"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" ordered="false"
+        lowerBound="1" eType="#//Node" eOpposite="#//Node/OutArcs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" ordered="false"
+        lowerBound="1" eType="#//Node" eOpposite="#//Node/InArcs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="arcgraphics" ordered="false"
+        eType="#//ArcGraphics" containment="true" eOpposite="#//ArcGraphics/containerArc"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node" abstract="true" eSuperTypes="#//PnObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="InArcs" ordered="false"
+        upperBound="-1" eType="#//Arc" changeable="false" eOpposite="#//Arc/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="OutArcs" ordered="false"
+        upperBound="-1" eType="#//Arc" changeable="false" eOpposite="#//Arc/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodegraphics" eType="#//NodeGraphics"
+        containment="true" eOpposite="#//NodeGraphics/containerNode"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Font">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="align" ordered="false"
+        eType="#//FontAlign" defaultValueLiteral="LEFT"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="decoration" ordered="false"
+        eType="#//FontDecoration" defaultValueLiteral="UNDERLINE"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="family" ordered="false"
+        eType="#//CSS2FontFamily" defaultValueLiteral="VERDANA"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="rotation" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" ordered="false" eType="#//CSS2FontSize"
+        defaultValueLiteral="SMALL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="style" ordered="false"
+        eType="#//CSS2FontStyle" defaultValueLiteral="NORMAL"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="weight" ordered="false"
+        eType="#//CSS2FontWeight"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerAnnotationGraphics"
+        ordered="false" eType="#//AnnotationGraphics" eOpposite="#//AnnotationGraphics/font"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FontAlign">
+    <eLiterals name="LEFT" literal="left"/>
+    <eLiterals name="CENTER" value="1" literal="center"/>
+    <eLiterals name="RIGHT" value="2" literal="right"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FontDecoration">
+    <eLiterals name="UNDERLINE" literal="underline"/>
+    <eLiterals name="OVERLINE" value="1" literal="overline"/>
+    <eLiterals name="LINETHROUGH" value="2" literal="linethrough"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSS2FontFamily">
+    <eLiterals name="VERDANA" literal="verdana"/>
+    <eLiterals name="ARIAL" value="1" literal="arial"/>
+    <eLiterals name="TIMES" value="2" literal="times"/>
+    <eLiterals name="GEORGIA" value="3" literal="georgia"/>
+    <eLiterals name="TREBUCHET" value="4" literal="trebuchet"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSS2FontSize">
+    <eLiterals name="XXSMALL" literal="xxsmall"/>
+    <eLiterals name="XSMALL" value="1" literal="xsmall"/>
+    <eLiterals name="SMALL" value="2" literal="small"/>
+    <eLiterals name="MEDIUM" value="3" literal="medium"/>
+    <eLiterals name="LARGE" value="4" literal="large"/>
+    <eLiterals name="XLARGE" value="5" literal="xlarge"/>
+    <eLiterals name="XXLARGE" value="6" literal="xxlarge"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSS2FontStyle">
+    <eLiterals name="NORMAL" literal="normal"/>
+    <eLiterals name="ITALIC" value="1" literal="italic"/>
+    <eLiterals name="OBLIQUE" value="2" literal="oblique"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CSS2FontWeight">
+    <eLiterals name="NORMAL" literal="normal"/>
+    <eLiterals name="BOLD" value="1" literal="bold"/>
+    <eLiterals name="BOLDER" value="2" literal="bolder"/>
+    <eLiterals name="LIGHTER" value="3" literal="lighter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PlaceNode" abstract="true" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencingPlaces" upperBound="-1"
+        eType="#//RefPlace" changeable="false" eOpposite="#//RefPlace/ref"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TransitionNode" abstract="true" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencingTransitions"
+        upperBound="-1" eType="#//RefTransition" changeable="false" eOpposite="#//RefTransition/ref"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Place" eSuperTypes="#//PlaceNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RefTransition" eSuperTypes="#//TransitionNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" ordered="false" lowerBound="1"
+        eType="#//TransitionNode" eOpposite="#//TransitionNode/referencingTransitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//TransitionNode"/>
+  <eClassifiers xsi:type="ecore:EClass" name="RefPlace" eSuperTypes="#//PlaceNode">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ref" ordered="false" lowerBound="1"
+        eType="#//PlaceNode" eOpposite="#//PlaceNode/referencingPlaces"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true" eSuperTypes="#//Label"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="LineStyle">
+    <eLiterals name="SOLID" literal="solid"/>
+    <eLiterals name="DASH" value="1" literal="dash"/>
+    <eLiterals name="DOT" value="2" literal="dot"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Annotation" abstract="true" eSuperTypes="#//Label">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="annotationgraphics" ordered="false"
+        eType="#//AnnotationGraphics" containment="true" eOpposite="#//AnnotationGraphics/containerAnnotation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="URI" instanceClassName="java.net.URI"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="LongString" instanceClassName="java.lang.StringBuffer"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AnyObject" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="containerToolInfo" eType="#//ToolInfo"
+        changeable="false" eOpposite="#//ToolInfo/toolInfoModel"/>
+  </eClassifiers>
+</ecore:EPackage>

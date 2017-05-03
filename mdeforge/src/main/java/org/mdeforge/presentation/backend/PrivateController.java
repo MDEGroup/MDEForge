@@ -257,7 +257,7 @@ public class PrivateController {
 				}
 				userService.update(user);
 			} catch (IOException e1) {
-				System.out.println("ERROR");
+				
 			}
 		else
 			throw new BusinessException("You have not permission to update user data");

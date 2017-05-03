@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sql" nsURI="http://www.emftext.org/language/sql" nsPrefix="sql">
+  <eAnnotations source="http://www.eclipse.org/OCL/Import">
+    <details key="ecore" value="http://www.eclipse.org/emf/2002/Ecore"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="Dummy"/>
+  <eSubpackages name="common" nsURI="http://www.emftext.org/language/sql/common" nsPrefix="common">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="conversionDelegates" value="org.emftext.language.sql.conversionDelegateFactory"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLScript">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//common/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DirectSQLStatement" abstract="true"
+        eSuperTypes="#//common/Statement"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="UnsignedInteger" instanceClassName="org.emftext.language.sql.UnsignedInteger"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Separator" abstract="true" eSuperTypes="#//common/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Comment" abstract="true" eSuperTypes="#//common/Separator">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleComment" eSuperTypes="#//common/Comment"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BracketedComment" eSuperTypes="#//common/Comment"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SchemaQualifiedName">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="DateType" instanceClassName="java.time.LocalDate">
+      <eAnnotations source="org.emftext.language.sql.conversionDelegateFactory"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="TimeType" instanceClassName="java.time.LocalTime">
+      <eAnnotations source="org.emftext.language.sql.conversionDelegateFactory"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EDataType" name="TimestampType" instanceClassName="java.time.ZonedDateTime">
+      <eAnnotations source="org.emftext.language.sql.conversionDelegateFactory"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="literal" nsURI="http://www.emftext.org/language/sql/literal"
+      nsPrefix="literal">
+    <eClassifiers xsi:type="ecore:EClass" name="Literal" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GeneralLiteral" abstract="true" eSuperTypes="#//literal/Literal"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CharacterStringLiteral" eSuperTypes="#//literal/NationalCharacterStringLiteral">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="characterSetName" eType="#//common/SchemaQualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NationalCharacterStringLiteral" eSuperTypes="#//literal/GeneralLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="values" lowerBound="1"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="separators" upperBound="-1"
+          eType="#//common/Separator" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatetimeLiteral" abstract="true" eSuperTypes="#//literal/GeneralLiteral"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanLiteral" eSuperTypes="#//literal/GeneralLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DateLiteral" eSuperTypes="#//literal/DatetimeLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="#//common/DateType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeLiteral" eSuperTypes="#//literal/DatetimeLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="#//common/TimeType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimestampLiteral" eSuperTypes="#//literal/DatetimeLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="#//common/TimestampType"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExactNumericLiteral" eSuperTypes="#//literal/NumericLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApproximateNumericLiteral" eSuperTypes="#//literal/NumericLiteral">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericLiteral" abstract="true" eSuperTypes="#//literal/Literal"/>
+  </eSubpackages>
+  <eSubpackages name="datatype" nsURI="http://www.emftext.org/language/sql/datatype"
+      nsPrefix="datatype">
+    <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PredefinedType" abstract="true" eSuperTypes="#//datatype/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CharacterStringType" eSuperTypes="#//datatype/PredefinedType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//datatype/CharacterStringTypeKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="#//common/UnsignedInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="characterSetName" eType="#//common/SchemaQualifiedName"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collationName" eType="#//common/SchemaQualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NationalCharacterStringType" eSuperTypes="#//datatype/PredefinedType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//datatype/NationalCharacterStringTypeKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" eType="#//common/UnsignedInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collationName" eType="#//common/SchemaQualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BinaryLargeObjectStringType" eSuperTypes="#//datatype/PredefinedType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//datatype/BinaryLargeObjectStringTypeKind"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="length" eType="#//datatype/LargeObjectLength"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NumericType" abstract="true" eSuperTypes="#//datatype/PredefinedType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanType" eSuperTypes="#//datatype/PredefinedType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DatetimeType" abstract="true" eSuperTypes="#//datatype/PredefinedType"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="CharacterStringTypeKind">
+      <eLiterals name="CHARACTER"/>
+      <eLiterals name="CHAR" value="1"/>
+      <eLiterals name="CHARACTER_VARYING" value="2"/>
+      <eLiterals name="CHAR_VARYING" value="3"/>
+      <eLiterals name="VARCHAR" value="4"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="NationalCharacterStringTypeKind">
+      <eLiterals name="NATIONAL_CHARACTER"/>
+      <eLiterals name="NATIONAL_CHAR" value="1"/>
+      <eLiterals name="NCHAR" value="2"/>
+      <eLiterals name="NATIONAL_CHARACTER_VARYING" value="3"/>
+      <eLiterals name="NATIONAL_CHAR_VARYING" value="4"/>
+      <eLiterals name="NCHAR_VARYING" value="5"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BinaryLargeObjectStringTypeKind">
+      <eLiterals name="BINARY_LARGE_OBJECT"/>
+      <eLiterals name="BLOB" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ExactNumericTypeKind">
+      <eLiterals name="NUMERIC"/>
+      <eLiterals name="DECIMAL" value="1"/>
+      <eLiterals name="DEC" value="2"/>
+      <eLiterals name="SMALLINT" value="3"/>
+      <eLiterals name="INTEGER" value="4"/>
+      <eLiterals name="INT" value="5"/>
+      <eLiterals name="BIGINT" value="6"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ApproximateNumericTypeKind">
+      <eLiterals name="FLOAT"/>
+      <eLiterals name="REAL" value="1"/>
+      <eLiterals name="DOUBLE_PRECISION" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExactNumericType" eSuperTypes="#//datatype/NumericType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//datatype/ExactNumericTypeKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="#//common/UnsignedInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scale" eType="#//common/UnsignedInteger"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ApproximateNumericType" eSuperTypes="#//datatype/NumericType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//datatype/ApproximateNumericTypeKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="#//common/UnsignedInteger"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LargeObjectLength">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+          eType="#//common/UnsignedInteger"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplier" eType="#//datatype/Multiplier"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="units" eType="#//datatype/CharLengthUnits"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="Multiplier">
+      <eLiterals name="K"/>
+      <eLiterals name="M" value="1"/>
+      <eLiterals name="G" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="CharLengthUnits">
+      <eLiterals name="CHARACTERS"/>
+      <eLiterals name="CODE_UNITS" value="1"/>
+      <eLiterals name="OCTETS" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DateType" eSuperTypes="#//datatype/DatetimeType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeType" eSuperTypes="#//datatype/DatetimeType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="#//common/UnsignedInteger"
+          defaultValueLiteral="0"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="withTimeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TimestampType" eSuperTypes="#//datatype/DatetimeType">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="#//common/UnsignedInteger"
+          defaultValueLiteral="6"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="withTimeZone" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="function" nsURI="http://www.emftext.org/language/sql/function"
+      nsPrefix="function">
+    <eClassifiers xsi:type="ecore:EClass" name="DatetimeValueFunction">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//function/DatetimeValueFunctionKind"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="precision" eType="#//common/UnsignedInteger"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="DatetimeValueFunctionKind">
+      <eLiterals name="CURRENT_DATE"/>
+      <eLiterals name="CURRENT_TIME" value="1"/>
+      <eLiterals name="LOCALTIME" value="2"/>
+      <eLiterals name="CURRENT_TIMESTAMP" value="3"/>
+      <eLiterals name="LOCALTIMESTAMP" value="4"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="expression" nsURI="http://www.emftext.org/language/sql/expression"
+      nsPrefix="expression">
+    <eClassifiers xsi:type="ecore:EClass" name="ImplicitlyTypedValueSpecification"
+        abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="NullSpecification" eSuperTypes="#//expression/ImplicitlyTypedValueSpecification"/>
+  </eSubpackages>
+  <eSubpackages name="schema" nsURI="http://www.emftext.org/language/sql/schema" nsPrefix="schema">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+      <details key="invocationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+      <details key="settingDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+      <details key="validationDelegates" value="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot"/>
+    </eAnnotations>
+    <eClassifiers xsi:type="ecore:EClass" name="TableDefinition" eSuperTypes="#//schema/SQLSchemaDefinitionStatement http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          volatile="true" transient="true" derived="true">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+          <details key="derivation" value="if schemaQualifiedName.oclIsUndefined() then '' else schemaQualifiedName.name endif"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schemaQualifiedName"
+          lowerBound="1" eType="#//common/SchemaQualifiedName" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" lowerBound="1"
+          eType="#//schema/TableScope" unsettable="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="contentsSource" lowerBound="1"
+          eType="#//schema/TableContentsSource" containment="true" eOpposite="#//schema/TableContentsSource/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableElementList" eSuperTypes="#//schema/TableContentsSource">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elements" lowerBound="1"
+          upperBound="-1" eType="#//schema/TableElement" containment="true" eOpposite="#//schema/TableElement/owner"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//schema/TableElementList" eOpposite="#//schema/TableElementList/elements"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Column" eSuperTypes="#//schema/TableElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="dataType" lowerBound="1"
+          eType="#//datatype/DataType" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="defaultOption" eType="#//schema/DefaultOption"
+          containment="true" eOpposite="#//schema/DefaultOption/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="constraint" eType="#//schema/ColumnConstraint"
+          containment="true" eOpposite="#//schema/ColumnConstraint/owner"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="collationName" eType="#//common/SchemaQualifiedName"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableConstraint" abstract="true" eSuperTypes="#//schema/TableElement http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schemaQualifiedName"
+          eType="#//common/SchemaQualifiedName" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableContentsSource" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//schema/TableDefinition" transient="true" eOpposite="#//schema/TableDefinition/contentsSource"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DefaultOption" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//schema/Column" eOpposite="#//schema/Column/defaultOption"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ColumnConstraint" abstract="true"
+        eSuperTypes="http://www.eclipse.org/emf/2002/Ecore#//EObject">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="owner" lowerBound="1"
+          eType="#//schema/Column" eOpposite="#//schema/Column/constraint"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="schemaQualifiedName"
+          eType="#//common/SchemaQualifiedName" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NotNullColumnConstraint" eSuperTypes="#//schema/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueColumnConstraint" eSuperTypes="#//schema/UniqueConstraint #//schema/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferentialColumnConstraint" eSuperTypes="#//schema/ReferentialConstraint #//schema/ColumnConstraint"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="TableScope">
+      <eLiterals name="PERSISTENT"/>
+      <eLiterals name="GLOBAL_TEMPORARY" value="1"/>
+      <eLiterals name="LOCAL_TEMPORARY" value="2"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLSchemaStatement" abstract="true"
+        eSuperTypes="#//common/DirectSQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLSchemaDefinitionStatement" abstract="true"
+        eSuperTypes="#//schema/SQLSchemaStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="LiteralDefaultOption" eSuperTypes="#//schema/DefaultOption">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="literal" lowerBound="1"
+          eType="#//literal/Literal" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DatetimeValueFunctionDefaultOption"
+        eSuperTypes="#//schema/DefaultOption">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="function" lowerBound="1"
+          eType="#//function/DatetimeValueFunction" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ImplicitlyTypedValueSpecificationDefaultOption"
+        eSuperTypes="#//schema/DefaultOption">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="specification" lowerBound="1"
+          eType="#//expression/ImplicitlyTypedValueSpecification" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="UniqueSpecificationKind">
+      <eLiterals name="UNIQUE"/>
+      <eLiterals name="PRIMARY_KEY" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueTableConstraint" eSuperTypes="#//schema/UniqueConstraint #//schema/TableColumnsConstraint"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferentialTableConstraint" eSuperTypes="#//schema/ReferentialConstraint #//schema/TableColumnsConstraint">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+        <details key="constraints" value="columnsMustBeCompatible"/>
+      </eAnnotations>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL/Pivot">
+        <details key="columnsMustBeCompatible" value="columns->size() = referencedColumns->size()"/>
+      </eAnnotations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UniqueConstraint" abstract="true"
+        interface="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="kind" lowerBound="1"
+          eType="#//schema/UniqueSpecificationKind"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReferentialConstraint" abstract="true"
+        interface="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedColumns" upperBound="-1"
+          eType="#//schema/Column"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="referencedTable" lowerBound="1"
+          eType="#//schema/TableReference" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableReference">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalogName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="schemaName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+          eType="#//schema/TableDefinition"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TableColumnsConstraint" abstract="true"
+        eSuperTypes="#//schema/TableConstraint">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          upperBound="-1" eType="#//schema/Column"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

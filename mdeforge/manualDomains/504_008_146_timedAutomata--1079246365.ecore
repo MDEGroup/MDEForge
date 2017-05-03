@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="timedAutomata"
+    nsURI="http://www.emftext.org/language/timedAutomata" nsPrefix="timedAutomata">
+  <eSubpackages name="base" nsURI="http://www.emftext.org/language/timedAutomata/base"
+      nsPrefix="base">
+    <eClassifiers xsi:type="ecore:EClass" name="Commentable" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Identifyable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="0"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Nameable">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="bnf" nsURI="http://www.emftext.org/language/timedAutomata/bnf"
+      nsPrefix="bnf">
+    <eClassifiers xsi:type="ecore:EClass" name="Identifier">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Synchronisation" abstract="true" interface="true"
+        eSuperTypes="simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SendSynchronisation" eSuperTypes="#//bnf/Synchronisation"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ReceiveSynchronisation" eSuperTypes="#//bnf/Synchronisation"/>
+    <eSubpackages name="expressions" nsURI="http://www.emftext.org/language/timedAutomata/bnf/expressions"
+        nsPrefix="expressions">
+      <eClassifiers xsi:type="ecore:EEnum" name="AssignOperator">
+        <eLiterals name="ASSIGN" value="1" literal="="/>
+        <eLiterals name="ADD_ASIGN" value="2" literal="+="/>
+        <eLiterals name="SUB_ASSIGN" value="3" literal="-="/>
+        <eLiterals name="DIV_ASSIGN" value="4" literal="/="/>
+        <eLiterals name="MULT_ASSIGN" value="5" literal="*="/>
+        <eLiterals name="MOD_ASSIGN" value="6" literal="%="/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="BinaryOperator">
+        <eLiterals name="NONE" value="-1" literal=""/>
+        <eLiterals name="EQUALS" literal="=="/>
+        <eLiterals name="NOT_EQUALS" value="1" literal="!="/>
+        <eLiterals name="LESS_THAN" value="2" literal="&lt;"/>
+        <eLiterals name="LESS_THAN_OR_EQUAL" value="3" literal="&lt;="/>
+        <eLiterals name="GREATER_THAN" value="4" literal=">"/>
+        <eLiterals name="GREATER_THAN_OR_EQUAL" value="5" literal=">="/>
+        <eLiterals name="LOGICAL_NEGATION" value="6" literal="!"/>
+        <eLiterals name="ADDITION" value="7" literal="+"/>
+        <eLiterals name="SUBSTRACTION" value="8" literal="-"/>
+        <eLiterals name="MULTIPLICATION" value="9" literal="*"/>
+        <eLiterals name="DIVISION" value="10" literal="/"/>
+        <eLiterals name="MODULO" value="11" literal="%"/>
+        <eLiterals name="LEFT_BITSHIFT" value="12" literal="&lt;&lt;"/>
+        <eLiterals name="RIGHT_BITSHIFT" value="13" literal=">>"/>
+        <eLiterals name="MINIMUM" value="14" literal="&lt;?"/>
+        <eLiterals name="MAXIMUM" value="15" literal=">?"/>
+        <eLiterals name="BITWISE_AND" value="16" literal="&amp;"/>
+        <eLiterals name="BITWISE_XOR" value="17" literal="^"/>
+        <eLiterals name="BITWISE_OR" value="18" literal="|"/>
+        <eLiterals name="LOGICAL_AND" value="19" literal="&amp;&amp;"/>
+        <eLiterals name="LOGICAL_OR" value="20" literal="||"/>
+        <eLiterals name="INCREMENT" value="22" literal="++"/>
+        <eLiterals name="DECREMENT" value="23" literal="--"/>
+        <eLiterals name="BITWISE_OR_ASSIGN" value="30" literal="|="/>
+        <eLiterals name="BITWISE_AND_ASSIGN" value="31" literal="&amp;="/>
+        <eLiterals name="BITWISE_XOR_ASIGN" value="32" literal="^="/>
+        <eLiterals name="LEFT_BITSHIFT_ASSIGN" value="33" literal="&lt;&lt;="/>
+        <eLiterals name="RIGHT_BITSHIFT_ASSIGN" value="34" literal=">>="/>
+        <eLiterals name="IMPLY" value="35" literal="imply"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="UnaryOperator">
+        <eLiterals name="PLUS" literal="+"/>
+        <eLiterals name="MINUS" value="1" literal="-"/>
+        <eLiterals name="NOT" value="2" literal="!"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="FixedExpressionType">
+        <eLiterals name="Deadlock" literal="deadlock"/>
+        <eLiterals name="True" value="1" literal="true"/>
+        <eLiterals name="False" value="2" literal="false"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true" interface="true"
+          eSuperTypes="#//base/Commentable"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConstantExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VariableExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" lowerBound="1"
+            eType="#//bnf/Identifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayVariableExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IncDecExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="beforeExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            defaultValueLiteral="false"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="increment" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            defaultValueLiteral="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="GroupingExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BinaryExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="left" lowerBound="1"
+            eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="right" lowerBound="1"
+            eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//bnf/expressions/BinaryOperator"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="AssignmentExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftSide" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightSide" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//bnf/expressions/AssignOperator"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="UnaryExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//bnf/expressions/UnaryOperator"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleIfExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="then" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IdentifierExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="WithArgumentsExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+            eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="PointExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ForallExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ExistsExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FixedExpression" eSuperTypes="#//bnf/expressions/Expression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" lowerBound="1"
+            eType="#//bnf/expressions/FixedExpressionType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Selection">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="declarations" nsURI="http://www.emftext.org/language/timedAutomata/bnf/declarations"
+        nsPrefix="declarations">
+      <eClassifiers xsi:type="ecore:EClass" name="Declaration" abstract="true" interface="true"
+          eSuperTypes="#//base/Commentable"/>
+      <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" eSuperTypes="#//bnf/declarations/Declaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="variableIdentifiers"
+            lowerBound="1" upperBound="100" eType="#//bnf/declarations/VariableIdentifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="VariableIdentifier">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arrayDeclarationTypes"
+            upperBound="100" eType="#//bnf/declarations/ArrayDeclarationType"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialiser" eType="#//bnf/declarations/Initialiser"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TypeDeclaration" eSuperTypes="#//bnf/declarations/Declaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arrayDeclarations"
+            lowerBound="1" upperBound="100" eType="#//bnf/declarations/ArrayDeclaration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FunctionDeclaration" eSuperTypes="#//bnf/declarations/Declaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="100"
+            eType="#//bnf/declarations/TAParameter"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="block" eType="#//bnf/declarations/Block"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ChannelPriorityDeclaration" eSuperTypes="#//bnf/declarations/Declaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="channelPriority" eType="#//bnf/declarations/ChannelPriority"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FieldDeclaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arrayDeclarations"
+            lowerBound="1" upperBound="100" eType="#//bnf/declarations/ArrayDeclaration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayDeclaration">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="types" upperBound="100"
+            eType="#//bnf/declarations/ArrayDeclarationType"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayDeclarationType"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayExpressionType" eSuperTypes="#//bnf/declarations/ArrayDeclarationType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayTypeType" eSuperTypes="#//bnf/declarations/ArrayDeclarationType">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Initialiser" abstract="true" interface="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionInitialiser" eSuperTypes="#//bnf/declarations/Initialiser">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ArrayInitialiser" eSuperTypes="#//bnf/declarations/Initialiser">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initialisers" lowerBound="1"
+            upperBound="100" eType="#//bnf/declarations/Initialiser"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TAParameter" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="arrayDeclaration" eType="#//bnf/declarations/ArrayDeclaration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="CallByValueParameter" eSuperTypes="#//bnf/declarations/TAParameter"/>
+      <eClassifiers xsi:type="ecore:EClass" name="CallByReferenceParameter" eSuperTypes="#//bnf/declarations/TAParameter"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Block">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="100"
+            eType="#//bnf/declarations/Declaration"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="100"
+            eType="#//bnf/declarations/Statement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" interface="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BlockStatement" eSuperTypes="#//bnf/declarations/Statement #//bnf/declarations/Block"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ForLoopStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="initExpression" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="loopConditionExpression"
+            eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="terminalExpression"
+            eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//bnf/declarations/Statement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IterationStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//bnf/types/Type"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//bnf/declarations/Statement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="WhileLoopStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//bnf/declarations/Statement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="DoWhileLoopStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="statement" eType="#//bnf/declarations/Statement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="if" eType="#//bnf/declarations/Statement"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//bnf/declarations/Statement"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" eSuperTypes="#//bnf/declarations/Statement">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ChannelPriority" abstract="true"
+          interface="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="DefaultChannelPriority" eSuperTypes="#//bnf/declarations/ChannelPriority"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleChannelPriority" eSuperTypes="#//bnf/declarations/ChannelPriority">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="channelExpression"
+            eType="#//bnf/declarations/ChannelExpression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ComplexChannelPriority" eSuperTypes="#//bnf/declarations/ChannelPriority">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="leftSideChannelExpression"
+            eType="#//bnf/declarations/ChannelExpression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="rightSideChannelExpression"
+            eType="#//bnf/declarations/ChannelPriority"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="channelOperator" eType="#//bnf/declarations/PriorityOperator"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="PriorityOperator">
+        <eLiterals name="Seperator" literal=","/>
+        <eLiterals name="LessThan" value="1" literal="&lt;"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ChannelExpression" abstract="true"
+          interface="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="IdentifierChannelExpression" eSuperTypes="#//bnf/declarations/ChannelExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionChannelExpression" eSuperTypes="#//bnf/declarations/ChannelExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="channelExpression"
+            eType="#//bnf/declarations/ChannelExpression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="types" nsURI="http://www.emftext.org/language/timedAutomata/bnf/types"
+        nsPrefix="types">
+      <eClassifiers xsi:type="ecore:EClass" name="Type" abstract="true" interface="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="#//bnf/types/TypePrefix"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IdentifierType" eSuperTypes="#//bnf/types/Type">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="identifier" eType="#//bnf/Identifier"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleType" eSuperTypes="#//bnf/types/Type">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//bnf/types/TypeId"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IntegerRange" eSuperTypes="#//bnf/types/Type">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="firstIndex" eType="#//bnf/expressions/Expression"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="secondIndex" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Scalar" eSuperTypes="#//bnf/types/Type">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="scalar" eType="#//bnf/expressions/Expression"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Struct" eSuperTypes="#//bnf/types/Type">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="fieldDeclarations"
+            lowerBound="1" upperBound="100" eType="#//bnf/declarations/FieldDeclaration"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="TypeId">
+        <eLiterals name="Integer" literal="int"/>
+        <eLiterals name="Clock" value="1" literal="clock"/>
+        <eLiterals name="Channel" value="2" literal="chan"/>
+        <eLiterals name="Boolean" value="3" literal="bool"/>
+        <eLiterals name="Void" value="4" literal="void"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="TypePrefix">
+        <eLiterals name="NONE" value="-1" literal=""/>
+        <eLiterals name="URGENT" literal="urgent"/>
+        <eLiterals name="BROADCAST" value="1" literal="broadcast"/>
+        <eLiterals name="META" value="2" literal="meta"/>
+        <eLiterals name="CONSTANT" value="4" literal="const"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+  <eSubpackages name="core" nsURI="http://www.emftext.org/language/timedAutomata/core"
+      nsPrefix="core">
+    <eClassifiers xsi:type="ecore:EClass" name="Project" eSuperTypes="#//core/TAElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="globalDeclarations" upperBound="-1"
+          eType="#//bnf/declarations/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templates" upperBound="-1"
+          eType="#//core/Template" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="systemDeclaration" lowerBound="1"
+          eType="#//core/SystemDefinition"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Template" eSuperTypes="#//core/TAElement #//base/Nameable #//base/Identifyable">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+          eType="#//bnf/declarations/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="initial" lowerBound="1"
+          eType="#//core/Location"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="taParameters" upperBound="-1"
+          eType="ecore:EClass simpleGraph.ecore#//Parameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="locations" upperBound="-1"
+          eType="#//core/Location" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="edges" upperBound="-1"
+          eType="#//core/Edge" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Edge" eSuperTypes="#//core/TAElement simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//core/Location"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//core/Location"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="guards" lowerBound="1"
+          eType="#//core/Guards"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="synchronisation" lowerBound="1"
+          eType="#//bnf/Synchronisation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selections" lowerBound="1"
+          eType="#//core/Selections"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="updates" lowerBound="1"
+          eType="#//core/Updates"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="nails" upperBound="-1"
+          eType="ecore:EClass simpleGraph.ecore#//Nail"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TAElement" abstract="true" eSuperTypes="#//base/Commentable #//base/Nameable"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Location" eSuperTypes="#//core/TAElement simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="urgent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="committed" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+          defaultValueLiteral="false"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="invariant" eType="#//bnf/expressions/Expression"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="label" eType="ecore:EClass simpleGraph.ecore#//Label"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SystemDefinition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateInstantiations"
+          upperBound="-1" eType="#//core/TemplateInstantiation"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="systems" eType="#//core/System"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="System" abstract="true" interface="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SimpleSystem" eSuperTypes="#//core/System">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="Identifier" eType="#//bnf/Identifier"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ComplexSystem" eSuperTypes="#//core/System">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="leftSideSystem" eType="#//core/System"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="rightSideSystem" eType="#//core/System"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="#//bnf/declarations/PriorityOperator"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TemplateInstantiation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processIdentifier" eType="#//bnf/Identifier"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="processParameters" upperBound="-1"
+          eType="#//bnf/declarations/TAParameter"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateIdentifier" eType="#//bnf/Identifier"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="templateArguments" upperBound="-1"
+          eType="#//bnf/expressions/Expression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Selections" eSuperTypes="simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="selections" upperBound="-1"
+          eType="#//bnf/expressions/Selection"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Updates" eSuperTypes="simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expressions" upperBound="-1"
+          eType="#//bnf/expressions/Expression"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Guards" eSuperTypes="simpleGraph.ecore#//Position">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" upperBound="-1"
+          eType="#//bnf/expressions/Expression"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

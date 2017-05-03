@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="automaton" nsURI="automaton.meta" nsPrefix="org.eclipse.viatra.cep.core.metamodels">
+  <eClassifiers xsi:type="ecore:EClass" name="InternalModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="automata" upperBound="-1"
+        eType="#//Automaton" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="latestEvent" eType="ecore:EClass Cep.ecore#//Event"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" lowerBound="1"
+        eType="#//EventContext"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Automaton">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPattern" lowerBound="1"
+        eType="ecore:EClass Cep.ecore#//EventPattern" eOpposite="Cep.ecore#//EventPattern/automaton"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventTokens" upperBound="-1"
+        eType="#//EventToken" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timedZones" upperBound="-1"
+        eType="#//TimedZone" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventToken">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentState" eType="#//State"
+        eOpposite="#//State/eventTokens"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="recordedEvents" upperBound="-1"
+        eType="ecore:EClass Cep.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lastProcessed" eType="ecore:EClass Cep.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timedZones" upperBound="-1"
+        eType="#//TimedZone"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/postState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outTransitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/preState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventTokens" upperBound="-1"
+        eType="#//EventToken" eOpposite="#//EventToken/currentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lastProcessedEvent" eType="ecore:EClass Cep.ecore#//Event"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inStateOf" upperBound="-1"
+        eType="#//TimedZone" eOpposite="#//TimedZone/inState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outStateOf" upperBound="-1"
+        eType="#//TimedZone" eOpposite="#//TimedZone/outState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InitState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrapState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preState" eType="#//State"
+        eOpposite="#//State/outTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postState" eType="#//State"
+        eOpposite="#//State/inTransitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypedTransition" eSuperTypes="#//Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" lowerBound="1" eType="#//Guard"
+        containment="true" eOpposite="#//Guard/transition"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EpsilonTransition" eSuperTypes="#//Transition"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventType" lowerBound="1"
+        eType="ecore:EClass Cep.ecore#//AtomicEventPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transition" lowerBound="1"
+        eType="#//TypedTransition" eOpposite="#//TypedTransition/guard"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EventContext">
+    <eLiterals name="CHRONICLE"/>
+    <eLiterals name="RECENT" value="1"/>
+    <eLiterals name="UNRESTRICTED" value="2"/>
+    <eLiterals name="IMMEDIATE" value="3"/>
+    <eLiterals name="STRICT_IMMEDIATE" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimedZone" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/inStateOf"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outStateOf"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Within" eSuperTypes="#//TimedZone"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HoldsFor" eSuperTypes="#//TimedZone"/>
+</ecore:EPackage>

@@ -32,6 +32,8 @@ public abstract class MDEForgeClient {
 		setToken();
 	}
 
+
+	
 	private void setToken() throws MalformedURLException, IOException {
 
 		URL token = new URL(connectionUrl + "oauth/token?grant_type=password&client_id=my-trusted-client&password=" 

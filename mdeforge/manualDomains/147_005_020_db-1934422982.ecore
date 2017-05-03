@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="db"
+    nsURI="http:///com/safi/db.ecore" nsPrefix="com.safi.db">
+  <eAnnotations source="teneo.jpa">
+    <details key="appinfo" value="@GenericGenerator(name=&quot;hibassigned&quot;, strategy = &quot;assigned&quot;)"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="DBConnection" eSuperTypes="#//DBResource">
+    <eOperations name="getQuery" eType="#//Query">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="user" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="loginTimeout" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="240000"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="properties" eType="#//Properties"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transactionMode" eType="#//TransactionMode"
+        defaultValueLiteral="None"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minPoolSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="3"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxPoolSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="15"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="acquireIncrement" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="3"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxIdleTime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="driver" eType="#//DBDriver"
+        eOpposite="#//DBDriver/connections"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queries" upperBound="-1"
+        eType="#//Query" containment="true" resolveProxies="false" eOpposite="#//Query/connection">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToMany(cascade={MERGE,PERSIST,REMOVE} fetch=&quot;EAGER&quot;  indexed=&quot;false&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DBDriver" eSuperTypes="#//DBResource">
+    <eOperations name="getConnection" eType="#//DBConnection">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="driverClassName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pooling" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connections" upperBound="-1"
+        eType="#//DBConnection" containment="true" resolveProxies="false" eOpposite="#//DBConnection/driver">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToMany(cascade={MERGE,PERSIST,REMOVE} fetch=&quot;EAGER&quot;  indexed=&quot;false&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="exampleUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jars" upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToMany(cascade={MERGE,PERSIST,REMOVE} fetch=&quot;EAGER&quot;  indexed=&quot;false&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="driverManager" eType="#//SafiDriverManager"
+        eOpposite="#//SafiDriverManager/drivers"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guideUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@Column(length = 1000)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="websiteUrl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="urlRegexPattern" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@Column(length = 5000)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Query" eSuperTypes="#//DBResource">
+    <eOperations name="getResultSet" eType="#//SafiResultSet">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getParameter" eType="#//QueryParameter">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getParameter" eType="#//QueryParameter">
+      <eParameters name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queryType" eType="#//QueryType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="querySql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+        eType="#//QueryParameter" containment="true" resolveProxies="false" eOpposite="#//QueryParameter/query">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToMany(cascade={MERGE,PERSIST,REMOVE} fetch=&quot;EAGER&quot;  indexed=&quot;false&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="#//DBConnection"
+        eOpposite="#//DBConnection/queries"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultSets" upperBound="-1"
+        eType="#//SafiResultSet" transient="true" containment="true" resolveProxies="false"
+        eOpposite="#//SafiResultSet/query"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="catalog" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueryParameter" eSuperTypes="#//DBResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dataType" eType="#//SQLDataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//Query"
+        eOpposite="#//Query/parameters"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="QueryType">
+    <eLiterals name="Select"/>
+    <eLiterals name="Update" value="1"/>
+    <eLiterals name="SPSelect" value="2" literal="SPSelect"/>
+    <eLiterals name="SPUpdate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RSHoldabilityMode">
+    <eLiterals name="HoldCursorsOverCommit"/>
+    <eLiterals name="CloseCursorsOverCommit" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="RSScrollMode">
+    <eLiterals name="ForwardOnly"/>
+    <eLiterals name="ScrollInsensitive" value="1"/>
+    <eLiterals name="ScrollSensitive" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SQLDataType">
+    <eLiterals name="Text"/>
+    <eLiterals name="Date" value="1"/>
+    <eLiterals name="DateTime" value="2"/>
+    <eLiterals name="Time" value="3"/>
+    <eLiterals name="Integer" value="4"/>
+    <eLiterals name="Long" value="5"/>
+    <eLiterals name="Double" value="6"/>
+    <eLiterals name="Clob" value="7"/>
+    <eLiterals name="Blob" value="8"/>
+    <eLiterals name="Array" value="9"/>
+    <eLiterals name="Object" value="10"/>
+    <eLiterals name="Boolean" value="11"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SafiDriverManager" eSuperTypes="#//DBResource">
+    <eOperations name="getDriver" eType="#//DBDriver">
+      <eParameters name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="drivers" upperBound="-1"
+        eType="#//DBDriver" containment="true" resolveProxies="false" eOpposite="#//DBDriver/driverManager">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@OneToMany(cascade={MERGE,PERSIST,REMOVE} fetch=&quot;EAGER&quot;  indexed=&quot;false&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SafiResultSet" eSuperTypes="#//DBResource">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="useCache" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scrollable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="readOnly" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scrollMode" eType="#//RSScrollMode"
+        defaultValueLiteral="ForwardOnly"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="holdabilityMode" eType="#//RSHoldabilityMode"
+        defaultValueLiteral="CloseCursorsOverCommit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//Query"
+        transient="true" eOpposite="#//Query/resultSets"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TransactionMode">
+    <eLiterals name="None"/>
+    <eLiterals name="ReadCommitted" value="1"/>
+    <eLiterals name="ReadUncommitted" value="2"/>
+    <eLiterals name="RepeatableRead" value="3"/>
+    <eLiterals name="Serializable" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Properties" instanceClassName="java.util.Properties"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="ResultSet" instanceClassName="java.sql.ResultSet"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Connection" instanceClassName="java.sql.Connection"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Statement" instanceClassName="java.sql.Statement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DBResource" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastUpdated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="-1" iD="true">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@GeneratedValue(strategy=&quot;TABLE&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Variable">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" ordered="false" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true">
+      <eAnnotations source="teneo.jpa">
+        <details key="appinfo" value="@GeneratedValue(generator=&quot;hibassigned&quot;)"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="defaultValue" ordered="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" eType="#//VariableType"
+        defaultValueLiteral="Object"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scope" ordered="false"
+        eType="#//VariableScope" defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableScope">
+    <eLiterals name="Local"/>
+    <eLiterals name="Global" value="1"/>
+    <eLiterals name="Runtime" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VariableType">
+    <eLiterals name="Text"/>
+    <eLiterals name="Integer" value="1"/>
+    <eLiterals name="Decimal" value="2"/>
+    <eLiterals name="Datetime" value="3"/>
+    <eLiterals name="Date" value="4"/>
+    <eLiterals name="Time" value="5"/>
+    <eLiterals name="Object" value="6"/>
+    <eLiterals name="Boolean" value="7" literal="Boolean"/>
+    <eLiterals name="Array" value="8" literal="Array"/>
+  </eClassifiers>
+  <eSubpackages name="server" nsURI="http:///com/safi/db.ecore#server" nsPrefix="com.safi.db.server">
+    <eSubpackages name="config" nsURI="http:///com/safi/db.ecore#config" nsPrefix="com.safi.db.server.config">
+      <eClassifiers xsi:type="ecore:EClass" name="ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModified" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastUpdated" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+            defaultValueLiteral="-1" iD="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@GeneratedValue(strategy=&quot;TABLE&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="createdBy" eType="#//server/config/User"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="modifiedBy" eType="#//server/config/User"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="description" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SafiServer" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="bindIP" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="managementPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+            defaultValueLiteral="7020"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="user" eType="#//server/config/User"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="users" upperBound="-1"
+            eType="#//server/config/User" containment="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@OneToMany(fetch=&quot;EAGER&quot; indexed=&quot;false&quot; cascade=&quot;ALL&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="running" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            transient="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Transient"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="debug" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            transient="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Transient"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+            defaultValueLiteral="7021"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Role" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="entitlements" upperBound="-1"
+            eType="#//server/config/Entitlement">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@ManyToMany(fetch=&quot;EAGER&quot; indexed=&quot;false&quot; )"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Entitlement" eSuperTypes="#//server/config/ServerResource"/>
+      <eClassifiers xsi:type="ecore:EClass" name="User" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+            eType="#//server/config/Role">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@ManyToMany(fetch=&quot;EAGER&quot; indexed=&quot;false&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Saflet" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="code" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Basic(fetch=&quot;LAZY&quot;)&#xD;&#xA;@Lob&#xD;&#xA;@Column(length=&quot;1048576&quot;)&#xD;&#xA;@Type(type=&quot;org.hibernate.type.PrimitiveByteArrayBlobType&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//server/config/SafletProject"
+            eOpposite="#//server/config/SafletProject/saflets"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="subsystemId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+            defaultValueLiteral=""/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SafletProject" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="saflets" upperBound="-1"
+            eType="#//server/config/Saflet" containment="true" eOpposite="#//server/config/Saflet/project">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@OneToMany(fetch=&quot;EAGER&quot; mappedBy=&quot;project&quot; indexed=&quot;false&quot; cascade=&quot;ALL&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Type(type=&quot;boolean&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="prompts" upperBound="-1"
+            eType="#//server/config/Prompt" containment="true" eOpposite="#//server/config/Prompt/project">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@OneToMany(fetch=&quot;LAZY&quot; mappedBy=&quot;project&quot;  indexed=&quot;false&quot; cascade=&quot;ALL&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Prompt" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="project" eType="#//server/config/SafletProject"
+            eOpposite="#//server/config/SafletProject/prompts"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="system" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Type(type=&quot;boolean&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="extension" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EEnum" name="SynchMode">
+        <eLiterals name="ReadOnly"/>
+        <eLiterals name="Synch" value="1"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SFTPInfo" abstract="true" interface="true">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sftpUser" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sftpPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="sftpPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TelephonySubsystem" eSuperTypes="#//server/config/ServerResource">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="hostname" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="running" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            transient="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Transient"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="safiServer" eType="#//server/config/SafiServer"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="private" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Type(type=&quot;boolean&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="visibleSafiServerIP"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+            defaultValueLiteral="true">
+          <eAnnotations source="teneo.jpa">
+            <details key="appinfo" value="@Type(type=&quot;boolean&quot;)"/>
+          </eAnnotations>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="managerName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="managerPassword" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="managerPort" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+            defaultValueLiteral="5038"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="promptDirectory" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+            defaultValueLiteral="/var/lib/asterisk/sounds/"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="platformId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+            changeable="false" defaultValueLiteral="" unsettable="true"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

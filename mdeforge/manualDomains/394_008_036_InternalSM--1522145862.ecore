@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="internalsm" nsURI="sm.meta" nsPrefix="hu.bme.mit.incquery.metamodels">
+  <eClassifiers xsi:type="ecore:EClass" name="State">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outTransitions" upperBound="-1"
+        eType="#//Transition" containment="true" eOpposite="#//Transition/preState">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="wildcards" value=""/>
+        <details key="name" value=""/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/postState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventTokens" upperBound="-1"
+        eType="#//EventToken" eOpposite="#//EventToken/currentState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeConstraints" upperBound="-1"
+        eType="#//TimeConstraint" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="lastProcessedEvent" eType="ecore:EClass CEPMeta.ecore#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="preState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" eType="#//Guard"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="postState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/inTransitions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventType" lowerBound="1"
+        eType="ecore:EClass CEPMeta.ecore#//AtomicEventPattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InitState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrapState" eSuperTypes="#//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventPattern" lowerBound="1"
+        eType="ecore:EClass CEPMeta.ecore#//EventPattern" eOpposite="CEPMeta.ecore#//EventPattern/stateMachine"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priority" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="#//EventProcessingContext"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InternalExecutionModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stateMachines" upperBound="-1"
+        eType="#//StateMachine" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="latestEvent" eType="ecore:EClass CEPMeta.ecore#//Event"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventTokens" upperBound="-1"
+        eType="#//EventToken" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="context" eType="#//EventProcessingContext"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EventToken">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="currentState" eType="#//State"
+        eOpposite="#//State/eventTokens"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="recordedEvents" upperBound="-1"
+        eType="ecore:EClass CEPMeta.ecore#//Event"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeConstraintSpecification">
+    <eOperations name="handleTimeConstraint"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expectedLength" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="startTimestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stopTimestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NumericCompareOperator">
+    <eLiterals name="LESS_THAN" literal="LESS_THAN"/>
+    <eLiterals name="LESS_OR_EQUALS" value="1"/>
+    <eLiterals name="EQUALS" value="2"/>
+    <eLiterals name="MORE_OR_EQUALS" value="3"/>
+    <eLiterals name="MORE_THAN" value="4"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TimeConstraintType">
+    <eLiterals name="START"/>
+    <eLiterals name="STOP" value="1"/>
+    <eLiterals name="CHECK" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeConstraint">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="timeConstraintSpecification"
+        lowerBound="1" eType="#//TimeConstraintSpecification"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//TimeConstraintType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EventProcessingContext">
+    <eLiterals name="CHRONICLE"/>
+    <eLiterals name="RECENT" value="1"/>
+    <eLiterals name="UNRESTRICTED" value="2"/>
+    <eLiterals name="IMMEDIATE" value="3" literal="IMMEDIATE"/>
+    <eLiterals name="STRICT_IMMEDIATE" value="4" literal="STRICT_IMMEDIATE"/>
+  </eClassifiers>
+</ecore:EPackage>

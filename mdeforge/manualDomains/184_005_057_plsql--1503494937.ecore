@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="plsql"
+    nsURI="http://gts.inf.um.es/modernization/plsql" nsPrefix="plsql">
+  <eSubpackages name="statement" nsURI="http://gts.inf.um.es/modernization/plsql/statement"
+      nsPrefix="statement">
+    <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="AssignmentStatement" eSuperTypes="#//statement/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="receptor" lowerBound="1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ExitStatement" eSuperTypes="#//statement/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="GotoStatement" eSuperTypes="#//statement/Statement #//declaration/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CaseStatement" eSuperTypes="#//statement/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="IfStatement" eSuperTypes="#//statement/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="ifStatements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elsif" upperBound="-1"
+          eType="#//statement/IfStatement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="elseStatements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LoopStatement" eSuperTypes="#//statement/Statement">
+      <eAnnotations>
+        <details value="Faltar&#xed;a tratar con los label_name de la regla loop_statement"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ForStatement" eSuperTypes="#//statement/LoopStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="index" eType="#//declaration/VariableDeclaration"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NullStatement" eSuperTypes="#//statement/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RaiseStatement" eSuperTypes="#//statement/Statement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="exception" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ReturnStatement" eSuperTypes="#//statement/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="BlockStatement" eSuperTypes="#//statement/Statement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+          eType="#//declaration/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exceptionSections" upperBound="-1"
+          eType="#//statement/ExceptionSection" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionCallStatement" eSuperTypes="#//statement/Statement #//declaration/NamedElement #//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+          eType="#//expression/FunctionCallParameter" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLStatement" eSuperTypes="#//statement/Statement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ControlSQLStatement" eSuperTypes="#//statement/SQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="CloseStatement" eSuperTypes="#//statement/ControlSQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cursor" eType="#//declaration/CursorDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CommitStatement" eSuperTypes="#//statement/ControlSQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FetchStatement" eSuperTypes="#//statement/ControlSQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cursor" eType="#//declaration/CursorDeclaration"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="into" upperBound="-1"
+          eType="#//expression/VarRefExpression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LockTableStatement" eSuperTypes="#//statement/ControlSQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="OpenStatement" eSuperTypes="#//statement/ControlSQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cursor" eType="#//declaration/CursorDeclaration"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exprs" upperBound="-1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RollbackStatement" eSuperTypes="#//statement/ControlSQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SavepointStatement" eSuperTypes="#//statement/ControlSQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ModifySQLStatement" eSuperTypes="#//statement/SQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SelectStatement" eSuperTypes="#//statement/ModifySQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="distinct" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="unique" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="all" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="selectList" unique="false"
+          upperBound="-1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+          defaultValueLiteral=""/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="into" upperBound="-1"
+          eType="#//expression/VarRefExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="bulk" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="collect" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="from" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="where" eType="#//condition/SQLCondition"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="orderBy" upperBound="-1"
+          eType="#//expression/Expression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="isCount" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InsertStatement" eSuperTypes="#//statement/ModifySQLStatement">
+      <eAnnotations>
+        <details value="Faltar&#xed;a tratar con la incrustracion de selects en vez de values y la inclusi&#xf3;n de return"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="into" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="columns" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="values" upperBound="-1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UpdateStatement" eSuperTypes="#//statement/ModifySQLStatement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="table" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="pairs" upperBound="-1"
+          eType="#//statement/UpdatePair" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="where" eType="#//condition/SQLCondition"
+          containment="true">
+        <eAnnotations>
+          <details value="Considerar &quot;keyCURRENT_OF cursor_name&quot;"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="UpdatePair">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="column" lowerBound="1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="DeleteStatement" eSuperTypes="#//statement/ModifySQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SetTransactionStatement" eSuperTypes="#//statement/ModifySQLStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ExceptionSection">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="exceptionNames" upperBound="-1"
+          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="expression" nsURI="http://gts.inf.um.es/modernization/plsql/expression"
+      nsPrefix="expression">
+    <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanExpression" eSuperTypes="#//expression/Expression #//condition/SQLCondition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr1" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/BooleanOperatorType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr2" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NotExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IsNullExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="InRangeExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="lower" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="upper" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LikeExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr1" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr2" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FoundExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="cursor" eType="#//declaration/CursorDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="VarRefExpression" abstract="true"
+        eSuperTypes="#//expression/Expression"/>
+    <eClassifiers xsi:type="ecore:EClass" name="FormsVarRef" eSuperTypes="#//expression/VarRefExpression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="reference" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLVariable" eSuperTypes="#//expression/VarRefExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//declaration/VariableDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="SQLCursor" eSuperTypes="#//expression/VarRefExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//declaration/CursorDeclaration"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="PropertyAccess" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="propertyName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StringOperation" eSuperTypes="#//expression/Expression"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="BooleanOperatorType">
+      <eLiterals name="OR"/>
+      <eLiterals name="AND" value="1"/>
+      <eLiterals name="NOT" value="2"/>
+      <eLiterals name="EQUALS" value="3"/>
+      <eLiterals name="LESSTHAN" value="4"/>
+      <eLiterals name="GREATERTHAN" value="5"/>
+      <eLiterals name="NOTEQUALS" value="6"/>
+      <eLiterals name="LESSEQUALS" value="7"/>
+      <eLiterals name="GREATEREQUALS" value="8"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="ArithmeticOperatorType">
+      <eLiterals name="PLUS"/>
+      <eLiterals name="MINUS" value="1"/>
+      <eLiterals name="DOUBLEVERTICALBAR" value="2"/>
+      <eLiterals name="MULTIPLICATION" value="3"/>
+      <eLiterals name="DIVISION" value="4"/>
+      <eLiterals name="EXPONENT" value="5"/>
+      <eLiterals name="POSITIVE" value="6"/>
+      <eLiterals name="NEGATIVE" value="7"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="LiteralExpressionType">
+      <eLiterals name="STRING"/>
+      <eLiterals name="INTEGER" value="1"/>
+      <eLiterals name="BOOLEAN" value="2"/>
+      <eLiterals name="NULL" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="LiteralExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/LiteralExpressionType"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionCallParameter" eSuperTypes="#//declaration/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" lowerBound="1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ArithmeticExpression" eSuperTypes="#//expression/Expression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr1" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/ArithmeticOperatorType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr2" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConcatString" eSuperTypes="#//expression/StringOperation">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exprs" upperBound="-1"
+          eType="#//expression/Expression" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="type" nsURI="http://gts.inf.um.es/modernization/plsql/type"
+      nsPrefix="type">
+    <eClassifiers xsi:type="ecore:EClass" name="Type"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Datatype" eSuperTypes="#//type/Type">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//type/BasicTypes"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="BasicTypes">
+      <eLiterals name="BINARY_INTEGER" literal=""/>
+      <eLiterals name="BINARY_FLOAT" value="1"/>
+      <eLiterals name="BINARY_DOUBLE" value="2"/>
+      <eLiterals name="NATURAL" value="3"/>
+      <eLiterals name="POSITIVE" value="4"/>
+      <eLiterals name="NUMBER" value="5"/>
+      <eLiterals name="NUMERIC" value="6"/>
+      <eLiterals name="DECIMAL" value="7"/>
+      <eLiterals name="DEC" value="8"/>
+      <eLiterals name="LONG" value="9"/>
+      <eLiterals name="BOOLEAN" value="10"/>
+      <eLiterals name="DATE" value="11"/>
+      <eLiterals name="INTEGER" value="12"/>
+      <eLiterals name="INT" value="13"/>
+      <eLiterals name="FLOAT" value="14"/>
+      <eLiterals name="REAL" value="15"/>
+      <eLiterals name="DOUBLE" value="16"/>
+      <eLiterals name="CHAR" value="17"/>
+      <eLiterals name="VARCHAR" value="18" literal="VARCHAR"/>
+      <eLiterals name="VARCHAR2" value="19"/>
+      <eLiterals name="CHARACTER" value="20"/>
+      <eLiterals name="NCHAR" value="21"/>
+      <eLiterals name="NVARCHAR" value="22"/>
+      <eLiterals name="NVARCHAR2" value="23"/>
+      <eLiterals name="BLOB" value="24"/>
+      <eLiterals name="CLOB" value="25"/>
+      <eLiterals name="ROWID" value="26"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="IndirectType" eSuperTypes="#//type/Type">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="rowtype" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="range" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="GenericType" eSuperTypes="#//type/Type">
+      <eAnnotations source="Dependency"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TypedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"
+          eType="#//type/Type" containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="condition" nsURI="http://gts.inf.um.es/modernization/plsql/condition"
+      nsPrefix="condition">
+    <eClassifiers xsi:type="ecore:EClass" name="SQLCondition" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="BooleanCondition" eSuperTypes="#//condition/SQLCondition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr1" eType="#//condition/SQLCondition"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/BooleanOperatorType"
+          defaultValueLiteral="" iD="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr2" eType="#//condition/SQLCondition"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NotCondition" eSuperTypes="#//condition/SQLCondition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//condition/SQLCondition"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="ConditionComparison" eSuperTypes="#//condition/SQLCondition">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr1" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//expression/BooleanOperatorType"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="expr2" eType="#//expression/Expression"
+          containment="true"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="declaration" nsURI="http://gts.inf.um.es/modernization/plsql/declaration"
+      nsPrefix="declaration">
+    <eClassifiers xsi:type="ecore:EClass" name="VariableDeclaration" eSuperTypes="#//declaration/Declaration #//type/TypedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assign" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="notnull" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="CursorDeclaration" eSuperTypes="#//declaration/Declaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//declaration/Argument" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="select" eType="#//statement/SelectStatement"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Declaration" abstract="true" eSuperTypes="#//declaration/NamedElement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="ProcedureDeclaration" eSuperTypes="#//declaration/Declaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//declaration/Argument" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+          eType="#//declaration/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="FunctionDeclaration" eSuperTypes="#//type/TypedElement #//declaration/Declaration">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="arguments" upperBound="-1"
+          eType="#//declaration/Argument" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+          eType="#//declaration/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="exceptionSection" eType="#//statement/ExceptionSection"
+          containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Argument" eSuperTypes="#//declaration/NamedElement #//type/TypedElement">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="in" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="out" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="assign" eType="#//expression/Expression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="default" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Package" eSuperTypes="#//declaration/NamedElement">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="declarations" upperBound="-1"
+          eType="#//declaration/Declaration" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
+          eType="#//statement/Statement" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="TriggerBlock" eSuperTypes="#//declaration/NamedElement #//statement/BlockStatement"/>
+    <eClassifiers xsi:type="ecore:EClass" name="PLSQLDefinition">
+      <eAnnotations>
+        <details value="En el futuro, esta metaclase ser&#xe1; abstracta y ser&#xe1; padre de Trigger Block"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+          eType="#//declaration/TriggerBlock" containment="true">
+        <eAnnotations>
+          <details value="Necesito esta agregaci&#xf3;n para poder hacer pruebas con Gra2MoL y varios ficheros de entrada"/>
+        </eAnnotations>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eClassifiers>
+  </eSubpackages>
+</ecore:EPackage>

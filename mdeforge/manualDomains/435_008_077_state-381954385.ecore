@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+	name="state" nsURI="http://state/1.0" nsPrefix="state">
+	<eClassifiers xsi:type="ecore:EClass" name="State"
+		eSuperTypes="#//Vertex #//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="region" lowerBound="1" upperBound="-1" eType="#//Region"
+			containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="isSimple"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="defferableTrigger" lowerBound="1" upperBound="-1" eType="#//Trigger"
+			containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="isComposite"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="doActivity" eType="#//Behaviour" containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="entry" eType="#//Behaviour" containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="exit" eType="#//Behaviour" containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Region"
+		eSuperTypes="#//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="state" eType="#//State" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="subVertex" lowerBound="1" upperBound="-1" eType="#//Vertex"
+			containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="stateMachine" eType="#//StateMachine" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="transition" lowerBound="1" upperBound="-1" eType="#//Transition"
+			containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="StateMachine"
+		eSuperTypes="#//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="region" lowerBound="1" upperBound="-1" eType="#//Region"
+			containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="NamedElement"
+		abstract="true">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="name"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="id"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Vertex"
+		abstract="true" eSuperTypes="#//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="outgoing" lowerBound="1" upperBound="-1" eType="#//Transition"
+			eOpposite="#//Transition/source" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="incoming" lowerBound="1" upperBound="-1" eType="#//Transition"
+			eOpposite="#//Transition/target" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Transition"
+		eSuperTypes="#//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="source" lowerBound="1" eType="#//Vertex" eOpposite="#//Vertex/outgoing" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="target" lowerBound="1" eType="#//Vertex" eOpposite="#//Vertex/incoming" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="kind" eType="#//TransitionKind" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="trigger" lowerBound="1" eType="#//Trigger" containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="guard" eType="#//Constraint" containment="true" />
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="effect" eType="#//Behaviour" containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EEnum" name="TransitionKind">
+		<eLiterals name="internal" value="1" />
+		<eLiterals name="local" />
+		<eLiterals name="external" value="2" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="FinalState"
+		eSuperTypes="#//State" />
+	<eClassifiers xsi:type="ecore:EClass" name="Constraint">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="specification" lowerBound="1" eType="#//OpaqueExpression"
+			containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Trigger"
+		eSuperTypes="#//NamedElement">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="event" lowerBound="1" eType="#//Event" containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Behaviour">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="body"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="language"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="StateModel">
+		<eStructuralFeatures xsi:type="ecore:EReference"
+			name="packagedElment" lowerBound="1" eType="#//NamedElement"
+			containment="true" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="OpaqueExpression">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="body"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="Event">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="body"
+			eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EClass" name="PseudoState"
+		eSuperTypes="#//Vertex">
+		<eStructuralFeatures xsi:type="ecore:EAttribute"
+			name="kind" eType="#//PseudoStateKind" />
+	</eClassifiers>
+	<eClassifiers xsi:type="ecore:EEnum" name="PseudoStateKind">
+		<eLiterals name="initial" />
+		<eLiterals name="deep" value="1" />
+		<eLiterals name="join" value="2" />
+		<eLiterals name="fork" value="3" />
+		<eLiterals name="choice" value="4" />
+		<eLiterals name="terminate" value="5" />
+		<eLiterals name="shallow" value="6" />
+		<eLiterals name="none" value="7" />
+	</eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sql"
+    nsURI="http://www.emftext.org/language/sql" nsPrefix="sql">
+  <eSubpackages name="sqlDataTypes" nsURI="http://www.emftext.org/language/sql/dataTypes"
+      nsPrefix="sqlDataTypes">
+    <eClassifiers xsi:type="ecore:EClass" name="String" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Boolean" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Real" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Date" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="TimeStamp" eSuperTypes="#//sqlDataTypes/Date"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Integer" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Float" eSuperTypes="#//sqlDataTypes/DataType"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Double" eSuperTypes="#//sqlDataTypes/DataType"/>
+  </eSubpackages>
+  <eSubpackages name="select" nsURI="http://www.emftext.org/language/sql/select" nsPrefix="select">
+    <eClassifiers xsi:type="ecore:EClass" name="SelectExpression">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//select/parameter/SelectParameter"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="columns" lowerBound="1"
+          eType="#//select/column/ColumnExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1"
+          eType="#//select/from/FromExpression" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="where" eType="#//select/where/WhereExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="groupBy" eType="#//select/groupBy/GroupByExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="having" eType="#//select/having/HavingExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="set" eType="#//select/set/SetExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="orderBy" eType="#//select/orderBy/OrderByExpression"
+          containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="limit" eType="#//select/limit/LimitExpression"
+          containment="true"/>
+    </eClassifiers>
+    <eSubpackages name="parameter" nsURI="http://www.emftext.org/language/sql/select/parameter"
+        nsPrefix="parameter">
+      <eClassifiers xsi:type="ecore:EClass" name="SelectParameter" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SelectParameterAll" eSuperTypes="#//select/parameter/SelectParameter"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SelectParameterDistinct" eSuperTypes="#//select/parameter/SelectParameter"/>
+    </eSubpackages>
+    <eSubpackages name="column" nsURI="http://www.emftext.org/language/sql/select/column"
+        nsPrefix="column">
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnExpressions"
+            lowerBound="1" upperBound="-1" eType="#//select/column/SingleColumnExpression"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SingleColumnExpression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//select/expression/Expression"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operation" eType="#//select/column/ColumnOperation"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//select/parameter/SelectParameter"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationCount" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationMin" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationMax" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationSum" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationAvg" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationEvery" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnOperationSome" eSuperTypes="#//select/column/ColumnOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="Column">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="from" nsURI="http://www.emftext.org/language/sql/select/from"
+        nsPrefix="from">
+      <eClassifiers xsi:type="ecore:EClass" name="FromExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="tables" lowerBound="1"
+            upperBound="-1" eType="#//select/from/TableListExpression" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TableExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectExpression" eType="#//select/SelectExpression"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="label" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//select/from/Table"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="Table">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TableListExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="table" lowerBound="1"
+            eType="#//select/from/TableExpression" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="joinTable" eType="#//select/from/JoinTableExpression"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinTableExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="join" lowerBound="1"
+            eType="#//select/from/JoinOperation" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="joinTable" lowerBound="1"
+            eType="#//select/from/TableExpression" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//select/expression/Expression" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinOperationInner" eSuperTypes="#//select/from/JoinOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinOperationLeft" eSuperTypes="#//select/from/JoinOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinOperationRight" eSuperTypes="#//select/from/JoinOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="JoinOperationOuter" eSuperTypes="#//select/from/JoinOperation"/>
+    </eSubpackages>
+    <eSubpackages name="where" nsURI="http://www.emftext.org/language/sql/select/where"
+        nsPrefix="where">
+      <eClassifiers xsi:type="ecore:EClass" name="WhereExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//select/expression/Expression" containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="orderBy" nsURI="http://www.emftext.org/language/sql/select/orderBy"
+        nsPrefix="orderBy">
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByExpression" abstract="true">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="#//select/orderBy/OrderByParameter"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByColumnExpression" eSuperTypes="#//select/orderBy/OrderByExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnReference" lowerBound="1"
+            eType="#//select/column/Column"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByAliasExpression" eSuperTypes="#//select/orderBy/OrderByExpression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderBySelectExpression" eSuperTypes="#//select/orderBy/OrderByExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectExpression" lowerBound="1"
+            eType="#//select/SelectExpression" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByParameter" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByParameterAsc" eSuperTypes="#//select/orderBy/OrderByParameter"/>
+      <eClassifiers xsi:type="ecore:EClass" name="OrderByParameterDesc" eSuperTypes="#//select/orderBy/OrderByParameter"/>
+    </eSubpackages>
+    <eSubpackages name="groupBy" nsURI="http://www.emftext.org/language/sql/select/groupBy"
+        nsPrefix="groupBy">
+      <eClassifiers xsi:type="ecore:EClass" name="GroupByExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            upperBound="-1" eType="#//select/expression/Expression" containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="having" nsURI="http://www.emftext.org/language/sql/select/having"
+        nsPrefix="having">
+      <eClassifiers xsi:type="ecore:EClass" name="HavingExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="expression" lowerBound="1"
+            eType="#//select/expression/Expression" containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="set" nsURI="http://www.emftext.org/language/sql/select/set"
+        nsPrefix="set">
+      <eClassifiers xsi:type="ecore:EClass" name="SetExpression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectExpression" lowerBound="1"
+            eType="#//select/SelectExpression" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="setOperation" lowerBound="1"
+            eType="#//select/set/SetOperation" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SetOperationUnion" eSuperTypes="#//select/set/SetOperation">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectParameter" eType="#//select/parameter/SelectParameter"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetOperationMinus" eSuperTypes="#//select/set/SetOperation">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectParameter" eType="#//select/parameter/SelectParameterDistinct"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetOperationExcept" eSuperTypes="#//select/set/SetOperation">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectParameter" eType="#//select/parameter/SelectParameterDistinct"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SetOperationIntersect" eSuperTypes="#//select/set/SetOperation">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectParameter" eType="#//select/parameter/SelectParameterDistinct"
+            containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="limit" nsURI="http://www.emftext.org/language/sql/select/limit"
+        nsPrefix="limit">
+      <eClassifiers xsi:type="ecore:EClass" name="LimitExpression">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="limit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="offset" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="expression" nsURI="http://www.emftext.org/language/sql/select/expression"
+        nsPrefix="expression">
+      <eClassifiers xsi:type="ecore:EClass" name="Expression" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleExpression" eSuperTypes="#//select/expression/Expression">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operations" eType="#//select/expression/AndOrExpressionOperation"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="conditions" lowerBound="1"
+            upperBound="2" eType="#//select/condition/Condition" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="notOperation" eType="#//select/expression/ExpressionOperationNot"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="AndOrExpressionOperation" eSuperTypes="#//select/expression/ExpressionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionOperationNot" eSuperTypes="#//select/expression/ExpressionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionOperationAnd" eSuperTypes="#//select/expression/AndOrExpressionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ExpressionOperationOr" eSuperTypes="#//select/expression/AndOrExpressionOperation"/>
+    </eSubpackages>
+    <eSubpackages name="condition" nsURI="http://www.emftext.org/language/sql/select/condition"
+        nsPrefix="condition">
+      <eClassifiers xsi:type="ecore:EClass" name="Condition" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleCondition" eSuperTypes="#//select/condition/Condition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="values" lowerBound="1"
+            upperBound="-1" eType="#//select/value/Value" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="OperationCondition" eSuperTypes="#//select/condition/SimpleCondition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operation" lowerBound="1"
+            eType="#//select/condition/ConditionOperation" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="IsNullCondition" eSuperTypes="#//select/condition/SimpleCondition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operationNot" eType="#//select/expression/ExpressionOperationNot"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ExistsCondition" eSuperTypes="#//select/condition/SimpleCondition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectExpression" lowerBound="1"
+            eType="#//select/SelectExpression" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="BetweenCondition" eSuperTypes="#//select/condition/SimpleCondition"/>
+      <eClassifiers xsi:type="ecore:EClass" name="InCondition" eSuperTypes="#//select/condition/SimpleCondition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="selectExpression" eType="#//select/SelectExpression"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operationNot" eType="#//select/expression/ExpressionOperationNot"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="LikeCondition" eSuperTypes="#//select/condition/SimpleCondition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operationNot" eType="#//select/expression/ExpressionOperationNot"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationEqual" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationLesser" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationLessEqual" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationGreater" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationGreatEqual" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationUnEqual" eSuperTypes="#//select/condition/ConditionOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionOperationUnEqual2" eSuperTypes="#//select/condition/ConditionOperation"/>
+    </eSubpackages>
+    <eSubpackages name="value" nsURI="http://www.emftext.org/language/sql/select/value"
+        nsPrefix="value">
+      <eClassifiers xsi:type="ecore:EClass" name="Value" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueFrontOperation" abstract="true"
+          eSuperTypes="#//select/value/ValueOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueFrontOperationPlus" eSuperTypes="#//select/value/ValueFrontOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueFrontOperationMinus" eSuperTypes="#//select/value/ValueFrontOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueOperation" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueOperationMultiply" eSuperTypes="#//select/value/ValueOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueOperationDivide" eSuperTypes="#//select/value/ValueOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ValueOperationParallel" eSuperTypes="#//select/value/ValueOperation"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleValue" eSuperTypes="#//select/value/Value">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="terms" lowerBound="1"
+            upperBound="2" eType="#//select/term/Term" containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="operations" eType="#//select/value/ValueOperation"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="frontOperation" eType="#//select/value/ValueFrontOperation"
+            containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="ConditionValue" eSuperTypes="#//select/value/Value">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="condition" lowerBound="1"
+            eType="#//select/condition/Condition" containment="true"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="FunctionValue" eSuperTypes="#//select/value/Value">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="functionName" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
+            eType="#//select/value/Value" containment="true"/>
+      </eClassifiers>
+    </eSubpackages>
+    <eSubpackages name="term" nsURI="http://www.emftext.org/language/sql/select/term"
+        nsPrefix="term">
+      <eClassifiers xsi:type="ecore:EClass" name="Term" abstract="true"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanTerm" abstract="true" eSuperTypes="#//select/term/Term"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanTermTrue" eSuperTypes="#//select/term/BooleanTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="BooleanTermFalse" eSuperTypes="#//select/term/BooleanTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="NullTerm" eSuperTypes="#//select/term/Term"/>
+      <eClassifiers xsi:type="ecore:EClass" name="ColumnTerm" eSuperTypes="#//select/term/Term">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="tableReference" eType="#//select/from/Table"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//select/column/Column"
+            containment="true"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="columnReference" eType="#//select/column/Column"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleTerm" abstract="true" eSuperTypes="#//select/term/Term">
+        <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1"
+            eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleTermString" eSuperTypes="#//select/term/SimpleTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleTermFloat" eSuperTypes="#//select/term/SimpleTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleTermInteger" eSuperTypes="#//select/term/SimpleTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="SimpleTermChar" eSuperTypes="#//select/term/SimpleTerm"/>
+      <eClassifiers xsi:type="ecore:EClass" name="CountStarTerm" eSuperTypes="#//select/term/Term"/>
+      <eClassifiers xsi:type="ecore:EClass" name="StarTerm" eSuperTypes="#//select/term/Term"/>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

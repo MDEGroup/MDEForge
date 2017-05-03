@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="esql" nsURI="http://www.smeup.org/asup/db/esql" nsPrefix="db-esql">
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationArea" abstract="true" interface="true"
+      eSuperTypes="../../org.smeup.sys.il.core/model/il-data.ecore#//DataStruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Cursor" abstract="true" interface="true"
+      eSuperTypes="#//ESqlObject">
+    <eOperations name="next">
+      <eParameters name="target" lowerBound="1" eType="ecore:EClass ../../org.smeup.sys.il.core/model/il-data.ecore#//BufferedData"/>
+    </eOperations>
+    <eOperations name="next">
+      <eParameters name="target" lowerBound="1" eType="#//CursorRecord"/>
+    </eOperations>
+    <eOperations name="open"/>
+    <eOperations name="openUsingDescriptor">
+      <eParameters name="descriptorName" eType="ecore:EClass ../../org.smeup.sys.il.core/model/il-data.ecore#//String"/>
+    </eOperations>
+    <eOperations name="openUsingVariable">
+      <eParameters name="variable" eType="ecore:EClass ../../org.smeup.sys.il.core/model/il-data.ecore#//String"/>
+    </eOperations>
+    <eOperations name="close"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="CursorRecord" instanceClassName="org.smeup.sys.il.data.QBufferedData[]"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CursorTerm" eSuperTypes="#//ESqlTerm">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cursorType" eType="#//CursorType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hold" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sql" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="statementName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CursorType">
+    <eLiterals name="NotScrollable" value="10" literal="NOTSCROLL"/>
+    <eLiterals name="Scrollable" value="20" literal="SCROLL"/>
+    <eLiterals name="DynamicScroll" value="30" literal="DYNSCROLL"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DescriptorArea" abstract="true" interface="true"
+      eSuperTypes="../../org.smeup.sys.il.core/model/il-data.ecore#//DataStruct"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESqlObject" abstract="true" interface="true">
+    <eOperations name="getCommunicationArea" lowerBound="1" eType="#//CommunicationArea"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESqlTerm" abstract="true" eSuperTypes="../../org.smeup.sys.il.core/model/il-core.ecore#//term/Term">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true" interface="true"
+      eSuperTypes="#//ESqlObject">
+    <eOperations name="prepare">
+      <eParameters name="from" eType="ecore:EClass ../../org.smeup.sys.il.core/model/il-data.ecore#//String"/>
+    </eOperations>
+    <eOperations name="execute"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StatementTerm" eSuperTypes="#//ESqlTerm"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ESqlManager" abstract="true" interface="true">
+    <eOperations name="createFactory" lowerBound="1" eType="#//ESqlFactory">
+      <eParameters name="contextProvider" lowerBound="1" eType="ecore:EClass ../../org.smeup.sys.il.core/model/il-core.ecore#//ctx/ContextProvider"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ESqlFactory" abstract="true" interface="true">
+    <eOperations name="createCursor" lowerBound="1" eType="#//Cursor">
+      <eParameters name="cursorTerm" lowerBound="1" eType="#//CursorTerm"/>
+    </eOperations>
+    <eOperations name="createCursorTerm" lowerBound="1" eType="#//CursorTerm">
+      <eParameters name="type" lowerBound="1" eType="ecore:EDataType ../../org.smeup.sys.mi.core/model/mi-core.ecore#//JavaType"/>
+      <eParameters name="annotations" lowerBound="1" upperBound="-1" eType="ecore:EDataType ../../org.smeup.sys.mi.core/model/mi-core.ecore#//JavaAnnotation"/>
+    </eOperations>
+    <eOperations name="createStatement" lowerBound="1" eType="#//Statement">
+      <eParameters name="statementTerm" lowerBound="1" eType="#//StatementTerm"/>
+    </eOperations>
+    <eOperations name="createStatementTerm" lowerBound="1" eType="#//StatementTerm">
+      <eParameters name="type" lowerBound="1" eType="ecore:EDataType ../../org.smeup.sys.mi.core/model/mi-core.ecore#//JavaType"/>
+      <eParameters name="annotations" lowerBound="1" upperBound="-1" eType="ecore:EDataType ../../org.smeup.sys.mi.core/model/mi-core.ecore#//JavaAnnotation"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="FetchPositioning">
+    <eLiterals name="Next" value="10" literal="NEXT"/>
+    <eLiterals name="Prior" value="20" literal="PRIOR"/>
+    <eLiterals name="First" value="30" literal="FIRST"/>
+    <eLiterals name="Last" value="40" literal="LAST"/>
+    <eLiterals name="Before" value="50" literal="BEFORE"/>
+    <eLiterals name="After" value="60" literal="AFTER"/>
+    <eLiterals name="Current" value="70" literal="CURRENT"/>
+    <eLiterals name="Relative" value="80" literal="RELATIVE"/>
+  </eClassifiers>
+</ecore:EPackage>

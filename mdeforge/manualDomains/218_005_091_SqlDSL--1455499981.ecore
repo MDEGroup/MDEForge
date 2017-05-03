@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sqlDSL" nsURI="http://www.lunifera.org/metamodel/dsl/SqlDSL"
+    nsPrefix="sqlDSL">
+  <eClassifiers xsi:type="ecore:EClass" name="SModel">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="generatedFile" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="settings" eType="#//SSettings"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="artifact" upperBound="-1"
+        eType="#//SArtifact" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SSettings">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="schema" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javapackage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="engine" eType="#//SDBEngine"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SDBEngine">
+    <eLiterals name="INNODB" literal="InnoDB"/>
+    <eLiterals name="MYISAM" value="1" literal="MyISAM"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SArtifact">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STable" eSuperTypes="#//SArtifact">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="settings" eType="#//SSettings"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entityname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cached" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prefix" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="columns" upperBound="-1"
+        eType="#//STableMember" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STableMember">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="props" eType="#//SColumnProps"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SColumn" eSuperTypes="#//STableMember">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extType" eType="#//SExtDeclaredSQLType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inlinedType" eType="#//SInlinedSQLType"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="simpleType" eType="#//SSimpleTypes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SJoinColumn" eSuperTypes="#//STableMember">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referencedType" eType="#//STable"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SColumnProps">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nullable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aes" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="#//SIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="javacolumn" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SExtDeclaredSQLType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SInlinedSQLType">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SSimpleTypes">
+    <eLiterals name="INT" literal="Int"/>
+    <eLiterals name="TINY_INT" value="1" literal="Tinyint"/>
+    <eLiterals name="SMALL_INT" value="2" literal="Smallint"/>
+    <eLiterals name="MEDIUM_INT" value="3" literal="Mediumint"/>
+    <eLiterals name="BOOLEAN" value="4" literal="Boolean"/>
+    <eLiterals name="BLOB" value="5" literal="Blob"/>
+    <eLiterals name="DATETIME" value="6" literal="Datetime"/>
+    <eLiterals name="DATE" value="7" literal="Date"/>
+    <eLiterals name="TIME" value="8" literal="Time"/>
+    <eLiterals name="POLYGON" value="9" literal="Polygon"/>
+    <eLiterals name="POINT" value="10" literal="Point"/>
+    <eLiterals name="FOTO" value="11" literal="Foto"/>
+    <eLiterals name="Currency" value="12" literal="Currency"/>
+    <eLiterals name="Coordinate" value="13" literal="Coordinate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SIndex">
+    <eLiterals name="NO" literal="No"/>
+    <eLiterals name="YES" value="1" literal="Yes"/>
+    <eLiterals name="UNIQUE" value="2" literal="Unique"/>
+    <eLiterals name="SPATIAL" value="3" literal="Spatial"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SEnum" eSuperTypes="#//SArtifact #//SExtDeclaredSQLType">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="literals" upperBound="-1"
+        eType="#//SEnumLiteral" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SEnumLiteral">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SString" eSuperTypes="#//SInlinedSQLType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SDecimal" eSuperTypes="#//SInlinedSQLType"/>
+</ecore:EPackage>

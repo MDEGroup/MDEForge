@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="research_team"
+    nsURI="http://research_team/1.0" nsPrefix="research_team">
+  <eClassifiers xsi:type="ecore:EClass" name="Team">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="meaning" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="urlPage" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="" upperBound="-1" eType="#//ActivityReport"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="members" lowerBound="1"
+        upperBound="-1" eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="teamMaster" lowerBound="1"
+        eType="#//Person"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openPosition" upperBound="-1"
+        eType="#//OpenPosition"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="involvedIn" upperBound="-1"
+        eType="#//Collaboration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mainReferences" upperBound="-1"
+        eType="#//Publication" eOpposite="#//Publication/team"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Person">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstname" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="affiliation" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="phone" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mail" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="soft" upperBound="-1" eType="#//Software"
+        eOpposite="#//Software/developers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="seminars" eType="#//Seminar"
+        eOpposite="#//Seminar/speakers"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paper" upperBound="-1"
+        eType="#//Paper" eOpposite="#//Paper/author"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="participates" upperBound="-1"
+        eType="#//Collaboration"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Publication">
+    <eOperations name="getBibtex" eType="#//String"/>
+    <eOperations name="getEndnote" eType="#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="team" eType="#//Team" eOpposite="#//Team/mainReferences"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publishedAs" lowerBound="1"
+        eType="#//Paper"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Collaboration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="website"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="from"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="until"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="partners" lowerBound="1"
+        upperBound="-1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="openPositions" upperBound="-1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Seminar">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="abstract"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="place"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateFrom"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateUntil"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url4slides"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="speakers" lowerBound="1"
+        upperBound="-1" eType="#//Person" eOpposite="#//Person/seminars"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpenPosition">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="status"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mission"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="context" eType="#//Collaboration"
+        eOpposite="#//Collaboration/openPositions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActivityReport">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="" lowerBound="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Section">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="text"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paper">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url4pdf"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="submittedTo"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="" upperBound="-1" eType="#//Publication"
+        eOpposite="#//Publication/publishedAs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+        upperBound="-1" eType="#//Person" eOpposite="#//Person/paper"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CallForPaper">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="deadline"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="url"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Software">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="website"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="title"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="description"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="developers" lowerBound="1"
+        upperBound="-1" eType="#//Person" eOpposite="#//Person/soft"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Partner">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="country"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="category"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="collaboration" lowerBound="1"
+        upperBound="-1" eType="#//Collaboration" eOpposite="#//Collaboration/partners"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TypeCollaboration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Article" eSuperTypes="#//Publication"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MasterThesis" eSuperTypes="#//Publication"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Misc" eSuperTypes="#//Publication"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PhDThesis" eSuperTypes="#//Publication"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InProceedings" eSuperTypes="#//Publication"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="String" instanceClassName="java.lang.String"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Date" instanceClassName="java.util.Date"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Integer" instanceClassName="java.lang.Integer"/>
+</ecore:EPackage>

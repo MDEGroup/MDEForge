@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="petrinetv3Trace" nsURI="petrinetv3Trace" nsPrefix="petrinetv3Trace">
+  <eClassifiers xsi:type="ecore:EClass" name="Trace">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Petrinetv3_Net_Initialize_Sequence"
+        upperBound="-1" eType="#//Steps/Petrinetv3_Net_Initialize"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Petrinetv3_Net_Run_Sequence"
+        upperBound="-1" eType="#//Steps/Petrinetv3_Net_Run"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Petrinetv3_Net_TickEnabledTransitions_Sequence"
+        upperBound="-1" eType="#//Steps/Petrinetv3_Net_TickEnabledTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Petrinetv3_Transition_Fire_Sequence"
+        upperBound="-1" eType="#//Steps/Petrinetv3_Transition_Fire"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="petrinetv3_tracedPlaces"
+        ordered="false" upperBound="-1" eType="#//States/petrinetv3/TracedPlace" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="petrinetv3_tracedTokens"
+        ordered="false" upperBound="-1" eType="#//States/petrinetv3/TracedToken" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="petrinetv3_tracedTransitions"
+        ordered="false" upperBound="-1" eType="#//States/petrinetv3/TracedTransition"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rootSteps" upperBound="-1"
+        eType="#//Steps/Step" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statesTrace" upperBound="-1"
+        eType="#//States/State" containment="true"/>
+  </eClassifiers>
+  <eSubpackages name="Steps" nsURI="petrinetv3Trace_Steps" nsPrefix="events">
+    <eClassifiers xsi:type="ecore:EClass" name="BigStep" abstract="true" eSuperTypes="#//Steps/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Net_Initialize" eSuperTypes="#//Steps/Petrinetv3_Net_Run_AbstractSubStep #//Steps/SmallStep">
+      <eOperations name="getCaller" lowerBound="1" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Net">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return (Net) this.getMse().getCaller();&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Net_Run" eSuperTypes="#//Steps/BigStep">
+      <eOperations name="getCaller" lowerBound="1" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Net">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return (Net) this.getMse().getCaller();&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="subSteps" upperBound="-1"
+          eType="#//Steps/Petrinetv3_Net_Run_AbstractSubStep" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Net_Run_AbstractSubStep"
+        abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Net_Run_ImplicitStep" eSuperTypes="#//Steps/Petrinetv3_Net_Run_AbstractSubStep #//Steps/SmallStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Net_TickEnabledTransitions"
+        eSuperTypes="#//Steps/Petrinetv3_Net_Run_AbstractSubStep #//Steps/SmallStep">
+      <eOperations name="getCaller" lowerBound="1" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Net">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return (Net) this.getMse().getCaller();&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Petrinetv3_Transition_Fire" eSuperTypes="#//Steps/Petrinetv3_Net_Run_AbstractSubStep #//Steps/SmallStep">
+      <eOperations name="getCaller" lowerBound="1" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Transition">
+        <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+          <details key="body" value="return (Transition) this.getMse().getCaller();&#xA;"/>
+        </eAnnotations>
+      </eOperations>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="RootImplicitStep" eSuperTypes="#//Steps/SmallStep"/>
+    <eClassifiers xsi:type="ecore:EClass" name="SmallStep" abstract="true" eSuperTypes="#//Steps/Step"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Step" abstract="true" eSuperTypes="../../org.gemoc.executionframework.engine.mse.model/model/GemocExecutionEngineMSE.ecore#//MSEOccurrence">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endingState" eType="#//States/State"
+          eOpposite="#//States/State/endedSteps"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="startingState" lowerBound="1"
+          eType="#//States/State" eOpposite="#//States/State/startedSteps"/>
+    </eClassifiers>
+  </eSubpackages>
+  <eSubpackages name="States" nsURI="petrinetv3Trace_States" nsPrefix="tracedclasses">
+    <eClassifiers xsi:type="ecore:EClass" name="Place_tokens_Value">
+      <eAnnotations source="http://www.modelexecution.org/trace/XMOF">
+        <details key="executionMetamodelElement"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+          eType="#//States/petrinetv3/TracedPlace" eOpposite="#//States/petrinetv3/TracedPlace/tokensSequence"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+          upperBound="-1" eType="#//States/State" eOpposite="#//States/State/place_tokens_Values"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+          eType="#//States/petrinetv3/TracedToken">
+        <eAnnotations source="aspect"/>
+      </eStructuralFeatures>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="State">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="endedSteps" upperBound="-1"
+          eType="#//Steps/Step" eOpposite="#//Steps/Step/endingState"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="place_tokens_Values"
+          ordered="false" upperBound="-1" eType="#//States/Place_tokens_Value" eOpposite="#//States/Place_tokens_Value/states"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="startedSteps" upperBound="-1"
+          eType="#//Steps/Step" eOpposite="#//Steps/Step/startingState"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="transition_clock_Values"
+          ordered="false" upperBound="-1" eType="#//States/Transition_clock_Value"
+          eOpposite="#//States/Transition_clock_Value/states"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="Transition_clock_Value">
+      <eAnnotations source="http://www.modelexecution.org/trace/XMOF">
+        <details key="executionMetamodelElement"/>
+      </eAnnotations>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="clock" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="-1">
+        <eAnnotations source="aspect"/>
+      </eStructuralFeatures>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="parent" lowerBound="1"
+          eType="#//States/petrinetv3/TracedTransition" eOpposite="#//States/petrinetv3/TracedTransition/clockSequence"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="states" lowerBound="1"
+          upperBound="-1" eType="#//States/State" eOpposite="#//States/State/transition_clock_Values"/>
+    </eClassifiers>
+    <eSubpackages name="petrinetv3" nsURI="petrinetv3Trace_petrinetv3" nsPrefix="">
+      <eClassifiers xsi:type="ecore:EClass" name="TracedPlace">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="originalObject" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Place"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="tokens" upperBound="-1"
+            eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Token">
+          <eAnnotations source="aspect"/>
+        </eStructuralFeatures>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="tokensSequence" upperBound="-1"
+            eType="#//States/Place_tokens_Value" containment="true" eOpposite="#//States/Place_tokens_Value/parent"/>
+      </eClassifiers>
+      <eClassifiers xsi:type="ecore:EClass" name="TracedToken"/>
+      <eClassifiers xsi:type="ecore:EClass" name="TracedTransition">
+        <eStructuralFeatures xsi:type="ecore:EReference" name="clockSequence" upperBound="-1"
+            eType="#//States/Transition_clock_Value" containment="true" eOpposite="#//States/Transition_clock_Value/parent"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="input" lowerBound="1"
+            upperBound="-1" eType="#//States/petrinetv3/TracedPlace"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="originalObject" eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Transition"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="output" lowerBound="1"
+            upperBound="-1" eType="#//States/petrinetv3/TracedPlace"/>
+        <eStructuralFeatures xsi:type="ecore:EReference" name="parentNet" lowerBound="1"
+            eType="ecore:EClass ../../fr.inria.diverse.sample.petrinetv3.model/model/petrinetv3.ecore#//Net"/>
+      </eClassifiers>
+    </eSubpackages>
+  </eSubpackages>
+</ecore:EPackage>

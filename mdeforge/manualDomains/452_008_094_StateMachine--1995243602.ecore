@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="StateMachine" nsURI="hu.bme.mit.inf.gomrp.statemachine" nsPrefix="hu.bme.mit.inf.gomrp.statemachine">
+  <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore">
+    <details key="settingDelegates" value="org.eclipse.incquery.querybasedfeature"/>
+  </eAnnotations>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachineBehavioralModel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statemachines" upperBound="-1"
+        eType="#//StateMachine" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="states" upperBound="-1"
+        eType="#//State" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1"
+        eType="#//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//Trigger" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guards" upperBound="-1"
+        eType="#//Guard" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="actions" upperBound="-1"
+        eType="#//Action" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="activeState" eType="#//State"
+        changeable="false" volatile="true" transient="true" derived="true">
+      <eAnnotations source="org.eclipse.incquery.querybasedfeature">
+        <details key="patternFQN" value="hu.bme.mit.inf.gomrp.statemachine.incquery.activeState"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="referredObject" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//RDMElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoingTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/sourceState"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incomingTransitions" upperBound="-1"
+        eType="#//Transition" eOpposite="#//Transition/targetState"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isInitial" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isActive" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="#//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sourceState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/outgoingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="targetState" lowerBound="1"
+        eType="#//State" eOpposite="#//State/incomingTransitions"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" eType="#//Trigger"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" upperBound="-1"
+        eType="#//Guard"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="action" upperBound="-1"
+        eType="#//Action"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isEnabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFireable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CompositeState" eSuperTypes="#//State">
+    <eAnnotations source="http://www.obeo.fr/dsl/dnc/archetype">
+      <details key="archetype" value="Role"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statemachine" lowerBound="1"
+        eType="#//StateMachine" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Guard" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true" eSuperTypes="#//NamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeTrainHeadingSpeed" eSuperTypes="#//ActionExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newHeadingSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"
+        defaultValueLiteral="ZERO"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeSignalAllowedSpeed" eSuperTypes="#//ActionExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newAllowedSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeTurnoutDirection" eSuperTypes="#//ActionExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTurnoutDirection" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TurnoutDirection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="turnout" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Turnout"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ChangeTrainCurrentTrackElement" eSuperTypes="#//ActionExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="newTrackElements" upperBound="2"
+        eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TrackElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrainCurrentHeadingSpeed" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentHeadingSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrainCurrentlyStandsOn" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trackElements" upperBound="2"
+        eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TrackElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TurnoutCurrentDirection" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="turnout" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Turnout"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentTurnoutDirection"
+        eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TurnoutDirection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SignalCurrentAllowedSpeed" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="currentAllowedSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Signal"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrainHeadingSpeedChanged" eSuperTypes="#//TriggerExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newHeadingSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TrainTrackElementChanged" eSuperTypes="#//TriggerExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="train" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Train"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trackElements" upperBound="2"
+        eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TrackElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SignalAllowedSpeedChanged" eSuperTypes="#//TriggerExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="signal" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Signal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newAllowedSpeed" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Speed"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TurnoutDirectionChanged" eSuperTypes="#//TriggerExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="turnout" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Turnout"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="newTurnoutDirection" eType="ecore:EEnum ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TurnoutDirection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NextTrackElementIs" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="routeElement" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//RouteElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trackElement" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TrackElement"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TurnoutHasDesiredDirection" eSuperTypes="#//GuardExpression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="turnout" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//Turnout"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="desiredDirection" eType="ecore:EClass ../../hu.bme.mit.inf.gomrp.railway/model/Railway.ecore#//TurnoutDesiredDirection"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ActionExpression" eSuperTypes="#//Action">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GuardExpression" eSuperTypes="#//Guard">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TriggerExpression" eSuperTypes="#//Trigger">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -8,7 +8,6 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -65,7 +64,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcoreFactory;
-import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -96,17 +94,10 @@ import org.eclipse.ocl.ecore.EcoreEnvironmentFactory;
 import org.eclipse.ocl.expressions.OCLExpression;
 import org.eclipse.ocl.helper.OCLHelper;
 import org.emfjson.jackson.module.EMFModule;
-import org.emfjson.jackson.resource.JsonResourceFactory;
 import org.mdeforge.business.BusinessException;
-import org.mdeforge.business.ContainmentRelationService;
-import org.mdeforge.business.CosineSimilarityRelationService;
-import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.InvalidArtifactException;
-import org.mdeforge.business.SemanticSimilarityRelationService;
-import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
-import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValuedRelationService;
 import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
 import org.mdeforge.business.model.AggregatedIntegerMetric;
@@ -115,8 +106,6 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.Clusterizzation;
 import org.mdeforge.business.model.ContainmentRelation;
-import org.mdeforge.business.model.CosineSimilarityRelation;
-import org.mdeforge.business.model.DiceSimilarityRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Property;
@@ -126,7 +115,6 @@ import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.ValuedRelation;
 import org.mdeforge.business.model.form.Statistic;
-import org.mdeforge.business.utils.SimilarityMethods;
 import org.mdeforge.emf.metric.Container;
 import org.mdeforge.emf.metric.MetricFactory;
 import org.mdeforge.emf.metric.MetricPackage;
@@ -153,12 +141,10 @@ import com.apporiented.algorithm.clustering.visualization.DendrogramPanel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
-import com.mongodb.Mongo;
 
 import anatlyzer.atl.util.ATLSerializer;
 import anatlyzer.atlext.ATL.ATLPackage;
 import anatlyzer.atlext.OCL.OclExpression;
-import uk.ac.shef.wit.simmetrics.similaritymetrics.DiceSimilarity;
 
 @Service
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
@@ -171,7 +157,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final float NsURI_BOOST_VALUE = 1.7f;
 
 	private static final String EANNOTATION_INDEX_CODE = "eAnnotation";
-	private static final float EANNOTATION_BOOST_VALUE = 1.7f;
 
 	private static final String ECLASS_INDEX_CODE = "eClass";
 	private static final float ECLASS_BOOST_VALUE = 1.5f;
@@ -185,39 +170,21 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private static final String EENUM_INDEX_CODE = "eEnum";
 	private static final float EENUM_BOOST_VALUE = 1.0f;
 
-	private static final String ELITERAL_INDEX_CODE = "eLiteral";
-	private static final float ELITERAL_BOOST_VALUE = 0.7f;
 
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
-	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
 
 	@Autowired
 	private ToBeAnalyseRepository tobeAnalyseRepository;
 	@Autowired
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired
-	private Mongo mongo;
-	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
 	private EcoreMetamodelRepository ecoreMetamodelRepository;
 	@Autowired
 	private MetricRepository metricRepository;
-	@Autowired
-	private RelationService relationService;
-	@Autowired
-	private SimilarityRelationService similarityRelationService;
-	@Autowired
-	private SemanticSimilarityRelationService semanticSimilarityRelationService;
-	@Autowired
-	private SemanticSimilarityRelationServiceV1 semanticSimilarityRelationServiceV1;
-	@Autowired
-	private DiceSimilarityRelationService diceSimilarityRelationService;
-	@Autowired
-	private ContainmentRelationService containmentRelationService;
-	@Autowired
-	private CosineSimilarityRelationService cosineSimilarityRelationService;
+
 
 	@Value("#{cfgproperties[basePathLucene]}")
 	protected String basePathLucene;
@@ -533,10 +500,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				EObject eo = resource.getContents().get(0);
 				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
 				if (diagnostic.getSeverity() == Diagnostic.ERROR){
-					diagnostic.getChildren().forEach(s -> System.out.println(s.getMessage()));
-					System.out.println(diagnostic.getChildren().size());
 					return false;
-					
 				}
 				else
 					return true;
@@ -657,28 +621,28 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			cr.setValue(containmentValue);
 			relationRepository.save(cr);
 		}
-		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+//		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
+//		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
 		// FIXME
-		String test = "";// serializeContent(emm1);
-		String test2 = "";// serializeContent(emm2);
-		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test, test2);
-		if (cosineSimScore > 0) {
-			CosineSimilarityRelation csr = new CosineSimilarityRelation();
-			csr.setFromArtifact(art1);
-			csr.setToArtifact(art2);
-			csr.setValue(cosineSimScore);
-			relationService.save(csr);
-		}
-		DiceSimilarity ds = new DiceSimilarity();
-		double diceSimScore = ds.getSimilarity(test, test2);
-		if (diceSimScore > 0) {
-			DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-			dsr.setFromArtifact(art1);
-			dsr.setToArtifact(art2);
-			dsr.setValue(diceSimScore);
-			relationService.save(dsr);
-		}
+//		String test = "";// serializeContent(emm1);
+//		String test2 = "";// serializeContent(emm2);
+//		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test, test2);
+//		if (cosineSimScore > 0) {
+//			CosineSimilarityRelation csr = new CosineSimilarityRelation();
+//			csr.setFromArtifact(art1);
+//			csr.setToArtifact(art2);
+//			csr.setValue(cosineSimScore);
+//			relationService.save(csr);
+//		}
+//		DiceSimilarity ds = new DiceSimilarity();
+//		double diceSimScore = ds.getSimilarity(test, test2);
+//		if (diceSimScore > 0) {
+//			DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+//			dsr.setFromArtifact(art1);
+//			dsr.setToArtifact(art2);
+//			dsr.setValue(diceSimScore);
+//			relationService.save(dsr);
+//		}
 		return simValue;
 	}
 
@@ -1259,7 +1223,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	@Override
 	public boolean checkConstraint(EPackage atlModel, OclExpression expr) throws BusinessException {
 		try {
-			System.out.println("Check Constraint");
 			// DEFINE OCL AND HELPER
 			OCL<?, EClassifier, ?, ?, ?, EParameter, ?, ?, ?, Constraint, EClass, EObject> ocl;
 			OCLHelper<EClassifier, ?, ?, Constraint> helper;
@@ -1280,7 +1243,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 			// EVALUATE OCL
 			boolean success = query.check(atlModel);
-			System.out.println("success " + success);
 			return success;
 		} catch (ParserException e) {
 			throw new BusinessException(e.getMessage());
@@ -1363,13 +1325,11 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private Document ePackageIndex(EPackage ePackage, Document doc) {
 		Field ePackageField = new Field(EPACKAGE_INDEX_CODE, ePackage.getName(), Store.YES, Index.ANALYZED);
 		ePackageField.setBoost(EPACKAGE_BOOST_VALUE);
-		// System.out.println("Package: " + ePackage.getName());
 		doc.add(ePackageField);
 		// GET NsURI
 		if (ePackage.getNsURI() != null && !ePackage.getNsURI().isEmpty()) {
 			Field EPackageNsURIField = new Field(NsURI_INDEX_CODE, ePackage.getNsURI(), Store.YES, Index.ANALYZED);
 			ePackageField.setBoost(NsURI_BOOST_VALUE);
-			// System.out.println("NsURI : " + ePackage.getNsURI());
 			doc.add(EPackageNsURIField);
 		}
 		// GET EAnnotation
@@ -1385,7 +1345,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		try {
 			Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
 			eClassField.setBoost(ECLASS_BOOST_VALUE);
-			// System.out.println("Class: " + eClass.getName());
 			doc.add(eClassField);
 
 			// GET EAnnotation
@@ -1399,7 +1358,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES,
 						Index.ANALYZED);
 				eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
-				// System.out.println("Attribute: " + attribute.getName());
 				doc.add(eClassAttributeField);
 			}
 			// Index EClass References
@@ -1407,7 +1365,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES,
 						Index.ANALYZED);
 				eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
-				// System.out.println("Reference: " + reference.getName());
 				doc.add(eClassReferenceField);
 			}
 

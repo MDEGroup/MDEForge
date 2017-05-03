@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="bibtex"
+    nsURI="http://www.emftext.org/language/bibtex" nsPrefix="bibtex">
+  <eClassifiers xsi:type="ecore:EClass" name="Person" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastName" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Author" eSuperTypes="#//Person"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Editor" eSuperTypes="#//Person"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StringValue" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="YearValue" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IntValue" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Page" eSuperTypes="#//IntValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Field" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AuthorField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="authors" lowerBound="1"
+        upperBound="-1" eType="#//Author" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EditorField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editors" lowerBound="1"
+        upperBound="-1" eType="#//Editor" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TitleField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BookTitleField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NumberField" eSuperTypes="#//IntValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="YearField" eSuperTypes="#//Field #//YearValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="BibtexKeyField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="JournalField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="VolumeField" eSuperTypes="#//Field #//IntValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PageField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fromPage" lowerBound="1"
+        eType="#//Page" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="toPage" eType="#//Page"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeriesField" eSuperTypes="#//StringValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AddressField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="MonthField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrganizationField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NoteField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PublisherField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PartField" eSuperTypes="#//IntValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="EidField" eSuperTypes="#//Field #//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UrlField" eSuperTypes="#//StringValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Keyword" eSuperTypes="#//StringValue"/>
+  <eClassifiers xsi:type="ecore:EClass" name="KeywordField" eSuperTypes="#//Field">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keywords" upperBound="-1"
+        eType="#//Keyword" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractField" eSuperTypes="#//StringValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ReviewField" eSuperTypes="#//StringValue #//Field"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Entry" abstract="true">
+    <eOperations name="getGeneralFields" upperBound="-1" eType="#//Field">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#xD;&#xA;&#x9;&#x9; org.eclipse.emf.common.util.EList&lt; org.emftext.language.bibtex.Field> result = new  org.eclipse.emf.common.util.BasicEList&lt; org.emftext.language.bibtex.Field>();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.BibtexKeyField bibtexKeyField = getBibtexKey();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.AbstractField abstractField = getAbstract();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.KeywordField keywordField = getKeyword();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.UrlField urlField = getUrl();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.ReviewField reviewField = getReview();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;result.add(bibtexKeyField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(abstractField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(keywordField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(urlField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(reviewField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;return result;&#xD;&#xA;"/>
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getFields" upperBound="-1" eType="#//Field">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#xD;&#xA;&#x9;&#x9;return getGeneralFields();&#xD;&#xA;"/>
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bibtexKey" lowerBound="1"
+        eType="#//BibtexKeyField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstract" eType="#//AbstractField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="url" eType="#//UrlField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="keyword" eType="#//KeywordField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="review" eType="#//ReviewField"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InProceedingsEntry" eSuperTypes="#//Entry">
+    <eOperations name="getFields" upperBound="-1" eType="#//Field">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9; org.eclipse.emf.common.util.EList&lt; org.emftext.language.bibtex.Field> result = new  org.eclipse.emf.common.util.BasicEList&lt; org.emftext.language.bibtex.Field>();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.TitleField titleField = getTitle();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.AuthorField authorField = getAuthor();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.YearField yearField = getYear();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.BookTitleField bookTitleField = getBookTitle();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;result.add(titleField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(authorField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(yearField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(bookTitleField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;return result;"/>
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+        eType="#//AuthorField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="title" lowerBound="1" eType="#//TitleField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bookTitle" lowerBound="1"
+        eType="#//BookTitleField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="year" lowerBound="1" eType="#//YearField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="editor" eType="#//EditorField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" eType="#//PageField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="volume" eType="#//VolumeField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="number" eType="#//NumberField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="series" eType="#//SeriesField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="address" eType="#//AddressField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="month" eType="#//MonthField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="organization" eType="#//OrganizationField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//NoteField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publisher" eType="#//PublisherField"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ArticleEntry" eSuperTypes="#//Entry">
+    <eOperations name="getFields" upperBound="-1" eType="#//Field">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9; org.eclipse.emf.common.util.EList&lt; org.emftext.language.bibtex.Field> result = new  org.eclipse.emf.common.util.BasicEList&lt; org.emftext.language.bibtex.Field>();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.TitleField titleField = getTitle();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.AuthorField authorField = getAuthor();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.YearField yearField = getYear();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.JournalField journalField = getJournal();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.VolumeField volumeField = getVolume();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9; org.emftext.language.bibtex.PageField pageField = getPages();&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;result.add(titleField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(authorField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(yearField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(journalField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(volumeField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;result.add(pageField);&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;&#xD;&#xA;&#x9;&#x9;return result;"/>
+        <details key="documentation" value=""/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="author" lowerBound="1"
+        eType="#//AuthorField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="title" lowerBound="1" eType="#//TitleField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="year" lowerBound="1" eType="#//YearField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="journal" lowerBound="1"
+        eType="#//JournalField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pages" lowerBound="1" eType="#//PageField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="volume" lowerBound="1"
+        eType="#//VolumeField" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="number" eType="#//NumberField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="month" eType="#//MonthField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//NoteField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="part" eType="#//PartField"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eid" eType="#//EidField"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Bibliography">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//Entry" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

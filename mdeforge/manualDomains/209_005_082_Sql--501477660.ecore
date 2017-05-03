@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (C) 2005 - 2014 TIBCO Software Inc. All rights reserved.
+  http://www.jaspersoft.com.
+  
+  Unless you have purchased  a commercial license agreement from Jaspersoft,
+  the following license terms  apply:
+  
+  This program and the accompanying materials
+  are made available under the terms of the Eclipse Public License v1.0
+  which accompanies this distribution, and is available at
+  http://www.eclipse.org/legal/epl-v10.html
+-->
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sql" nsURI="http://www.com.jaspersoft.studio.data.Sql" nsPrefix="sql">
+  <eClassifiers xsi:type="ecore:EClass" name="Model">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//SelectQuery"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="orderByEntry" eType="#//OrOrderByColumn"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectQuery"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SelectSubSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="all" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="query" eType="#//Select"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Select" eSuperTypes="#//SelectQuery">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" upperBound="-1" eType="#//SelectSubSet"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="select" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cols" eType="#//OrColumn"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tbl" eType="#//OrTable"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="whereExpression" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groupByEntry" eType="#//OrGroupByColumn"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="havingEntry" eType="#//OrExpr"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ColumnOrAlias" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnOrAlias" eSuperTypes="#//OrColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ce" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colAlias" eType="#//DbObjectName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="allCols" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dbAllCols" eType="#//DbObjectNameAll"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnFull"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OrTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//FromTable" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromTable" eSuperTypes="#//OrTable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="table" eType="#//TableOrAlias"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fjoin" upperBound="-1"
+        eType="#//FromTableJoin" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FromTableJoin">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="join" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onTable" eType="#//TableOrAlias"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="joinExpr" eType="#//OrExpr"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableOrAlias">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tfull" eType="#//TableFull"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sq" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="alias" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tblAlias" eType="#//DbObjectName"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TableFull"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DbObjectNameAll">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DbObjectName" eSuperTypes="#//ColumnFull #//TableFull">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dbname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrOrderByColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//OrderByColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrderByColumnFull" eSuperTypes="#//OrOrderByColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colOrder" eType="#//ColumnFull"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="colOrderInt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direction" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrGroupByColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//GroupByColumnFull" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupByColumnFull" eSuperTypes="#//OrGroupByColumn">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="colGrBy" eType="#//ColumnFull"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OrExpr">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//FullExpression" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FullExpression" eSuperTypes="#//OrExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="c" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="efrag" eType="#//FullExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notPrm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expgroup" eType="#//ExprGroup"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exp" eType="#//FullExpression"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xexp" eType="#//XExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isnull" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="in" eType="#//InOper" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="between" eType="#//Between"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="like" eType="#//Like" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="comp" eType="#//Comparison"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExprGroup">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="XExpr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="xf" eType="#//XFunction"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="col" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prm" eType="#//Prms" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prms">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//JRParameter" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="JRParameter" eSuperTypes="#//Prms">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jrprm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Comparison">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subOperator" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//Operands"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Like">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opLike" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//LikeOperand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LikeOperand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fop2" eType="#//OpFunction"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fcast" eType="#//OpFunctionCast"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Between">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="opBetween" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op2" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op3" eType="#//Operands"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="InOper">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subquery" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="opList" eType="#//OperandList"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OperandList"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Operands" eSuperTypes="#//OpFunctionArgAgregate">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op1" eType="#//Operand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Operand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Operand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="column" eType="#//ColumnOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="xop" eType="#//Operand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subq" eType="#//SubQueryOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fcast" eType="#//OpFunctionCast"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="func" eType="#//OpFunction"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sqlcase" eType="#//SQLCaseOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="param" eType="#//POperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eparam" eType="#//ExpOperand"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scalar" eType="#//ScalarOperand"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunction">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fname" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="args" eType="#//OpFunctionArg"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArg"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArgOperand" eSuperTypes="#//OpFunctionArg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//OpFunctionArgAgregate"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionCast">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="op" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="p" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="p2" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFunctionArgAgregate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="POperand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExpOperand">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="prm" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ColumnOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cfull" eType="#//ColumnFull"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubQueryOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sel" eType="#//SelectQuery"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScalarOperand" eSuperTypes="#//OperandList">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="soint" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sostr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodbl" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigDecimal"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sotime" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sodt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLCaseOperand">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="when" eType="#//SQLCaseWhens"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SQLCaseWhens"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SqlCaseWhen" eSuperTypes="#//SQLCaseWhens">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//OrExpr"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="texp" eType="#//Operands"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eexp" eType="#//Operands"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="XFunction">
+    <eLiterals name="xin" literal="IN"/>
+    <eLiterals name="xnotin" value="1" literal="NOTIN"/>
+    <eLiterals name="xeq" value="2" literal="EQUAL"/>
+    <eLiterals name="xnoteq" value="3" literal="NOTEQUAL"/>
+    <eLiterals name="xls" value="4" literal="LESS"/>
+    <eLiterals name="xgt" value="5" literal="GREATER"/>
+    <eLiterals name="xlsr" value="6" literal="LESS]"/>
+    <eLiterals name="xgtl" value="7" literal="[GREATER"/>
+    <eLiterals name="xbwn" value="8" literal="BETWEEN"/>
+    <eLiterals name="xbwnc" value="9" literal="[BETWEEN]"/>
+    <eLiterals name="xbwnl" value="10" literal="[BETWEEN"/>
+    <eLiterals name="xbwnr" value="11" literal="BETWEEN]"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Col" eSuperTypes="#//ColumnFull">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//DbObjectName" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="tbls" eSuperTypes="#//TableFull">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//DbObjectName" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="OpList" eSuperTypes="#//OperandList">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//ScalarOperand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Plus" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Minus" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Star" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Div" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Concat" eSuperTypes="#//Operands"/>
+  <eClassifiers xsi:type="ecore:EClass" name="OpFList" eSuperTypes="#//OpFunctionArg">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//OpFunctionArgOperand" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WhenList" eSuperTypes="#//SQLCaseWhens">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entries" upperBound="-1"
+        eType="#//SqlCaseWhen" containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

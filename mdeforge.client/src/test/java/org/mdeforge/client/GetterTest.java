@@ -27,13 +27,14 @@ public class GetterTest {
 	private static ArtifactService artifactService; 
 	@BeforeClass
 	public static void setup() throws Exception {
-		modelService = new ModelService("http://www.mdeforge.org/", "Admin", "juri");
-		atlTransformationService = new ATLTransformationService("http://www.mdeforge.org/", "Admin", "juri");
-		etlTransformationService = new ETLTransformationService("http://www.mdeforge.org/", "Admin", "juri");
-		ecoreMetamodelService = new EcoreMetamodelService("http://www.mdeforge.org/", "Admin", "juri");
-		workspaceService = new WorkspaceService("http://www.mdeforge.org/", "Admin", "juri");
-		artifactService = new ArtifactService("http://www.mdeforge.org/", "Admin", "juri");
+		modelService = new ModelService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		atlTransformationService = new ATLTransformationService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "juri");
+		artifactService = new ArtifactService("http://localhost:8080/mdeforge/", "Admin", "juri");
 	}
+	@Ignore
 	@Test
 	public void getEcores() throws Exception {
 		List<EcoreMetamodel> t = ecoreMetamodelService.getEcoreMetamodels();
@@ -42,9 +43,10 @@ public class GetterTest {
 		}
 		
 	}
+
 	@Test
 	public void getMetamodelJson() throws Exception{
-		System.out.println(ecoreMetamodelService.getEcoreMetamodelJsonFormat("57efef4ce4b0e7cbbfb53d00"));
+		System.out.println(ecoreMetamodelService.getEcoreMetamodelJsonFormat("58ee57920af085d33034e1ca"));
 	}
 	@Ignore
 	@Test
@@ -105,9 +107,6 @@ public class GetterTest {
 		
 
 	}
-	
-	
-	
 	@Ignore
 	@Test
 	public void getEcoreMetamodelsPublicTest() throws Exception {
@@ -205,7 +204,5 @@ public class GetterTest {
 	public void getEcore() throws Exception {
 		Artifact t = artifactService.getArtifact("552bbd16d4c659da8e19ed25");
 		System.out.println("Model: " + t.getClass().getCanonicalName());
-	}
-	
-	
+	}	
 }

@@ -387,14 +387,6 @@ public class ATLTransformationServiceImpl extends
 		}
 	}
 
-	private boolean isPresent(Artifact art,
-			List<DomainConformToRelation> listArtifact) {
-		for (DomainConformToRelation rel : listArtifact)
-			if (rel.getToArtifact().getId().equals(art.getId()))
-				return true;
-		return false;
-
-	}
 
 	@Override
 	public List<ATLTransformation> findTransformationsBySourceMetamodels(

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="requirement"
+    nsURI="http://org.topcased.requirement/1.0" nsPrefix="requirement">
+  <eClassifiers xsi:type="ecore:EClass" name="RequirementProject" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchicalElement" upperBound="-1"
+        eType="#//HierarchicalElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attributeConfiguration"
+        eType="#//AttributeConfiguration" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="chapter" lowerBound="3"
+        upperBound="3" eType="#//SpecialChapter" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="upstreamModel" lowerBound="1"
+        eType="#//UpstreamModel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HierarchicalElement" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="element" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" upperBound="-1"
+        eType="#//HierarchicalElement" containment="true" eOpposite="#//HierarchicalElement/parent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parent" eType="#//HierarchicalElement"
+        eOpposite="#//HierarchicalElement/children"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" upperBound="-1"
+        eType="#//Requirement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nextReqIndex" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong" defaultValueLiteral="10"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CurrentRequirement" eSuperTypes="#//Requirement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="impacted" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Attribute" abstract="true" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeConfiguration">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="listAttributes" upperBound="-1"
+        eType="#//ConfiguratedAttribute" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConfiguratedAttribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultValue" eType="#//DefaultAttributeValue"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="listValue" upperBound="-1"
+        eType="#//AttributeValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="#//AttributesType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultAttributeValue">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1" eType="#//AttributeValue"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IdentifiedElement" abstract="true" eSuperTypes="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EModelElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identifier" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="shortDescription" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SpecialChapter" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="hierarchicalElement" upperBound="-1"
+        eType="#//HierarchicalElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="requirement" upperBound="-1"
+        eType="#//Requirement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TextAttribute" eSuperTypes="#//Attribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ObjectAttribute" eSuperTypes="#//Attribute">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="AttributesType">
+    <eLiterals name="Text"/>
+    <eLiterals name="Object" value="1"/>
+    <eLiterals name="Allocate" value="2"/>
+    <eLiterals name="Link" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UpstreamModel" eSuperTypes="../../org.topcased.traceability/model/ttm.ecore#//Project"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeLink" eSuperTypes="#//ObjectAttribute">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="partial" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EBooleanObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeAllocate" eSuperTypes="#//ObjectAttribute"/>
+  <eClassifiers xsi:type="ecore:EClass" name="UntracedChapter" eSuperTypes="#//SpecialChapter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ProblemChapter" eSuperTypes="#//SpecialChapter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TrashChapter" eSuperTypes="#//SpecialChapter"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Requirement" abstract="true" eSuperTypes="#//IdentifiedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="attribute" upperBound="-1"
+        eType="#//Attribute" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="externalResources" upperBound="-1"
+        eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AnonymousRequirement" eSuperTypes="#//Requirement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DeletedChapter" eSuperTypes="#//SpecialChapter"/>
+</ecore:EPackage>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fsm" nsURI="http://puzzle.examples.fsm" nsPrefix="fsm">
+  <eClassifiers xsi:type="ecore:EClass" name="StateMachine" eSuperTypes="//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="regions" upperBound="-1" eType="//Region" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Region" eSuperTypes="//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="subvertex" upperBound="-1" eType="//AbstractState" containment="true" eOpposite="//AbstractState/ownerRegion"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="transitions" upperBound="-1" eType="//Transition" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownerState" eType="//State" eOpposite="//State/ownedRegions"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractState" abstract="true" eSuperTypes="//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" upperBound="-1" eType="//Transition" eOpposite="//Transition/target"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" upperBound="-1" eType="//Transition" eOpposite="//Transition/source"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownerRegion" lowerBound="1" eType="//Region" eOpposite="//Region/subvertex"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="State" eSuperTypes="//AbstractState">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="doActivity" eType="//Program" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="entry" eType="//Program" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exit" eType="//Program" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ownedRegions" upperBound="-1" eType="//Region" containment="true" eOpposite="//Region/ownerState"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Transition" eSuperTypes="//NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="trigger" eType="//Trigger" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1" eType="//AbstractState" eOpposite="//AbstractState/incoming"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1" eType="//AbstractState" eOpposite="//AbstractState/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="effect" upperBound="-1" eType="//Statement" containment="true">
+      <eAnnotations source="addition"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="guard" lowerBound="1" eType="//Constraint" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="expression">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pseudostate" abstract="true" eSuperTypes="//AbstractState"/>
+  <eClassifiers xsi:type="ecore:EClass" name="InitialState" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Fork" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Join" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ShallowHistory" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Junction" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Conditional" eSuperTypes="//Pseudostate"/>
+  <eClassifiers xsi:type="ecore:EClass" name="FinalState" eSuperTypes="//State"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Constraint"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Statement" abstract="true"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Program" eSuperTypes="//Statement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1" eType="//Statement" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="NamedElement">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name">
+      <eType xsi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+  </eClassifiers>
+</ecore:EPackage>
