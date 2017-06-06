@@ -44,6 +44,7 @@ public class SignIn {
 	GridFsTemplate operations;
 	@RequestMapping(value = "/signin", method = { RequestMethod.GET })
 	public String signIn(Model model) {
+		// call method for adding new workspace and Project as an example
 		model.addAttribute("user",new User());
 		return "public.signin";
 	}
