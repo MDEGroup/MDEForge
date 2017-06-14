@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -717,8 +718,25 @@ public class ATLTransformationServiceImpl extends
 		ModelFactory modelFactory = new EMFModelFactory();
 		IReferenceModel atlMetamodel;
 		try {
-			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String ATLPath = getClass().getResource("/utils/ATL2.ecore").getPath();
+			
+			File f = new File(ATLPath);
+			java.nio.file.Path path = Paths.get(f.getAbsolutePath());
+		
+			if(f.exists()){
+				System.out.println("ESISTE!!!");
+				System.out.println(path.toString());
+				System.out.println(f.getAbsolutePath());
+				System.out.println(f.getPath());
+			}
+			atlMetamodel = modelFactory.getBuiltInResource(path.toString());
+			/*
+			 * In our case we can't use this method because the method getFilePAthFromContent uses
+			 * an external ATL ecore that we have inside resources/utils directory.
+			 */
 			String filePath = gridFileMediaService.getFilePathFromContent(gfm);
+			
+//			String filePath = getClass().getResource("/utils/ATL.ecore").getPath();
 			EMFModel atlDynModel = (EMFModel) modelFactory
 					.newModel(atlMetamodel);
 			atlParser.inject(atlDynModel, filePath);
@@ -739,7 +757,7 @@ public class ATLTransformationServiceImpl extends
 					c.setName(modelInfo.getModelName());
 					result.add(c);
 				}
-				// TODO Automatically discorver if metamodel is in the repo!
+				// TODO Automatically discover if metamodel is in the repo!
 			}
 			return result;
 		} catch (ATLCoreException e) {

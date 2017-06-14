@@ -36,26 +36,26 @@
 						
 						<div class="separator"></div> 
 						<label>Username</label>
-						<input id="username-input" type="text" name="username" class="input-block-level center" autocomplete="off" placeholder="Your Username"/>
+						<input id="username-input" type="text" name="username" class="input-block-level center" autocomplete="off" placeholder="Your Username" tabindex="1"/>
 						<div class="separator"></div> 
 						</div>
 						</div>
 						<div class="row-fluid center">
 						<div class="span6">
 						<label>Firstname</label>
-						<input type="text" name="firstname" class="input-block-level" autocomplete="false" placeholder="Your Firstname"/>
+						<input type="text" name="firstname" class="input-block-level" autocomplete="false" placeholder="Your Firstname" tabindex="2"/>
 						<label>Email</label>
-						<input type="email" name="email" class="input-block-level" autocomplete="new-password" placeholder="Your Email Address"/>
+						<input type="email" name="email" class="input-block-level" autocomplete="new-password" placeholder="Your Email Address" tabindex="4"/>
 						<label>Password</label>
-						<input type="password" name="password" class="input-block-level" autocomplete="new-password" placeholder="Your Password" />
+						<input type="password" name="password" class="input-block-level" autocomplete="new-password" placeholder="Your Password" tabindex="6" />
 						</div>
 						<div class="span6">
 						<label>Lastname</label>
-						<input type="text" name="lastname" class="input-block-level" autocomplete="false" placeholder="Your Lastname"/>
+						<input type="text" name="lastname" class="input-block-level" autocomplete="false" placeholder="Your Lastname" tabindex="3"/>
 						<label>Confirm Email</label>
-						<input type="text" name="email_confirmation" class="input-block-level" autocomplete="false" placeholder="Confirm Your Email Address"/>
+						<input type="text" name="email_confirmation" class="input-block-level" autocomplete="false" placeholder="Confirm Your Email Address" tabindex="5"/>
 						<label>Repeat Password</label>
-						<input type="password" name="password_confirmation" class="input-block-level" autocomplete="new-password" placeholder="Repeat Your Password" />
+						<input type="password" name="password_confirmation" class="input-block-level" autocomplete="new-password" placeholder="Repeat Your Password" tabindex="7" />
 						</div>
 						</div>
 						
