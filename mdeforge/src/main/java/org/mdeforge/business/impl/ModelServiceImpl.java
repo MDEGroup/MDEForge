@@ -96,17 +96,17 @@ import com.mongodb.Mongo;
 @Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
 	
-	private static final String TYPE_TAG = "forgeType";
-	private static final String NAME_TAG = "name";
-	private static final String AUTHOR_TAG = "author";
-	private static final String ID_TAG = "id";
-	private static final String LAST_UPDATE_TAG = "lastUpdate";
-	
-	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
-//	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
-	private static final String CONFORM_TO_TAG = "conformToMM";
-	
-	private IndexWriter writer;
+//	private static final String TYPE_TAG = "forgeType";
+//	private static final String NAME_TAG = "name";
+//	private static final String AUTHOR_TAG = "author";
+//	private static final String ID_TAG = "id";
+//	private static final String LAST_UPDATE_TAG = "lastUpdate";
+//	
+//	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
+////	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+//	private static final String CONFORM_TO_TAG = "conformToMM";
+//	
+//	private IndexWriter writer;
 
 	@Autowired
 	private JsonMongoResourceSet jsonMongoResourceSet;
@@ -142,8 +142,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	@Value("#{cfgproperties[basePathLucene]}")
-	protected String basePathLucene;
+//	@Value("#{cfgproperties[basePathLucene]}")
+//	protected String basePathLucene;
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
@@ -327,186 +327,186 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	}
 	
 	
-	@Override
-	public void createIndex(Model is) {
-		File indexDirFile = new File(basePathLucene);
-		// set the directory for the index
-		Directory indexDir;
-		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-			// Create a new index in the directory, removing any
-			// previously indexed documents:
-			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
-			// create the indexer
-			this.writer = new IndexWriter(indexDir, conf);
-
-			Document document = parseArtifactForIndex(is);
-			writer.addDocument(document);
-			
-			writer.close();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			throw new BusinessException(e1.getMessage());
-		}
-
-	}
-	
-	/**
-	 * Perform the effective Lucene index.
-	 * @param ecoreMetamodel
-	 * @return
-	 */
-	private Document parseArtifactForIndex(Model model) {
-		
-		LuceneTag luceneTag = new LuceneTag(); 
-		
-		Document doc = new Document();
-//		Metadata metadata = new Metadata();
-//		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
-//		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
-//		ParseContext context = new ParseContext();
-//		Parser parser = new AutoDetectParser();
-//		InputStream stream = gridFileMediaService.getFileInputStream(model);
+//	@Override
+//	public void createIndex(Model is) {
+//		File indexDirFile = new File(basePathLucene);
+//		// set the directory for the index
+//		Directory indexDir;
 //		try {
-//			parser.parse(stream, handler, metadata, context);
+//			indexDir = FSDirectory.open(indexDirFile);
+//			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+//			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+//			// Create a new index in the directory, removing any
+//			// previously indexed documents:
+//			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
+//			// indexWriterConfig.setOpenMode(OpenMode.CREATE_OR_APPEND);
+//			// create the indexer
+//			this.writer = new IndexWriter(indexDir, conf);
+//
+//			Document document = parseArtifactForIndex(is);
+//			writer.addDocument(document);
+//			
+//			writer.close();
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//			throw new BusinessException(e1.getMessage());
 //		}
-//		catch (TikaException e) {
-//			e.printStackTrace();
-//		} catch (SAXException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
+//
+//	}
+//	
+//	/**
+//	 * Perform the effective Lucene index.
+//	 * @param ecoreMetamodel
+//	 * @return
+//	 */
+//	private Document parseArtifactForIndex(Model model) {
+//		
+//		LuceneTag luceneTag = new LuceneTag(); 
+//		
+//		Document doc = new Document();
+////		Metadata metadata = new Metadata();
+////		//By using the BodyContentHandler, you can request that Tika return only the content of the document's body as a plain-text string.
+////		ContentHandler handler = new BodyContentHandler(TIKA_CHARACTERS_LIMIT); //Parsing to Plain Text
+////		ParseContext context = new ParseContext();
+////		Parser parser = new AutoDetectParser();
+////		InputStream stream = gridFileMediaService.getFileInputStream(model);
+////		try {
+////			parser.parse(stream, handler, metadata, context);
+////		}
+////		catch (TikaException e) {
+////			e.printStackTrace();
+////		} catch (SAXException e) {
+////			e.printStackTrace();
+////		} catch (IOException e) {
+////			// TODO Auto-generated catch block
+////			e.printStackTrace();
+////		}
+////		finally {
+////			try {
+////				stream.close();
+////			} catch (IOException e) {
+////				// TODO Auto-generated catch block
+////				e.printStackTrace();
+////			}
+////		}
+//		try{
+//		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+//		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
+//		ecoreMetamodelService.loadArtifact(emm);
+//		ResourceSet load_resourceSet = new ResourceSetImpl();
+//
+//		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+//		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
+//		
+//		TreeIterator<EObject> eAllContents = load_resource.getAllContents();
+//		while (eAllContents.hasNext()) {
+//			EObject next = eAllContents.next();
+//			
+//			EClass eClass = next.eClass();
+//			if(eClass instanceof EClass)  {
+//				//CLASS ANNOTATIONS
+//				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
+//				//TODO index also the annotations
+//				
+//				//CLASS ATTRIBUTES
+//				for (EAttribute attribute : eClass.getEAllAttributes()) {
+//					// EAnnotation ann = attribute.getEAnnotation("searchindex");
+//					// String key = eClass.getName() + "#" +attribute.getName();
+//					// System.out.println(key);
+//					// Object value = next.eGet(attribute);
+//					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
+//
+//					/*
+//					 * Index className:classAttributeValue
+//					 */
+//					Field eClassWithAttributeField = new Field(eClass.getName(), attributeValue, Store.YES, Index.ANALYZED);
+//					// eClassWithAttributeField(1.5f);
+//					doc.add(eClassWithAttributeField);
+//
+//					/*
+//					 * Index className::classAttribute:attributeValue
+//					 */
+//					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
+//					// eClassWithAttributeAndAttributeValueField(1.5f);
+//					doc.add(eClassWithAttributeAndAttributeValueField);
+//				}
+//				
+//				// EClass References
+//				for (EReference reference : eClass.getEAllReferences()) {
+//					EObject value = (EObject) next.eGet(reference);
+//					String key = reference.getName();
+//					EClass referenceTo = (EClass) value.eClass();
+//					Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
+//					// eClassReferenceField.setBoost(1.5f);
+//					doc.add(eClassReferenceField);
+//					}
+//			}
+//			
+//		}
+//		}catch(Exception e) { logger.error("Some error when try to parse EMF index");}
+//		//Artifact TYPE: "Model"
+//		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+//		doc.add(artifactType);
+//
+////		String text = handler.toString();
+//		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
+//		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+////		textField.setBoost(2.0f);
+//		
+////		System.out.println(identifyLanguage(text));
+//		
+//		String artifactName = model.getName();
+//	 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
+////		filenameField.setBoost(0.5f);
+//		
+//	 	String author = model.getAuthor().getUsername();
+//	 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
+//	 	
+//	 	Date lastUpdate = model.getModified();
+//	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), Store.YES, Index.ANALYZED);
+////		filetypeField.setBoost(1.4f);
+//		
+//	 	for (Property prop : model.getProperties()) {
+//			String propName = prop.getName();
+//			String propValue = prop.getValue();
+//			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+//			doc.add(propField);
+//		}
+//	 	Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
+//	 	
+//	 	
+//	 	Field conformToFieldName = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Store.YES, Index.ANALYZED);
+//	 	doc.add(conformToFieldName);
+//	 	Field conformToFieldId = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Store.YES, Index.ANALYZED);
+//	 	doc.add(conformToFieldId);
+//	 	doc.add(textField);
+//	 	doc.add(artName);
+//	 	doc.add(authorField);
+//	 	doc.add(lastUpdateField);
+//		doc.add(idField);
+//		
+//	
+//		return doc;
+//	}
+	
+	
+//	private String getTextFromInputStream(InputStream is){      
+//        String str = "";
+//        StringBuffer buf = new StringBuffer();            
+//        try {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//            if (is != null) {                            
+//                while ((str = reader.readLine()) != null) {    
+//                    buf.append(str + "\n" );
+//                }                
+//            }
+//        } catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
-//		}
-//		finally {
-//			try {
-//				stream.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		try{
-		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
-		ecoreMetamodelService.loadArtifact(emm);
-		ResourceSet load_resourceSet = new ResourceSetImpl();
-
-		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
-		
-		TreeIterator<EObject> eAllContents = load_resource.getAllContents();
-		while (eAllContents.hasNext()) {
-			EObject next = eAllContents.next();
-			
-			EClass eClass = next.eClass();
-			if(eClass instanceof EClass)  {
-				//CLASS ANNOTATIONS
-				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
-				//TODO index also the annotations
-				
-				//CLASS ATTRIBUTES
-				for (EAttribute attribute : eClass.getEAllAttributes()) {
-					// EAnnotation ann = attribute.getEAnnotation("searchindex");
-					// String key = eClass.getName() + "#" +attribute.getName();
-					// System.out.println(key);
-					// Object value = next.eGet(attribute);
-					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
-
-					/*
-					 * Index className:classAttributeValue
-					 */
-					Field eClassWithAttributeField = new Field(eClass.getName(), attributeValue, Store.YES, Index.ANALYZED);
-					// eClassWithAttributeField(1.5f);
-					doc.add(eClassWithAttributeField);
-
-					/*
-					 * Index className::classAttribute:attributeValue
-					 */
-					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
-					// eClassWithAttributeAndAttributeValueField(1.5f);
-					doc.add(eClassWithAttributeAndAttributeValueField);
-				}
-				
-				// EClass References
-				for (EReference reference : eClass.getEAllReferences()) {
-					EObject value = (EObject) next.eGet(reference);
-					String key = reference.getName();
-					EClass referenceTo = (EClass) value.eClass();
-					Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
-					// eClassReferenceField.setBoost(1.5f);
-					doc.add(eClassReferenceField);
-					}
-			}
-			
-		}
-		}catch(Exception e) { logger.error("Some error when try to parse EMF index");}
-		//Artifact TYPE: "Model"
-		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
-		doc.add(artifactType);
-
-//		String text = handler.toString();
-		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
-		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
-//		textField.setBoost(2.0f);
-		
-//		System.out.println(identifyLanguage(text));
-		
-		String artifactName = model.getName();
-	 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
-//		filenameField.setBoost(0.5f);
-		
-	 	String author = model.getAuthor().getUsername();
-	 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
-	 	
-	 	Date lastUpdate = model.getModified();
-	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), Store.YES, Index.ANALYZED);
-//		filetypeField.setBoost(1.4f);
-		
-	 	for (Property prop : model.getProperties()) {
-			String propName = prop.getName();
-			String propValue = prop.getValue();
-			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-			doc.add(propField);
-		}
-	 	Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
-	 	
-	 	
-	 	Field conformToFieldName = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Store.YES, Index.ANALYZED);
-	 	doc.add(conformToFieldName);
-	 	Field conformToFieldId = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Store.YES, Index.ANALYZED);
-	 	doc.add(conformToFieldId);
-	 	doc.add(textField);
-	 	doc.add(artName);
-	 	doc.add(authorField);
-	 	doc.add(lastUpdateField);
-		doc.add(idField);
-		
-	
-		return doc;
-	}
-	
-	
-	private String getTextFromInputStream(InputStream is){      
-        String str = "";
-        StringBuffer buf = new StringBuffer();            
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            if (is != null) {                            
-                while ((str = reader.readLine()) != null) {    
-                    buf.append(str + "\n" );
-                }                
-            }
-        } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-            try { is.close(); } catch (Throwable ignore) {}
-        }
-        return buf.toString();
-    }
+//		} finally {
+//            try { is.close(); } catch (Throwable ignore) {}
+//        }
+//        return buf.toString();
+//    }
 
 }

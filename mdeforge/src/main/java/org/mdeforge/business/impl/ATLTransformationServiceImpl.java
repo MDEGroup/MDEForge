@@ -151,14 +151,14 @@ public class ATLTransformationServiceImpl extends
 		CRUDArtifactServiceImpl<ATLTransformation> implements
 		ATLTransformationService{
 
-	private static final String HELPER_TAG = "helper";
-	private static final float HELPER_BOOST_VALUE = 1.0f;
-	private static final String TEXT_TAG = "text";
-	private static final String FROM_METAMODEL_TAG = "fromMM";
-	private static final String TO_METAMODEL_TAG = "toMM";
-	private static final String RULE_NAME_TAG = "rule";
-	private static final String FROM_METACLASS = "fromMC";
-	private static final String FROM_TOCLASS = "toMC";
+//	private static final String HELPER_TAG = "helper";
+//	private static final float HELPER_BOOST_VALUE = 1.0f;
+//	private static final String TEXT_TAG = "text";
+//	private static final String FROM_METAMODEL_TAG = "fromMM";
+//	private static final String TO_METAMODEL_TAG = "toMM";
+//	private static final String RULE_NAME_TAG = "rule";
+//	private static final String FROM_METACLASS = "fromMC";
+//	private static final String FROM_TOCLASS = "toMC";
 	
 	@Autowired
 	private ATLTransformationRepository ATLTransformationRepository;
@@ -198,147 +198,147 @@ public class ATLTransformationServiceImpl extends
 	}
 
 
-	@Override
-	public void createIndex(ATLTransformation art) {
-		Document doc = new Document();
-		AtlParser atlParser = new AtlParser();
-		ModelFactory modelFactory = new EMFModelFactory();
-		IReferenceModel atlMetamodel;
-		try {
-			File indexDirFile = new File(basePathLucene);
-			// Set the directory in which will be created the index.
-			Directory indexDir;
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
-			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
-			IndexWriter writer = new IndexWriter(indexDir, conf);
-			try {
-			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
-			String filePath = gridFileMediaService.getFilePath(art);
-			EMFModel atlDynModel = (EMFModel) modelFactory
-					.newModel(atlMetamodel);
-			atlParser.inject(atlDynModel, filePath);
-			Resource originalTrafo = atlDynModel.getResource();
-			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
-					.getURI().toFileString(), true);
-//			atlModel.getModule().get
-			EList<ModuleElement> eAllContents = atlModel.getModule().getElements();
-			for (ModuleElement moduleElement : eAllContents) {
-				if (moduleElement instanceof Helper) {
-					Helper h = (Helper) moduleElement;
-					if (h.getDefinition()!=null) {
-						OclFeatureDefinition def = h.getDefinition();
-						if(def.getFeature()!= null && def.getFeature() instanceof Attribute) {
-							Attribute attr = (Attribute) def.getFeature();
-							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							attribute.setBoost(HELPER_BOOST_VALUE);
-							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							doc.add(text);
-							doc.add(attribute);
-						}
-						if(def.getFeature()!= null && def.getFeature() instanceof Operation) {
-							Operation attr = (Operation) def.getFeature();
-							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							attribute.setBoost(HELPER_BOOST_VALUE);
-							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							doc.add(text);
-							doc.add(attribute);
-						}
-					}
-				}
-				if (moduleElement instanceof Rule)
-				{
-					Rule r = (Rule) moduleElement;
-					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
-							Store.YES,Index.ANALYZED);
-					if(r instanceof MatchedRule) {
-						MatchedRule mr = (MatchedRule) r;
-						EList<InPatternElement> si = mr.getInPattern().getElements();
-						for (InPatternElement inPatternElement : si) {
-							if(inPatternElement instanceof SimpleInPatternElement) {
-								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
-								Field fromMC = new Field(FROM_METACLASS, sipe.getType().getName(), Store.YES, Index.ANALYZED);
-								doc.add(fromMC);
-								Field text = new Field(TEXT_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
-								doc.add(text);
-								
-							}
-							
-						}
-						EList<OutPatternElement> so = mr.getOutPattern().getElements();
-						for (OutPatternElement outPatternElement : so) {
-							if(outPatternElement instanceof SimpleOutPatternElement) {
-								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
-								Field toMC = new Field(FROM_TOCLASS, sope.getType().getName(), Store.YES, Index.ANALYZED);
-								doc.add(toMC);
-								Field text = new Field(TEXT_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
-								doc.add(text);
-							}
-							
-						}
-					}
-					doc.add(ruleName);
-				}
-				
-			}
-			Field type = new Field(TYPE_TAG, art.getClass().getSimpleName(), 
-					Store.YES, Index.ANALYZED);
-			doc.add(type);
-			
-			String artifactName = art.getName();
-		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
-		 	
-		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
-		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
-		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, temp_art.getName(), 
-		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, temp_art.getId(), 
-		 				Store.YES, Index.ANALYZED);
-				doc.add(fromMMID);
-				doc.add(fromMMName);
-			}
-		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
-		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
-		 		Field fromMMName = new Field(TO_METAMODEL_TAG, temp_art.getName(), 
-		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(TO_METAMODEL_TAG, temp_art.getId(), 
-		 				Store.YES, Index.ANALYZED);
-				doc.add(fromMMID);
-				doc.add(fromMMName);
-			}
-		 	String author = art.getAuthor().getUsername();
-		 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
-		 	Date lastUpdate = art.getModified();
-		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), 
-		 			Store.YES, Index.ANALYZED);
-		 	for (Property prop : art.getProperties()) {
-		 		
-				String propName = prop.getName();
-				String propValue = prop.getValue();
-				if(propName != null && propValue != null){
-					Field propField = new Field(propName, propValue, 
-						Store.YES, Index.ANALYZED);
-					doc.add(propField);
-				}
-			}
-		 	Field idField = new Field(ID_TAG, art.getId(), 
-		 			Store.YES, Index.ANALYZED);
-		 	doc.add(artName);
-		 	doc.add(authorField);
-		 	doc.add(lastUpdateField);
-			doc.add(idField);
-			writer.addDocument(doc);
-			}catch (Exception e) {logger.error(e.getMessage());e.printStackTrace();}
-			writer.close();
-		}
-		  catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
-		
-	}
+//	@Override
+//	public void createIndex(ATLTransformation art) {
+//		Document doc = new Document();
+//		AtlParser atlParser = new AtlParser();
+//		ModelFactory modelFactory = new EMFModelFactory();
+//		IReferenceModel atlMetamodel;
+//		try {
+//			File indexDirFile = new File(basePathLucene);
+//			// Set the directory in which will be created the index.
+//			Directory indexDir;
+//			indexDir = FSDirectory.open(indexDirFile);
+//			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+//			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+//			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
+//			IndexWriter writer = new IndexWriter(indexDir, conf);
+//			try {
+//			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+//			String filePath = gridFileMediaService.getFilePath(art);
+//			EMFModel atlDynModel = (EMFModel) modelFactory
+//					.newModel(atlMetamodel);
+//			atlParser.inject(atlDynModel, filePath);
+//			Resource originalTrafo = atlDynModel.getResource();
+//			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+//					.getURI().toFileString(), true);
+////			atlModel.getModule().get
+//			EList<ModuleElement> eAllContents = atlModel.getModule().getElements();
+//			for (ModuleElement moduleElement : eAllContents) {
+//				if (moduleElement instanceof Helper) {
+//					Helper h = (Helper) moduleElement;
+//					if (h.getDefinition()!=null) {
+//						OclFeatureDefinition def = h.getDefinition();
+//						if(def.getFeature()!= null && def.getFeature() instanceof Attribute) {
+//							Attribute attr = (Attribute) def.getFeature();
+//							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+//							attribute.setBoost(HELPER_BOOST_VALUE);
+//							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+//							doc.add(text);
+//							doc.add(attribute);
+//						}
+//						if(def.getFeature()!= null && def.getFeature() instanceof Operation) {
+//							Operation attr = (Operation) def.getFeature();
+//							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+//							attribute.setBoost(HELPER_BOOST_VALUE);
+//							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+//							doc.add(text);
+//							doc.add(attribute);
+//						}
+//					}
+//				}
+//				if (moduleElement instanceof Rule)
+//				{
+//					Rule r = (Rule) moduleElement;
+//					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
+//							Store.YES,Index.ANALYZED);
+//					if(r instanceof MatchedRule) {
+//						MatchedRule mr = (MatchedRule) r;
+//						EList<InPatternElement> si = mr.getInPattern().getElements();
+//						for (InPatternElement inPatternElement : si) {
+//							if(inPatternElement instanceof SimpleInPatternElement) {
+//								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
+//								Field fromMC = new Field(FROM_METACLASS, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+//								doc.add(fromMC);
+//								Field text = new Field(TEXT_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+//								doc.add(text);
+//								
+//							}
+//							
+//						}
+//						EList<OutPatternElement> so = mr.getOutPattern().getElements();
+//						for (OutPatternElement outPatternElement : so) {
+//							if(outPatternElement instanceof SimpleOutPatternElement) {
+//								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
+//								Field toMC = new Field(FROM_TOCLASS, sope.getType().getName(), Store.YES, Index.ANALYZED);
+//								doc.add(toMC);
+//								Field text = new Field(TEXT_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
+//								doc.add(text);
+//							}
+//							
+//						}
+//					}
+//					doc.add(ruleName);
+//				}
+//				
+//			}
+//			Field type = new Field(TYPE_TAG, art.getClass().getSimpleName(), 
+//					Store.YES, Index.ANALYZED);
+//			doc.add(type);
+//			
+//			String artifactName = art.getName();
+//		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
+//		 	
+//		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
+//		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+//		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, temp_art.getName(), 
+//		 				Store.YES, Index.ANALYZED);
+//		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, temp_art.getId(), 
+//		 				Store.YES, Index.ANALYZED);
+//				doc.add(fromMMID);
+//				doc.add(fromMMName);
+//			}
+//		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
+//		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+//		 		Field fromMMName = new Field(TO_METAMODEL_TAG, temp_art.getName(), 
+//		 				Store.YES, Index.ANALYZED);
+//		 		Field fromMMID = new Field(TO_METAMODEL_TAG, temp_art.getId(), 
+//		 				Store.YES, Index.ANALYZED);
+//				doc.add(fromMMID);
+//				doc.add(fromMMName);
+//			}
+//		 	String author = art.getAuthor().getUsername();
+//		 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
+//		 	Date lastUpdate = art.getModified();
+//		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), 
+//		 			Store.YES, Index.ANALYZED);
+//		 	for (Property prop : art.getProperties()) {
+//		 		
+//				String propName = prop.getName();
+//				String propValue = prop.getValue();
+//				if(propName != null && propValue != null){
+//					Field propField = new Field(propName, propValue, 
+//						Store.YES, Index.ANALYZED);
+//					doc.add(propField);
+//				}
+//			}
+//		 	Field idField = new Field(ID_TAG, art.getId(), 
+//		 			Store.YES, Index.ANALYZED);
+//		 	doc.add(artName);
+//		 	doc.add(authorField);
+//		 	doc.add(lastUpdateField);
+//			doc.add(idField);
+//			writer.addDocument(doc);
+//			}catch (Exception e) {logger.error(e.getMessage());e.printStackTrace();}
+//			writer.close();
+//		}
+//		  catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		
+//		
+//	}
 	@Override
 	public ResponseGrid<ATLTransformation> findAllPaginated(
 			RequestGrid requestGrid) throws BusinessException {
