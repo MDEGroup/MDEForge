@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.DemoService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
@@ -68,22 +69,12 @@ public class SignIn {
 	@Autowired
 	GridFsTemplate operations;
 	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
-	@Autowired
-	private GridFileMediaService gridFileMediaService;
-	@Autowired
-	private ATLTransformationService atlTransformationService;
-	@Autowired
-	private ModelService modelService;
-	@Autowired
-	private WorkspaceService workspaceService;
-	@Autowired
-	private ProjectService projectService;
+	private DemoService demoService;
+	
 
 	@RequestMapping(value = "/signin", method = { RequestMethod.GET })
 	public String signIn(Model model) {
 		// call method for adding new workspace and Project as an example
-		System.out.println("Sono dentro signin");
 		// User u = new User();
 		// List<Workspace> workspaceList = new ArrayList<Workspace>();
 		// workspaceList.add(initialWorkspace(u));
@@ -144,7 +135,7 @@ public class SignIn {
 		/*
 		 * START TO CREATE WORKSPACE AND PROJECT FOR DEMO
 		 */
-		createDemoNewRegistration(user);
+		demoService.createDemoNewRegistration(user);
 
 		/*
 		 * END TO CREATE WORKSPACE AND PROJECT FOR DEMO
@@ -154,191 +145,7 @@ public class SignIn {
 		return "public.registration.status";
 	}
 
-		/**
-		 * This is a function with that I create a Demo for a new User
-		 * @param u
-		 */
-	private void createDemoNewRegistration(User u) {
-		List<Workspace> workspaceList = new ArrayList<Workspace>();
-		workspaceList.add(createWorkspaceForDemo(u));
-		u.setWorkspaces(workspaceList);
+	
 
-	}
-
-	/**
-	 * This is a function with that I can initialize a new workspace for DEMO.
-	 * 
-	 * @param u
-	 * 
-	 * @return Workspace
-	 */
-
-	private Workspace createWorkspaceForDemo(User u) {
-		Workspace w = new Workspace();
-		w.setOwner(u);
-		w.setDescription("Example of workspace");
-		w.setName("Family to Person Workspace");
-		List<Project> projectList = new ArrayList<Project>();
-		projectList.add(createProjectForDemo(u));
-		w.setProjects(projectList);
-		workspaceService.create(w);
-
-		return w;
-	}
-
-	/**
-	 * This is a function with that I can initialize a new project for DEMO.
-	 * 
-	 * @return Project
-	 */
-
-	private Project createProjectForDemo(User u) {
-		Project p = new Project();
-		p.setOwner(u);
-		p.setName("Family to Person Project");
-		p.setDescription("Example of Project");
-		p.setArtifacts(createArtifactsForDemo(u));
-		// create an object project into database
-		projectService.create(p, u);
-
-		return p;
-	}
-
-	private String getNameFromPath(String path) {
-		Path p = Paths.get(path);
-		String file = p.getFileName().toString();
-		return file;
-
-	}
-
-	private List<Artifact> createArtifactsForDemo(User u) {
-		/*
-		 * In the our case We get the artifacts from a static directory We
-		 * created in the project before the directory is gotten with : String
-		 * familiesToPersonsPath =
-		 * getClass().getResource("/initialWorkspace/Families2Persons/").getPath
-		 * ();
-		 */
-		List<Artifact> artifactList = new ArrayList<Artifact>();
-		String resourcesBasePath = "/initialWorkspace/Families2Persons/";
-		String resourcesInputMM = "/Families.ecore";
-		String resourcesOutputMM = "/Persons.ecore";
-		String resourcesAtlTransfomation = "/Families2Persons.atl";
-		String resourcesInputModel = "/sample-Families.xmi";
-		String familiesToPersonsPath = getClass().getResource(resourcesBasePath).getPath();
-		try {
-			/*
-			 * CREATION FAMILIES ARTIFACT
-			 */
-
-			GridFileMedia inputMMgfm = gridFileMediaService
-					.createObjectFromFile(familiesToPersonsPath + resourcesInputMM, getNameFromPath(resourcesInputMM));
-
-			EcoreMetamodel families = new EcoreMetamodel();
-			families.setName("Families");
-			families.setDescription("This basic metamodel allows to represent families. A family, "
-					+ "which has a name, is composed of several persons identified by their firstname. ");
-			families.setOpen(false);
-			families.setFile(inputMMgfm);
-			families.setAuthor(u);
-			ecoreMetamodelService.create(families);
-			artifactList.add(families);
-			/*
-			 * CREATION PERSONS ARTIFACT
-			 */
-
-			GridFileMedia outputMMgfm = gridFileMediaService.createObjectFromFile(
-					familiesToPersonsPath + resourcesOutputMM, getNameFromPath(resourcesOutputMM));
-			EcoreMetamodel persons = new EcoreMetamodel();
-			persons.setName("Persons");
-			persons.setDescription(
-					"This simple metamodel describes a person (firstname, surname). It is used for illustration purposes.");
-			persons.setOpen(false);
-			persons.setFile(outputMMgfm);
-			persons.setAuthor(u);
-			ecoreMetamodelService.create(persons);
-			System.out.println("artefatto Person: " + persons.getId());
-			artifactList.add(persons);
-
-			/*
-			 * CREATION MODEL INPUT ARTIFACT
-			 */
-
-			GridFileMedia inputModelGfm = gridFileMediaService.createObjectFromFile(
-					familiesToPersonsPath + resourcesInputModel, getNameFromPath(resourcesInputModel));
-
-			org.mdeforge.business.model.Model simpleFamilyModel = new org.mdeforge.business.model.Model();
-			simpleFamilyModel.setName("Simple families model");
-			simpleFamilyModel.setOpen(false);
-			simpleFamilyModel.setDescription("For use in demo");
-
-			simpleFamilyModel.setFile(inputModelGfm);
-
-			ConformToRelation ctr = new ConformToRelation();
-			ctr.setFromArtifact(simpleFamilyModel);
-			ctr.setToArtifact(families);
-			simpleFamilyModel.getRelations().add(ctr);
-
-			simpleFamilyModel.setAuthor(u);
-			modelService.create(simpleFamilyModel);
-			artifactList.add(simpleFamilyModel);
-
-			/*
-			 * CREATION TRANSFORMATION ARTIFACT
-			 */
-
-			GridFileMedia transformationGfm = gridFileMediaService.createObjectFromFile(
-					familiesToPersonsPath + resourcesAtlTransfomation, getNameFromPath(resourcesAtlTransfomation));
-
-			ATLTransformation transformation = new ATLTransformation();
-			transformation.setName("Families2Preson");
-			transformation.setDescription(
-					"The goal is to present a use case of a model to model transformation written in ATL."
-							+ "This use case is named: Families to Persons"
-							+ " Initially we have a text describing a list of families."
-							+ "We want to transform this into another text describing a list of persons.);");
-
-			transformation.setOpen(false);
-			CoDomainConformToRelation cdct = new CoDomainConformToRelation();
-			cdct.setFromArtifact(transformation);
-			cdct.setToArtifact(persons);
-			cdct.setReferenceModelName("Persons");
-			cdct.setName("OUT");
-
-			DomainConformToRelation dct = new DomainConformToRelation();
-			dct.setFromArtifact(transformation);
-			dct.setToArtifact(families);
-			dct.setReferenceModelName("Families");
-			dct.setName("IN");
-			transformation.getRelations().add(cdct);
-			transformation.getRelations().add(dct);
-			transformation.setOpen(false);
-			transformation.setFile(transformationGfm);
-			transformation.setAuthor(u);
-			atlTransformationService.create(transformation);
-			artifactList.add(transformation);
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
-		for (Artifact artifact : artifactList) {
-			System.out.println("Artifatto nome: " + artifact.getName());
-		}
-		return artifactList;
-
-	}
-
-	@RequestMapping(value = "/testDemo", method = { RequestMethod.GET })
-	public String testDemo(Model model) {
-		// call method for adding new workspace and Project as an example
-		User u = new User();
-		u = userService.findOne("55ae5947d4c677485a267bca");
-		List<Workspace> workspaceList = new ArrayList<Workspace>();
-		workspaceList.add(createWorkspaceForDemo(u));
-		u.setWorkspaces(workspaceList);
-		model.addAttribute("user", u);
-
-		return "public.signin";
-	}
 
 }
