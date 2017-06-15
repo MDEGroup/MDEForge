@@ -49,6 +49,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
@@ -138,6 +139,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private UserRepository userRepository;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private LuceneService luceneService;
 	
 	
 	@Value("#{cfgproperties[basePath]}")
@@ -191,7 +194,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 //			logger.error(e.getMessage());
 //		}
 		try {
-			createIndex(result);
+			luceneService.createLuceneIndex(result);
 		} catch (Exception e) {
 			System.out.println("Unable to create index: " + e.getMessage());
 		}

@@ -156,7 +156,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 		if(artifact instanceof EcoreMetamodel){
 			 createEcoreMetamodelIndex((EcoreMetamodel) artifact);
 		}else if (artifact instanceof Model) {
-			
+			createModelIndex((Model) artifact);
 		}else if(artifact instanceof ATLTransformation){
 			createATLTransformationIndex((ATLTransformation) artifact);
 		}
@@ -184,7 +184,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 			// Create an index in the directory, appending new index over previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
 			// create the indexer
-			Document document = parseArtifactForIndex(is);
+			Document document = parseMetamodelForIndex(is);
 			this.writer = new IndexWriter(indexDir, conf);
 
 			try {
@@ -203,7 +203,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 
 	}
 	
-	private Document parseArtifactForIndex(EcoreMetamodel ecoreMetamodel) {
+	private Document parseMetamodelForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
 		
 //		String textOfTheInputStream = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
@@ -630,7 +630,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 			// create the indexer
 			this.writer = new IndexWriter(indexDir, conf);
 
-			Document document = parseArtifactForIndex(is);
+			Document document = parseModelForIndex(is);
 			writer.addDocument(document);
 			
 			writer.close();
@@ -646,7 +646,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 	 * @param ecoreMetamodel
 	 * @return
 	 */
-	private Document parseArtifactForIndex(Model model) {
+	private Document parseModelForIndex(Model model) {
 		
 		LuceneTag luceneTag = new LuceneTag(); 
 		

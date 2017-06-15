@@ -102,6 +102,7 @@ import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.ExtractContentEngineException;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.SemanticSimilarityRelationService;
 import org.mdeforge.business.SemanticSimilarityRelationServiceV1;
@@ -216,6 +217,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 	private MetricRepository metricRepository;
 	@Autowired
 	private RelationService relationService;
+	@Autowired
+	private LuceneService luceneService;
 
 //	@Value("#{cfgproperties[basePathLucene]}")
 //	protected String basePathLucene;
@@ -233,26 +236,26 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		try {
 			artifact.setValid(isValid(artifact));
 		} catch (Exception e) {
-			System.err.println("KK");
+			System.err.println("Metamodel is not valid.");
 		}
 		try {
 			this.extractedContent(result);
 		} catch (Exception e) {
-			logger.error("Some errors when try to extract content string from metamodel");
+			logger.error("Some errors when try to extract content string from metamodel.");
 		}
 		try {
 			artifact.getUri().addAll(getNSUris(result));
 		} catch (Exception e) {
-			logger.error("Error when try to extract URI from metamodel");
+			logger.error("Error when try to extract URI from metamodel.");
 		}
 		try {
 			artifact.setMetrics(calculateMetrics(artifact));
 		} catch (Exception e) {
-			logger.error("Some errors when try to calculate metrics for metamodel");
+			logger.error("Some errors when try to calculate metrics for metamodel.");
 		}
 		try {
-			createIndex(result);
-		} catch (Exception e) { logger.error("Some errors when try to create lucene indexis.");}
+			luceneService.createLuceneIndex(result);
+		} catch (Exception e) { logger.error("Some errors when try to create lucene index.");}
 		artifactRepository.save(artifact);
 		return result;
 	}

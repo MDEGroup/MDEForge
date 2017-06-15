@@ -74,6 +74,7 @@ import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
@@ -173,9 +174,13 @@ public class ATLTransformationServiceImpl extends
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 	@Autowired
+	private LuceneService luceneService;
+	@Autowired
 	private UNIVAQUSEWitnessFinder twf;
 	@Value("#{cfgproperties[testSericeTimeout]}")
 	protected int testServiceTimeout;
+	@Value("#{cfgproperties[basePath]}")
+	protected String basePath;
 	Logger logger = LoggerFactory.getLogger(ATLTransformationServiceImpl.class);
 
 	@Override
@@ -185,11 +190,11 @@ public class ATLTransformationServiceImpl extends
 			result.setMetrics(calculateMetrics(result));
 			artifactRepository.save(result);
 		} catch (Exception e) {
-			logger.error("Some errors when try to calculate metric for metamodel");
+			logger.error("Some errors when try to calculate metric for the ATL transformation.");
 			throw new MetricEngineException(e.getMessage(), result.getId());
 		}
 		try {
-			createIndex(result);
+			luceneService.createLuceneIndex(result);
 		}catch (Exception e) {
 			logger.error("Extact index error:" + e.getMessage());
 		}
@@ -658,7 +663,7 @@ public class ATLTransformationServiceImpl extends
 			SimpleDateFormat formatter5 = new SimpleDateFormat("yyyyMMddHHmmss");
 			String formats1 = formatter5.format(ss1);
 
-			String tempModelPath = "generatedBy_"
+			String tempModelPath = basePath + "generatedBy_"
 					+ transformation.getName() + "_" + formats1 + ".xmi";
 			String fileName = "generatedBy_"
 					+ transformation.getName().replace(" ", "")
