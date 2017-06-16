@@ -5,7 +5,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -16,6 +20,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Index;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -46,10 +51,13 @@ import org.eclipse.m2m.atl.core.ModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFModel;
 import org.eclipse.m2m.atl.core.emf.EMFModelFactory;
 import org.eclipse.m2m.atl.engine.parser.AtlParser;
+import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.LuceneService;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
@@ -58,8 +66,12 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.LuceneTag;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Service;
 
 import anatlyzer.atl.model.ATLModel;
 import anatlyzer.atlext.ATL.Helper;
@@ -74,16 +86,22 @@ import anatlyzer.atlext.OCL.Attribute;
 import anatlyzer.atlext.OCL.OclFeatureDefinition;
 import anatlyzer.atlext.OCL.Operation;
 
-public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation>implements LuceneService{
+@Service
+public class LuceneServiceImpl implements LuceneService{
 	
 	/*
-	 * ECORE METAMODEL TAGS
+	 * GENERAL TAGS
 	 */
+	private static final String TEXT_TAG = "text";
 	private static final String TYPE_TAG = "forgeType";
 	private static final String NAME_TAG = "name";
 	private static final String AUTHOR_TAG = "author";
 	private static final String ID_TAG = "id";
 	private static final String LAST_UPDATE_TAG = "lastUpdate";
+	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	/*
+	 * ECORE METAMODEL TAGS
+	 */
 	
 	private static final String EPACKAGE_INDEX_CODE = "ePackage";
 	private static final float EPACKAGE_BOOST_VALUE = 2.0f;
@@ -111,43 +129,46 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
 	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
-	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
+	
+	private static String[] metamodelLuceneTags = {EPACKAGE_INDEX_CODE,NsURI_INDEX_CODE,EANNOTATION_INDEX_CODE,
+			ECLASS_INDEX_CODE,EATTRIBUTE_INDEX_CODE,
+			EREFERENCE_INDEX_CODE,EENUM_INDEX_CODE,
+			ELITERAL_INDEX_CODE,EDATATYPE_INDEX_CODE};
 	
 	/*
 	 * ATL Transformation TAGS
 	 */
 	private static final String HELPER_TAG = "helper";
 	private static final float HELPER_BOOST_VALUE = 1.0f;
-	private static final String TEXT_TAG = "text";
 	private static final String FROM_METAMODEL_TAG = "fromMM";
 	private static final String TO_METAMODEL_TAG = "toMM";
 	private static final String RULE_NAME_TAG = "rule";
 	private static final String FROM_METACLASS = "fromMC";
 	private static final String FROM_TOCLASS = "toMC";
 	
+	private static String[] modelLuceneTags = {HELPER_TAG,FROM_METAMODEL_TAG,TO_METAMODEL_TAG,
+			RULE_NAME_TAG,FROM_METACLASS,FROM_TOCLASS};
 	/*
 	 * MODEL TAGS
 	 */
 	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
 	private static final String CONFORM_TO_TAG = "conformToMM";
-	
+	private static String[] transformationLuceneTags = {CONFORM_TO_TAG};
 	
 	private IndexWriter writer;
-
+	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
+	
 	@Autowired
 	protected GridFileMediaService gridFileMediaService;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
+	private ATLTransformationService aTLTransformationService;
+	@Autowired
+	private ModelService modelService;
 	@Value("#{cfgproperties[basePathLucene]}")
 	private String basePathLucene;
 	
-	
-	
-	@Override
-	public List<String> getIndexTagsByArtifactType(Artifact artifact) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	
 	
@@ -161,6 +182,47 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 			createATLTransformationIndex((ATLTransformation) artifact);
 		}
 		
+	}
+	
+	
+	@Override
+	public List<String> getIndexTagsByArtifactType(Artifact artifact) {
+		String[] result = null;
+		if(artifact instanceof EcoreMetamodel){
+			result = metamodelLuceneTags;
+		}else if (artifact instanceof Model) {
+			result = modelLuceneTags;
+		}else if(artifact instanceof ATLTransformation){
+			result = transformationLuceneTags;
+		}
+		
+		return Arrays.asList(result);
+	}
+	
+	
+	@Override
+	public List<String> getAllIndexTags() {
+		System.out.println("---------------------------------");
+		System.out.println("List of Name Fields in the index:");
+		System.out.println("---------------------------------");
+		
+		HashSet<String> result = new HashSet<String>();
+		
+		File indexDirFile = new File(basePathLucene);
+		try {
+			FSDirectory indexDir = FSDirectory.open(indexDirFile);
+			IndexReader luceneIndexReader = IndexReader.open(indexDir);
+			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		sortedList.forEach(x -> System.out.println(x));
+		return sortedList;
 	}
 	
 	
@@ -282,7 +344,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 		
 //		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
-		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+		Field textField = new Field(TEXT_TAG, text, Store.YES, Index.ANALYZED);
 		doc.add(textField);
 
 		
@@ -560,7 +622,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
 		 	
 		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
-		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
 		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, temp_art.getName(), 
 		 				Store.YES, Index.ANALYZED);
 		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, temp_art.getId(), 
@@ -569,7 +631,7 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 				doc.add(fromMMName);
 			}
 		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
-		 		Artifact temp_art = artifactRepository.findOne(dctr.getToArtifact().getId());
+		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
 		 		Field fromMMName = new Field(TO_METAMODEL_TAG, temp_art.getName(), 
 		 				Store.YES, Index.ANALYZED);
 		 		Field fromMMID = new Field(TO_METAMODEL_TAG, temp_art.getId(), 
@@ -599,7 +661,9 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 		 	doc.add(lastUpdateField);
 			doc.add(idField);
 			writer.addDocument(doc);
-			}catch (Exception e) {logger.error(e.getMessage());e.printStackTrace();}
+			}catch (Exception e) {
+				logger.error(e.getMessage());e.printStackTrace();
+			}
 			writer.close();
 		}
 		  catch (IOException e) {
@@ -730,14 +794,16 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 			}
 			
 		}
-		}catch(Exception e) { logger.error("Some error when try to parse EMF index");}
+		}catch(Exception e) { 
+			logger.error("Some error when try to parse EMF index");
+		}
 		//Artifact TYPE: "Model"
 		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
 		doc.add(artifactType);
 
 //		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
-		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+		Field textField = new Field(TEXT_TAG, text, Store.YES, Index.ANALYZED);
 //		textField.setBoost(2.0f);
 		
 //		System.out.println(identifyLanguage(text));
@@ -774,6 +840,69 @@ public class LuceneServiceImpl extends CRUDArtifactServiceImpl<ATLTransformation
 		
 	
 		return doc;
+	}
+
+
+
+	@Override
+	public void createLuceneIndexFromConfigurationPath() {
+		File directoryToIndex = new File(basePathLucene);
+		if (directoryToIndex.isDirectory() && directoryToIndex.exists()) {
+		
+			float duration = 0;
+			long startTime = System.nanoTime();
+			
+			System.out.println("Start Metamodel indexing...");
+			metamodelIndex();
+			System.out.println("End Metamodel indexing!");
+			System.out.println("Start Model indexing...");
+			atlIndex();
+			modelIndex();
+			long endTime = System.nanoTime();
+			duration = (endTime - startTime) / 1000000; // milliseconds(1000000) - seconds (1000000000)
+			
+			System.out.println("End Model indexing in " + duration +" ms.");
+		}else{
+			System.out.println("The provided folder doesn't exists. Check the configuration file.");
+		}
+	}
+	
+	private void metamodelIndex() {
+		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
+		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
+				System.out.println("Indexing: " + ecoreMetamodel.getName());
+				ecoreMetamodelService.createIndex(ecoreMetamodel);
+		}
+		System.out.println("------------------------------------------------");
+		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
+		// ecoreMetamodelService.search("eClass:Family");
+	}
+
+	
+	private void atlIndex() {
+		List<ATLTransformation> atlTList = aTLTransformationService.findAll();
+		for (ATLTransformation ecoreMetamodel : atlTList) {
+				System.out.println("Indexing: " + ecoreMetamodel.getName());
+				createLuceneIndex(ecoreMetamodel);
+		}
+		System.out.println("------------------------------------------------");
+		System.out.println("Index of " + atlTList.size() + " metamodels done!");
+		// ecoreMetamodelService.search("eClass:Family");
+	}
+	
+	private void modelIndex(){
+		List<Model> modelList = modelService.findAll();
+		for (Model model : modelList) {
+//			if(model.isValid()){
+				System.out.println("Indexing: " + model.getName());
+				modelService.createIndex(model);
+//			}else{
+//				System.out.println(model.getName() + " not a valid model!");
+//			}
+			
+		}
+		System.out.println("------------------------------------------------");
+		System.out.println("Index of " + modelList.size() + " models done!");
 	}
 	
 }
