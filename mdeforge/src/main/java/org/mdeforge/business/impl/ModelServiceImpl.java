@@ -197,7 +197,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				artifact.getRelations().add(relationTemp);
 				artifactRepository.save(artifact);
 				relList.add(relationTemp);
-				createIndex(artifact);
+//				createIndex(artifact);
+				luceneService.createLuceneIndex(artifact);
 			}
 			metamodel.getRelations().addAll(relList);
 			artifactRepository.save(metamodel);

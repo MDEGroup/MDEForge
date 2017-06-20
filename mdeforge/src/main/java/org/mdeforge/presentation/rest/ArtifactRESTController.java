@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Metric;
@@ -37,6 +38,8 @@ public class ArtifactRESTController {
 
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private LuceneService luceneService;
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
 
@@ -107,7 +110,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchResultComplete searchResults = artifactService.searchForm(text);
+			SearchResultComplete searchResults = luceneService.searchForm(text);
 			List<Artifact> artifactList = new ArrayList<Artifact>();
 			for (SearchResult result : searchResults.getResults()) {
 				artifactList.add(result.getArtifact());

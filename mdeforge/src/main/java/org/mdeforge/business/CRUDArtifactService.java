@@ -27,6 +27,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	ResponseGrid<T> findArtifactInProject(String idProject, User user, RequestGrid pag);
 	List<T> findArtifactInWorkspace(String idWorkspace, User user);
 	ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag);
+	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
 	boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)	throws BusinessException;
 	boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException;
 	boolean isArtifactInUser(User idUser, String idArtfact)	throws BusinessException;
@@ -57,14 +58,13 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void addComment(Comment comment, String idArtifat) throws BusinessException;
 	List<Statistic> statistic();
 	
-	//Search with Lucene
-	List<String> indexFieldNames() throws BusinessException;
-	List<String> indexFieldNamesForMM() throws BusinessException;
-	List<String> indexFieldNamesForT() throws BusinessException;
-	SearchResultComplete searchForm(String searchString) throws BusinessException;
-	SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException;
-	List<T> search(String searchString, int maxSearchResult) throws BusinessException;
-	void createIndex(T artifact);
-	boolean deleteTermFromIndex(String fieldName, String filePath);
-	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
+//	//Search with Lucene
+//	List<String> indexFieldNames() throws BusinessException;
+//	List<String> indexFieldNamesForMM() throws BusinessException;
+//	List<String> indexFieldNamesForT() throws BusinessException;
+//	SearchResultComplete searchForm(String searchString) throws BusinessException;
+//	SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException;
+//	List<T> search(String searchString, int maxSearchResult) throws BusinessException;
+//	void createIndex(T artifact);
+//	boolean deleteTermFromIndex(String fieldName, String filePath);
 }

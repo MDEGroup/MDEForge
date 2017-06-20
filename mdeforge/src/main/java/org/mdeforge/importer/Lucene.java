@@ -32,7 +32,7 @@ public class Lucene {
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
 				System.out.println("Indexing: " + ecoreMetamodel.getName());
-				ecoreMetamodelService.createIndex(ecoreMetamodel);
+//				ecoreMetamodelService.createIndex(ecoreMetamodel);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
@@ -44,7 +44,7 @@ public class Lucene {
 		List<ATLTransformation> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (ATLTransformation ecoreMetamodel : ecoreMMlist) {
 				System.out.println("Indexing: " + ecoreMetamodel.getName());
-				ecoreMetamodelService.createIndex(ecoreMetamodel);
+//				ecoreMetamodelService.createIndex(ecoreMetamodel);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
@@ -57,7 +57,7 @@ public class Lucene {
 		for (Model model : modelList) {
 //			if(model.isValid()){
 				System.out.println("Indexing: " + model.getName());
-				modelService.createIndex(model);
+//				modelService.createIndex(model);
 //			}else{
 //				System.out.println(model.getName() + " not a valid model!");
 //			}

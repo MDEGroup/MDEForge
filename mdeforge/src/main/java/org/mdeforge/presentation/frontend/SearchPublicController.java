@@ -10,6 +10,7 @@ import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.UserService;
@@ -39,22 +40,24 @@ public class SearchPublicController {
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
+	@Autowired
+	private LuceneService luceneService;
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model) {
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = artifactService.indexFieldNamesForMM();
+		List<String> indexFieldNamesForMM = luceneService.indexFieldNamesForMM();
 		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = artifactService.indexFieldNamesForT();
+		List<String> indexFieldNamesForT = luceneService.indexFieldNamesForT();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = artifactService.indexFieldNames();
+		List<String> indexFieldNamesForM = luceneService.indexFieldNamesForM();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.
@@ -73,7 +76,7 @@ public class SearchPublicController {
 			 @RequestParam(value = "limit") int limit,
 			 @RequestParam(value = "idProject", required = false) String idProject){
 	  searchString += " AND forgeType:" + type;
-	  List<Artifact> searchResultComplete = artifactService.search(searchString, limit);
+	  List<Artifact> searchResultComplete = luceneService.search(searchString, limit);
 	  
 	  //filter based on project: remove all the artifact present in the user project
 	  if(idProject != null){
@@ -96,13 +99,13 @@ public class SearchPublicController {
 		}
 		
 //		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
-		SearchResultComplete searchResultComplete = artifactService.searchWithPagination(searchString, hitPerPage, page);
+		SearchResultComplete searchResultComplete = luceneService.searchWithPagination(searchString, hitPerPage, page);
 		model.addAttribute("searchResultComplete", searchResultComplete);
 //		model.addAttribute("search_string", searchString);
 		
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = artifactService.indexFieldNamesForMM();
+		List<String> indexFieldNamesForMM = luceneService.indexFieldNamesForMM();
 		for (String string : indexFieldNamesForMM) {
 			System.out.println(string + "ggg");
 		}
@@ -110,12 +113,12 @@ public class SearchPublicController {
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = artifactService.indexFieldNamesForT();
+		List<String> indexFieldNamesForT = luceneService.indexFieldNamesForT();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = artifactService.indexFieldNames();
+		List<String> indexFieldNamesForM = luceneService.indexFieldNamesForM();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.

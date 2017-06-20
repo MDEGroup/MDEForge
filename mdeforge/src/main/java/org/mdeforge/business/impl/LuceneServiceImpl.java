@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -23,7 +24,18 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.highlight.TextFragment;
+import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -66,6 +78,8 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.LuceneTag;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
+import org.mdeforge.business.model.form.SearchResult;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,7 +101,7 @@ import anatlyzer.atlext.OCL.OclFeatureDefinition;
 import anatlyzer.atlext.OCL.Operation;
 
 @Service
-public class LuceneServiceImpl implements LuceneService{
+public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	
 	/*
 	 * GENERAL TAGS
@@ -155,6 +169,13 @@ public class LuceneServiceImpl implements LuceneService{
 	private static final String CONFORM_TO_TAG = "conformToMM";
 	private static String[] transformationLuceneTags = {CONFORM_TO_TAG};
 	
+	/*
+	 * FRAGMENT TAGS
+	 */
+	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
+	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
+	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
+	
 	private IndexWriter writer;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	
@@ -166,9 +187,11 @@ public class LuceneServiceImpl implements LuceneService{
 	private ATLTransformationService aTLTransformationService;
 	@Autowired
 	private ModelService modelService;
+	@Autowired
+	private CRUDArtifactService<Artifact> artifactService;
+	
 	@Value("#{cfgproperties[basePathLucene]}")
 	private String basePathLucene;
-	
 	
 	
 	
@@ -871,7 +894,8 @@ public class LuceneServiceImpl implements LuceneService{
 		List<EcoreMetamodel> ecoreMMlist = ecoreMetamodelService.findAll();
 		for (EcoreMetamodel ecoreMetamodel : ecoreMMlist) {
 				System.out.println("Indexing: " + ecoreMetamodel.getName());
-				ecoreMetamodelService.createIndex(ecoreMetamodel);
+//				ecoreMetamodelService.createIndex(ecoreMetamodel);
+				createLuceneIndex(ecoreMetamodel);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + ecoreMMlist.size() + " metamodels done!");
@@ -881,9 +905,9 @@ public class LuceneServiceImpl implements LuceneService{
 	
 	private void atlIndex() {
 		List<ATLTransformation> atlTList = aTLTransformationService.findAll();
-		for (ATLTransformation ecoreMetamodel : atlTList) {
-				System.out.println("Indexing: " + ecoreMetamodel.getName());
-				createLuceneIndex(ecoreMetamodel);
+		for (ATLTransformation atl : atlTList) {
+				System.out.println("Indexing: " + atl.getName());
+				createLuceneIndex(atl);
 		}
 		System.out.println("------------------------------------------------");
 		System.out.println("Index of " + atlTList.size() + " metamodels done!");
@@ -895,7 +919,7 @@ public class LuceneServiceImpl implements LuceneService{
 		for (Model model : modelList) {
 //			if(model.isValid()){
 				System.out.println("Indexing: " + model.getName());
-				modelService.createIndex(model);
+				createLuceneIndex(model);
 //			}else{
 //				System.out.println(model.getName() + " not a valid model!");
 //			}
@@ -905,4 +929,279 @@ public class LuceneServiceImpl implements LuceneService{
 		System.out.println("Index of " + modelList.size() + " models done!");
 	}
 	
+	
+	
+	
+	/*
+	 * SEARCHING
+	 */
+	@Override
+	public SearchResultComplete searchForm(String queryString) throws BusinessException {
+		
+		SearchResultComplete searchResultComplete = new SearchResultComplete();
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		
+		long duration = 0;
+		long startTime = System.nanoTime();
+		
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			
+			//Get all indexed fields
+//			String[] fields = indexFieldNames().toArray(new String[0]);
+			String[] fields = getAllIndexTags().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
+			System.out.println("Total hits: " + hits.totalHits);
+
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+			for (int i = 0; i < hits.totalHits; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
+				
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+//						System.out.println(frag[j].toString());
+					}
+				}
+				T art = (T) artifactService.findOne(doc.get("id"));
+				
+				SearchResult sr = new SearchResult();
+				sr.setArtifact(art);
+				sr.setScore(hits.scoreDocs[i].score);
+				sr.setFragments(fragments);
+				
+				searchResults.add(sr);
+			}
+			
+			searcher.close();
+			
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (InvalidTokenOffsetsException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+		
+		
+		long endTime = System.nanoTime();
+		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+//		System.out.println("Search done in " + duration + " milliseconds");
+		
+		searchResultComplete.setResults(searchResults);
+		searchResultComplete.setSearchTime(duration);
+		
+		
+		return searchResultComplete;
+	}
+	
+	@Override
+	public List<T> search(String queryString, int maxSearchResult) throws BusinessException {
+		List<T> listArtifact = new ArrayList<T>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			//Get all indexed fields
+			String[] fields = getAllIndexTags().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			TopDocs hits = searcher.search(query, maxSearchResult);
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+			for (int i = 0; i < max; i++) {
+				try {
+					int id = hits.scoreDocs[i].doc;
+					Document doc = searcher.doc(id);
+					String text = doc.get("text");
+					TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
+					TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+					String[] fragments = new String[frag.length];
+					for (int j = 0; j < frag.length; j++) {
+						if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+							fragments[j] = frag[j].toString();
+						}
+					}
+					T art = (T) artifactService.findOne(doc.get("id"));
+					listArtifact.add(art);
+				} catch (Exception e){}
+			}
+			searcher.close();
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+//		System.out.println("Search done in " + duration + " milliseconds");
+		return listArtifact;
+	}
+	
+	
+	@Override
+	public SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException {
+		long duration = 0;
+		long startTime = System.nanoTime();
+		
+		int totalNumberOfHits;
+		
+		SearchResultComplete searchResultComplete = new SearchResultComplete();
+		List<SearchResult> searchResults = new ArrayList<SearchResult>();
+		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
+		File indexDir = new File(basePathLucene);
+		Directory directory;
+		try {
+			directory = FSDirectory.open(indexDir);
+			IndexReader reader = IndexReader.open(directory);
+			IndexSearcher searcher = new IndexSearcher(reader);
+			
+//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			//Get all indexed fields
+			String[] fields = getAllIndexTags().toArray(new String[0]);
+			//Query Parse over multiple Indexed Fields
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			org.apache.lucene.search.Query query = queryParser.parse(queryString);
+			
+			TopScoreDocCollector collector = TopScoreDocCollector.create(3000, true);  // maxSearchResult is just an int limiting the total number of hits 
+
+			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
+			
+	        searcher.search(query, collector);
+
+	        totalNumberOfHits = collector.getTotalHits();
+
+	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
+			
+			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+//			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
+			for (int i = 0; i < iterator; i++) {
+				int id = hits.scoreDocs[i].doc;
+				Document doc = searcher.doc(id);
+				String text = doc.get("text");
+				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
+				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
+				String[] fragments = new String[frag.length];
+				for (int j = 0; j < frag.length; j++) {
+					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
+						fragments[j] = frag[j].toString();
+//						System.out.println(frag[j].toString());
+					}
+				}
+				T art = (T) artifactService.findOne(doc.get("id"));
+				
+				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
+				SearchResult sr = new SearchResult();
+				sr.setArtifact(art);
+				sr.setScore(hits.scoreDocs[i].doc);
+				sr.setFragments(fragments);
+				
+				searchResults.add(sr);
+			}
+			searcher.close();
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (InvalidTokenOffsetsException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (org.apache.lucene.queryParser.ParseException e) {
+			throw new BusinessException(e.getMessage());
+		}
+		
+		long endTime = System.nanoTime();
+		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+		
+		searchResultComplete.setResults(searchResults);
+		searchResultComplete.setSearchTime(duration);
+		searchResultComplete.setTotalHits(totalNumberOfHits);
+		searchResultComplete.setHitsPerPage(hitsPerPage);
+		searchResultComplete.setPageNumber(pageNumber);
+		searchResultComplete.setQueryString(queryString);
+		int numberOfPages = 0;
+		if(totalNumberOfHits % hitsPerPage == 0){
+			numberOfPages = totalNumberOfHits/hitsPerPage;
+		}else{
+			numberOfPages = (totalNumberOfHits/hitsPerPage) + 1;
+		}
+		searchResultComplete.setPages(numberOfPages);
+		
+		return searchResultComplete;
+	}
+	
+	
+	@Override
+	/**
+	 * Delete a Term from Lucene index. It take as input the FIELD_NAME and the FILE_PATH of the file we want to delete.
+	 */
+	public boolean deleteTermFromIndex(String fieldName, String filePath){
+		int numberDeleteTerms = 0;
+		boolean result = false;
+
+		File indexDirFile = new File(basePathLucene);
+		FSDirectory indexDir;
+		IndexReader luceneIndexReader = null;
+		try {
+			indexDir = FSDirectory.open(indexDirFile);
+			luceneIndexReader = IndexReader.open(indexDir);
+			
+			Term termToDelete = new Term(fieldName, filePath); 
+			
+			numberDeleteTerms = luceneIndexReader.deleteDocuments(termToDelete);
+			luceneIndexReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(numberDeleteTerms > 0){
+			result = true;
+		}
+		
+		return result;
+	}
+
+
+	@Override
+	public List<String> indexFieldNamesForMM() {
+		
+		return Arrays.asList(metamodelLuceneTags);
+	}
+
+
+	@Override
+	public List<String> indexFieldNamesForT() {
+		return Arrays.asList(transformationLuceneTags);
+	}
+
+
+	@Override
+	public List<String> indexFieldNamesForM() {
+		// TODO Auto-generated method stub
+		return Arrays.asList(modelLuceneTags);
+	}
+
+
 }
