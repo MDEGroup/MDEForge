@@ -167,16 +167,16 @@ public class SignIn {
 		Utils utils= new Utils();
 		
 		
-		this.cloneProject(userTestId, projectId,workspaceId);
-//		System.out.println(utils.createDate("yyyyMMdd_HHmmss"));
+		Project p =  projectService.cloneProject(userTestId, projectId,workspaceId);
 		
+	
 		System.out.println("fine test");
 		
 		
 		return new java.util.Date().getTime() + "";
 	}
 
-	private void cloneProject(String userId, String projectId,String workspaceId) {
+	private Project cloneProject(String userId, String projectToCloneId,String workspaceId) {
 		
 		/*
 		 * When we clone the project We need remove the old artifact and clone them next time because they are linked to by original project
@@ -194,7 +194,7 @@ public class SignIn {
 		List<Artifact> cloneArtifactList = new ArrayList<Artifact>();
 		String myDate= utils.createDate("yyyyMMddHHmmss");
 		w = workspaceService.findOne(workspaceId);
-		Project project = projectService.findOne(projectId);
+		Project project = projectService.findOne(projectToCloneId);
 		Project projectClone = new Project();
 		projectClone = project.clone();
 		String nameProject = "clone_"+ myDate +"_"+ project.getName();
@@ -236,7 +236,7 @@ public class SignIn {
 			artifactClone.getFile().setFileName(dirUser + "clone_" + myDate +"_"+ filename);
 			artifactClone.setId(null);
 			
-//			artifactClone.getProjects().removeAll(projectClonelist);
+
 			artifactClone.getProjects().clear();
 			gridFileMediaService.getFilePathFromContent(gfmObj);
 			 artifactService.create(artifactClone);
@@ -253,7 +253,8 @@ public class SignIn {
 		projectClone.setArtifacts(cloneArtifactList);
 //		 workspaceService.addProjectInWorkspace(idProject, idWorkspace, user)
 		projectService.create(projectClone, u);
-
+		
+		return projectClone;
 		
 
 	}

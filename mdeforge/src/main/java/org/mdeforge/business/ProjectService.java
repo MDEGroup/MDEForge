@@ -45,4 +45,6 @@ public interface ProjectService {
 	long countAll() throws BusinessException;
 
 	List<Project> findRecent() throws BusinessException;
+	
+	Project cloneProject(String userId, String projectToCloneId,String workspaceId);
 }
