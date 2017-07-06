@@ -577,7 +577,7 @@
 							artifact.model = true;
 							var idProject = $('#projectId').attr('data-id');
 							artifact.projectId = idProject;
-							artifact.ctx = git;
+							artifact.ctx = ctx;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);
