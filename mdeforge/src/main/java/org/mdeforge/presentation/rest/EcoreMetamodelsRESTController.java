@@ -255,7 +255,7 @@ public class EcoreMetamodelsRESTController {
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
 		
-		SearchResultComplete searchResults = luceneService.searchForm(searchString);
+		SearchResultComplete searchResults = luceneService.searchForm(user, searchString);
 		List<EcoreMetamodel> artifactList = new ArrayList<EcoreMetamodel>();
 		for (SearchResult result : searchResults.getResults()) {
 			artifactList.add((EcoreMetamodel) result.getArtifact());

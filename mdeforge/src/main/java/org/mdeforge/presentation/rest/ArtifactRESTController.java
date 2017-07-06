@@ -110,7 +110,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchResultComplete searchResults = luceneService.searchForm(text);
+			SearchResultComplete searchResults = luceneService.searchForm(user,text);
 			List<Artifact> artifactList = new ArrayList<Artifact>();
 			for (SearchResult result : searchResults.getResults()) {
 				artifactList.add(result.getArtifact());

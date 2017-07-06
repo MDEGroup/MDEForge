@@ -2,43 +2,46 @@ package org.mdeforge.business.impl;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.index.MultiFields;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.lucene.search.highlight.TextFragment;
-import org.apache.lucene.search.highlight.TokenSources;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
+import org.apache.lucene.util.BytesRef;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -54,10 +57,10 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.epsilon.ecl.parse.Ecl_EolParserRules.elseStatement_return;
 import org.eclipse.m2m.atl.core.IReferenceModel;
 import org.eclipse.m2m.atl.core.ModelFactory;
 import org.eclipse.m2m.atl.core.emf.EMFModel;
@@ -75,16 +78,15 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.CoDomainConformToRelation;
 import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
-import org.mdeforge.business.model.LuceneTag;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.Property;
+import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import anatlyzer.atl.model.ATLModel;
@@ -118,31 +120,14 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 */
 	
 	private static final String EPACKAGE_INDEX_CODE = "ePackage";
-	private static final float EPACKAGE_BOOST_VALUE = 2.0f;
-
 	private static final String NsURI_INDEX_CODE = "nsuri";
-	private static final float NsURI_BOOST_VALUE = 1.7f;
-
 	private static final String EANNOTATION_INDEX_CODE = "eAnnotation";
-	private static final float EANNOTATION_BOOST_VALUE = 1.7f;
-
 	private static final String ECLASS_INDEX_CODE = "eClass";
-	private static final float ECLASS_BOOST_VALUE = 1.5f;
-
 	private static final String EATTRIBUTE_INDEX_CODE = "eAttribute";
-	private static final float EATTRIBUTE_BOOST_VALUE = 1.4f;
-
 	private static final String EREFERENCE_INDEX_CODE = "eReference";
-	private static final float EREFERENCE_BOOST_VALUE = 1.4f;
-	
 	private static final String EENUM_INDEX_CODE = "eEnum";
-	private static final float EENUM_BOOST_VALUE = 1.0f;
-
 	private static final String ELITERAL_INDEX_CODE = "eLiteral";
-	private static final float ELITERAL_BOOST_VALUE = 0.7f;
-
 	private static final String EDATATYPE_INDEX_CODE = "eDataType";
-	private static final float EDATATYPE_BOOST_VALUE = 0.5f;
 	
 	private static String[] metamodelLuceneTags = {EPACKAGE_INDEX_CODE,NsURI_INDEX_CODE,EANNOTATION_INDEX_CODE,
 			ECLASS_INDEX_CODE,EATTRIBUTE_INDEX_CODE,
@@ -153,7 +138,6 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 * ATL Transformation TAGS
 	 */
 	private static final String HELPER_TAG = "helper";
-	private static final float HELPER_BOOST_VALUE = 1.0f;
 	private static final String FROM_METAMODEL_TAG = "fromMM";
 	private static final String TO_METAMODEL_TAG = "toMM";
 	private static final String RULE_NAME_TAG = "rule";
@@ -168,13 +152,8 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
 	private static final String CONFORM_TO_TAG = "conformToMM";
 	private static String[] transformationLuceneTags = {CONFORM_TO_TAG};
+
 	
-	/*
-	 * FRAGMENT TAGS
-	 */
-	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
-	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
-	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
 	
 	private IndexWriter writer;
 	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
@@ -229,13 +208,10 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 		System.out.println("List of Name Fields in the index:");
 		System.out.println("---------------------------------");
 		
-		HashSet<String> result = new HashSet<String>();
-		
-		File indexDirFile = new File(basePathLucene);
+		Collection<String> result = new HashSet<String>();
 		try {
-			FSDirectory indexDir = FSDirectory.open(indexDirFile);
-			IndexReader luceneIndexReader = IndexReader.open(indexDir);
-			result = (HashSet<String>) luceneIndexReader.getFieldNames(IndexReader.FieldOption.ALL);
+			IndexReader luceneIndexReader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
+			result = MultiFields.getIndexedFields(luceneIndexReader);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -259,35 +235,36 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 */
 	
 	private void createEcoreMetamodelIndex(EcoreMetamodel is) {
-		File indexDirFile = new File(basePathLucene);
-		// Set the directory in which will be created the index.
-		Directory indexDir;
+		
 		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			Directory indexDir = FSDirectory.open(Paths.get(basePathLucene));
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig conf = new IndexWriterConfig(analyzer);
 			// Create an index in the directory, appending new index over previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
 			// create the indexer
 			Document document = parseMetamodelForIndex(is);
-			this.writer = new IndexWriter(indexDir, conf);
+			writer = new IndexWriter(indexDir, conf);
 
-			try {
-				// writer.updateDocument(new Term("path", file.getPath()), document);
-				writer.addDocument(document);
-			} catch (CorruptIndexException e) {
-				throw new BusinessException(e.getMessage());
-			} catch (IOException e) {
-				throw new BusinessException(e.getMessage());
-			}
+			// writer.updateDocument(new Term("path", file.getPath()), document);
+			writer.addDocument(document);
+				
 			writer.close();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			throw new BusinessException(e1.getMessage());
+		} catch (CorruptIndexException e) {
+			throw new BusinessException(e.getMessage());
+		} catch (IOException e) {
+			throw new BusinessException(e.getMessage());
 		}
+			
+		
 
 	}
 	
+	/**
+	 * Parse Metamodel artifact file in order to extrapolate and index the file to Lucene Index
+	 * @param ecoreMetamodel
+	 * @return Document
+	 */
 	private Document parseMetamodelForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
 		
@@ -328,10 +305,25 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 //			}
 //		}
 		
-		URI fileURI = URI.createFileURI(gridFileMediaService.getFilePath(ecoreMetamodel));
+		//Register Metamodel
+		String artifactFilePath = "";
+		try{
+			artifactFilePath = gridFileMediaService.getFilePath(ecoreMetamodel);
+		}catch (Exception e) {
+			 System.err.println("File not exists!");
+		}
+		URI fileURI = URI.createFileURI(artifactFilePath);
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl());
+		
 		ResourceSet resourceSet = new ResourceSetImpl();
-		Resource resource = resourceSet.getResource(fileURI, true);
+		try{
+			Resource resource = resourceSet.getResource(fileURI, true);
+//			
+//			Reader reader = new InputStreamReader(gridFileMediaService.getFileInputStream(ecoreMetamodel));
+////			BufferedReader br = new BufferedReader(reader);
+//			Resource resource2 = resourceSet.createResource(URI.createURI("resource.extension")); 
+//			resource2.load(new URIConverter.ReadableInputStream(reader), null); 
+		
 		if (resource.isLoaded() && resource.getErrors() != null) {
 			TreeIterator<EObject> eAllContents = resource.getAllContents();
 			while (eAllContents.hasNext()) {
@@ -358,41 +350,46 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 		}
 		
 		//ID
-		Field idField = new Field(ID_TAG, ecoreMetamodel.getId(), Store.YES, Index.ANALYZED);
+		Field idField = new TextField(ID_TAG, ecoreMetamodel.getId(), Field.Store.YES);
 	 	doc.add(idField);
 		
 		//Artifact TYPE: "EcoreMetamodel"
-		Field artifactType = new Field(TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		Field artifactType = new TextField(TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Field.Store.YES);
 		doc.add(artifactType);
 		
 //		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
-		Field textField = new Field(TEXT_TAG, text, Store.YES, Index.ANALYZED);
+		Field textField = new TextField(TEXT_TAG, text, Field.Store.YES);
 		doc.add(textField);
 
 		
-		Field artName = new Field(NAME_TAG, ecoreMetamodel.getName(), Store.YES, Index.ANALYZED);
+		
+		Field artName = new TextField(NAME_TAG, ecoreMetamodel.getName(), Field.Store.YES);
 	 	doc.add(artName);
 	 	
-	 	Field authorField = new Field(AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+	 	Field authorField = new TextField(AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(), Field.Store.YES);
 	 	doc.add(authorField);
 	 	
-	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, ecoreMetamodel.getModified().toString(), Store.YES, Index.ANALYZED);
+	 	Field lastUpdateField = new TextField(LAST_UPDATE_TAG, ecoreMetamodel.getModified().toString(), Field.Store.YES);
 	 	doc.add(lastUpdateField);
 	 	
 	 	for (Property prop : ecoreMetamodel.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
 			if(propName != null && propValue != null) {
-				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+				Field propField = new TextField(propName, propValue, Field.Store.YES);
 				doc.add(propField);
 			}
 		}
 	 	
+		}catch (Exception e) {
+			System.out.println("ERROR");
+		}
 //		System.out.println(handler.toString());	 	
 
 	 	return doc;
 	}
+	
 	
 	private String getTextFromInputStream(InputStream is){      
         String str = "";
@@ -414,14 +411,11 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
     }
 	
 	private Document ePackageIndex(EPackage ePackage, Document doc){
-		Field ePackageField = new Field(EPACKAGE_INDEX_CODE, ePackage.getName(), Store.YES, Index.ANALYZED);
-		ePackageField.setBoost(EPACKAGE_BOOST_VALUE);
-		// System.out.println("Package: " + ePackage.getName());
+		Field ePackageField = new TextField(EPACKAGE_INDEX_CODE, ePackage.getName(), Field.Store.YES);
 		doc.add(ePackageField);
 		// GET NsURI
 		if (ePackage.getNsURI() != null && !ePackage.getNsURI().isEmpty()) {
-			Field EPackageNsURIField = new Field(NsURI_INDEX_CODE, ePackage.getNsURI(), Store.YES, Index.ANALYZED);
-			ePackageField.setBoost(NsURI_BOOST_VALUE);
+			Field EPackageNsURIField = new TextField(NsURI_INDEX_CODE, ePackage.getNsURI(), Field.Store.YES);
 //			System.out.println("NsURI : " + ePackage.getNsURI());
 			doc.add(EPackageNsURIField);
 		}
@@ -438,8 +432,7 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	
 	private Document eClassIndex(EClass eClass, Document doc){
 		try {
-			Field eClassField = new Field(ECLASS_INDEX_CODE, eClass.getName(), Store.YES, Index.ANALYZED);
-			eClassField.setBoost(ECLASS_BOOST_VALUE);
+			Field eClassField = new TextField(ECLASS_INDEX_CODE, eClass.getName(), Field.Store.YES);
 			// System.out.println("Class: " + eClass.getName());
 			doc.add(eClassField);
 
@@ -451,15 +444,13 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 
 			// Index EClass Attributes
 			for (EAttribute attribute : eClass.getEAttributes()) {
-				Field eClassAttributeField = new Field(EATTRIBUTE_INDEX_CODE, attribute.getName(), Store.YES, Index.ANALYZED);
-				eClassAttributeField.setBoost(EATTRIBUTE_BOOST_VALUE);
+				Field eClassAttributeField = new TextField(EATTRIBUTE_INDEX_CODE, attribute.getName(), Field.Store.YES);
 				// System.out.println("Attribute: " + attribute.getName());
 				doc.add(eClassAttributeField);
 			}
 			// Index EClass References
 			for (EReference reference : eClass.getEReferences()) {
-				Field eClassReferenceField = new Field(EREFERENCE_INDEX_CODE, reference.getName(), Store.YES, Index.ANALYZED);
-				eClassReferenceField.setBoost(EREFERENCE_BOOST_VALUE);
+				Field eClassReferenceField = new TextField(EREFERENCE_INDEX_CODE, reference.getName(), Field.Store.YES);
 				// System.out.println("Reference: " + reference.getName());
 				doc.add(eClassReferenceField);
 			}
@@ -473,15 +464,13 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	
 	
 	private Document eEnumIndex(EEnum eEnum, Document doc){
-		Field eEnumField = new Field(EENUM_INDEX_CODE, eEnum.getName(), Store.YES, Index.ANALYZED);
-		eEnumField.setBoost(EENUM_BOOST_VALUE);
+		Field eEnumField = new TextField(EENUM_INDEX_CODE, eEnum.getName(), Field.Store.YES);
 		doc.add(eEnumField);
 		return doc;
 	}
 	
 	private Document eDataTypeIndex(EDataType eDataType, Document doc){
-		Field eDataTypeField = new Field(EDATATYPE_INDEX_CODE, eDataType.getName(), Store.YES, Index.ANALYZED);
-		eDataTypeField.setBoost(EDATATYPE_BOOST_VALUE);
+		Field eDataTypeField = new TextField(EDATATYPE_INDEX_CODE, eDataType.getName(), Field.Store.YES);
 		doc.add(eDataTypeField);
 		return doc;
 	}
@@ -498,7 +487,7 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 			for (EAnnotation eAnnotation : annotations) {
 				if(getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")){
 					if(getAnnotationValue(eAnnotation) != null){
-						Field EPackageEAnnotationField = new Field(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Store.YES, Index.ANALYZED);
+						Field EPackageEAnnotationField = new TextField(EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Field.Store.YES);
 						doc.add(EPackageEAnnotationField);
 					}
 				}
@@ -560,12 +549,10 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 		ModelFactory modelFactory = new EMFModelFactory();
 		IReferenceModel atlMetamodel;
 		try {
-			File indexDirFile = new File(basePathLucene);
+			Directory indexDir = FSDirectory.open(Paths.get(basePathLucene));
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig conf = new IndexWriterConfig(analyzer);
 			// Set the directory in which will be created the index.
-			Directory indexDir;
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
 			IndexWriter writer = new IndexWriter(indexDir, conf);
 			try {
@@ -586,17 +573,15 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 						OclFeatureDefinition def = h.getDefinition();
 						if(def.getFeature()!= null && def.getFeature() instanceof Attribute) {
 							Attribute attr = (Attribute) def.getFeature();
-							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							attribute.setBoost(HELPER_BOOST_VALUE);
-							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							Field attribute = new TextField(HELPER_TAG, attr.getName(), Field.Store.YES);
+							Field text = new TextField(TEXT_TAG, attr.getName(), Field.Store.YES);
 							doc.add(text);
 							doc.add(attribute);
 						}
 						if(def.getFeature()!= null && def.getFeature() instanceof Operation) {
 							Operation attr = (Operation) def.getFeature();
-							Field attribute = new Field(HELPER_TAG, attr.getName(), Store.YES, Index.ANALYZED);
-							attribute.setBoost(HELPER_BOOST_VALUE);
-							Field text = new Field(TEXT_TAG, attr.getName(), Store.YES, Index.ANALYZED);
+							Field attribute = new TextField(HELPER_TAG, attr.getName(), Field.Store.YES);
+							Field text = new TextField(TEXT_TAG, attr.getName(), Field.Store.YES);
 							doc.add(text);
 							doc.add(attribute);
 						}
@@ -605,17 +590,16 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 				if (moduleElement instanceof Rule)
 				{
 					Rule r = (Rule) moduleElement;
-					Field ruleName = new Field(RULE_NAME_TAG,r.getName(),
-							Store.YES,Index.ANALYZED);
+					Field ruleName = new TextField(RULE_NAME_TAG,r.getName(), Field.Store.YES);
 					if(r instanceof MatchedRule) {
 						MatchedRule mr = (MatchedRule) r;
 						EList<InPatternElement> si = mr.getInPattern().getElements();
 						for (InPatternElement inPatternElement : si) {
 							if(inPatternElement instanceof SimpleInPatternElement) {
 								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
-								Field fromMC = new Field(FROM_METACLASS, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+								Field fromMC = new TextField(FROM_METACLASS, sipe.getType().getName(), Field.Store.YES);
 								doc.add(fromMC);
-								Field text = new Field(TEXT_TAG, sipe.getType().getName(), Store.YES, Index.ANALYZED);
+								Field text = new TextField(TEXT_TAG, sipe.getType().getName(), Field.Store.YES);
 								doc.add(text);
 								
 							}
@@ -625,9 +609,9 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 						for (OutPatternElement outPatternElement : so) {
 							if(outPatternElement instanceof SimpleOutPatternElement) {
 								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
-								Field toMC = new Field(FROM_TOCLASS, sope.getType().getName(), Store.YES, Index.ANALYZED);
+								Field toMC = new TextField(FROM_TOCLASS, sope.getType().getName(), Field.Store.YES);
 								doc.add(toMC);
-								Field text = new Field(TEXT_TAG, sope.getType().getName(), Store.YES, Index.ANALYZED);
+								Field text = new TextField(TEXT_TAG, sope.getType().getName(), Field.Store.YES);
 								doc.add(text);
 							}
 							
@@ -637,48 +621,48 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 				}
 				
 			}
-			Field type = new Field(TYPE_TAG, art.getClass().getSimpleName(), 
-					Store.YES, Index.ANALYZED);
+			Field type = new TextField(TYPE_TAG, art.getClass().getSimpleName(), 
+					Field.Store.YES);
 			doc.add(type);
 			
 			String artifactName = art.getName();
-		 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
+		 	Field artName = new TextField(NAME_TAG, artifactName, Field.Store.YES);
 		 	
 		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
 		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
-		 		Field fromMMName = new Field(FROM_METAMODEL_TAG, temp_art.getName(), 
-		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(FROM_METAMODEL_TAG, temp_art.getId(), 
-		 				Store.YES, Index.ANALYZED);
+		 		Field fromMMName = new TextField(FROM_METAMODEL_TAG, temp_art.getName(), 
+		 				Field.Store.YES);
+		 		Field fromMMID = new TextField(FROM_METAMODEL_TAG, temp_art.getId(), 
+		 				Field.Store.YES);
 				doc.add(fromMMID);
 				doc.add(fromMMName);
 			}
 		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
 		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
-		 		Field fromMMName = new Field(TO_METAMODEL_TAG, temp_art.getName(), 
-		 				Store.YES, Index.ANALYZED);
-		 		Field fromMMID = new Field(TO_METAMODEL_TAG, temp_art.getId(), 
-		 				Store.YES, Index.ANALYZED);
+		 		Field fromMMName = new TextField(TO_METAMODEL_TAG, temp_art.getName(), 
+		 				Field.Store.YES);
+		 		Field fromMMID = new TextField(TO_METAMODEL_TAG, temp_art.getId(), 
+		 				Field.Store.YES);
 				doc.add(fromMMID);
 				doc.add(fromMMName);
 			}
 		 	String author = art.getAuthor().getUsername();
-		 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
+		 	Field authorField = new TextField(AUTHOR_TAG, author, Field.Store.YES);
 		 	Date lastUpdate = art.getModified();
-		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), 
-		 			Store.YES, Index.ANALYZED);
+		 	Field lastUpdateField = new TextField(LAST_UPDATE_TAG, lastUpdate.toString(), 
+		 			Field.Store.YES);
 		 	for (Property prop : art.getProperties()) {
 		 		
 				String propName = prop.getName();
 				String propValue = prop.getValue();
 				if(propName != null && propValue != null){
-					Field propField = new Field(propName, propValue, 
-						Store.YES, Index.ANALYZED);
+					Field propField = new TextField(propName, propValue, 
+						Field.Store.YES);
 					doc.add(propField);
 				}
 			}
-		 	Field idField = new Field(ID_TAG, art.getId(), 
-		 			Store.YES, Index.ANALYZED);
+		 	Field idField = new TextField(ID_TAG, art.getId(), 
+		 			Field.Store.YES);
 		 	doc.add(artName);
 		 	doc.add(authorField);
 		 	doc.add(lastUpdateField);
@@ -703,13 +687,12 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 */
 	
 	private void createModelIndex(Model is) {
-		File indexDirFile = new File(basePathLucene);
-		// set the directory for the index
-		Directory indexDir;
+		
 		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			// set the directory for the index
+			Directory indexDir = FSDirectory.open(Paths.get(basePathLucene));
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig conf = new IndexWriterConfig(analyzer);
 			// Create a new index in the directory, removing any
 			// previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
@@ -735,7 +718,7 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 */
 	private Document parseModelForIndex(Model model) {
 		
-		LuceneTag luceneTag = new LuceneTag(); 
+//		LuceneTag luceneTag = new LuceneTag(); 
 		
 		Document doc = new Document();
 //		Metadata metadata = new Metadata();
@@ -793,14 +776,14 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 					/*
 					 * Index className:classAttributeValue
 					 */
-					Field eClassWithAttributeField = new Field(eClass.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					Field eClassWithAttributeField = new TextField(eClass.getName(), attributeValue, Field.Store.YES);
 					// eClassWithAttributeField(1.5f);
 					doc.add(eClassWithAttributeField);
 
 					/*
 					 * Index className::classAttribute:attributeValue
 					 */
-					Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
+					Field eClassWithAttributeAndAttributeValueField = new TextField(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Field.Store.YES);
 					// eClassWithAttributeAndAttributeValueField(1.5f);
 					doc.add(eClassWithAttributeAndAttributeValueField);
 				}
@@ -810,7 +793,7 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 					EObject value = (EObject) next.eGet(reference);
 					String key = reference.getName();
 					EClass referenceTo = (EClass) value.eClass();
-					Field eClassReferenceField = new Field(key, referenceTo.getName(), Store.YES, Index.ANALYZED);
+					Field eClassReferenceField = new TextField(key, referenceTo.getName(), Field.Store.YES);
 					// eClassReferenceField.setBoost(1.5f);
 					doc.add(eClassReferenceField);
 					}
@@ -821,39 +804,39 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 			logger.error("Some error when try to parse EMF index");
 		}
 		//Artifact TYPE: "Model"
-		Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+		Field artifactType = new TextField(TYPE_TAG, model.getClass().getSimpleName(), Field.Store.YES);
 		doc.add(artifactType);
 
 //		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
-		Field textField = new Field(TEXT_TAG, text, Store.YES, Index.ANALYZED);
+		Field textField = new TextField(TEXT_TAG, text, Field.Store.YES);
 //		textField.setBoost(2.0f);
 		
 //		System.out.println(identifyLanguage(text));
 		
 		String artifactName = model.getName();
-	 	Field artName = new Field(NAME_TAG, artifactName, Store.YES, Index.ANALYZED);
+	 	Field artName = new TextField(NAME_TAG, artifactName, Field.Store.YES);
 //		filenameField.setBoost(0.5f);
 		
 	 	String author = model.getAuthor().getUsername();
-	 	Field authorField = new Field(AUTHOR_TAG, author, Store.YES, Index.ANALYZED);
+	 	Field authorField = new TextField(AUTHOR_TAG, author, Field.Store.YES);
 	 	
 	 	Date lastUpdate = model.getModified();
-	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, lastUpdate.toString(), Store.YES, Index.ANALYZED);
+	 	Field lastUpdateField = new TextField(LAST_UPDATE_TAG, lastUpdate.toString(), Field.Store.YES);
 //		filetypeField.setBoost(1.4f);
 		
 	 	for (Property prop : model.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
-			Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+			Field propField = new TextField(propName, propValue, Field.Store.YES);
 			doc.add(propField);
 		}
-	 	Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
+	 	Field idField = new TextField(ID_TAG, model.getId(), Field.Store.YES);
 	 	
 	 	
-	 	Field conformToFieldName = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Store.YES, Index.ANALYZED);
+	 	Field conformToFieldName = new TextField(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Field.Store.YES);
 	 	doc.add(conformToFieldName);
-	 	Field conformToFieldId = new Field(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Store.YES, Index.ANALYZED);
+	 	Field conformToFieldId = new TextField(CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Field.Store.YES);
 	 	doc.add(conformToFieldId);
 	 	doc.add(textField);
 	 	doc.add(artName);
@@ -878,13 +861,16 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 			System.out.println("Start Metamodel indexing...");
 			metamodelIndex();
 			System.out.println("End Metamodel indexing!");
-			System.out.println("Start Model indexing...");
+			System.out.println("Start ATL Transformation indexing...");
 			atlIndex();
+			System.out.println("End ATL Transformation indexing.");
+			System.out.println("Start Model indexing...");
 			modelIndex();
+			System.out.println("End Model indexing.");
 			long endTime = System.nanoTime();
 			duration = (endTime - startTime) / 1000000; // milliseconds(1000000) - seconds (1000000000)
 			
-			System.out.println("End Model indexing in " + duration +" ms.");
+			System.out.println("End Overall indexing in " + duration +" ms.");
 		}else{
 			System.out.println("The provided folder doesn't exists. Check the configuration file.");
 		}
@@ -936,70 +922,50 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 * SEARCHING
 	 */
 	@Override
-	public SearchResultComplete searchForm(String queryString) throws BusinessException {
+	public SearchResultComplete searchForm(User user, String queryString) throws BusinessException {
 		
 		SearchResultComplete searchResultComplete = new SearchResultComplete();
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
 		
 		long duration = 0;
 		long startTime = System.nanoTime();
-		
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
 		try {
-			directory = FSDirectory.open(indexDir);
-
-			IndexReader reader = IndexReader.open(directory);
+			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
-			
+			Analyzer analyzer = new StandardAnalyzer();
+		
+		
 			//Get all indexed fields
-//			String[] fields = indexFieldNames().toArray(new String[0]);
 			String[] fields = getAllIndexTags().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
-			System.out.println("Total hits: " + hits.totalHits);
+			TopDocs results = searcher.search(query, Integer.MAX_VALUE);
+//			ScoreDoc[] hits = results.scoreDocs;
+			int numTotalHits = results.totalHits;
+			System.out.println(numTotalHits + " total matching documents");
 
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-			for (int i = 0; i < hits.totalHits; i++) {
-				int id = hits.scoreDocs[i].doc;
+			for (int i = 0; i < numTotalHits; i++) {
+				int id = results.scoreDocs[i].doc;
 				Document doc = searcher.doc(id);
-				
-				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
-				
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
 
-				String[] fragments = new String[frag.length];
-				for (int j = 0; j < frag.length; j++) {
-					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-						fragments[j] = frag[j].toString();
-//						System.out.println(frag[j].toString());
-					}
+				T art = (T) artifactService.findOne(doc.get(ID_TAG));
+				if(isArtifactAvailableForUser(art, user)){
+					SearchResult sr = new SearchResult();
+					sr.setArtifact(art);
+					sr.setScore(results.scoreDocs[i].score);
+					searchResults.add(sr);
 				}
-				T art = (T) artifactService.findOne(doc.get("id"));
-				
-				SearchResult sr = new SearchResult();
-				sr.setArtifact(art);
-				sr.setScore(hits.scoreDocs[i].score);
-				sr.setFragments(fragments);
-				
-				searchResults.add(sr);
 			}
 			
-			searcher.close();
+			reader.close();
 			
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (InvalidTokenOffsetsException e) {
+		} catch (ParseException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
+		} 
 		
 		
 		long endTime = System.nanoTime();
@@ -1008,143 +974,145 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 		
 		searchResultComplete.setResults(searchResults);
 		searchResultComplete.setSearchTime(duration);
-		
 		
 		return searchResultComplete;
 	}
 	
 	@Override
-	public List<T> search(String queryString, int maxSearchResult) throws BusinessException {
+	public List<T> search(User user, String queryString, int maxSearchResult) throws BusinessException {
 		List<T> listArtifact = new ArrayList<T>();
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
 		try {
-			directory = FSDirectory.open(indexDir);
-			IndexReader reader = IndexReader.open(directory);
+			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
 			IndexSearcher searcher = new IndexSearcher(reader);
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
+			Analyzer analyzer = new StandardAnalyzer();
 			//Get all indexed fields
 			String[] fields = getAllIndexTags().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 			TopDocs hits = searcher.search(query, maxSearchResult);
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
 			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
 			for (int i = 0; i < max; i++) {
-				try {
+//				try {
 					int id = hits.scoreDocs[i].doc;
 					Document doc = searcher.doc(id);
-					String text = doc.get("text");
-					TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
-					TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-					String[] fragments = new String[frag.length];
-					for (int j = 0; j < frag.length; j++) {
-						if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-							fragments[j] = frag[j].toString();
-						}
+					T art = (T) artifactService.findOne(doc.get(ID_TAG));
+					if(isArtifactAvailableForUser(art, user)){
+						listArtifact.add(art);
 					}
-					T art = (T) artifactService.findOne(doc.get("id"));
-					listArtifact.add(art);
-				} catch (Exception e){}
+//				} catch (Exception e){}
 			}
-			searcher.close();
+			reader.close();
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
-//		System.out.println("Search done in " + duration + " milliseconds");
+		} catch (ParseException e1) {
+			throw new BusinessException(e1.getMessage());
+		} 
+
 		return listArtifact;
 	}
 	
 	
 	@Override
-	public SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException {
+	public SearchResultComplete searchWithPagination(User user, String queryString, int hitsPerPage, int pageNumber) throws BusinessException {
 		long duration = 0;
 		long startTime = System.nanoTime();
 		
-		int totalNumberOfHits;
+		int numTotalHits;
 		
 		SearchResultComplete searchResultComplete = new SearchResultComplete();
 		List<SearchResult> searchResults = new ArrayList<SearchResult>();
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
 		try {
-			directory = FSDirectory.open(indexDir);
-			IndexReader reader = IndexReader.open(directory);
+			IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
 			IndexSearcher searcher = new IndexSearcher(reader);
+			Analyzer analyzer = new StandardAnalyzer();
 			
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
 			//Get all indexed fields
 			String[] fields = getAllIndexTags().toArray(new String[0]);
 			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
+			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(fields, analyzer);
 			org.apache.lucene.search.Query query = queryParser.parse(queryString);
 			
-			TopScoreDocCollector collector = TopScoreDocCollector.create(3000, true);  // maxSearchResult is just an int limiting the total number of hits 
-
-			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
+			// Collect enough docs to show x (pageNumber) pages
+		    TopDocs results = searcher.search(query, pageNumber * hitsPerPage);
+		    ScoreDoc[] hits = results.scoreDocs;
 			
-	        searcher.search(query, collector);
-
-	        totalNumberOfHits = collector.getTotalHits();
-
-	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
+		    numTotalHits = results.totalHits;
+		    System.out.println(numTotalHits + " total matching documents");
+		    
+//		    int start = 0;
+		    int start = (pageNumber-1) * hitsPerPage;;
+		    int end = Math.min(numTotalHits, hitsPerPage);
+		    
+		    if(end > hits.length){
+		    	hits = searcher.search(query, numTotalHits).scoreDocs;
+		    }
 			
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-//			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
-			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
-			for (int i = 0; i < iterator; i++) {
-				int id = hits.scoreDocs[i].doc;
-				Document doc = searcher.doc(id);
-				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-				String[] fragments = new String[frag.length];
-				for (int j = 0; j < frag.length; j++) {
-					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-						fragments[j] = frag[j].toString();
-//						System.out.println(frag[j].toString());
-					}
+		    end = Math.min(hits.length, start + hitsPerPage);
+		    
+		    for (int i = start; i < end; i++) {
+		    	Document doc = searcher.doc(hits[i].doc);
+				T art = (T) artifactService.findOne(doc.get(ID_TAG));
+				//it search only public artifacts or private or shared with user logged in
+				if(isArtifactAvailableForUser(art, user)){
+					SearchResult sr = new SearchResult();
+					sr.setArtifact(art);
+					sr.setScore(hits[i].score);
+					searchResults.add(sr);
 				}
-				T art = (T) artifactService.findOne(doc.get("id"));
 				
-				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
-				SearchResult sr = new SearchResult();
-				sr.setArtifact(art);
-				sr.setScore(hits.scoreDocs[i].doc);
-				sr.setFragments(fragments);
-				
-				searchResults.add(sr);
-			}
-			searcher.close();
+		    }
+		    
+		    long endTime = System.nanoTime();
+			duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+		    
+		    reader.close();
+		    
+		    
+//			TopScoreDocCollector collector = TopScoreDocCollector.create(3000, true);  // maxSearchResult is just an int limiting the total number of hits 
+
+//			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
+			
+//	        searcher.search(query, numTotalHits);
+//
+////	        numTotalHits = collector.getTotalHits();
+//
+//	        TopDocs hits = collector.topDocs(start, hitsPerPage);
+//			
+//			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
+//			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+////			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
+//			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
+//			for (int i = 0; i < iterator; i++) {
+//				int id = hits.scoreDocs[i].doc;
+//				Document doc = searcher.doc(id);
+//				T art = (T) artifactService.findOne(doc.get(ID_TAG));
+//				
+//				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
+//				SearchResult sr = new SearchResult();
+//				sr.setArtifact(art);
+//				sr.setScore(hits.scoreDocs[i].doc);
+//				
+//				searchResults.add(sr);
+//			}
+//			reader.close();
 		} catch (IOException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (InvalidTokenOffsetsException e) {
+		} catch (ParseException e) {
 			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
-		
-		long endTime = System.nanoTime();
-		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
+		} 
 		
 		searchResultComplete.setResults(searchResults);
 		searchResultComplete.setSearchTime(duration);
-		searchResultComplete.setTotalHits(totalNumberOfHits);
+		searchResultComplete.setTotalHits(numTotalHits);
 		searchResultComplete.setHitsPerPage(hitsPerPage);
 		searchResultComplete.setPageNumber(pageNumber);
 		searchResultComplete.setQueryString(queryString);
 		int numberOfPages = 0;
-		if(totalNumberOfHits % hitsPerPage == 0){
-			numberOfPages = totalNumberOfHits/hitsPerPage;
+		if(numTotalHits % hitsPerPage == 0){
+			numberOfPages = numTotalHits/hitsPerPage;
 		}else{
-			numberOfPages = (totalNumberOfHits/hitsPerPage) + 1;
+			numberOfPages = (numTotalHits/hitsPerPage) + 1;
 		}
 		searchResultComplete.setPages(numberOfPages);
 		
@@ -1157,24 +1125,31 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 	 * Delete a Term from Lucene index. It take as input the FIELD_NAME and the FILE_PATH of the file we want to delete.
 	 */
 	public boolean deleteTermFromIndex(String fieldName, String filePath){
-		int numberDeleteTerms = 0;
+		long numberDeleteTerms = 0;
 		boolean result = false;
-
-		File indexDirFile = new File(basePathLucene);
-		FSDirectory indexDir;
-		IndexReader luceneIndexReader = null;
+		
+		Term termToDelete = new Term(fieldName, filePath); 
 		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			luceneIndexReader = IndexReader.open(indexDir);
-			
-			Term termToDelete = new Term(fieldName, filePath); 
-			
-			numberDeleteTerms = luceneIndexReader.deleteDocuments(termToDelete);
-			luceneIndexReader.close();
+			numberDeleteTerms = writer.deleteDocuments(termToDelete);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+//		
+//		 BooleanQuery.Builder builder = new BooleanQuery.Builder();
+//
+//		//note year is stored as int , not as string when document is craeted.
+//		//if you use Term here which will need 2016 as String, that will not match with documents stored with year as int.
+//		 Query yearQuery = IntPoint.newExactQuery("year", 2016);
+//		 Query stateQuery = new TermQuery(new Term("STATE", "TX"));
+//		 Query cityQuery = new TermQuery(new Term("CITY", "CITY NAME"));
+//
+//		 builder.add(yearQuery, BooleanClause.Occur.MUST);
+//		 builder.add(stateQuery, BooleanClause.Occur.MUST);
+//		 builder.add(cityQuery, BooleanClause.Occur.MUST);
+//
+//		 writer.deleteDocuments(builder.build());
 		
 		if(numberDeleteTerms > 0){
 			result = true;
@@ -1186,7 +1161,6 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 
 	@Override
 	public List<String> indexFieldNamesForMM() {
-		
 		return Arrays.asList(metamodelLuceneTags);
 	}
 
@@ -1199,8 +1173,62 @@ public class LuceneServiceImpl<T extends Artifact> implements LuceneService{
 
 	@Override
 	public List<String> indexFieldNamesForM() {
-		// TODO Auto-generated method stub
 		return Arrays.asList(modelLuceneTags);
+	}
+	
+	@Override
+	public String getMaxFrequencyTerms() throws IOException{
+		 IndexReader reader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
+	      final Fields fields = MultiFields.getFields(reader);
+	      final Iterator<String> iterator = fields.iterator();
+
+	      long maxFreq = Long.MIN_VALUE;
+	      String freqTerm = "";
+	      while(iterator.hasNext()) {
+	          final String field = iterator.next();
+	          final Terms terms = MultiFields.getTerms(reader, field);
+	          final TermsEnum it = terms.iterator();
+	          BytesRef term = it.next();
+	         
+	          while (term != null) {
+	              final long freq = it.totalTermFreq();
+	              if (freq > maxFreq) {
+	                  maxFreq = freq;
+	                  freqTerm = term.utf8ToString();
+	              }
+//	              if(freq > 1 && term.utf8ToString().length() > 1){
+//	            	  System.out.println(freq +"; "+ term.utf8ToString());
+//	              }
+	              term = it.next();
+	          }
+	      }
+
+	      System.out.println(freqTerm + " ["+ maxFreq+" occurrencies]");
+	      return freqTerm;
+	  }
+	
+	
+	/**
+	 * Check if artifact is available (searcheable) for the user logged in. Search public or shared with user artifact. 
+	 * @param artifact, user
+	 * @return
+	 */
+	private boolean isArtifactAvailableForUser(Artifact artifact, User user){
+		boolean result = false;
+		if(user != null){
+			//If we are searching in the private area (a User is logged into the system)
+			if(artifact.isOpen() || artifact.getAuthor().equals(user) || artifact.getShared().contains(user)){
+				result = true;
+			}
+		}else{
+			//We are searching in the public area (only public artifact have to be shown)
+			if(artifact.isOpen()){
+				result = true;
+			}
+		}
+		
+		
+		return result;
 	}
 
 
