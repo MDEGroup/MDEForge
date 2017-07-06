@@ -29,7 +29,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @JsonTypeInfo (use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.CLASS,
 property = "_class")
 
-public class Artifact implements java.io.Serializable{
+public class Artifact implements java.io.Serializable,Cloneable{
 
 	/**
 	 * 
@@ -73,6 +73,14 @@ public class Artifact implements java.io.Serializable{
 	@JsonSerialize(using = UserSerializer.class)
 	private User author = new User();	
 	private List<Property> properties = new ArrayList<Property>();
+	
+	public Artifact clone() {
+		try {
+			return (Artifact) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public String getNameForIndex() {
 		return nameForIndex;

@@ -2,41 +2,38 @@ package org.mdeforge.presentation.frontend;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.mdeforge.business.ATLTransformationService;
-import org.mdeforge.business.ArtifactNotFoundException;
-import org.mdeforge.business.BusinessException;
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.DemoService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
-import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.CoDomainConformToRelation;
-import org.mdeforge.business.model.ConformToRelation;
-import org.mdeforge.business.model.DomainConformToRelation;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.VerificationToken;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.utils.Utils;
 import org.mdeforge.common.spring.security.OnRegistrationCompleteEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,9 +43,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mongodb.gridfs.GridFSFile;
 
 import net.tanesha.recaptcha.ReCaptchaImpl;
@@ -65,12 +62,23 @@ public class SignIn {
 	@Autowired
 	private UserService userService;
 	@Autowired
+	private ProjectService projectService;
+	@Autowired
+	private CRUDArtifactService<Artifact> artifactService;
+	@Autowired
 	ApplicationEventPublisher eventPublisher;
 	@Autowired
 	GridFsTemplate operations;
 	@Autowired
 	private DemoService demoService;
-	
+	@Autowired
+	private WorkspaceService workspaceService;
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
+	@Autowired
+	private EcoreMetamodelService ecoreMetaModelService;
+	@Value("#{cfgproperties[basePath]}")
+	private String basePath;
 
 	@RequestMapping(value = "/signin", method = { RequestMethod.GET })
 	public String signIn(Model model) {
@@ -145,7 +153,109 @@ public class SignIn {
 		return "public.registration.status";
 	}
 
-	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ResponseBody
+	public String test() throws IOException {
+		System.out.println("start test");
+		
+		// Project dello user jack1982te
+		final String projectId = "595cc24681c15fcf524d8402";
+		// final String artifacId = "594d5d8b81c10b68fe525465";
+		final String userTestId = "595cc27381c15fcf524d8408";
+		// workspace about test
+		final String workspaceId = "595cc28881c15fcf524d848e";
+		Utils utils= new Utils();
+		
+		
+		this.cloneProject(userTestId, projectId,workspaceId);
+//		System.out.println(utils.createDate("yyyyMMdd_HHmmss"));
+		
+		System.out.println("fine test");
+		
+		
+		return new java.util.Date().getTime() + "";
+	}
 
+	private void cloneProject(String userId, String projectId,String workspaceId) {
+		
+		/*
+		 * When we clone the project We need remove the old artifact and clone them next time because they are linked to by original project
+		 * We need manage those case:
+		 * - multiple clone 
+		 * -
+		 * 
+		 */
+		Utils utils = new Utils();
+		User u = userService.findOne(userId);
+		Workspace w = new Workspace();
+		
+		
+		List<Artifact> artifactList = new ArrayList<Artifact>();
+		List<Artifact> cloneArtifactList = new ArrayList<Artifact>();
+		String myDate= utils.createDate("yyyyMMddHHmmss");
+		w = workspaceService.findOne(workspaceId);
+		Project project = projectService.findOne(projectId);
+		Project projectClone = new Project();
+		projectClone = project.clone();
+		String nameProject = "clone_"+ myDate +"_"+ project.getName();
+		artifactList = project.getArtifacts();
+		
+
+		projectClone.setOwner(u);
+		projectClone.setName(nameProject);
+		projectClone.setId(null);
+	
+		String dirUser = u.getUsername() + File.separator;
+
+		/*
+		 * WE clone the artifacts and set up:
+		 * the author (user), the name of file (it's composed by
+		 */
+		for (Artifact artifact : artifactList) {
+
+			GridFileMedia gfmObj = new GridFileMedia();
+			String path = new String();
+			String filename;
+
+			path = gridFileMediaService.getFilePath(artifact);
+			filename = utils.getNameFromPath(path);
+			try {
+				gfmObj = gridFileMediaService.createObjectFromFile(path, filename);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			Artifact artifactClone = new Artifact();
+			List<Project> projectClonelist = new ArrayList<Project>();
+			projectClonelist = artifactClone.getProjects();
+			artifactClone = artifact.clone();
+			artifactClone.setFile(gfmObj);
+			artifactClone.setAuthor(u);
+			artifactClone.setName("clone_" + myDate +"_"+ filename);
+			artifactClone.getFile().setFileName(dirUser + "clone_" + myDate +"_"+ filename);
+			artifactClone.setId(null);
+			
+//			artifactClone.getProjects().removeAll(projectClonelist);
+			artifactClone.getProjects().clear();
+			gridFileMediaService.getFilePathFromContent(gfmObj);
+			 artifactService.create(artifactClone);
+			cloneArtifactList.add(artifactClone);
+
+		}
+//		deleting old artifacts
+		projectClone.getArtifacts().clear();
+
+		List<Workspace> listWorkspace = new ArrayList<Workspace>();
+		listWorkspace.add(w);
+		projectClone.getWorkspaces().remove(workspaceId);
+		projectClone.setWorkspaces(listWorkspace);
+		projectClone.setArtifacts(cloneArtifactList);
+//		 workspaceService.addProjectInWorkspace(idProject, idWorkspace, user)
+		projectService.create(projectClone, u);
+
+		
+
+	}
 
 }

@@ -62,20 +62,22 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		GridFileMedia gfr = new GridFileMedia();
 		gfr.setFileName(fileName);
 		File f = new File(tempFilePath);
-
+		if (f.createNewFile()){
+	        System.out.println("File is created!");
+		}else{
+			System.out.println("File is not created");
+		}
+	
 		if (f.exists()) {
-				
-				java.nio.file.Path path = Paths.get(f.getAbsolutePath());
-				byte[] data = Files.readAllBytes(path);
-				gfr.setByteArray(data);
-			
-				
 
+			java.nio.file.Path path = Paths.get(f.getAbsolutePath());
+			byte[] data = Files.readAllBytes(path);
+			gfr.setByteArray(data);
 
-	} else {
+		} else {
 			System.out.println("temp file path doesn't exist");
 		}
-		
+
 		return gfr;
 	}
 
@@ -100,6 +102,12 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		gridFileMediaRepository.delete(file);
 	}
 
+	
+	/*
+	 * This function create a new file System Resource . The name of file created is gotten up by basePath + artifact.getFile().getFilename()
+	 * (non-Javadoc)
+	 * @see org.mdeforge.business.GridFileMediaService#getFilePath(org.mdeforge.business.model.Artifact)
+	 */
 	@Override
 	public String getFilePath(Artifact artifact) throws BusinessException {
 		GridFileMedia grm = null;
@@ -129,6 +137,11 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 
 	}
 
+/*
+ * In this function We create the file
+ * (non-Javadoc)
+ * @see org.mdeforge.business.GridFileMediaService#getFilePathFromContent(org.mdeforge.business.model.GridFileMedia)
+ */
 	@Override
 	public String getFilePathFromContent(GridFileMedia gdf) throws BusinessException {
 

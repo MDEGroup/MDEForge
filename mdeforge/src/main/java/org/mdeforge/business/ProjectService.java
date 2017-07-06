@@ -29,7 +29,7 @@ public interface ProjectService {
 	
 	Project findOne(String id) throws BusinessException;
 
-	void removeArtifactFromProject(String idProject, String idWorkspace,
+	void removeArtifactFromProject(String idArtifact, String idProject,
 			User user) throws BusinessException;
 
 	void addArtifactInProject(String idArtifact, String idProject, User user) throws BusinessException;

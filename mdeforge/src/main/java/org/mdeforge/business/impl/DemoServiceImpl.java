@@ -1,17 +1,25 @@
 package org.mdeforge.business.impl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.DemoService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
@@ -23,9 +31,11 @@ import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.utils.JavaBeanCopier;
 import org.mdeforge.business.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,19 +52,21 @@ public class DemoServiceImpl implements DemoService {
 	private WorkspaceService workspaceService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private UserService userService;
 	@Value("#{cfgproperties[basePath]}")
-	private String basePath;
+	private  String basePath;
 
 	private static String resourcesBasePath = "/initialWorkspace/Families2Persons/";
-	private static String resourcesInputMM = "/Families.ecore";
-	private static String resourcesOutputMM = "/Persons.ecore";
-	private static String resourcesAtlTransfomation = "/Families2Persons.atl";
-	private static String resourcesInputModel = "/sample-Families.xmi";
+	private static String resourcesInputMM = "Families.ecore";
+	private static String resourcesOutputMM = "Persons.ecore";
+	private static String resourcesAtlTransfomation = "Families2Persons.atl";
+	private static String resourcesInputModel = "sample-Families.xmi";
 
-	private static String nMMInput = "_Families";
-	private static String nMMOutput = "_Persons";
-	private static String nModelInput = "_Simple families model";
-	private static String nTransformationInput = "_Families2Preson";
+	private static String nMMInput = "_Families.ecore";
+	private static String nMMOutput = "_Persons.ecore";
+	private static String nModelInput = "_sample-Families.xmi";
+	private static String nTransformationInput = "_Families2Person.atl";
 	private static String tTagIn = "Families";
 	private static String tTagOut = "Persons";
 	private static String descriptionMMInput = "This basic metamodel allows to represent families. A family, "
@@ -89,6 +101,7 @@ public class DemoServiceImpl implements DemoService {
 	private Workspace createWorkspaceForDemo(User u) {
 		Workspace w = new Workspace();
 		w.setOwner(u);
+		
 		w.setDescription(descriptionWorkspace);
 		w.setName(nWorkspace);
 		List<Project> projectList = new ArrayList<Project>();
@@ -106,14 +119,16 @@ public class DemoServiceImpl implements DemoService {
 	 */
 
 	private Project createProjectForDemo(User u) {
+		List<Artifact> artifactList = new ArrayList<Artifact>();
+
 		Project p = new Project();
 		p.setOwner(u);
 		p.setName(nProject);
 		p.setDescription(descriptionProject);
-
-		p.setArtifacts(createArtifactsForDemo(u));
-		// create an object project into database
+		artifactList = createArtifactsForDemo(u);
+		p.setArtifacts(artifactList);
 		projectService.create(p, u);
+	
 
 		return p;
 	}
@@ -137,32 +152,46 @@ public class DemoServiceImpl implements DemoService {
 		String nameModelInput = userName + nModelInput;
 		String nameTransformationInput = userName + nTransformationInput;
 		Utils utils = new Utils();
-
 		/*
-		 * CREATE A COPY OF ARTIFACTS
+		 * CREATION PATH basePath/username/
+		 * In this directory We are going to put user's artifacts
+		 * we suppose the username is unique.
+		 * We need this variable because We use that to create a path as: 
+		 * basePath/username/
+		 * basePath in our case is C:\development\MDEForge\forgedir
 		 */
-
-		if (checkArtifactsForDemo()) {
-			System.out.println("prova");
-
-		}
-
-		try {
+		String customPath=userName+File.separator;
+		System.out.println(customPath);
+		utils.createPath(basePath+File.separator+customPath);
+		
+			try {
 			/*
 			 * CREATION FAMILIES ARTIFACT
 			 */
 
 			GridFileMedia inputMMgfm = gridFileMediaService.createObjectFromFile(
 					familiesToPersonsPath + resourcesInputMM, utils.getNameFromPath(resourcesInputMM));
-
+			System.out.println("UTILS----------->: "+utils.getNameFromPath(resourcesInputMM));
+			System.out.println("FAMILY----------->: "+familiesToPersonsPath + resourcesInputMM);
 			EcoreMetamodel families = new EcoreMetamodel();
 			families.setName(nameMMInput);
 			families.setDescription(descriptionMMInput);
 			families.setOpen(false);
 			families.setFile(inputMMgfm);
+			/*
+			 * test
+			 */
+
 			families.setAuthor(u);
+//			WE need set the file name as "username/nomefile(customPath+resourcesInputMM)" because the directory is created with 
+//			FileSystemResource resource = new FileSystemResource(basePath + gdf.getFileName()); (it's inside GridFileMediaServiceImpl)
+//			when we call ecoreMetamodelService.create(families); 
+			
+			families.getFile().setFileName(customPath+resourcesInputMM);			
 			ecoreMetamodelService.create(families);
 			artifactList.add(families);
+			
+			
 			/*
 			 * CREATION PERSONS ARTIFACT
 			 */
@@ -175,8 +204,12 @@ public class DemoServiceImpl implements DemoService {
 			persons.setOpen(false);
 			persons.setFile(outputMMgfm);
 			persons.setAuthor(u);
+			persons.getFile().setFileName(customPath+resourcesOutputMM);	
 			ecoreMetamodelService.create(persons);
 			artifactList.add(persons);
+			
+//			ResourceSet rs = new ResourceSetImpl();
+//			rs.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl());
 
 			/*
 			 * CREATION MODEL INPUT ARTIFACT
@@ -184,7 +217,6 @@ public class DemoServiceImpl implements DemoService {
 
 			GridFileMedia inputModelGfm = gridFileMediaService.createObjectFromFile(
 					familiesToPersonsPath + resourcesInputModel, utils.getNameFromPath(resourcesInputModel));
-
 			org.mdeforge.business.model.Model simpleFamilyModel = new org.mdeforge.business.model.Model();
 			simpleFamilyModel.setName(nameModelInput);
 			simpleFamilyModel.setOpen(false);
@@ -196,8 +228,8 @@ public class DemoServiceImpl implements DemoService {
 			ctr.setFromArtifact(simpleFamilyModel);
 			ctr.setToArtifact(families);
 			simpleFamilyModel.getRelations().add(ctr);
-
 			simpleFamilyModel.setAuthor(u);
+			simpleFamilyModel.getFile().setFileName(customPath+resourcesInputModel);	
 			modelService.create(simpleFamilyModel);
 			artifactList.add(simpleFamilyModel);
 
@@ -208,12 +240,10 @@ public class DemoServiceImpl implements DemoService {
 			GridFileMedia transformationGfm = gridFileMediaService.createObjectFromFile(
 					familiesToPersonsPath + resourcesAtlTransfomation,
 					utils.getNameFromPath(resourcesAtlTransfomation));
-
 			ATLTransformation transformation = new ATLTransformation();
 			transformation.setName(nameTransformationInput);
 			transformation.setDescription(descriptionTransformation);
 
-			transformation.setOpen(false);
 			CoDomainConformToRelation cdct = new CoDomainConformToRelation();
 			cdct.setFromArtifact(transformation);
 			cdct.setToArtifact(persons);
@@ -230,6 +260,7 @@ public class DemoServiceImpl implements DemoService {
 			transformation.setOpen(false);
 			transformation.setFile(transformationGfm);
 			transformation.setAuthor(u);
+			transformation.getFile().setFileName(customPath+resourcesAtlTransfomation);	
 			atlTransformationService.create(transformation);
 			artifactList.add(transformation);
 		} catch (Exception e) {
@@ -243,24 +274,6 @@ public class DemoServiceImpl implements DemoService {
 
 	}
 
-	private boolean checkArtifactsForDemo() {
-		// String familiesToPersonsPath =
-		// getClass().getResource(resourcesBasePath).getPath();
-		Path path = Paths.get(basePath + resourcesInputMM);
-		System.out.println(path);
-		boolean result = false;
-		if (Files.exists(path)) {
-			System.out.println("Esiste");
-			result = true;
 
-		}
-
-		if (Files.notExists(path)) {
-			System.out.println("non esiste");
-			result = false;
-		}
-		return result;
-
-	}
 
 }
