@@ -37,7 +37,7 @@ public class Project implements java.io.Serializable,Cloneable {
 	@DBRef
 	@JsonSerialize(using = UserListSerializer.class)
 	private List<User> users = new ArrayList<User>();
-
+	private String megamodel;
 	@DBRef
 	@JsonSerialize(using = WorkspaceListSerializer.class)
 	private List<Workspace> workspaces = new ArrayList<Workspace>();;
@@ -149,5 +149,17 @@ public class Project implements java.io.Serializable,Cloneable {
 
 	public void setDescription(String description) {
 		Description = description;
+	}
+
+
+
+	public String getMegamodel() {
+		return megamodel;
+	}
+
+
+
+	public void setMegamodel(String megamodel) {
+		this.megamodel = megamodel;
 	}
 }

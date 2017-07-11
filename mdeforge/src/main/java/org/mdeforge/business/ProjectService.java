@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
+import org.softlang.megaParser.model.Megamodel;
 
 public interface ProjectService {
 	
@@ -47,4 +48,6 @@ public interface ProjectService {
 	List<Project> findRecent() throws BusinessException;
 	
 	Project cloneProject(String userId, String projectToCloneId,String workspaceId);
+	
+	Megamodel getMegamodelFromProject(Project project) throws BusinessException;
 }

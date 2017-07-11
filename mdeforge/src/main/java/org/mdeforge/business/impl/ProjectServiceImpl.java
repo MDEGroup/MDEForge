@@ -1,11 +1,15 @@
 package org.mdeforge.business.impl;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
@@ -25,6 +29,8 @@ import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
+import org.softlang.megaParser.model.Megamodel;
+import org.softlang.megaParser.parser.MegaParserListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +42,9 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
+import main.antlr.mega.MegaLexer;
+import main.antlr.mega.MegaParser;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -402,6 +411,30 @@ public class ProjectServiceImpl implements ProjectService {
 		this.create(projectClone, u);
 		
 		return projectClone;
+	}
+
+	@Override
+	public Megamodel getMegamodelFromProject(Project project) throws BusinessException {
+
+		String path = "test/sample.mega";
+		String pdata = project.getMegamodel();
+		ByteArrayInputStream stream = new ByteArrayInputStream(pdata.getBytes());
+        ANTLRInputStream antlrStream;
+		try {
+			antlrStream = new ANTLRInputStream(stream);
+			MegaLexer lexer = new MegaLexer(antlrStream);
+			CommonTokenStream token = new CommonTokenStream(lexer);
+			MegaParser parser = new MegaParser(token);
+			ParseTreeWalker treeWalker = new ParseTreeWalker();
+			MegaParserListener l = new MegaParserListener();
+			treeWalker.walk(l, parser.model());
+			
+			return l.mega;
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new BusinessException();
+		}
+		
 	}
 	
 }
