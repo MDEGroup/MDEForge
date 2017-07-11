@@ -2,18 +2,12 @@ package org.mdeforge.presentation.frontend;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.DemoService;
 import org.mdeforge.business.EcoreMetamodelService;
@@ -22,7 +16,6 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
-import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
@@ -75,8 +68,6 @@ public class SignIn {
 	private WorkspaceService workspaceService;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-	@Autowired
-	private EcoreMetamodelService ecoreMetaModelService;
 	@Value("#{cfgproperties[basePath]}")
 	private String basePath;
 
@@ -164,10 +155,7 @@ public class SignIn {
 		final String userTestId = "595cc27381c15fcf524d8408";
 		// workspace about test
 		final String workspaceId = "595cc28881c15fcf524d848e";
-		Utils utils= new Utils();
-		
-		
-		Project p =  projectService.cloneProject(userTestId, projectId,workspaceId);
+		projectService.cloneProject(userTestId, projectId,workspaceId);
 		
 	
 		System.out.println("fine test");
