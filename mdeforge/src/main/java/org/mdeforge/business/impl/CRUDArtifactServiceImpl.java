@@ -64,6 +64,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
+import org.mdeforge.business.impl.event.ArtifactChanged;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
@@ -75,6 +76,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -299,6 +301,9 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
 	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
 	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+	
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
@@ -834,8 +839,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		}
 		for (User us : artifact.getShared()) {
 			us.getSharedArtifact().remove(artifact);
-			userRepository.save(us);
 		}
+		userRepository.save(artifact.getShared());
 		artifact.getAuthor().getOwner().remove(artifact);
 		userRepository.save(artifact.getAuthor());
 		List<Relation> relations = crudRelationService.findRelationsByArtifact(artifact);
@@ -848,6 +853,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		relationRepository.delete(relations);
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
+		eventPublisher.publishEvent(new ArtifactChanged(artifact,"DELETE"));
 	}
 
 	@Override
@@ -855,11 +861,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		try {
 			if (artifact.getId() == null)
 				throw new BusinessException();
-			// verify metamodel owner
-			User user = userRepository.findOne(artifact.getAuthor().getId());
-			artifact.setAuthor(user);
 			T original = findOneByOwner(artifact.getId(), artifact.getAuthor());
-			// UploadFile
+
 			if (artifact.getFile() != null && artifact.getFile().getByteArray() != null) {
 				GridFileMedia fileMedia = new GridFileMedia();
 				fileMedia.setFileName("");
@@ -870,55 +873,52 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				gridFileMediaService.store(artifact.getFile());
 			} else
 				artifact.setFile(original.getFile());
-
 			
-			// check project Auth
-			for (Project p : artifact.getProjects()) {
-				projectService.findById(p.getId(), artifact.getAuthor());
+			for (Project project : original.getProjects()) {
+				project.getArtifacts().remove(original);
 			}
-
-			List<Relation> relationTemp = artifact.getRelations();
-			artifact.setRelations(new ArrayList<Relation>());
-
-			artifactRepository.save(artifact);
-			// check relation
+			projectRepository.save(original.getProjects());				
+			for (Project project : artifact.getProjects()) {
+				project.getArtifacts().add(original);
+			}
+			projectRepository.save(artifact.getProjects());
+			for (User us : original.getShared()) {
+				us.getSharedArtifact().remove(original);
+			}
+			userRepository.save(original.getShared());
 			for (User us : artifact.getShared()) {
-				User u = userService.findOne(us.getId());
-				if (u == null)
-					throw new BusinessException();
-				if (!isArtifactInUser(u, artifact.getId())) {
-					u.getSharedArtifact().add(artifact);
-					userRepository.save(u);
-				}
+				us.getSharedArtifact().remove(original);
 			}
-			for (Relation rel : relationTemp) {
-
-				Artifact toArtifact = artifactRepository.findOne(rel.getToArtifact().getId());
-				// findOneById(rel.getToArtifact().getId(),
-				// artifact.getAuthor());
-				if (existRelation(toArtifact.getId(), artifact.getId())) {
-					rel.setFromArtifact(artifact);
-					artifact.getRelations().add(rel);
-					relationRepository.save(rel);
-					artifactRepository.save(artifact);
-					Artifact temp = artifactRepository.findOne(rel.getToArtifact().getId());
-					if (temp.getRelations() == null)
-						temp.setRelations(new ArrayList<Relation>());
-					temp.getRelations().add(rel);
-					artifactRepository.save(temp);
-				}
-			}
-
+			userRepository.save(artifact.getShared());
 			
-			for (Project ps : artifact.getProjects()) {
-				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
-				if (!isArtifactInProject(p.getId(), artifact.getId())) {
-					p.getArtifacts().add(artifact);
-					p.setModifiedDate(new Date());
-					projectRepository.save(p);
+			for (Relation rel : original.getRelations()) {
+				if(rel.getFromArtifact().equals(artifact)){
+					rel.getToArtifact().getRelations().remove(rel);
+					artifactRepository.save(rel.getToArtifact());
+				}
+				if(rel.getToArtifact().equals(artifact)){
+					rel.getFromArtifact().getRelations().remove(rel);
+					artifactRepository.save(rel.getFromArtifact());
 				}
 			}
-
+			relationRepository.delete(artifact.getRelations());
+			
+			for (Relation rel : artifact.getRelations()) {
+				if(rel.getFromArtifact().equals(artifact)){
+					rel.getToArtifact().getRelations().add(rel);
+					artifactRepository.save(rel.getToArtifact());
+				}
+				if(rel.getToArtifact().equals(artifact)){
+					rel.getFromArtifact().getRelations().add(rel);
+					artifactRepository.save(rel.getFromArtifact());
+				}
+			}
+			relationRepository.save(artifact.getRelations());
+			eventPublisher.publishEvent(new ArtifactChanged(artifact, "UPDATE"));
+			artifactRepository.save(artifact);
+			
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
@@ -979,6 +979,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
 			artifactRepository.save(artifact);
+			eventPublisher.publishEvent(new ArtifactChanged(artifact, "ADD"));
+
 			user.getOwner().add(artifact);
 			userRepository.save(user);
 			// check relation
@@ -999,6 +1001,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			// Update bi-directional reference
 			artifact.setRelations(relationTemp);
 			artifactRepository.save(artifact);
+			if(artifact.getProjects() == null)
+				artifact.setProjects(new ArrayList<Project>());
 			for (Project ps : artifact.getProjects()) {
 				Project p = projectService.findById(ps.getId(), artifact.getAuthor());
 				p.getArtifacts().add(artifact);
@@ -1006,6 +1010,8 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 				projectRepository.save(p);
 			}
+			if(artifact.getShared() == null)
+				artifact.setShared(new ArrayList<User>());
 			for (User us : artifact.getShared()) {
 				User u = userService.findOne(us.getId());
 				if (u == null)

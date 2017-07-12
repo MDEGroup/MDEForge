@@ -15,6 +15,8 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.integration.GridFileMediaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -40,6 +42,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 	@Value("#{cfgproperties[basePath]}")
 	private String basePath;
 
+	Logger logger = LoggerFactory.getLogger(CRUDArtifactServiceImpl.class);
 	@Override
 	public void store(GridFileMedia gridFileMedia) throws BusinessException {
 		GridFSFile gridFile = operations.store(new ByteArrayInputStream(gridFileMedia.getByteArray()),
@@ -62,12 +65,6 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 		GridFileMedia gfr = new GridFileMedia();
 		gfr.setFileName(fileName);
 		File f = new File(tempFilePath);
-		if (f.createNewFile()){
-	        System.out.println("File is created!");
-		}else{
-			System.out.println("File is not created");
-		}
-	
 		if (f.exists()) {
 
 			java.nio.file.Path path = Paths.get(f.getAbsolutePath());
@@ -75,7 +72,7 @@ public class GridFileMediaServiceImpl implements GridFileMediaService {
 			gfr.setByteArray(data);
 
 		} else {
-			System.out.println("temp file path doesn't exist");
+			logger.debug("temp file path doesn't exist");
 		}
 
 		return gfr;

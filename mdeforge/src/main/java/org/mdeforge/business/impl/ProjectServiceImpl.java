@@ -25,6 +25,7 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.utils.Utils;
+import org.mdeforge.business.impl.event.ProjectChanged;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
@@ -32,6 +33,7 @@ import org.mdeforge.integration.WorkspaceRepository;
 import org.softlang.megaParser.model.Megamodel;
 import org.softlang.megaParser.parser.MegaParserListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -66,6 +68,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired
 	private WorkspaceRepository workspaceRepository;
 
+	@Autowired
+	ApplicationEventPublisher eventPublisher;
+	
 	@Autowired
 	private UserRepository userRepository;
 
@@ -186,6 +191,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public void update(Project project, User idUser ) throws BusinessException {
 		if (project.getId() == null)
 			throw new BusinessException();
+		Project oldProject = projectRepository.findOne(project.getId());
 		if(project.getWorkspaces() == null && project.getWorkspaces().size() == 0)
 			throw new BusinessException();
 		for (Workspace ws : project.getWorkspaces())
@@ -211,6 +217,7 @@ public class ProjectServiceImpl implements ProjectService {
 			art.getProjects().add(project);
 			artifactRepository.save(u);
 		}
+		eventPublisher.publishEvent(new ProjectChanged(oldProject, project));
 	}
 
 	@Override
