@@ -103,9 +103,21 @@
 												</div>
 											</div>
 											</li>
-										</c:forEach>
-									</ul>
-								</div>	
+										</c:forEach>	
+										<c:forEach items="${workspace.jsfiddles}" var="jsfiddle">
+											<li id="itemJsfiddle_${jsfiddle.getId()}" data-id="${jsfiddle.getId()}">
+												<div class="media innerAll">
+													<div class="media-object pull-left thumb"><img src="${pageContext.request.contextPath}/resources/theme/images/logo-small-jsfiddle.png" width="51px" height="51px"></div>
+													<div class="media-body">
+														<h5 class="strong text-black">${jsfiddle.getName()}</h5>
+														<span class="muted">${jsfiddle.getOwner().getUsername() }</span>
+													</div>
+												</div>
+												</li>
+										</c:forEach>										
+									</ul>	
+																							
+								</div>
 					    </div>
 				  	</div>
 				  	<!-- // Accordion Item END -->
@@ -233,6 +245,47 @@
 						<hr class="separator">
 						<span id="removeProject" class="btn btn-warning0 remove-project" data-id="" data-name="" style="margin-top: 20px"><i class="icon-remove"></i> Remove Project from Workspace</span>
 						<span class="pull-right"></span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row-fluid form-horizontal">
+				<div class="span12 detailsWrapper" id="details">
+					<div class="ajax-loading hide">
+						<i class="icon-spinner icon-spin icon-4x"></i>
+					</div>
+					<div class="innerAll" id="workspaceDetailsJsfiddleDiv" style="display: none;">
+						<div class="title">
+							<div class="row-fluid">
+								<div class="span8" id="jsfiddleId">
+									<h3 class="text-primary header-h main-title" id="jsfiddleName"></h3>
+									<div class="separator bottom"></div>
+									<p class="muted" id="jsfiddleArtifactsNumber"></p>
+									<h5 class="input-name">Owner</h5>
+									<p id="jsfiddleDesc"></p>
+								</div>
+								<div class="span4 text-right">
+								<h5 class="input-name">Visibility</h5>	
+								<div id="visibility">
+									<span class="btn btn-success"><i class="icon-cloud"></i> Public</span>
+								</div>					  												    
+								<div class="separator bottom"></div>
+								<h5 class="input-name">Owner</h5>
+								<!-- // Profile Photo END -->
+								<ul class="icons-ul">
+									<li><span id="jsfiddleOwnerUsername"></span> <span class="icon-user text-primary"><i></i></span></li>
+									<li class="text-black" style="font-size: 14px" id="jsfiddleOwnerName"></li>
+									<li><a href="#" id="jsfiddleOwnerEmail"></a> <span class="icon-envelope text-primary"><i></i></span></li>
+								</ul>
+								<div class="separator"></div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="body" id="jsfiddleBody">							
+							<div class="row-fluid">								
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

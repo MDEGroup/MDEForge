@@ -2,6 +2,7 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
@@ -27,4 +28,5 @@ public interface WorkspaceService {
 			User user) throws BusinessException;
 	List<Workspace> findByUser(User user) throws BusinessException;
 	Project addNewProjectInWorkspace(Project projectName, String idWorkspace, User user) throws BusinessException;
+	Jsfiddle addNewJsfiddleInWorkspace(Jsfiddle jsfiddle, String idWorkspace, User user) throws BusinessException;
 }

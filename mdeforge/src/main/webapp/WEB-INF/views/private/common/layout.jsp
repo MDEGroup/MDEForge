@@ -70,6 +70,21 @@
 	<script>var ctx = "${pageContext.request.contextPath}"</script>
 	<!-- LESS.js Library -->
 	<script src="${pageContext.request.contextPath}/resources/theme/scripts/plugins/system/less.min.js"></script>
+	<style type="text/css">
+		table.dataTableArtifacts thead th, table.dataTableArtifacts thead td {
+		    border: none !important;
+		    line-height: 8px;
+		    vertical-align: middle;
+		    text-align: left;
+		    background-image: none !important;
+		}
+		table.dataTableArtifacts tbody tr {
+		    line-height: 15px;
+		}
+		.contentView{
+			padding: 15px;
+		}
+	</style>
 </head>
 <body class="">
 	

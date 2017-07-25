@@ -12,10 +12,12 @@ import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.integration.ArtifactRepository;
+import org.mdeforge.integration.JsfiddleRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
@@ -44,6 +46,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 	@Autowired
 	private ProjectRepository projectRepository;
+	
+	@Autowired
+	private JsfiddleRepository jsfiddleRepository; 
 
 	@Autowired
 	private ArtifactRepository artifactRepository;
@@ -282,5 +287,20 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		w.getProjects().add(projectName);
 		workspaceRepository.save(w);
 		return projectName;
+	}
+
+	@Override
+	public Jsfiddle addNewJsfiddleInWorkspace(Jsfiddle jsfiddle, String idWorkspace, User user)
+			throws BusinessException {
+		user = userService.findOne(user.getId());
+		Workspace w = findById(idWorkspace, user);
+		jsfiddle.setOwner(user);
+		jsfiddle.getUsers().add(user);
+		jsfiddle.setModifiedDate(new Date());
+		jsfiddle.setCreatedDate(new Date());
+		jsfiddleRepository.save(jsfiddle);
+		w.getJsfiddles().add(jsfiddle);
+		workspaceRepository.save(w);
+		return jsfiddle;
 	}
 }

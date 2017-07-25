@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class Cluster implements Serializable {
+public class Cluster implements Serializable{
 
 	/**
 	 

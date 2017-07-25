@@ -1,14 +1,30 @@
 package org.mdeforge.presentation.backend;
 
 import java.beans.PropertyEditorSupport;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.JsfiddleService;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.enums.EditorTypeEnum;
+import org.mdeforge.business.model.ATLTransformation;
+import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.ArtifactList;
+import org.mdeforge.business.model.ContentView;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.EditorJ;
+import org.mdeforge.business.model.EmptyDiv;
+import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Table;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.presentation.validators.WorkspaceValidator;
@@ -24,11 +40,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+
 
 @Controller
 // TODO cambiare il mapping
@@ -40,10 +58,20 @@ public class WorkspaceController {
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
+	private JsfiddleService jsfiddleService; 
+	@Autowired
 	private User user;
 	@Autowired
 	private WorkspaceValidator workspaceValidator;
-
+	@Autowired
+	private CRUDArtifactService<Artifact> artifactService;
+	@Autowired
+	private EcoreMetamodelService ecoreMetamodelService; 
+	@Autowired
+	private ModelService modelService;
+	@Autowired	
+	private ATLTransformationService atlTransformationService;
+	
 	//@RequestParam(value = "search_string", required = false) String searchString
 	
 	@RequestMapping(value = "/{idWorkspace}/remove/{idProject}", method=RequestMethod.GET, 
@@ -93,6 +121,73 @@ public class WorkspaceController {
 		}
 	}
 	
+	@RequestMapping(value = "/{idWorkspace}/addNewJsfiddle", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_VALUE)
+	public @ResponseBody HttpEntity<Jsfiddle> addNewJsfiddletInWorkspace(@PathVariable("idWorkspace") String idWorkspace, @RequestBody Jsfiddle jsfiddle){
+		try{
+			
+			for(ContentView contentView: jsfiddle.getContentViewList()){
+	    		switch (contentView.getType()) {
+				case "editor":
+					EditorJ editor = new EditorJ();
+					
+					List<String> editorTypeList = new ArrayList<>();					
+					editorTypeList.add(EditorTypeEnum.plaintText.toString());
+					editorTypeList.add(EditorTypeEnum.treeBaseEditor.toString());
+					editorTypeList.add(EditorTypeEnum.diagrammaticEditor.toString());
+					
+					editor.setEditorTypeList(editorTypeList);
+					editor.setType(editorTypeList.get(0));
+					contentView.setContentType(editor);
+					break;
+				case "artifactList":
+					
+					ArtifactList artifactL = new ArtifactList();
+					
+					switch(contentView.getArtifactType()){
+						case "EcoreMetamodel":							
+							List<EcoreMetamodel> ecoreMetamodelList = ecoreMetamodelService.findAll();
+							artifactL.setEcoreMetamodelList(ecoreMetamodelList);
+							break;
+						case "Model":							
+							List<org.mdeforge.business.model.Model> modelList =  modelService.findAll();
+							artifactL.setModelList(modelList);
+							break;
+						case "ATLTransformation":							
+							List<ATLTransformation> atlTransformationList = atlTransformationService.findAll();
+							artifactL.setAtlTransformationList(atlTransformationList);
+							break;
+						case "All":
+							List<Artifact> artifactList = artifactService.findAll();
+							artifactL.setArtifactList(artifactList);							
+							break;
+						default:
+							break;
+					}
+					
+					contentView.setContentType(artifactL);
+					break;
+				case "table":
+					Table table = new Table();
+					table.setNumberCols(3);
+					table.setNumberTh(3);
+					contentView.setContentType(table);
+					break;
+				case "emptyDiv":
+					EmptyDiv emptyDiv = new EmptyDiv();
+					emptyDiv.setHtmlDiv("emptyDiv1");
+					contentView.setContentType(emptyDiv);
+					break;
+				default:
+					break;
+				}
+	    	}
+			
+			Jsfiddle j = workspaceService.addNewJsfiddleInWorkspace(jsfiddle, idWorkspace, user);
+			return  new ResponseEntity<Jsfiddle> (j, HttpStatus.OK);
+		}catch(BusinessException e){
+			return  new ResponseEntity<Jsfiddle>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	
 	@RequestMapping(value = "/dashboard", method = { RequestMethod.GET })
 	public String dashboard(Model model, @RequestParam String id) {
@@ -107,11 +202,20 @@ public class WorkspaceController {
 
 		Workspace workspace = workspaceService.findById(id, user);
 		List<Project> pl = projectService.findByUser(user);
+		List<Jsfiddle> js = jsfiddleService.findByUser(user);
+		
 		for (Project project : workspace.getProjects()) {
 			pl.remove(project);
 		}
+		
+		/*remove jsfiddles that does not belong to the user*/
+		for(Jsfiddle jsfiddle : workspace.getJsfiddles()){
+			js.remove(jsfiddle);
+		}
+		
 		model.addAttribute("workspace", workspace);
 		model.addAttribute("projects", pl);
+		model.addAttribute("jsfiddles", js);
 		
 		return "private.use.workspace_details";
 	}
