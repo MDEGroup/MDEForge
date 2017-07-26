@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.ContainmentRelationService;
 import org.mdeforge.business.CosineSimilarityRelationService;
 import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.LuceneService;
-import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValidateService;
+import org.mdeforge.business.impl.LuceneServiceImpl;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -56,9 +57,9 @@ public class EcoreMetamodelsRESTController {
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private LuceneService luceneService;
-	@Autowired
-	private ProjectService projectService;
 
+	@Autowired
+	private CRUDArtifactService<Artifact> artifactService;
 	@Autowired
 	private User user;
 
@@ -255,7 +256,7 @@ public class EcoreMetamodelsRESTController {
 	public HttpEntity<List<EcoreMetamodel>> searchResult(
 			@PathVariable(value = "search_string") String searchString) {
 		
-		SearchResultComplete searchResults = luceneService.searchForm(user, searchString);
+		SearchResultComplete searchResults = luceneService.search(user, searchString);
 		List<EcoreMetamodel> artifactList = new ArrayList<EcoreMetamodel>();
 		for (SearchResult result : searchResults.getResults()) {
 			artifactList.add((EcoreMetamodel) result.getArtifact());

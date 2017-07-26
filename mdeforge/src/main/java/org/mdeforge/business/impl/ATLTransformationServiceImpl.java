@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +28,19 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
@@ -60,7 +72,6 @@ import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EcoreMetamodelService;
 import org.mdeforge.business.GridFileMediaService;
-import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.MetricEngineException;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.RequestGrid;
@@ -84,6 +95,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.SimpleMetric;
 import org.mdeforge.business.model.User;
@@ -118,7 +130,18 @@ import anatlyzer.atl.util.ATLUtils;
 import anatlyzer.atl.util.ATLUtils.ModelInfo;
 import anatlyzer.atl.util.AnalyserUtils;
 import anatlyzer.atlext.ATL.Callable;
+import anatlyzer.atlext.ATL.Helper;
+import anatlyzer.atlext.ATL.InPatternElement;
+import anatlyzer.atlext.ATL.MatchedRule;
+import anatlyzer.atlext.ATL.ModuleElement;
+import anatlyzer.atlext.ATL.OutPatternElement;
+import anatlyzer.atlext.ATL.Rule;
+import anatlyzer.atlext.ATL.SimpleInPatternElement;
+import anatlyzer.atlext.ATL.SimpleOutPatternElement;
+import anatlyzer.atlext.OCL.Attribute;
+import anatlyzer.atlext.OCL.OclFeatureDefinition;
 import anatlyzer.atlext.OCL.OclType;
+import anatlyzer.atlext.OCL.Operation;
 import anatlyzer.evaluation.models.ModelGenerationStrategy;
 import transML.exceptions.transException;
 @Service
@@ -148,8 +171,6 @@ public class ATLTransformationServiceImpl extends
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 	@Autowired
-	private LuceneService luceneService;
-	@Autowired
 	private UNIVAQUSEWitnessFinder twf;
 	@Value("#{cfgproperties[testSericeTimeout]}")
 	protected int testServiceTimeout;
@@ -168,7 +189,7 @@ public class ATLTransformationServiceImpl extends
 			throw new MetricEngineException(e.getMessage(), result.getId());
 		}
 		try {
-			luceneService.createLuceneIndex(result);
+			createLuceneIndex(result);
 		}catch (Exception e) {
 			logger.error("Extact index error:" + e.getMessage());
 		}
@@ -465,7 +486,144 @@ public class ATLTransformationServiceImpl extends
 		}
 		return modules;
 	}
-
+	@Override
+	public void createLuceneIndex(ATLTransformation art) {
+		Document doc = new Document();
+		AtlParser atlParser = new AtlParser();
+		ModelFactory modelFactory = new EMFModelFactory();
+		IReferenceModel atlMetamodel;
+		try {
+			Directory indexDir = FSDirectory.open(Paths.get(basePathLucene));
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig conf = new IndexWriterConfig(analyzer);
+			// Set the directory in which will be created the index.
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND); //or CREATE
+			IndexWriter writer = new IndexWriter(indexDir, conf);
+			try {
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
+			String filePath = gridFileMediaService.getFilePath(art);
+			EMFModel atlDynModel = (EMFModel) modelFactory
+					.newModel(atlMetamodel);
+			atlParser.inject(atlDynModel, filePath);
+			Resource originalTrafo = atlDynModel.getResource();
+			ATLModel atlModel = new ATLModel(originalTrafo, originalTrafo
+					.getURI().toFileString(), true);
+//			atlModel.getModule().get
+			EList<ModuleElement> eAllContents = atlModel.getModule().getElements();
+			for (ModuleElement moduleElement : eAllContents) {
+				if (moduleElement instanceof Helper) {
+					Helper h = (Helper) moduleElement;
+					if (h.getDefinition()!=null) {
+						OclFeatureDefinition def = h.getDefinition();
+						if(def.getFeature()!= null && def.getFeature() instanceof Attribute) {
+							Attribute attr = (Attribute) def.getFeature();
+							Field attribute = new TextField(LuceneServiceImpl.HELPER_TAG, attr.getName(), Field.Store.YES);
+							Field text = new TextField(LuceneServiceImpl.TEXT_TAG, attr.getName(), Field.Store.YES);
+							doc.add(text);
+							doc.add(attribute);
+						}
+						if(def.getFeature()!= null && def.getFeature() instanceof Operation) {
+							Operation attr = (Operation) def.getFeature();
+							Field attribute = new TextField(LuceneServiceImpl.HELPER_TAG, attr.getName(), Field.Store.YES);
+							Field text = new TextField(LuceneServiceImpl.TEXT_TAG, attr.getName(), Field.Store.YES);
+							doc.add(text);
+							doc.add(attribute);
+						}
+					}
+				}
+				if (moduleElement instanceof Rule)
+				{
+					Rule r = (Rule) moduleElement;
+					Field ruleName = new TextField(LuceneServiceImpl.RULE_NAME_TAG,r.getName(), Field.Store.YES);
+					if(r instanceof MatchedRule) {
+						MatchedRule mr = (MatchedRule) r;
+						EList<InPatternElement> si = mr.getInPattern().getElements();
+						for (InPatternElement inPatternElement : si) {
+							if(inPatternElement instanceof SimpleInPatternElement) {
+								SimpleInPatternElement sipe = (SimpleInPatternElement) inPatternElement;
+								Field fromMC = new TextField(LuceneServiceImpl.FROM_METACLASS, sipe.getType().getName(), Field.Store.YES);
+								doc.add(fromMC);
+								Field text = new TextField(LuceneServiceImpl.TEXT_TAG, sipe.getType().getName(), Field.Store.YES);
+								doc.add(text);
+								
+							}
+							
+						}
+						EList<OutPatternElement> so = mr.getOutPattern().getElements();
+						for (OutPatternElement outPatternElement : so) {
+							if(outPatternElement instanceof SimpleOutPatternElement) {
+								SimpleOutPatternElement sope = (SimpleOutPatternElement) outPatternElement;
+								Field toMC = new TextField(LuceneServiceImpl.FROM_TOCLASS, sope.getType().getName(), Field.Store.YES);
+								doc.add(toMC);
+								Field text = new TextField(LuceneServiceImpl.TEXT_TAG, sope.getType().getName(), Field.Store.YES);
+								doc.add(text);
+							}
+							
+						}
+					}
+					doc.add(ruleName);
+				}
+				
+			}
+			Field type = new TextField(LuceneServiceImpl.TYPE_TAG, art.getClass().getSimpleName(), 
+					Field.Store.YES);
+			doc.add(type);
+			
+			String artifactName = art.getName();
+		 	Field artName = new TextField(LuceneServiceImpl.NAME_TAG, artifactName, Field.Store.YES);
+		 	
+		 	for (DomainConformToRelation dctr : art.getDomainConformToRelation()) {
+		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
+		 		Field fromMMName = new TextField(LuceneServiceImpl.FROM_METAMODEL_TAG, temp_art.getName(), 
+		 				Field.Store.YES);
+		 		Field fromMMID = new TextField(LuceneServiceImpl.FROM_METAMODEL_TAG, temp_art.getId(), 
+		 				Field.Store.YES);
+				doc.add(fromMMID);
+				doc.add(fromMMName);
+			}
+		 	for (CoDomainConformToRelation dctr : art.getCoDomainConformToRelation()) {
+		 		Artifact temp_art = ecoreMetamodelService.findOne(dctr.getToArtifact().getId());
+		 		Field fromMMName = new TextField(LuceneServiceImpl.TO_METAMODEL_TAG, temp_art.getName(), 
+		 				Field.Store.YES);
+		 		Field fromMMID = new TextField(LuceneServiceImpl.TO_METAMODEL_TAG, temp_art.getId(), 
+		 				Field.Store.YES);
+				doc.add(fromMMID);
+				doc.add(fromMMName);
+			}
+		 	String author = art.getAuthor().getUsername();
+		 	Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, author, Field.Store.YES);
+		 	Date lastUpdate = art.getModified();
+		 	Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG, lastUpdate.toString(), 
+		 			Field.Store.YES);
+		 	for (Property prop : art.getProperties()) {
+		 		
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				if(propName != null && propValue != null){
+					Field propField = new TextField(propName, propValue, 
+						Field.Store.YES);
+					doc.add(propField);
+				}
+			}
+		 	Field idField = new TextField(LuceneServiceImpl.ID_TAG, art.getId(), 
+		 			Field.Store.YES);
+		 	doc.add(artName);
+		 	doc.add(authorField);
+		 	doc.add(lastUpdateField);
+			doc.add(idField);
+			writer.addDocument(doc);
+			}catch (Exception e) {
+				logger.error(e.getMessage());e.printStackTrace();
+			}
+			writer.close();
+		}
+		  catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 	private List<Metric> getMetricList(String path, Artifact art) {
 
 		MetricPackage.eINSTANCE.eClass();
@@ -962,6 +1120,14 @@ public class ATLTransformationServiceImpl extends
 		
 		return stat;
 		
+	}
+
+
+	@Override
+	public List<String> getTagIndexes() {
+		ArrayList<String> result = new ArrayList<String>();
+		result.add(LuceneServiceImpl.CONFORM_TO_TAG);
+		return result;
 	}
 
 	// private InputStream getModulesList(String transformationPath) throws

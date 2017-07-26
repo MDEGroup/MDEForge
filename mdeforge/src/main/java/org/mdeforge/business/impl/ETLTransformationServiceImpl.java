@@ -238,6 +238,16 @@ public class ETLTransformationServiceImpl extends CRUDArtifactServiceImpl<ETLTra
 			ETLTransformation metamodel) {
 		return null;
 	}
+	@Override
+	public void createLuceneIndex(ETLTransformation artifact) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public List<String> getTagIndexes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 
 

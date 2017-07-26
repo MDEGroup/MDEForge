@@ -15,9 +15,7 @@ public class PopulateController {
 	@RequestMapping(value = "/lucene_index", method = { RequestMethod.GET })
 	public String indexExternalPathResources() {
 		
-		luceneService.createLuceneIndexFromConfigurationPath();
-		luceneService.getAllIndexTags();
-		
+		luceneService.createLuceneIndexFromConfigurationPath();	
 		return "public.index";
 	}
 

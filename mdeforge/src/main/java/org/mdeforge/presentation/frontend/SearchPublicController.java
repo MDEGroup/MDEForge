@@ -5,15 +5,9 @@ import java.util.List;
 
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
-import org.mdeforge.business.ContainmentRelationService;
-import org.mdeforge.business.CosineSimilarityRelationService;
-import org.mdeforge.business.DiceSimilarityRelationService;
 import org.mdeforge.business.EcoreMetamodelService;
-import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ModelService;
-import org.mdeforge.business.SimilarityRelationService;
-import org.mdeforge.business.UserService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
@@ -37,6 +31,10 @@ public class SearchPublicController {
 	@Autowired
 	private User user;
 	@Autowired
+	private ATLTransformationService atlTransformationService;
+	@Autowired
+	private ModelService modelService;
+	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
@@ -47,17 +45,17 @@ public class SearchPublicController {
 	public String search(Model model) {
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = luceneService.indexFieldNamesForMM();
+		List<String> indexFieldNamesForMM = ecoreMetamodelService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = luceneService.indexFieldNamesForT();
+		List<String> indexFieldNamesForT = atlTransformationService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = luceneService.indexFieldNamesForM();
+		List<String> indexFieldNamesForM = modelService.getAllIndexTags();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.
@@ -99,13 +97,13 @@ public class SearchPublicController {
 		}
 		
 //		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
-		SearchResultComplete searchResultComplete = luceneService.searchWithPagination(user, searchString, hitPerPage, page);
+		SearchResultComplete searchResultComplete = luceneService.search(user, searchString, hitPerPage, page);
 		model.addAttribute("searchResultComplete", searchResultComplete);
 //		model.addAttribute("search_string", searchString);
 		
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = luceneService.indexFieldNamesForMM();
+		List<String> indexFieldNamesForMM = ecoreMetamodelService.getAllIndexTags();
 		for (String string : indexFieldNamesForMM) {
 			System.out.println(string + "ggg");
 		}
@@ -113,12 +111,12 @@ public class SearchPublicController {
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = luceneService.indexFieldNamesForT();
+		List<String> indexFieldNamesForT = atlTransformationService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = luceneService.indexFieldNamesForM();
+		List<String> indexFieldNamesForM = modelService.getAllIndexTags();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.

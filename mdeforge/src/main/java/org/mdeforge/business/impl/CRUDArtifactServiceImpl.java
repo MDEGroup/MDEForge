@@ -6,17 +6,33 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.project;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.ArtifactNotFoundException;
@@ -40,6 +56,8 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.model.form.SearchResult;
+import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
@@ -64,6 +82,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	
+	private IndexWriter writer;
 	
 	@Override
 	public ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated) {
@@ -306,6 +325,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Value("#{cfgproperties[basePathLucene]}")
 	protected String basePathLucene;
 
+	
 
 
 	@SuppressWarnings("unchecked")
@@ -314,6 +334,25 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				.getActualTypeArguments()[0];
 	}
 
+	public String getTextFromInputStream(InputStream is){      
+        String str = "";
+        StringBuffer buf = new StringBuffer();            
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            if (is != null) {                            
+                while ((str = reader.readLine()) != null) {    
+                    buf.append(str + "\n" );
+                }                
+            }
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try { is.close(); } catch (Throwable ignore) {}
+        }
+        return buf.toString();
+    }
+	
 	@Override
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -1050,6 +1089,69 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	@Override
 	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
+	}
+
+	
+	
+	/**
+	 * Parse Metamodel artifact file in order to extrapolate and index the file to Lucene Index
+	 * @param ecoreMetamodel
+	 * @return Document
+	 */
+	@Override
+	public List<String> getAllIndexTags() {
+		
+		Collection<String> result = new HashSet<String>();
+		try {
+			IndexReader luceneIndexReader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
+			result = MultiFields.getIndexedFields(luceneIndexReader);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		sortedList.forEach(x -> System.out.println(x));
+		return sortedList;
+	}
+	@Override
+	/**
+	 * Delete a Term from Lucene index. It take as input the FIELD_NAME and the FILE_PATH of the file we want to delete.
+	 */
+	public boolean deleteTermFromIndex(String fieldName, String filePath){
+		long numberDeleteTerms = 0;
+		boolean result = false;
+		
+		Term termToDelete = new Term(fieldName, filePath); 
+		try {
+			numberDeleteTerms = writer.deleteDocuments(termToDelete);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+//		
+//		 BooleanQuery.Builder builder = new BooleanQuery.Builder();
+//
+//		//note year is stored as int , not as string when document is craeted.
+//		//if you use Term here which will need 2016 as String, that will not match with documents stored with year as int.
+//		 Query yearQuery = IntPoint.newExactQuery("year", 2016);
+//		 Query stateQuery = new TermQuery(new Term("STATE", "TX"));
+//		 Query cityQuery = new TermQuery(new Term("CITY", "CITY NAME"));
+//
+//		 builder.add(yearQuery, BooleanClause.Occur.MUST);
+//		 builder.add(stateQuery, BooleanClause.Occur.MUST);
+//		 builder.add(cityQuery, BooleanClause.Occur.MUST);
+//
+//		 writer.deleteDocuments(builder.build());
+		
+		if(numberDeleteTerms > 0){
+			result = true;
+		}
+		
+		return result;
 	}
 	
 }
