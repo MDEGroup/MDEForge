@@ -241,11 +241,109 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	 * @return
 	 */
 	private Document parseModelForIndex(Model model) {
-		//TODO 
 		Document doc = new Document();
+		try{
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
+		ecoreMetamodelService.loadArtifact(emm);
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
 		
+		TreeIterator<EObject> eAllContents = load_resource.getAllContents();
+		while (eAllContents.hasNext()) {
+			EObject next = eAllContents.next();
+			
+			EClass eClass = next.eClass();
+			if(eClass instanceof EClass)  {
+				//CLASS ANNOTATIONS
+				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
+				//TODO index also the annotations
+				
+				//CLASS ATTRIBUTES
+				for (EAttribute attribute : eClass.getEAllAttributes()) {
+					// EAnnotation ann = attribute.getEAnnotation("searchindex");
+					// String key = eClass.getName() + "#" +attribute.getName();
+					// System.out.println(key);
+					// Object value = next.eGet(attribute);
+					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
+
+					/*
+					 * Index className:classAttributeValue
+					 */
+					Field eClassWithAttributeField = new TextField(eClass.getName(), attributeValue, Field.Store.YES);
+					// eClassWithAttributeField(1.5f);
+					doc.add(eClassWithAttributeField);
+
+					/*
+					 * Index className::classAttribute:attributeValue
+					 */
+					Field eClassWithAttributeAndAttributeValueField = new TextField(eClass.getName() + LuceneServiceImpl.CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Field.Store.YES);
+					// eClassWithAttributeAndAttributeValueField(1.5f);
+					doc.add(eClassWithAttributeAndAttributeValueField);
+				}
+				
+				// EClass References
+				for (EReference reference : eClass.getEAllReferences()) {
+					EObject value = (EObject) next.eGet(reference);
+					String key = reference.getName();
+					EClass referenceTo = (EClass) value.eClass();
+					Field eClassReferenceField = new TextField(key, referenceTo.getName(), Field.Store.YES);
+					// eClassReferenceField.setBoost(1.5f);
+					doc.add(eClassReferenceField);
+					}
+			}
+			
+		}
+		}catch(Exception e) { 
+			logger.error("Some error when try to parse EMF index");
+		}
+		//Artifact TYPE: "Model"
+		Field artifactType = new TextField(LuceneServiceImpl.TYPE_TAG, model.getClass().getSimpleName(), Field.Store.YES);
+		doc.add(artifactType);
+
+//		String text = handler.toString();
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
+		Field textField = new TextField(LuceneServiceImpl.TEXT_TAG, text, Field.Store.YES);
+//		textField.setBoost(2.0f);
+		
+//		System.out.println(identifyLanguage(text));
+		
+		String artifactName = model.getName();
+	 	Field artName = new TextField(LuceneServiceImpl.NAME_TAG, artifactName, Field.Store.YES);
+//		filenameField.setBoost(0.5f);
+		
+	 	String author = model.getAuthor().getUsername();
+	 	Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, author, Field.Store.YES);
+	 	
+	 	Date lastUpdate = model.getModified();
+	 	Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG, lastUpdate.toString(), Field.Store.YES);
+//		filetypeField.setBoost(1.4f);
+		
+	 	for (Property prop : model.getProperties()) {
+			String propName = prop.getName();
+			String propValue = prop.getValue();
+			Field propField = new TextField(propName, propValue, Field.Store.YES);
+			doc.add(propField);
+		}
+	 	Field idField = new TextField(LuceneServiceImpl.ID_TAG, model.getId(), Field.Store.YES);
+	 	
+	 	
+	 	Field conformToFieldName = new TextField(LuceneServiceImpl.CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Field.Store.YES);
+	 	doc.add(conformToFieldName);
+	 	Field conformToFieldId = new TextField(LuceneServiceImpl.CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Field.Store.YES);
+	 	doc.add(conformToFieldId);
+	 	doc.add(textField);
+	 	doc.add(artName);
+	 	doc.add(authorField);
+	 	doc.add(lastUpdateField);
+		doc.add(idField);
+		
+	
 		return doc;
 	}
+	
 	
 
 
