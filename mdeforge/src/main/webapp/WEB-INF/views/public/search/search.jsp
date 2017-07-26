@@ -149,16 +149,7 @@
 													
 													<br>
 													
-													<c:choose>
-															<c:when test="${result.getFragments() != null}">
-																<c:forEach items="${result.getFragments()}" var="fragment">
-																	<p>... ${fragment} ...</p>
-														  		</c:forEach>
-															</c:when>
-															<c:otherwise>
-																<i>No description</i>
-															</c:otherwise>
-														</c:choose>
+													
 													
 												<%-- <p>
 													 	<c:set var="existDescription" value="false" />
