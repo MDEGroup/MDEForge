@@ -25,7 +25,8 @@ import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.utils.Utils;
-import org.mdeforge.business.impl.event.ProjectChanged;
+import org.mdeforge.business.impl.event.ArtifactChangedEvent;
+import org.mdeforge.business.impl.event.ProjectChangedEvent;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
@@ -56,7 +57,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
-	
+
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
@@ -64,25 +65,25 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private WorkspaceService workspaceService;
-	
+
 	@Autowired
 	private WorkspaceRepository workspaceRepository;
 
 	@Autowired
 	ApplicationEventPublisher eventPublisher;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
 	private ArtifactRepository artifactRepository;
-	
+
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
 
 	@Override
 	public void delete(Project project, User userId) throws BusinessException {
-		for (Workspace w : project.getWorkspaces()){
+		for (Workspace w : project.getWorkspaces()) {
 			w.getProjects().remove(project);
 			workspaceRepository.save(w);
 		}
@@ -90,27 +91,23 @@ public class ProjectServiceImpl implements ProjectService {
 			u.getSharedProject().remove(project);
 			userRepository.save(u);
 		}
-		for (Artifact u : project.getArtifacts()){
+		for (Artifact u : project.getArtifacts()) {
 			u.getProjects().remove(project);
 		}
 		projectRepository.delete(project);
 	}
 
 	@Override
-	public ResponseGrid<Project> findAllPaginated(RequestGrid requestGrid)
-			throws BusinessException {
+	public ResponseGrid<Project> findAllPaginated(RequestGrid requestGrid) throws BusinessException {
 		Page<Project> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
-			rows = projectRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = projectRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()));
 		} else {
-			rows = projectRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = projectRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
 		}
-		return new ResponseGrid<Project>(requestGrid.getDraw(),
-				rows.getNumberOfElements(), rows.getTotalElements(),
+		return new ResponseGrid<Project>(requestGrid.getDraw(), rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
 
@@ -137,12 +134,11 @@ public class ProjectServiceImpl implements ProjectService {
 		query.with(new Sort(Sort.Direction.DESC, "created"));
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		return n.find(query, Project.class);
-			
+
 	}
 
 	@Override
-	public List<Project> findByIdWorkspace(String idWorkspace, User user)
-			throws BusinessException {
+	public List<Project> findByIdWorkspace(String idWorkspace, User user) throws BusinessException {
 		//
 		//
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -158,7 +154,7 @@ public class ProjectServiceImpl implements ProjectService {
 		user = userService.findOne(user.getId());
 		if (project.getId() != null)
 			throw new BusinessException();
-		if(project.getWorkspaces() == null && project.getWorkspaces().size() == 0)
+		if (project.getWorkspaces() == null && project.getWorkspaces().size() == 0)
 			throw new BusinessException();
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), user);
@@ -188,17 +184,17 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public void update(Project project, User idUser ) throws BusinessException {
+	public void update(Project project, User idUser) throws BusinessException {
 		if (project.getId() == null)
 			throw new BusinessException();
 		Project oldProject = projectRepository.findOne(project.getId());
-		if(project.getWorkspaces() == null && project.getWorkspaces().size() == 0)
+		if (project.getWorkspaces() == null && project.getWorkspaces().size() == 0)
 			throw new BusinessException();
 		for (Workspace ws : project.getWorkspaces())
 			workspaceService.findById(ws.getId(), idUser);
 		for (Artifact ws : project.getArtifacts())
 			artifactService.findOneById(ws.getId(), idUser);
-		
+
 		List<Workspace> workspaces = project.getWorkspaces();
 		project.setModifiedDate(new Date());
 		projectRepository.save(project);
@@ -217,7 +213,7 @@ public class ProjectServiceImpl implements ProjectService {
 			art.getProjects().add(project);
 			artifactRepository.save(u);
 		}
-		eventPublisher.publishEvent(new ProjectChanged(oldProject, project));
+		eventPublisher.publishEvent(new ProjectChangedEvent(oldProject, project));
 	}
 
 	@Override
@@ -233,6 +229,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<Project> findAll() throws BusinessException {
 		return projectRepository.findAll();
 	}
+
 	@Override
 	public long countAll() throws BusinessException {
 		return projectRepository.count();
@@ -244,24 +241,25 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public void removeArtifactFromProject(String idArtifact, String idProject,
-			User user) throws BusinessException {
+	public void removeArtifactFromProject(String idArtifact, String idProject, User user) throws BusinessException {
 		Project proj = findById(idProject, user);
 		Artifact art = artifactService.findOneById(idArtifact, user);
 		proj.getArtifacts().remove(art);
 		art.getProjects().remove(proj);
 		artifactRepository.save(art);
 		proj.setModifiedDate(new Date());
+		Project oldProj = findById(idProject, user);
+		eventPublisher.publishEvent(new ProjectChangedEvent(oldProj, proj));
+
 		projectRepository.save(proj);
 	}
 
 	@Override
-	public void removeUserFromProject(String idUser, String idProject, User user)
-			throws BusinessException {
+	public void removeUserFromProject(String idUser, String idProject, User user) throws BusinessException {
 		Project proj = findById(idProject, user);
 		User userToDelete = userRepository.findOne(idUser);
 		proj.getUsers().remove(userToDelete);
-		//TOGLIERE DAL PROGETTO IL WS
+		// TOGLIERE DAL PROGETTO IL WS
 		userToDelete.getSharedProject().remove(proj);
 		for (Workspace w : userToDelete.getWorkspaces()) {
 			w.getProjects().remove(proj);
@@ -274,14 +272,15 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public void addArtifactInProject(String idArtifact, String idProject,
-			User user) throws BusinessException {
+	public void addArtifactInProject(String idArtifact, String idProject, User user) throws BusinessException {
 		Project proj = findById(idProject, user);
 		Artifact emm = artifactService.findOneById(idArtifact, user);
 		emm.getProjects().add(proj);
 		proj.getArtifacts().add(emm);
 		proj.setModifiedDate(new Date());
 		projectRepository.save(proj);
+		Project olProj = findById(idProject, user);
+		eventPublisher.publishEvent(new ProjectChangedEvent(olProj, proj));
 		artifactRepository.save(emm);
 	}
 
@@ -303,13 +302,13 @@ public class ProjectServiceImpl implements ProjectService {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		Criteria c1 = Criteria.where("users.$id").is(new ObjectId(user.getId()));
-		
+
 		query.addCriteria(c1);
 		List<Project> projList = operations.find(query, Project.class);
 		List<Project> toRemove = new ArrayList<Project>();
 		for (Project projectTo : projList) {
 			for (Workspace workspaceTo : projectTo.getWorkspaces()) {
-				for(Workspace w : workList) {
+				for (Workspace w : workList) {
 					if (w.getId().equals(workspaceTo.getId()))
 						toRemove.add(projectTo);
 				}
@@ -332,47 +331,43 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<Project> findMostSharedProject(User user) {
-		List<Project> result =  null;
-		//TODO
-		
-	
+		List<Project> result = null;
+		// TODO
+
 		return result;
 	}
 
 	@Override
 	public Project cloneProject(String userId, String projectToCloneId, String workspaceId) {
 		/*
-		 * When we clone the project We need remove the old artifact and clone them next time because they are linked to by original project
-		 * We need manage those case:
-		 * - multiple clone 
-		 * -
+		 * When we clone the project We need remove the old artifact and clone
+		 * them next time because they are linked to by original project We need
+		 * manage those case: - multiple clone -
 		 * 
 		 */
 		Utils utils = new Utils();
 		User u = userService.findOne(userId);
 		Workspace w = new Workspace();
-		
-		
+
 		List<Artifact> artifactList = new ArrayList<Artifact>();
 		List<Artifact> cloneArtifactList = new ArrayList<Artifact>();
-		String myDate= utils.createDate("yyyyMMddHHmmss");
+		String myDate = utils.createDate("yyyyMMddHHmmss");
 		w = workspaceService.findOne(workspaceId);
 		Project project = this.findOne(projectToCloneId);
 		Project projectClone = new Project();
 		projectClone = project.clone();
-		String nameProject = "clone_"+ myDate +"_"+ project.getName();
+		String nameProject = "clone_" + myDate + "_" + project.getName();
 		artifactList = project.getArtifacts();
-		
 
 		projectClone.setOwner(u);
 		projectClone.setName(nameProject);
 		projectClone.setId(null);
-	
+
 		String dirUser = u.getUsername() + File.separator;
 
 		/*
-		 * WE clone the artifacts and set up:
-		 * the author (user), the name of file (it's composed by
+		 * WE clone the artifacts and set up: the author (user), the name of
+		 * file (it's composed by
 		 */
 		for (Artifact artifact : artifactList) {
 
@@ -395,18 +390,17 @@ public class ProjectServiceImpl implements ProjectService {
 			artifactClone = artifact.clone();
 			artifactClone.setFile(gfmObj);
 			artifactClone.setAuthor(u);
-			artifactClone.setName("clone_" + myDate +"_"+ filename);
-			artifactClone.getFile().setFileName(dirUser + "clone_" + myDate +"_"+ filename);
+			artifactClone.setName("clone_" + myDate + "_" + filename);
+			artifactClone.getFile().setFileName(dirUser + "clone_" + myDate + "_" + filename);
 			artifactClone.setId(null);
-			
 
 			artifactClone.getProjects().clear();
 			gridFileMediaService.getFilePathFromContent(gfmObj);
-			 artifactService.create(artifactClone);
+			artifactService.create(artifactClone);
 			cloneArtifactList.add(artifactClone);
 
 		}
-//		deleting old artifacts
+		// deleting old artifacts
 		projectClone.getArtifacts().clear();
 
 		List<Workspace> listWorkspace = new ArrayList<Workspace>();
@@ -414,34 +408,32 @@ public class ProjectServiceImpl implements ProjectService {
 		projectClone.getWorkspaces().remove(workspaceId);
 		projectClone.setWorkspaces(listWorkspace);
 		projectClone.setArtifacts(cloneArtifactList);
-//		 workspaceService.addProjectInWorkspace(idProject, idWorkspace, user)
+		// workspaceService.addProjectInWorkspace(idProject, idWorkspace, user)
 		this.create(projectClone, u);
-		
+
 		return projectClone;
 	}
 
 	@Override
 	public Megamodel getMegamodelFromProject(Project project) throws BusinessException {
 
-		String path = "test/sample.mega";
-		String pdata = project.getMegamodel();
-		ByteArrayInputStream stream = new ByteArrayInputStream(pdata.getBytes());
-        ANTLRInputStream antlrStream;
 		try {
+			String pdata = project.getMegamodel();
+			ByteArrayInputStream stream = new ByteArrayInputStream(pdata.getBytes());
+			ANTLRInputStream antlrStream;
 			antlrStream = new ANTLRInputStream(stream);
 			MegaLexer lexer = new MegaLexer(antlrStream);
 			CommonTokenStream token = new CommonTokenStream(lexer);
+
 			MegaParser parser = new MegaParser(token);
 			ParseTreeWalker treeWalker = new ParseTreeWalker();
 			MegaParserListener l = new MegaParserListener();
-			treeWalker.walk(l, parser.model());
-			
+			treeWalker.walk(l, parser.megamodel());
 			return l.mega;
 		} catch (IOException e) {
-			e.printStackTrace();
-			throw new BusinessException();
+			throw new BusinessException(e.getMessage());
 		}
-		
+
 	}
-	
+
 }

@@ -72,14 +72,12 @@
 		button.addClass("disabled-button");
 		ecoreMetamodel.ecoreMetamdel = true;
 		var idProject = $('#projectId').attr('data-id');
-		console.log("1 _ " + idProject);
 		ecoreMetamodel.projectId = idProject;
 		
 		$.ajax({
 			
 			url : ctx + "/private/project/" + idProject + "/add/" + ecoreMetamodel.id,
 			success : function(data) {
-				console.log('jjj' + ctx)
 				var result = $('#ecoreMMTable');
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 						function(template) {
@@ -123,7 +121,6 @@
 			return false;
 		}
 		button.addClass("disabled-button");
-		console.log("2 _ " + idProject);
 		var idProject = $('#projectId').attr('data-id');
 		ATLTransormation.projectId = idProject;
 		ATLTransormation.ATLTransformation = true;
@@ -177,7 +174,6 @@
 		button.addClass("disabled-button");
 		model.model = true;
 		var idProject = $('#projectId').attr('data-id');
-		console.log("3 _ " + idProject);
 		model.projectId = idProject;
 		$.ajax({
 			url : ctx + "/private/project/" + idProject + "/add/" + model.id,
@@ -306,7 +302,6 @@
 	});
 	
 	$(document).on('click','.removeSharedUser', function(event){
-		debugger;
 		var idProject = $('#projectId').attr('data-id');
 		var idUser = $(this).data('id');
 		$.ajax({
@@ -345,6 +340,7 @@
 			url : ctx + "/private/workspace/" + idWorkspace + "/add/" + idProject,
 			success : function(data) {
 				data.ctx = ctx;
+				console.log(ctx);
 				var result = $('#projectList');
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/projectInArtifact.html',
 						function(template) {
@@ -504,7 +500,6 @@
 				url : ctx + "/private/project/" + id,
 				success : function(data) {
 					$('#projectId').attr('data-id',data.id);
-					console.log('kk ' + $('#projectId').attr('data-id'));
 					var workspace = $("#workspaceDetailsDiv");
 					workspace.show();
 					$('#users').empty();
@@ -656,6 +651,7 @@
 			},
 			success : function(data) {
 				var result = $('#projectList');
+				
 				$.get(ctx + '/resources/theme/scripts/plugins/forms/template/projectInArtifact.html', function(template) {
 					var rendered = Mustache.render(template, data);
 					result.append(rendered);
@@ -782,7 +778,6 @@ function getArtifactsForProject(typeArtifact, project, input){
         },
 	    dataType:'json',
 	    success: function(data) {
-	    	console.log(data)
 	    	var options = '';  
 			if(data.length > 0){
 				data.forEach(function(item, index, array){

@@ -1,5 +1,4 @@
 	$(document).on('click','.removeSharedUser', function(event){
-		debugger;
 		var idArtifact = $("#artifactName").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({
@@ -15,7 +14,6 @@
 	});
 	
 	$(document).on('click','.removeArtifactSharedUser', function(event){
-		debugger;
 		var idArtifact = $("#artifactName").data('id');
 		var idUser = $(this).data('id');
 		$.ajax({
@@ -31,7 +29,6 @@
 	});
 
 	$(document).on('click','#addUserArtifact', function(event){
-		debugger;
 		var button = $(this);
 		button.addClass("disabled-button");
 		var select = $('#userSelect');

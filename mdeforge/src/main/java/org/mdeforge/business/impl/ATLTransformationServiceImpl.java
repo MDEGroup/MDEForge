@@ -718,25 +718,8 @@ public class ATLTransformationServiceImpl extends
 		ModelFactory modelFactory = new EMFModelFactory();
 		IReferenceModel atlMetamodel;
 		try {
-			String ATLPath = getClass().getResource("/utils/ATL2.ecore").getPath();
-			
-			File f = new File(ATLPath);
-			java.nio.file.Path path = Paths.get(f.getAbsolutePath());
-		
-			if(f.exists()){
-				System.out.println("ESISTE!!!");
-				System.out.println(path.toString());
-				System.out.println(f.getAbsolutePath());
-				System.out.println(f.getPath());
-			}
-			atlMetamodel = modelFactory.getBuiltInResource(path.toString());
-			/*
-			 * In our case we can't use this method because the method getFilePAthFromContent uses
-			 * an external ATL ecore that we have inside resources/utils directory.
-			 */
+			atlMetamodel = modelFactory.getBuiltInResource("ATL.ecore");
 			String filePath = gridFileMediaService.getFilePathFromContent(gfm);
-			
-//			String filePath = getClass().getResource("/utils/ATL.ecore").getPath();
 			EMFModel atlDynModel = (EMFModel) modelFactory
 					.newModel(atlMetamodel);
 			atlParser.inject(atlDynModel, filePath);

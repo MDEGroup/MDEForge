@@ -3,12 +3,12 @@ package org.mdeforge.business.impl.event;
 import org.mdeforge.business.model.Artifact;
 import org.springframework.context.ApplicationEvent;
 
-public class ArtifactChanged extends ApplicationEvent {
+public class ArtifactChangedEvent extends ApplicationEvent {
 
 	private Artifact artifact;
 	private String state;
 	
-	public ArtifactChanged(Artifact artifact, String state) {
+	public ArtifactChangedEvent(Artifact artifact, String state) {
 		super(artifact);
 		this.setArtifact(artifact);
 		this.state = state;

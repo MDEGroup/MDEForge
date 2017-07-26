@@ -64,7 +64,7 @@ import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
-import org.mdeforge.business.impl.event.ArtifactChanged;
+import org.mdeforge.business.impl.event.ArtifactChangedEvent;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
 import org.mdeforge.integration.ProjectRepository;
@@ -853,7 +853,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		relationRepository.delete(relations);
 		gridFileMediaService.delete(artifact.getFile());
 		artifactRepository.delete(artifact);
-		eventPublisher.publishEvent(new ArtifactChanged(artifact,"DELETE"));
+		eventPublisher.publishEvent(new ArtifactChangedEvent(artifact,"DELETE"));
 	}
 
 	@Override
@@ -914,7 +914,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 				}
 			}
 			relationRepository.save(artifact.getRelations());
-			eventPublisher.publishEvent(new ArtifactChanged(artifact, "UPDATE"));
+			eventPublisher.publishEvent(new ArtifactChangedEvent(artifact, "UPDATE"));
 			artifactRepository.save(artifact);
 			
 			
@@ -979,7 +979,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			List<Relation> relationTemp = artifact.getRelations();
 			artifact.setRelations(new ArrayList<Relation>());
 			artifactRepository.save(artifact);
-			eventPublisher.publishEvent(new ArtifactChanged(artifact, "ADD"));
+			eventPublisher.publishEvent(new ArtifactChangedEvent(artifact, "ADD"));
 
 			user.getOwner().add(artifact);
 			userRepository.save(user);

@@ -15,7 +15,7 @@ import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.impl.event.ArtifactChanged;
+import org.mdeforge.business.impl.event.ArtifactChangedEvent;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
@@ -102,7 +102,6 @@ public class SignIn {
 			String appUrl = request.getContextPath();
 			try {
 				logger.info("Resolved");
-				eventPublisher.publishEvent(new ArtifactChanged(new Artifact(), "ADD"));
 				eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), appUrl));
 			} catch (Exception e) {
 				logger.error(e.getMessage());
