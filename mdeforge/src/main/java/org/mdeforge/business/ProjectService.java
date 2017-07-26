@@ -18,7 +18,7 @@ public interface ProjectService {
 	Project findById(String id, User user) throws BusinessException;
 	
 	List<Project> findByIdWorkspace(String idWorkspace, User user) throws BusinessException;
-
+	
 	void create(Project project, User userId) throws BusinessException;
 
 	void update(Project project, User idUser) throws BusinessException;
@@ -29,7 +29,7 @@ public interface ProjectService {
 	
 	Project findOne(String id) throws BusinessException;
 
-	void removeArtifactFromProject(String idProject, String idWorkspace,
+	void removeArtifactFromProject(String idArtifact, String idProject,
 			User user) throws BusinessException;
 
 	void addArtifactInProject(String idArtifact, String idProject, User user) throws BusinessException;
@@ -45,4 +45,6 @@ public interface ProjectService {
 	long countAll() throws BusinessException;
 
 	List<Project> findRecent() throws BusinessException;
+	
+	Project cloneProject(String userId, String projectToCloneId,String workspaceId);
 }

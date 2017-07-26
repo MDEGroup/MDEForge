@@ -72,7 +72,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		if (workspace.getProjects() == null)
 			workspace.setProjects(new ArrayList<Project>());
 		List<Project> ps = workspace.getProjects();
-		
+
 		workspace.setProjects(new ArrayList<Project>());
 		for (Project p : ps) {
 			Project temp = projectSerivce.findById(p.getId(), workspace.getOwner());
@@ -90,7 +90,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 			p.setModifiedDate(new Date());
 			projectRepository.save(p);
 		}
-		
+
 		user.getWorkspaces().add(workspace);
 		userRepository.save(user);
 	}
@@ -101,38 +101,32 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	}
 
 	@Override
-	public ResponseGrid<Workspace> findAllPaginated(RequestGrid requestGrid)
-			throws BusinessException {
+	public ResponseGrid<Workspace> findAllPaginated(RequestGrid requestGrid) throws BusinessException {
 		Page<Workspace> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
-			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()));
 		} else
-			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
-		return new ResponseGrid<Workspace>(requestGrid.getDraw(),
-				rows.getNumberOfElements(), rows.getTotalElements(),
+		return new ResponseGrid<Workspace>(requestGrid.getDraw(), rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
-	
+
 	@Override
 	public ResponseGrid<Workspace> findAllPaginatedByOwner(RequestGrid requestGrid, User user)
 			throws BusinessException {
 		Page<Workspace> rows = null;
 		if (requestGrid.getSortDir().compareTo("asc") == 0) {
-			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.ASC, requestGrid.getSortCol()), user.getId());
 		} else
-			rows = workspaceRepository.findAll(new PageRequest(requestGrid
-					.getStart(), requestGrid.getLength(),
+			rows = workspaceRepository.findAll(new PageRequest(requestGrid.getStart(), requestGrid.getLength(),
 					Direction.DESC, requestGrid.getSortCol()));
-		return new ResponseGrid<Workspace>(requestGrid.getDraw(),
-				rows.getNumberOfElements(), rows.getTotalElements(),
+		return new ResponseGrid<Workspace>(requestGrid.getDraw(), rows.getNumberOfElements(), rows.getTotalElements(),
 				rows.getContent());
 	}
+
 	@Override
 	public Workspace findByName(String name) throws BusinessException {
 		return workspaceRepository.findByName(name);
@@ -193,19 +187,18 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 			for (Project proj : workspace.getProjects()) {
 				proj.getWorkspaces().remove(workspace);
 				projectRepository.save(proj);
-				
+
 			}
 			workspace.getOwner().getWorkspaces().remove(workspace);
 			userRepository.save(workspace.getOwner());
 			workspaceRepository.delete(workspace);
-			
+
 		}
-		
+
 	}
 
 	@Override
-	public List<Workspace> findByUser(User user)
-			throws BusinessException {
+	public List<Workspace> findByUser(User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
 		query.addCriteria(Criteria.where("owner").in(user.getId()));
@@ -217,13 +210,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	public Workspace findOne(String id) {
 		return workspaceRepository.findOne(id);
 	}
+
 	@Override
-	public Workspace findOneWithUser(String id, String idUser) throws BusinessException{
+	public Workspace findOneWithUser(String id, String idUser) throws BusinessException {
 		Workspace workspace = workspaceRepository.findOne(id);
 		if (workspace.getOwner().getId().equals(idUser))
 			return workspace;
-		else throw new BusinessException();
-		
+		else
+			throw new BusinessException();
+
 	}
 
 	@Override
@@ -243,8 +238,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	}
 
 	@Override
-	public Project addProjectInWorkspace(String idProject, String idWorkspace,
-			User user) throws BusinessException {
+	public Project addProjectInWorkspace(String idProject, String idWorkspace, User user) throws BusinessException {
 		Workspace w = findById(idWorkspace, user);
 		Project p = projectSerivce.findById(idProject, user);
 		p.getWorkspaces().add(w);
@@ -256,8 +250,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	}
 
 	@Override
-	public Project addNewProjectInWorkspace(String projectName,
-			String idWorkspace, User user) throws BusinessException {
+	public Project addNewProjectInWorkspace(String projectName, String idWorkspace, User user)
+			throws BusinessException {
 		user = userService.findOne(user.getId());
 		Workspace w = findById(idWorkspace, user);
 		Project p = new Project();
@@ -273,9 +267,10 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspaceRepository.save(w);
 		return p;
 	}
+
 	@Override
-	public Project addNewProjectInWorkspace(Project projectName,
-			String idWorkspace, User user) throws BusinessException {
+	public Project addNewProjectInWorkspace(Project projectName, String idWorkspace, User user)
+			throws BusinessException {
 		user = userService.findOne(user.getId());
 		Workspace w = findById(idWorkspace, user);
 		projectName.setOwner(user);

@@ -50,6 +50,7 @@ public class ModelPrivateController extends ArtifactPrivateController<Model> {
 	@RequestMapping(value = "/artifact_project", method =  RequestMethod.GET )
 	public String detailsByProject(org.springframework.ui.Model model, @RequestParam String project_id, @RequestParam String artifact_id) {
 		super.detailsByProject(model, project_id, artifact_id);
+		System.out.println(project_id+" artefatto: "+ artifact_id);
 		return "private.use.model_details";
 	}
 

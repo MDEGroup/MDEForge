@@ -187,6 +187,7 @@
 						function(template) {
 							var rendered = Mustache.render(template, model);
 							result.append(rendered);
+							
 					});
 				//$("#modelSelect option[value='" + model.id + "']").remove();
 				$('#modelToAdd').hide();
@@ -844,6 +845,7 @@
 							artifact.model = true;
 							var idProject = $('#projectId').attr('data-id');
 							artifact.projectId = idProject;
+							artifact.ctx = ctx;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);

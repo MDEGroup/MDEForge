@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * @generated
  */
 @Document(collection="Workspaces")
-public class Workspace implements java.io.Serializable{
+public class Workspace implements java.io.Serializable {
 
 	@Id
 	private String id = null;
@@ -41,6 +41,9 @@ public class Workspace implements java.io.Serializable{
 	@DBRef
 	@JsonSerialize(using = UserSerializer.class)
 	private User owner;
+	
+	
+	
 	
 	
 	public List<Project> getProjects() {
