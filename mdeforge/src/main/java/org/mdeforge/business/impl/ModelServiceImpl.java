@@ -12,6 +12,8 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
@@ -19,8 +21,14 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -41,6 +49,7 @@ import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.integration.ArtifactRepository;
@@ -245,7 +254,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		try{
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
 		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
-		ecoreMetamodelService.loadArtifact(emm);
+		ecoreMetamodelService.registerMetamodel(emm);
 		ResourceSet load_resourceSet = new ResourceSetImpl();
 
 		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
@@ -263,22 +272,10 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				
 				//CLASS ATTRIBUTES
 				for (EAttribute attribute : eClass.getEAllAttributes()) {
-					// EAnnotation ann = attribute.getEAnnotation("searchindex");
-					// String key = eClass.getName() + "#" +attribute.getName();
-					// System.out.println(key);
-					// Object value = next.eGet(attribute);
 					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
-
-					/*
-					 * Index className:classAttributeValue
-					 */
 					Field eClassWithAttributeField = new TextField(eClass.getName(), attributeValue, Field.Store.YES);
-					// eClassWithAttributeField(1.5f);
 					doc.add(eClassWithAttributeField);
 
-					/*
-					 * Index className::classAttribute:attributeValue
-					 */
 					Field eClassWithAttributeAndAttributeValueField = new TextField(eClass.getName() + LuceneServiceImpl.CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Field.Store.YES);
 					// eClassWithAttributeAndAttributeValueField(1.5f);
 					doc.add(eClassWithAttributeAndAttributeValueField);
@@ -299,28 +296,18 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		}catch(Exception e) { 
 			logger.error("Some error when try to parse EMF index");
 		}
-		//Artifact TYPE: "Model"
 		Field artifactType = new TextField(LuceneServiceImpl.TYPE_TAG, model.getClass().getSimpleName(), Field.Store.YES);
 		doc.add(artifactType);
 
-//		String text = handler.toString();
 		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
 		Field textField = new TextField(LuceneServiceImpl.TEXT_TAG, text, Field.Store.YES);
-//		textField.setBoost(2.0f);
-		
-//		System.out.println(identifyLanguage(text));
-		
 		String artifactName = model.getName();
 	 	Field artName = new TextField(LuceneServiceImpl.NAME_TAG, artifactName, Field.Store.YES);
-//		filenameField.setBoost(0.5f);
-		
 	 	String author = model.getAuthor().getUsername();
 	 	Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, author, Field.Store.YES);
 	 	
 	 	Date lastUpdate = model.getModified();
 	 	Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG, lastUpdate.toString(), Field.Store.YES);
-//		filetypeField.setBoost(1.4f);
-		
 	 	for (Property prop : model.getProperties()) {
 			String propName = prop.getName();
 			String propValue = prop.getValue();
