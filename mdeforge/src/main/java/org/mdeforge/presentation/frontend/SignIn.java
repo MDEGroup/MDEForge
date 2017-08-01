@@ -210,8 +210,7 @@ public class SignIn {
 			try {
 				gfmObj = gridFileMediaService.createObjectFromFile(path, filename);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			Artifact artifactClone = new Artifact();

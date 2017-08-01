@@ -12,6 +12,7 @@ import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.SimilarityRelationService;
 import org.mdeforge.business.ValidateService;
+import org.mdeforge.business.impl.ATLTransformationServiceImpl;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Cluster;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -21,6 +22,8 @@ import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -44,6 +47,8 @@ import com.google.gson.JsonObject;
 @RestController
 @RequestMapping("/api/EcoreMetamodel")
 public class EcoreMetamodelsRESTController {
+
+	Logger logger = LoggerFactory.getLogger(EcoreMetamodelsRESTController.class);
 
 	@Autowired
 	private SimilarityRelationService similarityRelationService;
@@ -115,7 +120,7 @@ public class EcoreMetamodelsRESTController {
 			try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
 		} catch (JsonMappingException e) {

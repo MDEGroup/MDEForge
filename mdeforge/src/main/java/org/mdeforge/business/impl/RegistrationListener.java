@@ -3,7 +3,6 @@ package org.mdeforge.business.impl;
 import java.util.UUID;
 
 import org.mdeforge.business.UserService;
-import org.mdeforge.business.importer.impl.EcoreMetamodelImporterServiceImpl;
 import org.mdeforge.business.model.User;
 import org.mdeforge.common.spring.security.OnRegistrationCompleteEvent;
 import org.slf4j.Logger;
@@ -16,7 +15,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RegistrationListener implements ApplicationListener<OnRegistrationCompleteEvent> {
-    @Autowired
+
+	@Autowired
     private UserService userService;
     @Autowired
     private JavaMailSender mailSender;
@@ -41,7 +41,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 	        email.setSubject(subject);
 	        email.setText(message + "http://localhost:8080" + confirmationUrl);
 	        mailSender.send(email);
-        } catch (Exception e) {logger.error("Send mail error:" + e.getMessage());e.printStackTrace();}
+        } catch (Exception e) {
+        	logger.error("Send mail error:" + e.getMessage());
+        }
     }
 }
 
