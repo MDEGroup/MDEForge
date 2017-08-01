@@ -11,9 +11,17 @@ import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.enums.EditorTypeEnum;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.ArtifactList;
+import org.mdeforge.business.model.ContentView;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.EditorJ;
+import org.mdeforge.business.model.EmptyDiv;
 import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Table;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.integration.ArtifactRepository;
@@ -49,9 +57,6 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	
 	@Autowired
 	private JsfiddleRepository jsfiddleRepository; 
-
-	@Autowired
-	private ArtifactRepository artifactRepository;
 
 	@Autowired
 	private ProjectService projectSerivce;
@@ -287,6 +292,67 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 	@Override
 	public Jsfiddle addNewJsfiddleInWorkspace(Jsfiddle jsfiddle, String idWorkspace, User user)
 			throws BusinessException {
+		/*
+		 * 
+		 */
+		for (ContentView contentView : jsfiddle.getContentViewList()) {
+			switch (contentView.getType()) {
+			case "editor":
+				EditorJ editor = new EditorJ();
+
+				List<String> editorTypeList = new ArrayList<>();
+				editorTypeList.add(EditorTypeEnum.plaintText.toString());
+				editorTypeList.add(EditorTypeEnum.treeBaseEditor.toString());
+				editorTypeList.add(EditorTypeEnum.diagrammaticEditor.toString());
+
+				editor.setEditorTypeList(editorTypeList);
+				editor.setType(editorTypeList.get(0));
+				contentView.setContentType(editor);
+				break;
+			case "artifactList":
+
+				ArtifactList artifactL = new ArtifactList();
+
+				switch (contentView.getArtifactType()) {
+				case "EcoreMetamodel":
+					List<EcoreMetamodel> ecoreMetamodelList = artifactService.findAll(EcoreMetamodel.class);//ecoreMetamodelService.findAll();
+					artifactL.setEcoreMetamodelList(ecoreMetamodelList);
+					break;
+				case "Model":
+					List<org.mdeforge.business.model.Model> modelList = artifactService.findAll(org.mdeforge.business.model.Model.class);
+					artifactL.setModelList(modelList);
+					break;
+				case "ATLTransformation":
+					List<ATLTransformation> atlTransformationList = artifactService.findAll(ATLTransformation.class);
+					artifactL.setAtlTransformationList(atlTransformationList);
+					break;
+				case "All":
+					List<Artifact> artifactList = artifactService.findAll();
+					artifactL.setArtifactList(artifactList);
+					break;
+				default:
+					break;
+				}
+				contentView.setContentType(artifactL);
+				break;
+			case "table":
+				Table table = new Table();
+				table.setNumberCols(3);
+				table.setNumberTh(3);
+				contentView.setContentType(table);
+				break;
+			case "emptyDiv":
+				EmptyDiv emptyDiv = new EmptyDiv();
+				emptyDiv.setHtmlDiv("emptyDiv1");
+				contentView.setContentType(emptyDiv);
+				break;
+			default:
+				break;
+			}
+		}
+		/*
+		 * 
+		 */
 		user = userService.findOne(user.getId());
 		Workspace w = findById(idWorkspace, user);
 		jsfiddle.setOwner(user);

@@ -66,4 +66,5 @@ public interface CRUDArtifactService <T extends Artifact> {
 	void deleteComment(String idComment, String idArtifact);
 	List<String> getAllIndexTags();
 	List<String> getTagIndexes();
+	<K> List<K> findAll(Class<K> k);
 }
