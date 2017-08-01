@@ -298,13 +298,10 @@ public class ATLTransformationServiceImpl extends
 			temp2.delete();
 			return result;
 		} catch (ATLCoreException e) {
-			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
 			throw new BusinessException(e.getMessage());
 		}
 	}
@@ -454,12 +451,12 @@ public class ATLTransformationServiceImpl extends
 			doc.add(idField);
 			writer.addDocument(doc);
 			}catch (Exception e) {
-				logger.error(e.getMessage());e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			writer.close();
 		}
 		  catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 	}
@@ -482,7 +479,7 @@ public class ATLTransformationServiceImpl extends
 		try {
 			resource.load(null);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 
 		Container myForge = (Container) resource.getContents().get(0);

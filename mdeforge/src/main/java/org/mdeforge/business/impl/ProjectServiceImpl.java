@@ -25,6 +25,8 @@ import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +42,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+
+	
 	@Autowired
 	private ProjectRepository projectRepository;
 
@@ -369,8 +374,7 @@ public class ProjectServiceImpl implements ProjectService {
 			try {
 				gfmObj = gridFileMediaService.createObjectFromFile(path, filename);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 
 			Artifact artifactClone = new Artifact();

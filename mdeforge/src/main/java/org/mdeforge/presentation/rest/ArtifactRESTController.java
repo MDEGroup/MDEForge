@@ -15,6 +15,8 @@ import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,8 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 @RestController
 @RequestMapping("/api/Artifact")
 public class ArtifactRESTController {
+
+	Logger logger = LoggerFactory.getLogger(ArtifactRESTController.class);
 
 	@Autowired
 	private ProjectService projectService;
@@ -66,7 +70,7 @@ public class ArtifactRESTController {
 	        try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
 		} catch (JsonMappingException e) {
