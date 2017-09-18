@@ -156,7 +156,7 @@
 														<c:set var="description" value="" />
 														<c:forEach items="${result.artifact.properties}" var="property">
 
-															<c:if test="${property.getName() == 'Descriptionï¿½'}">
+															<c:if test="${property.getName() == 'Description '}">
 																<c:set var="existDescription" value="true" />
 																<c:set var="description" value="${property.getValue()}" />
 
