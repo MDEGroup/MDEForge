@@ -7,11 +7,14 @@ import org.mdeforge.business.InvalidArtifactException;
 import org.mdeforge.business.MetricProvider;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ValidateService;
+import org.mdeforge.business.impl.ATLTransformationServiceImpl;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -34,6 +37,7 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 @RestController
 @RequestMapping("/api/Model")
 public class ModelRESTController {
+	Logger logger = LoggerFactory.getLogger(ModelRESTController.class);
 
 	@Autowired
 	private ModelService modelService;
@@ -96,7 +100,7 @@ public class ModelRESTController {
 	        try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
 		} catch (JsonMappingException e) {
@@ -129,7 +133,7 @@ public class ModelRESTController {
 			// Response success
 			return new ResponseEntity<Model>(s, HttpStatus.OK);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			return new ResponseEntity<Model>( HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}

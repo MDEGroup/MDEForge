@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.mdeforge.business.model.serializer.json.ArtifactListSerializer;
+import org.mdeforge.business.model.serializer.json.JsfiddleListSerializer;
 import org.mdeforge.business.model.serializer.json.ProjectListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
 
@@ -29,6 +30,11 @@ public class Workspace implements java.io.Serializable {
 	@DBRef(lazy=true)
 	@JsonSerialize(using = ProjectListSerializer.class)
 	private List<Project> projects = new ArrayList<Project>();
+	
+	@DBRef(lazy=true)
+	@JsonSerialize(using = JsfiddleListSerializer.class)
+	private List<Jsfiddle> jsfiddles = new ArrayList<Jsfiddle>();
+	
 	@DBRef(lazy=true)
 	@JsonSerialize(using = ArtifactListSerializer.class)
 	private List<Artifact> artifacts = new ArrayList<Artifact>();
@@ -45,6 +51,13 @@ public class Workspace implements java.io.Serializable {
 	}
 	public void setProjects(List<Project> newProjects) {
 		projects = newProjects;
+	}
+	
+	public List<Jsfiddle> getJsfiddles() {
+		return jsfiddles;
+	}
+	public void setJsfiddles(List<Jsfiddle> jsfiddles) {
+		this.jsfiddles = jsfiddles;
 	}
 	public List<Artifact> getArtifacts() {
 		return artifacts;
@@ -67,8 +80,6 @@ public class Workspace implements java.io.Serializable {
 	public void setName(String newName) {
 		name = newName;
 	}
-
-
 
 	public String getId() {
 		return id;

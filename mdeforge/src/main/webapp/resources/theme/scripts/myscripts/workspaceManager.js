@@ -482,6 +482,268 @@
 		}
 	});
 	
+	// JSFiddle
+	/*This function start the Jsfiddle configuration*/
+	function jsfiddleView(tagid, id){
+		var workspaceProj = $("#workspaceDetailsDiv");
+		var workspaceJsfiddle = $("#workspaceDetailsJsfiddleDiv");
+		
+		workspaceProj.hide();
+		workspaceJsfiddle.show();
+		$("#jsfiddleBody").html("");
+		
+		$.ajax({
+			url : ctx + "/private/jsfiddle/" + id,
+			success : function(data) {
+				$('#jsfiddleName').text(data.name);
+				$('#jsfiddleOwnerEmail').text(data.owner.email);
+				$('#jsfiddleOwnerName').text(data.owner.firstname + ' ' + data.owner.lastname);
+				$('#jsfiddleOwnerUsername').text(data.owner.username);
+				
+				html = "";
+				contentViewLength = data.contentViewList.length;
+				$.each(data.contentViewList, function (i, contentView){
+					index = i+1;
+					
+					if(i%2==0){
+						html += '<div class="row-fluid">';						
+					}
+					
+					if(contentView.type == "editor"){
+						
+						var editorListHmtl="<select style='width: 100%' margin-bottom: '15px'>";
+						
+						for(x = 0; x < contentView.contentType.editorTypeList.length; x++){
+							selected="";
+							if(contentView.contentType.editorTypeList[x] == contentView.contentType.type){
+								selected="selected";
+							}
+							editorListHmtl += "<option value="+x+" "+selected+"> "+contentView.contentType.editorTypeList[x]+"</option>"
+						}
+						
+						editorListHmtl += "</select>";
+						
+						if(contentView.contentViewArtifactId != null){
+							html += '<div class="span6 contentView" style="min-height: 218px;"><div class="span12"><div class="span9"><h4>'+index+'. '+contentView.name+'</h4></div><div class="span3"><button type="button" class="btn btn-default pull-right" onclick="clearEditor()">Clean</button></div></div><div>'+editorListHmtl+'</div><div id="'+contentView.type+'_artifactList_'+contentView.contentViewArtifactId+'"></div></div>';							
+						}else if(contentView.artifatcId != null){
+							html += '<div class="span6 contentView"><h4>'+index+'. '+contentView.name+'</h4><div id="">ArtifactId: '+contentView.artifatcId+'</div></div>';
+						}else{
+							html += 'The Editor ContentView was not configured the correct way...';
+						}						
+							
+					}else if(contentView.type == "artifactList"){
+						
+						html += "<div class='span6 contentView'><div class='span12'><div class='span9'><h4>"+index+". "+contentView.name+"</h4></div><div class='span3'><button type='button' class='btn btn-default pull-right' onclick='clearArtifactList("+contentView.type+"_"+contentView.id+")'>Clean</button></div></div><table id='"+contentView.type+"_"+contentView.id+"' class='display dataTableArtifacts' width='100%'></table></div>";	
+						console.log("artifactList");
+					}else if(contentView.type == "serviceList"){
+						
+						buttons="";
+						for(var x=0; x<contentView.services.length ; x++){
+							buttons += "<button type='button' data-id="+x+" class='btn btn-primary' id="+contentView.id+"_"+contentView.services[x].name+" > "+contentView.services[x].name+" </button> ";
+						}						
+						
+						html += '<div class="span6 contentView"><h4>'+index+'. '+contentView.name+' </h4><div id="'+contentView.type+'_'+contentView.id+'">'+buttons+'</div></div>';
+						console.log("serviceList");
+					}else if(contentView.type == "table"){
+						
+						html += '<div class="span6 contentView"><h4>'+index+'. '+contentView.name+' </h4><div id="'+contentView.type+'_'+contentView.id+'"></div></div>';	
+						console.log("table");
+					}else if(contentView.type == "emptyDiv"){
+						
+						html += "<div class='span6 contentView'><div class='span12'><div class='span9'><h4>"+index+". "+contentView.name+" </h4></div><div class='span3'><button type='button' class='btn btn-default pull-right' onclick=clearEmptyDiv("+contentView.type+"_"+contentView.id+") >Clean</button></div></div><div class='emptyList' data-id='"+contentView.type+"_"+contentView.id+"' id='"+contentView.type+"_"+contentView.id+"'></div></div>";	
+						console.log("emptyDiv");
+					}
+					
+					if(i%2!=0){
+						html += '</div>';
+					}
+					
+					if(i == contentViewLength-1){
+						$("#jsfiddleBody").append(html);
+					}
+					
+				});
+				
+				$.each(data.contentViewList, function (i, contentView){
+					if(contentView.type == "artifactList"){
+						var content;
+						switch(contentView.artifactType){
+							case "EcoreMetamodel":
+								content = data.contentViewList[i].contentType.ecoreMetamodelList;
+								break;
+							case "Model":
+								content = data.contentViewList[i].contentType.modelList;
+								break;
+							case "ATLTransformation":
+								content = data.contentViewList[i].contentType.atlTransformationList;
+								break;
+							default:
+								break;
+						}					
+						
+						dataTableArtifactList(contentView.type+'_'+contentView.id , content);
+					}
+					
+					if(contentView.type == "serviceList"){
+						var xa = "aa";
+						
+						for(var x = 0; x < contentView.services.length; x++){
+							
+							$( "#"+contentView.id+"_"+contentView.services[x].name ).click(function() {
+								
+								var flag = true;
+								
+								for(var y = 0; y < contentView.services[$(this).data('id')].artifacts.length; y++){
+									
+									if(! $("#artifactList_"+contentView.services[$(this).data('id')].artifacts[y]).DataTable().rows( '.selected' ).any()){
+										flag = false;									
+									}									
+								}
+								
+								if(flag){
+									
+									if(contentView.services[$(this).data('id')].method=="GET"){
+										
+										$.ajax({
+											url : ctx + contentView.services[$(this).data('id')].url + $("#artifactList_"+contentView.services[$(this).data('id')].artifacts[0]).DataTable().rows('.selected').data()[0].id,
+											success : function(data) {
+												ShowInEmptyList(data);
+											},
+											error : function(error){
+												alert(error);
+											}
+										});
+										
+									}else{
+										
+										var models = new Array();
+										var model = {id:'',_class:''};
+										
+										for(var y=1; y < contentView.services[$(this).data('id')].artifacts.length; y++ ){
+											model.id= $("#artifactList_"+contentView.services[$(this).data('id')].artifacts[y]).DataTable().rows('.selected').data()[0].id;
+											model._class = $("#artifactList_"+contentView.services[$(this).data('id')].artifacts[y]).DataTable().rows('.selected').data()[0]._class;
+											models[y-1]=model;
+										}										
+										
+										$.ajax({
+											url : ctx + contentView.services[$(this).data('id')].url + $("#artifactList_"+contentView.services[$(this).data('id')].artifacts[0]).DataTable().rows('.selected').data()[0].id,
+											data : JSON.stringify(models),
+											type: contentView.services[$(this).data('id')].method,
+										    processData: false,
+											contentType : "application/json",
+											success : function(data) {
+												if(data[0] != undefined && data[0].name != undefined){
+													ShowInEmptyList(data[0].name);
+												}else{
+													ShowInEmptyList(data);
+												}
+												
+											},
+											error : function(error){
+												alert(error);
+											}
+										});
+										
+									}
+									
+									
+								}else{
+									alert(contentView.services[$(this).data('id')].msg);
+								}
+
+							});
+						}
+						
+					}
+				});
+				
+			},
+			error : function error(error) {
+				alert(error);
+			}
+		});
+	}
+		
+	function ShowInEmptyList(data){
+		/*fix it*/
+		$(".emptyList ").each(function(i, element) {		
+		    $("#"+element.attributes['id'].value).html(data);
+		});
+	}
+	
+	function clearArtifactList(idTableArtifactList){
+		$('#'+idTableArtifactList.attributes["id"].value+" tbody tr").removeClass('selected');
+	}
+	
+	function clearEmptyDiv(idEmptyDiv){
+		$("#"+idEmptyDiv.attributes["id"].value).html("");
+	}
+	
+	function clearEditor(){
+		
+	}
+	
+	function dataTableArtifactList(id,dataSet){
+		
+		if ( $.fn.dataTable.isDataTable( '#'+id ) ) {
+		    table = $('#'+id).DataTable();
+		}
+		else {
+			var table =$('#'+id).DataTable({
+				data: dataSet,
+				"responsive": true,
+				"info": false,
+				"pageLength": 5,
+				"pagingType": "simple",
+				"bLengthChange": false,
+				"language": {
+				    "processing":'<img class="spinner" src="${pageContext.request.contextPath}/resources/theme/images/spin.gif"></span>'
+				},
+		        columns: [
+		            { 
+		            	title: "Name",
+		            	data:'name',
+		            	render: function ( data, type, full, meta ) {  
+		            		return data.length > 10 ?
+		            	        '<span title="'+data+'">'+data.substr( 0, 20 )+'...</span>' :
+		            	        data;
+		            	    }
+		            },
+		            { 
+		            	title: "Type",
+		            	data:'_class'
+		            },
+		            { 
+		            	title: "Author",
+		            	data:'author.username'
+		            },
+		            {
+		            	title: "id",
+		            	data: 'id',
+		            	"visible": false
+		            }
+		        ]
+			});	
+			
+			$('#'+id+' tbody').on( 'click', 'tr', function () {
+		        
+				var data = table.row( this ).data();
+		        $("#editor_"+table.tables().nodes().to$().attr('id')).html(data.name);	        
+				
+				if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+		        }
+				
+		    } );
+			
+		}
+		
+	}
+	
 	// WORKSPACE LOADING
 	$('.widget-employees').each(function(){
 		if (typeof $.fn.select2 != 'undefined') 
@@ -496,12 +758,18 @@
 			$(this).addClass('active');
 			var tagid = $(this).attr('id');
 			var id = $(this).data('id');
+			if(tagid.substring(0,12) == "itemJsfiddle"){
+				jsfiddleView(tagid, id);
+				return null;
+			}
 			$.ajax({
 				url : ctx + "/private/project/" + id,
 				success : function(data) {
 					$('#projectId').attr('data-id',data.id);
 					var workspace = $("#workspaceDetailsDiv");
+					var workspaceJsfiddle = $("#workspaceDetailsJsfiddleDiv");
 					workspace.show();
+					workspaceJsfiddle.hide();
 					$('#users').empty();
 					$('#ATLToAdd').hide();
 					$('#modelToAdd').hide();

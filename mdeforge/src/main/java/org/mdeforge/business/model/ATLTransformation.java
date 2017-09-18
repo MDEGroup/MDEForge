@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -13,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @generated
  */
 
-public class ATLTransformation extends Transformation {
+public class ATLTransformation extends Transformation{
 
 	/**
 	 * 

@@ -457,6 +457,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	}
 
 	@Override
+	public <K> List<K> findAll(Class<K> k) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c = Criteria.where("_class").is(k.getCanonicalName());
+		query.addCriteria(c);
+		return n.find(query, k);
+	}
+	
+	@Override
 	public List<T> findRecentArtifacts() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 
@@ -676,7 +685,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new BusinessException(e.getMessage());
 		}
 	}
@@ -1089,8 +1098,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			IndexReader luceneIndexReader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
 			result = MultiFields.getIndexedFields(luceneIndexReader);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		
 		List<String> sortedList = new ArrayList<String>(result);

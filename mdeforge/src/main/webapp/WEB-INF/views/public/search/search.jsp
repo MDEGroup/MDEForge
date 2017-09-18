@@ -403,6 +403,7 @@
 														title="Metamodel Download"
 														class="glyphicons single download_alt"><i></i>Download</a>
 												</p>
+												<p>${artifact.getScore() }</p>
 											</div>
 										</div>
 										<hr class="separator">

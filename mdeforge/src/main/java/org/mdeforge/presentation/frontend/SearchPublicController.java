@@ -158,7 +158,7 @@ public class SearchPublicController {
 		gfm.setFileName("searchFragment.ecore");
 		m.setFile(gfm);
 		m.setName("searchFragment");        
-		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.5);
+		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.1);
 		for (EcoreMetamodel ecoreMetamodel : el) {
 			ecoreMetamodel.setFile(null);
 		}

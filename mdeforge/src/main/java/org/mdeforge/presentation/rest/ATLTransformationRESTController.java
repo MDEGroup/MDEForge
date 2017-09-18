@@ -1,11 +1,13 @@
 package org.mdeforge.presentation.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.m2m.atl.common.ATLExecutionException;
 import org.eclipse.m2m.atl.core.ATLCoreException;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.ModelService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
@@ -52,6 +54,8 @@ public class ATLTransformationRESTController {
 	private ProjectService projectService;
 	@Autowired
 	private User user;
+	@Autowired
+	private ModelService modelService;
 
 	@RequestMapping(value="/{id_artifact}/metrics", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_artifact") String idArtifact)
@@ -80,7 +84,13 @@ public class ATLTransformationRESTController {
 			@RequestBody List<Model> models) {
 		try {
 			ATLTransformation transformation = ATLtransformationService.findOne(id);
-			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, models, user));
+			
+			List<Model> modelsReady = new ArrayList<>();
+			for(int index =0; index < models.size(); index ++){
+				modelsReady.add(modelService.findOneById(models.get(index).getId(), user));				 
+			}
+			
+			ArtifactList result = new ArtifactList(ATLtransformationService.execute(transformation, modelsReady, user));
 			return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);

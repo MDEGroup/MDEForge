@@ -1,9 +1,5 @@
 package org.mdeforge.business.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,11 +11,21 @@ import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
+import org.mdeforge.business.enums.EditorTypeEnum;
+import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.ArtifactList;
+import org.mdeforge.business.model.ContentView;
+import org.mdeforge.business.model.EcoreMetamodel;
+import org.mdeforge.business.model.EditorJ;
+import org.mdeforge.business.model.EmptyDiv;
+import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
+import org.mdeforge.business.model.Table;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
 import org.mdeforge.integration.ArtifactRepository;
+import org.mdeforge.integration.JsfiddleRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
@@ -48,9 +54,9 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 
 	@Autowired
 	private ProjectRepository projectRepository;
-
+	
 	@Autowired
-	private ArtifactRepository artifactRepository;
+	private JsfiddleRepository jsfiddleRepository; 
 
 	@Autowired
 	private ProjectService projectSerivce;
@@ -283,6 +289,79 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		return projectName;
 	}
 
-	
+	@Override
+	public Jsfiddle addNewJsfiddleInWorkspace(Jsfiddle jsfiddle, String idWorkspace, User user)
+			throws BusinessException {
+		/*
+		 * 
+		 */
+		for (ContentView contentView : jsfiddle.getContentViewList()) {
+			switch (contentView.getType()) {
+			case "editor":
+				EditorJ editor = new EditorJ();
 
+				List<String> editorTypeList = new ArrayList<>();
+				editorTypeList.add(EditorTypeEnum.plaintText.toString());
+				editorTypeList.add(EditorTypeEnum.treeBaseEditor.toString());
+				editorTypeList.add(EditorTypeEnum.diagrammaticEditor.toString());
+
+				editor.setEditorTypeList(editorTypeList);
+				editor.setType(editorTypeList.get(0));
+				contentView.setContentType(editor);
+				break;
+			case "artifactList":
+
+				ArtifactList artifactL = new ArtifactList();
+
+				switch (contentView.getArtifactType()) {
+				case "EcoreMetamodel":
+					List<EcoreMetamodel> ecoreMetamodelList = artifactService.findAll(EcoreMetamodel.class);//ecoreMetamodelService.findAll();
+					artifactL.setEcoreMetamodelList(ecoreMetamodelList);
+					break;
+				case "Model":
+					List<org.mdeforge.business.model.Model> modelList = artifactService.findAll(org.mdeforge.business.model.Model.class);
+					artifactL.setModelList(modelList);
+					break;
+				case "ATLTransformation":
+					List<ATLTransformation> atlTransformationList = artifactService.findAll(ATLTransformation.class);
+					artifactL.setAtlTransformationList(atlTransformationList);
+					break;
+				case "All":
+					List<Artifact> artifactList = artifactService.findAll();
+					artifactL.setArtifactList(artifactList);
+					break;
+				default:
+					break;
+				}
+				contentView.setContentType(artifactL);
+				break;
+			case "table":
+				Table table = new Table();
+				table.setNumberCols(3);
+				table.setNumberTh(3);
+				contentView.setContentType(table);
+				break;
+			case "emptyDiv":
+				EmptyDiv emptyDiv = new EmptyDiv();
+				emptyDiv.setHtmlDiv("emptyDiv1");
+				contentView.setContentType(emptyDiv);
+				break;
+			default:
+				break;
+			}
+		}
+		/*
+		 * 
+		 */
+		user = userService.findOne(user.getId());
+		Workspace w = findById(idWorkspace, user);
+		jsfiddle.setOwner(user);
+		jsfiddle.getUsers().add(user);
+		jsfiddle.setModifiedDate(new Date());
+		jsfiddle.setCreatedDate(new Date());
+		jsfiddleRepository.save(jsfiddle);
+		w.getJsfiddles().add(jsfiddle);
+		workspaceRepository.save(w);
+		return jsfiddle;
+	}
 }
