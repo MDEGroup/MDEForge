@@ -29,7 +29,7 @@ public class JsfiddleController {
 	@Autowired
 	private User user;
 	
-	@RequestMapping(value = "/test2", method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Jsfiddle createJsfiddle(@RequestBody Jsfiddle jsfiddle,
     						ModelMap model){
     	

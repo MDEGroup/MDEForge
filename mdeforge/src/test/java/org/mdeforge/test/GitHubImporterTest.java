@@ -1,6 +1,9 @@
 package org.mdeforge.test;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
@@ -118,6 +121,27 @@ public class GitHubImporterTest {
 		logger.info("end import");
 	}
 
+	@Test
+	public void testRepositories(){
+		List<Repository> lr = repositoryRepository.findAll();
+		for (Repository repository : lr) {
+			repository.getHtmlUrl();
+			try {
+				URL token = new URL("https://github.com/" + repository.getOwner().getLogin() + "/" + repository.getName());
+				HttpURLConnection conn;
+				conn = (HttpURLConnection) token.openConnection();
+				conn.setRequestMethod("GET");
+				if (conn.getResponseCode() != 200) {
+					conn.disconnect();
+					System.out.println(repository.getOwner().getLogin() + "/" + repository.getName() + " doesn't exist");
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	@Ignore
 	@Test
 	public void testByWebSearch() throws InterruptedException, IOException {

@@ -9,7 +9,6 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.WorkspaceService;
-import org.mdeforge.business.impl.ATLTransformationServiceImpl;
 import org.mdeforge.business.model.Jsfiddle;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;

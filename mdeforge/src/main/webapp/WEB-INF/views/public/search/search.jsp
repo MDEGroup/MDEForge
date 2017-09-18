@@ -156,7 +156,7 @@
 														<c:set var="description" value="" />
 														<c:forEach items="${result.artifact.properties}" var="property">
 
-															<c:if test="${property.getName() == 'Description '}">
+															<c:if test="${property.getName() == 'Descriptionï¿½'}">
 																<c:set var="existDescription" value="true" />
 																<c:set var="description" value="${property.getValue()}" />
 
@@ -403,6 +403,7 @@
 														title="Metamodel Download"
 														class="glyphicons single download_alt"><i></i>Download</a>
 												</p>
+												<p>${artifact.getScore() }</p>
 											</div>
 										</div>
 										<hr class="separator">
