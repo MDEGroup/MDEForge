@@ -282,11 +282,14 @@
 	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	    <h3>${artifact.getName()}</h3>
 	  </div>
-	 	<pre class="prettyprint" style="margin: 0">
+		
+		<!--  it's slow so at moment we have commented-->	 
+	 	<%-- <pre class="prettyprint" style="margin: 0">
 	 		<code class="xml" style="font-size: 16px;line-height: 22px;font-weight: 400;">
 			${fn:escapeXml(fileToVisualize)}
 			</code>
-		</pre>
+		</pre> --%>
+		
 	  <div class="modal-footer center">
 	    <a href="#" class="btn btn-large" data-dismiss="modal">Close</a>
 	  </div>
