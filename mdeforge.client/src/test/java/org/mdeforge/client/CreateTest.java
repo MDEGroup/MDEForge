@@ -26,7 +26,8 @@ public class CreateTest {
 	public static void setup() throws Exception {
 //		atlTransformationService = new ATLTransformationService("http://www.mdeforge.org/", "Admin", "test123");
 //		etlTransformationService = new ETLTransformationService("http://localhost:8080/mdeforge/", "Admin", "test123");
-		ecoreMetamodelService = new EcoreMetamodelService("http://www.mdeforge.org/", "Admin", "test123");
+//		ecoreMetamodelService = new EcoreMetamodelService("http://www.mdeforge.org/", "Admin", "test123");
+		ecoreMetamodelService = new EcoreMetamodelService("http://localhost:8080/mdeforge/", "Admin", "juri");
 //		projectService = new ProjectService("http://localhost:8080/mdeforge/", "Admin", "test123");
 //		workspaceService = new WorkspaceService("http://localhost:8080/mdeforge/", "Admin", "test123");
 	}
@@ -51,21 +52,21 @@ public class CreateTest {
 		}
 		projectService.addProject(p);
 	}
-	@Ignore
+	
 	@Test
 	public void addEcoreMetamodel() throws Exception {
 		EcoreMetamodel emm = new EcoreMetamodel();
-		emm.setName("AndroidAppMM2.ecore");
+		emm.setName("QM_MM.qualitymetamodel");
 		List<String> tags = Arrays.asList("DB, DataBase, Data Base, Relational".split(","));
 		emm.setTags(tags);
 		emm.setDescription("Describes the basic structure of a general Relational DB");
 		emm.setAuthors("Metamodels Authors");
 		emm.setOpen(false);	
 		List<Workspace> worspaces = workspaceService.getWorkspaces();
-		for (Workspace project : worspaces) {
-			emm.getWorkspaces().add(project);
-		}
-		ecoreMetamodelService.addEcoreMetamodel(emm,"temp/AndroidAppMM.ecore");	
+//		for (Workspace project : worspaces) {
+//			emm.getWorkspaces().add(project);
+//		}
+		ecoreMetamodelService.addEcoreMetamodel(emm,"temp/QM_MM.qualitymetamodel");	
 	}
 	
 	@Ignore
@@ -89,7 +90,7 @@ public class CreateTest {
 			Workspace w = workspaceService.getWorkspace("5514aa53d4c67eee3e2c1b12");
 			ETLTransformation p = new ETLTransformation();
 			p.setName("Android2Web");
-			p.getWorkspaces().add(w);
+//			p.getWorkspaces().add(w);
 			etlTransformationService.addETLTransformation(p, "temp/Android2Web.etl");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
