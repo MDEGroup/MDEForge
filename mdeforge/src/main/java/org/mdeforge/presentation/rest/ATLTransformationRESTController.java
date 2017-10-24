@@ -10,6 +10,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
 import org.mdeforge.business.model.ATLTransformationTestServiceError;
+import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Model;
@@ -165,19 +166,17 @@ public class ATLTransformationRESTController {
 
 	// create transformation
 	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-	public @ResponseBody HttpEntity<String> createArtifact(
+	public @ResponseBody HttpEntity<Artifact> createArtifact(
 			@RequestBody ATLTransformation transformation) {
 		try {
 			// SetAuthor
 			transformation.setAuthor(user);
 			// transformation save
-			ATLtransformationService.create(transformation);
-			return new ResponseEntity<String>("Transformation inserted.",
+			ATLTransformation s = ATLtransformationService.create(transformation);
+			return new ResponseEntity<Artifact>(s,
 					HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>(
-					"Erron: Transformation not inserted.",
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 
