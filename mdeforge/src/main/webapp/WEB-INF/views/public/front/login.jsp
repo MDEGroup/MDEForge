@@ -20,15 +20,17 @@
 						
 						<div class="form-group">
 						<label>Username or Email</label>
-						<input type="text" name="j_username" class="form-control" placeholder="Your Username or Email address" tabindex="1"/>
+						<input class="loginCustom" type="text" name="j_username" class="form-control" placeholder="Your Username or Email address" tabindex="1"/>
 						</div>
 						
 						<div class="form-group">
 						<label>Password</label>
-						<a class="password forgot-password" href="#" tabindex="5"><strong >Forgot your password?</strong></a>
-						<input type="password" name="j_password" class="form-control" placeholder="Your Password" tabindex="2" />
+						
+						<input class="loginCustom" type="password" name="j_password" class="form-control" placeholder="Your Password" tabindex="2" />
 						</div>
-						<div class="form-group">
+							<div class="form-group">
+						<a class="password forgot-password" href="#" tabindex="5"><strong >Forgot your password?</strong></a>
+						</div>
 						<div class="uniformjs"><label class="checkbox"><input type="checkbox" value="remember-me" style="margin: 4px 10px 0 0" tabindex="3">Remember Me</label></div>
 						</div>
 						<div class="separator bottom"></div> 

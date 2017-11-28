@@ -1,0 +1,96 @@
+<style>
+	.a1 {
+		margin-bottom: 0.5em;
+		margin-top: 0.5em;
+	}
+
+	.a2 {
+		margin-bottom: 0.5em;
+		margin-top: 0.5em;
+	}
+
+	.liSelected {
+		border: none;
+	}
+</style>
+<md-card layout="column">
+	<md-toolbar>
+		<div class="md-toolbar-tools">
+			<ng-md-icon icon="format_indent_increase"></ng-md-icon>
+			&nbsp;
+			<h2>
+				<span>Tree Editor</span>
+			</h2>
+			<span flex></span>
+			<md-button class="md-fab md-mini"
+					   ng-if="ctrl.getSupportedChildrenTypes().length > 0 "
+					   ng-click="ctrl.addChild()">
+				<ng-md-icon icon="add_circle_outline"></ng-md-icon>
+			</md-button>
+			<md-button class="md-fab md-mini" ng-if="ctrl.selectedElement.parent"
+					   ng-click="ctrl.removeChild()">
+				<ng-md-icon icon="remove_circle_outline"></ng-md-icon>
+			</md-button>
+		</div>
+	</md-toolbar>
+
+	<md-content class="md-padding" layout="column">
+
+		<treecontrol class="tree-light"
+					 tree-model="ctrl.tree"
+					 options="ctrl.treeOptions"
+					 selected-node="ctrl.selectedElement"
+					 expanded-nodes="ctrl.expandedElements">
+
+
+			<span>
+				{{node.eClass.values.name}} <span ng-if="ctrl.getLabel(node)">({{ctrl.getLabel(node)}})</span>
+			</span>
+		</treecontrol>
+	</md-content>
+</md-card>
+
+<!-- HIDDEN DIALOG FOR ADDING ELEMENTS -->
+<div style="visibility: hidden">
+	<div class="md-dialog-container" id="addChildrenDialog">
+		<md-dialog>
+			<md-toolbar>
+				<div class="md-toolbar-tools">
+					<ng-md-icon icon="add_circle_outline"></ng-md-icon>
+					&nbsp;
+					<h2>
+						<span>Add children</span>
+					</h2>
+					<span flex></span>
+
+				</div>
+			</md-toolbar>
+
+			<md-content layout-padding
+			>
+
+				<p>What do you want to add to {{ctrl.selectedElement.eClass.values.name}}
+					?</p>
+
+				<md-list>
+					<md-list-item class="md-2-line"
+								  ng-click="ctrl.doCreateChild(child_type)"
+								  ng-repeat="child_type in ctrl.getSupportedChildrenTypes()">
+						<ng-md-icon icon="{{ctrl.ECORE_TYPE_ICONS[child_type]}}" class="md-avatar-icon"></ng-md-icon>
+
+						<div class="md-list-item-text" ng-class="{'md-offset': phone.options.offset }">
+							<span><h3> {{ child_type.values.eType.values.name }} </h3></span><span> <p>( field: {{child_type.values.name}} )</p></span>
+						</div>
+
+
+						<ng-md-icon icon="keyboard_arrow_right"></ng-md-icon>
+
+					</md-list-item>
+
+				</md-list>
+			</md-content>
+		</md-dialog>
+	</div>
+</div>
+
+

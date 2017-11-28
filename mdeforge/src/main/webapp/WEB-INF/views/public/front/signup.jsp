@@ -36,46 +36,45 @@
 							<input type="file" id="artifactName" style="display: none;" class="margin-none" name="photo" size="40">
 							
 						</div>
-						</div>
 						<div class="separator"></div> 
 						<div class="form-group">
 						<label class="control-label  textAlignLeft" for="username-input">Username:</label>
-						<input id="username-input" type="text" name="username" class="center form-control" autocomplete="off" placeholder="Your Username" tabindex="1"/>
+						<input class="registerCustom" id="username-input" type="text" name="username" class="center form-control" autocomplete="off" placeholder="Your Username" tabindex="1"/>
 						
 						</div>						
 											
 						<div class="form-group">
 						<label for="firstname" class=" control-label textAlignLeft">Firstname:</label>
-						<input type="text" name="firstname" class="center form-control" autocomplete="false" placeholder="Your Firstname" tabindex="2"/>
+						<input class="registerCustom" type="text" name="firstname" class="center form-control" autocomplete="false" placeholder="Your Firstname" tabindex="2"/>
 						
 						</div>
 						
 						<div class="form-group" >
 						<label for="lastname" class=" control-label">Lastname:</label>
-						<input type="text" id="lastname" name="lastname" class="center form-control" autocomplete="false" placeholder="Your Lastname" tabindex="3"/>
+						<input class="registerCustom" type="text" id="lastname" name="lastname" class="center form-control" autocomplete="false" placeholder="Your Lastname" tabindex="3"/>
 					
 						</div>
 						
 						<div class="form-group">
 						<label for="email" class=" control-label">Email:</label>
-						<input type="email" id="email" name="email" class="center form-control" autocomplete="new-password" placeholder="Your Email Address" tabindex="4"/>
+						<input class="registerCustom" type="email" id="email" name="email" class="center form-control" autocomplete="new-password" placeholder="Your Email Address" tabindex="4"/>
 						</div>
 						
 						
 						<div class="form-group">
 						<label for="email_confirmation" class=" control-label">Confirm Email:</label>
-						<input type="text" id="email_confirmation" name="email_confirmation" class="center form-control" autocomplete="false" placeholder="Confirm Your Email Address" tabindex="5"/>
+						<input class="registerCustom" type="text" id="email_confirmation" name="email_confirmation" class="center form-control" autocomplete="false" placeholder="Confirm Your Email Address" tabindex="5"/>
 						</div>
 						
 						<div class="form-group">
 						<label for="password" class=" control-label">Password:</label>
-						<input type="password" id="password" name="password" class="center form-control" autocomplete="new-password" placeholder="Your Password" tabindex="6" />
+						<input class="registerCustom" type="password" id="password" name="password" class="center form-control" autocomplete="new-password" placeholder="Your Password" tabindex="6" />
 						</div>
 						
 
 						<div class="form-group">
 						<label class=" control-label">Repeat Password:</label>
-						<input type="password" id="password_confirmation" name="password_confirmation" class="center form-control" autocomplete="new-password" placeholder="Repeat Your Password" tabindex="7" />
+						<input class="registerCustom" type="password" id="password_confirmation" name="password_confirmation" class="center form-control" autocomplete="new-password" placeholder="Repeat Your Password" tabindex="7" />
 						</div>
 			
 						<div class="separator"></div> 

@@ -1,0 +1,84 @@
+<!-- as a Dom element -->
+<!-- as an attribute -->
+
+<md-content md-theme="docs-dark" class="md-toolbar-tools">
+	<ng-md-icon icon="description"></ng-md-icon>
+	&nbsp;
+	<md-subheader ng-if="ctrl.metaModel && ctrl.editingModel && ctrl.modelIsSupported && !ctrl.posting">
+		{{ctrl.metaModel.name}}
+	</md-subheader>
+	<md-subheader ng-if="!ctrl.editingModel && ctrl.modelIsSupported!=false">Downloading metamodel</md-subheader>
+	<md-subheader ng-if="ctrl.posting && ctrl.modelIsSupported ">Posting updates</md-subheader>
+	<md-subheader ng-if="ctrl.modelIsSupported==false">Sorry this metamodel is unsupported at the moment, feel free
+		to
+		contact us.
+	</md-subheader>
+	<span flex></span>
+	<md-button class="md-fab md-mini"
+			   ng-if="ctrl.metaModel && ctrl.editingModel && ctrl.modelIsSupported && !ctrl.posting"
+			   ng-click="ctrl.store()">
+		<ng-md-icon icon="save"></ng-md-icon>
+	</md-button>
+	<md-button class="md-fab md-mini"
+			   ng-if="ctrl.metaModel && ctrl.editingModel && ctrl.modelIsSupported && !ctrl.posting"
+			   ng-click="ctrl.delete()">
+		<ng-md-icon icon="delete"></ng-md-icon>
+	</md-button>
+	<md-button class="md-fab md-mini"
+			   ng-if="ctrl.metaModel && ctrl.editingModel && ctrl.modelIsSupported && !ctrl.posting"
+			   ng-click="ctrl.export()">
+		<ng-md-icon icon="file_download"></ng-md-icon>
+	</md-button>
+
+</md-content>
+<md-progress-linear md-theme="docs-dark" md-mode="indeterminate"
+					ng-if="(!ctrl.editingModel && !ctrl.metaModel)||ctrl.posting"></md-progress-linear>
+
+
+<div flex layout="row" layout-fill layout-align="center"
+	 ng-if="ctrl.editingModel && ctrl.modelIsSupported">
+
+	<decorated-tree-ecore-editor flex="50" layout="column"
+								 ecore-resource="ctrl.resource"
+								 editing-model="ctrl.editingModel"
+								 selected-element="ctrl.selectedElement"
+								 ng-if="ctrl.settings.editor.mode.value==ctrl.EDITOR_MODE_AS_TREE.value">
+	</decorated-tree-ecore-editor>
+
+
+	<md-card flex="50" layout="column" ng-if="ctrl.settings.panels.mode.value==ctrl.PANELS_MODE_AS_CARD.value">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<ng-md-icon icon="tab"></ng-md-icon>
+				&nbsp;
+				<h2>
+					<span>Panels</span>
+				</h2>
+				<span flex></span>
+			</div>
+		</md-toolbar>
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="Properties" layout-fill>
+				<md-content layout="column">
+					<tree-ecore-properties-editor ng-if="ctrl.selectedElement"
+												  root-tree-ecore-element="ctrl.editingModel"
+												  tree-ecore-element="ctrl.selectedElement">
+
+					</tree-ecore-properties-editor>
+				</md-content>
+			</md-tab>
+			<md-tab label="Console" layout-fill>
+				<md-content layout="column">
+					<console-panel>
+
+					</console-panel>
+				</md-content>
+			</md-tab>
+			<md-tab label="File" ng-if="ctrl.metaModel">
+				<meta-data-panel artifact="ctrl.metaModel"></meta-data-panel>
+			</md-tab>
+		</md-tabs>
+	</md-card>
+
+</div>
+

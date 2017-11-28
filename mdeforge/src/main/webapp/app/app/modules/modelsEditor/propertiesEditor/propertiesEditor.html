@@ -1,0 +1,35 @@
+<md-table-container>
+	<table md-table>
+		<thead md-head>
+		<tr md-row>
+			<th md-column md-numeric>Property</th>
+			<th md-column md-numeric>Value</th>
+		</tr>
+		</thead>
+		<tbody md-body>
+		<tr md-row
+			ng-repeat="attribute in ctrl.attributes">
+			<td md-cell>{{attribute.name}}</td>
+			<td md-cell>
+			<input flex ng-if="attribute.type=='EString'" type="text"
+				   ng-model="ctrl.ecoreElement.values[attribute.name]">
+
+			<input flex ng-if="attribute.type=='EInt' || value.type=='EDouble' || value.type=='EFloat'"
+				   type="number"
+				   ng-model="ctrl.ecoreElement.values[attribute.name]">
+
+			<md-datepicker flex ng-model="ctrl.ecoreElement.values[attribute.name]" md-placeholder="Enter date"
+						   ng-if="attribute.type=='EDate'"></md-datepicker>
+
+			<md-checkbox flex ng-if="attribute.type=='EBoolean'"
+						 ng-model="ctrl.ecoreElement.values[attribute.name]">
+			</md-checkbox>
+
+			<input type="text" ng-if="!ctrl.isTypeSupported(attribute.type)"
+				   ng-model="ctrl.ecoreElement.values[attribute.name]"/>
+
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</md-table-container>

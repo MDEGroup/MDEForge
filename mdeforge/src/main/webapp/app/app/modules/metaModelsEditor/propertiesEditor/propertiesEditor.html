@@ -1,0 +1,51 @@
+<md-table-container>
+	<table md-table>
+		<thead md-head>
+		<tr md-row>
+			<th md-column md-numeric>Property</th>
+			<th md-column md-numeric>Value</th>
+		</tr>
+		</thead>
+		<tbody md-body>
+		<tr md-row
+			ng-repeat="(property, value) in ctrl.treeEcoreElement.properties">
+
+			<td md-cell>{{property}}</td>
+			<td md-cell>
+				<input flex ng-if="value.type=='EString'" type="{{value.type}}"
+					   ng-model="ctrl.treeEcoreElement.values[property]">
+
+				<input flex ng-if="value.type=='EInt' || value.type=='EDouble' || value.type=='EFloat'" type="number"
+					   ng-model="ctrl.treeEcoreElement.values[property]">
+
+				<md-checkbox flex ng-if="value.type=='EBoolean'"
+							 ng-model="ctrl.treeEcoreElement.values[property]">
+				</md-checkbox>
+
+
+				<md-select flex ng-if="value.type=='EType'"
+						   ng-model="ctrl.treeEcoreElement.values[property]">
+					<md-option ng-repeat="option in value.supportedValues()" ng-value="option">
+
+						{{option.values.name}}
+
+					</md-option>
+				</md-select>
+
+				<md-select flex ng-if="(value.type=='EClass' && value.multiple==false)"
+						   ng-model="ctrl.treeEcoreElement.values[property]">
+					<md-option ng-repeat="option in value.supportedValues()" ng-value="option.eClass">
+						{{option.values.name}}
+					</md-option>
+				</md-select>
+
+				<span flex elist-multi-select-input-directive ng-if="value.type=='EClass' && value.multiple==true"
+					  ng-model="ctrl.treeEcoreElement.values[property]"
+					  properties-field="value">
+
+				</span>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</md-table-container>

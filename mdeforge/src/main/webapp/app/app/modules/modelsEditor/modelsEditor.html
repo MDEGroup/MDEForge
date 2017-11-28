@@ -1,0 +1,72 @@
+<md-content md-theme="docs-dark" class="md-toolbar-tools">
+	<ng-md-icon icon="description"></ng-md-icon>
+	&nbsp;
+	<md-subheader>
+		{{ctrl.artifact.name}}, compliant with <a> {{ctrl.metaModelMetaData.name}} </a> metamodel
+	</md-subheader>
+	<span flex></span>
+	<md-button class="md-fab md-mini" ng-if="ctrl.artifact"
+			   ng-click="ctrl.store()"
+			   ng-disabled>
+		<ng-md-icon icon="save"></ng-md-icon>
+	</md-button>
+	<md-button class="md-fab md-mini" ng-if="ctrl.artifact"
+			   ng-click="ctrl.destroy()"
+			   ng-disabled>
+		<ng-md-icon icon="delete"></ng-md-icon>
+	</md-button>
+	<md-button class="md-fab md-mini"
+			   ng-if="ctrl.rootElement"
+			   ng-click="ctrl.export()">
+		<ng-md-icon icon="file_download"></ng-md-icon>
+	</md-button>
+
+</md-content>
+
+<md-progress-linear md-theme="docs-dark" md-mode="indeterminate"
+					ng-if="ctrl.loading"></md-progress-linear>
+
+
+<div flex layout="row" layout-fill layout-align="center start" ng-if="ctrl.metaModel">
+
+	<root-element-selector-directive ng-if="!ctrl.rootElement" on-root-element-selected="ctrl.onRootElementSelected"
+									 flex="50">
+
+	</root-element-selector-directive>
+
+	<decorated-tree-ecore-instance-editor flex="50" layout="column"
+										  selected-element="ctrl.selectedElement"
+										  root-element="ctrl.rootElement"
+										  ecore-resource="ctrl.resource"
+										  ng-if="ctrl.rootElement">
+	</decorated-tree-ecore-instance-editor>
+
+
+	<md-card flex="50" layout="column"
+			 ng-if="ctrl.rootElement && ctrl.settings.panels.mode.value==ctrl.PANELS_MODE_AS_CARD.value">
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<ng-md-icon icon="tab"></ng-md-icon>
+				&nbsp;
+				<h2>
+					<span>Panels</span>
+				</h2>
+				<span flex></span>
+			</div>
+		</md-toolbar>
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="Properties" layout-fill>
+				<md-content layout="column">
+					<ecore-instance-properties-editor ng-if="ctrl.selectedElement"
+													  meta-model="ctrl.metaModel"
+													  root-ecore-element="ctrl.rootElement"
+													  ecore-element="ctrl.selectedElement">
+
+					</ecore-instance-properties-editor>
+				</md-content>
+			</md-tab>
+		</md-tabs>
+	</md-card>
+
+</div>
+
