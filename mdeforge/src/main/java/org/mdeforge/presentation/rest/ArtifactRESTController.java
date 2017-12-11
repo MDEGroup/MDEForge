@@ -10,6 +10,7 @@ import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
@@ -59,6 +60,15 @@ public class ArtifactRESTController {
 		return new ResponseEntity<List<Artifact>>(result, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<Artifact> getArtifactByName(@PathVariable("name") String idModel) {
+		try {
+			Artifact model = artifactService.findOneByName(idModel, user);
+			return new ResponseEntity<Artifact>(model, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
 		try {

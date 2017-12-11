@@ -7,7 +7,6 @@ import java.util.List;
 import org.mdeforge.business.model.serializer.json.ProjectListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
-import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.mdeforge.business.model.wrapper.json.RelationList;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -67,8 +66,6 @@ public class Artifact implements java.io.Serializable{
 	private List<Project> projects = new ArrayList<Project>();
 	@JsonSerialize(using = UserListSerializer.class)
 	private List<User> shared = new ArrayList<User>();
-	@JsonSerialize(using = WorkspaceListSerializer.class)
-	private List<Workspace> workspaces = new ArrayList<Workspace>();
 	@JsonSerialize(using = UserSerializer.class)
 	private User author = new User();	
 	private List<Property> properties = new ArrayList<Property>();
@@ -155,17 +152,6 @@ public class Artifact implements java.io.Serializable{
 		shared = newShared;
 	}
 
-	
-	public List<Workspace> getWorkspaces() {
-		return workspaces;
-	}
-
-	
-	public void setWorkspaces(List<Workspace> newWorkspaces) {
-		workspaces = newWorkspaces;
-	}
-
-	
 	public User getAuthor() {
 		return author;
 	}

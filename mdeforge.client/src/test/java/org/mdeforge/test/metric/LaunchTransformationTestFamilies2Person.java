@@ -38,7 +38,7 @@ public class LaunchTransformationTestFamilies2Person {
 			System.out.println(metric.getClass());
 		}
 		lm.forEach(x -> System.out.println(x.getName()));
-		Artifact art = artifactService.getArtifact("570b626c11200c9281009818");
+		Artifact art = artifactService.getArtifact("57ecce640f0c487db7b173af");
 		art.getMetrics().forEach(x->System.out.println(x.getName()));
 	}
 }
