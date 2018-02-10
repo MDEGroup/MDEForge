@@ -69,15 +69,16 @@ public class ArtifactRESTController {
 			return new ResponseEntity<Artifact>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
+
 	@RequestMapping(value = "/schema", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
 		try {
-			
+
 			ObjectMapper MAPPER = new ObjectMapper();
 			HyperSchemaFactoryWrapper visitor = new HyperSchemaFactoryWrapper();
-	        MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(Artifact.class), visitor);
-	        JsonSchema jsonSchema = visitor.finalSchema();
-	        try {
+			MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(Artifact.class), visitor);
+			JsonSchema jsonSchema = visitor.finalSchema();
+			try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
 				logger.error(e.getMessage());
@@ -121,44 +122,58 @@ public class ArtifactRESTController {
 		}
 	}
 
-
 	// search artifacts ordered by score
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchResultComplete searchResults = luceneService.search(user,text);
+			SearchResultComplete searchResults = luceneService.search(user, text);
 			List<Artifact> artifactList = new ArrayList<Artifact>();
 			for (SearchResult result : searchResults.getResults()) {
 				artifactList.add(result.getArtifact());
 			}
 			ArtifactList list = new ArtifactList(artifactList);
-			
+
 			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
 		} catch (BusinessException e) {
 			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
-	
+
 	@RequestMapping(value = "/comment/{idArtifact}", method = RequestMethod.GET)
-	public @ResponseBody HttpEntity<Comment> postComment(@RequestBody Comment comment, 
+	public @ResponseBody HttpEntity<Comment> postComment(@RequestBody Comment comment,
 			@PathVariable("text") String idArtifact) {
 		comment.setUser(user);
 		Artifact art = artifactService.findOne(idArtifact);
-		artifactService.addComment(comment,idArtifact);
+		artifactService.addComment(comment, idArtifact);
 		artifactService.update(art);
 		return new ResponseEntity<Comment>(comment, HttpStatus.OK);
 	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public @ResponseBody HttpEntity<String> delete(
-			@PathVariable("id") String idArtifact) {
+	public @ResponseBody HttpEntity<String> delete(@PathVariable("id") String idArtifact) {
 		try {
 			Artifact art = artifactService.findOneById(idArtifact, user);
 			artifactService.delete(art, user);
-			return new ResponseEntity<String>("true",
-					HttpStatus.OK);
+			return new ResponseEntity<String>("true", HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<String>("false",
-					HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<String>("false", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	// search artifacts ordered by score
+	@RequestMapping(value = "/searchByIndex/{text}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> searchByIndex(@PathVariable("text") String text) {
+		try {
+			SearchResultComplete searchResults = luceneService.searchByIndex(user, text);
+			List<Artifact> artifactList = new ArrayList<Artifact>();
+			for (SearchResult result : searchResults.getResults()) {
+				artifactList.add(result.getArtifact());
+			}
+			ArtifactList list = new ArtifactList(artifactList);
+
+			return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<ArtifactList>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 	}
 }

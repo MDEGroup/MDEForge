@@ -1,0 +1,204 @@
+package org.mdeforge.presentation.rest;
+
+import java.util.List;
+
+import org.mdeforge.business.BusinessException;
+import org.mdeforge.business.InvalidArtifactException;
+import org.mdeforge.business.MetricProvider;
+import org.mdeforge.business.ModelService;
+import org.mdeforge.business.ValidateService;
+import org.mdeforge.business.impl.ATLTransformationServiceImpl;
+import org.mdeforge.business.model.Metric;
+import org.mdeforge.business.model.Model;
+import org.mdeforge.business.model.User;
+import org.mdeforge.business.model.wrapper.json.ArtifactList;
+import org.mdeforge.business.model.wrapper.json.MetricList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFactoryWrapper;
+
+@Controller
+@RestController
+@RequestMapping("/api/Model")
+public class ModelRESTController {
+	Logger logger = LoggerFactory.getLogger(ModelRESTController.class);
+
+	@Autowired
+	private ModelService modelService;
+	
+	@Autowired
+	private User user;
+	
+	
+//	@Autowired
+//	private ValidateService validateService;
+	
+
+
+	@RequestMapping(value = "/similarity/{id_MM1}/{id_MM2}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> getSimilarity(
+			@PathVariable("id_MM1") String id_MM1,
+			@PathVariable("id_MM2") String id_MM2) {
+		
+		Model mm1 = modelService.findOne(id_MM1);
+		Model mm2 = (Model) modelService.findOne(id_MM2);
+		modelService.calculateSimilarity(mm1, mm2);
+		return null;
+	}
+	
+	@RequestMapping(value = "/validate/{id_MM1}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> isValid(
+			@PathVariable("id_MM1") String id_MM1) {
+		
+		ValidateService va = (ValidateService)modelService;
+		Model mm1 = (Model) modelService.findOne(id_MM1);
+		boolean v = va.isValid(mm1);
+		//boolean v = validationService.isValid(null);
+		return new ResponseEntity<String>(((v)?"Is valid":"Not valid"), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/{id_model}/metrics", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<MetricList> getMetrics(@PathVariable("id_model") String idModel)
+	{
+		Model emm = (Model) modelService.findOne(idModel);
+		MetricProvider mp = (MetricProvider) modelService;
+		List<Metric> lm = mp.calculateMetrics(emm);
+		return new ResponseEntity<MetricList>(new MetricList(lm), HttpStatus.OK);
+	}
+	// Get specified metamodel
+	@RequestMapping(method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> getModels() {
+		ArtifactList result = new ArtifactList(modelService.findAllWithPublicByUser(user));
+		return new ResponseEntity<ArtifactList>(result, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/schema", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<JsonSchema> getJsonSchema() {
+		try {
+			
+			ObjectMapper MAPPER = new ObjectMapper();
+			HyperSchemaFactoryWrapper visitor = new HyperSchemaFactoryWrapper();
+	        MAPPER.acceptJsonFormatVisitor(MAPPER.constructType(Model.class), visitor);
+	        JsonSchema jsonSchema = visitor.finalSchema();
+	        try {
+				MAPPER.writeValueAsString(jsonSchema);
+			} catch (JsonProcessingException e) {
+				logger.error(e.getMessage());
+			}
+			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
+		} catch (JsonMappingException e) {
+			return new ResponseEntity<JsonSchema>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	@RequestMapping(value = "/public", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> getPublicModels() {
+		ArtifactList list = new ArtifactList(modelService.findAllPublic());
+		return new ResponseEntity<ArtifactList>(list, HttpStatus.OK);
+	}
+
+	// get shared metamodel
+	@RequestMapping(value = "/shared", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<ArtifactList> getModelsByUser() {
+		ArtifactList list = new ArtifactList(modelService.findAllWithPublicByUser(user));
+		return new ResponseEntity<ArtifactList>(new ArtifactList(list), HttpStatus.OK);
+	}
+
+	// Create metamodel
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
+	public @ResponseBody HttpEntity<Model> createArtifact(@RequestBody Model model) {
+		try {
+			// SetAuthor
+			model.setAuthor(user);
+			// add author to shared
+			// metamodel create
+			Model s = (Model) modelService.create(model);
+			// Response success
+			return new ResponseEntity<Model>(s, HttpStatus.OK);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return new ResponseEntity<Model>( HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	// update metamodel
+	@RequestMapping(method = RequestMethod.PUT, consumes = "application/json")
+	public @ResponseBody HttpEntity<String> updateArtifact(@RequestBody Model model) {
+		try {
+			// SetAuthor
+			model.setAuthor(user);
+			// add author to shared
+			model.getShared().add(user);
+			// metamodel save
+			modelService.update(model);
+			return new ResponseEntity<String>("Model updated.", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Erron: metamodel not updated", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	// get single metamodel
+	@RequestMapping(value = "/{id_model}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<Model> getModel(@PathVariable("id_model") String idModel) {
+		try {
+			Model model = (Model) modelService.findOneById(idModel, user);
+			return new ResponseEntity<Model>(model, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<Model>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/byname/{name}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<Model> getModelByName(@PathVariable("name") String idModel) {
+		try {
+			Model model = (Model) modelService.findOneById(idModel, user);
+			return new ResponseEntity<Model>(model, HttpStatus.OK);
+		} catch (BusinessException e) {
+			return new ResponseEntity<Model>(HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+	@RequestMapping(value = "/{id_model}", method = RequestMethod.DELETE)
+	public @ResponseBody HttpEntity<String> deleteModel(@PathVariable("id_model") String idModel) {
+		try {
+			Model art = modelService.findOneById(idModel, user);
+			modelService.delete(art, user);
+			return new ResponseEntity<String>("Model deleted", HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>("Model not deleted", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+	@RequestMapping(value = "/modelJsonFormat/{id_ecoreMetamodel}", method = RequestMethod.GET)
+	public @ResponseBody HttpEntity<String> getMetamodelInJsonFormat(
+			@PathVariable("id_model") String idModel) {
+		try{
+			
+			Model model = modelService.findOneById(idModel, user);
+			if(modelService.isValid(model))
+				throw new InvalidArtifactException();
+			String result = modelService
+					.getJson(model);
+			return new ResponseEntity<String>(result, HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("Model or metamodel is invalid",
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
+	}
+
+}

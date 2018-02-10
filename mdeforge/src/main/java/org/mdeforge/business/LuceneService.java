@@ -17,4 +17,5 @@ public interface LuceneService{
 	SearchResultComplete search(User user, String queryString, int hitsPerPage, int pageNumber) throws BusinessException;
 	List<Artifact> search(User user, String queryString, int maxSearchResult) throws BusinessException;
 
+	SearchResultComplete searchByIndex(User user, String queryString) throws BusinessException;
 }
