@@ -148,9 +148,8 @@ import anatlyzer.atlext.OCL.OclExpression;
 public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMetamodel>
 		implements EcoreMetamodelService {
 
-
 	private IndexWriter writer;
-	
+
 	@Autowired
 	private SimpleMongoDbFactory mongoDbFactory;
 	@Autowired
@@ -180,14 +179,15 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		}
 		try {
 			result.getUri().addAll(getNSUris(result));
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error("Unable to extract nsURIs");
 		}
-//		try {
-//			this.extractedContent(result);
-//		} catch (Exception e) {
-//			logger.error("Some errors when try to extract content string from metamodel.");
-//		}
+		// try {
+		// this.extractedContent(result);
+		// } catch (Exception e) {
+		// logger.error("Some errors when try to extract content string from
+		// metamodel.");
+		// }
 		try {
 			result.setMetrics(calculateMetrics(result));
 		} catch (Exception e) {
@@ -205,110 +205,125 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	private Document parseMetamodelForIndex(EcoreMetamodel ecoreMetamodel) {
 		Document doc = new Document();
-		
-		//Register Metamodel
+
+		// Register Metamodel
 		String artifactFilePath = "";
-		try{
+		try {
 			artifactFilePath = gridFileMediaService.getFilePath(ecoreMetamodel);
-		}catch (Exception e) {
-			 System.err.println("File not exists!");
+		} catch (Exception e) {
+			System.err.println("File not exists!");
 		}
 		URI fileURI = URI.createFileURI(artifactFilePath);
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new EcoreResourceFactoryImpl());
-		
+
 		ResourceSet resourceSet = new ResourceSetImpl();
-		try{
-			Resource resource = resourceSet.getResource(fileURI, true);	
-		if (resource.isLoaded() && resource.getErrors() != null) {
-			TreeIterator<EObject> eAllContents = resource.getAllContents();
-			while (eAllContents.hasNext()) {
-				EObject next = eAllContents.next();
-				if (next instanceof EPackage) {
-					EPackage ePackage = (EPackage) next;
-					doc = ePackageIndex(ePackage, doc);
-				} else if (next instanceof EClass) {
-					EClass eClass = (EClass) next;
-					doc = eClassIndex(eClass, doc);
-				} else if (next instanceof EEnum) {
-					EEnum eEnum = (EEnum) next;
-					doc = eEnumIndex(eEnum, doc);
-				} else if (next instanceof EDataType) {
-					EDataType eDataType = (EDataType) next;
-					doc = eDataTypeIndex(eDataType, doc);
-				} else if (next instanceof EAnnotation) {
-					// GET all the EAnnotations
-					EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
-					doc = indexAnnotations(annotations, doc);
+		try {
+			Resource resource = resourceSet.getResource(fileURI, true);
+			if (resource.isLoaded() && resource.getErrors() != null) {
+				TreeIterator<EObject> eAllContents = resource.getAllContents();
+				while (eAllContents.hasNext()) {
+					EObject next = eAllContents.next();
+					if (next instanceof EPackage) {
+						EPackage ePackage = (EPackage) next;
+						doc = ePackageIndex(ePackage, doc);
+					} else if (next instanceof EClass) {
+						EClass eClass = (EClass) next;
+						doc = eClassIndex(eClass, doc);
+					} else if (next instanceof EEnum) {
+						EEnum eEnum = (EEnum) next;
+						doc = eEnumIndex(eEnum, doc);
+					} else if (next instanceof EDataType) {
+						EDataType eDataType = (EDataType) next;
+						doc = eDataTypeIndex(eDataType, doc);
+					} else if (next instanceof EAnnotation) {
+						// GET all the EAnnotations
+						EList<EAnnotation> annotations = ((EModelElement) next).getEAnnotations();
+						doc = indexAnnotations(annotations, doc);
+					}
+
 				}
-
 			}
-		}
-		
-		//ID
-		Field idField = new TextField(LuceneServiceImpl.ID_TAG, ecoreMetamodel.getId(), Field.Store.YES);
-	 	doc.add(idField);
-		
-		//Artifact TYPE: "EcoreMetamodel"
-		Field artifactType = new TextField(LuceneServiceImpl.TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(), Field.Store.YES);
-		doc.add(artifactType);
-		
-//		String text = handler.toString();
-		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
-		Field textField = new TextField(LuceneServiceImpl.TEXT_TAG, text, Field.Store.YES);
-		doc.add(textField);
 
-		
-		
-		Field artName = new TextField(LuceneServiceImpl.NAME_TAG, ecoreMetamodel.getName(), Field.Store.YES);
-	 	doc.add(artName);
-	 	
-	 	Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(), Field.Store.YES);
-	 	doc.add(authorField);
-	 	
-	 	Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG, ecoreMetamodel.getModified().toString(), Field.Store.YES);
-	 	doc.add(lastUpdateField);
-	 	
-	 	for (Property prop : ecoreMetamodel.getProperties()) {
-			String propName = prop.getName();
-			String propValue = prop.getValue();
-			if(propName != null && propValue != null) {
-				Field propField = new TextField(propName, propValue, Field.Store.YES);
-				doc.add(propField);
+			// ID
+			Field idField = new TextField(LuceneServiceImpl.ID_TAG, ecoreMetamodel.getId(), Field.Store.YES);
+			doc.add(idField);
+
+			// Artifact TYPE: "EcoreMetamodel"
+			Field artifactType = new TextField(LuceneServiceImpl.TYPE_TAG, ecoreMetamodel.getClass().getSimpleName(),
+					Field.Store.YES);
+			doc.add(artifactType);
+
+			// String text = handler.toString();
+			String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(ecoreMetamodel));
+			Field textField = new TextField(LuceneServiceImpl.TEXT_TAG, text, Field.Store.YES);
+			doc.add(textField);
+
+			Field artName = new TextField(LuceneServiceImpl.NAME_TAG, ecoreMetamodel.getName(), Field.Store.YES);
+			doc.add(artName);
+
+			Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, ecoreMetamodel.getAuthor().getUsername(),
+					Field.Store.YES);
+			doc.add(authorField);
+
+			Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG,
+					ecoreMetamodel.getModified().toString(), Field.Store.YES);
+			doc.add(lastUpdateField);
+
+			for (Property prop : ecoreMetamodel.getProperties()) {
+				String propName = prop.getName();
+				String propValue = prop.getValue();
+				if (propName != null && propValue != null) {
+					Field propField = new TextField(propName, propValue, Field.Store.YES);
+					doc.add(propField);
+				}
 			}
-		}
-	 	
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			System.out.println("ERROR");
 		}
-//		System.out.println(handler.toString());	 	
+		// System.out.println(handler.toString());
 
-	 	return doc;
+		return doc;
 	}
-	
-	private Document ePackageIndex(EPackage ePackage, Document doc){
+
+	private Document ePackageIndex(EPackage ePackage, Document doc) {
 		Field ePackageField = new TextField(LuceneServiceImpl.EPACKAGE_INDEX_CODE, ePackage.getName(), Field.Store.YES);
 		doc.add(ePackageField);
 		// GET NsURI
 		if (ePackage.getNsURI() != null && !ePackage.getNsURI().isEmpty()) {
-			Field EPackageNsURIField = new TextField(LuceneServiceImpl.NsURI_INDEX_CODE, ePackage.getNsURI(), Field.Store.YES);
-//			System.out.println("NsURI : " + ePackage.getNsURI());
+			Field EPackageNsURIField = new TextField(LuceneServiceImpl.NsURI_INDEX_CODE, ePackage.getNsURI(),
+					Field.Store.YES);
+			// System.out.println("NsURI : " + ePackage.getNsURI());
 			doc.add(EPackageNsURIField);
 		}
+
+		// GET EClassifier added by Kelwin
+		EList<EClassifier> eClassifiers = ePackage.getEClassifiers();
+		if (eClassifiers != null && !eClassifiers.isEmpty()) {
+			for (EClassifier eClassifier : eClassifiers) {
+				if (eClassifier instanceof EClass) {
+					EClass eClass = (EClass) eClassifier;
+					doc = eClassIndex(eClass, doc);
+				} else if (eClassifier instanceof EDataType) {
+					// PrimitiveTypes
+					EDataType eDataType = (EDataType) eClassifier;
+					doc = eDataTypeIndex(eDataType, doc);
+				}
+			}
+		}
+
 		// GET EAnnotation
 		EList<EAnnotation> annotations = ePackage.getEAnnotations();
 		if (annotations != null && !annotations.isEmpty()) {
 			doc = indexAnnotations(annotations, doc);
 		}
-		
+
 		return doc;
 	}
-	
 
-	
-	private Document eClassIndex(EClass eClass, Document doc){
+	private Document eClassIndex(EClass eClass, Document doc) {
 		try {
 			Field eClassField = new TextField(LuceneServiceImpl.ECLASS_INDEX_CODE, eClass.getName(), Field.Store.YES);
-			// System.out.println("Class: " + eClass.getName());
 			doc.add(eClassField);
 
 			// GET EAnnotation
@@ -319,36 +334,49 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 			// Index EClass Attributes
 			for (EAttribute attribute : eClass.getEAttributes()) {
-				Field eClassAttributeField = new TextField(LuceneServiceImpl.EATTRIBUTE_INDEX_CODE, attribute.getName(), Field.Store.YES);
+				Field eClassAttributeField = new TextField(LuceneServiceImpl.EATTRIBUTE_INDEX_CODE, attribute.getName(),
+						Field.Store.YES);
 				// System.out.println("Attribute: " + attribute.getName());
 				doc.add(eClassAttributeField);
+				
+				// Index eDataType Attributes added by Kelwin
+				if (attribute.getEType() != null) {
+					if (attribute.getEType() instanceof EDataType) {
+						EDataType eDataType = (EDataType) attribute.getEType();
+						doc = eDataTypeIndex(eDataType, doc);
+					}
+				}
+
 			}
 			// Index EClass References
 			for (EReference reference : eClass.getEReferences()) {
-				Field eClassReferenceField = new TextField(LuceneServiceImpl.EREFERENCE_INDEX_CODE, reference.getName(), Field.Store.YES);
+				Field eClassReferenceField = new TextField(LuceneServiceImpl.EREFERENCE_INDEX_CODE, reference.getName(),
+						Field.Store.YES);
 				// System.out.println("Reference: " + reference.getName());
 				doc.add(eClassReferenceField);
 			}
-		
+
 		} catch (Exception e) {
 			System.err.println("ERROR");
 		}
-		
+
 		return doc;
 	}
-	
+
 	/**
 	 * Index the annotation list provided as input.
+	 * 
 	 * @param annotations
 	 * @param doc
 	 * @return Document
 	 */
-	private Document indexAnnotations(List<EAnnotation> annotations, Document doc){
+	private Document indexAnnotations(List<EAnnotation> annotations, Document doc) {
 		if (annotations != null && !annotations.isEmpty()) {
 			for (EAnnotation eAnnotation : annotations) {
-				if(getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")){
-					if(getAnnotationValue(eAnnotation) != null){
-						Field EPackageEAnnotationField = new TextField(LuceneServiceImpl.EANNOTATION_INDEX_CODE, getAnnotationValue(eAnnotation), Field.Store.YES);
+				if (getAnnotationKey(eAnnotation) != null && getAnnotationKey(eAnnotation).equals("weight")) {
+					if (getAnnotationValue(eAnnotation) != null) {
+						Field EPackageEAnnotationField = new TextField(LuceneServiceImpl.EANNOTATION_INDEX_CODE,
+								getAnnotationValue(eAnnotation), Field.Store.YES);
 						doc.add(EPackageEAnnotationField);
 					}
 				}
@@ -356,56 +384,58 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		}
 		return doc;
 	}
-	
-	
+
 	/**
 	 * Get the annotation key from an EAnnotation
+	 * 
 	 * @param eAnnotation
 	 * @return String
 	 */
-	private String getAnnotationKey(EAnnotation eAnnotation){
+	private String getAnnotationKey(EAnnotation eAnnotation) {
 		String result = null;
 		if (eAnnotation != null) {
-				EMap<String, String> annotationDetails = eAnnotation.getDetails();
-				for (Entry<String, String> entry : annotationDetails) {
-					if(entry.getKey() != null && entry.getValue() != null){
-						result = entry.getKey();
+			EMap<String, String> annotationDetails = eAnnotation.getDetails();
+			for (Entry<String, String> entry : annotationDetails) {
+				if (entry.getKey() != null && entry.getValue() != null) {
+					result = entry.getKey();
 				}
 			}
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Get the annotation value from an EAnnotation
+	 * 
 	 * @param eAnnotation
 	 * @return String
 	 */
-	private String getAnnotationValue(EAnnotation eAnnotation){
+	private String getAnnotationValue(EAnnotation eAnnotation) {
 		String result = null;
 		if (eAnnotation != null) {
 			EMap<String, String> annotationDetails = eAnnotation.getDetails();
 			for (Entry<String, String> entry : annotationDetails) {
-				if(entry.getKey() != null && entry.getValue() != null){
+				if (entry.getKey() != null && entry.getValue() != null) {
 					result = entry.getValue();
 				}
 			}
 		}
 		return result;
 	}
-	
-	private Document eEnumIndex(EEnum eEnum, Document doc){
+
+	private Document eEnumIndex(EEnum eEnum, Document doc) {
 		Field eEnumField = new TextField(LuceneServiceImpl.EENUM_INDEX_CODE, eEnum.getName(), Field.Store.YES);
 		doc.add(eEnumField);
 		return doc;
 	}
-	
-	private Document eDataTypeIndex(EDataType eDataType, Document doc){
-		Field eDataTypeField = new TextField(LuceneServiceImpl.EDATATYPE_INDEX_CODE, eDataType.getName(), Field.Store.YES);
+
+	private Document eDataTypeIndex(EDataType eDataType, Document doc) {
+		Field eDataTypeField = new TextField(LuceneServiceImpl.EDATATYPE_INDEX_CODE, eDataType.getName(),
+				Field.Store.YES);
 		doc.add(eDataTypeField);
 		return doc;
 	}
-	
+
 	@Override
 	public void createLuceneIndex(EcoreMetamodel is) {
 
@@ -506,8 +536,6 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		// return a;
 	}
 
-
-
 	private InputStream[] getModulesList(String modules_input) throws IOException {
 		InputStream[] modules = null;
 		String[] moduleNames = modules_input.split(",");
@@ -594,7 +622,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				registerSubPackage(p);
 			}
 		}
-		
+
 		return r;
 	}
 
@@ -711,10 +739,9 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				EcoreUtil.resolveAll(resourceSet);
 				EObject eo = resource.getContents().get(0);
 				Diagnostic diagnostic = Diagnostician.INSTANCE.validate(eo);
-				if (diagnostic.getSeverity() == Diagnostic.ERROR){
+				if (diagnostic.getSeverity() == Diagnostic.ERROR) {
 					return false;
-				}
-				else
+				} else
 					return true;
 			} catch (Exception e) {
 				return false;
@@ -834,27 +861,28 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 			relationRepository.save(cr);
 		}
 
-//		EcoreMetamodel emm1 = (EcoreMetamodel) art1;
-//		EcoreMetamodel emm2 = (EcoreMetamodel) art2;
-//		String test = serializeContent(emm1);
-//		String test2 = serializeContent(emm2);
-//		double cosineSimScore = new SimilarityMethods().cosineSimilarityScore(test, test2);
-//		if (cosineSimScore > 0) {
-//			CosineSimilarityRelation csr = new CosineSimilarityRelation();
-//			csr.setFromArtifact(art1);
-//			csr.setToArtifact(art2);
-//			csr.setValue(cosineSimScore);
-//			relationService.save(csr);
-//		}
-//		DiceSimilarity ds = new DiceSimilarity();
-//		double diceSimScore = ds.getSimilarity(test, test2);
-//		if (diceSimScore > 0) {
-//			DiceSimilarityRelation dsr = new DiceSimilarityRelation();
-//			dsr.setFromArtifact(art1);
-//			dsr.setToArtifact(art2);
-//			dsr.setValue(diceSimScore);
-//			relationService.save(dsr);
-//		}
+		// EcoreMetamodel emm1 = (EcoreMetamodel) art1;
+		// EcoreMetamodel emm2 = (EcoreMetamodel) art2;
+		// String test = serializeContent(emm1);
+		// String test2 = serializeContent(emm2);
+		// double cosineSimScore = new
+		// SimilarityMethods().cosineSimilarityScore(test, test2);
+		// if (cosineSimScore > 0) {
+		// CosineSimilarityRelation csr = new CosineSimilarityRelation();
+		// csr.setFromArtifact(art1);
+		// csr.setToArtifact(art2);
+		// csr.setValue(cosineSimScore);
+		// relationService.save(csr);
+		// }
+		// DiceSimilarity ds = new DiceSimilarity();
+		// double diceSimScore = ds.getSimilarity(test, test2);
+		// if (diceSimScore > 0) {
+		// DiceSimilarityRelation dsr = new DiceSimilarityRelation();
+		// dsr.setFromArtifact(art1);
+		// dsr.setToArtifact(art2);
+		// dsr.setValue(diceSimScore);
+		// relationService.save(dsr);
+		// }
 		return simValue;
 	}
 
@@ -1385,7 +1413,7 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 		mapper.registerModule(emfModule);
 
 		try {
-			
+
 			String jsonString = mapper.writeValueAsString(metamodel);
 			return jsonString;
 		} catch (JsonProcessingException e1) {
@@ -1396,8 +1424,8 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 
 	@Override
 	public String getJson(EcoreMetamodel id) throws BusinessException {
-		if(!isValid(id))
-				throw new InvalidArtifactException();
+		if (!isValid(id))
+			throw new InvalidArtifactException();
 		Resource resource = this.registerMetamodel(id);
 		return getJsonFormatFromResource(resource);
 	}
@@ -1505,17 +1533,18 @@ public class EcoreMetamodelServiceImpl extends CRUDArtifactServiceImpl<EcoreMeta
 				try {
 					calculateSimilarity(toBeAnalyse.getArtifact(), ecoreMM);
 				} catch (Exception e) {
-					
+
 				}
 		}
 	}
 
 	@Override
 	public List<String> getTagIndexes() {
-		String[] metamodelLuceneTags = {LuceneServiceImpl.EPACKAGE_INDEX_CODE, LuceneServiceImpl.NsURI_INDEX_CODE, LuceneServiceImpl.EANNOTATION_INDEX_CODE,
-				LuceneServiceImpl.ECLASS_INDEX_CODE, LuceneServiceImpl.EATTRIBUTE_INDEX_CODE,
-				LuceneServiceImpl.EREFERENCE_INDEX_CODE, LuceneServiceImpl.EENUM_INDEX_CODE,
-				LuceneServiceImpl.ELITERAL_INDEX_CODE, LuceneServiceImpl.EDATATYPE_INDEX_CODE};
+		String[] metamodelLuceneTags = { LuceneServiceImpl.EPACKAGE_INDEX_CODE, LuceneServiceImpl.NsURI_INDEX_CODE,
+				LuceneServiceImpl.EANNOTATION_INDEX_CODE, LuceneServiceImpl.ECLASS_INDEX_CODE,
+				LuceneServiceImpl.EATTRIBUTE_INDEX_CODE, LuceneServiceImpl.EREFERENCE_INDEX_CODE,
+				LuceneServiceImpl.EENUM_INDEX_CODE, LuceneServiceImpl.ELITERAL_INDEX_CODE,
+				LuceneServiceImpl.EDATATYPE_INDEX_CODE };
 		return Arrays.asList(metamodelLuceneTags);
 	}
 
