@@ -192,6 +192,8 @@
 						if((previous.value == ";") || (previous.value == "}")) {
 							var toAdd = {name:'rule', value:'rule', score:2, meta:"keyword"};
 							completions.push(toAdd);
+							var toAdd = {name:'lazy', value:'lazy', score:2, meta:"keyword"};
+							completions.push(toAdd);
 							var toAdd = {name:'endpoint', value:'endpoint', score:2, meta:"keyword"};
 							completions.push(toAdd);
 							var toAdd = {name:'entrypoint', value:'entrypoint', score:2, meta:"keyword"};

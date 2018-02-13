@@ -108,7 +108,7 @@ define('ace/mode/myatl_highlight_rules', ['require', 'exports', 'module' , 'ace/
 
     var myatlHighlightRules = function() {
     	
-        var keywords = ("<=|<>|def|String|do|helper|entrypoint|else|Real|context|create|from|let|Boolean|if|OclAny|using|IN|in|module|query|Sequence|then|OUT|->|null|true|invalid|Collection|OclVoid|>=|..|::|Set|rule|UnlimitedNatural|endpoint|not|and|yyy|xor|OrderedSet|or|false|Bag|...|Integer|<-|OclInvalid|xxx|self|uses|endif|to|implies|Tuple");
+        var keywords = ("<=|<>|def|String|do|helper|entrypoint|else|Real|context|create|from|let|Boolean|if|OclAny|using|IN|in|module|query|Sequence|then|OUT|->|null|true|invalid|Collection|OclVoid|>=|..|::|Set|lazy|rule|UnlimitedNatural|endpoint|not|and|yyy|xor|OrderedSet|or|false|Bag|...|Integer|<-|OclInvalid|xxx|self|uses|endif|to|implies|Tuple");
         var builtinTypes = ("");
         var builtinFunctions = ("");
         var builtinConstants = ("");

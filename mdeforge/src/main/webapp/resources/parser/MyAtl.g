@@ -80,9 +80,8 @@ rule_ModuleElement:
 
 
 
-
 rule_MatchedRule : 
-	'rule' name_0=rule_UnrestrictedName '{'
+	('lazy')? 'rule' name_0=rule_UnrestrictedName '{'
 		'from'
 		inpattern_1=rule_InPattern 
 		('using' '{'
