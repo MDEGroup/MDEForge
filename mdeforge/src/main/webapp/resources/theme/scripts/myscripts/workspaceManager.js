@@ -437,7 +437,7 @@
 		var nameProject = $(this).data('name');
 		var idWorkspace = $("#workspaceId").data('id');
 		$.ajax({
-			url : ctx + "private/project/delete",
+			url : ctx + "/private/project/delete",
 			type: "DELETE",
 			data: {
 				project_id: idProject 
@@ -683,7 +683,7 @@
 	}
 	
 	function clearEditor(){
-		
+		/*TODO*/
 	}
 	
 	function dataTableArtifactList(id,dataSet){

@@ -303,4 +303,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
 		workspaceRepository.save(w);
 		return jsfiddle;
 	}
+
+	@Override
+	public void removeProjectInWorkspaces(Project p) throws BusinessException{
+		// TODO Auto-generated method stub
+		
+		workspaceRepository.findAll().forEach(workspace -> {
+			workspace.getProjects().remove(p);
+			workspaceRepository.save(workspace);
+		});
+		
+	}
 }

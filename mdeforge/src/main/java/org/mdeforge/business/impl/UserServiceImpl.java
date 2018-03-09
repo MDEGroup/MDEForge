@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findByUsernameContaining(name);
 	}
 	
-	
 	@Override
 	public User findOne(String id) throws BusinessException{
 		User u = userRepository.findOne(id);
@@ -151,7 +150,16 @@ public class UserServiceImpl implements UserService{
 		u.setPassword(bcrypt);
 		userRepository.save(u);
 		
-		
+	}
+
+	@Override
+	public void removeSharedProjectInUsers(Project p) throws BusinessException {
+		// TODO Auto-generated method stub
+			
+		userRepository.findAll().forEach(user ->{
+			user.getSharedProject().remove(p);
+			userRepository.save(user);
+		});
 		
 	}
 

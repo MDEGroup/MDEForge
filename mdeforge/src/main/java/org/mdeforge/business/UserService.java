@@ -2,6 +2,7 @@ package org.mdeforge.business;
 
 import java.util.List;
 
+import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.VerificationToken;
 
@@ -34,4 +35,6 @@ public interface UserService {
 	User findOneByEmail(String email) throws BusinessException;
 
 	List<User> findByUsernameContaining(String name);
+	
+	void removeSharedProjectInUsers(Project project) throws BusinessException;
 }

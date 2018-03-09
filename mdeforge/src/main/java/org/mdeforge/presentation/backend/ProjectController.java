@@ -1,12 +1,16 @@
 package org.mdeforge.presentation.backend;
 
+import java.util.List;
+
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.EditorService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
+import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Editor;
+import org.mdeforge.business.model.Workspace;
 import org.mdeforge.business.model.Metamodel;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
@@ -16,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +39,10 @@ public class ProjectController {
 //	
 	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	private UserService userService;
+	
 	@Autowired
 	private User user;
 //	@Autowired
@@ -141,6 +150,24 @@ public class ProjectController {
 		return "redirect:/project/list";
 	}
 	
+	@RequestMapping(value = "/deleteProject", method = RequestMethod.GET)
+	public @ResponseBody Boolean deleteProject(@RequestParam String idProject) {
+		Project p = projectService.findById(idProject, user);
+		
+		/* note: delete the project from all workspaces and users (sharedProject). */
+
+		try {
+			workspaceService.removeProjectInWorkspaces(p);
+			userService.removeSharedProjectInUsers(p);
+		}catch (Exception e) {
+			// TODO: handle exception
+			return false;
+		}
+		
+		projectService.delete(p, user);
+		return true;
+	}
+	
 	@RequestMapping(value = "/update", method = { RequestMethod.GET })
 	public String update_start(@RequestParam("name") String name, org.springframework.ui.Model model) {
 		Project project = projectService.findByName(name);
@@ -176,6 +203,14 @@ public class ProjectController {
 		return p;
 	}
 	
+	@RequestMapping(value = "", method=RequestMethod.GET)
+	public String projectDetails(@RequestParam String idProject, Model model) {
+		
+		Project project = projectService.findById(idProject, user);
+		model.addAttribute("project", project);
+		
+		return "private.use.project.project_details";
+	}
 	
 	
 	@RequestMapping(value = "/metamodel/create", method = { RequestMethod.GET })

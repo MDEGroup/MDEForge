@@ -196,8 +196,8 @@
 								<tbody>
 									<c:forEach items="${myProjectList}" var="project">
 										<!-- Table row -->
-										<tr>
-											<td>${project.getName()}</td>
+										<tr>										    
+											<td><a href="${pageContext.request.contextPath}/private/project?idProject=${project.getId()}"> ${project.getName()} </a></td>
 											<td class="center">
 												<span><fmt:formatDate type="date" value="${project.getCreatedDate()}" /></span>
 											</td>
