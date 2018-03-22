@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
@@ -14,6 +15,8 @@ import org.mdeforge.business.model.form.SearchResult;
 import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
 import org.mdeforge.business.model.wrapper.json.MetricList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -37,8 +40,12 @@ import com.fasterxml.jackson.module.jsonSchema.customProperties.HyperSchemaFacto
 @RequestMapping("/api/Artifact")
 public class ArtifactRESTController {
 
+	Logger logger = LoggerFactory.getLogger(ArtifactRESTController.class);
+
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private LuceneService luceneService;
 	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
 
@@ -63,7 +70,7 @@ public class ArtifactRESTController {
 	        try {
 				MAPPER.writeValueAsString(jsonSchema);
 			} catch (JsonProcessingException e) {
-				e.printStackTrace();
+				logger.error(e.getMessage());
 			}
 			return new ResponseEntity<JsonSchema>(jsonSchema, HttpStatus.OK);
 		} catch (JsonMappingException e) {
@@ -109,7 +116,7 @@ public class ArtifactRESTController {
 	@RequestMapping(value = "/search/{text}", method = RequestMethod.GET)
 	public @ResponseBody HttpEntity<ArtifactList> search(@PathVariable("text") String text) {
 		try {
-			SearchResultComplete searchResults = artifactService.searchForm(text);
+			SearchResultComplete searchResults = luceneService.search(user,text);
 			List<Artifact> artifactList = new ArrayList<Artifact>();
 			for (SearchResult result : searchResults.getResults()) {
 				artifactList.add(result.getArtifact());

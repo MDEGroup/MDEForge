@@ -1,5 +1,7 @@
 package org.mdeforge.business.impl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,19 +9,24 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.BusinessException;
 import org.mdeforge.business.CRUDArtifactService;
+import org.mdeforge.business.GridFileMediaService;
 import org.mdeforge.business.ProjectService;
 import org.mdeforge.business.RequestGrid;
 import org.mdeforge.business.ResponseGrid;
 import org.mdeforge.business.UserService;
 import org.mdeforge.business.WorkspaceService;
 import org.mdeforge.business.model.Artifact;
+import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Project;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.Workspace;
+import org.mdeforge.business.utils.Utils;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.ProjectRepository;
 import org.mdeforge.integration.UserRepository;
 import org.mdeforge.integration.WorkspaceRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +42,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
+	Logger logger = LoggerFactory.getLogger(ProjectServiceImpl.class);
+
+	
 	@Autowired
 	private ProjectRepository projectRepository;
 
@@ -57,6 +67,9 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Autowired
 	private ArtifactRepository artifactRepository;
+	
+	@Autowired
+	private GridFileMediaService gridFileMediaService;
 
 	@Override
 	public void delete(Project project, User userId) throws BusinessException {
@@ -313,6 +326,86 @@ public class ProjectServiceImpl implements ProjectService {
 		
 	
 		return result;
+	}
+
+	@Override
+	public Project cloneProject(String userId, String projectToCloneId, String workspaceId) {
+		/*
+		 * When we clone the project We need remove the old artifact and clone them next time because they are linked to by original project
+		 * We need manage those case:
+		 * - multiple clone 
+		 * -
+		 * 
+		 */
+		Utils utils = new Utils();
+		User u = userService.findOne(userId);
+		Workspace w = new Workspace();
+		
+		
+		List<Artifact> artifactList = new ArrayList<Artifact>();
+		List<Artifact> cloneArtifactList = new ArrayList<Artifact>();
+		String myDate= utils.createDate("yyyyMMddHHmmss");
+		w = workspaceService.findOne(workspaceId);
+		Project project = this.findOne(projectToCloneId);
+		Project projectClone = new Project();
+		projectClone = project.clone();
+		String nameProject = "clone_"+ myDate +"_"+ project.getName();
+		artifactList = project.getArtifacts();
+		
+
+		projectClone.setOwner(u);
+		projectClone.setName(nameProject);
+		projectClone.setId(null);
+	
+		String dirUser = u.getUsername() + File.separator;
+
+		/*
+		 * WE clone the artifacts and set up:
+		 * the author (user), the name of file (it's composed by
+		 */
+		for (Artifact artifact : artifactList) {
+
+			GridFileMedia gfmObj = new GridFileMedia();
+			String path = new String();
+			String filename;
+
+			path = gridFileMediaService.getFilePath(artifact);
+			filename = utils.getNameFromPath(path);
+			try {
+				gfmObj = gridFileMediaService.createObjectFromFile(path, filename);
+			} catch (IOException e) {
+				logger.error(e.getMessage());
+			}
+
+			Artifact artifactClone = new Artifact();
+			List<Project> projectClonelist = new ArrayList<Project>();
+			projectClonelist = artifactClone.getProjects();
+			artifactClone = artifact.clone();
+			artifactClone.setFile(gfmObj);
+			artifactClone.setAuthor(u);
+			artifactClone.setName("clone_" + myDate +"_"+ filename);
+			artifactClone.getFile().setFileName(dirUser + "clone_" + myDate +"_"+ filename);
+			artifactClone.setId(null);
+			
+
+			artifactClone.getProjects().clear();
+			gridFileMediaService.getFilePathFromContent(gfmObj);
+			 artifactService.create(artifactClone);
+			cloneArtifactList.add(artifactClone);
+
+		}
+//		deleting old artifacts
+		projectClone.getArtifacts().clear();
+
+		List<Workspace> listWorkspace = new ArrayList<Workspace>();
+		listWorkspace.add(w);
+		projectClone.getWorkspaces().remove(workspaceId);
+		projectClone.setWorkspaces(listWorkspace);
+		projectClone.setArtifacts(cloneArtifactList);
+//		 workspaceService.addProjectInWorkspace(idProject, idWorkspace, user)
+		this.create(projectClone, u);
+		
+		return projectClone;
 	}
 	
 }

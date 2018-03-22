@@ -6,7 +6,6 @@ import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
 
 
@@ -17,7 +16,7 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<T> findAll() throws BusinessException;
 	ResponseGrid<T> findAll(RequestGrid pag) throws BusinessException;
 	List<T> findSharedNoProject(User user) throws BusinessException;
-	ResponseGrid<T> findSharedNoProject(User user, RequestGrid pag) throws BusinessException;
+//	ResponseGrid<T> findSharedNoProject(User user, RequestGrid pag) throws BusinessException;
 	T findOne(String id) throws BusinessException;	
 	List<T> findAllWithPublicByUser(User user) throws BusinessException;
 	ResponseGrid<T> findAllWithPublicByUser(User user, RequestGrid pag) throws BusinessException;
@@ -25,6 +24,13 @@ public interface CRUDArtifactService <T extends Artifact> {
 	ResponseGrid<T> findAllPublic(RequestGrid pag) throws BusinessException;
 	List<T> findArtifactInProject(String idProject, User user);
 	ResponseGrid<T> findArtifactInProject(String idProject, User user, RequestGrid pag);
+//<<<<<<< HEAD
+//=======
+//	List<T> findArtifactInWorkspace(String idWorkspace, User user);
+//	ResponseGrid<T> findArtifactInWorkspace(String idWorkspace, User user, RequestGrid pag);
+//	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
+//	boolean isArtifactInWorkspace(String idWorkspace, String idArtfact)	throws BusinessException;
+//>>>>>>> lucene
 	boolean isArtifactInProject(String idProject, String idArtfact) throws BusinessException;
 	boolean isArtifactInUser(User idUser, String idArtfact)	throws BusinessException;
 	boolean existRelation(String idTo, String idFrom) throws BusinessException;
@@ -53,13 +59,12 @@ public interface CRUDArtifactService <T extends Artifact> {
 	List<Metric> findMetric(String idArtifact, User user) throws BusinessException;
 	void addComment(Comment comment, String idArtifat) throws BusinessException;
 	List<Statistic> statistic();
+	void createLuceneIndex(T artifact);
 	
-	List<String> getIndexes();
-	SearchResultComplete searchForm(String searchString) throws BusinessException;
-	SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException;
-	List<T> search(String searchString, int maxSearchResult) throws BusinessException;
-	void createIndex(T artifact);
 	boolean deleteTermFromIndex(String fieldName, String filePath);
 	ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated);
 	void deleteComment(String idComment, String idArtifact);
+	List<String> getAllIndexTags();
+	List<String> getTagIndexes();
+	<K> List<K> findAll(Class<K> k);
 }

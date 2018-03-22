@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import org.eclipse.m2m.atl.common.ATLExecutionException;
 import org.eclipse.m2m.atl.core.ATLCoreException;
@@ -26,6 +25,8 @@ import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.User;
 import org.mdeforge.business.model.form.ATLTransformationForm;
 import org.mdeforge.business.model.wrapper.json.RelationList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,12 +39,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import transML.exceptions.transException;
 
 @Controller
 @RequestMapping("/private/ATLTransformation")
 public class ATLPrivateController extends ArtifactPrivateController<ATLTransformation> {
+
+	Logger logger = LoggerFactory.getLogger(ATLPrivateController.class);
 
 	@Autowired
 	private ATLTransformationService aTLTransformationService;
@@ -212,10 +214,10 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 
 		} catch (ATLTransformationCompilationError e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (transException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return "private.use.transformation_details";
 	}
@@ -242,10 +244,10 @@ public class ATLPrivateController extends ArtifactPrivateController<ATLTransform
 			
 		} catch (ATLTransformationCompilationError e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} catch (transException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return "private.use.transformation_details";
 	}

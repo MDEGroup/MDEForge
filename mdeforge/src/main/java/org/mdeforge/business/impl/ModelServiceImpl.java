@@ -3,6 +3,7 @@ package org.mdeforge.business.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,18 +13,18 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.bson.types.ObjectId;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -32,7 +33,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.Diagnostician;
-import org.eclipse.emf.ecore.util.EcoreEList;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 import org.emfjson.jackson.resource.JsonResourceFactory;
@@ -69,14 +69,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements ModelService {
-	
-	
-	private static final String CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER = "_";
-//	private static final int TIKA_CHARACTERS_LIMIT = 5000000; // characters
-	private static final String CONFORM_TO_TAG = "conformToMM";
-	
-	private IndexWriter writer;
 
+
+	private IndexWriter writer;
 	@Autowired
 	private EcoreMetamodelService ecoreMetamodelService;
 	@Autowired
@@ -87,28 +82,23 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	private ArtifactRepository artifactRepository;
 	@Autowired
 	private GridFileMediaService gridFileMediaService;
-	
+
+
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	@Value("#{cfgproperties[basePathLucene]}")
-	protected String basePathLucene;
 	@Value("#{cfgproperties[mongoPrefix]}")
 	private String mongoPrefix;
 	@Value("#{cfgproperties[jsonArtifactCollection]}")
 	private String jsonArtifactCollection;
-
-
 
 	@Override
 	public List<Model> findModelsByMetamodel(Metamodel metamodel) {
 		List<Model> result = new ArrayList<Model>();
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
 		Query query = new Query();
-		Criteria c2 = Criteria.where("toArtifact.$id").is(
-				new ObjectId(metamodel.getId()));
+		Criteria c2 = Criteria.where("toArtifact.$id").is(new ObjectId(metamodel.getId()));
 
-		Criteria c1 = Criteria.where("_class").is(
-				ConformToRelation.class.getCanonicalName());
+		Criteria c1 = Criteria.where("_class").is(ConformToRelation.class.getCanonicalName());
 		query.addCriteria(c1);
 		query.addCriteria(c2);
 		List<ConformToRelation> dcts = n.find(query, ConformToRelation.class);
@@ -135,11 +125,18 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				artifact.setValid(false);
 			else 
 				artifact.setValid(true);
+		try {
+			createLuceneIndex(result);
 		} catch (Exception e) {
 			logger.error("Validation Exception");
 		}
 		return result;
+		} catch(Exception e){
+			
+		}
+		return null;
 	}
+
 	@Override
 	public void createAll(List<Model> artifacts, EcoreMetamodel metamodel, User user) throws BusinessException {
 		metamodel = (EcoreMetamodel) artifactRepository.findOne(metamodel.getId());
@@ -154,13 +151,13 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				else
 					fileMedia.setByteArray(Base64.decode(artifact.getFile().getContent().getBytes()));
 				artifact.setFile(fileMedia);
-				
+
 				if (artifact.getFile() != null) {
 					gridFileMediaService.store(artifact.getFile());
 				}
 				artifact.setCreated(new Date());
 				artifact.setModified(new Date());
-	
+
 				artifact.setAuthor(user);
 				if (artifact.getShared() == null)
 					artifact.setShared(new ArrayList<User>());
@@ -172,7 +169,8 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 				artifact.getRelations().add(relationTemp);
 				artifactRepository.save(artifact);
 				relList.add(relationTemp);
-				createIndex(artifact);
+				// createIndex(artifact);
+				createLuceneIndex(artifact);
 			}
 			metamodel.getRelations().addAll(relList);
 			artifactRepository.save(metamodel);
@@ -181,10 +179,6 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			throw new BusinessException();
 		}
 	}
-	
-	
-	
-	
 
 
 	@Override
@@ -211,32 +205,27 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 		}
 	}
 
-	@Override
-	public double calculateSimilarity(Artifact art1, Artifact art2) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
-		List<Model> result = new ArrayList<Model>();
-		for (DomainConformToRelation rel : atlTransformation
-				.getDomainConformToRelation())
-			result.addAll(findModelsByMetamodel((EcoreMetamodel) rel
-					.getToArtifact()));
-		return result;
-	}
+
+//	@Override
+//<<<<<<< HEAD
+//	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
+//		List<Model> result = new ArrayList<Model>();
+//		for (DomainConformToRelation rel : atlTransformation
+//				.getDomainConformToRelation())
+//			result.addAll(findModelsByMetamodel((EcoreMetamodel) rel
+//					.getToArtifact()));
+//		return result;
+//	}
 	
 	
-	@Override
-	public void createIndex(Model is) {
-		// set the directory for the index
-		Directory indexDir;
+	public void createLuceneIndex(Model is) {
+		
 		try {
-			File indexDirFile = new File(basePathLucene);
-			indexDir = FSDirectory.open(indexDirFile);
-			Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, analyzer);
+			// set the directory for the index
+			Directory indexDir = FSDirectory.open(Paths.get(basePathLucene));
+			Analyzer analyzer = new StandardAnalyzer();
+			IndexWriterConfig conf = new IndexWriterConfig(analyzer);
 			// Create a new index in the directory, removing any
 			// previously indexed documents:
 			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
@@ -244,7 +233,7 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 			// create the indexer
 			this.writer = new IndexWriter(indexDir, conf);
 
-			Document document = parseArtifactForIndex(is);
+			Document document = parseModelForIndex(is);
 			writer.addDocument(document);
 			
 			writer.close();
@@ -260,112 +249,110 @@ public class ModelServiceImpl extends CRUDArtifactServiceImpl<Model> implements 
 	 * @param ecoreMetamodel
 	 * @return
 	 */
-	private Document parseArtifactForIndex(Model model) {
-		
-		Document doc = getMetadataIndex(model);
+	private Document parseModelForIndex(Model model) {
+		Document doc = new Document();
 		try{
-			Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
-			ecoreMetamodelService.registerMetamodel(emm);
-			ResourceSet load_resourceSet = new ResourceSetImpl();
-			/**/
-			Field idField = new Field(ID_TAG, model.getId(), Store.YES, Index.ANALYZED);
-		 	doc.add(idField);
+		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		EcoreMetamodel emm = ((EcoreMetamodel)model.getMetamodel().getToArtifact());
+		ecoreMetamodelService.registerMetamodel(emm);
+		ResourceSet load_resourceSet = new ResourceSetImpl();
+
+		load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
+		
+		TreeIterator<EObject> eAllContents = load_resource.getAllContents();
+		while (eAllContents.hasNext()) {
+			EObject next = eAllContents.next();
 			
-			Field artifactType = new Field(TYPE_TAG, model.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
-			doc.add(artifactType);
-			
-			Field artName = new Field(NAME_TAG, model.getName(), Store.YES, Index.ANALYZED);
-		 	doc.add(artName);
-		 	
-		 	Field authorField = new Field(AUTHOR_TAG, model.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
-		 	doc.add(authorField);
-		 	
-		 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, model.getModified().toString(), Store.YES, Index.ANALYZED);
-		 	doc.add(lastUpdateField);
-		 	
-		 	for (Property prop : model.getProperties()) {
-				String propName = prop.getName();
-				String propValue = prop.getValue();
-				if(propName != null && propValue != null) {
-					Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-					doc.add(propField);
-				}
-			}
-			
-			/**/
-			
-			
-			Field conformToName = new Field(CONFORM_TO_TAG, emm.getName(), Store.YES, Index.ANALYZED);
-			doc.add(conformToName);
-			
-			Field conformToId = new Field(CONFORM_TO_TAG, emm.getId(), Store.YES, Index.ANALYZED);
-			doc.add(conformToId);
-			load_resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
-			Resource load_resource = load_resourceSet.getResource(URI.createURI(gridFileMediaService.getFilePath(model)), true);
-			
-			
-			
-			
-			
-			
-			TreeIterator<EObject> eAllContents = load_resource.getAllContents();
-			while (eAllContents.hasNext()) {
-				EObject next = eAllContents.next();
+			EClass eClass = next.eClass();
+			if(eClass instanceof EClass)  {
+				//CLASS ANNOTATIONS
+				EList<EAnnotation> annotations = next.eClass().getEAnnotations();
+				//TODO index also the annotations
 				
-				EClass eClass = next.eClass();
-				if(eClass instanceof EClass)  {
-					//CLASS ATTRIBUTES
-					for (EAttribute attribute : eClass.getEAllAttributes()) {
-						if(next.eGet(attribute) != null){
-							String attributeValue = next.eGet(attribute).toString();
-							Field eClassWithAttributeField = new Field(eClass.getName(), attributeValue, Store.YES, Index.ANALYZED);
-							doc.add(eClassWithAttributeField);
-							Field eClassWithAttributeAndAttributeValueField = new Field(eClass.getName() + CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Store.YES, Index.ANALYZED);
-							doc.add(eClassWithAttributeAndAttributeValueField);
-						}
-					}
-					
-					// EClass References
-					for (EReference reference : eClass.getEAllReferences()) {
-						Object object = next.eGet(reference);
-						if(!(object instanceof EcoreEList))
-						{
-							EObject eo = (EObject) object;
-							if (eo!=null && eo.eClass() instanceof EClass){
-								EClass value = (EClass) eo.eClass();
-								if(value!=null){
-									for (EAttribute eattribute : value.getEAttributes()) {
-										if(eo.eGet(eattribute)!=null){
-											String indexValue = eo.eGet(eattribute).toString();
-											String key = reference.getName();
-											Field eClassReferenceField = new Field(key, indexValue, Store.YES, Index.ANALYZED);
-											doc.add(eClassReferenceField);
-										}
-									}
-								}
-							}
-						}
-						else {
-							//TODO
-							logger.info("VERIFICARE");
-						}
-					}
+				//CLASS ATTRIBUTES
+				for (EAttribute attribute : eClass.getEAllAttributes()) {
+					String attributeValue = next.eGet(eClass.getEStructuralFeature(attribute.getName())).toString();
+					Field eClassWithAttributeField = new TextField(eClass.getName(), attributeValue, Field.Store.YES);
+					doc.add(eClassWithAttributeField);
+
+					Field eClassWithAttributeAndAttributeValueField = new TextField(eClass.getName() + LuceneServiceImpl.CUSTOM_LUCENE_INDEX_SEPARATOR_CHARACTER + attribute.getName(), attributeValue, Field.Store.YES);
+					// eClassWithAttributeAndAttributeValueField(1.5f);
+					doc.add(eClassWithAttributeAndAttributeValueField);
 				}
+				
+				// EClass References
+				for (EReference reference : eClass.getEAllReferences()) {
+					EObject value = (EObject) next.eGet(reference);
+					String key = reference.getName();
+					EClass referenceTo = (EClass) value.eClass();
+					Field eClassReferenceField = new TextField(key, referenceTo.getName(), Field.Store.YES);
+					// eClassReferenceField.setBoost(1.5f);
+					doc.add(eClassReferenceField);
+					}
 			}
-		} catch(Exception e) {
-			e.printStackTrace();
+			
+		}
+		}catch(Exception e) { 
 			logger.error("Some error when try to parse EMF index");
 		}
+		Field artifactType = new TextField(LuceneServiceImpl.TYPE_TAG, model.getClass().getSimpleName(), Field.Store.YES);
+		doc.add(artifactType);
+
+		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(model));
+		Field textField = new TextField(LuceneServiceImpl.TEXT_TAG, text, Field.Store.YES);
+		String artifactName = model.getName();
+	 	Field artName = new TextField(LuceneServiceImpl.NAME_TAG, artifactName, Field.Store.YES);
+	 	String author = model.getAuthor().getUsername();
+	 	Field authorField = new TextField(LuceneServiceImpl.AUTHOR_TAG, author, Field.Store.YES);
+	 	
+	 	Date lastUpdate = model.getModified();
+	 	Field lastUpdateField = new TextField(LuceneServiceImpl.LAST_UPDATE_TAG, lastUpdate.toString(), Field.Store.YES);
+	 	for (Property prop : model.getProperties()) {
+			String propName = prop.getName();
+			String propValue = prop.getValue();
+			Field propField = new TextField(propName, propValue, Field.Store.YES);
+			doc.add(propField);
+		}
+	 	Field idField = new TextField(LuceneServiceImpl.ID_TAG, model.getId(), Field.Store.YES);
+	 	
+	 	
+	 	Field conformToFieldName = new TextField(LuceneServiceImpl.CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getName(), Field.Store.YES);
+	 	doc.add(conformToFieldName);
+	 	Field conformToFieldId = new TextField(LuceneServiceImpl.CONFORM_TO_TAG, model.getMetamodel().getToArtifact().getId(), Field.Store.YES);
+	 	doc.add(conformToFieldId);
+	 	doc.add(textField);
+	 	doc.add(artName);
+	 	doc.add(authorField);
+	 	doc.add(lastUpdateField);
+		doc.add(idField);
+		
+	
 		return doc;
 	}
 	
 	
-	
+
+
+
 
 	@Override
-	public List<String> getIndexes() {
-		//FIXME
+	public double calculateSimilarity(Artifact art1, Artifact art2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Model> findByTransformation(ATLTransformation atlTransformation) {
+		List<Model> result = new ArrayList<Model>();
+		for (DomainConformToRelation rel : atlTransformation.getDomainConformToRelation())
+			result.addAll(findModelsByMetamodel((EcoreMetamodel) rel.getToArtifact()));
+		return result;
+	}
+
+	@Override
+	public List<String> getTagIndexes() {
+		//TODO BASCIANI 
 		return new ArrayList<String>();
 	}
 

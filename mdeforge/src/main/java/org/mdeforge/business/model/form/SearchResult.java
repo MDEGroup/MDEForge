@@ -5,7 +5,6 @@ import org.mdeforge.business.model.Artifact;
 public class SearchResult {
 	
 	private int id;
-	private String[] fragments;
 	private float score;
 	private Artifact artifact;
 	
@@ -14,12 +13,6 @@ public class SearchResult {
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
-	public String[] getFragments() {
-		return fragments;
-	}
-	public void setFragments(String[] fragments) {
-		this.fragments = fragments;
 	}
 	public float getScore() {
 		return score;

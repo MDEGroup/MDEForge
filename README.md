@@ -4,7 +4,7 @@ MDEForge is an extensible Web-based modeling platform specifically conceived to 
 # MDEForge Platform
 MDEForge platform consists of a number of services that can be used by means of both a Web access and programmatic interfaces (API) that enable their adoption as software as a service. In particular, core services are provided to enable the management of modeling artifacts, namely transformations, models, metamodels, and editors. Atop of such core services, extensions can be developed to add new functionalities.
 
-<img src="http://www.mdeforge.org/resources/theme/images/architecture.png">
+<img src="http://www.mdeforge.org/wp-content/uploads/2017/03/architecture.png">
 
 # MDEForge Users
 

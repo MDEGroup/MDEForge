@@ -187,6 +187,7 @@
 						function(template) {
 							var rendered = Mustache.render(template, model);
 							result.append(rendered);
+							
 					});
 				//$("#modelSelect option[value='" + model.id + "']").remove();
 				$('#modelToAdd').hide();
@@ -437,7 +438,7 @@
 		var nameProject = $(this).data('name');
 		var idWorkspace = $("#workspaceId").data('id');
 		$.ajax({
-			url : ctx + "/private/project/delete",
+			url : ctx + "private/project/delete",
 			type: "DELETE",
 			data: {
 				project_id: idProject 
@@ -683,7 +684,7 @@
 	}
 	
 	function clearEditor(){
-		/*TODO*/
+		
 	}
 	
 	function dataTableArtifactList(id,dataSet){
@@ -844,6 +845,7 @@
 							artifact.model = true;
 							var idProject = $('#projectId').attr('data-id');
 							artifact.projectId = idProject;
+							artifact.ctx = ctx;
 							$.get(ctx + '/resources/theme/scripts/plugins/forms/template/artifactRowInWorkspace.html',
 									function(template) {
 										var rendered = Mustache.render(template, artifact);

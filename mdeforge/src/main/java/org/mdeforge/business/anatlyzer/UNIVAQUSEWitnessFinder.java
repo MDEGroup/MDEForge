@@ -1,5 +1,7 @@
 package org.mdeforge.business.anatlyzer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import anatlyzer.atl.witness.IWitnessFinder;
@@ -9,10 +11,11 @@ public class UNIVAQUSEWitnessFinder extends UseWitnessFinder {
 
 	@Value("#{cfgproperties[basePath]}")
 	protected String basePath;
-	
+	Logger logger = LoggerFactory.getLogger(UNIVAQUSEWitnessFinder.class);
+
 	@Override
 	protected void onUSEInternalError(Exception e) {
-		e.printStackTrace();
+		logger.error(e.getMessage() + e.getStackTrace());
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.List;
 import org.mdeforge.business.ATLTransformationService;
 import org.mdeforge.business.CRUDArtifactService;
 import org.mdeforge.business.EcoreMetamodelService;
+import org.mdeforge.business.LuceneService;
 import org.mdeforge.business.ModelService;
 import org.mdeforge.business.model.Artifact;
 import org.mdeforge.business.model.EcoreMetamodel;
@@ -30,29 +31,31 @@ public class SearchPublicController {
 	@Autowired
 	private User user;
 	@Autowired
-	private EcoreMetamodelService ecoreMetamodelService;
-	@Autowired
-	private ATLTransformationService atlService;
+	private ATLTransformationService atlTransformationService;
 	@Autowired
 	private ModelService modelService;
 	@Autowired
+	private EcoreMetamodelService ecoreMetamodelService;
+	@Autowired
 	private CRUDArtifactService<Artifact> artifactService;
+	@Autowired
+	private LuceneService luceneService;
 	
 	@RequestMapping(value = "/search", method = { RequestMethod.GET })
 	public String search(Model model) {
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = ecoreMetamodelService.getIndexes();
+		List<String> indexFieldNamesForMM = ecoreMetamodelService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = atlService.getIndexes();
+		List<String> indexFieldNamesForT = atlTransformationService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = modelService.getIndexes();
+		List<String> indexFieldNamesForM = modelService.getAllIndexTags();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.
@@ -71,7 +74,7 @@ public class SearchPublicController {
 			 @RequestParam(value = "limit") int limit,
 			 @RequestParam(value = "idProject", required = false) String idProject){
 	  searchString += " AND forgeType:" + type;
-	  List<Artifact> searchResultComplete = artifactService.search(searchString, limit);
+	  List<Artifact> searchResultComplete = luceneService.search(user, searchString, limit);
 	  
 	  //filter based on project: remove all the artifact present in the user project
 	  if(idProject != null){
@@ -94,24 +97,26 @@ public class SearchPublicController {
 		}
 		
 //		SearchResultComplete searchResultComplete = artifactService.searchForm(searchString);
-		SearchResultComplete searchResultComplete = artifactService.searchWithPagination(searchString, hitPerPage, page);
+		SearchResultComplete searchResultComplete = luceneService.search(user, searchString, hitPerPage, page);
 		model.addAttribute("searchResultComplete", searchResultComplete);
 //		model.addAttribute("search_string", searchString);
 		
 		// Tags for MM (statics)
 		// Get all Metamodels tags
-		List<String> indexFieldNamesForMM = ecoreMetamodelService.getIndexes();
-		
+		List<String> indexFieldNamesForMM = ecoreMetamodelService.getAllIndexTags();
+		for (String string : indexFieldNamesForMM) {
+			System.out.println(string + "ggg");
+		}
 		model.addAttribute("indexFieldNamesForMM", indexFieldNamesForMM);
 
 		// Tags for T. (statics)
 		// Get all Transformations tags
-		List<String> indexFieldNamesForT = atlService.getIndexes();
+		List<String> indexFieldNamesForT = atlTransformationService.getAllIndexTags();
 		model.addAttribute("indexFieldNamesForT", indexFieldNamesForT);
 
 		// Tags for M. (dinamics)
 		// Get all tags
-		List<String> indexFieldNamesForM = modelService.getIndexes();
+		List<String> indexFieldNamesForM = modelService.getAllIndexTags();
 
 		// Remove Metamodels and Transformations tags in order to find out only
 		// the model tags.
@@ -153,7 +158,7 @@ public class SearchPublicController {
 		gfm.setFileName("searchFragment.ecore");
 		m.setFile(gfm);
 		m.setName("searchFragment");        
-		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.5);
+		List<EcoreMetamodel> el = ecoreMetamodelService.searchByExample(m, 0.1);
 		for (EcoreMetamodel ecoreMetamodel : el) {
 			ecoreMetamodel.setFile(null);
 		}

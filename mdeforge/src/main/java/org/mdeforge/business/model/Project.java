@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  * @generated
  */
 @Document(collection="Projects")
-public class Project implements java.io.Serializable{
+public class Project implements java.io.Serializable,Cloneable {
 
 	
 	private static final long serialVersionUID = -717518242205317774L;
@@ -41,10 +41,22 @@ public class Project implements java.io.Serializable{
 	@DBRef
 	@JsonSerialize(using = WorkspaceListSerializer.class)
 	private List<Workspace> workspaces = new ArrayList<Workspace>();;
-
+	
+	
 	private String name = null;
 
 	private String id = null;
+	
+	
+	public Project clone() {
+		try {
+			return (Project) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
 
 	public List<Artifact> getArtifacts() {
 		return artifacts;

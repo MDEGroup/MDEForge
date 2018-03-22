@@ -7,38 +7,25 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.proj
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.sort;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.ParameterizedType;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.search.TopScoreDocCollector;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.lucene.search.highlight.TextFragment;
-import org.apache.lucene.search.highlight.TokenSources;
-import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.bson.types.ObjectId;
 import org.mdeforge.business.ArtifactNotFoundException;
 import org.mdeforge.business.AuthorizzationException;
@@ -57,12 +44,9 @@ import org.mdeforge.business.model.Comment;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Metric;
 import org.mdeforge.business.model.Project;
-import org.mdeforge.business.model.Property;
 import org.mdeforge.business.model.Relation;
 import org.mdeforge.business.model.ToBeAnalyse;
 import org.mdeforge.business.model.User;
-import org.mdeforge.business.model.form.SearchResult;
-import org.mdeforge.business.model.form.SearchResultComplete;
 import org.mdeforge.business.model.form.Statistic;
 import org.mdeforge.integration.ArtifactRepository;
 import org.mdeforge.integration.MetricRepository;
@@ -87,8 +71,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.crypto.codec.Base64;
 public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRUDArtifactService<T> {
 	
-	
-	
+	private IndexWriter writer;
 	
 	@Override
 	public ResponseGrid<T> findMyArtifacts(User user, RequestGrid pag, boolean generated) {
@@ -259,11 +242,6 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 
 
-	@Override
-	public ResponseGrid<T> findSharedNoProject(User user, RequestGrid pag) throws BusinessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 
 
@@ -276,29 +254,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		artifactRepository.save(art);
 		return;
 	}
-	
-	@Override
-	public void deleteComment(String idComment, String idArtifact) {
-		T art = findOne(idArtifact);
-		Comment c = new Comment();
-		c.setId(idComment);
-		art.getComments().remove(c);
-		artifactRepository.save(art);
-		return;
-	}
-	@Override
-	public List<String> getIndexes() {
-		return Arrays.asList(TYPE_TAG, NAME_TAG, AUTHOR_TAG, ID_TAG, LAST_UPDATE_TAG);
-	}
-	protected static final String INVOLVED_TAG = "involved";
-	protected static final String TYPE_TAG = "forgeType";
-	protected static final String NAME_TAG = "name";
-	protected static final String AUTHOR_TAG = "author";
-	protected static final String ID_TAG = "id";
-	protected static final String LAST_UPDATE_TAG = "lastUpdate";
-	private static final int MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE = 10;
-	private static final String TAG_HIGHLIGHT_OPEN = "<strong>";
-	private static final String TAG_HIGHLIGHT_CLOSE = "</strong>";
+
 	@Autowired
 	private MetricRepository metricRepository;
 	@Autowired
@@ -329,58 +285,68 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	protected Class<T> persistentClass;
 	@Value("#{cfgproperties[basePathLucene]}")
 	protected String basePathLucene;
-	
-	protected Document getMetadataIndex (Artifact artifact){
-		Document doc = new Document();
-		//ID
-		Field idField = new Field(ID_TAG, artifact.getId(), Store.YES, Index.ANALYZED);
-	 	doc.add(idField);
-		
-		//Artifact TYPE: "EcoreMetamodel"
-		Field artifactType = new Field(TYPE_TAG, artifact.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
-		doc.add(artifactType);
-		
-//				String text = handler.toString();
-		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(artifact));
-		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
-		doc.add(textField);
 
-		
-		Field artName = new Field(NAME_TAG, artifact.getName(), Store.YES, Index.ANALYZED);
-	 	doc.add(artName);
-	 	
-	 	Field authorField = new Field(AUTHOR_TAG, artifact.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
-	 	doc.add(authorField);
-	 	
-	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, artifact.getModified().toString(), Store.YES, Index.ANALYZED);
-	 	doc.add(lastUpdateField);
-	 	
-	 	for (Property prop : artifact.getProperties()) {
-			String propName = prop.getName();
-			String propValue = prop.getValue();
-			if(propName != null && propValue != null) {
-				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
-				doc.add(propField);
-			}
-		}
-	 	for (Relation rel : artifact.getRelations()) {
-			if(rel.getFromArtifact()!=artifact){
-				Field involvedName = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
-			 	doc.add(involvedName);
-			 	Field involvedId = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
-			 	doc.add(involvedId);
-			}
-			if(rel.getToArtifact()!=artifact){
-				Field involvedName = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
-			 	doc.add(involvedName);
-			 	Field involvedId = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
-			 	doc.add(involvedId);
-			}
-		}
-	 	return doc;
+	//TODO
+//	protected Document getMetadataIndex (Artifact artifact){
+//		Document doc = new Document();
+//		Field idField = new Field(ID_TAG, artifact.getId(), Store.YES, Index.ANALYZED);
+//	 	doc.add(idField);
+//		
+//		Field artifactType = new Field(TYPE_TAG, artifact.getClass().getSimpleName(), Store.YES, Index.ANALYZED);
+//		doc.add(artifactType);
+//		
+//		String text = getTextFromInputStream(gridFileMediaService.getFileInputStream(artifact));
+//		Field textField = new Field("text", text, Store.YES, Index.ANALYZED);
+//		doc.add(textField);
+//
+//		
+//		Field artName = new Field(NAME_TAG, artifact.getName(), Store.YES, Index.ANALYZED);
+//	 	doc.add(artName);
+//	 	
+//	 	Field authorField = new Field(AUTHOR_TAG, artifact.getAuthor().getUsername(), Store.YES, Index.ANALYZED);
+//	 	doc.add(authorField);
+//	 	
+//	 	Field lastUpdateField = new Field(LAST_UPDATE_TAG, artifact.getModified().toString(), Store.YES, Index.ANALYZED);
+//	 	doc.add(lastUpdateField);
+//	 	
+//	 	for (Property prop : artifact.getProperties()) {
+//			String propName = prop.getName();
+//			String propValue = prop.getValue();
+//			if(propName != null && propValue != null) {
+//				Field propField = new Field(propName, propValue, Store.YES, Index.ANALYZED);
+//				doc.add(propField);
+//			}
+//		}
+//	 	for (Relation rel : artifact.getRelations()) {
+//			if(rel.getFromArtifact()!=artifact){
+//				Field involvedName = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
+//			 	doc.add(involvedName);
+//			 	Field involvedId = new Field(INVOLVED_TAG, rel.getFromArtifact().getId(), Store.YES, Index.ANALYZED);
+//			 	doc.add(involvedId);
+//			}
+//			if(rel.getToArtifact()!=artifact){
+//				Field involvedName = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
+//			 	doc.add(involvedName);
+//			 	Field involvedId = new Field(INVOLVED_TAG, rel.getToArtifact().getId(), Store.YES, Index.ANALYZED);
+//			 	doc.add(involvedId);
+//			}
+//		}
+//	 	return doc;
+//	}
+
+	
+	
+
+
+	
+
+	@SuppressWarnings("unchecked")
+	public CRUDArtifactServiceImpl() {
+		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+				.getActualTypeArguments()[0];
 	}
 
-	private String getTextFromInputStream(InputStream is){      
+	public String getTextFromInputStream(InputStream is){      
         String str = "";
         StringBuffer buf = new StringBuffer();            
         try {
@@ -391,232 +357,13 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
                 }                
             }
         } catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		} finally {
             try { is.close(); } catch (Throwable ignore) {}
         }
         return buf.toString();
     }
 	
-	@Override
-	public SearchResultComplete searchForm(String queryString) throws BusinessException {
-		
-		SearchResultComplete searchResultComplete = new SearchResultComplete();
-		List<SearchResult> searchResults = new ArrayList<SearchResult>();
-		
-		long duration = 0;
-		long startTime = System.nanoTime();
-		
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
-		try {
-			directory = FSDirectory.open(indexDir);
-
-			IndexReader reader = IndexReader.open(directory);
-			IndexSearcher searcher = new IndexSearcher(reader);
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
-			
-			//Get all indexed fields
-			String[] fields = getIndexes().toArray(new String[0]);
-			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
-			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-			TopDocs hits = searcher.search(query, Integer.MAX_VALUE);
-
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-			for (int i = 0; i < hits.totalHits; i++) {
-				int id = hits.scoreDocs[i].doc;
-				Document doc = searcher.doc(id);
-				
-				String text = doc.get("text");
-				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
-				
-				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-
-				String[] fragments = new String[frag.length];
-				for (int j = 0; j < frag.length; j++) {
-					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-						fragments[j] = frag[j].toString();
-					}
-				}
-				T art = findOne(doc.get("id"));
-				
-				SearchResult sr = new SearchResult();
-				sr.setArtifact(art);
-				sr.setScore(hits.scoreDocs[i].score);
-				sr.setFragments(fragments);
-				
-				searchResults.add(sr);
-			}
-			
-			searcher.close();
-			
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (InvalidTokenOffsetsException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
-		
-		
-		long endTime = System.nanoTime();
-		duration = (endTime - startTime)/1000000; //milliseconds(1000000) - seconds (1000000000)
-		
-		searchResultComplete.setResults(searchResults);
-		searchResultComplete.setSearchTime(duration);
-		
-		
-		return searchResultComplete;
-	}
-	
-	@Override
-	public List<T> search(String queryString, int maxSearchResult) throws BusinessException {
-		List<T> listArtifact = new ArrayList<T>();
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
-		try {
-			directory = FSDirectory.open(indexDir);
-			IndexReader reader = IndexReader.open(directory);
-			IndexSearcher searcher = new IndexSearcher(reader);
-//			QueryParser queryParser = new QueryParser(Version.LUCENE_35, "text", analyzer);
-			//Get all indexed fields
-			String[] fields = getIndexes().toArray(new String[0]);
-			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
-			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-			TopDocs hits = searcher.search(query, maxSearchResult);
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-			int max = (maxSearchResult > hits.totalHits)?hits.totalHits:maxSearchResult;
-			for (int i = 0; i < max; i++) {
-				try {
-					int id = hits.scoreDocs[i].doc;
-					Document doc = searcher.doc(id);
-					String text = doc.get("text");
-					TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, "text", analyzer);
-					TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-					String[] fragments = new String[frag.length];
-					for (int j = 0; j < frag.length; j++) {
-						if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-							fragments[j] = frag[j].toString();
-						}
-					}
-					T art = findOne(doc.get("id"));	
-					listArtifact.add(art);
-				} catch (Exception e){}
-			}
-			searcher.close();
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
-		return listArtifact;
-	}
-	
-	
-	@Override
-	public SearchResultComplete searchWithPagination(String queryString, int hitsPerPage, int pageNumber) throws BusinessException {
-		long duration = 0;
-		long startTime = System.nanoTime();
-		
-		int totalNumberOfHits;
-		
-		SearchResultComplete searchResultComplete = new SearchResultComplete();
-		List<SearchResult> searchResults = new ArrayList<SearchResult>();
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_35);
-		File indexDir = new File(basePathLucene);
-		Directory directory;
-		try {
-			directory = FSDirectory.open(indexDir);
-			IndexReader reader = IndexReader.open(directory);
-			IndexSearcher searcher = new IndexSearcher(reader);
-			
-			//Get all indexed fields
-			String[] fields = getIndexes().toArray(new String[0]);
-			//Query Parse over multiple Indexed Fields
-			MultiFieldQueryParser queryParser = new MultiFieldQueryParser(Version.LUCENE_35, fields, analyzer);
-			org.apache.lucene.search.Query query = queryParser.parse(queryString);
-			
-			TopScoreDocCollector collector = TopScoreDocCollector.create(3000, true);  // maxSearchResult is just an int limiting the total number of hits 
-
-			int startIndex = (pageNumber-1) * hitsPerPage;  // our page is 1 based - so we need to convert to zero based
-			
-	        searcher.search(query, collector);
-
-	        totalNumberOfHits = collector.getTotalHits();
-
-	        TopDocs hits = collector.topDocs(startIndex, hitsPerPage);
-			
-			SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter(TAG_HIGHLIGHT_OPEN, TAG_HIGHLIGHT_CLOSE);
-			//Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-			int iterator = (hitsPerPage > hits.scoreDocs.length)?hits.scoreDocs.length:hitsPerPage;
-			for (int i = 0; i < iterator; i++) {
-				int id = hits.scoreDocs[i].doc;
-				Document doc = searcher.doc(id);
-//				String text = doc.get("text");
-//				TokenStream tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(),hits.scoreDocs[i].doc, "text", analyzer);
-//				TextFragment[] frag = highlighter.getBestTextFragments(tokenStream, text, true, MAX_NUMBER_OF_FRAGMENTS_TO_RETRIEVE);
-//				String[] fragments = new String[frag.length];
-//				for (int j = 0; j < frag.length; j++) {
-//					if ((frag[j] != null) && (frag[j].getScore() > 0)) {
-//						fragments[j] = frag[j].toString();
-//					}
-//				}
-				T art = findOne(doc.get("id"));
-				
-				//TODO fare ricerca solo di artefatti PUBBLCI o SOLO PRIVATI o SOLO SHARATI CON ME
-				SearchResult sr = new SearchResult();
-				sr.setArtifact(art);
-				sr.setScore(hits.scoreDocs[i].doc);
-//				sr.setFragments(fragments);
-				
-				searchResults.add(sr);
-			}
-			searcher.close();
-		} catch (IOException e) {
-			throw new BusinessException(e.getMessage());
-		} 
-//		catch (InvalidTokenOffsetsException e) {
-//			throw new BusinessException(e.getMessage());
-//		} 
-		catch (org.apache.lucene.queryParser.ParseException e) {
-			throw new BusinessException(e.getMessage());
-		}
-		
-		long endTime = System.nanoTime();
-		duration = (endTime - startTime)/1000000;
-		
-		searchResultComplete.setResults(searchResults);
-		searchResultComplete.setSearchTime(duration);
-		searchResultComplete.setTotalHits(totalNumberOfHits);
-		searchResultComplete.setHitsPerPage(hitsPerPage);
-		searchResultComplete.setPageNumber(pageNumber);
-		searchResultComplete.setQueryString(queryString);
-		int numberOfPages = 0;
-		if(totalNumberOfHits % hitsPerPage == 0){
-			numberOfPages = totalNumberOfHits/hitsPerPage;
-		}else{
-			numberOfPages = (totalNumberOfHits/hitsPerPage) + 1;
-		}
-		searchResultComplete.setPages(numberOfPages);
-		
-		return searchResultComplete;
-	}
-
-	
-
-	@SuppressWarnings("unchecked")
-	public CRUDArtifactServiceImpl() {
-		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
-				.getActualTypeArguments()[0];
-	}
-
 	@Override
 	public T findOneById(String idArtifact, User user) throws BusinessException {
 		MongoOperations operations = new MongoTemplate(mongoDbFactory);
@@ -704,6 +451,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 
 	}
 
+	@Override
+	public <K> List<K> findAll(Class<K> k) {
+		MongoOperations n = new MongoTemplate(mongoDbFactory);
+		Query query = new Query();
+		Criteria c = Criteria.where("_class").is(k.getCanonicalName());
+		query.addCriteria(c);
+		return n.find(query, k);
+	}
+	
 	@Override
 	public List<T> findRecentArtifacts() {
 		MongoOperations n = new MongoTemplate(mongoDbFactory);
@@ -820,6 +576,15 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			return n.count(new Query(), persistentClass);
 
 	}
+	@Override
+	public void deleteComment(String idComment, String idArtifact) {
+		T art = findOne(idArtifact);
+		Comment c = new Comment();
+		c.setId(idComment);
+		art.getComments().remove(c);
+		artifactRepository.save(art);
+		return;
+	}
 
 	@Override
 	public void delete(T artifact, User user) {
@@ -920,7 +685,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 			throw new BusinessException(e.getMessage());
 		}
 	}
@@ -1018,7 +783,7 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 			toBeAnalyzedRepository.save(art);
 
 			try{
-				createIndex(artifact);
+				createLuceneIndex(artifact);
 			} catch(Exception e) {
 				logger.error("Error during calculate indexes");
 			}
@@ -1312,32 +1077,61 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 	public List<Metric> findMetric(String idArtifact, User user) throws BusinessException {
 		return metricRepository.findByArtifactId(new ObjectId(idArtifact));
 	}
+
 	
-	
-	
+	/**
+	 * Parse Metamodel artifact file in order to extrapolate and index the file to Lucene Index
+	 * @param ecoreMetamodel
+	 * @return Document
+	 */
+	@Override
+	public List<String> getAllIndexTags() {
+		
+		Collection<String> result = new HashSet<String>();
+		try {
+			IndexReader luceneIndexReader = DirectoryReader.open(FSDirectory.open(Paths.get(basePathLucene)));
+			result = MultiFields.getIndexedFields(luceneIndexReader);
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+		}
+		
+		List<String> sortedList = new ArrayList<String>(result);
+		Collections.sort(sortedList);
+		
+		sortedList.forEach(x -> System.out.println(x));
+		return sortedList;
+	}
 	@Override
 	/**
 	 * Delete a Term from Lucene index. It take as input the FIELD_NAME and the FILE_PATH of the file we want to delete.
 	 */
 	public boolean deleteTermFromIndex(String fieldName, String filePath){
-		int numberDeleteTerms = 0;
+		//TODO Basciani
+		
+		long numberDeleteTerms = 0;
 		boolean result = false;
-
-		File indexDirFile = new File(basePathLucene);
-		FSDirectory indexDir;
-		IndexReader luceneIndexReader = null;
+		
+		Term termToDelete = new Term(fieldName, filePath); 
 		try {
-			indexDir = FSDirectory.open(indexDirFile);
-			luceneIndexReader = IndexReader.open(indexDir);
-			
-			Term termToDelete = new Term(fieldName, filePath); 
-			
-			numberDeleteTerms = luceneIndexReader.deleteDocuments(termToDelete);
-			luceneIndexReader.close();
+			numberDeleteTerms = writer.deleteDocuments(termToDelete);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
+		
+//		
+//		 BooleanQuery.Builder builder = new BooleanQuery.Builder();
+//
+//		//note year is stored as int , not as string when document is craeted.
+//		//if you use Term here which will need 2016 as String, that will not match with documents stored with year as int.
+//		 Query yearQuery = IntPoint.newExactQuery("year", 2016);
+//		 Query stateQuery = new TermQuery(new Term("STATE", "TX"));
+//		 Query cityQuery = new TermQuery(new Term("CITY", "CITY NAME"));
+//
+//		 builder.add(yearQuery, BooleanClause.Occur.MUST);
+//		 builder.add(stateQuery, BooleanClause.Occur.MUST);
+//		 builder.add(cityQuery, BooleanClause.Occur.MUST);
+//
+//		 writer.deleteDocuments(builder.build());
 		
 		if(numberDeleteTerms > 0){
 			result = true;
@@ -1345,4 +1139,5 @@ public abstract class CRUDArtifactServiceImpl<T extends Artifact> implements CRU
 		
 		return result;
 	}
+	
 }

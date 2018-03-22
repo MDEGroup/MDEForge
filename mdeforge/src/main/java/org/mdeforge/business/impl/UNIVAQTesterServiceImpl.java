@@ -304,7 +304,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 				logger.error("[ERROR] " + error);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage() + e.getStackTrace());
 			}
 		}
 		
@@ -313,7 +313,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			moveDirectory(folderTemp + "models", folderModels);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage() + e.getStackTrace());
 		}
 		resource.unload();
 		
@@ -356,7 +356,7 @@ public class UNIVAQTesterServiceImpl implements UNIVAQTesterService {
 			properties.store(fileOut, "--");
 			fileOut.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage() + e.getStackTrace());
 		}
 		transMLProperties.loadPropertiesFile(folderTemp);
 	}
