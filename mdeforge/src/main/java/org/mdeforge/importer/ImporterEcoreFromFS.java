@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImporterEcoreFromFS {
 	
-	
+	private static String folderString = "GLOBAL";
 	public static void main(String[] args) {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"file:src/main/webapp/WEB-INF/spring/root-context.xml");
@@ -22,7 +22,7 @@ public class ImporterEcoreFromFS {
 		EcoreMetamodelService ecoreMetamodelService = context.getBean(EcoreMetamodelService.class);
 		User usr = new User();
 		usr.setId("5514b943d4c6c379396fe8b7");
-		File folder = new File("manualDomains");
+		File folder = new File(folderString);
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.toString().endsWith(".ecore")) {
@@ -34,7 +34,7 @@ public class ImporterEcoreFromFS {
 		        	emm.setOpen(true);
 		        	Property p = new Property();
 		        	p.setName("imported");
-		        	p.setValue("github");
+		        	p.setValue("COMLAN EVALUATION");
 		        	ecoreMetamodelService.create(emm);
 		        	System.out.println(file.getName().toString());
 		        } catch (Exception e) {

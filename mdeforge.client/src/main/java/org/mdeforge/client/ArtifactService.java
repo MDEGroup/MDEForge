@@ -27,7 +27,7 @@ public class ArtifactService extends MDEForgeClient {
 		return mapper.readValue(result, Artifact.class);
 	}
 	public Artifact getArtifactByName(String name) throws Exception {
-		String result = doGetRequest(connectionUrl + "api/Artifact/byname" + name);
+		String result = doGetRequest(connectionUrl + "api/Artifact/byname/" + name);
 		return mapper.readValue(result, Artifact.class);
 	}
 	

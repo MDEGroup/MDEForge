@@ -5,6 +5,7 @@ import java.util.List;
 import org.mdeforge.business.model.ATLTransformation;
 import org.mdeforge.business.model.ATLTransformationError;
 import org.mdeforge.business.model.ATLTransformationTestServiceError;
+import org.mdeforge.business.model.EcoreMetamodel;
 import org.mdeforge.business.model.GridFileMedia;
 import org.mdeforge.business.model.Model;
 import org.mdeforge.business.model.wrapper.json.ArtifactList;
@@ -19,7 +20,7 @@ public class ATLTransformationService extends ArtifactService {
 			String password) throws Exception {
 		super(connectionUrl, username, password);
 	}
-	public void addATLTransformation(ATLTransformation transformation, String file) throws Exception {
+	public ATLTransformation addATLTransformation(ATLTransformation transformation, String file) throws Exception {
 		GridFileMedia gfm = new GridFileMedia();
 		gfm.setContent(MDEForgeClient.readFile(file));
 		if (file.lastIndexOf("/") == -1)
@@ -28,7 +29,9 @@ public class ATLTransformationService extends ArtifactService {
 			gfm.setFileName(file.substring(file.lastIndexOf("/")));
 		transformation.setFile(gfm);
 		ObjectNode on = mapper.valueToTree(transformation);
-		doPostRequest(connectionUrl + "api/ATLTransformation/", on);
+		String app = doPostRequest(connectionUrl + "api/ATLTransformation/", on);
+		ATLTransformation emm = mapper.readValue(app, new TypeReference<ATLTransformation>() {});
+		return emm;
 	}
 
 	public void addATLTransformatio(ATLTransformation transofrmation) throws Exception {

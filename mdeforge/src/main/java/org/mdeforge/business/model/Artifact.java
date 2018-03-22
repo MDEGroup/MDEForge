@@ -8,7 +8,6 @@ import org.mdeforge.business.model.serializer.json.ProjectListSerializer;
 import org.mdeforge.business.model.serializer.json.RelationListSerializer;
 import org.mdeforge.business.model.serializer.json.UserListSerializer;
 import org.mdeforge.business.model.serializer.json.UserSerializer;
-import org.mdeforge.business.model.serializer.json.WorkspaceListSerializer;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.DBRef;
